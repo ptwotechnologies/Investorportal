@@ -6,9 +6,9 @@ import { Link } from 'react-router-dom';
 const HomeSec1 = () => {
   return (
    <>
-    <div className= "bg-[#001032] h-290 md:h-auto lg:bg-white w-full pt-5 lg:pt-20  px-7 rounded-b-4xl" >
+    <div className= "bg-[#001032] h-290 md:h-auto lg:bg-white w-full pt-5 lg:pt-20  px-5 rounded-b-4xl" >
       <div
-        className="text-sm text-white flex justify-start items-center gap-2 p-2 md:px-4 w-[65%] sm:w-[55%] md:w-[40%] lg:w-[32%] xl:w-[22%] rounded-3xl mt-20 
+        className="text-[12px] text-white flex justify-start items-center gap-2 p-2 md:px-4 w-[70%] md:w-[40%] lg:w-[32%] xl:w-[22%] rounded-3xl mt-20 
         bg-linear-to-r from-[#001032] from-20% lg:from-70% via-blue-[#001032] at-130% to-[#D8D8D8] 
         "
       >
@@ -49,7 +49,7 @@ const HomeSec1 = () => {
         bg-linear-to-r from-[#001032] from-40% via-blue-[#001032] at-130% to-[#D8D8D8]"
             >
               <p className="text-center hidden lg:block">Built for startups ready to grow smarter</p>
-              <p className="text-center lg:hidden text-sm ">Designed for founders ready to grow with purpose</p>
+              <p className="text-center lg:hidden text-[12px]">Designed for founders ready to grow with purpose</p>
              
             </div>
           </div>
@@ -103,8 +103,8 @@ const HomeSec1 = () => {
           id="right"
           className="w-full lg:w-[50%] lg:bg-white rounded-md lg:rounded-sm mt-auto flex justify-center items-center   ">
           <img src={img1} alt="" className="rounded-sm object-fill h-[870px]  hidden lg:block"  />
-          <div className="lg:hidden  h-100 w-full  mt-10">
-            <img src={img1} alt="" className="rounded-4xl    w-full h-[220px] object-cover  border border-[#001032]" />
+          <div className="lg:hidden  h-90 w-full  mt-10">
+            <img src={img1} alt="" className="rounded-4xl    w-full h-[200px] object-cover  border border-[#001032]" />
                </div>
         </div>
       </div>
@@ -115,8 +115,8 @@ const HomeSec1 = () => {
           </div>
           </div>
     </div>
-     <div className="flex justify-center items-center gap-2 border-2 border-[#002A30]  w-[60%] 
-     mt-35 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm font-semibold lg:hidden">
+     <div className="flex justify-center items-center gap-2 border-2 border-[#002A30]  w-[70%] 
+     mt-40 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm font-semibold lg:hidden">
         <button>See How It Works</button>
         <IoIosArrowRoundForward size={25} className="mt-1" />
           </div>

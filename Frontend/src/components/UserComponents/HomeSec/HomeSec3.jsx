@@ -112,7 +112,7 @@ who lived it first</h1>
                 <p className="px-2 pl-4 text-sm font-light pb-4">So our team sat together, spent months on planning, strategizing, building and came up <Link to="/" className="cursor-pointer">See more...</Link></p>
         </div>
         <div className="lg:hidden p-4">
-                <p className="bg-[#616B80] p-3 px-4 text-sm rounded-4xl text-center  mt-7 mb-7 text-white ">Simply, a connected ecosystem for founders & growth!</p>
+                <p className="bg-[#616B80] p-3 px-2 text-xs rounded-4xl text-center  mt-7 mb-7 text-white ">Simply, a connected ecosystem for founders & growth!</p>
         </div>
 
      

@@ -73,20 +73,20 @@ const HomeSec6 = () => {
                     <h1 className='text-xl font-semibold'>I’m a Startup</h1>
                 <h1 className='text-sm leading-6 tracking-wide py-2  pt-4 '>Pick your onboarding plan</h1>
                 <p className='text-sm leading-6 tracking-wider w-full '>Learn how to use your founder credits and start building with expert guidance.</p>
-                 <Link to="/startup"><button className='text-md mb-2 mt-7 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button></Link>
+                 <Link to="/startup"><button className='text-md mb-2 mt-10 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button></Link>
             </div>
 
              <div className='bg-[#616B80] rounded-sm p-3 px-4 w-full'>
                     <h1 className='text-xl font-semibold'>Investors</h1>
                 <h1 className='text-sm leading-6 tracking-wide py-2  pt-4 '>Create your investor account.</h1>
                 <p className='text-sm leading-6 tracking-wider w-full '>Share your focus areas, deal sizes, and investment interests.</p>
-                 <Link to="/investor"><button className='text-md mb-2 mt-7 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button></Link>
+                 <Link to="/investor"><button className='text-md mb-2 mt-10 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button></Link>
             </div>
              <div className='bg-[#002A30CC] rounded-sm p-3 px-4 w-full'>
                     <h1 className='text-xl font-semibold'>Service Professionals</h1>
                 <h1 className='text-sm leading-6 tracking-wide py-2  pt-4 '>Choose your onboarding plan</h1>
                 <p className='text-sm leading-6 tracking-wider w-full '>Connect with verified startups and convert leads directly.</p>
-                 <Link to="/serviceprofessional"><button className='text-md mb-2 mt-7 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button></Link>
+                 <Link to="/serviceprofessional"><button className='text-md mb-2 mt-10 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button></Link>
             </div>
 
         </div>

@@ -47,13 +47,13 @@ const HomeSec5 = () => {
         onScroll={handleScroll}
         className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide">
         {divElements.map((item, index) => (
-          <div key={index} className="w-full lg:w-[42%] h-[400px]  shrink-0 snap-center  p-4 mx-2 ">
+          <div key={index} className="w-full lg:w-[42%]   shrink-0 snap-center  p-4 mx-2 ">
            <div className='flex flex-col lg:flex-row  justify-center items-start w-full h-full gap-15 lg:gap-8 px-7 lg:p-7 border border-[#00103280] 
            rounded-sm shadow-lg'>
-             <p className='text-[#001032B2] text-md leading-8 tracking-wider lg:hidden'>{item.paragraph}</p>
+             <p className='text-[#001032B2] text-md leading-8 tracking-wider lg:hidden py-2'>{item.paragraph}</p>
               <p className='text-[#001032B2] text-md leading-9  tracking-wider hidden lg:block'>{item.lgPara}</p>
 
-            <div className='lg:hidden flex justify-between items-center gap-15  w-full'>
+            <div className='lg:hidden flex justify-between items-center gap-5  w-full py-3'>
                 <div className=' '>
                   <p className='text-sm pt-2 text-[#001032B2]'>{item.name}</p>
                 <p className='text-sm  text-[#001032B5]'>{item.companyName}</p>
