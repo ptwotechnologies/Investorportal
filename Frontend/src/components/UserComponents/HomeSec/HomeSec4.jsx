@@ -4,64 +4,66 @@ import img1 from "/homeSec4.png";
 const HomeSec4 = () => {
   return (
      <div >
-      <div className="lg:bg-[#001D21] bg-[#002A30CC] text-white ">
+      <div className="lg:bg-[#002A30] bg-[#002A30CC] text-white rounded-sm lg:rounded-none">
         <div id="top ">
-        <h1 className="text-4xl px-8 lg:py-15 pt-8 font-semibold">
+        <h1 className="text-4xl px-8 lg:py-15 pt-8 font-semibold hidden lg:block">
           Consultations that move you forward
         </h1>
-        <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-70 lg:gap-y-30 gap-y-10 m-10 lg:mx-32 pb-20">
+        <h1 className="text-3xl px-6  pt-8 font-semibold lg:hidden">
+          Consultations that push you forward
+        </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-70 lg:gap-y-30 gap-y-10 mx-6 my-10 lg:m-10 lg:mx-32 pb-20">
           <div className="flex">
             <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
             <div>
-              <h1 className="lg:text-3xl text-4xl">1</h1>
-              <p className="text-sm tracking-wide w-65">
-                Legal paperwork, compliances, agreements
+              <h1 className="lg:text-5xl text-4xl">1</h1>
+              <p className="text-md tracking-wide w-70">
+                Legal structure, compliance, and investor paperwork
               </p>
             </div>
           </div>
           <div className="flex">
             <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
             <div>
-              <h1 className="lg:text-3xl text-4xl">2</h1>
-              <p className="text-sm tracking-wide w-65">
-                Building an MVP or scaling tech without wasting months
+              <h1 className="lg:text-5xl text-4xl">2</h1>
+              <p className="text-md tracking-wide w-70">
+                MVP build or tech scale-up — done efficiently
               </p>
             </div>
           </div>
           <div className="flex">
             <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
             <div>
-              <h1 className="lg:text-3xl text-4xl">3</h1>
-              <p className="text-sm tracking-wide w-65">
-                Branding that earns trust, not just looks good
+              <h1 className="lg:text-5xl text-4xl">3</h1>
+              <p className="text-md tracking-wide w-70">
+                Branding that wins trust and builds recall
               </p>
             </div>
           </div>
           <div className="flex">
             <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
             <div>
-              <h1 className="lg:text-3xl text-4xl">4</h1>
-              <p className="text-sm tracking-wide w-65">
-                Marketing that brings in real users, not just traffic
+              <h1 className="lg:text-5xl text-4xl">4</h1>
+              <p className="text-md tracking-wide w-70">
+                Marketing that converts, not just attracts
               </p>
             </div>
           </div>
           <div className="flex">
             <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
             <div>
-              <h1 className="lg:text-3xl text-4xl">5</h1>
-              <p className="text-sm tracking-wide w-65">
-                Fundraising prep — how to talk to investors like you know your
-                stuff
+              <h1 className="lg:text-5xl text-4xl">5</h1>
+              <p className="text-md tracking-wide w-70">
+               Investor prep — tell your story with clarity
               </p>
             </div>
           </div>
           <div className="flex">
             <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
             <div>
-              <h1 className="lg:text-3xl text-4xl">6</h1>
-              <p className="text-sm tracking-wide w-65">
-                Understanding where your money’s going (and why it matters)
+              <h1 className="lg:text-6xl text-4xl">6</h1>
+              <p className="text-md tracking-wide w-70">
+                Financial visibility — know your runway, always
               </p>
             </div>
           </div>

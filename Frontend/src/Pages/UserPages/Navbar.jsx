@@ -7,10 +7,10 @@ import NavbarSheet from '../../components/UserComponents/NavbarSec/NavbarSheet'
 
 const Navbar = () => {
   return (
-     <div className='w-full h-[15%] lg:h-[20%] flex justify-between items-center px-5 bg-[#001032] lg:bg-white fixed top-0 z-50'>
+     <div className='w-full h-[12%] lg:h-[15%] flex justify-between items-center px-6 bg-[#001032] lg:bg-white fixed top-0 z-50'>
       <div>
         <Link to="/" ><img src={logo2} alt="Logo"   className='w-45 hidden lg:block ' /></Link>
-        <Link to="/" ><img src={logo} alt="Logo"   className='w-45 lg:hidden  ' /></Link>    
+        <Link to="/" ><img src={logo} alt="Logo"   className='w-35 lg:hidden  ' /></Link>    
       </div>
       
 

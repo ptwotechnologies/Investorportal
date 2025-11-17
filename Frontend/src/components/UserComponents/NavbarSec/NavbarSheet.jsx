@@ -26,7 +26,7 @@ function NavbarSheet() {
       <div className="lg:hidden">
         <Sheet>
           <SheetTrigger>
-            <GiHamburgerMenu size={35} className="text-white" />
+            <GiHamburgerMenu size={27} className="text-white" />
           </SheetTrigger>
           <SheetContent className="w-full ">
             <SheetHeader>
