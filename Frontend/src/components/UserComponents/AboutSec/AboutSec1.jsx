@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const AboutSec1 = () => {
   return (
@@ -13,7 +14,7 @@ const AboutSec1 = () => {
         <h1 className='text-5xl lg:text-6xl font-semibold   lg:leading-15  leading-12 tracking-wide lg:pb-12 pb-4 lg:hidden '>the next level </h1>
 
         <p className='text-md  lg:leading-9 tracking-wider lg:w-[60%]  pr-4'>Grow Your Business by Partnering with India’s Fastest-Growing Startup Ecosystem</p>
-        <button className=' my-6 lg:mt-18 bg-[#001032] text-white p-2 px-13 rounded-sm text-lg'>Enroll now</button>
+        <Link to="/login"><button className=' my-6 lg:mt-18 bg-[#001032] text-white p-2 px-13 rounded-sm text-lg'>Enroll now</button></Link>
      </div>
 
      <div id='right' className='w-full lg:w-[50%] lg:mt-28'>

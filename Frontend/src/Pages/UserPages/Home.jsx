@@ -7,6 +7,7 @@ import HomeSec5 from '../../components/UserComponents/HomeSec/HomeSec5'
 import HomeSec6 from '../../components/UserComponents/HomeSec/HomeSec6'
 import HomeSec7 from '../../components/UserComponents/HomeSec/HomeSec7'
 import HomeSec8 from '../../components/UserComponents/HomeSec/HomeSec8'
+import logo from "/ArtesterLogo2.png";
 
 const Home = () => {
   return (
@@ -37,6 +38,9 @@ const Home = () => {
       <div>
         <HomeSec8/>
       </div>
+       <div>
+                <img src={logo} className='w-60 lg:w-90 mx-auto mb-9 lg:mb-15'/>
+              </div>
     </div>
   )
 }

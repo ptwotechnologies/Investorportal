@@ -14,29 +14,24 @@ const ServiceProfessionalSec4 = () => {
  
    const divElements = [
      {
-         paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-         designation:"Designation ",
-        company:"Company.",
+         paragraph:"“We started getting briefs that fit our niche within days. No more chasing, just meaningful work and timely payments”",
+         name:"Designation ",
+        company:"Product Designer",
         color:"#002A30"
      },
      {
-         paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-         designation:"Designation ",
-        company:"Company.",
-         color:"#616B80"
-     },
-     {
-         paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-         designation:"Designation ",
-        company:"Company.",
+         paragraph:"“Artestor cut our onboarding friction — clear scopes, upfront budgets, and founders who actually know what they want”",
+         name:"Sharanya ",
+        company:"Growth Consultant",
          color:"#001032"
      },
-         {
-         paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-         designation:"Designation ",
-        company:"Company.",
-         color:"#2E5055"
+     {
+         paragraph:"“Artestor cut our onboarding friction — clear scopes, upfront budgets, and founders who actually know what they want”",
+         name:"Sharanya ",
+        company:"Growth Consultant",
+         color:"#001032"
      },
+       
  
    ]
    return (
@@ -48,17 +43,17 @@ const ServiceProfessionalSec4 = () => {
          onScroll={handleScroll}
          className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide ">
          {divElements.map((item, index) => (
-           <div key={index} className="w-[42%] h-auto  shrink-0 snap-center  p-4   mx-2 text-white  ">
-            <div className='flex flex-row  justify-center items-center w-full h-full gap-10  border border-[#00103280] 
+           <div key={index} className="w-[58%] h-auto  shrink-0 snap-center  p-4 px-10   mx-2 text-white  ">
+            <div className='flex flex-row  justify-center items-start w-full h-full gap-10  border border-[#00103280] 
             rounded-2xl shadow-lg' style={{backgroundColor: item.color}}>
               <div className='px-5'>
-                <p className=' text-sm leading-6 tracking-wider py-4'>{item.paragraph}</p>
-              <p className='text-sm pt-5 '>{item.designation}</p>
-                 <p className='text-sm  '>{item.company}</p>
+                <p className=' text-xl leading-8 tracking-wider py-12 '>{item.paragraph}</p>
+              <p className='text-lg pt-5 '>{item.name}</p>
+                 <p className='text-lg  '>{item.company}</p>
                  
               </div>
              <div className=' block' >
-                 <div className='w-[180px] h-[350px] bg-[#D9D9D9] rounded-2xl'>
+                 <div className='w-[180px] h-[300px] bg-[#D9D9D9] rounded-2xl'>
                  </div>
             </div>
              </div>

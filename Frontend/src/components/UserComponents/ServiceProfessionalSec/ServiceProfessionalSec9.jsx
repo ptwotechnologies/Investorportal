@@ -1,6 +1,7 @@
 import React from 'react'
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
+import { Link } from 'react-router-dom';
 
 function ServiceProfessionalSec9() {
  const cards = [
@@ -114,12 +115,12 @@ function ServiceProfessionalSec9() {
               </div>
 
               <div className="mt-6 px-3 text-center">
-                <button
+                <Link to="/login"><button
                   type="button"
                   className=" w-full lg:w-[90%] mt-7 h-10  rounded-sm bg-[#002A30] text-background text-md font-medium transition hover:opacity-90"
                 >
                   Get started
-                </button>
+                </button></Link>
               </div>
             </article>
           ))}

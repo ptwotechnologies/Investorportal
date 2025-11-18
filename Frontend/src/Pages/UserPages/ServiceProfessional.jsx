@@ -9,6 +9,7 @@ import ServiceProfessionalSec7 from '../../components/UserComponents/ServiceProf
 import ServiceProfessionalSec8 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec8';
 import ServiceProfessionalSec10 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec10';
 import ServiceProfessionalSec9 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec9';
+import logo from "/ArtesterLogo2.png";
 
 const ServiceProfessional = () => {
   return (
@@ -43,6 +44,9 @@ const ServiceProfessional = () => {
       <div >
         <ServiceProfessionalSec10/>
       </div>
+      <div>
+                <img src={logo} className='w-60 lg:w-90 mx-auto mb-10 lg:mb-20'/>
+              </div>
      
     </div>
   )

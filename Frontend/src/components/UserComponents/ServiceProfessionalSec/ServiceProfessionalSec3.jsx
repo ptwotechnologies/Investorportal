@@ -3,42 +3,42 @@ import React from 'react'
 const ServiceProfessionalSec3 = () => {
   return (
     <>
-    <div className=" p-10 hidden lg:block">
+    <div className=" p-10 pt-15 hidden lg:block">
       <h1 className="text-[#001032CC] text-5xl font-bold">
-        The broken loops in the market
+        Gaps in the Market
       </h1>
       <div className="flex justify-center items-center gap-13 pt-15">
         <div id="left" className="w-[40%] ">
-          <h1 className="text-2xl font-semibold py-10">The support system you’ve been missing</h1>
-          <ul className="list-disc pl-4 p-4 font-medium">
+          <h1 className="text-xl font-semibold pb-2">Most service pros chase noisy leads, deal with scope creep, and lose hours on discovery calls that never convert. We fix that.</h1>
+          <ul className="list-disc pl-4 px-4 font-medium">
             <li >
-              <h2 >Verified startup flow</h2>
-              <p className="text-base">
-                Work with early-stage founders actively seeking your services - no cold outreach needed.
+              <h2 className='text-xl font-medium my-2' >Predictable project flow:</h2>
+              <p className=" text-lg text-wide leading-7">
+                Get matched to startups that match your expertise and capacity.
               </p>
             </li>
             <li >
-              <h2 >Organic visibility </h2>
-              <p className="text-base">
-                Get discovered organically inside the portal by 500+ startups browsing daily.
+              <h2 className='text-xl font-medium my-2' >Verified decisions: </h2>
+              <p className=" text-lg text-wide leading-7">
+                Work only with founders vetted for clarity, intent and budgets.
               </p>
             </li>
              <li >
-              <h2 >Access to mid & high ticket projects</h2>
-              <p className="text-base">
-                Work on clearly defined projects, budgets are pre-set and verified by our admin team.
+              <h2 className='text-xl font-medium my-2'  >Clear scopes, fair rates:</h2>
+              <p className=" text-lg text-wide leading-7">
+                Set deliverables and pricing up-front — no hidden surprises.
               </p>
             </li>
             <li>
-              <h2>Admin-support communication</h2>
-              <p className="text-base">
-                From onboarding to delivery, we help streamline conversations and protect both sides.
+              <h2 className='text-xl font-medium my-2'>Payment protection:</h2>
+              <p className=" text-lg text-wide leading-7">
+                Platform-assisted payments and milestone release keep work steady.
               </p>
             </li>
              <li>
-              <h2 >Consultation for industry experts</h2>
-              <p className="text-base">
-                Get free guidance on portfolio building, pricing, negotiation, and presentation.
+              <h2 className='text-xl font-medium my-2' >Long-term relationships:</h2>
+              <p className=" text-lg text-wide leading-7">
+                Convert single projects into recurring collaborations and retainers.
               </p>
             </li>
 
