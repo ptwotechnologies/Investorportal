@@ -19,6 +19,7 @@ const HomeSec5 = () => {
         name:"Vivek T ",
         lgname:"Sanjay Kumar",
        company:"Elvehico ",
+       company2:"Founder",
         companyName:"Early-stage product team"
     },
     {
@@ -26,6 +27,7 @@ const HomeSec5 = () => {
         lgPara:"With Artestor, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
         name:"Vivek T ",
         lgname:"Niharika Sharma",
+         company2:"TSAH",
         company:"TSAH ",
         companyName:"Founder"
     },
@@ -34,6 +36,7 @@ const HomeSec5 = () => {
          lgPara:"Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
         name:"Vivek T ",
         lgname:"Niharika Sharma",
+        company2:"Founder",
         company:"TSAH",
         companyName:"Startup"
     },
@@ -56,7 +59,7 @@ const HomeSec5 = () => {
             <div className='lg:hidden flex justify-between items-center gap-5  w-full py-3'>
                 <div className=' '>
                   <p className='text-sm pt-2 text-[#001032B2]'>{item.name}</p>
-                <p className='text-sm  text-[#001032B5]'>{item.companyName}</p>
+                <p className='text-sm  text-[#001032B5]'>{item.company2}</p>
                 <p className='text-sm  text-[#001032B5]'>Early-stage product team</p>
                 </div>
                 <div className='flex justify-center items-center gap-5 '>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+
 const AboutSec6 = () => {
   const [activeIndex, setActiveIndex] = useState(null);
       const faqs = [
@@ -60,6 +61,7 @@ const AboutSec6 = () => {
       
       ))}
        </div>
+       
     </div>
   )
 }

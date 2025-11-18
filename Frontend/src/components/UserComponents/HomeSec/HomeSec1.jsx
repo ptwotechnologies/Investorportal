@@ -117,7 +117,7 @@ const HomeSec1 = () => {
     </div>
      <div className="flex justify-center items-center gap-2 border-2 border-[#002A30]  w-[70%] 
      mt-40 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm font-semibold lg:hidden">
-        <button>See How It Works</button>
+       <Link to="/login"> <button>See How It Works</button></Link>
         <IoIosArrowRoundForward size={25} className="mt-1" />
           </div>
           </>
