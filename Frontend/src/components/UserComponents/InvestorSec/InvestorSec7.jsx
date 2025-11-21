@@ -20,8 +20,8 @@ const InvestorSec7 = () => {
           <hr />
          </div>
          <div className='flex justify-between items-center gap-15'>
-            <h1 className='py-6 text-5xl'>Design & Branding</h1>
-            <p className='bg-[#D9D9D9] rounded-full p-6 text-5xl mr-10'>1/4</p>
+            <h1 className='py-6 text-4xl'>Design & Branding</h1>
+            <p className='bg-[#D9D9D9] rounded-full p-6 text-5xl mr-10 mt-2'>1/4</p>
          </div>
         </div>
         <div id="right" className="w-[60%]  ">

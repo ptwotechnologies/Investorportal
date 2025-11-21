@@ -9,6 +9,7 @@ import InvestorSec7 from '@/components/UserComponents/InvestorSec/InvestorSec7'
 import InvestorSec8 from '@/components/UserComponents/InvestorSec/InvestorSec8'
 import InvestorSec9 from '@/components/UserComponents/InvestorSec/InvestorSec9'
 import React from 'react'
+import logo from "/ArtesterLogo2.png";
 
 const Investor = () => {
   return (
@@ -43,6 +44,9 @@ const Investor = () => {
       <div>
         <InvestorSec10/>
       </div>
+      <div>
+                            <img src={logo} className='w-60 lg:w-90 mx-auto my-20  lg:mb-25'/>
+                          </div>
     </div>
   )
 }

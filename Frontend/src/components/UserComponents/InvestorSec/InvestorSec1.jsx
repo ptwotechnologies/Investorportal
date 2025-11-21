@@ -17,8 +17,8 @@ const InvestorSec1 = () => {
                  <button className='hidden lg:block mb-3 lg:bg-[#001032] lg:text-white bg-white text-[#001032] p-3 px-15  rounded-sm text-lg'>Get Listed</button>
                </div>
              </div>
-             <div className='hidden lg:block text-center  w-[60%]'>
-                <h1 className='  text-center text-4xl font-bold  leading-11  tracking-wide  text-[#001032]'>Grow Your Business by Partnering with India’s Fastest-Growing Startup Ecosystem</h1>
+             <div className='hidden lg:block text-center  w-[75%]'>
+                <h1 className='  text-center text-5xl font-semibold  leading-13  tracking-wide  text-[#001032]'>Grow Your Business by Partnering with India’s Fastest-Growing Startup Ecosystem</h1>
              </div>
             </div>
   )

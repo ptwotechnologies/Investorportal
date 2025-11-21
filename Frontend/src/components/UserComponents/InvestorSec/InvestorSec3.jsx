@@ -9,36 +9,36 @@ const InvestorSec3 = () => {
       </h1>
       <div className="flex justify-center items-center gap-13 pt-15">
         <div id="left" className="w-[40%] ">
-          <h1 className="text-2xl font-semibold py-10">The support system you’ve been missing</h1>
+          <h1 className="text-2xl font-semibold py-10">The support system founders actually need</h1>
           <ul className="list-disc pl-4 p-4 font-medium">
             <li >
-              <h2 >Verified startup flow</h2>
-              <p className="text-base">
-                Work with early-stage founders actively seeking your services - no cold outreach needed.
+              <h2 className='text-xl font-semibold' >Early-stage direction</h2>
+              <p className=" text-lg font-light">
+                Most founders build without clarity — we give you structure from Day 1.
               </p>
             </li>
             <li >
-              <h2 >Organic visibility </h2>
-              <p className="text-base">
-                Get discovered organically inside the portal by 500+ startups browsing daily.
+              <h2 className='text-xl font-semibold'>Real opportunity visibility  </h2>
+              <p className=" text-lg font-light">
+                Investors discover your startup through relevance, not random outreach.
               </p>
             </li>
              <li >
-              <h2 >Access to mid & high ticket projects</h2>
-              <p className="text-base">
-                Work on clearly defined projects, budgets are pre-set and verified by our admin team.
+              <h2 className='text-xl font-semibold'>Access to expert insight</h2>
+              <p className=" text-lg font-light">
+                Work with vetted specialists who align their expertise with your milestones.
               </p>
             </li>
             <li>
-              <h2>Admin-support communication</h2>
-              <p className="text-base">
-                From onboarding to delivery, we help streamline conversations and protect both sides.
+              <h2 className='text-xl font-semibold'>Protected collaboration</h2>
+              <p className=" text-lg font-light">
+                Every interaction is moderated so you stay safe, informed, and stress-free.
               </p>
             </li>
              <li>
-              <h2 >Consultation for industry experts</h2>
-              <p className="text-base">
-                Get free guidance on portfolio building, pricing, negotiation, and presentation.
+              <h2 className='text-xl font-semibold' >Strategic founder guidance</h2>
+              <p className=" text-lg font-light">
+                Get personalised help on pricing, positioning, storytelling, and readiness.
               </p>
             </li>
 
