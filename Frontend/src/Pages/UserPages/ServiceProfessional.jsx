@@ -45,7 +45,7 @@ const ServiceProfessional = () => {
         <ServiceProfessionalSec10/>
       </div>
       <div>
-                <img src={logo} className='w-60 lg:w-90 mx-auto mb-10 lg:mb-20'/>
+                <img src={logo} className='w-60 lg:w-90 mx-auto my-10 lg:my-0 lg:mb-20'/>
               </div>
      
     </div>

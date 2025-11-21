@@ -14,15 +14,15 @@ const StartupSec4 = () => {
   
     const divElements = [
       {
-          paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-          designation:"Designation ",
-         company:"Company.",
+          paragraph:"Artestor turned our scattershot outreach into a clear fundraising path.We tightened our story, found the right leads, and closed our first term sheet — faster than we expected.",
+          designation:"Niharika Sharma, Cofounder",
+         company:"Elvehico",
          color:"#002A30"
       },
       {
-          paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-          designation:"Designation ",
-         company:"Company.",
+          paragraph:"Before Artestor we pitched everywhere and got nowhere. Here we met investors who actually understood our metrics and moved the conversation forward",
+          designation:"Shravani, Co-founder ",
+         company:"Smriti Adventures",
           color:"#001032"
       },
       {
@@ -31,12 +31,7 @@ const StartupSec4 = () => {
          company:"Company.",
           color:"#616B80"
       },
-          {
-          paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-          designation:"Designation ",
-         company:"Company.",
-          color:"#2E5055"
-      },
+          
   
     ]
     return (

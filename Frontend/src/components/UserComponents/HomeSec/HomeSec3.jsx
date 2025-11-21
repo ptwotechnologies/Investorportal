@@ -105,11 +105,11 @@ who lived it first</h1>
                <p className=' text-lg font-semibold leading-8 tracking-wider w-[70%]'> the system was broken, not our ideas.</p>
                   
                 <p className="bg-[#616B80] p-3 text-sm rounded-4xl text-center mt-9 mb-3">Really! The system is built to drain founders…</p>
-                <p className="px-2 text-sm font-light">First, the ad platforms charge you for every single click (doesn’t matter if those clicks) <Link to="/" className="cursor-pointer">See more...</Link></p>
+                <p className="px-3 text-sm font-light">First, the ad platforms charge you for every single click (doesn’t matter if those clicks) <Link to="/" className="cursor-pointer">See more...</Link></p>
                 <hr className="border-t border-[#FFFFFF33] mt-9 m-3 "/>
 
                 <p className="bg-[#616B80] p-3  text-sm rounded-4xl text-center mt-6 mb-3">That’s when we decided, we need to fix this... </p>
-                <p className="px-2 pl-4 text-sm font-light pb-4">So our team sat together, spent months on planning, strategizing, building and came up <Link to="/" className="cursor-pointer">See more...</Link></p>
+                <p className="px-2 pl-3 text-sm font-light pb-4">So our team sat together, spent months on planning, strategizing, building and came up <Link to="/" className="cursor-pointer">See more...</Link></p>
         </div>
         <div className="lg:hidden p-4">
                 <p className="bg-[#616B80] p-3 px-2 text-xs rounded-4xl text-center  mt-7 mb-7 text-white ">Simply, a connected ecosystem for founders & growth!</p>

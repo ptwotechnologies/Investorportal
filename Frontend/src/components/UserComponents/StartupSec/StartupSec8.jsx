@@ -14,30 +14,23 @@ const StartupSec8 = () => {
    
      const divElements = [
        {
-           paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
-           name:"Vivek T ",
-          company:"Company Name ",
-           companyName:"Startup"
+           paragraph:"Artestor helped us understand our actual runway, identify blind spots, and present our metrics with confidence",
+           name:"Anchal Dogra ",
+          company:"Arulyog Welbeing ",
+           
        },
        {
-           paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
-           name:"Vivek T ",
-           company:"Company Name ",
-           companyName:"Startup"
+           paragraph:"The clarity we gained completely changed how we pitched. Investors knewexactly what we were building and why",
+           name:"Sanjay Kumar",
+           company:"Parikalpna",
+           
        },
        {
-           paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
+           paragraph:"Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors",
             name:"Vivek T ",
            company:"Company Name ",
-           companyName:"Startup"
+          
        },
-           {
-           paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
-            name:"Vivek T ",
-           company:"Company Name ",
-           companyName:"Startup"
-       },
-   
      ]
      return (
        <div className='mt-15  ' >
@@ -50,9 +43,9 @@ const StartupSec8 = () => {
            className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide lg:ml-10">
            {divElements.map((item, index) => (
              <div key={index} className="w-full lg:w-[42%] h-[350px]  shrink-0 snap-center  p-4 mx-2 ">
-              <div className='flex flex-col lg:flex-row  justify-center items-center w-full h-full gap-10 lg:gap-10 p-5 lg:p-7 border border-[#00103280] 
+              <div className='flex flex-col lg:flex-row  justify-center items-start  w-full h-full gap-10 lg:gap-10 p-5 lg:p-7 border border-[#00103280] 
               rounded-sm shadow-lg'>
-                <p className='text-[#001032B5] text-sm leading-6 tracking-wider'>{item.paragraph}</p>
+                <p className='text-[#001032B5] text-xl leading-8 tracking-wider '>{item.paragraph}</p>
                <div className='lg:hidden flex justify-between items-center gap-20  w-full'>
                    <div className=' '>
                      <p className='text-sm pt-2 text-[#001032B5]'>{item.name}</p>

@@ -9,6 +9,7 @@ import StartupSec7 from '../../components/UserComponents/StartupSec/StartupSec7'
 import StartupSec8 from '../../components/UserComponents/StartupSec/StartupSec8'
 import StartupSec9 from '../../components/UserComponents/StartupSec/StartupSec9'
 import StartupSec10 from '../../components/UserComponents/StartupSec/StartupSec10'
+import logo from "/ArtesterLogo2.png";
 
 const Startup = () => {
   return (
@@ -43,6 +44,9 @@ const Startup = () => {
       <div>
         <StartupSec10/>
       </div>
+      <div>
+                      <img src={logo} className='w-60 lg:w-90 mx-auto my-10 lg:my-0 lg:mb-20'/>
+                    </div>
     </div>
   )
 }
