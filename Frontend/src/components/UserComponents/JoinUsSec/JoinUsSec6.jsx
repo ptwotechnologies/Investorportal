@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const JoinUsSec6 = () => {
   return (
@@ -84,7 +85,7 @@ const JoinUsSec6 = () => {
 
       <div className='lg:hidden text-center  mt-8'>
         <h1 className='text-[#001032] text-2xl font-semibold text-center'>Ready to on-board...?</h1>
-          <button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button>
+          <Link to="/login"><button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button></Link>
                  
       </div>
     </div>

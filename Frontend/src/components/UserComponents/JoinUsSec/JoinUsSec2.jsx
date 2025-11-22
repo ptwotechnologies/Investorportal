@@ -6,7 +6,8 @@ function Item({ label }) {
     <div className="flex flex-col items-center gap-2 gap-y-4">
       {/* decorative placeholder icon */}
       <div className="h-14 w-14 bg-[#E5E5E5]  border border-border" />
-      <p className="text-center text-lg font-semibold text-[#001032]">Verified Client pipelines</p>
+      <p className="text-center text-md font-semibold text-[#001032]">Verified Client pipelines</p>
+      
     </div>
   )
 }

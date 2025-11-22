@@ -170,7 +170,7 @@ const JoinUsSec3 = (props) => {
       </div>
 
       {/* Dots */}
-      <div className="mt-4 flex items-center justify-center gap-2" role="tablist" aria-label="Carousel pagination">
+      <div className="mt-4 flex items-center justify-center  gap-2" role="tablist" aria-label="Carousel pagination">
         {items.map((_, i) => (
           <button
             key={i}

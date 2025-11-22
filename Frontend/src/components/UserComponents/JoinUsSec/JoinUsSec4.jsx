@@ -38,7 +38,7 @@ const JoinUsSec4 = () => {
            ]
   return (
      <div className='lg:mt-8 lg:px-10 mt-16 px-3' >
-           <h1 className='text-3xl lg:text-5xl text-[#001032] font-bold text-center lg:text-start'>Who is this platform for?</h1>
+           <h1 className='text-[27px] lg:text-5xl text-[#001032] font-bold text-center lg:text-start'>Who is this platform for?</h1>
           <div className="relative">
            <div
              ref={scrollRef}
