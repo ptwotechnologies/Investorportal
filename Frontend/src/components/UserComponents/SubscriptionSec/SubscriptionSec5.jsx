@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const ContactUsSec2 = () => {
+const SubscriptionSec5 = () => {
   return (
-     <div className=' p-4 lg:p-15 lg:px-35 text-white text-center  bg-[#F9972A1A] '>
-     <div className='bg-linear-to-b from-[#C1CFED] from-80% to-[#001032D9] w-full  p-8 lg:p-10'>
+    <div className=' p-4 lg:p-15 lg:px-35 text-white text-center  bg-[#F9972A1A] mt-6'>
+     <div className='bg-linear-to-b from-[#C1CFED] from-90% to-[#001032D9] w-full  p-8 lg:p-10'>
         <div className='bg-[#001032] w-full '>
             <h1 className=' text-xl lg:text-5xl pt-7 lg:pt-15 font-semibold tracking-wide'>Before you close this tab <br/>
             picture next Monday</h1>
@@ -18,4 +18,4 @@ const ContactUsSec2 = () => {
   )
 }
 
-export default ContactUsSec2
+export default SubscriptionSec5

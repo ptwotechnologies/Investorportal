@@ -9,14 +9,13 @@ import { CheckIcon } from 'lucide-react';
 const bullets = ["Startups", "Service Professionals", "Investors", "Channel Partners"]
 
 const logos = [
-  { alt: "Partner 1", w: 120 },
-  { alt: "Partner 2", w: 120 },
-  { alt: "Partner 3", w: 120 },
-  { alt: "Partner 4", w: 120 },
-  { alt: "Partner 5", w: 120 },
-  { alt: "Partner 6", w: 120 },
-  
-]
+  { alt: "Partner 1", w: 120, src: "/teparowLogo.png" },
+  { alt: "Partner 2", w: 120, src: "/optileadLogo.png", isBig: true },
+  { alt: "Partner 3", w: 120, src: "/niyamsetuLogo.png", isBig: true },
+  { alt: "Partner 4", w: 120, src: "/ecnolatLogo.png" },
+  { alt: "Partner 5", w: 120, src: "/ptwoLogo.png" },
+  { alt: "Partner 6", w: 120, src: "/kapinortLogo.png" },
+];
 
 const benefitCards = [
   {
@@ -38,7 +37,7 @@ function Bullet({ children }) {
   return (
     <div className="flex items-center gap-4 ">
      <IoIosCheckmark className='bg-white text-[#001426] rounded-full' />
-      <span className="text-lg  text-primary-foreground/80 ">{children}</span>
+      <span className="text-sm  text-[#B2BFC1] ">{children}</span>
     </div>
   )
 }
@@ -67,14 +66,14 @@ function BenefitCard({ title, body }) {
 
 const ContactUsSec1 = () => {
   return (
-    <section className="bg-[#001426] text-primary-foreground mt-23 lg:mt-40 lg:rounded-3xl rounded-b-3xl">
+    <section className="bg-[#001032] text-primary-foreground mt-15 lg:mt-40 lg:rounded-3xl rounded-b-3xl">
       <div className="mx-auto w-full  px-4 md:px-8 py-8 md:py-20">
         {/* Top panel */}
         <div className="flex flex-col lg:flex-row justify-between items-start   ">
           {/* Left summary */}
           <div className="md:pr-6 p-3">
-            <h1 className="text-4xl md:text-4xl lg:text-5xl font-semibold  tracking-wide leading-10 lg:leading-16 w-[78%]">Connect with our experts</h1>
-            <p className="py-5 text-lg  leading-8 tracking-wider w-[90%] lg:w-[80%]">
+            <h1 className="text-[30px] text-[#F9F9F7] md:text-4xl lg:text-5xl font-semibold  tracking-wide leading-10 lg:leading-16 w-[78%]">Connect with our experts</h1>
+            <p className="py-3 text-xs leading-5 lg:leading-8 tracking-wider w-[90%] lg:w-[80%] text-[#F9F9F7]">
               Our experts in Artestor will support you and solve your queries in multiple domains:
             </p>
 
@@ -84,21 +83,65 @@ const ContactUsSec1 = () => {
               ))}
             </ul>
 
-            <p className="py-10 text-lg  leading-8 tracking-wider lg:w-[80%]">
+            <p className="py-7 text-sm  leading-8 tracking-wider lg:w-[80%]">
              Get the access of 50+ investors and 500+ satrtups and 200+ service professionals
             </p>
 
             {/* Partner logos */}
-            <div className="mt-2 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 lg:gap-6 gap-8 place-items-center gap-y-12 ">
-              {logos.map((l, i) => (
-                <div key={i} className="flex items-center">
-                  <img
-                    alt={l.alt}
-                    className="h-6 md:h-8 w-auto opacity-80"
-                    src={`/placeholder-icon.png?height=32&width=${l.w}&query=logo%20placeholder`}
-                  />
-                </div>
-              ))}
+              <div id="desktop" className="mt-2 w-full hidden lg:block">
+              {/* First Row */}
+              <div className="grid grid-cols-3 divide-x divide-slate-700">
+                {logos.slice(0, 3).map((l, i) => (
+                  <div key={i} className="flex items-center justify-center p-8">
+                    <img
+                      src={l.src || "/placeholder.svg"}
+                      alt={l.alt}
+                      className={`w-auto opacity-80 ${
+                        l.isBig ? "h-14" : "h-12"
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              {/* Horizontal Divider */}
+              <div className="border-t border-slate-700" />
+
+              {/* Second Row */}
+              <div className="grid grid-cols-3 divide-x divide-slate-700">
+                {logos.slice(3, 6).map((l, i) => (
+                  <div
+                    key={i + 3}
+                    className="flex items-center justify-center p-8"
+                  >
+                    <img
+                      src={l.src || "/placeholder.svg"}
+                      alt={l.alt}
+                      className="h-6 md:h-10 w-auto opacity-80"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div id="phone" className="mt-2 w-full  lg:hidden">
+              {/* First Row */}
+              <div className="grid grid-cols-2 gap-x-6">
+                {logos.map((l, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-center p-5 py-7"
+                  >
+                    <img
+                      src={l.src || "/placeholder.svg"}
+                      alt={l.alt}
+                      className={`w-auto opacity-80 ${
+                        l.isBig ? "h-16" : "h-12"
+                      }`}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
            <div className='hidden lg:block'>
              <div className='mt-20 text-[#B2BFC1] text-sm flex items-center gap-1  '>

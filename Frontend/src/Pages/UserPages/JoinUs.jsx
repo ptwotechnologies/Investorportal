@@ -8,6 +8,7 @@ import JoinUsSec7 from '@/components/UserComponents/JoinUsSec/JoinUsSec7'
 import JoinUsSec8 from '@/components/UserComponents/JoinUsSec/JoinUsSec8'
 import JoinUsSec9 from '@/components/UserComponents/JoinUsSec/JoinUsSec9'
 import React from 'react'
+import logo from "/ArtesterLogo2.png";
 
 const JoinUs = () => {
   return (
@@ -39,6 +40,9 @@ const JoinUs = () => {
       <div>
         <JoinUsSec9/>
       </div>
+      <div>
+                <img src={logo} className='w-60 lg:w-90 mx-auto mb-10 lg:my-20'/>
+              </div>
     </div>
   )
 }

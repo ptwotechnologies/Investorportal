@@ -6,7 +6,7 @@ import About from '../Pages/UserPages/About'
 import ServiceProfessional from '../Pages/UserPages/ServiceProfessional'
 import Startup from '../Pages/UserPages/Startup'
 import Investor from '@/Pages/UserPages/Investor'
-import ChannelPartners from '@/Pages/UserPages/ChannelPartners'
+import Subscriptions from '@/Pages/UserPages/Subscriptions'
 import JoinUs from '@/Pages/UserPages/JoinUs'
 import ContactUs from '@/Pages/UserPages/ContactUs'
 import Login from '@/Pages/UserPages/LoginPages/Login'
@@ -74,7 +74,7 @@ const UserRoutes = () => {
           <Route path="/startup" element={<Startup />} />
           <Route path="/investor" element={<Investor />} />
           <Route path="/pricing" element={<Pricing/>} />
-          <Route path="/channelpartners" element={<ChannelPartners/>} />
+          <Route path="/subscription" element={<Subscriptions/>} />
           <Route path="/joinus" element={<JoinUs/>} />
            <Route path="/contactus" element={<ContactUs/>} />
            <Route path="/login" element={<Login/>} />

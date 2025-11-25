@@ -1,13 +1,14 @@
 import React from 'react'
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
+import { Link } from 'react-router-dom';
 
-const DesigningContent = () => {
+const DevelopmentContent = () => {
   
-     const cards = [
+    const cards = [
         {
-          accent: "bg-[#6E5C3B]",
-          title: "Onboarding Prices",
+          accent: "Basic",
+          title: "Institutional",
           blurb: "Best for funds under $3M",
           priceMain: "$3.5k + 0.75%",
           priceSub: "of fund size",
@@ -20,8 +21,8 @@ const DesigningContent = () => {
           footnote: "Pricing may vary with add-on services",
         },
         {
-          accent: "bg-[#6E5C3B]",
-          title: "Onboarding Prices",
+          accent: "Medium",
+          title: "Institutional",
           blurb: "Best for funds under $3M",
           priceMain: "$3.5k + 0.75%",
           priceSub: "of fund size",
@@ -34,8 +35,8 @@ const DesigningContent = () => {
           footnote: "Pricing may vary with add-on services",
         },
         {
-          accent: "bg-[#6E5C3B]",
-          title: "Onboarding Prices",
+          accent: "Advanced",
+          title: "Institutional",
           blurb: "Best for funds under $3M",
           priceMain: "$3.5k + 0.75%",
           priceSub: "of fund size",
@@ -50,16 +51,17 @@ const DesigningContent = () => {
       ]
 
   return (
-   <section className="mx-auto w-full md:py-16">
+    <section className="mx-auto w-full md:py-16">
                     
             
                     <div className="lg:grid  lg:gap-5 grid-cols-1 md:grid-cols-2 lg:grid-cols-3  ">
                       {cards.map((card, idx) => (
-                        <article key={idx} className=" w-full  my-4 lg:my-0   lg:p-6 text-card-foreground">
+                        <article key={idx} className=" w-full  my-4 lg:my-0   lg:p-6 text-card-foreground ">
+                          <h1 className='border-2 border-[#000000] text-[#001032] rounded-full p-1 px-6 text-3xl font-bold text-center w-[60%] mx-auto mb-13'>{card.accent}</h1>
                           {/* accent bar */}
-                          <div className={`h-2 lg:h-1.5 w-full lg:w-[90%]   ${card.accent}`}  />
-            
-                          <div className="mt-8 lg:mt-4 space-y-1.5 px-3">
+                         <div className='p-2 bg-[#6E5C3B]'>
+                          <div className='bg-white p-4 py-7'>
+                             <div className=" space-y-1.5 px-3">
                             <h3 className=" text-3xl lg:text-lg font-bold text-[#001032] pb-4 lg:pb-0">{card.title}</h3>
                             <p className="text-sm leading-6 text-[#3C1D3A]">{card.blurb}</p>
                           </div>
@@ -91,7 +93,7 @@ const DesigningContent = () => {
                           <hr className="my-6 border-border" />
             
                           {/* features */}
-                          <div className='px-3'>
+                          <div className='px-3 lg:mb-10'>
                             <p className="mb-6 lg:mb-3 text-sm font-medium">Features</p>
                             <ul className="space-y-3 text-[#3C1D3A]">
                               {card.features.map((f, i) => (
@@ -110,14 +112,16 @@ const DesigningContent = () => {
                               </li>
                             </ul>
                           </div>
+                          </div>
+                         </div>
             
-                          <div className="mt-6 px-3 text-center">
-                            <button
+                          <div className="  text-center">
+                            <Link to="/login"><button
                               type="button"
-                              className=" w-full lg:w-[90%] mt-7 h-10  rounded-sm bg-[#002A30] text-background text-md font-medium transition hover:opacity-90"
+                              className=" w-full lg:w-full mt-4 h-10  rounded-[5px] bg-[#002A30] text-background text-md font-medium transition hover:opacity-90"
                             >
                               Get started
-                            </button>
+                            </button></Link>
                           </div>
                         </article>
                       ))}
@@ -126,4 +130,4 @@ const DesigningContent = () => {
   )
 }
 
-export default DesigningContent
+export default DevelopmentContent

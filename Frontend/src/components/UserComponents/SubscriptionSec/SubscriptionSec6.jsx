@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ChannelPartnerSec4 = () => {
+const SubscriptionSec6 = () => {
   const [activeIndex, setActiveIndex] = useState(null);
         const faqs = [
           {
@@ -93,4 +93,4 @@ const ChannelPartnerSec4 = () => {
   )
 }
 
-export default ChannelPartnerSec4
+export default SubscriptionSec6

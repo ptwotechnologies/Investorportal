@@ -49,17 +49,20 @@ const DropDown = () => {
    <div className=' w-full '>
         <div className='flex justify-center '>
             <DropdownMenu  >
-  <div className=' text-white bg-[#B5B5B5] h-18 rounded-full p-2'>
-    <DropdownMenuTrigger className='flex justify-center items-center gap-2 p-3 px-6 text-2xl rounded-full mb-10 bg-[#001426] '>
+  <div className=' text-white bg-[#B5B5B5] h-14 rounded-full p-1'>
+    <DropdownMenuTrigger className='flex justify-center items-center gap-6 p-2 px-7 text-2xl rounded-full mb-10 bg-[#001426] '>
     <button>{activeTab}</button>
      <IoIosArrowDown  className='mt-2'/>
     </DropdownMenuTrigger>
   </div>
-  <DropdownMenuContent className='mt-5'>
+  <DropdownMenuContent className='mt-2 border border-[#000000] w-80 rounded-4xl p-3  flex flex-col justify-center items-center'>
      {tabs.map((tab) => (
-            <DropdownMenuItem key={tab.id} onClick={() => setActiveTab(tab.id)} className="text-2xl ">
+           <div className=' text-white bg-[#B5B5B5] h-13 rounded-full p-1 my- w-55'>
+             <DropdownMenuItem key={tab.id} onClick={() => setActiveTab(tab.id)} className="text-2xl  rounded-full text-center px-5  bg-[#001426] text-white flex items-center justify-between">
               {tab.label}
+               <IoIosArrowDown  className='mt-2 text-white'/>
             </DropdownMenuItem>
+           </div>
           ))}
   </DropdownMenuContent>
 </DropdownMenu>

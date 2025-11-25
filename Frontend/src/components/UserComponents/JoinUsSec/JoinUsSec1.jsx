@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const JoinUsSec1 = () => {
   return (
@@ -9,8 +10,8 @@ const JoinUsSec1 = () => {
             <div className=' lg:w-[73%] lg:text-[#001032]' >
             <p className='text-[42px] font-semibold leading-13 lg:leading-14 tracking-wide mb-6 '>Grow Your Business by Partnering with India’s Fastest-Growing Startup Ecosystem</p>
         <p className='text-2xl leading-8 tracking-wide hidden lg:block'>Grow Your Business by Partnering with India</p>
-        <button className='  mt-3 lg:bg-[#001426] lg:text-white bg-white text-[#001032] 
-        p-2 px-14 rounded-sm text-lg mb-15 lg:mb-0'>Get Listed</button>
+        <Link to="/login"><button className='  mt-3 lg:bg-[#001426] lg:text-white bg-white text-[#001032] 
+        p-2 px-14 rounded-sm text-lg mb-15 lg:mb-0'>Get Listed</button></Link>
         </div>
     </div>
         </div>
