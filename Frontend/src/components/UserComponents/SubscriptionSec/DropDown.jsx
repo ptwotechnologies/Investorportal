@@ -18,12 +18,12 @@ const DropDown = () => {
 
   const tabs = [
     { id: 'Designing', label: 'Designing' },
-    { id: 'Development', label: 'Development' },
-    { id: 'Marketing', label: 'Marketing' },
-    { id: 'Legal', label: 'Legal' },
-    { id: 'Consultancy', label: 'Consultancy' },
     { id: 'HR', label: 'HR' },
+    { id: 'Legal', label: 'Legal' },
     { id: 'Advisory', label: 'Advisory' },
+    { id: 'Marketing', label: 'Marketing' },
+    { id: 'Consultancy', label: 'Consultancy' },
+    { id: 'Development', label: 'Development' },
   ];
 
   const tabContents = {
@@ -40,13 +40,13 @@ const DropDown = () => {
         <DropdownMenu onOpenChange={(open) => setIsOpen(open)}>
 
           <div className='text-white bg-[#B5B5B5] h-14 rounded-full p-1'>
-            <DropdownMenuTrigger className=' w-65 flex justify-between items-center  p-2 px-7 text-2xl rounded-full mb-10 bg-[#001426]'>
+            <DropdownMenuTrigger className=' w-65 flex justify-between items-center  p-2 px-7 text-2xl rounded-full  bg-[#001426]'>
               <button>{activeTab}</button>
               <IoIosArrowDown className='mt-2' />
             </DropdownMenuTrigger>
           </div>
 
-          <DropdownMenuContent className=' w-65 p-3 bg-transparent border-none shadow-none flex flex-col justify-center items-center'>
+          <DropdownMenuContent className=' w-65 bg-transparent border-none shadow-none flex flex-col justify-center items-center'>
 
             
             {tabs
@@ -59,7 +59,6 @@ const DropDown = () => {
                     className="text-2xl rounded-full text-center px-5 bg-[#001426] text-white flex items-center justify-between"
                   >
                     {tab.label}
-                    <IoIosArrowDown className='mt-2 text-white' />
                   </DropdownMenuItem>
                 </div>
               ))
@@ -70,7 +69,7 @@ const DropDown = () => {
       </div>
 
       {/* Content blur on open */}
-      <div className={`mt-18 transition-all duration-300 ${isOpen ? 'blur-sm' : ''}`}>
+      <div className={`mt-18 transition-all duration-300 ${isOpen ? 'blur-lg' : ''}`}>
         {tabContents[activeTab]}
       </div>
 

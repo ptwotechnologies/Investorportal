@@ -29,6 +29,7 @@ import Notification from '@/Pages/UserPages/ProfilePages/Notification'
 import Connect from '@/Pages/UserPages/ProfilePages/Connect'
 import TransactionId from '@/Pages/UserPages/LoginPages/TransactionId'
 import Pricing from '@/Pages/UserPages/Pricing'
+import ChannelPartners from '@/Pages/UserPages/ChannelPartners'
 
 
 const UserRoutes = () => {
@@ -74,6 +75,7 @@ const UserRoutes = () => {
           <Route path="/startup" element={<Startup />} />
           <Route path="/investor" element={<Investor />} />
           <Route path="/pricing" element={<Pricing/>} />
+          <Route path="/channelpartners" element={<ChannelPartners/>} />
           <Route path="/subscription" element={<Subscriptions/>} />
           <Route path="/joinus" element={<JoinUs/>} />
            <Route path="/contactus" element={<ContactUs/>} />
