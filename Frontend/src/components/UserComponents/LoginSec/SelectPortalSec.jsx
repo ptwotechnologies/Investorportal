@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const SelectPortalSec = () => {
   return (
     <div>
-      <div className="flex justify-between items-center  h-screen">
+      <div className="flex justify-between items-center  min-h-dvh">
         <div id="left" className=" w-[40%] hidden lg:block mx-auto ">
                  <div className="flex flex-col justify-between items-center gap-y-25">
                    <div>
@@ -23,12 +23,12 @@ const SelectPortalSec = () => {
                 </div>
         <div
           id="right"
-          className="lg:w-[60%] lg:pl-20 lg:px-10 lg:py-2  h-screen"
+          className="lg:w-[60%] lg:pl-20 lg:px-10 lg:py-2  min-h-dvh"
         >
-          <div className="bg-[#001032] h-screen lg:h-auto p-4 lg:p-3 w-full lg:rounded-lg ">
+          <div className="lg:bg-[#001032]  h-dvh   lg:p-3 w-full lg:rounded-lg ">
             <div className="bg-white h-full lg:h-auto rounded-md ">
               <div id="top" className="text-center">
-                <img src={logo} alt="Logo" className=" lg:w-55  w-45 mx-auto lg:py-14 py-14" />
+                <img src={logo} alt="Logo" className=" lg:w-55  w-45 mx-auto lg:py-16 py-14" />
                 <p className=" mb-20 lg:mb-10 px-5 lg:px-10 font-medium text-[#001032]">
                   Get the most benefits from our pool of possible clients for
                   you
