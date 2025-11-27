@@ -30,7 +30,7 @@ const LogicSec1 = () => {
          </div>
         </div>
         <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center ">
-          <div className="bg-[#001032]  lg:h-auto p-5 lg:p-3 w-full lg:rounded-lg ">
+          <div className="bg-[#001032] h-[90%] lg:h-auto p-5 lg:p-3 w-full lg:rounded-lg ">
             <Card className="w-full h-full lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
