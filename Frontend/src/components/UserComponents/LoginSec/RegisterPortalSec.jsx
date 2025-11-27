@@ -42,22 +42,22 @@ const RegisterPortalSec = () => {
                  <div className="flex flex-col justify-between items-center gap-y-25">
                    <div>
                     <img src={logo} alt="Logo" className=" w-100 " />
-                  <p className=" text-[#001426] text-xl w-full relative bottom-25 left-17 ">Allows you to get funding,</p>
-                  <p className=" text-[#001426] text-xl relative bottom-25 left-17   ">resources and investor connect</p>
+                  <p className=" text-[#001032] text-xl w-full  ">Allows you to get funding,</p>
+                  <p className=" text-[#001032] text-xl   ">resources and investor connect</p>
                   </div>
                   <div >
-                    <p className="  text-lg w-full  text-[#000000] relative top-10 left-30" >Terms, Privacy Disclosures Cookie Settings © norf.KD Technologies LLP</p>
+                    <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © norf.KD Technologies LLP</p>
                   </div>
                  </div>
                 </div>
         <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center h-screen  w-full">
-          <div className="bg-[#001426] h-screen lg:h-auto p-5 lg:p-3 w-full  lg:rounded-lg ">
+          <div className="bg-[#001032] h-screen lg:h-auto p-5 lg:p-3 w-full  lg:rounded-lg ">
             <Card className="w-full h-full lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="w-35 h-30 lgw-50 lg:h-45 mx-auto" />
+                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-2" />
                 </CardTitle>
-                <CardDescription className=" mb-1 text-[#001032] text-lg lg:text-sm font-semibold ">
+                <CardDescription className=" mb-1 text-[#001032] text-sm lg:text-sm font-semibold ">
                   Get the most benefits from our pool of possible clients for you
                 </CardDescription>
                 <CardAction></CardAction>
@@ -123,7 +123,7 @@ const RegisterPortalSec = () => {
                      <div className=' w-full '>
                       <DropdownMenu className="bg-red-300 w-full" >
                               <div className="border border-[#0010321A] w-full px-3 p-2.5 rounded-md"  >
-                                <DropdownMenuTrigger className='flex items-center gap-35 '>
+                                <DropdownMenuTrigger className='flex items-center gap-23 '>
                                 <button className='text-[#00103280] font-medium   '>{activeTab}</button>
                                  <div className='w-[20%]  '>
                                   <IoIosArrowDown  className='mt-2  w-20 ' />
@@ -150,7 +150,7 @@ const RegisterPortalSec = () => {
               </CardContent>
               <CardFooter className="flex-col gap-2 mt-4">
                
-                <Link to="/selectPortal" className="w-full"><Button  className="w-full bg-[#001426]">
+                <Link to="/selectPortal" className="w-full"><Button  className="w-full bg-[#001032]">
                   Continue
                 </Button></Link>
                 

@@ -60,8 +60,8 @@ const ChannelPartnerSec1 = () => {
 
         </div>
 
-        <div id='form' className='p-2.5 border-3 rounded-xl border-gray-300 bg-gray-100'>
-               <div className="bg-white rounded-xl border-3 border-gray-300 lg:p-10 px-3 py-5 shadow-lg">
+        <div id='form' className='p-2.5 border-3 rounded-xl border-gray-200 bg-gray-100'>
+               <div className="bg-white rounded-xl border-3 border-gray-200 lg:p-10 px-3 py-5 shadow-lg">
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <input className="p-3 lg:py-6 border rounded-lg" placeholder="First name" />
@@ -115,12 +115,11 @@ const ChannelPartnerSec1 = () => {
 
        </div>
 
-    <div id='bottom' className='lg:mt-30 lg:px-10 mt-10'>
+   <div id='bottom' className='lg:mt-30 lg:px-10 mt-10'>
   <h1 className='lg:hidden text-[22px] text-[#001032] font-semibold'>
     Experience to be remembered
   </h1>
 
-  {/* Mobile → flex & scroll | Desktop → grid */}
   <div className="
     flex lg:grid
     lg:grid-cols-3
@@ -129,19 +128,24 @@ const ChannelPartnerSec1 = () => {
     mt-8 px-2
     overflow-x-auto lg:overflow-visible
     space-x-1 lg:space-x-0
-    snap-x snap-mandatory       /* ⭐ added */
+    scrollbar-hide
+    snap-x snap-mandatory
   ">
 
     {[1, 2, 3].map((item) => (
       <div key={item} className="min-w-full lg:min-w-0 px-7 lg:px-0 snap-center">
-        {/* ⭐ snap-center added */}
 
-        <hr className='border-t-[#00103299] mb-10 hidden lg:block'/>
+        <hr className='border-t-[#00103299] mb-10 hidden lg:block' />
 
         <div
-          className="bg-white border border-gray-300 rounded-xl lg:p-6 p-3 shadow-lg flex flex-col justify-between mx-2 lg:mx-0"
+          className="
+            bg-white border border-gray-200 rounded-xl 
+            lg:p-6 p-3 
+            flex flex-col justify-between mx-2 lg:mx-0
+            shadow-[0_4px_30px_rgba(0,0,0,0.12)]   
+          "
         >
-          <p className="text-[#001032] lg:pb-30 pb-5 lg:text-lg text-md tracking-wide lg:leading-7">
+          <p className="text-[#001032] lg:pb-30 pb-5 lg:text-lg text-[14px] tracking-wide lg:leading-7">
             I used to spend hours sending proposals that went nowhere. Through this platform, I started getting real, qualified leads who were actually ready to move. The 90-day partnership helped me grow my client base and confidence.
           </p>
 
@@ -160,11 +164,13 @@ const ChannelPartnerSec1 = () => {
             <div className="lg:w-20 lg:h-20 w-18 h-15 lg:bg-[#001032] bg-[#00103233] rounded-full"></div>
           </div>
         </div>
+
       </div>
     ))}
 
   </div>
 </div>
+
 
 
        </div>

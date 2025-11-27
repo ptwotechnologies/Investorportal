@@ -13,11 +13,11 @@ const SelectPortalSec = () => {
                  <div className="flex flex-col justify-between items-center gap-y-25">
                    <div>
                     <img src={logo} alt="Logo" className=" w-100 " />
-                  <p className=" text-[#001426] text-xl w-full relative bottom-25 left-17 ">Allows you to get funding,</p>
-                  <p className=" text-[#001426] text-xl relative bottom-25 left-17   ">resources and investor connect</p>
+                  <p className=" text-[#001032] text-xl w-full  ">Allows you to get funding,</p>
+                  <p className=" text-[#001032] text-xl ">resources and investor connect</p>
                   </div>
                   <div >
-                    <p className="  text-lg w-full  text-[#000000] relative top-10 left-20" >Terms, Privacy Disclosures Cookie Settings © norf.KD Technologies LLP</p>
+                    <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © norf.KD Technologies LLP</p>
                   </div>
                  </div>
                 </div>
@@ -25,11 +25,11 @@ const SelectPortalSec = () => {
           id="right"
           className="lg:w-[60%] lg:pl-20 lg:px-10 lg:py-2  h-screen"
         >
-          <div className="bg-[#001426] h-screen lg:h-auto p-4 lg:p-3 w-full lg:rounded-lg ">
+          <div className="bg-[#001032] h-screen lg:h-auto p-4 lg:p-3 w-full lg:rounded-lg ">
             <div className="bg-white h-full lg:h-auto rounded-md ">
               <div id="top" className="text-center">
-                <img src={logo} alt="Logo" className=" w-50 h-45 mx-auto " />
-                <p className=" mb-30 lg:mb-10 px-10 font-medium">
+                <img src={logo} alt="Logo" className=" lg:w-55  w-45 mx-auto lg:py-14 py-14" />
+                <p className=" mb-20 lg:mb-10 px-5 lg:px-10 font-medium text-[#001032]">
                   Get the most benefits from our pool of possible clients for
                   you
                 </p>
@@ -39,7 +39,7 @@ const SelectPortalSec = () => {
               </div>
               <div id="bottom " className="hidden lg:block">
                 <div className="flex justify-center items-center gap-3 p-3 pb-13 text-white ">
-                  <div className="bg-[#001426] rounded-sm p-3">
+                  <div className="bg-[#001032] rounded-sm p-3">
                     <div className="flex justify-start items-center py-5 gap-2 ">
                       <div className="bg-[#FFFFFF] w-10 h-10"></div>
                       <h1 className="text-lg font-semibold">Startup</h1>
@@ -58,7 +58,7 @@ const SelectPortalSec = () => {
                   <div className="bg-[#002A30] rounded-sm p-3">
                     <div className="flex justify-start items-center py-5 gap-2 ">
                       <div className="bg-[#FFFFFF] w-10 h-10"></div>
-                      <h1 className="text-lg font-semibold">Startup</h1>
+                      <h1 className="text-lg font-semibold">Investor</h1>
                     </div>
                     <p className="text-sm leading-6 tracking-wide mb-5 ">
                       Start exploring, connect with others, get listed, build
@@ -74,7 +74,7 @@ const SelectPortalSec = () => {
                   <div className="bg-[#001032] rounded-sm p-3">
                     <div className="flex justify-start items-center py-5 gap-2 ">
                       <div className="bg-[#FFFFFF] w-10 h-10"></div>
-                      <h1 className="text-lg font-semibold">Startup</h1>
+                      <h1 className="text-lg font-semibold">Service Professional</h1>
                     </div>
                     <p className="text-sm leading-6 tracking-wide mb-5 ">
                       Start exploring, connect with others, get listed, build
@@ -94,15 +94,15 @@ const SelectPortalSec = () => {
                 <div className="  px-10">
                     <RadioGroup defaultValue="comfortable ">
                   <div className="flex items-center gap-8 mb-4">
-                    <RadioGroupItem value="default" id="r1"  />
+                    <RadioGroupItem value="default" id="r1" className="border-2 border-[#001032]  "  />
                     <Label htmlFor="r1" className="text-xl">Start up</Label>
                   </div>
                   <div className="flex items-center gap-8 mb-4">
-                    <RadioGroupItem value="comfortable" id="r2" />
+                    <RadioGroupItem value="comfortable" id="r2" className="border-2 border-[#001032] " />
                     <Label htmlFor="r2" className="text-xl">Investor</Label>
                   </div>
                   <div className="flex items-center gap-8 mb-4">
-                    <RadioGroupItem value="compact" id="r3" />
+                    <RadioGroupItem value="compact" id="r3"className="border-2 border-[#001032] "  />
                     <Label htmlFor="r3" className="text-xl">Service professional</Label>
                   </div>
                 </RadioGroup>

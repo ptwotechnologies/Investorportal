@@ -36,7 +36,7 @@ const UserRoutes = () => {
 
   const adminPrefixes = [
   '/login',
-  '/selectportal',
+  '/selectPortal',
   '/registerportal',
   '/portaldetails',
   '/onboardingplans',
@@ -80,7 +80,7 @@ const UserRoutes = () => {
           <Route path="/joinus" element={<JoinUs/>} />
            <Route path="/contactus" element={<ContactUs/>} />
            <Route path="/login" element={<Login/>} />
-           <Route path="/selectportal" element={<SelectPortal/>} />
+           <Route path="/selectPortal" element={<SelectPortal/>} />
            <Route path="/registerportal" element={<RegisterPortal/>} />
             <Route path="/portaldetails" element={<PortalDetails/>} />
             <Route path="/onboardingplans" element={<OnboardingPlans/>} />

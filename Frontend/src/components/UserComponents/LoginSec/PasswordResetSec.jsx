@@ -21,15 +21,15 @@ const PasswordResetSec = () => {
           <div className="flex flex-col justify-between items-center gap-y-25">
             <div>
               <img src={logo} alt="Logo" className=" w-100 " />
-              <p className=" text-[#001426] text-xl w-full relative bottom-25 left-17 ">
+              <p className=" text-[#001032] text-xl w-full  ">
                 Allows you to get funding,
               </p>
-              <p className=" text-[#001426] text-xl relative bottom-25 left-17   ">
+              <p className=" text-[#001032] text-xl  ">
                 resources and investor connect
               </p>
             </div>
             <div>
-              <p className="  text-lg w-full  text-[#000000] relative top-10 left-30">
+              <p className="  text-lg w-full  text-[#000000] relative top-45">
                 Terms, Privacy Disclosures Cookie Settings © norf.kD
                 Technologies LLP
               </p>
@@ -40,15 +40,15 @@ const PasswordResetSec = () => {
           id="right"
           className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center h-screen  w-full"
         >
-          <div className="bg-[#001426] h-screen lg:h-auto p-5 lg:p-3 w-full  lg:rounded-lg ">
+          <div className="bg-[#001032] h-screen lg:h-auto p-5 lg:p-3 w-full  lg:rounded-lg ">
             <Card className="w-full h-full lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="w-50 h-45 mx-auto" />
+                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-13 my-7" />
                 </CardTitle>
                 <CardDescription className=" mb-1 text-[#001032] text-lg lg:text-sm font-semibold  ">
                   <p className="text-lg mb-8">Trouble logging in?</p>
-                   <p className="lg:w-[80%]  mx-auto">Enter your email or phone and we'll send you a link or code to get back into your account.</p>
+                   <p className="lg:w-[80%] text-sm  mx-auto">Enter your email or phone and we'll send you a link or code to get back into your account.</p>
 
                 </CardDescription>
 
@@ -71,7 +71,7 @@ const PasswordResetSec = () => {
               </CardContent>
               <CardFooter>
                 <Link to="/selectPortal" className="w-full">
-                  <Button className="w-full bg-[#001426] mt-5 lg:mt-0">
+                  <Button className="w-full bg-[#001032] mt-12 lg:mt-0">
                     Continue
                   </Button>
                 </Link>
