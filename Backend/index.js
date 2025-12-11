@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors({
-  origin: "http://localhost:5173", // sirf aapke frontend ka URL allow kare
+  origin: "*", // sirf aapke frontend ka URL allow kare
   methods: ["GET","POST","PUT","DELETE"],
   credentials: true
 }));
