@@ -54,7 +54,7 @@ const ConnectSec1 = () => {
   }, []);
 
   return (
-    <div className="md:flex bg-black lg:bg-gray-100 pl-4 pr-4 pb-6">
+    <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
                  <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto  pt-4">
                    {/* Header */}
                    <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
@@ -75,7 +75,7 @@ const ConnectSec1 = () => {
                    {/* ✅ Equal height fix added here */}
                    <div className="flex gap-4 items-stretch">
                      {/* Left Card */}
-             <div className="flex flex-col md:flex-row bg-white border border-gray-400 p-6 rounded-md shadow-md justify-between w-full md:w-[60%] h-full gap-6">
+             <div className="flex flex-col md:flex-row bg-white border border-gray-400 p-6 rounded-md shadow-md justify-between w-full md:w-[60%]  lg:h-[88vh]  gap-6">
             <h2 className="block md:hidden font-semibold text-2xl text-[#001426] px-2">Connect</h2>
             {/* Column 1 */}
             <div className="flex flex-col gap-3 md:mt-28 w-full md:w-1/2">
@@ -93,7 +93,7 @@ const ConnectSec1 = () => {
             </div>
 
             {/* Column 2 */}
-            <div className="hidden md:flex flex-col gap-3 w-full md:w-1/2">
+            <div className="hidden md:flex flex-col gap-3 w-full md:w-1/2 max-h-150 scrollbar-hide overflow-y-auto">
               {leftPartCol2.map((item, index) => (
                 <div
                   key={index}
@@ -109,7 +109,7 @@ const ConnectSec1 = () => {
           </div>
            
                      {/* ✅ Right Card (exact UI, untouched CSS) */}
-                     <div className="hidden lg:flex w-[40%] h-[90vh] ">
+                     <div className="hidden lg:flex w-[40%] h-[88vh] ">
                        <div className="bg-white border border-gray-300 shadow-md rounded-2xl overflow-hidden flex flex-col justify-between w-full h-full">
                          {/* Header image section */}
                          <div className="relative h-40 border-2 border-gray-300"></div>

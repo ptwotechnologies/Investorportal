@@ -4,6 +4,7 @@ import { FiEdit2 } from "react-icons/fi";
 import { TfiList } from "react-icons/tfi";
 import { HiMiniLink } from "react-icons/hi2";
 import { BsSendFill } from "react-icons/bs";
+import { NavLink } from "react-router-dom";
 
 const RequestRaisedSec = () => {
   const [selectedRequest, setSelectedRequest] = useState(null);
@@ -68,10 +69,10 @@ const RequestRaisedSec = () => {
             <div className="border px-6 py-3 bg-white flex flex-col gap-6 border-gray-300 shadow-md rounded-lg w-full">
               <div className="flex border-2 shadow-md border-gray-300 items-center px-4 justify-between rounded-2xl flex-1 min-w-[150px]">
                 <div className="flex items-center gap-2">
-                  <p className="px-2 border-r-2 border-gray-500">Raised</p>
-                  <p className="text-white bg-gray-900 p-2 rounded-lg m-2">
+                  <NavLink to="/requestraised"><p className="p-2 px-3 border-r-2 border-gray-500 bg-gray-900 rounded-lg text-white">Raised</p></NavLink>
+                  <NavLink to="/request"><p className="  p-2 rounded-lg m-2">
                     Received
-                  </p>
+                  </p></NavLink>
                 </div>
                 <div className="flex items-center gap-2 ">
                   <TfiList size={24} className="text-gray-500 bg-white" />

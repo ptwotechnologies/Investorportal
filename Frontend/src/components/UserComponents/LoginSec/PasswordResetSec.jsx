@@ -16,7 +16,7 @@ import { Link } from "react-router-dom";
 const PasswordResetSec = () => {
   return (
    <div>
-      <div className="flex justify-between items-center  ">
+      <div className="flex justify-between items-center lg:min-h-dvh   ">
         <div id="left" className=" w-[40%] hidden lg:block mx-auto ">
           <div className="flex flex-col justify-between items-center gap-y-25">
             <div>
@@ -38,13 +38,13 @@ const PasswordResetSec = () => {
         </div>
         <div
           id="right"
-          className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center h-screen  w-full"
+          className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center  w-full"
         >
-          <div className="bg-[#001032] h-screen lg:h-auto p-5 lg:p-3 w-full  lg:rounded-lg ">
-            <Card className="w-full h-full lg:h-auto mx-auto rounded-lg">
+          <div className="lg:bg-[#001032] lg:p-3 w-full  lg:rounded-lg ">
+            <Card className="w-full  lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-13 my-7" />
+                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-13 my-10 mb-15" />
                 </CardTitle>
                 <CardDescription className=" mb-1 text-[#001032] text-lg lg:text-sm font-semibold  ">
                   <p className="text-lg mb-8">Trouble logging in?</p>
@@ -69,9 +69,9 @@ const PasswordResetSec = () => {
                 </div>
               </form>
               </CardContent>
-              <CardFooter>
-                <Link to="/selectPortal" className="w-full">
-                  <Button className="w-full bg-[#001032] mt-12 lg:mt-0">
+              <CardFooter className="absolute bottom-5 w-full lg:static">
+                <Link to="/passwordresetotp" className="w-full">
+                  <Button className="w-full bg-[#001032] ">
                     Continue
                   </Button>
                 </Link>

@@ -12,8 +12,8 @@ const InvestorSec2 = () => {
             <div className="w-[18%] ">
               <div className="text-6xl mb-1 text-[#002A30] font-semibold ">
                 <p >1</p></div>
-              <p className="text-[#001032] font-medium  tracking-wide leading-8 text-lg ">Onboard</p>
-              <p className='text-sm w-[80%]'>Verified startup flow Work with early-stage founders actively seeking </p>
+              <p className="text-[#001032] font-medium  tracking-wide leading-8 text-lg ">Discover</p>
+              <p className='text-sm w-[90%]'>Curated deal flow Meet vetted founders buildinghigh-potential ventures </p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
@@ -21,8 +21,8 @@ const InvestorSec2 = () => {
             <div className="w-[18%]  ">
               <div className="text-6xl mb-1 text-[#002A30] font-semibold ">
                 <p >2</p></div>
-              <p className="text-[#001032] font-medium  tracking-wide leading-8 text-xl">Guide</p>
-              <p className='text-sm w-[80%]'>Verified startup flow Work with early-stage founders actively seeking </p>
+              <p className="text-[#001032] font-medium  tracking-wide leading-8 text-xl">Evaluate</p>
+              <p className='text-sm w-[90%]'>Structured startup dataReview clarity-driven insights built for investor decisions </p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
@@ -31,7 +31,7 @@ const InvestorSec2 = () => {
              <div className="text-6xl mb-1 text-[#002A30] font-semibold">
                 <p >3</p></div>
               <p className="text-[#001032] font-medium  tracking-wide leading-8 text-xl">Network</p>
-               <p className='text-sm w-[80%]'>Verified startup flow Work with early-stage founders actively seeking </p>
+               <p className='text-sm w-[90%]'>Connect with experts Access domain partners whosupport your investment thesis </p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
@@ -40,7 +40,7 @@ const InvestorSec2 = () => {
               <div className="text-6xl mb-1 text-[#002A30] font-semibold">
                 <p >4</p></div>
               <p className="text-[#001032] font-medium  tracking-wide leading-8 text-xl">Allocate</p>
-              <p className='text-sm w-[80%]'>Verified startup flow Work with early-stage founders actively seeking </p>
+              <p className='text-sm w-[90%]'>Deploy with confidenceInvest through verified startup-ready systems </p>
             </div>
           </div>
         </div>
@@ -48,11 +48,11 @@ const InvestorSec2 = () => {
     </div>
 
     <div id="phoneScreen" className="bg-[#DDDDDD] rounded-2xl text-white flex flex-wrap gap-x-4 gap-y-16  justify-center mt-1 py-14 pt-40 lg:hidden">
-      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl">Verified Client Pipelines </button>
-      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl" > Admin-Controlled Payments </button>
-      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl">Industry Expert Guidance </button>
-      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl"> Automated Client Matching </button>
-      <button className="bg-[#002A30] p-2 text-lg w-[40%] border-2 border-white rounded-2xl">Post-Sales Support </button>
+      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl">Curated Deal <br/> Flow </button>
+      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl" > Expert-Verified Startups </button>
+      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl">Smart Matching System </button>
+      <button className="bg-[#002A30] p-2 text-lg w-[45%] border-2 border-white rounded-2xl"> Post-Investment Support </button>
+      <button className="bg-[#002A30] p-2 text-lg w-[40%] border-2 border-white rounded-2xl">Transparent Founder Data </button>
 
     </div>
    </>

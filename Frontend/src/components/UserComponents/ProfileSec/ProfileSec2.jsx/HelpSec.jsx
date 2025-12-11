@@ -8,7 +8,7 @@ import { BsSendFill } from "react-icons/bs";
 import { FiEdit2 } from "react-icons/fi";
 import { FaUser } from "react-icons/fa";
 
-const HelpSec = () => {
+const HelpSec = ({ isOpen = true }) => {
  const leftPart = [
     {
       name: "I need assistance with sign up the account",
@@ -47,7 +47,7 @@ const HelpSec = () => {
     <div className="md:flex w-full overflow-hidden">
       <div className="min-h-screen bg-gray-100 lg:p-4 p-2 w-full  mx-auto">
         {/* Header */}
-        <div className="hidden lg:flex bg-white border fixed w-[78%] z-20 border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
+        <div className="hidden lg:flex bg-white border sticky top-4 z-20 border-gray-400 shadow-md rounded-lg px-10 justify-between items-center w-full">
           <h1 className="text-md font-semibold text-gray-800">
             Welcome, Startup India Pvt. Ltd.
           </h1>
@@ -61,18 +61,18 @@ const HelpSec = () => {
             </span>
           </button>
         </div>
-        <div id='mobile ' className='lg:hidden bg-white border border-gray-300 p-2 mb-2 rounded-lg'> 
+        <div id='mobile ' className='lg:hidden bg-white border border-gray-300 p-2 mb-2 rounded-lg '> 
               <div className="flex justify-between items-start gap-4 w-full  ">
-              <div className="flex items-center gap-4 w-full">
+              <div className="flex items-center gap-2 w-full">
                 <div className="w-12 h-12 rounded-full border border-gray-300 shadow-md shrink-0"></div>
-                <p className="text-gray-900 font-semibold">Tickets</p>
+                <p className="text-gray-900 font-semibold text-sm">Tickets</p>
                 <div className="flex border-2 shadow-md border-gray-300 items-center px-4 justify-between rounded-2xl flex-1 min-w-[150px]">
-                  <div className="flex items-center gap-2 flex-1">
+                  <div className="flex items-center gap- flex-1">
                     <IoSearchSharp size={24} className="text-gray-500" />
                     <input
                       type="text"
                       placeholder="Search Messages"
-                      className="p-2 outline-none w-full"
+                      className="p-1  outline-none w-full"
                     />
                   </div>
                   <TfiList size={24} className="text-gray-500" />
@@ -80,9 +80,9 @@ const HelpSec = () => {
               </div>
             </div>
             </div>
-        <div className="flex gap-4 lg:mt-15  h-40">
+        <div className="flex gap-4 lg:mt-4 mt-2">
           {/* Left Card */}
-           <div className="lg:min-h-screen flex flex-col   rounded-lg border  border-gray-300 lg:p-6 p-3 shadow-md w-full lg:w-[40%] h-[77vh] lg:h-screen bg-white">
+           <div className="lg:h-160 h-[73vh] flex flex-col   rounded-lg border  border-gray-300 lg:p-6 p-3 shadow-md w-full lg:w-[40%]  bg-white">
             <div id='desktop ' className='hidden lg:block'> 
               <div className="flex justify-between items-start gap-4 w-full  ">
               <div className="flex items-center gap-4 w-full">
@@ -126,9 +126,9 @@ const HelpSec = () => {
           </div>
 
           {/* Right Card */}
-          <div className="hidden lg:block w-[60%] items-center justify-center h-screen ml-auto overflow-hidden ">
+          <div className="hidden lg:block w-[60%] items-center justify-center h-screen ml-auto overflow-hidden relative">
             <div className='h-[calc(100vh-170px)] overflow-y-scroll scrollbar-hide'>
-              <div className="border p-6  pt-20 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full ">
+              <div className="border p-6  pt-6 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full ">
               {rightPart.map((item, index) => (
                 <div
                   key={index}
@@ -145,8 +145,8 @@ const HelpSec = () => {
             </div>
             </div>
 
-            <div className="border p-5 border-gray-300 shadow-md rounded-lg w-[46%] mt-4 bg-white fixed bottom-0 z-20">
-              <div className="flex border-2 shadow-md border-gray-300 items-center px-4 justify-between rounded-xl flex-1 min-w-[150px]">
+            <div className={`hidden lg:block relative bottom-4 right-0 border p-5 border-gray-300 shadow-md rounded-lg mt-4 bg-white z-20 ${isOpen ? 'lg:w-full w-auto' : 'w-full'}`}>
+              <div className="flex border-2 shadow-md border-gray-300 items-center px-4 justify-between rounded-xl w-full min-w-[150px]">
                 {" "}
                 <input
                   type="text"

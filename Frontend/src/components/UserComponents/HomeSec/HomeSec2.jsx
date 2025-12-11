@@ -3,6 +3,7 @@ import img1 from "/homeSec2Img1.png";
 import img2 from "/homeSec2Img2.png";
 import img3 from "/homeSec2Img3.png";
 import ScrollAreaSec from "./ScrollAreaSec";
+import { Link } from "react-router-dom";
 
 const HomeSec2 = () => {
   return (
@@ -118,37 +119,37 @@ const HomeSec2 = () => {
             <div className=" w-[30%]">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Startups</h3>
-              <img
+             <Link to="/startup"> <img
                 src={img1}
                 alt=""
                 className="rounded-xl w-[90%] h-[400px]"
-              />
+              /></Link>
               <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                You’re building a startup that solves a real-world problem{" "}
+                You’re building something real and ready to scale{" "}
               </p>
             </div>
             <div className=" w-[30%]">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Investors</h3>
-              <img
+              <Link to="/investor"><img
                 src={img2}
                 alt=""
                 className="rounded-xl w-[90%] h-[400px]"
-              />
+              /></Link>
               <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                You want incubated startups curated to your domain{" "}
+                You seek refined, investment-ready startup in your space{" "}
               </p>
             </div>
             <div className=" w-[30%]">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Service Professionals</h3>
-              <img
+             <Link to="/serviceprofessional"> <img
                 src={img3}
                 alt=""
                 className="rounded-xl w-[90%] h-[400px]"
-              />
+              /></Link>
               <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                You want startups curated to your domain
+                You want genuine startup leads without paid ads
               </p>
             </div>
           </div>

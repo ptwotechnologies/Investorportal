@@ -5,40 +5,40 @@ const InvestorSec3 = () => {
      <>
     <div className=" p-10 lg:pt-35 hidden lg:block">
       <h1 className="text-[#001032CC] text-5xl font-bold">
-        The broken loops in the market
+       WHY INVESTORS CHOOSE THIS <br/> PORTAL?
       </h1>
       <div className="flex justify-center items-center gap-13 pt-15">
         <div id="left" className="w-[40%] ">
-          <h1 className="text-2xl font-semibold py-10">The support system founders actually need</h1>
+          <h1 className="text-2xl font-semibold py-10">The support system you’ve been missing</h1>
           <ul className="list-disc pl-4 p-4 font-medium">
             <li >
-              <h2 className='text-xl font-semibold' >Early-stage direction</h2>
+              <h2 className='text-xl font-semibold' >Access pre-vetted founders</h2>
               <p className=" text-lg font-light">
-                Most founders build without clarity — we give you structure from Day 1.
+                Review startups that have been refined through structured preparation and expert assessment.
               </p>
             </li>
             <li >
-              <h2 className='text-xl font-semibold'>Real opportunity visibility  </h2>
+              <h2 className='text-xl font-semibold'>All data is verified </h2>
               <p className=" text-lg font-light">
-                Investors discover your startup through relevance, not random outreach.
+                Every metric, document, and statement is checked by our team for accuracy and clarity.
               </p>
             </li>
              <li >
-              <h2 className='text-xl font-semibold'>Access to expert insight</h2>
+              <h2 className='text-xl font-semibold'>Diligence support when needed</h2>
               <p className=" text-lg font-light">
-                Work with vetted specialists who align their expertise with your milestones.
+                Get guided summaries, founder notes, and clean financial breakdowns.
               </p>
             </li>
             <li>
-              <h2 className='text-xl font-semibold'>Protected collaboration</h2>
+              <h2 className='text-xl font-semibold'>Network with aligned founders</h2>
               <p className=" text-lg font-light">
-                Every interaction is moderated so you stay safe, informed, and stress-free.
+                See opportunities filtered to match your sector, thesis, and ticket size.
               </p>
             </li>
              <li>
-              <h2 className='text-xl font-semibold' >Strategic founder guidance</h2>
+              <h2 className='text-xl font-semibold' >Seamless deal coordination</h2>
               <p className=" text-lg font-light">
-                Get personalised help on pricing, positioning, storytelling, and readiness.
+               We help streamline calls, clarify expectations, and maintain momentum.
               </p>
             </li>
 

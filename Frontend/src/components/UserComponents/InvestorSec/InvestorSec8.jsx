@@ -14,25 +14,17 @@ const InvestorSec8 = () => {
     
       const divElements = [
         {
-            paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re ",
-            name:"Vivek T ",
-           company:"Company Name ",
-            companyName:"Startup"
+            paragraph:"Artestor helped streamline our funnel. We met founders who were clear, prepared, and genuinely ready for investment talks",
+            name:"Tapan Verma  ",
+           company:"Kapinort ventures",
         },
         {
-            paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’r",
-            name:"Vivek T ",
-            company:"Company Name ",
-            companyName:"Startup"
+            paragraph:"The quality of deal flow is impressive. We saved weeks of filtering and focused on startups with real traction and direction",
+            name:"Sanjay Kumar ",
+            company:"Kapinort Ventures",
         },
         {
-            paragraph:"“Breaks down your numbers, shows you how long your runway actually is,",
-             name:"Vivek T ",
-            company:"Company Name ",
-            companyName:"Startup"
-        },
-            {
-            paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down",
+            paragraph:"The quality of deal flow is impressive. We saved weeks of filtering and focused on startups with real traction and direction",
              name:"Vivek T ",
             company:"Company Name ",
             companyName:"Startup"
@@ -43,7 +35,7 @@ const InvestorSec8 = () => {
          <div className='mt-15  ' >
   
        <div className="relative">
-        <h1 className='text-5xl font-semibold px-10 pb-10 text-[#001032]'>Trusted by professionls</h1>
+        <h1 className='text-5xl font-semibold px-10 pb-10 text-[#001032]'>Trusted by investors</h1>
         <div
           ref={scrollRef}
           onScroll={handleScroll}

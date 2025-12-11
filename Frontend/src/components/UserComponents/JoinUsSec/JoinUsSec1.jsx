@@ -8,7 +8,7 @@ const JoinUsSec1 = () => {
             <h1 className='lg:hidden pt-25 text-center pb-3 '>For Service Professionals</h1>
         <div className=' text-center w-full lg:h-screen flex justify-center items-start lg:items-end lg:pb-16 '>
             <div className=' lg:w-[73%] lg:text-[#001032]' >
-            <p className='text-[42px] font-semibold leading-13 lg:leading-14 tracking-wide mb-6 '>Grow Your Business by Partnering with India’s Fastest-Growing Startup Ecosystem</p>
+            <p className='text-[42px] font-semibold leading-13 lg:leading-14 tracking-wide mb-6 '>Collaborate, grow, and accelerate opportunities on one unified platform</p>
         <p className='text-2xl leading-8 tracking-wide hidden lg:block'>Grow Your Business by Partnering with India</p>
         <Link to="/login"><button className='  mt-3 lg:bg-[#001426] lg:text-white bg-white text-[#001032] 
         p-2 px-14 rounded-sm text-lg mb-15 lg:mb-0'>Get Listed</button></Link>

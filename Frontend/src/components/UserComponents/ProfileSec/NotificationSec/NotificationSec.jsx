@@ -22,6 +22,15 @@ const NotificationSec = () => {
     {
       data: "An experienced entrepreneur and business professional.",
     },
+     {
+      data: "An experienced entrepreneur and business professional.",
+    },
+     {
+      data: "An experienced entrepreneur and business professional.",
+    },
+     {
+      data: "An experienced entrepreneur and business professional.",
+    },
   ];
 
   const requestOptions = [
@@ -59,7 +68,7 @@ const NotificationSec = () => {
   }, []);
 
   return (
-   <div className="md:flex bg-black lg:bg-gray-100 pl-4 pr-4 pb-6">
+   <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
              <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto  pt-4">
                {/* Header */}
                <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
@@ -80,20 +89,20 @@ const NotificationSec = () => {
                {/* ✅ Equal height fix added here */}
                <div className="flex gap-4 items-stretch">
                  {/* Left Card */}
-                  <div className="flex flex-col justify-between w-full md:w-[60%] items-center lg:h-[90vh]">
+                  <div className="flex flex-col  justify-between w-full md:w-[60%] items-center lg:h-[88vh]">
             <div className="border px-6 py-3 pb-20 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full h-full">
               {/* Left content starts here */}
-              <div className="flex flex-col gap-6 text-sm text-gray-800 w-full">
+              <div className="flex flex-col gap-3 text-sm text-gray-800 w-full">
                 {/* Name */}
                 <h2 className="text-lg font-semibold">Notification</h2>
               </div>
 
               {/* ✅ Mobile Right Part */}
-              <div className="flex-flex-col gap-2">
+              <div className="flex-flex-col gap-2 max-h-120 overflow-y-auto scrollbar-hide">
                 {leftPart.map((item, index) => (
                   <div
                     key={index}
-                    className={`border-2 p-4 flex items-center gap-4 border-gray-500 rounded-lg w-full md:w-[60%]
+                    className={`border-2 p-4 lg:my-2 my-3 flex items-center gap-4 border-gray-500 rounded-lg w-full md:w-[60%]
                                   ${
                                     index % 2 !== 0
                                       ? "flex-row-reverse"
@@ -101,11 +110,11 @@ const NotificationSec = () => {
                                   } flex`}
                   >
                     <div className="shrink-0 w-20 h-20 rounded-full border-2 border-gray-500 shadow-md flex items-center justify-center"></div>
-                    <p className="flex-1 text-gray-700">{item.data}</p>
+                    <p className="flex-1 text-gray-700 ">{item.data}</p>
                   </div>
                 ))}
               </div>
-              <button className="w-full md:w-[20%] md:ml-36 bg-[#001426] rounded-lg px-4 py-2  text-white">
+              <button className="w-full md:w-[20%] md:ml-36 bg-[#001426] rounded-lg px-4 py-2    text-white">
                 View More
               </button>
             </div>
@@ -113,7 +122,7 @@ const NotificationSec = () => {
           </div>
        
                  {/* ✅ Right Card (exact UI, untouched CSS) */}
-                 <div className="hidden lg:flex w-[40%] h-[90vh] ">
+                 <div className="hidden lg:flex w-[40%] h-[88vh] ">
                    <div className="bg-white border border-gray-300 shadow-md rounded-2xl overflow-hidden flex flex-col justify-between w-full h-full">
                      {/* Header image section */}
                      <div className="relative h-40 border-2 border-gray-300"></div>

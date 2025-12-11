@@ -29,9 +29,9 @@ const PricingSec2 = () => {
     <>
     <div className="container mx-auto lg:p-10   ">
       <h1 className='text-4xl lg:text-5xl text-[#001032] font-semibold lg:mb-7 mb-2  px-4 lg:px-0 lg:mt-0'>Pricing Models</h1>
-      <p className='text-2xl lg:text-5xl text-[#001032]  px-4 lg:px-0 lg:mb-30 mb-10'>Grow Your Business by Partnering with us</p>
+      <p className='text-2xl lg:text-5xl text-[#001032]  px-4 lg:px-0 lg:mb-30 mb-10'>Choose the model which suits your business</p>
       <div className=''>
-        <div className="flex justify-center items-center flex-wrap gap-5 bg-[#B5B5B5] w-fit rounded-full  p-1 mx-auto">
+        <div className="flex justify-start items-center flex-wrap gap-5 bg-[#B5B5B5] w-fit rounded-full  p-1 mx-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}

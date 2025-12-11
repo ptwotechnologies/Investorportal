@@ -18,7 +18,7 @@ Ecosystem</h1>
          <div id='right' className='w-full my-5 lg:my-0 lg:w-[80%]  '>
            <div className='h-[250px] lg:h-[400px] bg-[#D8D8D8] lg:rounded-sm rounded-2xl lg:flex lg:justify-center lg:items-end'>
             <img src={img} alt="Image" className='object-cover h-full w-full lg:hidden rounded-2xl'/>
-             <button className='hidden lg:block mb-3 lg:bg-[#001032] lg:text-white bg-white text-[#001032] lg:p-3  lg:px-15 rounded-sm text-lg'>Get Listed</button>
+             <Link to="/login"><button className='hidden lg:block mb-3 lg:bg-[#001032] lg:text-white bg-white text-[#001032] lg:p-3  lg:px-15 rounded-sm text-lg'>Get Listed</button></Link>
            </div>
          </div>
          <div className='hidden lg:block text-center  w-[60%]'>

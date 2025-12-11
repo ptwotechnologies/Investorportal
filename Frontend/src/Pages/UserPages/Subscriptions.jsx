@@ -3,7 +3,7 @@ import SubscriptionSec1 from '@/components/UserComponents/SubscriptionSec/Subscr
 import SubscriptionSec2 from '@/components/UserComponents/SubscriptionSec/SubscriptionSec2'
 import SubscriptionSec3 from '@/components/UserComponents/SubscriptionSec/SubscriptionSec3'
 import SubscriptionSec3Desktop from '@/components/UserComponents/SubscriptionSec/SubscriptionSec3Desktop'
-
+import { useSearchParams } from 'react-router-dom';
 
 import SubscriptionSec4 from '@/components/UserComponents/SubscriptionSec/SubscriptionSec4'
 import SubscriptionSec5 from '@/components/UserComponents/SubscriptionSec/SubscriptionSec5'
@@ -13,6 +13,9 @@ import logo from "/ArtesterLogo2.png";
 import React from 'react'
 
 const Subscription = () => {
+
+  const [searchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab'); 
   return (
     <div>
       <div>
@@ -28,7 +31,7 @@ const Subscription = () => {
         <SubscriptionSec3Desktop/>
       </div>
       <div>
-        <SubscriptionSec4/>
+        <SubscriptionSec4 urlTab={tabParam}/>
       </div>
       <div>
         <SubscriptionSec5/>

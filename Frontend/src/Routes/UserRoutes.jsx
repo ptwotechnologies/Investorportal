@@ -23,7 +23,6 @@ import PasswordSuccess from '@/Pages/UserPages/LoginPages/PasswordSuccess'
 import Profile from '@/Pages/UserPages/ProfilePages/Profile'
 import Help from '@/Pages/UserPages/ProfilePages/Help'
 import RequestReceived from '@/Pages/UserPages/ProfilePages/RequestReceived'
-import RequestRaised from '@/Pages/UserPages/ProfilePages/RequestRaised'
 import Settings from '@/Pages/UserPages/ProfilePages/Settings'
 import Notification from '@/Pages/UserPages/ProfilePages/Notification'
 import Connect from '@/Pages/UserPages/ProfilePages/Connect'
@@ -68,7 +67,7 @@ const UserRoutes = () => {
     <div>
     {!hideNavbar && <Navbar />}
     
-        <Routes>
+        <Routes> 
          <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/serviceprofessional" element={<ServiceProfessional />} />
@@ -91,10 +90,9 @@ const UserRoutes = () => {
             <Route path="/passwordresetotp" element={<PasswordResetOtpSec/>} />
             <Route path="/newpassword" element={<NewPassword/>} />
             <Route path="/passwordsuccess" element={<PasswordSuccess/>} />
-            <Route path="/profile" element={<Profile/>} />
+            <Route path="/profile" element={<Profile/>} /> 
             <Route path="/help" element={<Help/>} />
             <Route path="/request" element={<RequestReceived/>} />
-            <Route path="/requestraised" element={<RequestRaised/>} />
              <Route path="/settings" element={<Settings/>} />
               <Route path="/notification" element={<Notification/>} />
                <Route path="/connect" element={<Connect/>} />

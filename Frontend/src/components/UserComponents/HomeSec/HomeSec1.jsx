@@ -59,26 +59,26 @@ const HomeSec1 = () => {
               <div className="w-8 h-8 bg-[#001032]"></div>
               <p className="leading-8 tracking-wider">
                
-                Investors are already waiting for startups like you
+               Investors are actively browsing for founders like you
               </p>
             </div>
             <div className="flex justify-start items-center gap-3 mt-10">
               <div className="w-8 h-8 bg-[#001032]"></div>
               <p className="leading-8 tracking-wider">
                
-                Investors are already waiting for startups like you
+                Experts are ready to guide you at every critical step
               </p>
             </div>
             <div className="flex justify-start items-center gap-3 mt-10">
               <div className="w-8 h-8 bg-[#001032]"></div>
               <p className="leading-8 tracking-wider">
-                Free guidance from experts to become investor-ready
+               Reach real audiences organically without spending on ads
               </p>
             </div>
             <div className="flex justify-start items-center gap-3 mt-10 ">
               <div className="w-8 h-8 bg-[#001032] "></div>
               <p className="leading-8 tracking-wider">
-                You can tap into real audience without running a single ad
+               Access practical, founder-focused support for investor readiness
               </p>
             </div>
           </div>
@@ -109,10 +109,10 @@ const HomeSec1 = () => {
         </div>
       </div>
           <div className="hidden lg:block">
-            <div className="flex justify-center items-center gap-3 bg-[#001032] ml-auto text-white w-[50%] mt-4 p-1 rounded-sm ">
-       <Link to="/login"> <button>See How It Works</button></Link>
+            <Link to="/login"> <div className="flex justify-center items-center gap-3 bg-[#001032] ml-auto text-white w-[50%] mt-4 p-1 rounded-sm ">
+       <button>See How It Works</button>
         <IoIosArrowRoundForward size={25} />
-          </div>
+          </div></Link>
           </div>
     </div>
      <div className="flex justify-center items-center gap-2 border-2 border-[#002A30]  w-[70%] 

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const InvestorSec7 = () => {
   return (
@@ -20,7 +21,7 @@ const InvestorSec7 = () => {
           <hr />
          </div>
          <div className='flex justify-between items-center gap-15'>
-            <h1 className='py-6 text-4xl'>Design & Branding</h1>
+            <h1 className='py-6 text-4xl'>Get Onboarded</h1>
             <p className='bg-[#D9D9D9] rounded-full p-6 text-5xl mr-10 mt-2'>1/4</p>
          </div>
         </div>
@@ -37,7 +38,7 @@ const InvestorSec7 = () => {
             </div>
             <h1 className='text-2xl font-semibold pb-5'>Choose your on-boarding plan</h1>
            
-            <p className='text-md leading-9 tracking-wider'>→ All plans include access to the portal and startup requests</p>
+            <p className='text-md leading-9 tracking-wider'>→ Select the tier that aligns with your investment style and focus</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just pick what fits your business goals</p>
             <hr className='mx-6' />
              <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
@@ -47,10 +48,10 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Create your profile and list your services</h1>
+            <h1 className='text-2xl font-semibold pb-5'>Create your investor profile, past deals & experience</h1>
            
-            <p className='text-md leading-9 tracking-wider'>→ Add categories, pricing, sample work, and turnaround timelines</p>
-            <p className='text-md leading-9 tracking-wider pb-9'>→ We use this to match you with real startup needs</p>
+            <p className='text-md leading-9 tracking-wider'>→ Add categories, pricing, experience and turnaround timelines</p>
+            <p className='text-md leading-9 tracking-wider pb-9'>→ Share your sectors, thesis, past deals, and preferred ticket sizes.</p>
            
              <div className='h-[300px] bg-[#FFFFFF] rounded-sm mt-6 my-8'> </div>
               <hr className='mx-6' />
@@ -59,9 +60,9 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Get approved in 24 hours</h1>
+            <h1 className='text-2xl font-semibold pb-5'>Get verified in 24 hours</h1>
            
-            <p className='text-md leading-9 tracking-wider'>→ Our team reviews all listings to ensure legitimacy and relevance</p>
+            <p className='text-md leading-9 tracking-wider'>→ Our team confirms your details to maintain credibility in the system</p>
             
              <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
              <hr className='mx-6'  />
@@ -72,7 +73,7 @@ const InvestorSec7 = () => {
             </div>
             <h1 className='text-2xl font-semibold pb-5'>Go live on the portal</h1>
            
-            <p className='text-md leading-9 tracking-wider'>→ Get discovered by verified startups, respond to interest, and convert leads directly</p>
+            <p className='text-md leading-9 tracking-wider'>→ Start discovering refined founders and evaluating real opportunities</p>
            
              <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
         </div>
@@ -84,20 +85,21 @@ const InvestorSec7 = () => {
 
       <div className='lg:hidden text-center  mt-8'>
         <h1 className='text-[#001032] text-2xl font-semibold text-center'>Ready to on-board...?</h1>
-          <button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button>
+          <Link to="/login"><button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button></Link>
                   <div  className="w-full  h-fit  p-4 text-start mt-5">
              <div className=' w-full h-full gap-10  border border-[#00103280] shadow-lg  p-2 rounded-md'>
-                <p className=' text-sm leading-6 tracking-wider '>You’ve got the skills. We’ve got the startups.Instead of spending money on ads, pitching endlessly, or chasing unclear leads, plug into a system built for real, verified work. Together with a straightforward way to grow your practice with startups that are filtered and ready to move</p>
-                 <div className=' flex justify-between items-center lg:mt-25 mt-15' >
+              <h1 className=' text-md leading-6 tracking-wider font-medium mb-1 '>You bring the experience. We bring the founders.</h1>
+                <p className=' text-md leading-6 tracking-wider '>Instead of scattered pitches, random outreach, or unclear traction, connect with startups that are already pre-screened and prepared for real talks. Together, we build a cleaner, faster path to meaningful deals.</p>
+                 <div className=' flex justify-between items-center lg:mt-25 mt-10' >
                      <div className='font-semibold text-md'>
-                        <h1>Join once. </h1>
-                          <p>Let the ecosystem work for you</p>
+                        <h1 className='text-sm'>Join once. </h1>
+                          <p className='text-sm'>Let the ecosystem work for you</p>
                      </div>
                   <div className='flex justify-center items-center gap-3'>
                     <div className='w-0.5 h-[100px] bg-[#D9D9D9] '>
                   </div>
                     <div className=' rounded-full bg-[#001032] '>
-                      <p className='p-6 py-12 text-center text-white'>Get Listed</p>
+                      <p className='p-3 py-5 text-center text-white'>Get Listed</p>
                   </div>
                   
                   </div>

@@ -51,13 +51,13 @@ const StartupSec6 = () => {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide lg:px-10 pt-8 gap-2 lg:gap-5 text-[#001032] ">
+          className="flex overflow-x-scroll  snap-x snap-mandatory scrollbar-hide lg:px-10 pt-8 gap-2 lg:gap-5 text-[#001032] ">
           {divElements.map((item, index) => (
-            <div key={index} className="w-[48%]  lg:w-[30%] h-fit  shrink-0 snap-center lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
+            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0 snap-center lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
              <div className=' w-full h-full lg:gap-10  border border-[#00103280] 
-             lg:rounded-2xl shadow-lg lg:p-3 p-2 '>
+             lg:rounded-2xl shadow-lg lg:p-3 p-5 '>
                 <p className='text-sm lg:text-xl leading-6 tracking-wider hidden lg:block'>{item.paragraph}</p>
-                <p className='text-sm lg:text-xl leading-6 tracking-wider lg:hidden'>{item.phonepara}</p>
+                <p className='text-md lg:text-xl leading-6 tracking-wider lg:hidden mb-20'>{item.phonepara}</p>
               <div className=' flex justify-between items-center lg:mt-25 mt-5' >
                      <div className='font-semibold lg:text-xl hidden lg:block'>
                         <h1>{item.company}</h1>

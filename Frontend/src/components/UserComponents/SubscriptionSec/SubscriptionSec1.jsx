@@ -1,6 +1,7 @@
 import React from 'react'
 import img from "/homeSec1.png";
 import img1 from "/priceImg.png"
+import { Link } from 'react-router-dom';
 
 
 const SubscriptionSec1 = () => {
@@ -12,7 +13,7 @@ const SubscriptionSec1 = () => {
              <h1 className=' text-4xl  mx-auto  lg:text-4xl lg:font-bold font-semibold lg:leading-11 leading-12 tracking-wide  lg:w-[60%] '>Grow Your Business by Partnering with India’s Fastest-Growing Startup Ecosystem</h1>
        
                
-               <button className='  mt-7 lg:bg-[#001032] lg:text-white bg-white text-[#001032] p-2 px-10 rounded-sm text-lg drop-shadow-[0_6px_2px_rgba(0,0,0,0.2)] lg:drop-shadow-none '>Get Listed</button>
+               <Link to="/login"><button className='  mt-7 lg:bg-[#001032] lg:text-white bg-white text-[#001032] p-2 px-10 rounded-sm text-lg drop-shadow-[0_6px_2px_rgba(0,0,0,0.2)] lg:drop-shadow-none '>Register</button></Link>
             </div>
        
             <div id='right' className='w-full  my-5 lg:px-10 '>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MarketingContent from './MarketingContent';
 import DevelopmentContent from './DevelopmentContent';
 import DesigningContent from './DesigningContent';
@@ -6,10 +6,25 @@ import LegalContent from './LegalContent';
 import DropDown from './DropDown';
 
 
-const SubscriptionSec4 = () => {
-  const [activeTab, setActiveTab] = useState('Designing');
 
-  
+const SubscriptionSec4 = ({ urlTab }) => {
+
+
+  const TAB_IDS = ['Designing', 'Development', 'Marketing', 'Legal', 'Consultancy', 'HR', 'Advisory'];
+
+  const normalizeTab = (raw) => {
+    if (!raw) return null;
+    const cleaned = String(raw).trim();
+    const match = TAB_IDS.find((t) => t.toLowerCase() === cleaned.toLowerCase());
+    return match ?? cleaned;
+  };
+
+  const [activeTab, setActiveTab] = useState(normalizeTab(urlTab) || 'Designing');
+
+  useEffect(() => {
+    const nt = normalizeTab(urlTab);
+    if (nt && nt !== activeTab) setActiveTab(nt);
+  }, [urlTab]);
 
   const tabs = [
     { id: 'Designing', label: 'Designing' },
@@ -22,20 +37,14 @@ const SubscriptionSec4 = () => {
   ];
 
   const tabContents = {
-    Designing: (
-     <DesigningContent/>
-    ),
-    Development: (
-      <DevelopmentContent/>
-    ),
-   Marketing: (
-     <MarketingContent/>
-    ),
-    Legal:(
-      <LegalContent/>
-    )
-  };
-
+  Designing: <DesigningContent />,
+  Development: <DevelopmentContent />,
+  Marketing: <MarketingContent />,
+  Legal: <LegalContent />,
+  HR: <div>HR Plans Content</div>,
+  Advisory: <div>Advisory Plans Content</div>,
+  Consultancy: <div>Consultancy Plans Content</div>,
+};
   return (
      <>
     <div className="container mx-auto lg:p-10 mt-10 ">

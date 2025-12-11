@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { IoIosArrowDown } from "react-icons/io";
 import DesigningContent from './DesigningContent';
 import DevelopmentContent from './DevelopmentContent';
@@ -13,15 +14,32 @@ import {
 
 const DropDown = () => {
 
-  const [activeTab, setActiveTab] = useState('Designing');
+  const [searchParams] = useSearchParams();
+  const urlTab = searchParams.get('tab');
+
+  const TAB_IDS = ['Designing', 'Development', 'Marketing', 'Legal', 'Consultancy', 'HR', 'Advisory'];
+  const normalizeTab = (raw) => {
+    if (!raw) return null;
+    const cleaned = String(raw).trim();
+    const match = TAB_IDS.find((t) => t.toLowerCase() === cleaned.toLowerCase());
+    return match ?? cleaned;
+  };
+
+  const [activeTab, setActiveTab] = useState(normalizeTab(urlTab) || 'HR');
+
+  useEffect(() => {
+    const nt = normalizeTab(urlTab);
+    if (nt && nt !== activeTab) setActiveTab(nt);
+  }, [urlTab]);
   const [isOpen, setIsOpen] = useState(false); // blur control
 
   const tabs = [
-    { id: 'Designing', label: 'Designing' },
+    
     { id: 'HR', label: 'HR' },
     { id: 'Legal', label: 'Legal' },
     { id: 'Advisory', label: 'Advisory' },
     { id: 'Marketing', label: 'Marketing' },
+    { id: 'Designing', label: 'Designing' },
     { id: 'Consultancy', label: 'Consultancy' },
     { id: 'Development', label: 'Development' },
   ];
@@ -39,10 +57,12 @@ const DropDown = () => {
       <div className='flex justify-center'>
         <DropdownMenu onOpenChange={(open) => setIsOpen(open)}>
 
-          <div className='text-white bg-[#B5B5B5] h-14 rounded-full p-1'>
-            <DropdownMenuTrigger className=' w-65 flex justify-between items-center  p-2 px-7 text-2xl rounded-full  bg-[#001426]'>
-              <button>{activeTab}</button>
-              <IoIosArrowDown className='mt-2' />
+          <div className='text-white border border-black h-14 rounded-full p-1'>
+            <DropdownMenuTrigger className=' w-65 p-0 rounded-full text-center'>
+              <button className='w-65 flex justify-center gap-3 items-center p-2 px-7 text-2xl rounded-full bg-[#001426]'>
+                <span>{activeTab}</span>
+                <IoIosArrowDown className='mt-2' />
+              </button>
             </DropdownMenuTrigger>
           </div>
 
@@ -52,11 +72,11 @@ const DropDown = () => {
             {tabs
               .filter(tab => tab.id !== activeTab)
               .map((tab) => (
-                <div className='text-white bg-[#B5B5B5] h-13 rounded-full p-1 my-1 w-65'>
+                <div className='text-white border border-black h-13 rounded-full p-1 my-1 w-65'>
                   <DropdownMenuItem
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className="text-2xl rounded-full text-center px-5 bg-[#001426] text-white flex items-center justify-between"
+                    className="text-2xl rounded-full text-center px-5  bg-[#001426] text-white flex items-center justify-center"
                   >
                     {tab.label}
                   </DropdownMenuItem>

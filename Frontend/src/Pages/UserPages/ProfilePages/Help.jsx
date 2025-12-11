@@ -6,20 +6,20 @@ import React, { useState } from 'react'
 const Help = () => {
     const [isOpen, setIsOpen] = useState(true);
   return (
-   <div className="lg:bg-gray-100 h-screen overflow-hidden">
-      <div className="lg:flex h-full">
+   <div className="lg:bg-gray-100 lg:h-screen overflow-hidden">
+      <div className="lg:flex lg:h-full">
         {/* Sidebar */}
         <div className={`w-[20%] hidden lg:block ${isOpen ? 'w-[20%]' : 'w-[0%]'} transition-all duration-300`}>
           <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
 
         {/* Mobile Nav */}
-        <div className="lg:hidden fixed top-0 z-50 w-full">
+        <div className="lg:hidden fixed top-0 z-50 w-full ">
           <Mobile/>
         </div>
 
         {/* Main Section */}
-        <div className={`lg:w-[80%] ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]'} transition-all duration-300 mt-25 lg:mt-0 h-full overflow-hidden`}>
+        <div className={`lg:w-[80%] ${isOpen ? 'lg:w-[80%]' : 'lg:w-[360%]'} transition-all duration-300 mt-20 lg:mt-0 h-full overflow-hidden`}>
           <HelpSec />
         </div>
       </div>

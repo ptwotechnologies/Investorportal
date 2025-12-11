@@ -3,7 +3,6 @@ import { CalendarIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 function formatDate(date) {
@@ -16,31 +15,30 @@ function formatDate(date) {
 }
 
 function isValidDate(date) {
-  if (!date) return false;
-  return !isNaN(date.getTime());
+  return date instanceof Date && !isNaN(date.getTime());
 }
 
-const Calendar2 = () => {
+const Calendar2 = ({ onChange }) => {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState(new Date("2025-06-01"));
-  const [month, setMonth] = React.useState(new Date("2025-06-01"));
-  const [value, setValue] = React.useState(formatDate(date));
+  const [date, setDate] = React.useState(null); // default null
+  const [month, setMonth] = React.useState(new Date());
+  const [value, setValue] = React.useState("");
 
   return (
     <div className="flex flex-col gap-3">
-      
       <div className="relative flex gap-2">
         <Input
           id="date"
           value={value}
           placeholder="Founded on"
-          className="bg-background pr-10 p-3 py-6 text-[#00103280]  font-semibold"
+          className="bg-background pr-10 p-3 py-6 text-[#00103280] font-semibold"
           onChange={(e) => {
             const newDate = new Date(e.target.value);
             setValue(e.target.value);
             if (isValidDate(newDate)) {
               setDate(newDate);
               setMonth(newDate);
+              if (onChange) onChange(newDate); // call onChange prop
             }
           }}
           onKeyDown={(e) => {
@@ -50,6 +48,7 @@ const Calendar2 = () => {
             }
           }}
         />
+
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -61,6 +60,7 @@ const Calendar2 = () => {
               <span className="sr-only">Select date</span>
             </Button>
           </PopoverTrigger>
+
           <PopoverContent
             className="w-auto overflow-hidden p-0"
             align="end"
@@ -77,6 +77,7 @@ const Calendar2 = () => {
                 setDate(selectedDate);
                 setValue(formatDate(selectedDate));
                 setOpen(false);
+                if (onChange) onChange(selectedDate); // call onChange prop
               }}
             />
           </PopoverContent>

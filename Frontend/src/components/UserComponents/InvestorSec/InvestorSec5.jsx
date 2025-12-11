@@ -5,33 +5,33 @@ const InvestorSec5 = () => {
    const divElements = [
      {
         number:"1 ",
-        phoneScreenHeading:"Get visibility without paid ads :",
-        phoneScreenPara:"Reach verified investors and consultants with zero ad spend or noisy outreach"
+        phoneScreenHeading:"Access refined deal flow:",
+        phoneScreenPara:"Meet founders who already completed structured readiness"
      },
      {
         number:"2",
-        phoneScreenHeading:"Your startup gets protected:",
-        phoneScreenPara:"Every interaction is reviewed by our team for clarity, fairness and trust"
+        phoneScreenHeading:"Verified startup profiles:",
+        phoneScreenPara:"All data is reviewed for trust, accuracy, and presentation"
      },
      {
         number:"3",
-        phoneScreenHeading:"Guidance when you need it:",
-        phoneScreenPara:"Get one-on-one support with strategy, positioning, pitch materials and growth"
+        phoneScreenHeading:"Guidance when needed:",
+        phoneScreenPara:"Get expert insights on traction, narratives, and signals"
      },
         {
         number:"4",
-         phoneScreenHeading:"Access to active investors:",
-        phoneScreenPara:"Build credibility faster inside our growing investor discovery ecosystem"
+         phoneScreenHeading:"Cross-industry exposure:",
+        phoneScreenPara:"Discover opportunities across multiple growing sectors"
      },
      {
         number:"5",
-        phoneScreenHeading:"Seamless coordination:",
-        phoneScreenPara:"We simplify intros, align scopes and keep your fundraising clean and smooth."
+        phoneScreenHeading:"Seamless introductions:",
+        phoneScreenPara:"We handle alignment so your time goes to evaluation"
      },
      {
         number:"6 ",
-         phoneScreenHeading:"Verified ecosystem, zero scam :",
-        phoneScreenPara:"We maintain a 99.99% safe environment so you don’t waste energy on noise"
+         phoneScreenHeading:"Zero noise, zero clutter:",
+        phoneScreenPara:"Only credible startups enter the ecosystem — nothing random"
      },
    
  
@@ -40,38 +40,38 @@ const InvestorSec5 = () => {
    const phoneElements = [
      {
         number:"1 ",
-        phoneScreenHeading:"Get visibility without paid ads :",
-        phoneScreenPara:"Reach verified investors and consultantswith zero ad spend or noisy outreach"
+        phoneScreenHeading:"Access refined deal flow:",
+        phoneScreenPara:"Meet founders who already completed structured readiness"
      },
      {
         number:"2",
-        phoneScreenHeading:"Your startup gets protected :",
-        phoneScreenPara:"Every interaction is reviewed by ourteam for clarity, fairness and trust"
+        phoneScreenHeading:"Verified startup profiles:",
+        phoneScreenPara:"All data is reviewed for trust, accuracy, and presentation"
      },
      {
         number:"3",
-        phoneScreenHeading:"Guidance when you need it :",
-        phoneScreenPara:"Get one-on-one support with strategy,positioning, pitch materials and growth"
+        phoneScreenHeading:"Guidance when needed:",
+        phoneScreenPara:"Get expert insights on traction, narratives, and signals"
      },
         {
         number:"4",
-         phoneScreenHeading:"Access to active investors :",
-        phoneScreenPara:"Build credibility faster inside ourgrowing investor discovery ecosystem"
+         phoneScreenHeading:"Cross-industry exposure:",
+        phoneScreenPara:"Discover opportunities across multiple growing sectors"
      },
      {
         number:"5",
-        phoneScreenHeading:"Seamless founder coordination :",
-        phoneScreenPara:"We simplify intros, align scopes andkeep your fundraising clean and smooth"
+        phoneScreenHeading:"Seamless introductions:",
+        phoneScreenPara:"We handle alignment so your time goes to evaluation"
      },
      {
         number:"6 ",
-         phoneScreenHeading:"Verified ecosystem, zero scam risk :",
-        phoneScreenPara:"We maintain a 99.99% safe environmentso you don’t waste energy on noise"
+         phoneScreenHeading:"Zero noise, zero clutter:",
+        phoneScreenPara:"Only credible startups enter the ecosystem — nothing random"
      },
      {
         number:"7 ",
-         phoneScreenHeading:"Opportunity to join incubation : ",
-        phoneScreenPara:"Become part of our curated program andscale faster with structured support"
+         phoneScreenHeading:"Opportunity to mentor:  ",
+        phoneScreenPara:"Support promising founders and shape future investments"
      },
  
    ]
@@ -83,7 +83,7 @@ const InvestorSec5 = () => {
           Consultations that move you forward
         </h1>
         <h1 className='lg:hidden text-3xl font-semibold pb-7'>
-          Why founders choose this portal?
+          Why service providers choose this portal?
         </h1>
        <div className='hidden lg:block'>
             <div className="grid lg:grid-cols-3 lg:gap-x-30 gap-5 lg:gap-y-30 lg:m-10 lg:mx-25">
@@ -128,9 +128,8 @@ const InvestorSec5 = () => {
        </div>
     </div>
     <div className='shadow-2xl p-7 pt-10 m-2 lg:hidden text-center '>
-         <h1 className='text-xl font-bold text-[#001032]'>Feels like a dream?</h1>
-         <h1 className='text-md mt-3 text-[#001032]'>Let’s turn it into <br/>
-   your real-world momentum!</h1>
+         <h1 className='text-xl font-bold text-[#001032]'>Sounds like the right fit?</h1>
+         <h1 className='text-md mt-3 text-[#001032]'>Let’s help you meet better founders </h1>
          <Link to="/login"><button className='bg-[#002A30] p-2 lg:p-3 text-white lg:my-8 my-3 mt-8 px-10 rounded-lg text-lg'>Let’s get started 
     </button></Link>
        </div>

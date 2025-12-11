@@ -9,7 +9,7 @@ import { BsSendFill } from "react-icons/bs";
 const SettingsSec = () => {
 
      const [selectedRequest, setSelectedRequest] = useState(null);
-
+ 
   const requestOptions = [
     { id: 1, label: "Connect with Admin" },
     { id: 2, label: "Require Advisory Service" },
@@ -45,7 +45,7 @@ const SettingsSec = () => {
   }, []);
 
   return (
-     <div className="md:flex bg-black lg:bg-gray-100 pl-4 pr-4 pb-4">
+     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-4">
           <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto  pt-4">
             {/* Header */}
             <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
@@ -66,12 +66,14 @@ const SettingsSec = () => {
             {/* ✅ Equal height fix added here */}
             <div className="flex gap-4 items-stretch">
               {/* Left Card */}
-               <div className="flex flex-col justify-between w-full md:w-[60%] items-center lg:h-[90vh]">
+               <div className="flex flex-col justify-between w-full md:w-[60%] items-center lg:h-[88vh]">
             <div className="border px-6 py-3 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full h-full">
               {/* Left content starts here */}
-              <div className="flex flex-col gap-6 text-sm text-gray-800 w-full">
+              
+              <div className="flex flex-col lg:gap-4 gap-3 text-sm text-gray-800 w-full">
+                <h1 className="lg:hidden text-xl font-medium my-4">Settings</h1>
                 {/* Name */}
-                <div className="flex items-center justify-between pb-2 mt-4">
+                <div className="flex items-center justify-between pb-2 lg:mt-4">
                   <label className="font-semibold">Name</label>
                   <div className="flex items-center gap-3">
                     <span>Akshay Dogra</span>
@@ -107,7 +109,7 @@ const SettingsSec = () => {
                 </div>
 
                 {/* Save / Cancel Modal */}
-                <div className="md:hidden flex justify-center mt-95">
+                <div className="md:hidden flex justify-center mt-30">
                   <button className="px-6 w-full py-2 bg-[#001426] text-white rounded-md transition font-medium">
                     Save
                   </button>
@@ -133,7 +135,7 @@ const SettingsSec = () => {
           </div>
     
               {/* ✅ Right Card (exact UI, untouched CSS) */}
-              <div className="hidden lg:flex w-[40%] h-[90vh] ">
+              <div className="hidden lg:flex w-[40%] h-[88vh] ">
                 <div className="bg-white border border-gray-300 shadow-md rounded-2xl overflow-hidden flex flex-col justify-between w-full h-full">
                   {/* Header image section */}
                   <div className="relative h-40 border-2 border-gray-300"></div>

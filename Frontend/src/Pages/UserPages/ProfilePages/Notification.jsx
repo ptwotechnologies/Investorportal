@@ -15,7 +15,7 @@ const Notification = () => {
       <div className='lg:hidden fixed top-0 z-50 w-full '>
         <Mobile/>
       </div>
-     <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-25 lg:mt-0`}>
+     <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-13 lg:mt-0`}>
       <NotificationSec/>
      </div>
     </div>

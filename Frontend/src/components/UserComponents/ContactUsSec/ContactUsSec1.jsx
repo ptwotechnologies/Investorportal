@@ -66,7 +66,7 @@ function BenefitCard({ title, body }) {
 
 const ContactUsSec1 = () => {
   return (
-    <section className="bg-[#001032] text-primary-foreground mt-15 lg:mt-40 lg:rounded-3xl rounded-b-3xl">
+    <section className="bg-[#001032] text-primary-foreground mt-15 lg:mt-30 lg:rounded-3xl rounded-b-3xl">
       <div className="mx-auto w-full  px-4 md:px-8 py-8 md:py-20">
         {/* Top panel */}
         <div className="flex flex-col lg:flex-row justify-between items-start   ">

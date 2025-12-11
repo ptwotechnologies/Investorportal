@@ -39,9 +39,11 @@ const [activeTab, setActiveTab] = useState('Startups');
         <div className='flex justify-center '>
             <DropdownMenu  >
   <div className=' text-white bg-[#B5B5B5] h-18 rounded-full p-2'>
-    <DropdownMenuTrigger className='flex justify-center items-center gap-2 p-3 px-6 text-2xl rounded-full mb-10 bg-[#001426] '>
-    <button>{activeTab}</button>
-     <IoIosArrowDown  className='mt-2'/>
+    <DropdownMenuTrigger className='p-0 rounded-full'>
+      <button className='flex justify-center items-center gap-2 p-3 px-6 text-2xl rounded-full mb-10 bg-[#001426] w-full'>
+        <span>{activeTab}</span>
+        <IoIosArrowDown className='mt-2' />
+      </button>
     </DropdownMenuTrigger>
   </div>
   <DropdownMenuContent className='mt-5'>

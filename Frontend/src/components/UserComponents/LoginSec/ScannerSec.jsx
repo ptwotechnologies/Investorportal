@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 const ScannerSec = () => {
   return (
    <div>
-          <div className="flex justify-between items-center  ">
+          <div className="flex justify-between items-center lg:min-h-dvh  ">
             <div id="left" className=" w-[40%] hidden lg:block mx-auto ">
              <div className="flex flex-col justify-between items-center gap-y-25">
                <div>
@@ -30,9 +30,9 @@ const ScannerSec = () => {
               </div>
              </div>
             </div>
-            <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-3 text-center h-screen">
-               <div className="bg-[#001032] h-screen lg:h-auto p-5 lg:p-3 w-full  lg:rounded-lg ">
-            <Card className="w-full h-full lg:h-auto mx-auto rounded-lg">
+            <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-3 text-center">
+               <div className="lg:bg-[#001032] lg:p-3 w-full  lg:rounded-lg ">
+            <Card className="w-full  lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-7" />
@@ -51,9 +51,9 @@ const ScannerSec = () => {
                </div>
                <p className="lg:text-xs text-xs text-[#001032B2] lg:w-[50%] w-[98%] mx-auto lg:my-1 my-6 font-medium tracking-wide leading-6">Scan the QR code and proceed with the payment as per the chosen plan</p>
               </CardContent>
-              <CardFooter >
+              <CardFooter className="absolute bottom-5 w-full lg:static" >
                
-                <Link to="/selectPortal" className="w-full"><Button  className="w-full bg-[#001032] mt-7 lg:mt-0">
+                <Link to="/transactionId" className="w-full"><Button  className="w-full bg-[#001032]  ">
                   Continue
                 </Button></Link>
                 

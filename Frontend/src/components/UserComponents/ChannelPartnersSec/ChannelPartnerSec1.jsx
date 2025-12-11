@@ -3,6 +3,25 @@ import { FaCircleCheck } from "react-icons/fa6";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 
 const ChannelPartnerSec1 = () => {
+
+  const cardData = [
+  {
+    text: "The process felt human, even though it’s AI-driven. The brief understanding was spot-on, and the quality of connections was miles ahead of typical marketplaces. It’s built for people who value real work over noise.",
+    line1: "Join once,", 
+    line2: "Let the ecosystem work for you"
+  },
+  {
+    text: "I used to spend hours sending proposals that went nowhere. Through this platform, I started getting real, qualified leads who were actually ready to move. The 90-day partnership helped me grow my client base and confidence.",
+    line1: "Join once,", 
+    line2: "Let the ecosystem work for you"
+  },
+  {
+    text: "I used to spend hours sending proposals that went nowhere. Through this platform, I started getting real, qualified leads who were actually ready to move. The 90-day partnership helped me grow my client base and confidence.",
+    line1: "Join once,", 
+    line2: "Let the ecosystem work for you"
+  }
+];
+
   return (
     <div className=' lg:mb-20 lg:mt-30 lg:p-2.5 lg:border border-[#b5b3b3] bg-[#E5E5E5] rounded-4xl '>
        <div className='lg:border border-[#E5E5E5] lg:p-7 px-2 bg-white rounded-4xl lg:py-25 py-20'>
@@ -60,7 +79,7 @@ const ChannelPartnerSec1 = () => {
 
         </div>
 
-        <div id='form' className='p-2.5 border-3 rounded-xl border-gray-200 bg-gray-100'>
+        <div id='form' className='p-2.5 border-3 rounded-xl border-gray-200 bg-gray-100 inner-shadow'>
                <div className="bg-white rounded-xl border-3 border-gray-200 lg:p-10 px-3 py-5 shadow-lg">
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -77,7 +96,7 @@ const ChannelPartnerSec1 = () => {
               <p className="text-[#002B31] font-medium lg:text-md text-sm ">
               Are you already registered as Service Professional?
             </p>
-            <p className='text-[#1D2A29CC] text-xs lg:text-sm'>Register yourself as service professional before applying to be a channel partner</p>
+            <p className='text-[#1D2A29CC] text-[10px] lg:text-sm'>Register yourself as service professional before applying to be a channel partner</p>
             </div>
 
             <div className="flex items-center lg:gap-4 gap-2">
@@ -115,14 +134,14 @@ const ChannelPartnerSec1 = () => {
 
        </div>
 
-   <div id='bottom' className='lg:mt-30 lg:px-10 mt-10'>
-  <h1 className='lg:hidden text-[22px] text-[#001032] font-semibold'>
+  <div id='bottom' className='lg:mt-30 lg:px-10 mt-10'>
+  <h1 className='lg:hidden text-[22px] text-[#001032] font-semibold px-5'>
     Experience to be remembered
   </h1>
 
   <div className="
     flex lg:grid
-    lg:grid-cols-3
+    lg:grid-cols-3 lg:items-stretch
     lg:gap-x-25
     gap-8
     mt-8 px-2
@@ -132,30 +151,36 @@ const ChannelPartnerSec1 = () => {
     snap-x snap-mandatory
   ">
 
-    {[1, 2, 3].map((item) => (
-      <div key={item} className="min-w-full lg:min-w-0 px-7 lg:px-0 snap-center">
+    {cardData.map((card, index) => (
+      <div 
+        key={index} 
+        className="min-w-full lg:min-w-0 px-7 lg:px-0 snap-center h-full flex flex-col"
+      >
 
+        {/* HR — keep it here */}
         <hr className='border-t-[#00103299] mb-10 hidden lg:block' />
 
         <div
           className="
             bg-white border border-gray-200 rounded-xl 
             lg:p-6 p-3 
-            flex flex-col justify-between mx-2 lg:mx-0
-            shadow-[0_4px_30px_rgba(0,0,0,0.12)]   
+            flex flex-col justify-between
+            mx-2 lg:mx-0
+            shadow-[0_4px_30px_rgba(0,0,0,0.12)]
+            h-full
           "
         >
           <p className="text-[#001032] lg:pb-30 pb-5 lg:text-lg text-[14px] tracking-wide lg:leading-7">
-            I used to spend hours sending proposals that went nowhere. Through this platform, I started getting real, qualified leads who were actually ready to move. The 90-day partnership helped me grow my client base and confidence.
+            {card.text}
           </p>
 
           <div className="flex justify-between items-center mt-6">
             <div>
               <p className="text-[#001032] font-semibold text-sm lg:text-md">
-                Join once,
+                {card.line1}
               </p>
               <p className="font-semibold text-[#001032] text-sm lg:text-md">
-                Let the ecosystem work for you
+                {card.line2}
               </p>
             </div>
 
@@ -163,6 +188,7 @@ const ChannelPartnerSec1 = () => {
 
             <div className="lg:w-20 lg:h-20 w-18 h-15 lg:bg-[#001032] bg-[#00103233] rounded-full"></div>
           </div>
+
         </div>
 
       </div>
@@ -170,6 +196,9 @@ const ChannelPartnerSec1 = () => {
 
   </div>
 </div>
+
+
+
 
 
 
