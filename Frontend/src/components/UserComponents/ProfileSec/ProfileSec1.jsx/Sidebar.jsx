@@ -68,7 +68,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {/* Right Panel Toggle */}
       {isOpen && (
         <div className="absolute top-0 left-full ml- w-60 bg-white h-full rounded-tr-2xl rounded-br-2xl  shadow-lg transition-all duration-300 z-40">
-          <div className="my-6">
+          <div className="my-6 flex justify-center">
             <img src={loginLogo} alt="logo" className="w-40" />
           </div>
           <div className="text-[#001426]">

@@ -3,7 +3,9 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import mongoose from 'mongoose'
 import userRoutes from './Routes/User.Routes.js';
+import profileRoutes from './Routes/Profile.Routes.js';
 import cors from "cors";
+import path from "path";
 
 
 dotenv.config();
@@ -20,6 +22,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
+app.use("/uploads", express.static("uploads"));
 
 dotenv.config() 
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -36,6 +39,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoutes);
+app.use("/profile", profileRoutes);
 
 // Start Server
 app.listen(PORT, () => {

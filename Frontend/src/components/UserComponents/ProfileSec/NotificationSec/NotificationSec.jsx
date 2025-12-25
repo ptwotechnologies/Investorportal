@@ -68,28 +68,10 @@ const NotificationSec = () => {
   }, []);
 
   return (
-   <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
-             <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto  pt-4">
-               {/* Header */}
-               <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
-                 <h1 className="text-md font-semibold text-gray-800">
-                   Welcome, Startup India Pvt. Ltd.
-                 </h1>
-                 <button className="flex items-center gap-2 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition-colors">
-                   <FaUser
-                     className="text-gray-600 border border-gray-600 p-1 rounded-full"
-                     size={24}
-                   />
-                   <span className="font-semibold text-gray-800">
-                     Switch to professional
-                   </span>
-                 </button>
-               </div>
-       
-               {/* ✅ Equal height fix added here */}
-               <div className="flex gap-4 items-stretch">
-                 {/* Left Card */}
-                  <div className="flex flex-col  justify-between w-full md:w-[60%] items-center lg:h-[88vh]">
+   <div className="md:flex  lg:bg-gray-100  w-[70%] lg:pl-4 lg:pr-4 lg:pb-6">
+             
+             
+                  <div className="flex flex-col  justify-between  items-center ">
             <div className="border px-6 py-3 pb-20 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full h-full">
               {/* Left content starts here */}
               <div className="flex flex-col gap-3 text-sm text-gray-800 w-full">
@@ -121,62 +103,10 @@ const NotificationSec = () => {
             {/* Left content ends here */}
           </div>
        
-                 {/* ✅ Right Card (exact UI, untouched CSS) */}
-                 <div className="hidden lg:flex w-[40%] h-[88vh] ">
-                   <div className="bg-white border border-gray-300 shadow-md rounded-2xl overflow-hidden flex flex-col justify-between w-full h-full">
-                     {/* Header image section */}
-                     <div className="relative h-40 border-2 border-gray-300"></div>
-       
-                     {/* Profile photo overlap */}
-                     <div className="relative px-4 -mt-12">
-                       <div className="w-28 h-28 rounded-full border-2 border-gray-300 shadow-md bg-white"></div>
-       
-                       <div className="mt-6 px-4">
-                         <h2 className="text-gray-900 text-lg font-semibold">
-                           Akshay Dogra
-                         </h2>
-                         <p className="text-sm text-gray-800 mt-2 leading-tight">
-                           Grow Your Business by Partnering with <br />
-                           <span>India’s Fastest-Growing Startup </span>
-                         </p>
-                         <p>Ecosystem</p>
-                         <p className="text-sm text-gray-700 font-medium mt-3">
-                           New Delhi, Delhi, India
-                         </p>
-                       </div>
-                     </div>
-       
-                     {/* About Section */}
-                     <div className=" mt-10 ">
-                       <div className="bg-white border-t-2 border-gray-300 rounded-xl shadow-sm p-6 px-8">
-                         <div className="flex items-start justify-between">
-                           <h3 className="text-lg font-semibold text-gray-800">
-                             About
-                           </h3>
-                           <button className="p-1 rounded-md hover:bg-gray-100 transition">
-                             <FiEdit2 className="text-gray-800" />
-                           </button>
-                         </div>
-       
-                         <p className="text-[13px] text-gray-600 mt-2 leading-6">
-                           An experienced entrepreneur and business professional who
-                           consistently delivers high-quality and result-focused
-                           marketing campaign, customer experience and design valuable
-                           content for go-to-market, launch, start-up, brand building,
-                           event and community engagement. Dedicated results and omni
-                           channel product marketing, brand and community development.
-                           <span className="text-gray-800 font-medium">
-                             {" "}
-                             See more...
-                           </span>
-                         </p>
-                       </div>
-                     </div>
-                   </div>
-                 </div>
-                 {/* ✅ End Right Card */}
-               </div>
-             </div>
+                
+               
+              
+             
            </div>
   )
 }

@@ -30,6 +30,7 @@ const LogicSec1 = () => {
       });
 
       if (response.data.message === "Login successful") {
+        localStorage.setItem("token", response.data.token);
         toast.success("Login successful!");
         // Redirect user after login
         navigate("/profile"); // apne project ka route

@@ -7,15 +7,10 @@ import React, { useState } from 'react'
 const Notification = () => {
  const [isOpen, setIsOpen] = useState(true);
   return (
-    <div className='bg-gray-100 h-screen overflow-hidden'>
+    <div className='bg-gray-100  overflow-hidden'>
     <div className='lg:flex '>
-      <div className={`w-[20%] hidden lg:block ${isOpen ? 'w-[20%]' : 'w-[0%]'} transition-all duration-300`}>
-        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen}/>
-      </div>
-      <div className='lg:hidden fixed top-0 z-50 w-full '>
-        <Mobile/>
-      </div>
-     <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-13 lg:mt-0`}>
+     
+     <div >
       <NotificationSec/>
      </div>
     </div>
