@@ -6,7 +6,7 @@ import path from "path";
 export const getProfile = async (req, res) => {
   try {
     let profile = await Profile.findOne({ userId: req.user._id })
-      .populate("userId", "role");
+      .populate("userId", "role  businessDetails.businessEmail businessDetails.number");
 
     if (!profile) {
       profile = await Profile.create({
@@ -25,7 +25,9 @@ export const getProfile = async (req, res) => {
 
     res.status(200).json({
       ...profile.toObject(),
-      role: profile.userId?.role,
+     role: profile.userId?.role,
+      email: profile.userId?.businessDetails?.businessEmail,
+      phone: profile.userId?.businessDetails?.number,
     });
   } catch (error) {
     console.error(error);
@@ -42,7 +44,7 @@ export const updateProfile = async (req, res) => {
 
   try {
     // Find the profile
-    let profile = await Profile.findOne({ userId: req.user._id }).populate("userId", "role");
+    let profile = await Profile.findOne({ userId: req.user._id }).populate("userId", "role  businessDetails.businessEmail businessDetails.number");
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
@@ -56,6 +58,8 @@ export const updateProfile = async (req, res) => {
     res.status(200).json({
       ...profile.toObject(),
       role: profile.userId?.role,
+      email: profile.userId?.businessDetails?.businessEmail,
+      phone: profile.userId?.businessDetails?.number,
       message: "Profile updated successfully",
     });
   } catch (error) {
@@ -102,6 +106,50 @@ export const uploadPortfolio = async (req, res) => {
     res.status(200).json({ message: "Portfolio uploaded successfully", portfolio: profile.portfolio });
   } catch (error) {
     console.error("UploadPortfolio Error:", error); // add this to see exact cause
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// DELETE portfolio item
+export const deletePortfolioItem = async (req, res) => {
+  try {
+    const { id } = req.params; // portfolio subdocument id
+    const userId = req.user?._id;
+    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+
+    const profile = await Profile.findOne({ userId });
+    if (!profile) return res.status(404).json({ message: "Profile not found" });
+
+    // Find subdoc
+    const item = profile.portfolio.id(id);
+    if (!item) return res.status(404).json({ message: "Portfolio item not found" });
+
+    // Remove file from disk if exists
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+
+      let filePath = item.fileUrl;
+      // Normalize and ensure relative path
+      filePath = filePath.replace(/\\/g, "/");
+      if (filePath.startsWith('/')) filePath = filePath.slice(1);
+
+      const absPath = path.resolve(filePath);
+      if (fs.existsSync(absPath)) {
+        fs.unlinkSync(absPath);
+      }
+    } catch (err) {
+      // non-fatal if unlink fails
+      console.error('Failed to remove file from disk:', err.message);
+    }
+
+    // Remove subdocument and save
+    item.remove();
+    await profile.save();
+
+    res.status(200).json({ message: "Portfolio item deleted", portfolio: profile.portfolio });
+  } catch (error) {
+    console.error("deletePortfolioItem Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

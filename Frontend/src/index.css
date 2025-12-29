@@ -141,3 +141,12 @@
   white-space: pre-wrap; /* new lines preserve ho */
 }
 
+
+/* Agar tailwind ke plugin installed nahi hai, to manually add kar sakte ho */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 2 lines show karo */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+

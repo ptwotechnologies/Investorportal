@@ -29,6 +29,7 @@ import Connect from '@/Pages/UserPages/ProfilePages/Connect'
 import TransactionId from '@/Pages/UserPages/LoginPages/TransactionId'
 import Pricing from '@/Pages/UserPages/Pricing'
 import ChannelPartners from '@/Pages/UserPages/ChannelPartners'
+import ProtectedRoute from "../components/UserComponents/ProtectedRoutes";
 
 
 const UserRoutes = () => {
@@ -90,12 +91,12 @@ const UserRoutes = () => {
             <Route path="/passwordresetotp" element={<PasswordResetOtpSec/>} />
             <Route path="/newpassword" element={<NewPassword/>} />
             <Route path="/passwordsuccess" element={<PasswordSuccess/>} />
-            <Route path="/profile" element={<Profile/>} /> 
-            <Route path="/help" element={<Help/>} />
-            <Route path="/request" element={<RequestReceived/>} />
-             <Route path="/settings" element={<Settings/>} />
-              <Route path="/notification" element={<Notification/>} />
-               <Route path="/connect" element={<Connect/>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile/></ProtectedRoute>} /> 
+            <Route path="/help" element={<ProtectedRoute><Help/></ProtectedRoute>} />
+            <Route path="/request" element={<ProtectedRoute><RequestReceived/></ProtectedRoute>} />
+             <Route path="/settings" element={ <ProtectedRoute><Settings /></ProtectedRoute>} />
+             
+               <Route path="/connect" element={<ProtectedRoute><Connect/></ProtectedRoute>} />
       </Routes>
     </div>
   )
