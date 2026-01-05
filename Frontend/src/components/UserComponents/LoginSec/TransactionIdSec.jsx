@@ -79,7 +79,7 @@ const TransactionIdSec = () => {
             </div>
             <div>
               <p className="  text-lg w-full  text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © norf.kD Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP
               </p>
             </div>
           </div>
@@ -113,7 +113,7 @@ const TransactionIdSec = () => {
 
               <CardContent>
                 <form onSubmit={handleSubmit}>
-                  <div className="flex flex-col gap-6 px-6 lg:mb-48 mb-60">
+                  <div className="flex flex-col gap-6 lg:px-6 lg:mb-48 mb-60">
                     <div className="grid gap-2 ">
                       <Input
                         type="text"
@@ -126,7 +126,7 @@ const TransactionIdSec = () => {
                     </div>
                   </div>
 
-                  <CardFooter className="absolute bottom-5 w-full lg:static">
+                  <CardFooter className=" w-full px-0">
                     <Button
                       type="submit"
                       className="w-full bg-[#001032] mt-5 lg:mt-0"

@@ -48,8 +48,8 @@ const LogicSec1 = () => {
 
 
   return (
-    <div>
-      <div className="flex justify-between items-center   lg:min-h-dvh  ">
+    <div >
+      <div className="flex lg:justify-between items-center   lg:min-h-dvh  ">
         <div id="left" className=" w-[40%] hidden lg:block mx-auto  ">
          <div className="flex flex-col justify-between items-center gap-y-25">
            <div>
@@ -58,13 +58,13 @@ const LogicSec1 = () => {
           <p className=" text-[#001032] text-xl   ">resources and investor connect</p>
           </div>
           <div >
-            <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © norf.kD Technologies LLP</p>
+            <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP</p>
           </div>
          </div>
         </div>
-        <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center ">
+        <div id="right" className="lg:w-[47%] w-full lg:pl-20 lg:px-10 lg:py-5 text-center ">
           <div className="lg:bg-[#001032]   lg:p-3 w-full lg:rounded-lg  ">
-            <Card className="w-full     mx-auto rounded-lg   lg:h-auto ">
+            <Card className="w-full     mx-auto rounded-lg   lg:h-auto h-[100vh] ">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-7" />
@@ -105,7 +105,7 @@ const LogicSec1 = () => {
                     </div>
                   </div>
 
-                  <CardFooter className="flex-col gap-2 mt-4 absolute bottom-5 w-full lg:static">
+                  <CardFooter className="flex-col gap-2 mt-4  bottom-0 px-0  w-full lg:static">
                 <Button type="submit" className="w-full bg-[#001032] my-2">
                   Log in
                 </Button>

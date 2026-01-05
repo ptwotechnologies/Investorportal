@@ -30,6 +30,7 @@ import TransactionId from '@/Pages/UserPages/LoginPages/TransactionId'
 import Pricing from '@/Pages/UserPages/Pricing'
 import ChannelPartners from '@/Pages/UserPages/ChannelPartners'
 import ProtectedRoute from "../components/UserComponents/ProtectedRoutes";
+import Dashboard from '@/Pages/UserPages/ProfilePages/Dashboard'
 
 
 const UserRoutes = () => {
@@ -57,7 +58,8 @@ const UserRoutes = () => {
   '/verification',
   '/userprofile',
   '/registration',
-  '/payments'
+  '/payments',
+  '/dashboard'
    ]
 
    
@@ -95,8 +97,8 @@ const UserRoutes = () => {
             <Route path="/help" element={<ProtectedRoute><Help/></ProtectedRoute>} />
             <Route path="/request" element={<ProtectedRoute><RequestReceived/></ProtectedRoute>} />
              <Route path="/settings" element={ <ProtectedRoute><Settings /></ProtectedRoute>} />
-             
-               <Route path="/connect" element={<ProtectedRoute><Connect/></ProtectedRoute>} />
+            <Route path="/connect" element={<ProtectedRoute><Connect/></ProtectedRoute>} />
+             <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
       </Routes>
     </div>
   )

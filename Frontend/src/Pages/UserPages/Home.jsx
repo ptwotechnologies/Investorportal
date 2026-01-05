@@ -39,7 +39,7 @@ const Home = () => {
         <HomeSec8/>
       </div>
        <div>
-                <img src={logo} className='w-60 lg:w-90 mx-auto mb-9 lg:mb-15'/>
+                <img src={logo} className='w-60 lg:w-90 mx-auto mb-15 lg:mb-25 mt-15'/>
               </div>
     </div>
   )

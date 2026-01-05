@@ -17,9 +17,21 @@ import { MdLocationOn } from "react-icons/md";
 import { FaLinkedin } from "react-icons/fa6";
 import { AiFillInstagram } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
+import { FiX } from "react-icons/fi";
+import { statesData } from "./StateCity";
 
 const ProfileSec = () => {
-  const [profile, setProfile] = useState(null);
+  const MAX_PORTFOLIO_IMAGES = 19;
+
+  const token = localStorage.getItem("token");
+  const [profile, setProfile] = useState({
+    name: "",
+    bio: "",
+    state: "",
+    city: "",
+    coverImage: "",
+    profilePhoto: "",
+  });
   const [editSections, setEditSections] = useState({
     header: false,
     aboutAndSkills: false,
@@ -29,9 +41,9 @@ const ProfileSec = () => {
   });
   const [portfolioFiles, setPortfolioFiles] = useState([]);
   const [showContactInfo, setShowContactInfo] = useState(false);
-const [isAboutExpanded, setIsAboutExpanded] = useState(false);
-const [isServicesExpanded, setIsServicesExpanded] = useState(false);
-const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
+  const [isAboutExpanded, setIsAboutExpanded] = useState(false);
+  const [isServicesExpanded, setIsServicesExpanded] = useState(false);
+  const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileImageFile, setProfileImageFile] = useState(null);
@@ -47,7 +59,7 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
   // Normalize services for display: backend may store as array or string
   const servicesText = profile?.services
     ? Array.isArray(profile.services)
-      ? profile.services.join(', ')
+      ? profile.services.join(", ")
       : profile.services
     : "";
   const [zoom, setZoom] = useState(1);
@@ -117,20 +129,24 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
       return;
     }
 
+    if (portfolioFiles.length >= MAX_PORTFOLIO_IMAGES) {
+      alert(`Cannot upload more than ${MAX_PORTFOLIO_IMAGES} images.`);
+      setSelectedFile(null);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("file", selectedFile);
 
     try {
-      const res = await axios.post(`${serverUrl}/profile/portfolio`, formData, {
+      await axios.post(`${serverUrl}/profile/portfolio`, formData, {
         headers: {
-          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
-      // Backend se return hui file info ko portfolioFiles me add karo
-      setPortfolioFiles((prev) => [...prev, res.data]);
-      setSelectedFile(null); // file select clear
+      setSelectedFile(null);
+      await fetchProfile(); // refresh UI
     } catch (err) {
       console.error("Upload failed:", err);
       alert("Upload failed");
@@ -251,8 +267,51 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
     };
   }, [showContactInfo]);
 
-  
+  const handleDeletePortfolio = async (portfolioId) => {
+    try {
+      await axios.delete(`${serverUrl}/profile/portfolio/${portfolioId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      // ✅ UI se bhi remove karo
+      setPortfolioFiles((prev) =>
+        prev.filter((item) => item._id !== portfolioId)
+      );
+    } catch (error) {
+      console.error("Delete failed", error);
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    if (portfolioFiles.length >= MAX_PORTFOLIO_IMAGES) {
+      alert(`You can upload maximum ${MAX_PORTFOLIO_IMAGES} images.`);
+      return;
+    }
+
+    setSelectedFile(file);
+    setPreviewImage(URL.createObjectURL(file)); // optional preview
+  };
+
+  // Email mask: first 3 characters + *** + domain
+  const maskEmail = (email) => {
+    if (!email) return "";
+    const [user, domain] = email.split("@");
+    if (user.length <= 3) return "***@" + domain;
+    return user.slice(0, 3) + "***@" + domain;
+  };
+
+  // Phone mask: last 4 digits visible, baaki *
+  const maskPhone = (phone) => {
+    if (!phone) return "";
+    const last4 = phone.slice(-4);
+    return "*".repeat(phone.length - 4) + last4;
+  };
 
   return (
     <div>
@@ -407,15 +466,47 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
                       className="border-2 p-1 rounded-md  "
                       placeholder="Bio"
                     />
-                    <input
-                      type="text"
-                      value={profile?.address || ""}
-                      onChange={(e) =>
-                        setProfile({ ...profile, address: e.target.value })
-                      }
-                      className="border-2 p-1 rounded-md"
-                      placeholder="Address"
-                    />
+                    <div className="flex gap-2">
+                      {/* STATE */}
+                      <input
+                        list="stateList"
+                        placeholder="Select State"
+                        value={profile.state}
+                        onChange={(e) =>
+                          setProfile({
+                            ...profile,
+                            state: e.target.value,
+                            city: "",
+                          })
+                        }
+                        className="border-2 p-1 rounded-md w-1/2"
+                      />
+
+                      <datalist id="stateList">
+                        {Object.keys(statesData).map((state) => (
+                          <option key={state} value={state} />
+                        ))}
+                      </datalist>
+
+                      {/* CITY */}
+                      <input
+                        list="cityList"
+                        placeholder="Select City"
+                        value={profile.city}
+                        onChange={(e) =>
+                          setProfile({ ...profile, city: e.target.value })
+                        }
+                        className="border-2 p-1 rounded-md w-1/2"
+                        disabled={!profile.state}
+                      />
+
+                      <datalist id="cityList">
+                        {profile.state &&
+                          statesData[profile.state]?.map((city) => (
+                            <option key={city} value={city} />
+                          ))}
+                      </datalist>
+                    </div>
                   </div>
                 ) : (
                   <>
@@ -430,14 +521,20 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
                     </div>
                     <p className=" text-md">{profile?.bio}</p>
                     <p className="text-md text-gray-700 flex items-center gap-2">
-                      {profile?.address}
+                      {profile.city && profile.state
+                        ? `${profile?.city}, ${profile?.state}`
+                        : "Location not added"}
                       <button
                         onClick={() => setShowContactInfo(true)}
-                        className="text-blue-600 font-medium text-sm hover:underline"
+                        className="text-[#001032] font-medium text-sm underline"
                       >
                         Contact info
                       </button>
                     </p>
+
+                    <button className="text-[#001032] text-sm font-medium">
+                      1 Connection
+                    </button>
                   </>
                 )}
               </div>
@@ -506,25 +603,24 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
             />
           ) : (
             <div className="lg:px-5">
-  <p
-    className={`text-sm dynamic-text transition-all duration-300 
+              <p
+                className={`text-sm dynamic-text transition-all duration-300 
       ${!isAboutExpanded ? "lg:line-clamp-3 line-clamp-4" : ""}
     `}
-  >
-    {profile?.about}
-  </p>
+              >
+                {profile?.about}
+              </p>
 
-  {/* See more / See less */}
-  {profile?.about && profile.about.length > 120 && (
-    <button
-      onClick={() => setIsAboutExpanded(!isAboutExpanded)}
-      className="text-blue-600 text-sm font-medium"
-    >
-      {isAboutExpanded ? "See less" : "See more"}
-    </button>
-  )}
-</div>
-
+              {/* See more / See less */}
+              {profile?.about && profile.about.length > 120 && (
+                <button
+                  onClick={() => setIsAboutExpanded(!isAboutExpanded)}
+                  className="text-[#001032] text-sm font-medium"
+                >
+                  {isAboutExpanded ? "See less" : "See more"}
+                </button>
+              )}
+            </div>
           )}
         </div>
 
@@ -583,36 +679,35 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
           />
         </div>
         <div className="lg:pl-9 px-4 lg:py-2 py-1 mb-6 relative">
-  {editSections.services ? (
-    <textarea
-      value={servicesText}
-      onChange={(e) =>
-        setProfile({ ...profile, services: e.target.value })
-      }
-      className="border-2 rounded-md p-2 w-full"
-    />
-  ) : (
-    <div className="relative">
-     <p
-  className={`text-sm font-medium leading-6 lg:leading-7 lg:pr-3 overflow-hidden transition-all duration-300
+          {editSections.services ? (
+            <textarea
+              value={servicesText}
+              onChange={(e) =>
+                setProfile({ ...profile, services: e.target.value })
+              }
+              className="border-2 rounded-md p-2 w-full"
+            />
+          ) : (
+            <div className="relative">
+              <p
+                className={`text-sm font-medium leading-6 lg:leading-7 lg:pr-3 overflow-hidden transition-all duration-300
     ${!isServicesExpanded ? "line-clamp-3 lg:line-clamp-1" : "line-clamp-none"}
   `}
->
-  {servicesText}
-</p>
+              >
+                {servicesText}
+              </p>
 
-{servicesText && servicesText.length > 120 && (
-  <button
-    onClick={() => setIsServicesExpanded(!isServicesExpanded)}
-    className="text-blue-600 text-sm font-medium cursor-pointer bg-white px-1"
-  >
-    {isServicesExpanded ? "See less" : "See more"}
-  </button>
-)}
-
-    </div>
-  )} 
-</div>
+              {servicesText && servicesText.length > 120 && (
+                <button
+                  onClick={() => setIsServicesExpanded(!isServicesExpanded)}
+                  className="text-[#001032] text-sm font-medium cursor-pointer bg-white px-1"
+                >
+                  {isServicesExpanded ? "See less" : "See more"}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
 
         {editSections.services && (
           <div className="flex justify-end px-4 lg:px-0 mb-4 lg:pl-9">
@@ -729,24 +824,23 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
               <p className="text-sm ">{exp.duration}</p>
               <p className="text-sm ">{exp.location}</p>
               <div className="relative mt-2">
-  <p
-    className={`text-sm  transition-all duration-300 overflow-hidden w-[90%] lg:w-[50%]
+                <p
+                  className={`text-sm  transition-all duration-300 overflow-hidden w-[90%] lg:w-[50%]
       ${!isExpDescExpanded ? "line-clamp-1" : "line-clamp-none"}
     `}
-  >
-    {exp.description}
-  </p>
+                >
+                  {exp.description}
+                </p>
 
-  {exp.description && exp.description.length > 50 && (
-    <button
-      onClick={() => setIsExpDescExpanded(!isExpDescExpanded)}
-      className="text-blue-600 text-sm font-medium mt-1"
-    >
-      {isExpDescExpanded ? "See less" : "See more"}
-    </button>
-  )}
-</div>
-
+                {exp.description && exp.description.length > 50 && (
+                  <button
+                    onClick={() => setIsExpDescExpanded(!isExpDescExpanded)}
+                    className="text-[#001032] text-sm font-medium mt-1"
+                  >
+                    {isExpDescExpanded ? "See less" : "See more"}
+                  </button>
+                )}
+              </div>
             </>
           )}
         </div>
@@ -766,213 +860,242 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
       </div>
 
       <div
-  id="portfolio"
-  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5 lg:m-2 lg:p-2 my-2"
->
-  <div className="flex justify-between items-center my-3">
-    <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">
-      Portfolio
-    </h1>
-  </div>
-
-  {/* ===== Desktop View ===== */}
-  <div className="hidden lg:block">
-    <div className="flex flex-wrap lg:pl-9 pl-4 gap-4 mb-4">
-      
-      {/* Upload Card */}
-      <div
-        className="w-48 h-48 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100"
-        onClick={() =>
-          document.getElementById("portfolioUploadDesktop").click()
-        }
+        id="portfolio"
+        className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5 lg:m-2 lg:p-2 my-2"
       >
-        <input
-          type="file"
-          id="portfolioUploadDesktop"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => setSelectedFile(e.target.files[0])}
-        />
-        <p className="text-gray-400 text-xl font-semibold">+ Upload</p>
-      </div>
-
-      {/* Existing Images */}
-      {portfolioFiles.map((item, idx) => {
-        if (!item?.fileUrl) return null;
-
-        return (
-          <div
-            key={idx}
-            className="w-48 h-48 border-2 border-[#D9D9D9] rounded-md overflow-hidden"
-          >
-            <a
-              href={getPortfolioUrl(item.fileUrl)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img
-                src={getPortfolioUrl(item.fileUrl)}
-                alt="Portfolio"
-                className="w-full h-full object-cover hover:scale-105 transition"
-              />
-            </a>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-
-  {/* ===== Mobile View ===== */}
-  <div className="lg:hidden">
-    <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pl-4 mb-4">
-      
-      {portfolioFiles.map((item, idx) => (
-        <div
-          key={idx}
-          className="w-[40%] h-40 border-2 border-[#D9D9D9] rounded-md shrink-0 snap-center"
-        >
-          <a
-            href={getPortfolioUrl(item.fileUrl)}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src={getPortfolioUrl(item.fileUrl)}
-              alt="Portfolio"
-              className="w-full h-full object-cover rounded-md"
-            />
-          </a>
+        <div className="flex justify-between items-center my-3">
+          <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">
+            Portfolio
+          </h1>
         </div>
-      ))}
 
-      {/* Upload Card Mobile */}
-      <div
-        className="w-[40%] h-40 border-2 border-dashed rounded-md shrink-0 snap-center flex items-center justify-center cursor-pointer hover:bg-gray-100"
-        onClick={() =>
-          document.getElementById("portfolioUploadMobile").click()
-        }
-      >
-        <input
-          type="file"
-          id="portfolioUploadMobile"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => setSelectedFile(e.target.files[0])}
-        />
-        <p className="text-gray-400 text-xl font-semibold">+ Upload</p>
+        {/* ===== Desktop View ===== */}
+        <div className="hidden lg:block">
+          <div className="flex flex-wrap lg:pl-9 pl-4 gap-4 mb-4">
+            {/* Upload Card */}
+
+            {/* Existing Images */}
+            {portfolioFiles.map((item, idx) => {
+              if (!item?.fileUrl) return null;
+
+              return (
+                <div
+                  key={idx}
+                  className="relative group w-48 h-48 border-2 border-[#D9D9D9] rounded-md overflow-hidden"
+                >
+                  {/* ❌ Delete icon */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      handleDeletePortfolio(item._id);
+                    }}
+                    className="absolute top-2 right-2 z-10 bg-black/60 text-white rounded-full p-1
+        opacity-0 group-hover:opacity-100 transition"
+                  >
+                    <FiX size={18} />
+                  </button>
+
+                  {/* Image */}
+                  <a
+                    href={getPortfolioUrl(item.fileUrl)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={getPortfolioUrl(item.fileUrl)}
+                      alt="Portfolio"
+                      className="w-full h-full object-cover group-hover:scale-105 transition"
+                    />
+                  </a>
+                </div>
+              );
+            })}
+            <div
+              className="w-48 h-48 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100"
+              onClick={() =>
+                document.getElementById("portfolioUploadDesktop").click()
+              }
+            >
+              <input
+                type="file"
+                id="portfolioUploadDesktop"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+              />
+              <p className="text-gray-400 text-xl font-semibold">+ Upload</p>
+            </div>
+          </div>
+        </div>
+
+        {/* ===== Mobile View ===== */}
+        <div className="lg:hidden">
+          <div className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide gap-4 pl-4 mb-4">
+            {portfolioFiles.map((item, idx) => (
+              <div
+                key={idx}
+                className="relative w-[40%] h-40 border-2 border-[#D9D9D9] rounded-md shrink-0 snap-center"
+              >
+                {/* ❌ Delete */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleDeletePortfolio(item._id);
+                  }}
+                  className="absolute top-2 right-2 z-10 bg-black/60 text-white rounded-full p-1"
+                >
+                  <FiX size={16} />
+                </button>
+
+                <a
+                  href={getPortfolioUrl(item.fileUrl)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={getPortfolioUrl(item.fileUrl)}
+                    alt="Portfolio"
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                </a>
+              </div>
+            ))}
+
+            {/* Upload Card Mobile */}
+            <div
+              className="w-[40%] h-40 border-2 border-dashed rounded-md shrink-0 snap-center flex items-center justify-center cursor-pointer hover:bg-gray-100"
+              onClick={() =>
+                document.getElementById("portfolioUploadMobile").click()
+              }
+            >
+              <input
+                type="file"
+                id="portfolioUploadMobile"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => setSelectedFile(e.target.files[0])}
+              />
+              <p className="text-gray-400 text-xl font-semibold">+ Upload</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Upload Button */}
+        {selectedFile && (
+          <div className="flex justify-end px-4 mb-4">
+            <button
+              onClick={handleUpload}
+              disabled={portfolioFiles.length >= MAX_PORTFOLIO_IMAGES}
+              className={`bg-blue-500 text-white px-4 py-1 rounded-md ${
+                portfolioFiles.length >= MAX_PORTFOLIO_IMAGES
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+            >
+              Upload
+            </button>
+          </div>
+        )}
       </div>
-    </div>
-  </div>
 
-  {/* Upload Button */}
-  {selectedFile && (
-    <div className="flex justify-end px-4 mb-4">
-      <button
-        onClick={handleUpload}
-        className="bg-blue-500 text-white px-4 py-1 rounded-md"
+      <div
+        id="social-media"
+        className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5 lg:m-2 lg:p-2 mb-4"
       >
-        Upload
-      </button>
-    </div>
-  )}
-</div>
+        <div className="flex justify-between items-center my-3">
+          <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">
+            Social Media
+          </h1>
 
+          <MdEdit
+            size={20}
+            className="mr-3 lg:mr-0 cursor-pointer"
+            onClick={() =>
+              setEditSections((prev) => ({
+                ...prev,
+                socialMedia: !prev.socialMedia,
+              }))
+            }
+          />
+        </div>
 
-     <div
-  id="social-media"
-  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5 lg:m-2 lg:p-2 mb-4"
->
-  <div className="flex justify-between items-center my-3">
-    <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">
-      Social Media
-    </h1>
+        <div className="lg:pl-9 pl-4 py-2 mb-3 flex flex-col gap-2 lg:pr-30 pr-5">
+          {/* Only show inputs when edit mode is active */}
+          {editSections.socialMedia ? (
+            <>
+              <input
+                placeholder="LinkedIn Profile URL"
+                value={profile?.socialMedia?.linkedin || ""}
+                onChange={(e) =>
+                  setProfile({
+                    ...profile,
+                    socialMedia: {
+                      ...profile?.socialMedia,
+                      linkedin: e.target.value,
+                    },
+                  })
+                }
+                className="border-2 rounded-md p-2"
+              />
 
-    <MdEdit
-      size={20}
-      className="mr-3 lg:mr-0 cursor-pointer"
-      onClick={() =>
-        setEditSections((prev) => ({
-          ...prev,
-          socialMedia: !prev.socialMedia,
-        }))
-      }
-    />
-  </div>
+              <input
+                placeholder="Instagram Profile URL"
+                value={profile?.socialMedia?.instagram || ""}
+                onChange={(e) =>
+                  setProfile({
+                    ...profile,
+                    socialMedia: {
+                      ...profile?.socialMedia,
+                      instagram: e.target.value,
+                    },
+                  })
+                }
+                className="border-2 rounded-md p-2"
+              />
+            </>
+          ) : (
+            // Show icons only in view mode (after save)
+            <>
+              {profile?.socialMedia?.linkedin && (
+                <a
+                  href={profile.socialMedia.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-blue-600"
+                >
+                  <FaLinkedin size={18} /> LinkedIn
+                </a>
+              )}
+              {profile?.socialMedia?.instagram && (
+                <a
+                  href={profile.socialMedia.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-pink-500"
+                >
+                  <FaInstagram size={18} /> Instagram
+                </a>
+              )}
+            </>
+          )}
+        </div>
 
-  <div className="lg:pl-9 pl-4 py-2 mb-3 flex flex-col gap-2 lg:pr-30 pr-5">
-    {/* Only show inputs when edit mode is active */}
-    {editSections.socialMedia ? (
-      <>
-        <input
-          placeholder="LinkedIn Profile URL"
-          value={profile?.socialMedia?.linkedin || ""}
-          onChange={(e) =>
-            setProfile({
-              ...profile,
-              socialMedia: {
-                ...profile?.socialMedia,
-                linkedin: e.target.value,
-              },
-            })
-          }
-          className="border-2 rounded-md p-2"
-        />
-
-        <input
-          placeholder="Instagram Profile URL"
-          value={profile?.socialMedia?.instagram || ""}
-          onChange={(e) =>
-            setProfile({
-              ...profile,
-              socialMedia: {
-                ...profile?.socialMedia,
-                instagram: e.target.value,
-              },
-            })
-          }
-          className="border-2 rounded-md p-2"
-        />
-      </>
-    ) : (
-      // Show icons only in view mode (after save)
-      <>
-        {profile?.socialMedia?.linkedin && (
-          <a
-            href={profile.socialMedia.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-blue-600"
-          >
-            <FaLinkedin size={18} /> LinkedIn
-          </a>
+        {/* Save button only in edit mode */}
+        {editSections.socialMedia && (
+          <div className="flex justify-end px-4 mb-4 lg:px-0">
+            <button
+              onClick={() =>
+                setEditSections((prev) => ({ ...prev, socialMedia: false }))
+              }
+              className="bg-blue-500 text-white px-4 py-1 rounded-md"
+            >
+              Save
+            </button>
+          </div>
         )}
-        {profile?.socialMedia?.instagram && (
-          <a
-            href={profile.socialMedia.instagram}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-pink-500"
-          >
-            <FaInstagram size={18} /> Instagram
-          </a>
-        )}
-      </>
-    )}
-  </div>
-
-  {/* Save button only in edit mode */}
-  {editSections.socialMedia && (
-    <div className="flex justify-end px-4 mb-4 lg:px-0">
-      <button
-        onClick={() => setEditSections((prev) => ({ ...prev, socialMedia: false }))}
-        className="bg-blue-500 text-white px-4 py-1 rounded-md"
-      >
-        Save
-      </button>
-    </div>
-  )}
-</div>
-
+      </div>
 
       {isImageModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center z-50">
@@ -1126,7 +1249,7 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
                     />
                   ) : (
                     <p className="text-blue-600">
-                      {profile?.email || "Not added"}
+                      {profile?.email ? maskEmail(profile.email) : "Not added"}
                     </p>
                   )}
                 </div>
@@ -1151,139 +1274,51 @@ const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
                     />
                   ) : (
                     <p className="text-blue-600">
-                      {profile?.phone || "Not added"}
+                      {profile?.phone ? maskPhone(profile.phone) : "Not added"}
                     </p>
                   )}
                 </div>
-              </div>
-
-              <div className="flex items-start gap-6">
-                <div>
-                  <MdLocationOn size={20} className="mt-1" />
-                </div>
-                <div>
-                  <h1 className="text-lg  ">Address</h1>
-                  {isContactEdit ? (
-                    <input
-                      value={contactForm.address}
-                      onChange={(e) =>
-                        setContactForm({
-                          ...contactForm,
-                          address: e.target.value,
-                        })
-                      }
-                      className="border p-1 rounded w-full"
-                    />
-                  ) : (
-                    <p className="text-blue-600">
-                      {profile?.address || "Not added"}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <div className="flex items-start gap-6">
-                <div>
-                  <FaLinkedin size={20} className="mt-1" />
-                </div>
-                <p>
-                  <h1 className="text-lg  ">LinkedIn</h1>{" "}
-                  {isContactEdit ? (
-                    <input
-                      value={contactForm.linkedin}
-                      onChange={(e) =>
-                        setContactForm({
-                          ...contactForm,
-                          linkedin: e.target.value,
-                        })
-                      }
-                      className="border p-1 rounded w-full"
-                    />
-                  ) : profile?.socialMedia?.linkedin ? (
-                    <a
-                      href={profile.socialMedia.linkedin}
-                      target="_blank"
-                      className="text-blue-600"
-                    >
-                      View Profile
-                    </a>
-                  ) : (
-                    "Not added"
-                  )}
-                </p>
-              </div>
-
-              <div className="flex items-start gap-6">
-                <div>
-                  <AiFillInstagram size={20} className="mt-1" />
-                </div>
-                <p>
-                  <h1 className="text-lg  ">Instagram</h1>{" "}
-                  {isContactEdit ? (
-                    <input
-                      value={contactForm.instagram}
-                      onChange={(e) =>
-                        setContactForm({
-                          ...contactForm,
-                          instagram: e.target.value,
-                        })
-                      }
-                      className="border p-1 rounded w-full"
-                    />
-                  ) : profile?.socialMedia?.instagram ? (
-                    <a
-                      href={profile.socialMedia.instagram}
-                      target="_blank"
-                      className="text-blue-600"
-                    >
-                      View Profile
-                    </a>
-                  ) : (
-                    "Not added"
-                  )}
-                </p>
               </div>
             </div>
 
             {isContactEdit && (
-  <div className="flex justify-end gap-3 mt-6">
-    <button
-      onClick={() => setIsContactEdit(false)}
-      className="px-4 py-1 border rounded"
-    >
-      Cancel
-    </button>
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={() => setIsContactEdit(false)}
+                  className="px-4 py-1 border rounded"
+                >
+                  Cancel
+                </button>
 
-    <button
-      onClick={async () => {
-        await updateProfileData({
-          address: contactForm.address,
-          socialMedia: {
-            linkedin: contactForm.linkedin,
-            instagram: contactForm.instagram,
-          },
-        });
+                <button
+                  onClick={async () => {
+                    await updateProfileData({
+                      address: contactForm.address,
+                      socialMedia: {
+                        linkedin: contactForm.linkedin,
+                        instagram: contactForm.instagram,
+                      },
+                    });
 
-        setProfile((prev) => ({
-          ...prev,
-          address: contactForm.address,
-          phone: contactForm.phone,
-          socialMedia: {
-            ...prev.socialMedia,
-            linkedin: contactForm.linkedin,
-            instagram: contactForm.instagram,
-          },
-        }));
+                    setProfile((prev) => ({
+                      ...prev,
+                      address: contactForm.address,
+                      phone: contactForm.phone,
+                      socialMedia: {
+                        ...prev.socialMedia,
+                        linkedin: contactForm.linkedin,
+                        instagram: contactForm.instagram,
+                      },
+                    }));
 
-        setIsContactEdit(false);
-      }}
-      className="px-4 py-1 bg-blue-600 text-white rounded"
-    >
-      Save
-    </button>
-  </div>
-)}
-
+                    setIsContactEdit(false);
+                  }}
+                  className="px-4 py-1 bg-blue-600 text-white rounded"
+                >
+                  Save
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

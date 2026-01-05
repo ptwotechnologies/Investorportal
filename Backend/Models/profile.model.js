@@ -8,8 +8,8 @@ const profileSchema = new mongoose.Schema({
   
   name: { type: String, default: "" },
   bio: { type: String },         
-  address: { type: String },
-  
+  state: { type: String },
+  city: { type: String },
   
   about: { type: String },  
   topSkills: [String],     

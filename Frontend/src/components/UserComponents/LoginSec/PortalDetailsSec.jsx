@@ -116,7 +116,7 @@ const PortalDetailsSec = () => {
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © norf.KD Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP
               </p>
             </div>
           </div>
@@ -213,7 +213,7 @@ const PortalDetailsSec = () => {
                   </div>
 
                   {/* SUBMIT BUTTON */}
-                  <CardFooter className="flex-col gap-2 mt-4 w-full">
+                  <CardFooter className="flex-col gap-2 lg:mt-4 w-full px-0 mt-15">
                     <Button type="submit" className="w-full bg-[#001032]">Continue</Button>
                   </CardFooter>
                 </form>

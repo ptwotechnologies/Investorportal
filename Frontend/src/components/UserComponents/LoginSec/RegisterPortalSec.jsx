@@ -117,7 +117,7 @@ const RegisterPortalSec = () => {
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © norf.KD Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP
               </p>
             </div>
           </div>
@@ -128,7 +128,7 @@ const RegisterPortalSec = () => {
             <Card className="w-full lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-55 w-40 mx-auto lg:my-12 mb-1" />
+                  <img src={logo} alt="Logo" className="lg:w-55 w-40 mx-auto  mb-1" />
                 </CardTitle>
                 <CardDescription className="mb-1 text-[#001032] text-sm lg:text-sm font-semibold">
                   Get the most benefits from our pool of possible clients for you
@@ -234,7 +234,7 @@ const RegisterPortalSec = () => {
                     <Calendar2 onChange={(date) => setDob(date)} />
                   </div>
 
-                  <CardFooter className="flex-col gap-2 lg:mt-4 mb-1 w-full">
+                  <CardFooter className="flex-col gap-2 lg:mt-2 mb-1 w-full px-0 mt-15">
                     <Button type="submit" className="w-full bg-[#001032]">
                       Continue
                     </Button>

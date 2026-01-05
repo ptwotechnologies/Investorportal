@@ -113,7 +113,7 @@ const HomeSec2 = () => {
       >
         <div className="">
           <h1 className="text-5xl font-semibold p-10  hidden lg:block ">Who is this portal for?</h1>
-           <h1 className="text-[44px] font-semibold  py-4 pb-10  w-full lg:hidden tracking-wider leading-10">Who is this <br/> portal for?</h1>
+           <h1 className="text-[44px] font-semibold px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-10">Who is this <br/> portal for?</h1>
           <div className="hidden lg:block">
             <div className="flex justify-center items-center gap-5 mx-20  ">
             <div className=" w-[30%]">

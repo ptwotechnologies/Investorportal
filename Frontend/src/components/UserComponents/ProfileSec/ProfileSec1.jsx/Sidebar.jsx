@@ -12,6 +12,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import { RxCross2 } from "react-icons/rx";
+import { FaHome } from "react-icons/fa";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
@@ -75,6 +76,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <IoMdMenu className="text-white" size={27} onClick={handleToggle} />
         </div>
         <div>
+           <FaHome 
+           className="text-gray-500 my-3"
+            size={27}
+             onClick={handleToggle}/>
+
           <CgProfile
             className="text-gray-500 my-3"
             size={27}
@@ -184,6 +190,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
           <div className="text-[#001426]">
             <ul>
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                  }`
+                }
+              >
+                Dashboard
+              </NavLink>
+
               <NavLink
                 to="/profile"
                 className={({ isActive }) =>

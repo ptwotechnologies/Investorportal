@@ -9,10 +9,10 @@ import {
   FaRegCalendarCheck,
 } from "react-icons/fa";
 import { FiCalendar } from "react-icons/fi";
-import ProgressBar, { ProgressBar2, ProgressBar3 } from "./ProgressBar";
+import ProgressBar, { ProgressBar2, ProgressBar3 } from "../UserComponents/ProfileSec/UserDashboard/ProgressBar";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoIosArrowRoundForward } from "react-icons/io";
-import Graph1 from "./Graph1";
+import Graph1 from "../UserComponents/ProfileSec/UserDashboard/Graph1";
 
 const AdminSec1 = () => {
   const percentage = 75;

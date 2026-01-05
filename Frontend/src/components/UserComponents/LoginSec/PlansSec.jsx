@@ -117,10 +117,8 @@ const PlansSec = ({ userId }) => {
         <div
           ref={scrollRef}
           className="
-            lg:grid lg:gap-1 md:grid-cols-2 lg:grid-cols-4 
-            flex overflow-x-auto 
-            snap-x snap-mandatory 
-            scrollbar-hide 
+            grid gap-10 lg:gap-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 
+            
             w-full
           "
         >
@@ -136,9 +134,11 @@ const PlansSec = ({ userId }) => {
                 text-card-foreground
               "
             >
-              <div className={`h-2.5 lg:h-1 w-full ${card.accent}`} />
+             
 
-              <div className="mt-3 lg:mt-1 space-y-1.5 text-center">
+              <div className="bg-[#6E5C3B] p-2 lg:p-1 ">
+               <div className="bg-white py-3">
+                 <div className=" lg:mt-1 space-y-1.5 text-center">
                 <h3 className="text-3xl lg:text-sm font-bold text-[#001032] pb-4 lg:pb-0">
                   {card.title}
                 </h3>
@@ -212,20 +212,13 @@ const PlansSec = ({ userId }) => {
                   Select
                 </button>
               </div>
+               </div>
+              </div>
             </article>
           ))}
         </div>
 
-        <div className="flex justify-center mt-4 space-x-2 lg:hidden">
-          {cards.map((_, i) => (
-            <div
-              key={i}
-              className={`h-2 w-2 rounded-full mb-2 ${
-                activeIndex === i ? "bg-[#001032] scale-110" : "bg-gray-300"
-              }`}
-            />
-          ))}
-        </div>
+      
       </section>
     </main>
   );

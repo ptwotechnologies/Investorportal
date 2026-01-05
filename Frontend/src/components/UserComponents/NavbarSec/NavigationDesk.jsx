@@ -30,7 +30,7 @@ const NavigationDesk = () => {
         <NavigationMenuItem>
           <NavigationMenuTrigger className="bg-[#001032] text-white px-7 py-1 rounded-full text-lg  ">Auxiliaries</NavigationMenuTrigger>
           <NavigationMenuContent className="inner-shadow left-[-100px]">
-            <ul className="grid w-[800px] h-90 gap-4 shadow-md border rounded-xl p-4">
+            <ul className="grid w-[800px] h-80 gap-4 shadow-md border rounded-xl p-4">
               <li className='flex items-start justify-center gap-15 gap-y-20'>
                 <NavigationMenuLink asChild >
                   <div className='w-[30%]'>
@@ -127,12 +127,12 @@ const NavigationDesk = () => {
                            </div>
                      </div>
 
-                    <Link to="/joinus"> <button className='bg-[#001032] text-white p-1 px-5  rounded-full my-4'>Explore</button></Link>
+                    <Link to="/joinus"> <button className='bg-[#001032] text-white p-1 px-5  rounded-full mb-2 mt-6'>Explore</button></Link>
                  </div>
                  </div>
                 </NavigationMenuLink>
               </li>
-              <div className='text-xs text-[#001032]  flex items-center gap-1 ml-3 relative bottom-9'>Explore the benefits of <Link to="/channelpartners" className='underline flex items-center gap-1'>channel partners  <BsBoxArrowInUpRight size={15} className='mt-1'/> </Link> </div>
+              <div className='text-xs text-[#001032]  flex items-center gap-1 ml-3 relative bottom-10'>Explore the benefits of <Link to="/channelpartners" className='underline flex items-center gap-1'>channel partners  <BsBoxArrowInUpRight size={15} className='mt-1'/> </Link> </div>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -186,7 +186,7 @@ const NavigationDesk = () => {
                     <div className='border border-[#D0D0D040] shadow-md rounded-xl p-3 text-center'>
                      <h1 className='text-[#5C5C5C] font-medium'>Join us!</h1>
                      <p className='text-xs'>Join our ecosystem of 4 portals into one</p>
-                     <div className='grid grid-cols-2 gap-x-5'>
+                     <div className='grid grid-cols-2 gap-x-5 '>
                            <div>
                             <img src={img1} alt="" className='h-15' />
                            </div>

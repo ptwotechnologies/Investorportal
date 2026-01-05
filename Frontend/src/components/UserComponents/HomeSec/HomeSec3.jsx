@@ -91,8 +91,8 @@ const HomeSec3 = () => {
          
       </div>
 
-      <div className="pb-12 pt-5 mr-20" >
-        <p className="bg-white w-[43%] text-center rounded-4xl  ml-auto p-2 px-3 font-bold text-[#001032] tracking-wide ">Simply, a one stop solution for startups & founders!</p>
+      <div className="pb-12 pt-5 mr-18" >
+        <p className="bg-white w-[45%] text-center rounded-4xl  ml-auto p-2 px-3 font-bold text-[#001032] tracking-wide ">Simply, a one stop solution for startups & founders!</p>
       </div>
 
         </div>

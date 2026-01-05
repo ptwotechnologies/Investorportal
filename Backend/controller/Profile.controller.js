@@ -1,6 +1,7 @@
 import Profile from "../Models/profile.model.js";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 
 // GET Profile of logged-in user
 export const getProfile = async (req, res) => {
@@ -13,7 +14,8 @@ export const getProfile = async (req, res) => {
         userId: req.user._id,
         name:  "",
         bio: "",
-        address: "",
+        state: "",
+        city:"",
         about: "",
         topSkills: [],
         services: [],
@@ -113,46 +115,41 @@ export const uploadPortfolio = async (req, res) => {
 // DELETE portfolio item
 export const deletePortfolioItem = async (req, res) => {
   try {
-    const { id } = req.params; // portfolio subdocument id
-    const userId = req.user?._id;
-    if (!userId) return res.status(401).json({ message: "Unauthorized" });
+    const { id } = req.params;
+    const userId = req.user._id;
 
     const profile = await Profile.findOne({ userId });
-    if (!profile) return res.status(404).json({ message: "Profile not found" });
-
-    // Find subdoc
-    const item = profile.portfolio.id(id);
-    if (!item) return res.status(404).json({ message: "Portfolio item not found" });
-
-    // Remove file from disk if exists
-    try {
-      const fs = await import('fs');
-      const path = await import('path');
-
-      let filePath = item.fileUrl;
-      // Normalize and ensure relative path
-      filePath = filePath.replace(/\\/g, "/");
-      if (filePath.startsWith('/')) filePath = filePath.slice(1);
-
-      const absPath = path.resolve(filePath);
-      if (fs.existsSync(absPath)) {
-        fs.unlinkSync(absPath);
-      }
-    } catch (err) {
-      // non-fatal if unlink fails
-      console.error('Failed to remove file from disk:', err.message);
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found" });
     }
 
-    // Remove subdocument and save
-    item.remove();
+    const item = profile.portfolio.id(id);
+    if (!item) {
+      return res.status(404).json({ message: "Portfolio item not found" });
+    }
+
+    // 🧹 Delete file from disk
+    if (item.fileUrl) {
+      const filePath = path.resolve(item.fileUrl.replace(/^\/+/, ""));
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+      }
+    }
+
+    // 🗑 Remove from DB
+    profile.portfolio.pull(id);
     await profile.save();
 
-    res.status(200).json({ message: "Portfolio item deleted", portfolio: profile.portfolio });
+    res.status(200).json({
+      message: "Portfolio item deleted successfully",
+      portfolio: profile.portfolio,
+    });
   } catch (error) {
-    console.error("deletePortfolioItem Error:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("Delete Portfolio Error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 
 
 
@@ -210,5 +207,7 @@ export const uploadCoverImage = async (req, res) => {
     res.status(500).json({ message: "Error uploading cover image" });
   }
 };
+
+
 
 

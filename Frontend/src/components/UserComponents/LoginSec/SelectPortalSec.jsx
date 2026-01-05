@@ -26,7 +26,7 @@ const SelectPortalSec = () => {
             </div>
             <div>
               <p className="  text-lg w-full  text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © norf.KD
+                Terms, Privacy Disclosures Cookie Settings © Artestor
                 Technologies LLP
               </p>
             </div>
@@ -45,12 +45,12 @@ const SelectPortalSec = () => {
                   Get the most benefits from our pool of possible clients for
                   you
                 </p>
-                <p className="text-[#001032] border border-[#00142666] mx-10 md:mx-40 lg:mx-50 text-xl font-semibold rounded-md lg:mb-15 mb-7 p-2">
+                <p className="text-[#001032] border border-[#00142666] mx-10 md:mx-40 lg:mx-50 text-xl font-semibold rounded-md lg:mb-15 mb-10 p-2">
                   Which side are you on?
                 </p>
               </div>
               <div id="bottom " className="hidden lg:block">
-                <div className="flex justify-center items-center gap-3 p-3 pb-13 text-white ">
+                <div className="flex justify-center items-center gap-3 p-3 pb-10 text-white ">
                   <div className="bg-[#001032] rounded-sm p-3">
                     <div className="flex justify-start items-center py-5 gap-2 ">
                       <div className="bg-[#FFFFFF] w-10 h-10"></div>
@@ -132,38 +132,44 @@ const SelectPortalSec = () => {
               <div className="lg:hidden ">
                 <div className="  px-10">
                   <RadioGroup onValueChange={setRole}>
-                    <div className="flex items-center gap-8 mb-4">
+                    <div className="bg-[#001032] text-white px-5 py-2 mb-2 rounded-md">
+                      <div className="flex items-center gap-5 ">
                       <RadioGroupItem
                         value="startup"
                         id="r1"
-                        className="border-2 border-[#001032]"
+                        className="border-2 border-white"
                       />
-                      <Label htmlFor="r1" className="text-xl">
+                      <Label htmlFor="r1" className="text-lg">
                         Startup
                       </Label>
                     </div>
+                    </div>
 
-                    <div className="flex items-center gap-8 mb-4">
+                   <div className="bg-[#002A30] text-white px-5 py-2 mb-2 rounded-md">
+                     <div className="flex items-center gap-8 ">
                       <RadioGroupItem
                         value="investor"
                         id="r2"
-                        className="border-2 border-[#001032]"
+                        className="border-2 border-white"
                       />
-                      <Label htmlFor="r2" className="text-xl">
+                      <Label htmlFor="r2" className="text-lg">
                         Investor
                       </Label>
                     </div>
+                   </div>
 
-                    <div className="flex items-center gap-8 mb-4">
+                   <div  className="bg-[#001032] text-white px-5 py-2 mb-2 rounded-md">
+                     <div className="flex items-center gap-8">
                       <RadioGroupItem
                         value="service_professional"
                         id="r3"
-                        className="border-2 border-[#001032]"
+                        className="border-2 border-white"
                       />
-                      <Label htmlFor="r3" className="text-xl">
+                      <Label htmlFor="r3" className="text-lg">
                         Service Professional
                       </Label>
                     </div>
+                   </div>
                   </RadioGroup>
                 </div>
                 <div className="text-center absolute bottom-5 w-full lg:stactic">
