@@ -60,7 +60,15 @@ export const updateAdditionalDetails = async (req, res) => {
 
     // Update additionalDetails and registrationStep
     user.additionalDetails = additionalDetails;
-    user.registrationStep = 3; // Step 3 after additionalDetails
+     if (user.role === "investor") {
+      user.registrationStep = 5;        // onboarding complete
+      user.paymentStatus = "approved";  // logical approval
+    } 
+    // 🔥 OTHER ROLES
+    else {
+      user.registrationStep = 3;
+    }
+
     await user.save();
 
     res.status(200).json({
@@ -85,6 +93,13 @@ export const updatePlan = async (req, res) => {
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
+
+     if (user.role === "investor") {
+      return res.status(403).json({
+        message: "Investors are not allowed to select plans",
+      });
+    }
+
 
     user.plan = plan;
     user.registrationStep = 4; // Step 4 after plan selection
@@ -172,8 +187,12 @@ export const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
 
     // Check paymentStatus
-    if (user.paymentStatus !== "approved") {
-      return res.status(403).json({ message: "Please complete all signup steps and payment to login." });
+    if (user.role !== "investor") {
+      if (user.paymentStatus !== "approved") {
+        return res.status(403).json({
+          message: "Please complete all signup steps and payment to login.",
+        });
+      }
     }
 
     // Generate JWT token

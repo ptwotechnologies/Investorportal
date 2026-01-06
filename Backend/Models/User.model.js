@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema(
     plan: {
       amount: { type: Number, default: 0 },
     },
-
+ 
     transactionId: { type: String, default: "" },
     paymentStatus: {
       type: String,

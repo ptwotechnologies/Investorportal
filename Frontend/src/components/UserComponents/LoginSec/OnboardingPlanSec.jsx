@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "/ArtesterLogo2.png";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PlansSec from "./PlansSec";
 
 const OnboardingPlanSec = () => {
 
   const location = useLocation();
+   const navigate = useNavigate();
 const userId = location.state?.userId || localStorage.getItem("userId");
+
+ const role =
+    location.state?.role || localStorage.getItem("role");
+
+  useEffect(() => {
+    if (role === "investor") {
+      navigate("/login", { replace: true });
+    }
+  }, [role, navigate]);
+
+  if (role === "investor") return null;
 
 
   return (
@@ -27,7 +39,7 @@ const userId = location.state?.userId || localStorage.getItem("userId");
                   </div>
                  </div>
                 </div>
-        <div
+        <div 
           id="right"
           className="lg:w-[60%] lg:pl- lg:px-2 lg:py-2  "
         >

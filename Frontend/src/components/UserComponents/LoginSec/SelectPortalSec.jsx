@@ -61,18 +61,17 @@ const SelectPortalSec = () => {
                       your portfolio and go live
                     </p>
                     <div className="flex justify-end items-center gap-3">
-                     
-                        <button
-                          onClick={() =>
-                            navigate("/registerportal", {
-                              state: { role: "startup" },
-                            })
-                          }
-                          className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
-                        >
-                          Get Started <IoIosArrowRoundForward size={25} />
-                        </button>
-                     
+                      <button
+                        onClick={() => {
+                          localStorage.setItem("role", "startup");
+                          navigate("/registerportal", {
+                            state: { role: "startup" },
+                          });
+                        }}
+                        className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
+                      >
+                        Get Started <IoIosArrowRoundForward size={25} />
+                      </button>
                     </div>
                   </div>
                   <div className="bg-[#002A30] rounded-sm p-3">
@@ -85,18 +84,17 @@ const SelectPortalSec = () => {
                       your portfolio and go live
                     </p>
                     <div className="flex justify-end items-center gap-3">
-                      
-                        <button
-                          onClick={() =>
-                            navigate("/registerportal", {
-                              state: { role: "investor" },
-                            })
-                          }
-                          className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
-                        >
-                          Get Started <IoIosArrowRoundForward size={25} />
-                        </button>
-                     
+                      <button
+                        onClick={() => {
+                          localStorage.setItem("role", "investor");
+                          navigate("/registerportal", {
+                            state: { role: "investor" },
+                          });
+                        }}
+                        className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
+                      >
+                        Get Started <IoIosArrowRoundForward size={25} />
+                      </button>
                     </div>
                   </div>
                   <div className="bg-[#001032] rounded-sm p-3">
@@ -111,19 +109,17 @@ const SelectPortalSec = () => {
                       your portfolio and go live
                     </p>
                     <div className="flex justify-end items-center gap-3">
-                     
-                       
-                        <button
-                          onClick={() =>
-                            navigate("/registerportal", {
-                              state: { role: "service_professional" },
-                            })
-                          }
-                          className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
-                        >
-                          Get Started <IoIosArrowRoundForward size={25} />
-                        </button>
-                     
+                      <button
+                        onClick={() => {
+                          localStorage.setItem("role", "service_professional");
+                          navigate("/registerportal", {
+                            state: { role: "service_professional" },
+                          });
+                        }}
+                        className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
+                      >
+                        Get Started <IoIosArrowRoundForward size={25} />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -134,60 +130,59 @@ const SelectPortalSec = () => {
                   <RadioGroup onValueChange={setRole}>
                     <div className="bg-[#001032] text-white px-5 py-2 mb-2 rounded-md">
                       <div className="flex items-center gap-5 ">
-                      <RadioGroupItem
-                        value="startup"
-                        id="r1"
-                        className="border-2 border-white"
-                      />
-                      <Label htmlFor="r1" className="text-lg">
-                        Startup
-                      </Label>
-                    </div>
+                        <RadioGroupItem
+                          value="startup"
+                          id="r1"
+                          className="border-2 border-white"
+                        />
+                        <Label htmlFor="r1" className="text-lg">
+                          Startup
+                        </Label>
+                      </div>
                     </div>
 
-                   <div className="bg-[#002A30] text-white px-5 py-2 mb-2 rounded-md">
-                     <div className="flex items-center gap-8 ">
-                      <RadioGroupItem
-                        value="investor"
-                        id="r2"
-                        className="border-2 border-white"
-                      />
-                      <Label htmlFor="r2" className="text-lg">
-                        Investor
-                      </Label>
+                    <div className="bg-[#002A30] text-white px-5 py-2 mb-2 rounded-md">
+                      <div className="flex items-center gap-8 ">
+                        <RadioGroupItem
+                          value="investor"
+                          id="r2"
+                          className="border-2 border-white"
+                        />
+                        <Label htmlFor="r2" className="text-lg">
+                          Investor
+                        </Label>
+                      </div>
                     </div>
-                   </div>
 
-                   <div  className="bg-[#001032] text-white px-5 py-2 mb-2 rounded-md">
-                     <div className="flex items-center gap-8">
-                      <RadioGroupItem
-                        value="service_professional"
-                        id="r3"
-                        className="border-2 border-white"
-                      />
-                      <Label htmlFor="r3" className="text-lg">
-                        Service Professional
-                      </Label>
+                    <div className="bg-[#001032] text-white px-5 py-2 mb-2 rounded-md">
+                      <div className="flex items-center gap-8">
+                        <RadioGroupItem
+                          value="service_professional"
+                          id="r3"
+                          className="border-2 border-white"
+                        />
+                        <Label htmlFor="r3" className="text-lg">
+                          Service Professional
+                        </Label>
+                      </div>
                     </div>
-                   </div>
                   </RadioGroup>
                 </div>
                 <div className="text-center absolute bottom-5 w-full lg:stactic">
-                 
-                    <button
-                      className="bg-[#001426] text-white w-[90%] p-2 rounded-md"
-                      onClick={() => {
-                        if (!role) {
-                          alert("Please select a role");
-                          return;
-                        }
-
-                        navigate("/registerportal", { state: { role } });
-                      }}
-                    >
-                      Continue
-                    </button>
-               
+                  <button
+                    className="bg-[#001426] text-white w-[90%] p-2 rounded-md"
+                    onClick={() => {
+                      localStorage.setItem("role", role);
+                      if (!role) {
+                        alert("Please select a role");
+                        return;
+                      }
+                       localStorage.setItem("role", role);
+                      navigate("/registerportal", { state: { role } });
+                    }}
+                  >
+                    Continue
+                  </button>
                 </div>
               </div>
             </div>
