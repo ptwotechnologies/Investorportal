@@ -39,7 +39,12 @@ const LogicSec1 = () => {
       }
     } catch (error) {
       if (error.response && error.response.data) {
-        toast.error(error.response.data.message);
+        // Show short toast for incomplete signup/payment to match desired UX
+        if (error.response.status === 403 && /complete all signup steps/i.test(error.response.data.message)) {
+          toast.error("plz complete all steps");
+        } else {
+          toast.error(error.response.data.message);
+        }
       } else {
         toast.error("Server Error");
       }
