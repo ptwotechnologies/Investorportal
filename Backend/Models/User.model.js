@@ -12,20 +12,34 @@ const userSchema = new mongoose.Schema(
     },
 
     businessDetails: {
-      number: { type: String, required: true },
-      businessName: { type: String, required: true },
-      businessEmail: { type: String, required: true },
+      // General fields (made optional to support different roles)
+       firstName: { type: String, default: "" },
+      lastName: { type: String, default: "" },
+      number: { type: String, default: "" },
       website: { type: String, default: "" },
-      businessType: { type: String, required: true },
-      foundedon: { type: String, required: true },
+      // Investor-specific fields
+      investorType: { type: String, default: "" }, // Venture Capitalist, Angel Investor, Venture Firm
+      firmName: { type: String, default: "" },
+      // Service professional specific fields
+      serviceType: { type: String, default: "" }, // Freelancer, Company
+      companyName: { type: String, default: "" },
+     
     },
 
     additionalDetails: {
-      pitchDeckUpload: { type: String, default: "" },
-      profileUpload: { type: String, default: "" },
       linkedinProfile: { type: [String], default: [] },
-      reason: { type: [String], default: [] },
+      // Investor-only optional fields and startup files
+      foundedon: { type: Date },
+      domain: { type: String, default: "" },
+      referralCode: { type: String, default: "" },
+      logoFileName: { type: String, default: "" },
+      profileFileName: { type: String, default: "" },
+      pitchDeckFileName: { type: String, default: "" },
+      startupBusinessType: { type: String, default: "" },
+      designation: { type: String, default: "" },
     },
+
+
 
     plan: {
       amount: { type: Number, default: 0 },

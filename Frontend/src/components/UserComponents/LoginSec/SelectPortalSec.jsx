@@ -51,7 +51,7 @@ const SelectPortalSec = () => {
               </div>
               <div id="bottom " className="hidden lg:block">
                 <div className="flex justify-center items-center gap-3 p-3 pb-10 text-white ">
-                  <div className="bg-[#001032] rounded-sm p-3">
+                  <div className="bg-[#001032CC] rounded-sm p-3">
                     <div className="flex justify-start items-center py-5 gap-2 ">
                       <div className="bg-[#FFFFFF] w-10 h-10"></div>
                       <h1 className="text-lg font-semibold">Startup</h1>
@@ -74,7 +74,7 @@ const SelectPortalSec = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="bg-[#002A30] rounded-sm p-3">
+                  <div className="bg-[#002A30CC] rounded-sm p-3">
                     <div className="flex justify-start items-center py-5 gap-2 ">
                       <div className="bg-[#FFFFFF] w-10 h-10"></div>
                       <h1 className="text-lg font-semibold">Investor</h1>
@@ -97,7 +97,7 @@ const SelectPortalSec = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="bg-[#001032] rounded-sm p-3">
+                  <div className="bg-[#65677E] rounded-sm p-3">
                     <div className="flex justify-start items-center py-5 gap-2 ">
                       <div className="bg-[#FFFFFF] w-10 h-10"></div>
                       <h1 className="text-lg font-semibold">
@@ -128,7 +128,7 @@ const SelectPortalSec = () => {
               <div className="lg:hidden ">
                 <div className="  px-10">
                   <RadioGroup onValueChange={setRole}>
-                    <div className="bg-[#001032] text-white px-5 py-2 mb-2 rounded-md">
+                    <div className="bg-[#001032CC] text-white px-5 py-2 mb-2 rounded-md">
                       <div className="flex items-center gap-5 ">
                         <RadioGroupItem
                           value="startup"
@@ -136,33 +136,33 @@ const SelectPortalSec = () => {
                           className="border-2 border-white"
                         />
                         <Label htmlFor="r1" className="text-lg">
-                          Startup
+                         Startup or Founder
                         </Label>
                       </div>
                     </div>
 
-                    <div className="bg-[#002A30] text-white px-5 py-2 mb-2 rounded-md">
-                      <div className="flex items-center gap-8 ">
+                    <div className="bg-[#002A30CC] text-white px-5 py-2 mb-2 rounded-md">
+                      <div className="flex items-center gap-5 ">
                         <RadioGroupItem
                           value="investor"
                           id="r2"
                           className="border-2 border-white"
                         />
                         <Label htmlFor="r2" className="text-lg">
-                          Investor
+                          Angel Investor or VC
                         </Label>
                       </div>
                     </div>
 
-                    <div className="bg-[#001032] text-white px-5 py-2 mb-2 rounded-md">
-                      <div className="flex items-center gap-8">
+                    <div className="bg-[#65677E] text-white px-5 py-2 mb-2 rounded-md">
+                      <div className="flex items-center gap-5">
                         <RadioGroupItem
                           value="service_professional"
                           id="r3"
                           className="border-2 border-white"
                         />
                         <Label htmlFor="r3" className="text-lg">
-                          Service Professional
+                         Service professional
                         </Label>
                       </div>
                     </div>

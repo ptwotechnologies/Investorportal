@@ -21,28 +21,32 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Calendar2 from "./Calendar2";
+
 import { serverUrl } from "@/App";
 
 const RegisterPortalSec = () => {
   const location = useLocation();
-  const { role } = location.state || {};
+  // Role comes from SelectPortal; default to what was chosen or investor
+  const role = location.state?.role || localStorage.getItem("role") || "investor";
 
-  const [activeTab, setActiveTab] = useState("Business Type");
+  const investorTabs = ["Venture Capitalist", "Angel Investor", "Venture Firm"];
+  const serviceTabs = ["Freelancer", "Company"];
+
+  const defaultTab = role === "service_professional" ? serviceTabs[0] : investorTabs[0];
+  const [activeTab, setActiveTab] = useState(defaultTab);
+  const isStartup = role === "startup";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
-  const [businessName, setBusinessName] = useState("");
-  const [businessEmail, setBusinessEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [website, setWebsite] = useState("");
+  const [firmName, setFirmName] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [businessType, setBusinessType] = useState(activeTab);
-  const [dob, setDob] = useState(null); // Date object from Calendar2
 
-  const tabs = [
-    { id: "Manufacturing", label: "Manufacturing" },
-    { id: "Service", label: "Service" },
-  ];
+  const tabs = role === "service_professional" ? serviceTabs.map((t)=>({id:t,label:t})) : investorTabs.map((t) => ({ id: t, label: t }));
 
   const navigate = useNavigate();
 
@@ -54,22 +58,51 @@ const RegisterPortalSec = () => {
       return;
     }
 
-    if (!dob) {
-      alert("Please select the founding date");
-      return;
+    // Role-specific validations
+    if (role === "investor") {
+      if (businessType === "Venture Firm" && !firmName) {
+        alert("Please enter your firm name");
+        return;
+      }
+      if (!website) {
+        alert("Please enter a website");
+        return;
+      }
+    }
+
+    if (role === "service_professional") {
+      if (businessType === "Company" && !companyName) {
+        alert("Please enter your company name");
+        return;
+      }
+      if (!website) {
+        alert("Please enter a website");
+        return;
+      }
+    }
+
+    if (role === "startup") {
+      if (!companyName) {
+        alert("Please enter your company name");
+        return;
+      }
+      if (!website) {
+        alert("Please enter a website");
+        return;
+      }
     }
 
     try {
-      // Convert Date object to YYYY-MM-DD string
-      const foundedOnString = dob.toISOString().split("T")[0];
-
       const businessDetails = {
         number: mobile,
-        businessName,
-        businessEmail,
+        firstName,
+        lastName,
         website,
+        firmName: role === "investor" ? firmName || null : null,
+        investorType: role === "investor" ? businessType : null,
+        serviceType: role === "service_professional" ? businessType : null,
+        companyName: role === "service_professional" || role === "startup" ? companyName || null : null,
         businessType,
-        foundedon: foundedOnString,
       };
 
       const payload = {
@@ -88,7 +121,11 @@ const RegisterPortalSec = () => {
         navigate("/portaldetails", { 
           state: { 
             userId: response.data.userId,
-            role 
+            role,
+            investorType: role === "investor" ? businessType : null,
+            firmName: role === "investor" ? firmName || null : null,
+            serviceType: role === "service_professional" ? businessType : null,
+            companyName: role === "service_professional" || role === "startup" ? companyName || null : null,
           } 
         });
       } else {
@@ -123,7 +160,7 @@ const RegisterPortalSec = () => {
           </div>
         </div>
 
-        <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center w-full">
+        <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10  text-center w-full">
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
             <Card className="w-full lg:h-auto mx-auto rounded-lg">
               <CardHeader>
@@ -139,10 +176,28 @@ const RegisterPortalSec = () => {
               <CardContent>
                 <form onSubmit={handleSubmit}>
                   <div className="flex flex-col gap-3">
+                     <Input
+                      id="firstName"
+                      type="text"
+                      placeholder="First Name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      required
+                      className="p-5 font-medium text-[#00103280]"
+                    />
+                    <Input
+                      id="lastName"
+                      type="text"
+                      placeholder="Last Name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      required
+                      className="p-5 font-medium text-[#00103280]"
+                    />
                     <Input
                       id="email"
                       type="email"
-                      placeholder="Email or Phone"
+                      placeholder="Email "
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -160,81 +215,153 @@ const RegisterPortalSec = () => {
                     <Input
                       id="mobile"
                       type="text"
-                      placeholder="Mobile or Phone"
+                      placeholder="Mobile Number"
                       value={mobile}
                       onChange={(e) => setMobile(e.target.value)}
                       required
                       className="p-5 font-medium text-[#00103280]"
                     />
-                    <Input
-                      id="businessName"
-                      type="text"
-                      placeholder="Business Name"
-                      value={businessName}
-                      onChange={(e) => setBusinessName(e.target.value)}
-                      required
-                      className="p-5 font-medium text-[#00103280]"
-                    />
-                    <Input
-                      id="businessEmail"
-                      type="email"
-                      placeholder="Business Email"
-                      value={businessEmail}
-                      onChange={(e) => setBusinessEmail(e.target.value)}
-                      required
-                      className="p-5 font-medium text-[#00103280]"
-                    />
-                    <Input
-                      id="website"
-                      type="text"
-                      placeholder="Website"
-                      value={website}
-                      onChange={(e) => setWebsite(e.target.value)}
-                      className="p-5 font-medium text-[#00103280]"
-                    />
 
-                    {/* Dropdown for business type */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button
-                          className="
-                            w-full
-                            bg-white
-                            border border-[#0010321A]
-                            rounded-md
-                            h-12
-                            px-5
-                            flex justify-between items-center
-                            text-[#00103280]
-                            font-medium
-                            cursor-pointer
-                          "
-                        >
-                          {activeTab}
-                          <IoIosArrowDown className="mt-0" />
-                        </button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="mt-2 w-full bg-white border border-[#001032] rounded-md shadow-sm">
-                        {tabs.map((tab) => (
-                          <DropdownMenuItem
-                            key={tab.id}
-                            onClick={() => {
-                              setActiveTab(tab.label);
-                              setBusinessType(tab.label);
-                            }}
-                            className="text-[#00103280] text-md px-5 py-2"
+                    {/* Role-specific field: for startup show Company Name input, otherwise show dropdown */}
+                    {isStartup ? (
+                      <>
+                        <Input
+                          id="companyName"
+                          type="text"
+                          placeholder="Company Name"
+                          value={companyName}
+                          onChange={(e) => setCompanyName(e.target.value)}
+                          required
+                          className="p-5 font-medium text-[#00103280]"
+                        />
+                        <Input
+                          id="website"
+                          type="text"
+                          placeholder="Website"
+                          value={website}
+                          onChange={(e) => setWebsite(e.target.value)}
+                          required
+                          className="p-5 font-medium text-[#00103280]"
+                        />
+                      </>
+                    ) : (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            className="
+                              w-full
+                              bg-white
+                              border border-[#0010321A]
+                              rounded-md
+                              h-12
+                              px-5
+                              flex justify-between items-center
+                              text-[#00103280]
+                              font-medium
+                              cursor-pointer
+                            "
                           >
-                            {tab.label}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                            {activeTab}
+                            <IoIosArrowDown className="mt-0" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="mt-2 w-full bg-white border border-[#001032] rounded-md shadow-sm">
+                          {tabs.map((tab) => (
+                            <DropdownMenuItem
+                              key={tab.id}
+                              onClick={() => {
+                                setActiveTab(tab.label);
+                                setBusinessType(tab.label);
+                              }}
+                              className="text-[#00103280] text-md px-5 py-2"
+                            >
+                              {tab.label}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )} 
 
-                    {/* Calendar component */}
-                    <Calendar2 onChange={(date) => setDob(date)} />
+                    {/* Role-specific inputs */}
+                    {role === "investor" && (
+                      <>
+                        {activeTab === "Venture Firm" ? (
+                          <>
+                            <Input
+                              id="firmName"
+                              type="text"
+                              placeholder="Firm Name"
+                              value={firmName}
+                              onChange={(e) => setFirmName(e.target.value)}
+                              required
+                              className="p-5 font-medium text-[#00103280]"
+                            />
+                            <Input
+                              id="website"
+                              type="text"
+                              placeholder="Website"
+                              value={website}
+                              onChange={(e) => setWebsite(e.target.value)}
+                              required
+                              className="p-5 font-medium text-[#00103280]"
+                            />
+                          </>
+                        ) : (
+                          <Input
+                            id="website"
+                            type="text"
+                            placeholder="Website"
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                            required
+                            className="p-5 font-medium text-[#00103280]"
+                          />
+                        )}
+                      </>
+                    )}
+
+                    {role === "service_professional" && (
+                      <>
+                        {activeTab === "Company" ? (
+                          <>
+                            <Input
+                              id="companyName"
+                              type="text"
+                              placeholder="Company Name"
+                              value={companyName}
+                              onChange={(e) => setCompanyName(e.target.value)}
+                              required
+                              className="p-5 font-medium text-[#00103280]"
+                            />
+                            <Input
+                              id="website"
+                              type="text"
+                              placeholder="Website"
+                              value={website}
+                              onChange={(e) => setWebsite(e.target.value)}
+                              required
+                              className="p-5 font-medium text-[#00103280]"
+                            />
+                          </>
+                        ) : (
+                          <Input
+                            id="website"
+                            type="text"
+                            placeholder="Website"
+                            value={website}
+                            onChange={(e) => setWebsite(e.target.value)}
+                            required
+                            className="p-5 font-medium text-[#00103280]"
+                          />
+                        )}
+                      </>
+                    )}
+
+                   
+                   
                   </div>
 
-                  <CardFooter className="flex-col gap-2 lg:mt-2 mb-1 w-full px-0 mt-15">
+                  <CardFooter className="flex-col gap-2 lg:mt-5 mb-1 w-full px-0 mt-15">
                     <Button type="submit" className="w-full bg-[#001032]">
                       Continue
                     </Button>

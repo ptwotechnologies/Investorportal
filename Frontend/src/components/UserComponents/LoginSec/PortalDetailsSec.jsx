@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import logoIcon from "/pitchdeckLogo.png";
 
 import {
   Card,
@@ -28,20 +29,44 @@ const PortalDetailsSec = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [userId, setUserId] = useState(location.state?.userId || null);
+  // Role from registration (can be investor or service_professional)
+  const role = location.state?.role || localStorage.getItem("role");
+  const [investorType, setInvestorType] = useState(location.state?.investorType || null);
+  const [firmNameFromPrev, setFirmNameFromPrev] = useState(location.state?.firmName || "");
+  const [serviceType, setServiceType] = useState(location.state?.serviceType || null);
+  const [companyNameFromPrev, setCompanyNameFromPrev] = useState(location.state?.companyName || "");
 
   // Form values
   const [pitchDeck, setPitchDeck] = useState("");
   const [profile, setProfile] = useState("");
   const [linkedin, setLinkedin] = useState("");
   const [foundedOn, setFoundedOn] = useState(null);
+  const [designation, setDesignation] = useState("");
+  const [domain, setDomain] = useState(" Domain");
+  const [referralCode, setReferralCode] = useState("");
+  const [logoFile, setLogoFile] = useState(null);
+  // Startup-specific business type selection (shown instead of LinkedIn)
+  const [startupBusinessType, setStartupBusinessType] = useState(" Business Type");
+  const startupBusinessOptions = ["Manufacturing", "Trading", "Service Based"];
+  // Maximum logo / file size in bytes (2MB)
+  const MAX_LOGO_SIZE = 2 * 1024 * 1024;
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return setLogoFile(null);
+    if (file.size > MAX_LOGO_SIZE) {
+      alert("File must be less than 2MB");
+      e.target.value = "";
+      setLogoFile(null);
+      return;
+    }
+    setLogoFile(file);
+  };
+  // control which fields to show (investor, service professionals, startup)
+  const showPortalFields = role === "investor" || role === "service_professional" || role === "startup";
 
-  // Two separate dropdowns
-  const [businessType, setBusinessType] = useState("Select Business Type");
-  const [reasonForJoining, setReasonForJoining] = useState("Select Reason");
 
-  // Dummy dropdown options
-  const businessOptions = ["Manufacturing", "Service", "Trading"];
-  const reasonOptions = ["Funding", "Networking", "Business Growth"];
+  // (Non-investor fields removed — this flow is investor-only for now)  
+  const domainOptions = ["Technology", "Legal & Compliance", "Marketing", "Designing", "Development", "Other"];
 
   // Retrieve userId from localStorage if missing
   useEffect(() => {
@@ -59,33 +84,62 @@ const PortalDetailsSec = () => {
       return;
     }
 
-    if (!foundedOn) {
-      alert("Please select founding date");
-      return;
-    }
-
-    if (
-      !pitchDeck ||
-      !profile ||
-      !linkedin ||
-      businessType === "Select Business Type" ||
-      reasonForJoining === "Select Reason"
-    ) {
-      alert("All fields are required!");
-      return;
+    // Role-specific validations: investors, service_professional, and startup share portal fields
+    if (showPortalFields) {
+      if (!foundedOn) {
+        alert("Please select founding date");
+        return;
+      }
+      // For startup we don't require LinkedIn; instead require startup business type
+      if (role !== "startup" && !linkedin) {
+        alert("LinkedIn profile is required");
+        return;
+      }
+      if (role === "startup" && startupBusinessType === "Select Business Type") {
+        alert("Please select a business type");
+        return;
+      }
+      if (domain === "Select Domain") {
+        alert("Please select a domain");
+        return;
+      }
+      if (investorType === "Venture Firm" && !designation) {
+        alert("Please enter your designation");
+        return;
+      }
+      if (serviceType === "Company" && !companyNameFromPrev) {
+        alert("Company name missing from registration");
+        return;
+      }
+      if (logoFile && logoFile.size > MAX_LOGO_SIZE) {
+        alert("File must be less than 2MB");
+        return;
+      }
+    } else {
+      // Generic required checks for other roles (avoid undefined vars)
+      if (!pitchDeck || !profile || !linkedin) {
+        alert("All fields are required!");
+        return;
+      }
     }
 
     try {
-      const payload = {
+      const additionalDetails = {
+        linkedinProfile: [linkedin],
+        foundedon: foundedOn ? foundedOn.toISOString().split("T")[0] : null,
+        domain: domain === "Select Domain" ? null : domain,
+        referralCode: referralCode || null,
+        designation: investorType === "Venture Firm" ? designation || null : null,
+        profileFileName: role === "startup" ? null : (logoFile ? logoFile.name : null),
+        pitchDeckFileName: role === "startup" ? (logoFile ? logoFile.name : null) : null,
+        startupBusinessType: role === "startup" ? (startupBusinessType === "Select Business Type" ? null : startupBusinessType) : null,
+        firmName: firmNameFromPrev || null,
+        companyName: companyNameFromPrev || null,
+      };
+
+    const payload = {
         userId,
-        additionalDetails: {
-          pitchDeckUpload: pitchDeck,
-          profileUpload: profile,
-          linkedinProfile: [linkedin],
-          reason: [reasonForJoining],
-          businessType: businessType,
-          foundedon: foundedOn.toISOString().split("T")[0],
-        },
+        additionalDetails,
         registrationStep: 2,
       };
 
@@ -130,7 +184,7 @@ const PortalDetailsSec = () => {
               
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-55 w-45 mx-auto lg:my-12 my-7" />
+                  <img src={logo} alt="Logo" className="lg:w-50 w-45 mx-auto my-3" />
                 </CardTitle>
                 <CardDescription className="mb-1 text-[#001032] text-md lg:text-sm font-semibold">
                   Get the most benefits from our pool of possible clients for you
@@ -142,74 +196,125 @@ const PortalDetailsSec = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="flex flex-col gap-3">
 
-                    {/* BUSINESS TYPE DROPDOWN */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
-                          {businessType}
-                          <IoIosArrowDown className="mt-1" />
-                        </button>
-                      </DropdownMenuTrigger>
+                       {/* Designation for Venture Firm */}
+                        {investorType === "Venture Firm" && (
+                          <Input
+                            type="text"
+                            placeholder="Designation"
+                            value={designation}
+                            onChange={(e) => setDesignation(e.target.value)}
+                            className="p-5 font-medium text-[#00103280]"
+                            required
+                          />
+                        )}
 
-                      <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
-                        {businessOptions.map((item) => (
-                          <DropdownMenuItem key={item} onClick={() => setBusinessType(item)}>
-                            {item}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    {showPortalFields ? (
+                      <>
+                        {/* INVESTOR & SERVICE_PROFESSIONAL: Founding date */}
+                        <div>
+                            <Calendar2 onChange={(date) => setFoundedOn(date)} />
+                        </div>
 
-                    {/* DATE PICKER */}
-                    <Calendar2 onChange={(date) => setFoundedOn(date)} />
+                        {/* LINKEDIN for investors & service_professionals, BUSINESS TYPE dropdown for startups */}
+                        {role === "startup" ? (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                {startupBusinessType}
+                                <IoIosArrowDown className="mt-1" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                              {startupBusinessOptions.map((item) => (
+                                <DropdownMenuItem key={item} onClick={() => setStartupBusinessType(item)}>
+                                  {item}
+                                </DropdownMenuItem>
+                              ))}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        ) : (
+                          <Input
+                            type="text"
+                            placeholder="LinkedIn Profile"
+                            value={linkedin}
+                            onChange={(e) => setLinkedin(e.target.value)}
+                            className="p-5 font-medium text-[#00103280]"
+                            required
+                          />
+                        )}
 
-                    {/* PITCH DECK */}
-                    <Input
-                      type="text"
-                      placeholder="Pitch Deck Upload"
-                      value={pitchDeck}
-                      onChange={(e) => setPitchDeck(e.target.value)}
-                      className="p-5 font-medium text-[#00103280]"
-                      required
-                    />
+                        {/* Show firm/company name if passed from registration */}
+                        {role === "investor" && firmNameFromPrev ? (
+                          <Input
+                            type="text"
+                            placeholder="Firm Name"
+                            value={firmNameFromPrev}
+                            readOnly
+                            className="p-5 font-medium text-[#00103280] bg-gray-50"
+                          />
+                        ) : null}
+                       
 
-                    {/* PROFILE UPLOAD */}
-                    <Input
-                      type="text"
-                      placeholder="Profile Upload"
-                      value={profile}
-                      onChange={(e) => setProfile(e.target.value)}
-                      className="p-5 font-medium text-[#00103280]"
-                      required
-                    />
+                        {/* DOMAIN */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                              {domain}
+                              <IoIosArrowDown className="mt-1" />
+                            </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                            {domainOptions.map((item) => (
+                              <DropdownMenuItem key={item} onClick={() => setDomain(item)}>
+                                {item}
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuContent>
+                        </DropdownMenu>
 
-                    {/* LINKEDIN */}
-                    <Input
-                      type="text"
-                      placeholder="LinkedIn Profile"
-                      value={linkedin}
-                      onChange={(e) => setLinkedin(e.target.value)}
-                      className="p-5 font-medium text-[#00103280]"
-                      required
-                    />
+                        {/* Referral */}
+                        <Input
+                          type="text"
+                          placeholder="Referral Code (optional)"
+                          value={referralCode}
+                          onChange={(e) => setReferralCode(e.target.value)}
+                          className="p-5 font-medium text-[#00103280]"
+                        />
 
-                    {/* REASON FOR JOINING DROPDOWN */}
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
-                          {reasonForJoining}
-                          <IoIosArrowDown className="mt-1" />
-                        </button>
-                      </DropdownMenuTrigger>
+                        {/* Profile / Pitchdeck upload (optional) */}
+                        <div className="flex flex-col gap-2 items-center justify-center ">
+                          
+                          <div className="w-full ">
+                            <input
+                              id="logoInput"
+                              type="file"
+                              accept="image/*,application/pdf"
+                              onChange={handleLogoChange}
+                              className="hidden "
+                            />
+                            <label htmlFor="logoInput" className="cursor-pointer inline-flex flex-col items-center gap-2 px-3 py-3  w-full border  rounded-md">
+                              <img src={logoIcon} alt="Upload" className="w-19 h-19 object-contain" />
+                              <span className="text-sm text-[#00103280]"> {role === "startup" ? "Pitchdeck Upload" : "Profile  Upload"} </span>
+                            </label>
+                            {logoFile && (
+                              <div className="flex items-center gap-2">
+                                <img src={URL.createObjectURL(logoFile)} alt="preview" className="w-10 h-10 object-cover rounded" />
+                                <p className="text-sm text-[#00103280]">{logoFile.name}</p>
+                              </div>
+                            )}
+                          </div>
+                          <label className="text-left text-xs font-medium text-gray-600">(Max 2MB)</label>
+                        </div>
 
-                      <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
-                        {reasonOptions.map((item) => (
-                          <DropdownMenuItem key={item} onClick={() => setReasonForJoining(item)}>
-                            {item}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                       
+                        
+                      </>
+                    ) : (
+                      <>
+                       
+                        
+                      </>
+                    )}
                   </div>
 
                   {/* SUBMIT BUTTON */}

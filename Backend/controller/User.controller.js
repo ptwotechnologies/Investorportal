@@ -12,6 +12,17 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // 1a. Role-specific validation
+    if (role === "service_professional") {
+      const { serviceType, companyName } = businessDetails;
+      if (!serviceType) {
+        return res.status(400).json({ message: "Service type is required for service professionals" });
+      }
+      if (serviceType === "Company" && !companyName) {
+        return res.status(400).json({ message: "Company name is required for service professionals of type Company" });
+      }
+    }
+
     // 2. Check if email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -57,6 +68,30 @@ export const updateAdditionalDetails = async (req, res) => {
     // Find user
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Server-side validation for additional details
+    if (user.role === "investor") {
+      // If venture firm, designation is required
+      if (user.businessDetails && user.businessDetails.investorType === "Venture Firm") {
+        if (!additionalDetails.designation) {
+          return res.status(400).json({ message: "Designation is required for Venture Firm investors" });
+        }
+      }
+    }
+
+    if (user.role === "service_professional") {
+      if (user.businessDetails && user.businessDetails.serviceType === "Company") {
+        if (!user.businessDetails.companyName) {
+          return res.status(400).json({ message: "Company name missing for service professional" });
+        }
+      }
+    }
+
+    if (user.role === "startup") {
+      if (!additionalDetails || !additionalDetails.startupBusinessType) {
+        return res.status(400).json({ message: "Startup business type is required" });
+      }
+    }
 
     // Update additionalDetails and registrationStep
     user.additionalDetails = additionalDetails;
