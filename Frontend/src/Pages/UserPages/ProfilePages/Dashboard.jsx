@@ -14,7 +14,7 @@ const Dashboard = () => {
       <div className='lg:hidden fixed top-0 z-50 w-full '>
         <Mobile/>
       </div>
-     <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[82%]' : 'lg:w-[350%]' } transition-all duration-300 mt-18 pt-1 lg:mt-0`}>
+     <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[82%]' : 'lg:w-[350%]' } transition-all duration-300 mt-18 pt-1 lg:pt-0 lg:mt-0`}>
        <DashboardSec/>
      </div>
     </div>

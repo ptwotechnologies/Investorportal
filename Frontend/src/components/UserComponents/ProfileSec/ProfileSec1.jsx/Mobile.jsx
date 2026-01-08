@@ -95,6 +95,9 @@ const Mobile = () => {
                 <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-7">
                   <div id="top">
                     <ul className="flex flex-col gap-2">
+                      <Link to="/dashboard">
+                        <li>Dashboard</li>
+                      </Link>
                       <Link to="/profile">
                         <li>Profile</li>
                       </Link>

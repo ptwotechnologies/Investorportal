@@ -11,6 +11,8 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import Graph1 from "./Graph1";
 import { motion } from "framer-motion";
+import { CgProfile } from "react-icons/cg";
+import { Link } from 'react-router-dom';
 
 
 const DashboardSec = () => {
@@ -27,13 +29,29 @@ const DashboardSec = () => {
 
 
   return (
-    <div className='bg-gray-100 h-screen'>
+    <div className='bg-gray-200 h-screen pt-2 px-2'>
       <div className='hidden lg:block'>
-        <div className="bg-gray-200 p-3 flex gap-3 ">
+         <div
+                  id="topbar"
+                  className="flex justify-between items-center  border-2 border-[#D9D9D9] rounded-xl bg-white px-5  mx-2 p-2"
+                >
+                  <div>
+                    <p className="font-semibold text-[#001032]">
+                      Welcome, Startup India Pvt. Ltd.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-x-3">
+                    <CgProfile className="text-gray-500 " size={25} />
+                    <p className="text-[#001426] font-semibold">
+                      Switch to professional
+                    </p>
+                  </div>
+                </div>
+        <div className="bg-gray-200 px-3 pt-3 flex gap-3 ">
         <div id="left" className="w-[70%] ">
           <div id="top" className="flex items-center gap-3">
-            <div id="left" className="rounded-2xl bg-white p-5 h-[50vh]  w-[50%]">
-              <h1 className="text-3xl font-semibold text-[#202020] my-4">
+            <div id="left" className="rounded-2xl bg-white p-5 h-[47vh]  w-[50%]">
+              <h1 className="text-3xl font-semibold text-[#202020] my-3">
                 Progress Statistics
               </h1>
               <div className="flex items-center gap-3 my-6 text-[#202020]">
@@ -43,7 +61,7 @@ const DashboardSec = () => {
                 </p>
               </div>
 
-              <div className="flex items-center w-full gap-2 text-[#6F6F6F] my-4 mb-7">
+              <div className="flex items-center w-full gap-2 text-[#6F6F6F] my-4 mb-5">
                 <div className="w-[60%]">
                   <ProgressBar />
                   <p className="text-sm mt-1">20%</p>
@@ -58,7 +76,7 @@ const DashboardSec = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-evenly bg-gray-100  p-2 mt-3 rounded-3xl">
+              <div className="flex items-center justify-evenly bg-gray-100  p-2 mt-1 rounded-3xl">
                 <div>
                   <div className="bg-[#760BFF] w-9 h-9 rounded-full text-white flex items-center justify-center mx-auto ">
                     <FaImage />
@@ -88,10 +106,10 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="rounded-2xl bg-white p-3 py-4 h-[50vh]  w-[50%]"
+              className="rounded-2xl bg-white p-3 py-4 h-[47vh]  w-[50%]"
             >
               <div className="flex  items-center justify-between ">
-           <h1  className="text-3xl font-semibold text-[#202020] my-4">Profile</h1>
+           <h1  className="text-3xl font-semibold text-[#202020] my-2">Profile</h1>
               </div>
               <div>
                
@@ -151,14 +169,14 @@ const DashboardSec = () => {
                 </div>
 
                 <div className="bg-[#001426] text-white p-1 rounded-lg text-center mt-1">
-                  <button className="">Complete Your Profile</button>
+                  <Link to="/profile"><button className="">Complete Your Profile</button></Link>
                 </div>
               </div>
             </div>
           </div>
 
-          <div id="bottom" className="bg-white rounded-2xl mt-3 h-[45vh]">
-            <div className="flex items-center justify-between px-5 py-6">
+          <div id="bottom" className="bg-white rounded-2xl mt-3 h-[41vh]">
+            <div className="flex items-center justify-between px-5 py-4">
               <h1 className="text-3xl text-[#202020] font-semibold">Requests</h1>
               <div className="flex items-center gap-1 ">
                 <div className="w-6 h-6 rounded-full border border-black flex items-center justify-center">
@@ -209,8 +227,8 @@ const DashboardSec = () => {
 
             <div className="border w-[35%] p-3 bg-[#F1F1F1] rounded-3xl mb-2">
                 <p className="text-[#6F6F6F] text-sm">17.00 P.M.</p>
-                <h1 className="my-3 w-[65%] leading-5 text-[#202020] font-semibold text-lg">
-                  Looking for assistance in leads
+                <h1 className="my-3  leading-5 text-[#202020] font-semibold text-lg">
+                  Looking for <br/> assistance in leads
                 </h1>
                 <button className="hover:bg-white text-white bg-[#FF6812] hover:text-[#FF6812] py-1 px-6 my-1 mb-4  rounded-md ">
                   Check status
@@ -228,7 +246,7 @@ const DashboardSec = () => {
           </div>
         </div>
 
-        <div id="right" className="w-[30%] h-[96vh] bg-white rounded-2xl p-4 text-[#202020]">
+        <div id="right" className="w-[30%] h-[90vh] bg-white rounded-2xl p-4 text-[#202020]">
          <div className="flex items-center justify-between">
            <p className="text-3xl font-semibold my-4">Activity</p>
           <div className="flex items-center gap-1 border border-[#6F6F6F] p-1 px-3 rounded-2xl">
@@ -237,7 +255,7 @@ const DashboardSec = () => {
              </div>
          </div>
 
-         <div className="flex items-center gap-5 p-5 py-8">
+         <div className="flex items-center gap-5 p-5 py-5">
           <p className="text-3xl font-semibold">50</p>
           <p className="text-md font-medium">Connects</p>
          </div>
@@ -246,7 +264,7 @@ const DashboardSec = () => {
           <Graph1/>
          </div>
 
-         <div className="bg-[#F1F1F1] px-8 py-6 mt-5 rounded-2xl">
+         <div className="bg-[#F1F1F1] px-8 py-4 mt-4 rounded-2xl">
            <h3 className="text-gray-900 text-[18px] font-semibold mb-3">
               New Registrations
             </h3>
@@ -286,6 +304,9 @@ const DashboardSec = () => {
         </div>
       </div>
       </div>
+
+
+
 
       <div className='lg:hidden bg-gray-100 h-auto'>
         <div>
@@ -354,7 +375,7 @@ const DashboardSec = () => {
                 </div>
 
                 <div className="bg-[#001426] text-white p-1 rounded-lg text-center mt-1">
-                  <button className="">Complete Your Profile</button>
+                 <Link to="/profile"> <button className="">Complete Your Profile</button></Link>
                 </div>
               </div>
             </div>

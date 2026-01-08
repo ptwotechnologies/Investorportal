@@ -33,7 +33,7 @@ const LogicSec1 = () => {
         localStorage.setItem("token", response.data.token);
         toast.success("Login successful!");
         // Redirect user after login
-        navigate("/profile"); // apne project ka route
+        navigate("/dashboard"); // apne project ka route
       } else {
         toast.error(response.data.message);
       }
@@ -69,7 +69,7 @@ const LogicSec1 = () => {
         </div>
         <div id="right" className="lg:w-[47%] w-full lg:pl-20 lg:px-10 lg:py-5 text-center ">
           <div className="lg:bg-[#001032]   lg:p-3 w-full lg:rounded-lg  ">
-            <Card className="w-full     mx-auto rounded-lg   lg:h-auto h-[100vh] ">
+            <Card className="w-full     mx-auto rounded-lg   lg:h-auto h-screen ">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-7" />
