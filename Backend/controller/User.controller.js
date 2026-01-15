@@ -69,15 +69,7 @@ export const updateAdditionalDetails = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Server-side validation for additional details
-    if (user.role === "investor") {
-      // If venture firm, designation is required
-      if (user.businessDetails && user.businessDetails.investorType === "Venture Firm") {
-        if (!additionalDetails.designation) {
-          return res.status(400).json({ message: "Designation is required for Venture Firm investors" });
-        }
-      }
-    }
+    
 
     if (user.role === "service_professional") {
       if (user.businessDetails && user.businessDetails.serviceType === "Company") {
@@ -96,8 +88,8 @@ export const updateAdditionalDetails = async (req, res) => {
     // Update additionalDetails and registrationStep
     user.additionalDetails = additionalDetails;
      if (user.role === "investor") {
-      user.registrationStep = 5;        // onboarding complete
-      user.paymentStatus = "approved";  // logical approval
+      user.registrationStep = 4;        // onboarding complete
+      user.paymentStatus = "pending";  // logical approval
     } 
     // 🔥 OTHER ROLES
     else {
@@ -123,7 +115,7 @@ export const updatePlan = async (req, res) => {
     const { userId, plan } = req.body;
 
     if (!userId || !plan || typeof plan.amount !== "number") {
-      return res.status(400).json({ message: "Valid plan amount is required" });
+      return res.status(400).json({ message: "Valid plan amount is required" }); 
     }
 
     const user = await User.findById(userId);

@@ -13,11 +13,13 @@ import {
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { serverUrl } from "@/App";
+import { SpinnerButton } from "./StatusSpinner";
 
 const PaymentSuccessSec = () => {
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
+  const [role, setRole] = useState(null);
 
   
   useEffect(() => {
@@ -49,18 +51,40 @@ const PaymentSuccessSec = () => {
 
   
   useEffect(() => {
-    if (userId) {
-      checkPaymentStatus();
-      const interval = setInterval(checkPaymentStatus, 60000);
-      return () => clearInterval(interval);
-    }
-  }, [userId]);
+  if (!userId || paymentStatus === "approved") return;
+
+  checkPaymentStatus(); // initial hit
+
+  const interval = setInterval(() => {
+    checkPaymentStatus();
+  }, 360000); // 6 minutes
+
+  return () => clearInterval(interval);
+}, [userId, paymentStatus]);
+
+
+
+
+
+  useEffect(() => {
+  const storedRole = localStorage.getItem("role");
+  if (storedRole) {
+    setRole(storedRole);
+  }
+}, []);
 
   
   const statusMessage =
-    paymentStatus === "approved"
+  role === "investor"
+    ? paymentStatus === "approved"
+      ? "Your onboarding is complete. You can continue."
+      : "We are reviewing your details. Please wait for admin approval."
+    : paymentStatus === "approved"
       ? "Payment approved! You can continue."
       : "We are reviewing your details. Please wait until it gets approved.";
+
+
+      const roleinvest= role !== "investor" ? "Payment has been received successfully!" : "Thank you for joining as an investor!";
 
   return (
     <div>
@@ -88,22 +112,28 @@ const PaymentSuccessSec = () => {
                   <img src={logo} alt="Logo" className="lg:w-45 w-45 mx-auto lg:my-10 my-7" />
                 </CardTitle>
                 <CardDescription className="mb-1 text-[#001032] text-sm lg:text-sm font-semibold">
-                  Payment has been received successfully!
+                  {roleinvest}
                   <p className="mt-2">{statusMessage}</p>
                   {loading && <p className="mt-2 text-yellow-500 font-bold">Processing...</p>}
                 </CardDescription>
               </CardHeader>
 
               <CardContent>
-                <div className="w-50 h-50 mx-auto border-2 border-[#00142666] rounded-full my-10 lg:my-12">
+              {paymentStatus === "approved" ? (
+                  <div className="w-30 h-30 lg:w-40 lg:h-40 mx-auto border-2 border-[#00142666] rounded-full my-16 mt-20 lg:my-12">
                   <img src={paymentSuccess} alt="QR" />
                 </div>
+                ) : (
+                  <div className="my-16 mt-20 lg:my-12">
+                  <SpinnerButton/>
+                </div>
+                )}
               </CardContent>
 
               <CardFooter className="absolute bottom-5 w-full lg:static">
                 {paymentStatus === "approved" ? (
                   <Link to="/login" className="w-full">
-                    <Button className="w-full bg-[#001032]">Continue</Button>
+                    <Button className="w-full bg-[#001032]">Back to Login</Button>
                   </Link>
                 ) : (
                   <Button className="w-full bg-[#001032] opacity-50 cursor-not-allowed" disabled>

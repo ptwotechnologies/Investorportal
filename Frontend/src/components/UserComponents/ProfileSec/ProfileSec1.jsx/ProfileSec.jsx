@@ -19,9 +19,12 @@ import { AiFillInstagram } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
 import { statesData } from "./StateCity";
+import { IoDiamondOutline } from "react-icons/io5";
+import { FaPlus } from "react-icons/fa6";
+import instaIcon from "/instagram.jpeg";
 
 const ProfileSec = () => {
-  const MAX_PORTFOLIO_IMAGES = 19;
+  const MAX_PORTFOLIO_IMAGES = 20;
 
   const token = localStorage.getItem("token");
   const [profile, setProfile] = useState({
@@ -31,6 +34,11 @@ const ProfileSec = () => {
     city: "",
     coverImage: "",
     profilePhoto: "",
+    socialMedia: {
+      // ✅ ADD THIS
+      linkedin: "",
+      instagram: "",
+    },
   });
   const [editSections, setEditSections] = useState({
     header: false,
@@ -39,11 +47,23 @@ const ProfileSec = () => {
     experience: false,
     socialMedia: false,
   });
+
+  const [experienceEdit, setExperienceEdit] = useState({});
   const [portfolioFiles, setPortfolioFiles] = useState([]);
   const [showContactInfo, setShowContactInfo] = useState(false);
   const [isAboutExpanded, setIsAboutExpanded] = useState(false);
   const [isServicesExpanded, setIsServicesExpanded] = useState(false);
   const [isExpDescExpanded, setIsExpDescExpanded] = useState(false);
+  const [showAllExperience, setShowAllExperience] = useState(false);
+  const [showExpModal, setShowExpModal] = useState(false);
+
+  const [newExperience, setNewExperience] = useState({
+    title: "",
+    company: "",
+    duration: "",
+    location: "",
+    description: [""],
+  });
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [profileImageFile, setProfileImageFile] = useState(null);
@@ -79,13 +99,19 @@ const ProfileSec = () => {
       });
       setProfile({
         ...res.data,
-        experience: res.data.experience ?? {
-          title: "",
-          company: "",
-          duration: "",
-          location: "",
-          description: "",
-        },
+        experience: Array.isArray(res.data.experience)
+          ? res.data.experience
+          : res.data.experience
+          ? [res.data.experience]
+          : [
+              {
+                title: "",
+                company: "",
+                duration: "",
+                location: "",
+                description: [""],
+              },
+            ],
       });
       setPortfolioFiles(res.data.portfolio || []);
     } catch (err) {
@@ -97,6 +123,16 @@ const ProfileSec = () => {
     fetchProfile();
   }, []);
 
+  const normalizeExperience = (experienceArr) =>
+    experienceArr.map((exp) => ({
+      ...exp,
+      description: Array.isArray(exp.description)
+        ? exp.description
+        : exp.description
+        ? [exp.description]
+        : [""],
+    }));
+
   const updateProfileData = async (data) => {
     try {
       const token = localStorage.getItem("token");
@@ -106,17 +142,21 @@ const ProfileSec = () => {
 
       setProfile({
         ...res.data.profile,
-        experience: res.data.profile.experience || {
-          title: "",
-          company: "",
-          duration: "",
-          location: "",
-          description: "",
-        },
-        topSkills: res.data.profile.topSkills || "",
-        services: res.data.profile.services || "",
-        socialMedia: res.data.profile.socialMedia || {},
+        experience: Array.isArray(res.data.profile.experience)
+          ? res.data.profile.experience
+          : res.data.profile.experience
+          ? [res.data.profile.experience]
+          : [
+              {
+                title: "",
+                company: "",
+                duration: "",
+                location: "",
+                description: [""],
+              },
+            ],
       });
+
       alert("Profile updated successfully");
     } catch (err) {
       console.error(err);
@@ -240,7 +280,7 @@ const ProfileSec = () => {
     company: "",
     duration: "",
     location: "",
-    description: "",
+    description: [""],
   };
 
   const getPortfolioUrl = (fileUrl) => {
@@ -313,6 +353,88 @@ const ProfileSec = () => {
     return "*".repeat(phone.length - 4) + last4;
   };
 
+  const safeDescription = Array.isArray(exp.description)
+    ? exp.description
+    : exp.description
+    ? [exp.description]
+    : [""];
+
+  useEffect(() => {
+    if (showExpModal) {
+      // modal open → body scroll disable
+      document.body.style.overflow = "hidden";
+    } else {
+      // modal close → body scroll enable
+      document.body.style.overflow = "auto";
+    }
+
+    // cleanup on unmount
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [showExpModal]);
+
+  const handleSaveNewExperience = async () => {
+    // Blank check
+    const isFilled =
+      newExperience.title.trim() !== "" ||
+      newExperience.company.trim() !== "" ||
+      newExperience.duration.trim() !== "" ||
+      newExperience.location.trim() !== "" ||
+      newExperience.description.some((desc) => desc.trim() !== "");
+
+    if (!isFilled) {
+      setShowExpModal(false); // blank → close modal
+      return;
+    }
+
+    const updatedProfile = {
+      ...profile,
+      experience: [...profile.experience, newExperience],
+    };
+
+    setProfile(updatedProfile); // UI update
+
+    try {
+      await updateProfileData(updatedProfile); // ✅ backend update
+    } catch (err) {
+      console.error("Failed to save experience:", err);
+    }
+
+    setShowExpModal(false); // close modal
+  };
+
+  const handleSaveSocialMedia = async () => {
+    const updatedProfile = {
+      ...profile,
+      socialMedia: profile.socialMedia,
+    };
+
+    setProfile(updatedProfile); // UI safe
+
+    try {
+      await updateProfileData(updatedProfile); // ✅ SAME FUNCTION
+    } catch (err) {
+      console.error("Social media save failed", err);
+    }
+
+    setEditSections((prev) => ({
+      ...prev,
+      socialMedia: false,
+    }));
+  };
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user && !profile.name) {
+      setProfile((prev) => ({
+        ...prev,
+        name: `${user.firstName} ${user.lastName}`,
+      }));
+    }
+  }, [profile.name]);
+
   return (
     <div>
       <div className="hidden lg:block">
@@ -322,11 +444,19 @@ const ProfileSec = () => {
         >
           <div>
             <p className="font-semibold text-[#001032]">
-              Welcome, Startup India Pvt. Ltd.
+              Welcome, <span>{profile?.companyName || profile?.name}</span>
             </p>
           </div>
           <div className="flex items-center gap-x-3">
-            <CgProfile className="text-gray-500 " size={25} />
+            <img
+              src={
+                profile?.profilePhoto
+                  ? `${serverUrl}${profile.profilePhoto}`
+                  : "/default-profile.png" // koi default blank image ya avatar
+              }
+              alt="Profile"
+              className="w-8 h-8 rounded-full object-cover border-2 border-[#001032]"
+            />
             <p className="text-[#001426] font-semibold">
               Switch to professional
             </p>
@@ -454,7 +584,7 @@ const ProfileSec = () => {
                         onChange={(e) =>
                           setProfile({ ...profile, name: e.target.value })
                         }
-                        className="border-2 p-1 rounded-md"
+                        className="border-2 p-1 rounded-md text-sm"
                         placeholder="Name"
                       />
                     </div>
@@ -463,7 +593,7 @@ const ProfileSec = () => {
                       onChange={(e) =>
                         setProfile({ ...profile, bio: e.target.value })
                       }
-                      className="border-2 p-1 rounded-md  "
+                      className="border-2 p-1 rounded-md text-sm "
                       placeholder="Bio"
                     />
                     <div className="flex gap-2">
@@ -479,7 +609,7 @@ const ProfileSec = () => {
                             city: "",
                           })
                         }
-                        className="border-2 p-1 rounded-md w-1/2"
+                        className="border-2 p-1 rounded-md w-1/2 text-sm"
                       />
 
                       <datalist id="stateList">
@@ -496,7 +626,7 @@ const ProfileSec = () => {
                         onChange={(e) =>
                           setProfile({ ...profile, city: e.target.value })
                         }
-                        className="border-2 p-1 rounded-md w-1/2"
+                        className="border-2 p-1 rounded-md w-1/2 text-sm "
                         disabled={!profile.state}
                       />
 
@@ -511,7 +641,7 @@ const ProfileSec = () => {
                 ) : (
                   <>
                     <div className="flex items-center gap-1">
-                      <h1 className="font-medium mb-0.5 text-xl">
+                      <h1 className="font-medium mb-0.5 lg:mb-0 text-xl">
                         {profile?.name}
                       </h1>
                       <MdOutlineVerifiedUser
@@ -519,8 +649,8 @@ const ProfileSec = () => {
                         className="text-green-700 "
                       />
                     </div>
-                    <p className=" text-md">{profile?.bio}</p>
-                    <p className="text-md text-gray-700 flex items-center gap-2">
+                    <p className=" text-md my-2 lg:my-0">{profile?.bio}</p>
+                    <p className="text-md text-gray-700 flex items-center gap-2 my-1 lg:my-0">
                       {profile.city && profile.state
                         ? `${profile?.city}, ${profile?.state}`
                         : "Location not added"}
@@ -540,7 +670,7 @@ const ProfileSec = () => {
               </div>
 
               <div className="p-2 lg:p-0">
-                <div className="flex items-center ">
+                <div className="flex items-center relative bottom-12 ">
                   <MdEdit
                     size={20}
                     className="cursor-pointer"
@@ -557,13 +687,13 @@ const ProfileSec = () => {
 
             {/* Save button outside the flex container */}
             {editSections.header && (
-              <div className="flex justify-end px-4 lg:pl-13 mb-4">
+              <div className="flex justify-end px-2 lg:pl-13 mb-4">
                 <button
                   onClick={() => {
                     updateProfileData(profile);
                     setEditSections((prev) => ({ ...prev, header: false }));
                   }}
-                  className="bg-blue-500 text-white px-4 py-1 rounded-md h-10"
+                  className="bg-blue-500 text-white px-4 py-1 rounded-md h-10 mb-2"
                 >
                   Save
                 </button>
@@ -624,10 +754,13 @@ const ProfileSec = () => {
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-1  lg:mx-9 mx-4 p-2 lg:px-5 lg:my-6 my-4 border-2 border-[#D9D9D9] rounded-xl  text-[#001032]">
-          <h1 className=" w-[40%] lg:w-[10%] lg:text-md text-sm mt-1 lg:text-md lg:mt-0 ">
-            Top Skills
-          </h1>
+        <div className="flex flex-col  gap-1  lg:mx-9 mx-4 p-2 lg:px-5 lg:my-6 my-4 border-2 border-[#D9D9D9] rounded-xl  text-[#001032]">
+          <div className="flex items-center gap-2 ">
+            <IoDiamondOutline size={22} />
+            <h1 className=" w-[40%] lg:w-[10%]  text-md mt-1 lg:text-xl font-semibold lg:mt-0 ">
+              Top Skills
+            </h1>
+          </div>
           {editSections.aboutAndSkills ? (
             <input
               type="text"
@@ -638,7 +771,7 @@ const ProfileSec = () => {
               className="border-2 rounded-md p-2 w-full"
             />
           ) : (
-            <p className="lg:text-sm text-xs leading-4  flex items-center lg:leading-7 lg:w-[90%]">
+            <p className="lg:text-sm text-xs leading-4  flex items-center lg:leading-7 lg:w-[90%] pl-8">
               {profile?.topSkills}
             </p>
           )}
@@ -741,115 +874,235 @@ const ProfileSec = () => {
           <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">
             Experience
           </h1>
-          <MdEdit
-            size={20}
-            className="mr-3 lg:mr-0 cursor-pointer"
-            onClick={() =>
-              setEditSections((prev) => ({
-                ...prev,
-                experience: !prev.experience,
-              }))
-            }
-          />
-        </div>
-        <div className="  lg:pl-10 pl-3 pb-5">
-          {editSections.experience ? (
-            <div className="">
-              <input
-                type="text"
-                value={exp.title}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    experience: [{ ...exp, title: e.target.value }],
-                  })
-                }
-                className="border-2 p-1 rounded-md mr-3"
-                placeholder="Title"
-              />
-              <input
-                type="text"
-                value={exp.company}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    experience: [{ ...exp, company: e.target.value }],
-                  })
-                }
-                className="border-2 p-1 rounded-md mr-3"
-                placeholder="Company"
-              />
-              <input
-                type="text"
-                value={exp.duration}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    experience: [{ ...exp, duration: e.target.value }],
-                  })
-                }
-                className="border-2 p-1 rounded-md mr-3"
-                placeholder="Duration"
-              />
-              <input
-                type="text"
-                value={exp.location}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    experience: [{ ...exp, location: e.target.value }],
-                  })
-                }
-                className="border-2 p-1 rounded-md mr-3"
-                placeholder="Location"
-              />
-              <input
-                value={exp.description}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    experience: [{ ...exp, description: e.target.value }],
-                  })
-                }
-                className="border-2 p-1  rounded-md dynamic-text"
-                placeholder="Description"
-              />
-            </div>
-          ) : (
-            <>
-              <h1 className="font-semibold pt-1 text-md lg:text-xl">
-                {exp.title}
-              </h1>
-              <p className="text-sm lg:pt-4 pt-2 font-medium">{exp.company}</p>
-              <p className="text-sm ">{exp.duration}</p>
-              <p className="text-sm ">{exp.location}</p>
-              <div className="relative mt-2">
-                <p
-                  className={`text-sm  transition-all duration-300 overflow-hidden w-[90%] lg:w-[50%]
-      ${!isExpDescExpanded ? "line-clamp-1" : "line-clamp-none"}
-    `}
-                >
-                  {exp.description}
-                </p>
+          <div className="flex items-center">
+            {/* Add Experience Button */}
+            <FaPlus
+              className="mr-3 cursor-pointer text-xl"
+              onClick={() => {
+                // agar modal already open hai → kuch mat karo
+                if (showExpModal) return;
 
-                {exp.description && exp.description.length > 50 && (
-                  <button
-                    onClick={() => setIsExpDescExpanded(!isExpDescExpanded)}
-                    className="text-[#001032] text-sm font-medium mt-1"
-                  >
-                    {isExpDescExpanded ? "See less" : "See more"}
-                  </button>
-                )}
-              </div>
-            </>
+                // blank form ke saath modal open karo
+                setNewExperience({
+                  title: "",
+                  company: "",
+                  duration: "",
+                  location: "",
+                  description: [""],
+                });
+
+                setShowExpModal(true);
+              }}
+            />
+          </div>
+        </div>
+        <div className="lg:pl-10 pl-4 pb-5 mt-6">
+          {profile.experience &&
+            profile.experience.length > 0 &&
+            (showAllExperience
+              ? profile.experience
+              : profile.experience.slice(0, 3)
+            ).map((exp, i) => {
+              const safeDescription = Array.isArray(exp.description)
+                ? exp.description
+                : exp.description
+                ? [exp.description]
+                : [""];
+
+              return (
+                <div key={i} className="mb-4 border-b pb-3">
+                  <div className="flex justify-between items-start">
+                    {experienceEdit[i] ? (
+                      <div className="w-full">
+                        <input
+                          type="text"
+                          value={exp.title}
+                          onChange={(e) => {
+                            const newExperiences = [...profile.experience];
+                            newExperiences[i].title = e.target.value;
+                            setProfile({
+                              ...profile,
+                              experience: newExperiences,
+                            });
+                          }}
+                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
+                          placeholder="Title"
+                        />
+                        <input
+                          type="text"
+                          value={exp.company}
+                          onChange={(e) => {
+                            const newExperiences = [...profile.experience];
+                            newExperiences[i].company = e.target.value;
+                            setProfile({
+                              ...profile,
+                              experience: newExperiences,
+                            });
+                          }}
+                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
+                          placeholder="Company"
+                        />
+                        <input
+                          type="text"
+                          value={exp.duration}
+                          onChange={(e) => {
+                            const newExperiences = [...profile.experience];
+                            newExperiences[i].duration = e.target.value;
+                            setProfile({
+                              ...profile,
+                              experience: newExperiences,
+                            });
+                          }}
+                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
+                          placeholder="Duration"
+                        />
+                        <input
+                          type="text"
+                          value={exp.location}
+                          onChange={(e) => {
+                            const newExperiences = [...profile.experience];
+                            newExperiences[i].location = e.target.value;
+                            setProfile({
+                              ...profile,
+                              experience: newExperiences,
+                            });
+                          }}
+                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
+                          placeholder="Location"
+                        />
+
+                        {safeDescription.map((desc, index) => (
+                          <input
+                            key={index}
+                            value={desc}
+                            onChange={(e) => {
+                              const newExperiences = [...profile.experience];
+                              newExperiences[i].description[index] =
+                                e.target.value;
+                              setProfile({
+                                ...profile,
+                                experience: newExperiences,
+                              });
+                            }}
+                            className="border-2 p-1 rounded-md dynamic-text text-sm mb-2 block w-full"
+                            placeholder={`Description ${index + 1}`}
+                          />
+                        ))}
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newExperiences = [...profile.experience];
+                            newExperiences[i].description.push("");
+                            setProfile({
+                              ...profile,
+                              experience: newExperiences,
+                            });
+                          }}
+                          className="text-blue-500 text-sm font-medium mt-1"
+                        >
+                          + Add Description
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="w-full">
+                        <h1 className="font-semibold pt-1 text-md lg:text-xl">
+                          {exp.title}
+                        </h1>
+                        <p className="text-sm font-medium">{exp.company}</p>
+                        <p className="text-sm">{exp.duration}</p>
+                        <p className="text-sm">{exp.location}</p>
+
+                        <div className="relative mt-2">
+                          <div
+                            className={`text-sm transition-all duration-300 overflow-hidden w-[90%] lg:w-[50%] ${
+                              !isExpDescExpanded ? "line-clamp-1" : ""
+                            }`}
+                          >
+                            {(isExpDescExpanded
+                              ? safeDescription
+                              : safeDescription.slice(0, 1)
+                            ).map((desc, index) => (
+                              <div key={index} className="flex">
+                                <span className="mr-1">•</span>
+                                <span>{desc}</span>
+                              </div>
+                            ))}
+                          </div>
+
+                          {safeDescription.length > 1 && (
+                            <button
+                              onClick={() =>
+                                setIsExpDescExpanded(!isExpDescExpanded)
+                              }
+                              className="text-[#001032] text-sm font-medium mt-1"
+                            >
+                              {isExpDescExpanded ? "See less" : "See more"}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Edit icon for individual experience */}
+                    <MdEdit
+                      size={20}
+                      className="mr-3 cursor-pointer mx-4"
+                      onClick={() => {
+                        setExperienceEdit((prev) => ({
+                          ...prev,
+                          [i]: !prev[i],
+                        }));
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+
+          {/* View More / View Less button for experience list */}
+          {profile.experience && profile.experience.length > 3 && (
+            <button
+              onClick={() => setShowAllExperience(!showAllExperience)}
+              className="text-blue-500 text-sm font-medium mt-2"
+            >
+              {showAllExperience
+                ? "View Less"
+                : `View ${profile.experience.length - 3} more`}
+            </button>
           )}
         </div>
-        {editSections.experience && (
+
+        {Object.values(experienceEdit).some((v) => v) && (
           <div className="flex justify-end px-4 mb-4 lg:px-0">
             <button
-              onClick={() => {
-                updateProfileData(profile);
-                setEditSections((prev) => ({ ...prev, experience: false }));
+              onClick={async () => {
+                // Remove blank experiences
+                const filteredExp = profile.experience.filter((exp) => {
+                  return (
+                    exp.title.trim() !== "" ||
+                    exp.company.trim() !== "" ||
+                    exp.duration.trim() !== "" ||
+                    exp.location.trim() !== "" ||
+                    (Array.isArray(exp.description) &&
+                      exp.description.some((desc) => desc.trim() !== ""))
+                  );
+                });
+
+                const updatedProfile = { ...profile, experience: filteredExp };
+
+                // Update state
+                setProfile(updatedProfile);
+
+                try {
+                  // Save to backend
+                  await updateProfileData(updatedProfile);
+                } catch (err) {
+                  console.error("Failed to save experiences:", err);
+                }
+
+                // Close edit mode
+                setExperienceEdit({});
               }}
               className="bg-blue-500 text-white px-4 py-1 rounded-md"
             >
@@ -867,6 +1120,23 @@ const ProfileSec = () => {
           <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">
             Portfolio
           </h1>
+          <div
+            className="mr-2 p-2  rounded-md shrink-0 snap-center flex items-center justify-center cursor-pointer hover:bg-gray-100"
+            onClick={() =>
+              document.getElementById("portfolioUploadMobile").click()
+            }
+          >
+            <input
+              type="file"
+              id="portfolioUploadMobile"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => setSelectedFile(e.target.files[0])}
+            />
+            <p className=" text-xl font-semibold">
+              <FaPlus />
+            </p>
+          </div>
         </div>
 
         {/* ===== Desktop View ===== */}
@@ -911,7 +1181,7 @@ const ProfileSec = () => {
                 </div>
               );
             })}
-            <div
+            {/* <div
               className="w-48 h-48 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100"
               onClick={() =>
                 document.getElementById("portfolioUploadDesktop").click()
@@ -925,7 +1195,7 @@ const ProfileSec = () => {
                 onChange={(e) => setSelectedFile(e.target.files[0])}
               />
               <p className="text-gray-400 text-xl font-semibold">+ Upload</p>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -964,21 +1234,6 @@ const ProfileSec = () => {
             ))}
 
             {/* Upload Card Mobile */}
-            <div
-              className="w-[40%] h-40 border-2 border-dashed rounded-md shrink-0 snap-center flex items-center justify-center cursor-pointer hover:bg-gray-100"
-              onClick={() =>
-                document.getElementById("portfolioUploadMobile").click()
-              }
-            >
-              <input
-                type="file"
-                id="portfolioUploadMobile"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
-              />
-              <p className="text-gray-400 text-xl font-semibold">+ Upload</p>
-            </div>
           </div>
         </div>
 
@@ -1020,10 +1275,9 @@ const ProfileSec = () => {
             }
           />
         </div>
-
         <div className="lg:pl-9 pl-4 py-2 mb-3 flex flex-col gap-2 lg:pr-30 pr-5">
-          {/* Only show inputs when edit mode is active */}
           {editSections.socialMedia ? (
+            /* 🟢 EDIT MODE → inputs enabled */
             <>
               <input
                 placeholder="LinkedIn Profile URL"
@@ -1055,8 +1309,9 @@ const ProfileSec = () => {
                 className="border-2 rounded-md p-2"
               />
             </>
-          ) : (
-            // Show icons only in view mode (after save)
+          ) : profile?.socialMedia?.linkedin ||
+            profile?.socialMedia?.instagram ? (
+            /* 🔵 VIEW MODE (data exists) → icons */
             <>
               {profile?.socialMedia?.linkedin && (
                 <a
@@ -1065,9 +1320,10 @@ const ProfileSec = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-blue-600"
                 >
-                  <FaLinkedin size={18} /> LinkedIn
+                  <FaLinkedin size={20} /> LinkedIn
                 </a>
               )}
+
               {profile?.socialMedia?.instagram && (
                 <a
                   href={profile.socialMedia.instagram}
@@ -1075,9 +1331,24 @@ const ProfileSec = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-pink-500"
                 >
-                  <FaInstagram size={18} /> Instagram
+                  <img src={instaIcon} className="w-5 rounded-sm" />
+                  Instagram
                 </a>
               )}
+            </>
+          ) : (
+            /* ⚪ VIEW MODE (no data yet) → disabled inputs */
+            <>
+              <input
+                placeholder="LinkedIn Profile URL"
+                disabled
+                className="border-2 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+              />
+              <input
+                placeholder="Instagram Profile URL"
+                disabled
+                className="border-2 rounded-md p-2 bg-gray-100 cursor-not-allowed"
+              />
             </>
           )}
         </div>
@@ -1086,9 +1357,7 @@ const ProfileSec = () => {
         {editSections.socialMedia && (
           <div className="flex justify-end px-4 mb-4 lg:px-0">
             <button
-              onClick={() =>
-                setEditSections((prev) => ({ ...prev, socialMedia: false }))
-              }
+              onClick={handleSaveSocialMedia}
               className="bg-blue-500 text-white px-4 py-1 rounded-md"
             >
               Save
@@ -1098,7 +1367,7 @@ const ProfileSec = () => {
       </div>
 
       {isImageModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col justify-center items-center z-50">
+        <div className="fixed inset-0 bg-white bg-opacity-70 flex flex-col justify-center items-center z-50 ">
           <img
             src={modalImage}
             className="max-h-[80%] max-w-[80%] object-contain mb-4"
@@ -1319,6 +1588,101 @@ const ProfileSec = () => {
                 </button>
               </div>
             )}
+          </div>
+        </div>
+      )}
+
+      {showExpModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl w-[95%] max-w-lg p-6 shadow-xl">
+            <h2 className="text-xl font-semibold text-[#001032] mb-4">
+              Add Experience
+            </h2>
+
+            <input
+              type="text"
+              placeholder="Title"
+              value={newExperience.title}
+              onChange={(e) =>
+                setNewExperience({ ...newExperience, title: e.target.value })
+              }
+              className="border-2 p-2 rounded-md w-full mb-3"
+            />
+
+            <input
+              type="text"
+              placeholder="Company"
+              value={newExperience.company}
+              onChange={(e) =>
+                setNewExperience({ ...newExperience, company: e.target.value })
+              }
+              className="border-2 p-2 rounded-md w-full mb-3"
+            />
+
+            <input
+              type="text"
+              placeholder="Duration"
+              value={newExperience.duration}
+              onChange={(e) =>
+                setNewExperience({ ...newExperience, duration: e.target.value })
+              }
+              className="border-2 p-2 rounded-md w-full mb-3"
+            />
+
+            <input
+              type="text"
+              placeholder="Location"
+              value={newExperience.location}
+              onChange={(e) =>
+                setNewExperience({ ...newExperience, location: e.target.value })
+              }
+              className="border-2 p-2 rounded-md w-full mb-3"
+            />
+
+            {newExperience.description.map((desc, index) => (
+              <input
+                key={index}
+                value={desc}
+                placeholder={`Description ${index + 1}`}
+                onChange={(e) => {
+                  const updatedDesc = [...newExperience.description];
+                  updatedDesc[index] = e.target.value;
+                  setNewExperience({
+                    ...newExperience,
+                    description: updatedDesc,
+                  });
+                }}
+                className="border-2 p-2 rounded-md w-full mb-2"
+              />
+            ))}
+
+            <button
+              onClick={() =>
+                setNewExperience({
+                  ...newExperience,
+                  description: [...newExperience.description, ""],
+                })
+              }
+              className="text-blue-500 text-sm mb-4"
+            >
+              + Add Description
+            </button>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowExpModal(false)}
+                className="px-4 py-1 border rounded-md"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleSaveNewExperience}
+                className="bg-blue-500 text-white px-4 py-1 rounded-md"
+              >
+                Save
+              </button>
+            </div>
           </div>
         </div>
       )}

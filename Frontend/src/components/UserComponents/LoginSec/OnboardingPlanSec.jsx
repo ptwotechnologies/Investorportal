@@ -17,7 +17,7 @@ const userId = location.state?.userId || localStorage.getItem("userId");
 
   useEffect(() => {
     if (role === "investor") {
-      navigate("/login", { replace: true });
+      navigate("/paymentsuccess", { replace: true }); 
     }
   }, [role, navigate]);
 
@@ -46,10 +46,13 @@ const userId = location.state?.userId || localStorage.getItem("userId");
           <div className="lg:bg-[#001032]  lg:p-3 w-screen lg:w-auto lg:rounded-lg ">
             <div className="bg-white  lg:h-auto rounded-md ">
               <div id="top" className="text-center">
-                <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:py-12 py-8" />
+                <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:py-6 py-8" />
                 
-                <p className="text-[#001032] border-2 border-[#00142666] mx-5 hidden lg:block lg:mb-6  lg:mx-30 text-lg font-semibold rounded-md  p-2">
+                <p className="text-[#001032] border-2 border-[#00103280] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mx-5 hidden lg:block   lg:mx-50 text-lg font-semibold rounded-md  p-2">
                   Choose the best suited onboarding plan for you
+                </p>
+                <p className="text-[#001032] border-2 border-[#00103280]  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mb-2 mx-4 lg:hidden text-lg font-semibold rounded-sm  p-2">
+                  Choose the Onboarding Plan
                 </p>
               </div>
               <div id="bottom " className=" w-full ">

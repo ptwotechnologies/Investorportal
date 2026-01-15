@@ -10,64 +10,84 @@ const PlansSec = ({ userId }) => {
 
   const cards = [
     {
-      amount: 3500,   // ⭐ Add amount for API
-      accent: "bg-[#BA1E1E]",
-      title: "Onboarding Prices",
-      blurb: "Best for funds under $3M",
-      priceMain: "$3.5k + 0.75%",
-      priceSub: "of fund size",
-      notes: ["annualized cost"],
-      meta: [
-        { label: "Investments", value: "15" },
-        { label: "State Regulatory Fees", value: "Variable" },
+      title: "Most Affordable Plan",
+      titleBg: "#BA1E1E",
+      titleBg2: "#B77070",
+      amount: 2999,
+      amountduration: "/year",
+      planName: "Basic Plan",
+      heading1: "Support & Guidance",
+      heading2: "Network & Growth",
+      features: [
+        "2 Consultation sessions per month",
+        "Access to the verified service professinals",
       ],
-      features: ["Fund admin", "Legal fund formation"],
-      footnote: "Pricing may vary with add-on services",
+      features2: [
+        "Access to the other portals",
+        "Fund raising updates",
+        "Connecting with Investors",
+      ],
+      buttonText: "Start with Basic",
     },
     {
-      amount: 5000,
-      accent: "bg-[#BA1E1E]",
-      title: "Onboarding Prices",
-      blurb: "Best for funds under $5M",
-      priceMain: "$5k + 1%",
-      priceSub: "of fund size",
-      notes: ["annualized cost"],
-      meta: [
-        { label: "Investments", value: "25" },
-        { label: "State Regulatory Fees", value: "Variable" },
+      title: "Starter Growth Plan",
+      titleBg: "#119BCD",
+      titleBg2: "#61C9EF",
+      amount: 9999,
+      amountduration: "/year",
+      planName: "Growth Plan",
+      heading1: "Support & Guidance + All in Basic Plan &",
+      heading2: "Network & Growth",
+      features: [
+        "2 Consultation sessions per month",
+        "Assistance with Pitch Deck",
       ],
-      features: ["Fund admin", "Legal compliance"],
-      footnote: "Pricing may vary with add-on services",
+      features2: [
+        "Channel Partners Support",
+        "Funding Support",
+        "Pitching the investors",
+      ],
+      buttonText: "Start with Growth",
     },
     {
-      amount: 7000,
-      accent: "bg-[#BA1E1E]",
-      title: "Onboarding Prices",
-      blurb: "Best for growing funds",
-      priceMain: "$7k + 1.2%",
-      priceSub: "of fund size",
-      notes: ["annualized cost"],
-      meta: [
-        { label: "Investments", value: "35" },
-        { label: "State Regulatory Fees", value: "Variable" },
+      title: "Founder Pro Plan",
+      titleBg: "#FEC432",
+      titleBg2: "#F2D795",
+      amount: 19999,
+      amountduration: "/year",
+      planName: "Pro Plan",
+      heading1: "Support & Guidance + All in Growth Plan &",
+      heading2: "Network & Growth",
+      features: [
+        "2 Consultation sessions per month",
+        "Assistance with Financial Projections",
       ],
-      features: ["Advanced reporting", "Fund admin"],
-      footnote: "Pricing may vary with add-on services",
+      features2: [
+        "Refined & Approved Startups and Investors",
+        "Meet with Investors",
+        "Business Strategies & Advisory",
+      ],
+      buttonText: "Start with Pro",
     },
     {
-      amount: 10000,
-      accent: "bg-[#BA1E1E]",
-      title: "Onboarding Prices",
-      blurb: "Best for large funds",
-      priceMain: "$10k + 1.5%",
-      priceSub: "of fund size",
-      notes: ["annualized cost"],
-      meta: [
-        { label: "Investments", value: "50+" },
-        { label: "State Regulatory Fees", value: "Variable" },
+      title: "Elite Founder Plan",
+      titleBg: "#108349",
+      titleBg2: "#49CE8B",
+      amount: 49999,
+      amountduration: "/year",
+      planName: "Elite Plan",
+      heading1: "Support & Guidance + All in Pro Plan &",
+      heading2: "Network & Growth",
+      features: [
+        "2 Consultation sessions per month",
+        "Access to the verified service professinals",
       ],
-      features: ["Full suite admin", "Legal + compliance"],
-      footnote: "Pricing may vary with add-on services",
+      features2: [
+        "Access to the Communities",
+        "Enrollment in Business Incubation",
+        "Access to the Multiple Portals",
+      ],
+      buttonText: "Start with Elite",
     },
   ];
 
@@ -111,114 +131,154 @@ const PlansSec = ({ userId }) => {
   }, []);
 
   return (
-    <main className="bg-background text-foreground">
-      <section className="mx-auto w-full lg:px-2 lg:py-7">
-
-        <div
+    <main className="bg-background text-foreground ">
+      <section className="mx-auto w-full lg:px-2  lg:py-7">
+       <div className="lg:h-[62vh] lg:overflow-y-auto scrollbar-hide">
+         <div
           ref={scrollRef}
           className="
-            grid gap-10 lg:gap-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 
+            grid gap-2 lg:gap-2  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
             
             w-full
           "
         >
           {cards.map((card, idx) => (
-            <article
-              key={idx}
-              className="
+            <>
+              <article
+                key={idx}
+                className="
                 w-full
                 lg:w-auto
                 shrink-0 lg:shrink 
                 snap-center 
-                lg:mr-0 lg:p-1 
+                lg:mr-0  
                 text-card-foreground
+                lg:h-full
+                py-1
+                
               "
-            >
-             
+              >
+                <div className="bg-white py-5 lg:py-3 border-2 border-[#00103280] m-4 lg:m-1 rounded-sm px-4 lg:px-2 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+                  <div className=" lg:mt-1 space-y-1.5 ">
+                    <div
+                      style={{
+                        background: `linear-gradient(90deg, ${card.titleBg} 75%, ${card.titleBg2} 100%)`,
+                      }}
+                      className="text-white  py-1  rounded-sm w-fit px-4 lg:px-2 mb-4 lg:mb-3 lg:text-xs"
+                    >
+                      {card.title}
+                    </div>
 
-              <div className="bg-[#6E5C3B] p-2 lg:p-1 ">
-               <div className="bg-white py-3">
-                 <div className=" lg:mt-1 space-y-1.5 text-center">
-                <h3 className="text-3xl lg:text-sm font-bold text-[#001032] pb-4 lg:pb-0">
-                  {card.title}
-                </h3>
-                <p className="lg:text-xs text-md tracking-wide text-[#3C1D3A] mx-auto w-[85%]">
-                  {card.blurb}
-                </p>
-              </div>
-
-              <div className="mt-5 lg:mt-2 text-[#3C1D3A] px-6 lg:px-5">
-                <p className="lg:text-xs text-2xl">
-                  {card.priceMain}{" "}
-                  <span className="lg:text-xs text-sm font-normal">
-                    {card.priceSub}
-                  </span>
-                </p>
-
-                {card.notes.map((n, i) => (
-                  <p key={i} className="lg:text-xs text-md">
-                    {n}
-                  </p>
-                ))}
-
-                <div className="mt-8 mb-10 lg:mb-0 lg:mt-2">
-                  {card.meta.map((m, i) => (
-                    <p key={i} className="lg:text-xs text-md">
-                      <span className="font-medium">{m.label}: </span>{m.value}
+                    <div className="pb-4 lg:pb-0">
+                      <h3 className="text-3xl lg:text-lg font-semibold text-[#001032] ">
+                        {card.planName}
+                      </h3>
+                      <p className="text-sm lg:text-[10px] text-[#3C1D3A]">
+                        For early-stage founders & businesses{" "}
+                      </p>
+                    </div>
+                    <div className="text-[#3C1D3A]">
+                      <p className="lg:text-lg text-3xl font-bold tracking-wide  ">
+                        Rs {card.amount}
+                        <span className="font-normal text-xl lg:text-md">
+                          {card.amountduration}
+                        </span>
+                      </p>
+                      <p className="text-sm lg:text-[10px]">Annual onboarding fee</p>
+                    </div>
+                  </div>
+                  <div className="bg-[#0000001A] flex items-center text-xs lg:text-[9px] gap-2 px-2 py-1 rounded-sm mt-6 lg:mt-4">
+                    <p className="font-bold">
+                      15 <span className="font-normal">connects</span>
                     </p>
-                  ))}
-                </div>
-              </div>
+                    <div className="h-6 w-0.5 bg-[#8282825C]"></div>
+                    <p>
+                      Annual Fee: <span className="font-bold">Fixed </span>
+                    </p>
+                    <div className="h-6 w-0.5 bg-[#8282825C]"></div>
+                    <p>Support included</p>
+                  </div>
+                  <hr className="mt-4" />
 
-              <hr className="my-4" />
+                  <div className="mt-3 lg:mt-2 text-[#3C1D3A] ">
+                    <h1 className="text-sm">What’s included?</h1>
+                    <div>
+                      <p className="my-3 lg:text-[10px] text-sm text-md font-medium bg-[#0000001A] px-2 py-1 rounded-sm">
+                        {card.heading1}
+                      </p>
+                      <ul className="space-y-1 text-[#3C1D3A] text-sm lg:text-[10px]">
+                        {card.features.map((f, i) => (
+                          <li key={i} className="flex items-start gap-2 ">
+                            <IoMdCheckmark className="h-5 w-5 text-primary mt-1" />
+                            <span className="lg:text-xs text-md">{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
 
-              <div className="px-6 lg:px-5">
-                <p className="mb-6 lg:mb-3 lg:text-xs text-md font-medium">Features</p>
+                    <div>
+                      <p className="my-5 lg:my-2 lg:text-[10px] text-sm text-md font-medium bg-[#0000001A] px-2 py-1 rounded-sm">
+                        {card.heading2}
+                      </p>
+                      <ul className="space-y-1 text-[#3C1D3A] text-sm  lg:text-[10px]">
+                        {card.features2.map((f, i) => (
+                          <li key={i} className="flex items-start gap-2">
+                            <IoMdCheckmark className="h-5 w-5 text-primary mt-1" />
+                            <span className="lg:text-xs text-md">{f}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
 
-                <ul className="space-y-1 text-[#3C1D3A]">
-                  {card.features.map((f, i) => (
-                    <li key={i} className="flex items-start gap-2">
-                      <IoMdCheckmark className="h-5 w-5 text-primary mt-1" />
-                      <span className="lg:text-xs text-md">{f}</span>
-                    </li>
-                  ))}
-
-                  <li className="flex items-start gap-2 mt-6 lg:mt-0">
-                    <CgAsterisk className="h-6 w-6 mt-1" />
-                    <span className="lg:text-xs text-md leading-5">
-                      {card.footnote}
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <hr />
-
-              {/* ⭐ ONLY BACKEND CONNECTED — DESIGN SAME */}
-              <div className="px-2 text-center">
-                <button
-                  className="
-                    w-[95%] lg:w-full
+                  {/* ⭐ ONLY BACKEND CONNECTED — DESIGN SAME */}
+                  <div className="mt-3   lg:mt-auto pt-3 lg:pt-1 text-center">
+                    <button
+                      className="
+                     w-full
                     mt-2 lg:mt-3
                     p-2 lg:p-1
                     mx-auto 
-                    rounded-sm bg-[#001032] 
+                    rounded-sm bg-[#002A30] 
                     text-background text-md 
-                    font-medium
+                   
                     hover:opacity-90
                   "
-                  onClick={() => handlePlanSelect(card.amount)}
-                >
-                  Select
-                </button>
-              </div>
-               </div>
-              </div>
-            </article>
+                      onClick={() => handlePlanSelect(card.amount)}
+                    >
+                      {card.buttonText}
+                    </button>
+                  </div>
+                </div>
+              </article>
+              <hr className="lg:hidden mx-6" />
+            </>
           ))}
-        </div>
 
-      
+         <div className="hidden lg:block">
+           <div className="bg-white  border-2 border-[#00103280]  lg:mt-2 rounded-sm  p-3 h-[72vh] w-[37vw] ml-1 px-7 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+           <div id="top" className="flex justify-between items-center ">
+            <div className="bg-[#5DD2E3] w-37 h-60 rounded-3xl">
+
+            </div>
+            <div className="bg-[#C2D3D5]  w-37 h-80 rounded-3xl">
+
+            </div>
+            <div className="bg-[#4A66A3]  w-37 h-70 rounded-3xl mt-20">
+
+            </div>
+
+
+           </div>
+           <div id="bottom">
+               <div className="bg-[#DBDBDB] w-full h-8 rounded-full mt-25">
+
+               </div>
+           </div>
+          </div>
+         </div>
+        </div>
+       </div>
       </section>
     </main>
   );

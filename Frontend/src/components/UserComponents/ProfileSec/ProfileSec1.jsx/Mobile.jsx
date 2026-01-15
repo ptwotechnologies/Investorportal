@@ -72,9 +72,9 @@ const Mobile = () => {
           <img src={loginLogo} alt="logo" className="w-30" />
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2">
           <IoIosNotifications
-                  size={30}
+                  size={30} 
                   onClick={handleNotificationClick}
                 />
           <Sheet>

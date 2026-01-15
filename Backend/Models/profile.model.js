@@ -25,7 +25,7 @@ const profileSchema = new mongoose.Schema({
       company: String,
       duration: String,
       location: String,
-      description: String,
+      description: [String],
     }
   ],
 

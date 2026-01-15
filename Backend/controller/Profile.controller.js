@@ -7,12 +7,15 @@ import fs from "fs";
 export const getProfile = async (req, res) => {
   try {
     let profile = await Profile.findOne({ userId: req.user._id })
-      .populate("userId", "role  businessDetails.businessEmail businessDetails.number");
+     .populate(
+  "userId",
+  "role businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.businessEmail businessDetails.companyName"
+);
 
     if (!profile) {
       profile = await Profile.create({
         userId: req.user._id,
-        name:  "",
+        name:  "", 
         bio: "",
         state: "",
         city:"",
@@ -27,9 +30,11 @@ export const getProfile = async (req, res) => {
 
     res.status(200).json({
       ...profile.toObject(),
+       name: profile.name || `${profile.userId.businessDetails.firstName} ${profile.userId.businessDetails.lastName}`,
      role: profile.userId?.role,
       email: profile.userId?.businessDetails?.businessEmail,
       phone: profile.userId?.businessDetails?.number,
+      companyName: profile.userId?.businessDetails?.companyName,
     });
   } catch (error) {
     console.error(error);
@@ -46,11 +51,28 @@ export const updateProfile = async (req, res) => {
 
   try {
     // Find the profile
-    let profile = await Profile.findOne({ userId: req.user._id }).populate("userId", "role  businessDetails.businessEmail businessDetails.number");
+    let profile = await Profile.findOne({ userId: req.user._id }) .populate(
+  "userId",
+  "role businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.businessEmail businessDetails.companyName"
+);
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
+    
+
+
+    if (updatedData.experience && Array.isArray(updatedData.experience)) {
+  updatedData.experience = updatedData.experience.map((exp) => ({
+    ...exp,
+    description: Array.isArray(exp.description)
+      ? exp.description
+      : exp.description
+      ? [exp.description]
+      : [],
+  }));
+}
+
 
     // Update profile fields
     Object.assign(profile, updatedData);
@@ -62,6 +84,7 @@ export const updateProfile = async (req, res) => {
       role: profile.userId?.role,
       email: profile.userId?.businessDetails?.businessEmail,
       phone: profile.userId?.businessDetails?.number,
+      companyName: profile.userId?.businessDetails?.companyName,
       message: "Profile updated successfully",
     });
   } catch (error) {

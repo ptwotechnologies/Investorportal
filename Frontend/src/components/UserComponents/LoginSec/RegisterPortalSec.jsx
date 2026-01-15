@@ -38,10 +38,12 @@ const RegisterPortalSec = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [mobile, setMobile] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [website, setWebsite] = useState("");
+  const [optionalWebsite, setOptionalWebsite] = useState("");
   const [firmName, setFirmName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [businessType, setBusinessType] = useState(activeTab);
@@ -58,16 +60,25 @@ const RegisterPortalSec = () => {
       return;
     }
 
+    // Validate passwords match
+    if (password !== confirmPassword) {
+      alert("Passwords do not match. Please try again.");
+      return;
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      alert("Password must be at least 6 characters long.");
+      return;
+    }
+
     // Role-specific validations
     if (role === "investor") {
       if (businessType === "Venture Firm" && !firmName) {
         alert("Please enter your firm name");
         return;
       }
-      if (!website) {
-        alert("Please enter a website");
-        return;
-      }
+      
     }
 
     if (role === "service_professional") {
@@ -75,10 +86,7 @@ const RegisterPortalSec = () => {
         alert("Please enter your company name");
         return;
       }
-      if (!website) {
-        alert("Please enter a website");
-        return;
-      }
+     
     }
 
     if (role === "startup") {
@@ -176,7 +184,8 @@ const RegisterPortalSec = () => {
               <CardContent>
                 <form onSubmit={handleSubmit}>
                   <div className="flex flex-col gap-3">
-                     <Input
+                    <div className="flex gap-3">
+                       <Input
                       id="firstName"
                       type="text"
                       placeholder="First Name"
@@ -194,6 +203,7 @@ const RegisterPortalSec = () => {
                       required
                       className="p-5 font-medium text-[#00103280]"
                     />
+                    </div>
                     <Input
                       id="email"
                       type="email"
@@ -209,6 +219,15 @@ const RegisterPortalSec = () => {
                       placeholder="Password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      required
+                      className="p-5 font-medium text-[#00103280]"
+                    />
+                     <Input
+                      id="confirmpassword"
+                      type="password"
+                      placeholder="Confirm Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
                       required
                       className="p-5 font-medium text-[#00103280]"
                     />
@@ -308,12 +327,11 @@ const RegisterPortalSec = () => {
                           </>
                         ) : (
                           <Input
-                            id="website"
+                            id="optionalWebsite"
                             type="text"
-                            placeholder="Website"
-                            value={website}
-                            onChange={(e) => setWebsite(e.target.value)}
-                            required
+                            placeholder="Website (if any)"
+                            value={optionalWebsite}
+                            onChange={(e) => setOptionalWebsite(e.target.value)}
                             className="p-5 font-medium text-[#00103280]"
                           />
                         )}
@@ -345,12 +363,11 @@ const RegisterPortalSec = () => {
                           </>
                         ) : (
                           <Input
-                            id="website"
+                            id="optionalWebsite"
                             type="text"
-                            placeholder="Website"
-                            value={website}
-                            onChange={(e) => setWebsite(e.target.value)}
-                            required
+                            placeholder="Website (if any)"
+                            value={optionalWebsite}
+                            onChange={(e) => setOptionalWebsite(e.target.value)}
                             className="p-5 font-medium text-[#00103280]"
                           />
                         )}

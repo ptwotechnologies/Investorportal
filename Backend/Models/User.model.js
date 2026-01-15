@@ -31,12 +31,13 @@ const userSchema = new mongoose.Schema(
       // Investor-only optional fields and startup files
       foundedon: { type: Date },
       domain: { type: String, default: "" },
+      domainDescription: { type: String, default: "" },
       referralCode: { type: String, default: "" },
       logoFileName: { type: String, default: "" },
       profileFileName: { type: String, default: "" },
       pitchDeckFileName: { type: String, default: "" },
       startupBusinessType: { type: String, default: "" },
-      designation: { type: String, default: "" },
+      serviceBusinessType: { type: String, default: "" },
     },
 
 
