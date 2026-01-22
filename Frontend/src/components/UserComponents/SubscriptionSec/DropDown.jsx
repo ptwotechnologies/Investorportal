@@ -11,6 +11,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import ConsultancyContent from './ConsultancyContent';
+import HrContent from './HrContent';
+import AdvisoryContent from './AdvisoryContent';
 
 const DropDown = () => {
 
@@ -48,13 +51,19 @@ const DropDown = () => {
     Designing: <DesigningContent />,
     Development: <DevelopmentContent />,
     Marketing: <MarketingContent />,
-    Legal: <LegalContent />
+    Legal: <LegalContent />,
+     Consultancy: <ConsultancyContent />,
+  HR: <HrContent />,
+  Advisory: <AdvisoryContent />,
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full relative ">
+       {isOpen && (
+      <div className="fixed inset-0 z-40 backdrop-blur-lg bg-black/10" />
+    )}
 
-      <div className='flex justify-center'>
+      <div className='flex justify-center relative z-50'>
         <DropdownMenu onOpenChange={(open) => setIsOpen(open)}>
 
           <div className='text-white border border-black h-14 rounded-full p-1'>
@@ -89,7 +98,7 @@ const DropDown = () => {
       </div>
 
       {/* Content blur on open */}
-      <div className={`mt-18 transition-all duration-300 ${isOpen ? 'blur-lg' : ''}`}>
+      <div className="mt-18">
         {tabContents[activeTab]}
       </div>
 

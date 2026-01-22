@@ -39,7 +39,7 @@ const HomeSec5 = () => {
       companyName: "Startup",
     },
   ]
-
+ 
   const data = [...divElements, ...divElements]
 
   // ✅ smooth endless auto scroll
@@ -80,7 +80,7 @@ const HomeSec5 = () => {
           onScroll={handleScroll}
           className="flex overflow-x-scroll scrollbar-hide"
         >
-          {data.map((item, index) => (
+          {data.map((item, index) => ( 
             <div
               key={index}
               className="w-full lg:w-[42%] shrink-0 p-4 mx-2"
@@ -128,16 +128,7 @@ const HomeSec5 = () => {
           ))}
         </div>
 
-        <div className="flex justify-center mt-4">
-          {divElements.map((_, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full mx-1 ${
-                activeIndex === index ? 'bg-gray-600' : 'bg-gray-300'
-              }`}
-            />
-          ))}
-        </div>
+       
       </div>
     </div>
   )

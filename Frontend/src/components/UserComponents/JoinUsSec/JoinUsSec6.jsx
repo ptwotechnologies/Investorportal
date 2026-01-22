@@ -40,8 +40,8 @@ const JoinUsSec6 = () => {
            
             <p className='text-md leading-9 tracking-wider'>→ All plans include access to the portal and startup requests</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just pick what fits your business goals</p>
-            <hr className='mx-6' />
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+           
+             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  mb-8'> </div>
              <hr className='mx-6'  />
         </div>
 
@@ -76,6 +76,7 @@ const JoinUsSec6 = () => {
             <p className='text-md leading-9 tracking-wider'>→ Get discovered by verified startups, respond to interest, and convert leads directly</p>
            
              <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+             <hr className='mx-6'  />
         </div>
 
 

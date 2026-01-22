@@ -57,7 +57,7 @@ const InvestorSec3 = () => {
       <div className="w-full h-16 bg-[#0010329E] rounded-t-sm"></div>
       <div className="w-full h-16 bg-[#EEEEEE] rounded-t-sm"></div>
       <div className="w-full h-16 bg-[#002A308A] rounded-t-sm"></div>
-      <div className="w-full h-64 bg-[#FFFFFF] rounded-sm shadow-md mb-20"></div>
+      <div className="w-full h-64 bg-[#FFFFFF] rounded-sm shadow-md "></div>
     </div>
     </>
   )

@@ -17,6 +17,7 @@ import { useEffect, useRef } from "react";
 import { CgProfile } from "react-icons/cg";
 import axios from "axios";
 import { serverUrl } from "@/App";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 function NavbarSheet({ textColor }) {
   const [openSheet, setOpenSheet] = useState(false);
@@ -78,10 +79,10 @@ function NavbarSheet({ textColor }) {
         {!isLoggedIn ? (
           <>
             <Link to="/login">
-              <button className="mr-4 underline px-5">Sign in</button>
+              <button className="mr-4 underline px-5 py-1">Sign in</button>
             </Link>
             <Link to="/login">
-              <button className="bg-[#001032] text-white px-5 rounded-sm">
+              <button className="bg-[#001032] text-white px-5 py-1 rounded-sm">
                 Sign up
               </button>
             </Link>
@@ -89,21 +90,32 @@ function NavbarSheet({ textColor }) {
         ) : (
           <>
             {/* Profile Circle */}
-            <div
-              onClick={() => setOpenProfileMenu(!openProfileMenu)}
-              className="w-12 h-12 rounded-full overflow-hidden cursor-pointer border"
-            >
-              {profile?.profilePhoto ? (
-                <img
-                  src={getProfileImage(profile.profilePhoto)}
-                  alt="profile"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-[#001032] flex items-center justify-center">
-                  <CgProfile size={20} className="text-white" />
-                </div>
-              )}
+            <div className="flex items-center justify-between gap-3 cursor-pointer bg-[#001032] text-white px-3 py-1 rounded-sm">
+              {/* My Account Button */}
+              <button
+                onClick={() => setOpenProfileMenu(!openProfileMenu)}
+                className=""
+              >
+                My Account
+              </button>
+
+              {/* Profile Image */}
+              <div
+                onClick={() => setOpenProfileMenu(!openProfileMenu)}
+                className="w-9 h-9 rounded-full overflow-hidden border-2 border-white"
+              >
+                {profile?.profilePhoto ? (
+                  <img
+                    src={getProfileImage(profile.profilePhoto)}
+                    className="w-full h-full object-cover"
+                    alt="profile"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-[#001032] flex items-center justify-center">
+                    <CgProfile size={18} className="text-white" />
+                  </div>
+                )}
+              </div>
             </div>
           </>
         )}
@@ -144,7 +156,7 @@ function NavbarSheet({ textColor }) {
             {openSheet ? (
               <IoIosClose size={35} className={`${textColor}`} />
             ) : (
-              <GiHamburgerMenu size={27} className={`${textColor}`} />
+              <RxHamburgerMenu size={27} className={`${textColor}`} />
             )}
           </SheetTrigger>
 

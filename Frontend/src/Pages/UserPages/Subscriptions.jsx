@@ -11,6 +11,7 @@ import SubscriptionSec5 from '@/components/UserComponents/SubscriptionSec/Subscr
 import SubscriptionSec6 from '@/components/UserComponents/SubscriptionSec/SubscriptionSec6'
 import logo from "/ArtesterLogo2.png";
 import React from 'react'
+import Footer from '@/components/UserComponents/Footer';
 
 const Subscription = () => {
 
@@ -39,9 +40,16 @@ const Subscription = () => {
       <div>
         <SubscriptionSec6/>
       </div>
+
+       <div>
+        <Footer/>
+      </div>
       <div>
-                                   <img src={logo} className='w-60 lg:w-90 mx-auto mb-9 lg:mb-15'/>
+                                   <img src={logo} className='w-60 lg:w-90 mx-auto lg:my-25 my-15'/>
                                  </div>
+                                 <div className="fixed bottom-0 left-0 w-full h-20
+        bg-linear-to-t from-[#edbeed] to-transparent 
+        pointer-events-none z-10" />
     </div>
   )
 }

@@ -1,17 +1,38 @@
-import React , { useState, useRef } from 'react'
+import React , { useState, useRef, useEffect } from 'react'
 
 const JoinUsSec7 = () => {
   const scrollRef = useRef(null);
           const [activeIndex, setActiveIndex] = useState(0);
         
-          const handleScroll = () => {
-            const scrollWidth = scrollRef.current.scrollWidth;
-            const clientWidth = scrollRef.current.clientWidth;
-            const scrollLeft = scrollRef.current.scrollLeft;
-            const index = Math.round(scrollLeft / clientWidth);
-            setActiveIndex(index);
-          };
-        
+          useEffect(() => {
+              const container = scrollRef.current
+              if (!container) return
+          
+              let animationId
+          
+              const autoScroll = () => {
+                container.scrollLeft += 0.5
+          
+                if (container.scrollLeft >= container.scrollWidth / 2) {
+                  container.scrollLeft = 0
+                }
+          
+                animationId = requestAnimationFrame(autoScroll)
+              }
+          
+              animationId = requestAnimationFrame(autoScroll)
+          
+              return () => cancelAnimationFrame(animationId)
+            }, [])
+          
+            const handleScroll = () => {
+              const container = scrollRef.current
+              const index = Math.round(
+                container.scrollLeft / container.clientWidth
+              )
+              setActiveIndex(index % divElements.length)
+            }
+          
           const divElements = [
             {
                 paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
@@ -40,17 +61,17 @@ const JoinUsSec7 = () => {
         
           ]
 
-
+         const data = [...divElements, ...divElements]
   return (
      <div className='mt-15  ' >
     
          <div className="relative">
-             <h1 className='text-5xl font-semibold px-10 pb-10 text-[#001032]'>Trusted by investors</h1>
+            
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide lg:ml-10">
-            {divElements.map((item, index) => (
+            className="flex overflow-x-scroll  scrollbar-hide lg:ml-10">
+            {data.map((item, index) => (
               <div key={index} className="w-full lg:w-[42%] h-[350px]  shrink-0 snap-center  p-4 mx-2 ">
                <div className='flex flex-col lg:flex-row  justify-center items-center w-full h-full gap-10 lg:gap-10 p-5 lg:p-7 border border-[#00103280] 
                rounded-sm shadow-lg'>

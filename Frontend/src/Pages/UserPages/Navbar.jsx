@@ -127,7 +127,7 @@ const Navbar = () => {
   return (
     <div
       className={`
-        w-full h-[12%] lg:h-[15%] flex justify-between items-center px-6 
+        w-full h-[10%] lg:h-[15%] flex justify-between items-center px-4 lg:px-6 
         fixed top-0 z-50 transition-transform duration-300
         ${showNavbar ? 'translate-y-0' : '-translate-y-full'}
         ${bgMobile} lg:${bgDesktop}

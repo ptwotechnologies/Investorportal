@@ -101,10 +101,10 @@ const HomeSec1 = () => {
 
         <div
           id="right"
-          className="w-full lg:w-[50%] lg:bg-white rounded-md lg:rounded-sm mt-auto flex justify-center items-center   ">
-          <img src={img1} alt="" className="rounded-sm object-fill h-[870px]  hidden lg:block"  />
-          <div className="lg:hidden  h-90 w-full  mt-10">
-            <img src={img1} alt="" className="rounded-4xl    w-full h-[200px] object-cover  border border-[#001032]" />
+          className="w-full lg:w-[50%] lg:bg-white rounded-md lg:rounded-sm mt-auto flex justify-center items-center  ">
+          <div className="rounded-sm bg-gray-200 w-full h-[870px]  hidden lg:block"></div>  
+           <div className="lg:hidden  h-90 w-full  mt-10">
+            <div className="rounded-4xl  bg-gray-200  w-full h-[200px] object-cover  border border-[#001032]"></div>   
                </div>
         </div>
       </div>
@@ -116,11 +116,11 @@ const HomeSec1 = () => {
           </div>
     </div>
      <div className="flex justify-center items-center gap-2 border-2 border-[#002A30]  w-[70%] 
-     mt-28 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm font-semibold lg:hidden">
+     mt-32 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm font-semibold lg:hidden">
        <Link to="/login"> <button>See How It Works</button></Link>
         <IoIosArrowRoundForward size={25} className="mt-1" />
           </div>
-          </>
+          </> 
   )
 }
 

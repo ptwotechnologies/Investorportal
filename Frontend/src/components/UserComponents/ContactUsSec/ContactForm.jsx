@@ -125,9 +125,22 @@ const ContactForm = () => {
             )
           })}
         </div>
-      </fieldset>
+      </fieldset> 
+       <div className="lg:mt-20 mt-10   text-[#1D2A29CC]">
+                <p className="tracking-wide lg:leading-7 text-xs lg:text-md mb-2 lg:mb-0">
+                  By clicking, you agree to our Term and Conditions to be a
+                  channel partner.
+                </p>
+                <div className="flex lg:items-center items-start lg:gap-3 gap-1">
+                  <input type="checkbox" className="mt-1 lg:mt-0" />
+                  <span className=" tracking-wide text-xs lg:text-md">
+                    I have read all the terms and conditions and I’m ready to be
+                    a channel partner.
+                  </span>
+                </div>
+              </div>
 
-      <div className="pt-12 pb-20">
+      <div className="pt-3 pb-20">
         <button
           type="submit"
           className="inline-flex items-center justify-center rounded-sm bg-[#001032] px-6 py-3 text-sm font-medium text-primary-foreground"

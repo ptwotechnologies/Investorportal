@@ -23,7 +23,11 @@ const profileSchema = new mongoose.Schema({
     {
       title: String,
       company: String,
-      duration: String,
+     duration: {
+      startDate: { type: String, default: "" }, // "2024-06"
+      endDate: { type: String, default: "" },   // "2025-01"
+      present: { type: Boolean, default: false }
+    },
       location: String,
       description: [String],
     }

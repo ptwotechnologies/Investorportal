@@ -1,16 +1,39 @@
-import React , { useState, useRef } from 'react'
+import React , { useState, useRef, useEffect } from 'react'
 
 const StartupSec8 = () => {
   const scrollRef = useRef(null);
      const [activeIndex, setActiveIndex] = useState(0);
+
+       useEffect(() => {
+         const container = scrollRef.current
+         if (!container) return
+     
+         let animationId
+     
+         const autoScroll = () => {
+           container.scrollLeft += 0.5
+     
+           if (container.scrollLeft >= container.scrollWidth / 2) {
+             container.scrollLeft = 0
+           }
+     
+           animationId = requestAnimationFrame(autoScroll)
+         }
+     
+         animationId = requestAnimationFrame(autoScroll)
+     
+         return () => cancelAnimationFrame(animationId)
+       }, [])
    
      const handleScroll = () => {
-       const scrollWidth = scrollRef.current.scrollWidth;
-       const clientWidth = scrollRef.current.clientWidth;
-       const scrollLeft = scrollRef.current.scrollLeft;
-       const index = Math.round(scrollLeft / clientWidth);
-       setActiveIndex(index);
-     };
+  const container = scrollRef.current
+  const index = Math.round(
+    container.scrollLeft / container.clientWidth
+  )
+  setActiveIndex(index % divElements.length)
+}
+
+
    
      const divElements = [
        {
@@ -32,6 +55,8 @@ const StartupSec8 = () => {
           
        },
      ]
+
+     const data = [...divElements, ...divElements]
      return (
        <div className='mt-15  ' >
    
@@ -40,12 +65,12 @@ const StartupSec8 = () => {
          <div
            ref={scrollRef}
            onScroll={handleScroll}
-           className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide lg:ml-10">
-           {divElements.map((item, index) => (
+           className="flex overflow-x-scroll  scrollbar-hide lg:ml-10">
+           {data.map((item, index) => (
              <div key={index} className="w-full lg:w-[42%] h-[350px]  shrink-0 snap-center  p-4 mx-2 ">
               <div className='flex flex-col lg:flex-row  justify-center items-start  w-full h-full gap-10 lg:gap-10 p-5 lg:p-7 border border-[#00103280] 
               rounded-sm shadow-lg'>
-                <p className='text-[#001032B5] text-xl leading-8 tracking-wider '>{item.paragraph}</p>
+                <p className='text-[#001032B5] text-md leading-8 tracking-wider '>{item.paragraph}</p>
                <div className='lg:hidden flex justify-between items-center gap-20  w-full'>
                    <div className=' '>
                      <p className='text-sm pt-2 text-[#001032B5]'>{item.name}</p>
@@ -69,16 +94,7 @@ const StartupSec8 = () => {
              </div>
            ))}
          </div>
-         <div className="flex justify-center mt-4">
-           {divElements.map((item, index) => (
-             <div
-               key={index}
-               className={`w-2 h-2 rounded-full mx-1 ${
-                 activeIndex === index ? 'bg-gray-600' : 'bg-gray-300'
-               }`}
-             />
-           ))}
-         </div>
+      
        </div>
          
        </div>

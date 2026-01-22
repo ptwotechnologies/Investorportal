@@ -3,6 +3,7 @@ import ContactUsSec2 from '@/components/UserComponents/ContactUsSec/ContactUsSec
 import ContactUsSec3 from '@/components/UserComponents/ContactUsSec/ContactUsSec3'
 import React from 'react'
 import logo from "/ArtesterLogo2.png";
+import Footer from '@/components/UserComponents/Footer';
 
 const ContactUs = () => {
   return (
@@ -17,7 +18,10 @@ const ContactUs = () => {
         <ContactUsSec3/>
      </div>
      <div>
-                     <img src={logo} className='w-60 lg:w-90 mx-auto mb-9 lg:mb-15'/>
+        <Footer/>
+      </div>
+     <div>
+                     <img src={logo} className='w-60 lg:w-90 mx-auto lg:my-25 my-15'/>
                    </div>
     </div>
   )

@@ -109,21 +109,20 @@ const HomeSec2 = () => {
 
       <div
         id="bottom"
-        className="bg-[#001032] w-full text-white rounded-4xl mt-13 px-4"
+        className="bg-[#001032] w-full text-white rounded-4xl lg:rounded-none mt-13 px-4"
       >
         <div className="">
           <h1 className="text-5xl font-semibold p-10  hidden lg:block ">Who is this portal for?</h1>
-           <h1 className="text-[44px] font-semibold px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-10">Who is this <br/> portal for?</h1>
+           <h1 className="text-[44px] font-semibold px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-10 ">Who is this  portal  for?</h1>
           <div className="hidden lg:block">
-            <div className="flex justify-center items-center gap-5 mx-20  ">
+            <div className="flex justify-center items-center  mx-20  ">
             <div className=" w-[30%]">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Startups</h3>
-             <Link to="/startup"> <img
-                src={img1}
-                alt=""
-                className="rounded-xl w-[90%] h-[400px]"
-              /></Link>
+             <Link to="/startup"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
+                
+                
+              </div></Link>
               <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
                 You’re building something real and ready to scale{" "}
               </p>
@@ -131,11 +130,10 @@ const HomeSec2 = () => {
             <div className=" w-[30%]">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Investors</h3>
-              <Link to="/investor"><img
-                src={img2}
-                alt=""
-                className="rounded-xl w-[90%] h-[400px]"
-              /></Link>
+              <Link to="/investor"><div  className="rounded-xl w-[90%] h-[400px] bg-gray-200">
+                
+               
+              </div></Link>
               <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
                 You seek refined, investment-ready startup in your space{" "}
               </p>
@@ -143,11 +141,22 @@ const HomeSec2 = () => {
             <div className=" w-[30%]">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Service Professionals</h3>
-             <Link to="/serviceprofessional"> <img
-                src={img3}
-                alt=""
-                className="rounded-xl w-[90%] h-[400px]"
-              /></Link>
+             <Link to="/serviceprofessional"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
+               
+                
+              </div></Link>
+              <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                You want genuine startup leads without paid ads
+              </p>
+            </div>
+
+            <div className=" w-[30%]">
+              <hr className="border-t border-gray-500 pb-8 w-[90%] " />
+              <h3 className="text-2xl pb-5">Channel Partners</h3>
+             <Link to="/channelpartners"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
+               
+                
+              </div></Link>
               <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
                 You want genuine startup leads without paid ads
               </p>

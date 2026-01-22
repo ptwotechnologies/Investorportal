@@ -1,93 +1,89 @@
 import React from 'react'
 import { IoMdCheckmark } from "react-icons/io";
-import { CgAsterisk } from "react-icons/cg";
 
-
-
-const MarketingContent = () => {
-  const cards = [
-     {
-       title: "Most Affordable Plan",
-       titleBg: "#D3D3D3",
-       titleBg2: "#D3D3D3",
-       amount: 2999,
-       amountduration: "/year",
-       planName: "Starter",
-       heading1: "Support & Guidance",
-       heading2: "Network & Growth",
-       features: [
-         "2 Consultation sessions per month",
-         "Access to the verified service professinals",
-       ],
-       features2: [
-         "Access to the other portals",
-         "Fund raising updates",
-         "Connecting with investors",
-       ],
-       buttonText: "Start with Basic",
-       buttonBg: "#D3D3D3",
-       buttonBg2: "#D3D3D3",
-     },
- 
-     {
-       title: "Starter Growth Plan",
-       titleBg: "#7EA2EE",
-       titleBg2: "#FF81FF",
-       amount: 9999,
-       amountduration: "/year",
-       planName: "Growth",
-       heading1: "Support & Guidance + All in Basic Plan &",
-       heading2: "Network & Growth",
-       features: [
-         "2 Consultation sessions per month",
-         "Assistance with Pitch Deck",
-       ],
-       features2: [
-         "Channel Partners Support",
-         "Funding Support",
-         "Pitching the investors",
-       ],
-       buttonText: "Start with Growth",
-       buttonBg: "#001032",
-       buttonBg2: "#F783FE",
-     },
- 
-     {
-       title: "Founder Pro Plan",
-       titleBg: "#D3D3D3",
-       titleBg2: "#D3D3D3",
-       amount: 19999,
-       amountduration: "/year",
-       planName: "Pro",
-       heading1: "Support & Guidance + All in Growth Plan &",
-       heading2: "Network & Growth",
-       features: [
-         "2 Consultation sessions per month",
-         "Assistance with Financial Projections",
-       ],
-       features2: [
-         "Refined & Approved Startups and Investors",
-         "Meet with Investors",
-         "Business Strategies & Advisory",
-       ],
-       buttonText: "Start with Pro",
-       buttonBg: "#D3D3D3",
-       buttonBg2: "#D3D3D3",
-     },
-   ];
- 
-   const [currentIndex, setCurrentIndex] = React.useState(0);
-   const scrollRef = React.useRef(null);
- 
-   const handleScroll = () => {
-     const container = scrollRef.current;
-     if (!container) return;
- 
-     const cardWidth = container.scrollWidth / cards.length;
-     const index = Math.round(container.scrollLeft / cardWidth);
-     setCurrentIndex(index);
-   };
-
+const AdvisoryContent = () => {
+      const cards = [
+        {
+          title: "Most Affordable Plan",
+          titleBg: "#D3D3D3",
+          titleBg2: "#D3D3D3",
+          amount: 2999,
+          amountduration: "/year",
+          planName: "Starter",
+          heading1: "Support & Guidance",
+          heading2: "Network & Growth",
+          features: [
+            "2 Consultation sessions per month",
+            "Access to the verified service professinals",
+          ],
+          features2: [
+            "Access to the other portals",
+            "Fund raising updates",
+            "Connecting with investors",
+          ],
+          buttonText: "Start with Basic",
+          buttonBg: "#D3D3D3",
+          buttonBg2: "#D3D3D3",
+        },
+    
+        {
+          title: "Starter Growth Plan",
+          titleBg: "#7EA2EE",
+          titleBg2: "#FF81FF",
+          amount: 9999,
+          amountduration: "/year",
+          planName: "Growth",
+          heading1: "Support & Guidance + All in Basic Plan &",
+          heading2: "Network & Growth",
+          features: [
+            "2 Consultation sessions per month",
+            "Assistance with Pitch Deck",
+          ],
+          features2: [
+            "Channel Partners Support",
+            "Funding Support",
+            "Pitching the investors",
+          ],
+          buttonText: "Start with Growth",
+          buttonBg: "#001032",
+          buttonBg2: "#F783FE",
+        },
+    
+        {
+          title: "Founder Pro Plan",
+          titleBg: "#D3D3D3",
+          titleBg2: "#D3D3D3",
+          amount: 19999,
+          amountduration: "/year",
+          planName: "Pro",
+          heading1: "Support & Guidance + All in Growth Plan &",
+          heading2: "Network & Growth",
+          features: [
+            "2 Consultation sessions per month",
+            "Assistance with Financial Projections",
+          ],
+          features2: [
+            "Refined & Approved Startups and Investors",
+            "Meet with Investors",
+            "Business Strategies & Advisory",
+          ],
+          buttonText: "Start with Pro",
+          buttonBg: "#D3D3D3",
+          buttonBg2: "#D3D3D3",
+        },
+      ];
+    
+      const [currentIndex, setCurrentIndex] = React.useState(0);
+      const scrollRef = React.useRef(null);
+    
+      const handleScroll = () => {
+        const container = scrollRef.current;
+        if (!container) return;
+    
+        const cardWidth = container.scrollWidth / cards.length;
+        const index = Math.round(container.scrollLeft / cardWidth);
+        setCurrentIndex(index);
+      };
   return (
    <main className="bg-background text-foreground">
         <section className="mx-auto w-full lg:px-6  ">
@@ -214,4 +210,4 @@ const MarketingContent = () => {
   )
 }
 
-export default MarketingContent
+export default AdvisoryContent

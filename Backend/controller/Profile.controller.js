@@ -9,7 +9,7 @@ export const getProfile = async (req, res) => {
     let profile = await Profile.findOne({ userId: req.user._id })
      .populate(
   "userId",
-  "role businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.businessEmail businessDetails.companyName"
+  "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName"
 );
 
     if (!profile) {
@@ -32,7 +32,7 @@ export const getProfile = async (req, res) => {
       ...profile.toObject(),
        name: profile.name || `${profile.userId.businessDetails.firstName} ${profile.userId.businessDetails.lastName}`,
      role: profile.userId?.role,
-      email: profile.userId?.businessDetails?.businessEmail,
+      email: profile.userId?.email,
       phone: profile.userId?.businessDetails?.number,
       companyName: profile.userId?.businessDetails?.companyName,
     });
@@ -51,9 +51,9 @@ export const updateProfile = async (req, res) => {
 
   try {
     // Find the profile
-    let profile = await Profile.findOne({ userId: req.user._id }) .populate(
+    let profile = await Profile.findOne({ userId: req.user._id })  .populate(
   "userId",
-  "role businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.businessEmail businessDetails.companyName"
+  "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName"
 );
 
     if (!profile) {
@@ -82,7 +82,7 @@ export const updateProfile = async (req, res) => {
     res.status(200).json({
       ...profile.toObject(),
       role: profile.userId?.role,
-      email: profile.userId?.businessDetails?.businessEmail,
+      email: profile.userId?.email, 
       phone: profile.userId?.businessDetails?.number,
       companyName: profile.userId?.businessDetails?.companyName,
       message: "Profile updated successfully",

@@ -6,6 +6,7 @@ import AboutSec4 from '../../components/UserComponents/AboutSec/AboutSec4'
 import AboutSec5 from '../../components/UserComponents/AboutSec/AboutSec5'
 import AboutSec6 from '../../components/UserComponents/AboutSec/AboutSec6'
 import logo from "/ArtesterLogo2.png";
+import Footer from '@/components/UserComponents/Footer'
 
 const About = () => {
   return (
@@ -22,14 +23,18 @@ const About = () => {
     <div  >
       <AboutSec4/>
     </div>
-    <div >
+    <div > 
       <AboutSec5/>
     </div>
-    <div className='hidden lg:block'>
+    <div>
       <AboutSec6/>
     </div>
+
+    <div>
+        <Footer/>
+      </div>
      <div>
-          <img src={logo} className='w-60 lg:w-90 mx-auto mb-10 lg:my-20'/>
+          <img src={logo} className='w-60 lg:w-90 mx-auto   lg:my-25 my-15'/>
         </div>
     </div>
   )

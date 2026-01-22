@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import img1 from "/homeSec2Img2.png"
 import { Link } from "react-router-dom";
 
 const HomeSec3 = () => {
-  return (
+
+  const [isOpen, setIsOpen] = useState(true);
+   const [isSecondOpen, setIsSecondOpen] = useState(false);
+    const [isThirdOpen, setIsThirdOpen] = useState(false);
+
+  return ( 
     <div className="">
       <div id="top" className="text-center mt-8 lg:mt-16">
         <h1 className="text-2xl lg:text-4xl font-semibold lg:tracking-wider mb-1  lg:mb-4 text-[#12355C] ">
@@ -42,17 +47,41 @@ const HomeSec3 = () => {
                 <p className="text-2xl font-semibold mb-17 ">It was the system around them</p>
                 <hr className='w-full mb-5 ' />
 
-                <h1 className='text-xl font-semibold mb-5 '>Really! The system is built to exhaust founders</h1>
-                <div className='leading-20 tracking-wider w-[94%]'>
-                  <p className='text-sm leading-6'>First, you’re pushed into ad platforms where every click drains your budget — even if none of them convert. Then come the workshops, courses, and “growth promises” That leave you with theory, not traction.…</p>
-                <p className='text-sm leading-6 my-5'>Next, agencies show up with retainers, legal paperwork, design fees, and marketing retainers — everything except what you actually need: real users and real investors. By the time you reach the important conversations, you’ve spent time, money, and clarity — without the forward movement you expected.</p>
-                
-               <p className='text-sm leading-6 mb-8'>Phew..! </p>
-                </div>
+                <h1 className='text-xl font-semibold mb-5 ' onClick={() => setIsOpen(!isOpen)}>Really! The system is built to exhaust founders</h1>
+                {isOpen && (
+        <div className="leading-20 tracking-wider w-[94%]">
+          <p className="text-sm leading-6">
+            First, you’re pushed into ad platforms where every click drains your
+            budget — even if none of them convert. Then come the workshops,
+            courses, and “growth promises” that leave you with theory, not
+            traction.…
+          </p>
+
+          <p className="text-sm leading-6 my-5">
+            Next, agencies show up with retainers, legal paperwork, design fees,
+            and marketing retainers — everything except what you actually need:
+            real users and real investors. By the time you reach the important
+            conversations, you’ve spent time, money, and clarity — without the
+            forward movement you expected.
+          </p>
+
+          <p className="text-sm leading-6 mb-8">Phew..!</p>
+        </div>
+      )}
                 <hr  />
-                <h1 className='my-4 text-xl font-semibold'>Keep your financials clean and transparent</h1>
+                <h1 className='my-4 text-xl font-semibold'  onClick={() => setIsSecondOpen(!isSecondOpen)}>Keep your financials clean and transparent</h1>
+                {isSecondOpen && (
+                  <div className="leading-20 tracking-wider w-[94%]">
+                    <p className="text-sm leading-6" >Keep your financials clean and transparent</p>
+                  </div>
+                )}
                  <hr  />
-                 <h1 className='my-4 text-xl font-semibold'>Get simplified compliance and support</h1>
+                 <h1 className='my-4 text-xl font-semibold'onClick={() => setIsThirdOpen(!isThirdOpen)}>Get simplified compliance and support</h1>
+                 {isThirdOpen && (
+                  <div className="leading-20 tracking-wider w-[94%]">
+                    <p className="text-sm leading-6" >Keep your financials clean and transparent</p>
+                  </div>
+                )}
                  <hr  />
 
         </div>
@@ -79,8 +108,8 @@ const HomeSec3 = () => {
           </div>
 
           <div className="mt-15 mx-10">
-         <div className="  w-full ">
-            <img src={img1} alt="Image" className="h-115 w-full rounded-md relative top-16"/>
+         <div className="  h-115 w-full rounded-md relative top-16 bg-gray-200">
+            
         </div>
         
           

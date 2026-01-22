@@ -43,13 +43,13 @@ const StartupSec4 = () => {
          onScroll={handleScroll}
          className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide ">
          {divElements.map((item, index) => (
-           <div key={index} className="w-[58%] h-auto  shrink-0 snap-center  p-4 px-10   mx-2 text-white  ">
+           <div key={index} className="w-[38%] h-auto  shrink-0 snap-center  p-4  mx-2 text-white  ">
             <div className='flex flex-row  justify-center items-start w-full  gap-10  border border-[#00103280] 
             rounded-2xl shadow-lg' style={{backgroundColor: item.color}}>
               <div className='px-5'>
-                <p className=' text-xl leading-8 tracking-wider py-12 '>{item.paragraph}</p>
+                <p className=' text-lg leading-8 tracking-wider pb-5 pt-6 '>{item.paragraph}</p>
               <p className='text-lg pt-5 '>{item.name}</p>
-                 <p className='text-lg  '>{item.company}</p>
+                 <p className='text-lg  pb-3 '>{item.company}</p>
                  
               </div>
              <div className=' block' >

@@ -3,15 +3,16 @@ import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoMdArrowRoundForward } from "react-icons/io";
 
 const AboutSec5 = () => {
-  const [openSection, setOpenSection] = useState(null);
+  
+  const [openSection, setOpenSection] = useState("investors");
 
   const toggle = (name) => {
     setOpenSection(prev => prev === name ? null : name);
   };
   return (
     <div className=' lg:p-12 '>
-        <div className='text-5xl text-[#001032]  lg:mb-30 font-semibold leading-14 tracking-wide p-5'>
-         <h1>Who’s here and what that matters?</h1>
+        <div className='text-4xl lg:text-5xl text-[#001032]  lg:mb-30 font-semibold lg:leading-14 tracking-wide p-5'>
+         <h1>Who’s here and what matters?</h1>
         </div>
         <div className='flex flex-col lg:flex-row items-center  gap-2  '>
     <div id='left' className='lg:w-[40%] lg:p-5 mb-15'>
@@ -49,14 +50,14 @@ const AboutSec5 = () => {
         ? <IoMdArrowRoundDown className='text-white' size={30} />
         : <IoMdArrowRoundForward className='text-white' size={30} />
       }
-      <h1 className='text-white font-medium text-4xl'>
+      <h1 className='text-white font-medium text-2xl'>
         Investors
       </h1>
     </div>
 
     {/* paragraph INSIDE same blue box */}
     {openSection === "investors" && (
-      <p className='my-6 text-xl text-white ml-13'>
+      <p className='my-6 text-md text-white ml-13'>
         They use the portal to find refined, verified startups...
       </p>
     )}
@@ -75,15 +76,15 @@ const AboutSec5 = () => {
         ? <IoMdArrowRoundDown className='text-white lg:text-[#272626]' size={35} />
         : <IoMdArrowRoundForward className='text-white lg:text-[#272626]' size={35} />
       }
-      <h1 className='font-medium text-4xl  text-white lg:text-[#000000]'>
+      <h1 className='font-medium lg:text-4xl text-2xl  text-white lg:text-[#000000]'>
         Service Professionals
       </h1>
     </div>
 
     {/* paragraph stays INSIDE SAME DIV */}
     {openSection === "service" && (
-      <p className='text-xl lg:text-base text-white lg:text-[#000000] mt-4 ml-13 lg:ml-0'>
-         service professionals description
+      <p className='text-md lg:text-base text-white lg:text-[#000000] mt-4 ml-13 lg:ml-0'>
+         They use the portal to find refined, verified startups...
       </p>
     )}
   </div>
@@ -101,15 +102,15 @@ const AboutSec5 = () => {
         ? <IoMdArrowRoundDown className='text-white lg:text-[#272626]' size={35} />
         : <IoMdArrowRoundForward className='text-white lg:text-[#272626]' size={35} />
       }
-      <h1 className='font-medium text-4xl  text-white lg:text-[#000000]'>
+      <h1 className='font-medium lg:text-4xl text-2xl text-white lg:text-[#000000]'>
         Channel Partners
       </h1>
     </div>
 
     {/* paragraph INSIDE SAME DIV */}
     {openSection === "channel" && (
-      <p className='text-xl lg:text-base text-white lg:text-[#000000] mt-4 ml-13'>
-        channel partners description
+      <p className='text-md lg:text-base text-white lg:text-[#000000] mt-4 ml-13 lg:ml-0'>
+         They use the portal to find refined, verified startups...
       </p>
     )}
   </div>

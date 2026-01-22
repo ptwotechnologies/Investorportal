@@ -60,7 +60,11 @@ const ProfileSec = () => {
   const [newExperience, setNewExperience] = useState({
     title: "",
     company: "",
-    duration: "",
+    duration: {
+      startDate: "",
+      endDate: "",
+      present: false,
+    },
     location: "",
     description: [""],
   });
@@ -102,16 +106,16 @@ const ProfileSec = () => {
         experience: Array.isArray(res.data.experience)
           ? res.data.experience
           : res.data.experience
-          ? [res.data.experience]
-          : [
-              {
-                title: "",
-                company: "",
-                duration: "",
-                location: "",
-                description: [""],
-              },
-            ],
+            ? [res.data.experience]
+            : [
+                {
+                  title: "",
+                  company: "",
+                  duration: "",
+                  location: "",
+                  description: [""],
+                },
+              ],
       });
       setPortfolioFiles(res.data.portfolio || []);
     } catch (err) {
@@ -129,8 +133,8 @@ const ProfileSec = () => {
       description: Array.isArray(exp.description)
         ? exp.description
         : exp.description
-        ? [exp.description]
-        : [""],
+          ? [exp.description]
+          : [""],
     }));
 
   const updateProfileData = async (data) => {
@@ -145,16 +149,16 @@ const ProfileSec = () => {
         experience: Array.isArray(res.data.profile.experience)
           ? res.data.profile.experience
           : res.data.profile.experience
-          ? [res.data.profile.experience]
-          : [
-              {
-                title: "",
-                company: "",
-                duration: "",
-                location: "",
-                description: [""],
-              },
-            ],
+            ? [res.data.profile.experience]
+            : [
+                {
+                  title: "",
+                  company: "",
+                  duration: "",
+                  location: "",
+                  description: [""],
+                },
+              ],
       });
 
       alert("Profile updated successfully");
@@ -205,7 +209,7 @@ const ProfileSec = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       setProfile((prev) => ({
@@ -229,7 +233,7 @@ const ProfileSec = () => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
 
       setProfile((prev) => ({
@@ -249,7 +253,7 @@ const ProfileSec = () => {
         { profilePhoto: null },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       setProfile((prev) => ({ ...prev, profilePhoto: null }));
     } catch (err) {
@@ -266,7 +270,7 @@ const ProfileSec = () => {
         { coverImage: null },
         {
           headers: { Authorization: `Bearer ${token}` },
-        }
+        },
       );
       setProfile((prev) => ({ ...prev, coverImage: null }));
     } catch (err) {
@@ -317,7 +321,7 @@ const ProfileSec = () => {
 
       // ✅ UI se bhi remove karo
       setPortfolioFiles((prev) =>
-        prev.filter((item) => item._id !== portfolioId)
+        prev.filter((item) => item._id !== portfolioId),
       );
     } catch (error) {
       console.error("Delete failed", error);
@@ -356,8 +360,8 @@ const ProfileSec = () => {
   const safeDescription = Array.isArray(exp.description)
     ? exp.description
     : exp.description
-    ? [exp.description]
-    : [""];
+      ? [exp.description]
+      : [""];
 
   useEffect(() => {
     if (showExpModal) {
@@ -482,7 +486,7 @@ const ProfileSec = () => {
             }}
             onClick={() => {
               setModalImage(
-                profile?.coverImage ? `${serverUrl}${profile.coverImage}` : ""
+                profile?.coverImage ? `${serverUrl}${profile.coverImage}` : "",
               );
               setIsCover(true); // cover photo
               setIsImageModalOpen(true);
@@ -534,7 +538,7 @@ const ProfileSec = () => {
                     setModalImage(
                       profile?.profilePhoto
                         ? `${serverUrl}${profile.profilePhoto}`
-                        : ""
+                        : "",
                     );
                     setIsCover(false); // profile photo
                     setIsImageModalOpen(true);
@@ -574,12 +578,13 @@ const ProfileSec = () => {
             </div>
 
             <div className="flex  lg:px-5  lg:p-2  justify-between lg:pl-13 pl-4 relative bottom-6 lg:bottom-3  lg:mb-3 pb-1 lg:pb-0">
-              <div>
+              <div className="max-w-full overflow-hidden">
                 {editSections.header ? (
                   <div className="flex flex-col gap-2">
                     <div className="flex">
                       <input
                         type="text"
+                        maxLength={40}
                         value={profile?.name || ""}
                         onChange={(e) =>
                           setProfile({ ...profile, name: e.target.value })
@@ -589,6 +594,7 @@ const ProfileSec = () => {
                       />
                     </div>
                     <textarea
+                      maxLength={120}
                       value={profile?.bio || ""}
                       onChange={(e) =>
                         setProfile({ ...profile, bio: e.target.value })
@@ -641,7 +647,10 @@ const ProfileSec = () => {
                 ) : (
                   <>
                     <div className="flex items-center gap-1">
-                      <h1 className="font-medium mb-0.5 lg:mb-0 text-xl">
+                      <h1
+                        className="font-medium mb-0.5 lg:mb-0 text-xl 
+                       max-w-full"
+                      >
                         {profile?.name}
                       </h1>
                       <MdOutlineVerifiedUser
@@ -649,7 +658,13 @@ const ProfileSec = () => {
                         className="text-green-700 "
                       />
                     </div>
-                    <p className=" text-md my-2 lg:my-0">{profile?.bio}</p>
+                    <p
+                      className="text-md my-2 lg:my-0 
+                        overflow-hidden 
+                      "
+                    >
+                      {profile?.bio}
+                    </p>
                     <p className="text-md text-gray-700 flex items-center gap-2 my-1 lg:my-0">
                       {profile.city && profile.state
                         ? `${profile?.city}, ${profile?.state}`
@@ -722,9 +737,10 @@ const ProfileSec = () => {
             }
           />
         </div>
-        <div className="px-4 py-2 leading-11 lg:tracking-wider tracking-wide pr-4 lg:pr-0 h-auto">
+        <div className="px-4 py-2 leading- text-sm lg:tracking-wider tracking-wide pr-4 lg:pr-0 h-auto">
           {editSections.aboutAndSkills ? (
             <textarea
+              maxLength={500}
               value={profile?.about}
               onChange={(e) =>
                 setProfile({ ...profile, about: e.target.value })
@@ -764,6 +780,7 @@ const ProfileSec = () => {
           {editSections.aboutAndSkills ? (
             <input
               type="text"
+              maxLength={150}
               value={profile?.topSkills}
               onChange={(e) =>
                 setProfile({ ...profile, topSkills: e.target.value })
@@ -814,6 +831,7 @@ const ProfileSec = () => {
         <div className="lg:pl-9 px-4 lg:py-2 py-1 mb-6 relative">
           {editSections.services ? (
             <textarea
+              maxLength={400}
               value={servicesText}
               onChange={(e) =>
                 setProfile({ ...profile, services: e.target.value })
@@ -886,7 +904,11 @@ const ProfileSec = () => {
                 setNewExperience({
                   title: "",
                   company: "",
-                  duration: "",
+                  duration: {
+                    startDate: "",
+                    endDate: "",
+                    present: false,
+                  },
                   location: "",
                   description: [""],
                 });
@@ -899,168 +921,253 @@ const ProfileSec = () => {
         <div className="lg:pl-10 pl-4 pb-5 mt-6">
           {profile.experience &&
             profile.experience.length > 0 &&
-            (showAllExperience
-              ? profile.experience
-              : profile.experience.slice(0, 3)
-            ).map((exp, i) => {
-              const safeDescription = Array.isArray(exp.description)
-                ? exp.description
-                : exp.description
-                ? [exp.description]
-                : [""];
+            // Sort experiences: Present first, then descending by endDate
+            [...profile.experience]
+              .sort((a, b) => {
+                if (a.duration.present && !b.duration.present) return -1;
+                if (!a.duration.present && b.duration.present) return 1;
+                const aDate = a.duration.present
+                  ? new Date()
+                  : new Date(a.duration.endDate);
+                const bDate = b.duration.present
+                  ? new Date()
+                  : new Date(b.duration.endDate);
+                return bDate - aDate;
+              })
+              .slice(0, showAllExperience ? undefined : 3)
+              .map((exp, i) => {
+                const safeDescription = Array.isArray(exp.description)
+                  ? exp.description
+                  : exp.description
+                    ? [exp.description]
+                    : [""];
 
-              return (
-                <div key={i} className="mb-4 border-b pb-3">
-                  <div className="flex justify-between items-start">
-                    {experienceEdit[i] ? (
-                      <div className="w-full">
-                        <input
-                          type="text"
-                          value={exp.title}
-                          onChange={(e) => {
-                            const newExperiences = [...profile.experience];
-                            newExperiences[i].title = e.target.value;
-                            setProfile({
-                              ...profile,
-                              experience: newExperiences,
-                            });
-                          }}
-                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
-                          placeholder="Title"
-                        />
-                        <input
-                          type="text"
-                          value={exp.company}
-                          onChange={(e) => {
-                            const newExperiences = [...profile.experience];
-                            newExperiences[i].company = e.target.value;
-                            setProfile({
-                              ...profile,
-                              experience: newExperiences,
-                            });
-                          }}
-                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
-                          placeholder="Company"
-                        />
-                        <input
-                          type="text"
-                          value={exp.duration}
-                          onChange={(e) => {
-                            const newExperiences = [...profile.experience];
-                            newExperiences[i].duration = e.target.value;
-                            setProfile({
-                              ...profile,
-                              experience: newExperiences,
-                            });
-                          }}
-                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
-                          placeholder="Duration"
-                        />
-                        <input
-                          type="text"
-                          value={exp.location}
-                          onChange={(e) => {
-                            const newExperiences = [...profile.experience];
-                            newExperiences[i].location = e.target.value;
-                            setProfile({
-                              ...profile,
-                              experience: newExperiences,
-                            });
-                          }}
-                          className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
-                          placeholder="Location"
-                        />
-
-                        {safeDescription.map((desc, index) => (
+                return (
+                  <div key={i} className="mb-4 border-b pb-3">
+                    <div className="flex justify-between items-start">
+                      {experienceEdit[i] ? (
+                        <div className="w-full">
+                          {/* Title */}
                           <input
-                            key={index}
-                            value={desc}
+                            type="text"
+                            value={exp.title}
                             onChange={(e) => {
                               const newExperiences = [...profile.experience];
-                              newExperiences[i].description[index] =
-                                e.target.value;
+                              newExperiences[i].title = e.target.value;
                               setProfile({
                                 ...profile,
                                 experience: newExperiences,
                               });
                             }}
-                            className="border-2 p-1 rounded-md dynamic-text text-sm mb-2 block w-full"
-                            placeholder={`Description ${index + 1}`}
+                            className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
+                            placeholder="Title"
                           />
-                        ))}
 
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const newExperiences = [...profile.experience];
-                            newExperiences[i].description.push("");
-                            setProfile({
-                              ...profile,
-                              experience: newExperiences,
-                            });
-                          }}
-                          className="text-blue-500 text-sm font-medium mt-1"
-                        >
-                          + Add Description
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="w-full">
-                        <h1 className="font-semibold pt-1 text-md lg:text-xl">
-                          {exp.title}
-                        </h1>
-                        <p className="text-sm font-medium">{exp.company}</p>
-                        <p className="text-sm">{exp.duration}</p>
-                        <p className="text-sm">{exp.location}</p>
+                          {/* Company */}
+                          <input
+                            type="text"
+                            value={exp.company}
+                            onChange={(e) => {
+                              const newExperiences = [...profile.experience];
+                              newExperiences[i].company = e.target.value;
+                              setProfile({
+                                ...profile,
+                                experience: newExperiences,
+                              });
+                            }}
+                            className="border-2 p-1 rounded-md mr-3 mb-3 text-sm w-full"
+                            placeholder="Company"
+                          />
 
-                        <div className="relative mt-2">
-                          <div
-                            className={`text-sm transition-all duration-300 overflow-hidden w-[90%] lg:w-[50%] ${
-                              !isExpDescExpanded ? "line-clamp-1" : ""
-                            }`}
-                          >
-                            {(isExpDescExpanded
-                              ? safeDescription
-                              : safeDescription.slice(0, 1)
-                            ).map((desc, index) => (
-                              <div key={index} className="flex">
-                                <span className="mr-1">•</span>
-                                <span>{desc}</span>
-                              </div>
-                            ))}
+                          {/* Start Date */}
+                          <div className="relative mb-2">
+                            {!exp.duration.startDate && (
+                              <span className="absolute left-3 top-2.5 text-gray-400 text-sm pointer-events-none">
+                                Start Date
+                              </span>
+                            )}
+                            <input
+                              type="month"
+                              value={exp.duration.startDate}
+                              onChange={(e) => {
+                                const newExperiences = [...profile.experience];
+                                newExperiences[i].duration.startDate =
+                                  e.target.value;
+                                setProfile({
+                                  ...profile,
+                                  experience: newExperiences,
+                                });
+                              }}
+                              className={`border-2 p-2 rounded-md w-full text-sm ${
+                                !exp.duration.startDate
+                                  ? "text-transparent"
+                                  : "text-black"
+                              }`}
+                            />
                           </div>
 
-                          {safeDescription.length > 1 && (
-                            <button
-                              onClick={() =>
-                                setIsExpDescExpanded(!isExpDescExpanded)
-                              }
-                              className="text-[#001032] text-sm font-medium mt-1"
-                            >
-                              {isExpDescExpanded ? "See less" : "See more"}
-                            </button>
+                          {/* End Date */}
+                          {!exp.duration.present && (
+                            <div className="relative mb-2">
+                              {!exp.duration.endDate && (
+                                <span className="absolute left-3 top-2.5 text-gray-400 text-sm pointer-events-none">
+                                  End Date
+                                </span>
+                              )}
+                              <input
+                                type="month"
+                                value={exp.duration.endDate}
+                                onChange={(e) => {
+                                  const newExperiences = [
+                                    ...profile.experience,
+                                  ];
+                                  newExperiences[i].duration.endDate =
+                                    e.target.value;
+                                  setProfile({
+                                    ...profile,
+                                    experience: newExperiences,
+                                  });
+                                }}
+                                className={`border-2 p-2 rounded-md w-full text-sm ${
+                                  !exp.duration.endDate
+                                    ? "text-transparent"
+                                    : "text-black"
+                                }`}
+                              />
+                            </div>
                           )}
+
+                          {/* Present Checkbox */}
+                          <label className="flex items-center gap-2 text-sm mb-3 ml-2">
+                            <input
+                              type="checkbox"
+                              checked={exp.duration.present}
+                              onChange={(e) => {
+                                const newExperiences = [...profile.experience];
+                                newExperiences[i].duration.present =
+                                  e.target.checked;
+                                if (e.target.checked)
+                                  newExperiences[i].duration.endDate = "";
+                                setProfile({
+                                  ...profile,
+                                  experience: newExperiences,
+                                });
+                              }}
+                            />
+                            Currently working here
+                          </label>
+
+                          {/* Location */}
+                          <input
+                            type="text"
+                            value={exp.location}
+                            onChange={(e) => {
+                              const newExperiences = [...profile.experience];
+                              newExperiences[i].location = e.target.value;
+                              setProfile({
+                                ...profile,
+                                experience: newExperiences,
+                              });
+                            }}
+                            className="border-2 p-2 rounded-md mr-3 mb-3 text-sm w-full"
+                            placeholder="Location"
+                          />
+
+                          {/* Descriptions */}
+                          {safeDescription.map((desc, index) => (
+                            <input
+                              key={index}
+                              value={desc}
+                              maxLength={100}
+                              onChange={(e) => {
+                                const newExperiences = [...profile.experience];
+                                newExperiences[i].description[index] =
+                                  e.target.value;
+                                setProfile({
+                                  ...profile,
+                                  experience: newExperiences,
+                                });
+                              }}
+                              className="border-2 p-1 rounded-md dynamic-text text-sm mb-2 block w-full"
+                              placeholder={`Description ${index + 1}`}
+                            />
+                          ))}
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newExperiences = [...profile.experience];
+                              newExperiences[i].description.push("");
+                              setProfile({
+                                ...profile,
+                                experience: newExperiences,
+                              });
+                            }}
+                            className="text-blue-500 text-sm font-medium mt-1"
+                          >
+                            + Add Description
+                          </button>
                         </div>
-                      </div>
-                    )}
+                      ) : (
+                        <div className="w-full">
+                          <h1 className="font-semibold pt-1 text-md lg:text-xl">
+                            {exp.title}
+                          </h1>
+                          <p className="text-sm font-medium">{exp.company}</p>
+                          <p className="text-sm">
+                            {exp.duration?.startDate} –{" "}
+                            {exp.duration?.present
+                              ? "Present"
+                              : exp.duration?.endDate}
+                          </p>
+                          <p className="text-sm">{exp.location}</p>
 
-                    {/* Edit icon for individual experience */}
-                    <MdEdit
-                      size={20}
-                      className="mr-3 cursor-pointer mx-4"
-                      onClick={() => {
-                        setExperienceEdit((prev) => ({
-                          ...prev,
-                          [i]: !prev[i],
-                        }));
-                      }}
-                    />
+                          <div className="relative mt-2">
+                            <div
+                              className={`text-sm transition-all duration-300 overflow-hidden w-[90%] lg:w-[50%] ${!isExpDescExpanded ? "line-clamp-1" : ""}`}
+                            >
+                              {(isExpDescExpanded
+                                ? safeDescription
+                                : safeDescription.slice(0, 1)
+                              ).map((desc, index) => (
+                                <div key={index} className="flex">
+                                  <span className="mr-1">•</span>
+                                  <span>{desc}</span>
+                                </div>
+                              ))}
+                            </div>
+
+                            {safeDescription.length > 1 && (
+                              <button
+                                onClick={() =>
+                                  setIsExpDescExpanded(!isExpDescExpanded)
+                                }
+                                className="text-[#001032] text-sm font-medium mt-1"
+                              >
+                                {isExpDescExpanded ? "See less" : "See more"}
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Edit icon */}
+                      <MdEdit
+                        size={20}
+                        className="mr-3 cursor-pointer mx-4"
+                        onClick={() =>
+                          setExperienceEdit((prev) => ({
+                            ...prev,
+                            [i]: !prev[i],
+                          }))
+                        }
+                      />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
 
-          {/* View More / View Less button for experience list */}
+          {/* View More / View Less */}
           {profile.experience && profile.experience.length > 3 && (
             <button
               onClick={() => setShowAllExperience(!showAllExperience)}
@@ -1387,7 +1494,7 @@ const ProfileSec = () => {
               onClick={() => {
                 document
                   .getElementById(
-                    isCover ? "coverPhotoInput" : "profilePhotoInput"
+                    isCover ? "coverPhotoInput" : "profilePhotoInput",
                   )
                   .click();
                 setIsImageModalOpen(false);
@@ -1445,7 +1552,7 @@ const ProfileSec = () => {
                   try {
                     const croppedImage = await getCroppedImg(
                       imageToCrop,
-                      croppedAreaPixels
+                      croppedAreaPixels,
                     );
                     if (isCover) {
                       await uploadCoverPhoto(croppedImage);
@@ -1619,15 +1726,78 @@ const ProfileSec = () => {
               className="border-2 p-2 rounded-md w-full mb-3"
             />
 
-            <input
-              type="text"
-              placeholder="Duration"
-              value={newExperience.duration}
-              onChange={(e) =>
-                setNewExperience({ ...newExperience, duration: e.target.value })
-              }
-              className="border-2 p-2 rounded-md w-full mb-3"
-            />
+            {/* Start Date */}
+            <div className="relative mb-3">
+              {!newExperience.duration.startDate && (
+                <span className="absolute left-3 top-2.5 text-gray-400 text-sm pointer-events-none">
+                  Start Date
+                </span>
+              )}
+              <input
+                type="month"
+                value={newExperience.duration.startDate}
+                onChange={(e) =>
+                  setNewExperience({
+                    ...newExperience,
+                    duration: {
+                      ...newExperience.duration,
+                      startDate: e.target.value,
+                    },
+                  })
+                }
+                className={`border-2 p-2 rounded-md w-full 
+    ${!newExperience.duration.startDate ? "text-transparent" : "text-black"}
+  `}
+              />
+            </div>
+
+            {/* End Date */}
+            {!newExperience.duration.present && (
+              <div className="relative mb-3">
+                {!newExperience.duration.endDate && (
+                  <span className="absolute left-3 top-2.5 text-gray-400 text-sm pointer-events-none">
+                    End Date
+                  </span>
+                )}
+                <input
+                  type="month"
+                  value={newExperience.duration.endDate}
+                  onChange={(e) =>
+                    setNewExperience({
+                      ...newExperience,
+                      duration: {
+                        ...newExperience.duration,
+                        endDate: e.target.value,
+                      },
+                    })
+                  }
+                  className={`border-2 p-2 rounded-md w-full 
+        ${!newExperience.duration.endDate ? "text-transparent" : "text-black"}
+      `}
+                />
+              </div>
+            )}
+
+            {/* Present Checkbox */}
+            <label className="flex items-center gap-2 text-sm mb-4 ml-2">
+              <input
+                type="checkbox"
+                checked={newExperience.duration.present}
+                onChange={(e) =>
+                  setNewExperience({
+                    ...newExperience,
+                    duration: {
+                      ...newExperience.duration,
+                      present: e.target.checked,
+                      endDate: e.target.checked
+                        ? ""
+                        : newExperience.duration.endDate,
+                    },
+                  })
+                }
+              />
+              Currently working here
+            </label>
 
             <input
               type="text"

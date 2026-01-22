@@ -10,6 +10,7 @@ import InvestorSec8 from '@/components/UserComponents/InvestorSec/InvestorSec8'
 import InvestorSec9 from '@/components/UserComponents/InvestorSec/InvestorSec9'
 import React from 'react'
 import logo from "/ArtesterLogo2.png";
+import Footer from '@/components/UserComponents/Footer'
 
 const Investor = () => {
   return (
@@ -38,15 +39,21 @@ const Investor = () => {
       <div className='hidden lg:block'>
         <InvestorSec8/>
       </div>
-      <div>
+      {/* <div>
         <InvestorSec9/>
-      </div>
+      </div> */}
       <div>
         <InvestorSec10/>
       </div>
       <div>
-                            <img src={logo} className='w-60 lg:w-90 mx-auto my-20  lg:mb-25'/>
+        <Footer/>
+      </div>
+      <div>
+                          <img src={logo} className='w-60 lg:w-90 mx-auto lg:my-25 my-15'/>
                           </div>
+                          <div className="fixed bottom-0 left-0 w-full h-20
+        bg-linear-to-t from-[#edbeed] to-transparent 
+        pointer-events-none z-10" />
     </div>
   )
 }

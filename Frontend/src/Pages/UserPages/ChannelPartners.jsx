@@ -3,6 +3,7 @@ import ChannelPartnerSec2 from '@/components/UserComponents/ChannelPartnersSec/C
 import ChannelPartnerSec3 from '@/components/UserComponents/ChannelPartnersSec/ChannelPartnerSec3'
 import React from 'react'
 import logo from "/ArtesterLogo2.png";
+import Footer from '@/components/UserComponents/Footer';
 
 const ChannelPartners = () => {
   return (
@@ -16,8 +17,11 @@ const ChannelPartners = () => {
         <div>
           <ChannelPartnerSec3/>
         </div>
+         <div>
+        <Footer/>
+      </div>
         <div>
-                             <img src={logo} className='w-60 lg:w-90 mx-auto mb-9 lg:mb-15'/>
+                             <img src={logo} className='w-60 lg:w-90 mx-auto lg:my-25 my-15'/>
                            </div>
     </div>
   )

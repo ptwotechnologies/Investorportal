@@ -9,9 +9,9 @@ import { CheckIcon } from 'lucide-react';
 const bullets = ["Startups", "Service Professionals", "Investors", "Channel Partners"]
 
 const logos = [
-  { alt: "Partner 1", w: 120, src: "/teparowLogo.png" },
-  { alt: "Partner 2", w: 120, src: "/optileadLogo.png", isBig: true },
   { alt: "Partner 3", w: 120, src: "/niyamsetuLogo.png", isBig: true },
+  { alt: "Partner 2", w: 120, src: "/optileadLogo.png", isBig: true },
+  { alt: "Partner 1", w: 120, src: "/teparowLogo.png" },
   { alt: "Partner 4", w: 120, src: "/ecnolatLogo.png" },
   { alt: "Partner 5", w: 120, src: "/ptwoLogo.png" },
   { alt: "Partner 6", w: 120, src: "/kapinortLogo.png" },

@@ -33,6 +33,7 @@ import ProtectedRoute from "../components/UserComponents/ProtectedRoutes";
 import Dashboard from '@/Pages/UserPages/ProfilePages/Dashboard'
 
 
+
 const UserRoutes = () => {
 
   const adminPrefixes = [
@@ -100,6 +101,7 @@ const UserRoutes = () => {
             <Route path="/connect" element={<ProtectedRoute><Connect/></ProtectedRoute>} />
              <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
       </Routes>
+
     </div>
   )
 }

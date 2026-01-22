@@ -40,8 +40,8 @@ const ServiceProfessionalSec7 = () => {
            
             <p className='text-md leading-9 tracking-wider'>→ All plans include access to the portal and service professional’s requests</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ It include discovery, visibility and ecosystem support</p>
-            <hr className='mx-6' />
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+            
+             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  mb-8 '> </div>
              <hr className='mx-6'  />
         </div>
 
@@ -76,6 +76,7 @@ const ServiceProfessionalSec7 = () => {
             <p className='text-md leading-9 tracking-wider'>→ Respond to founder requests and start taking meaningful work</p>
            
              <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+             <hr className='mx-6'  />
         </div>
 
 
@@ -87,17 +88,17 @@ const ServiceProfessionalSec7 = () => {
         <h1 className='text-[#001032] text-2xl font-semibold text-center'>Ready to on-board...?</h1>
           <Link to="/login"><button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button></Link>
                   <div  className="w-full  h-fit  p-4 text-start mt-5">
-             <div className=' w-full h-full gap-10  shadow-xl border   rounded-md p-4'>
+             <div className=' w-full h-full gap-10  shadow-xl border px-6 pb-6  rounded-md p-4'>
                 <p className=' text-sm leading-6 tracking-wider pb-4 '>You’ve built the skill. We’ve built the ecosystem</p>
                 <p className=' text-sm leading-6 tracking-wider '>Instead of chasing leads or spending on ads, get consistent work from real founders Together we create a cleaner, more predictable work pipeline</p>
 
-                 <div className=' flex justify-between items-center lg:mt-25 mt-15' >
-                     <div className='font-semibold text-md'>
+                 <div className=' flex justify-between items-center lg:mt-25 mt-15 ' >
+                     <div className='font-semibold text-sm'>
                         <h1>Join once. </h1>
                           <p>Let the work come for you</p>
                      </div>
                   <div className='flex justify-center items-center gap-3'>
-                    <div className='w-0.5 h-[100px] bg-[#D9D9D9] '>
+                    <div className='w-0.5 h-[70px] bg-[#D9D9D9] '>
                   </div>
                     <div className=' rounded-full bg-[#001032] w-20 h-20 flex items-center justify-center'>
                       <p className=' text-sm  text-white'>Get Listed</p>

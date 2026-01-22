@@ -8,7 +8,7 @@ const SubscriptionSec1 = () => {
   return (
    <div className=' lg:pt-30 w-full lg:px-6 px-4 py-2 flex flex-col  justify-center items-center gap-5 h-[800px] lg:h-auto rounded-b-2xl lg:rounded-none
                    '>
-             <button className='mt-32 lg:mt-0 mx-auto text-[#001426] border border-[#001426] p-1 px-7 rounded-full font-semibold tracking-wide'>Subscriptions</button>
+             <button className='mt-25 lg:mt-0 mx-auto text-[#001426] border border-[#001426] p-1 px-7 rounded-full font-semibold tracking-wide'>Subscriptions</button>
             <div id='left' className='w-full  text-center   lg:text-[#001032]   '>
              <h1 className=' text-4xl  mx-auto  lg:text-4xl lg:font-bold font-semibold lg:leading-11 leading-12 tracking-wide  lg:w-[60%] '>Grow Your Business by Partnering with India’s Fastest-Growing Startup Ecosystem</h1>
        

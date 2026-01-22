@@ -20,6 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import { IoIosNotifications } from "react-icons/io";
+import { RxHamburgerMenu } from "react-icons/rx";
 
 const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
@@ -81,7 +82,7 @@ const Mobile = () => {
             <SheetTrigger asChild>
               <div className="flex items-center gap-5">
                 
-                <GiHamburgerMenu size={30} className="text-[#001426]" />
+                <RxHamburgerMenu size={30} className="text-[#001426]" />
               </div>
             </SheetTrigger>
 

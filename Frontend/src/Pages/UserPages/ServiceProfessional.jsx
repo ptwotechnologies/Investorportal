@@ -10,10 +10,11 @@ import ServiceProfessionalSec8 from '../../components/UserComponents/ServiceProf
 import ServiceProfessionalSec10 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec10';
 import ServiceProfessionalSec9 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec9';
 import logo from "/ArtesterLogo2.png";
+import Footer from '@/components/UserComponents/Footer';
 
 const ServiceProfessional = () => {
   return (
-    <div>
+    <div >
       <div>
         <ServiceProfessionalSec1/>
       </div>
@@ -44,9 +45,15 @@ const ServiceProfessional = () => {
       <div >
         <ServiceProfessionalSec10/>
       </div>
+      <div className='mt-4'>
+        <Footer/>
+      </div>
       <div>
-                <img src={logo} className='w-60 lg:w-90 mx-auto my-10 lg:my-0 lg:mb-20'/>
+                <img src={logo} className='w-60 lg:w-90 mx-auto lg:my-25 my-15'/>
               </div>
+               <div className="fixed bottom-0 left-0 w-full h-20
+        bg-linear-to-t from-[#edbeed] to-transparent 
+        pointer-events-none z-10" />
      
     </div>
   )

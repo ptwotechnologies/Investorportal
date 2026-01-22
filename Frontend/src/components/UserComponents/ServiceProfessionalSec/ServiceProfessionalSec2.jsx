@@ -56,7 +56,7 @@ const ServiceProfessionalSec2 = () => {
     <div id="phoneScreen" className="bg-[#DDDDDD] rounded-2xl text-white flex flex-wrap gap-x-4 gap-y-16  justify-center mt-1 py-14 pt-40 lg:hidden">
       <button className="bg-[#002A30] p-2 text-md w-[45%] rounded-2xl border-2 border-white">Verified Startup Leads </button>
       <button className="bg-[#002A30] p-2 text-md w-[45%] rounded-2xl border-2 border-white" > Fair & Transparent Pricing </button>
-      <button className="bg-[#002A30] p-2 text-md w-[45%] rounded-2xl border-2 border-white">Expert-Led Guidance </button>
+      <button className="bg-[#002A30] p-2 text-md w-[45%] rounded-2xl border-2 border-white">Expert-Led <br /> Guidance </button>
       <button className="bg-[#002A30] p-2 text-md w-[45%] rounded-2xl border-2 border-white"> Smart Work Matching </button>
       <button className="bg-[#002A30] p-2 text-md w-[40%] rounded-2xl border-2 border-white">Post-Delivery Support </button>
 

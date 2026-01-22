@@ -31,11 +31,11 @@ const InvestorSec4 = () => {
           company:"Angel Investor",
            color:"#616B80"
        },
-           
-   
      ]
+
+     
      return (
-      <div className='mt-15  ' >
+      <div className='mt-15  ' > 
  
       <div className="relative">
        <div
@@ -43,13 +43,15 @@ const InvestorSec4 = () => {
          onScroll={handleScroll}
          className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide ">
          {divElements.map((item, index) => (
-           <div key={index} className="w-[58%] h-auto  shrink-0 snap-center  p-4 px-10   mx-2 text-white  ">
+           <div key={index} className="w-[38%] h-auto  shrink-0 snap-center  p-3    mx-2 text-white  ">
             <div className='flex flex-row  justify-center items-start w-full  gap-10  border border-[#00103280] 
             rounded-2xl shadow-lg' style={{backgroundColor: item.color}}>
-              <div className='px-5 h-90'>
-                <p className=' text-xl leading-8 tracking-wider py-12 '>{item.paragraph}</p>
-              <p className='text-lg pt-5  '>{item.designation}</p>
+              <div className='px-5 h-90 flex flex-col justify-between py-3'>
+                <p className=' text-md leading-8 tracking-wider  '>{item.paragraph}</p>
+             <div>
+               <p className='text-lg pt-5  '>{item.designation}</p>
                  <p className='text-lg '>{item.company}</p>
+             </div>
                  
               </div>
              <div className=' block' >
@@ -60,16 +62,7 @@ const InvestorSec4 = () => {
            </div>
          ))}
        </div>
-       <div className="flex justify-center mt-4">
-         {divElements.map((item, index) => (
-           <div
-             key={index}
-             className={`w-2 h-2 rounded-full mx-1 ${
-               activeIndex === index ? 'bg-gray-600' : 'bg-gray-300'
-             }`}
-           />
-         ))}
-       </div>
+    
      </div>
        
      </div>

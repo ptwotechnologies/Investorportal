@@ -38,7 +38,7 @@ const HomeSec6 = () => {
         >
           <div className="bg-[#001032] rounded-sm p-6 w-full">
             <div className="flex justify-start items-center py-4 gap-4 ">
-              <div className="bg-[#FFFFFF] w-22 h-22"></div>
+              <div className="bg-[#FFFFFF] w-15 h-15"></div>
               <h1 className="text-2xl font-semibold">Startup</h1>
             </div>
             <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
@@ -64,7 +64,7 @@ const HomeSec6 = () => {
                 <button
                   className="
         hidden group-hover:block 
-        text-2xl font-semibold  mt-10 bg-white text-[#000000] p-2 px-3 rounded-sm transition-all
+        text-2xl font-semibold  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
       "
                 >
                   Get Started
@@ -74,7 +74,7 @@ const HomeSec6 = () => {
           </div>
           <div className="bg-[#616B80] rounded-sm p-6">
             <div className="flex justify-start items-center py-4 gap-4 ">
-              <div className="bg-[#FFFFFF] w-22 h-22"></div>
+              <div className="bg-[#FFFFFF] w-15 h-15"></div>
               <h1 className="text-2xl font-semibold">Investor</h1>
             </div>
             <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
@@ -99,7 +99,7 @@ const HomeSec6 = () => {
                 <button
                   className="
         hidden group-hover:block 
-        text-2xl font-semibold  mt-10 bg-white text-[#000000] p-2 px-3 rounded-sm transition-all
+        text-2xl font-semibold  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
       "
                 >
                   Get Started
@@ -109,7 +109,7 @@ const HomeSec6 = () => {
           </div>
           <div className="bg-[#002A30CC] rounded-sm p-6">
             <div className="flex justify-start items-center py-4 gap-4 ">
-              <div className="bg-[#FFFFFF] w-22 h-22"></div>
+              <div className="bg-[#FFFFFF] w-15 h-15"></div>
               <h1 className="text-2xl font-semibold">Service Professionals</h1>
             </div>
             <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
@@ -134,7 +134,7 @@ const HomeSec6 = () => {
                 <button
                   className="
         hidden group-hover:block 
-        text-2xl font-semibold  mt-10 bg-white text-[#000000] p-2 px-3 rounded-sm transition-all
+        text-2xl font-semibold  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
       "
                 >
                   Get Started

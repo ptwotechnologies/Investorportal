@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 const JoinUsSec1 = () => {
   return (
    <div className='lg:bg-[#D8D8D880]  text-white'>
-        <div className='bg-[#001032] lg:bg-[#D8D8D880]'>
-            <h1 className='lg:hidden pt-25 text-center pb-3 '>For Service Professionals</h1>
+        <div className='bg-[#001032] lg:bg-[#D8D8D880] px-5 pt-8'>
+            <h1 className='lg:hidden mt-18  text-center mx-auto border border-white w-fit px-4 py-1 rounded-full '>Join us</h1>
         <div className=' text-center w-full lg:h-screen flex justify-center items-start lg:items-end lg:pb-16 '>
             <div className=' lg:w-[73%] lg:text-[#001032]' >
-            <p className='text-[42px] font-semibold leading-13 lg:leading-14 tracking-wide mb-6 '>Collaborate, grow, and accelerate opportunities on one unified platform</p>
+            <p className='text-[42px] font-semibold leading-13 lg:leading-14 tracking-wide mb-6 hidden lg:block'>Collaborate, grow, and accelerate opportunities on one unified platform</p>
+            <p className='text-4xl font-semibold leading-13 lg:leading-14 tracking-wide mb-6 lg:hidden '>Collaborate, grow, and accelerate opportunities on one unified platform - An ecosystem for every business</p>
         <p className='text-2xl leading-8 tracking-wide hidden lg:block'>Grow Your Business by Partnering with India</p>
         <Link to="/login"><button className='  mt-3 lg:bg-[#001426] lg:text-white bg-white text-[#001032] 
         p-2 px-14 rounded-sm text-lg mb-15 lg:mb-0'>Get Listed</button></Link>
