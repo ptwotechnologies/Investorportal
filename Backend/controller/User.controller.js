@@ -1,3 +1,4 @@
+import connectDB from '../lib/db.js'; // Add this import
 import User from "../Models/User.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -199,30 +200,34 @@ export const getPaymentStatus = async (req, res) => {
 }
 
 
+// In your login controller file
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) return res.status(400).json({ message: "Email and password are required" });
-
-    // Check if user exists
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ message: "Invalid email or password" });
-
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: "Invalid email or password" });
-
-    // Check paymentStatus
-    if (user.role !== "investor") {
-      if (user.paymentStatus !== "approved") {
-        return res.status(403).json({
-          message: "Please complete all signup steps and payment to login.",
-        });
-      }
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
     }
 
-    // Generate JWT token
+    // ✅ Fixed: findOne (not findone)
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    if (user.role !== "investor" && user.paymentStatus !== "approved") {
+      return res.status(403).json({
+        message: "Please complete all signup steps and payment to login.",
+      });
+    }
+
     const token = jwt.sign(
       { userId: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
@@ -238,6 +243,11 @@ export const login = async (req, res) => {
 
   } catch (error) {
     console.error("Login Error:", error);
+    
+    if (error.name === 'MongooseError' && error.message.includes('buffering timed out')) {
+      return res.status(503).json({ message: "Database connection issue. Please try again." });
+    }
+    
     res.status(500).json({ message: "Server error" });
   }
 };

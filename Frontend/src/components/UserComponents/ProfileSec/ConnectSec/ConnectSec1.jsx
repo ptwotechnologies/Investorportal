@@ -198,7 +198,7 @@ const ConnectSec1 = () => {
               {/* Services */}
                 <div
                       id="services"
-                      className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white px-4 lg:m-2 my-2 py-2 "
+                      className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white px-4  my-2 py-2 "
                     >
                       <div className="flex justify-between items-center mt-3 mb-1">
                         <h1 className="text-[#001032]  px-4 font-semibold text-md lg:text-xl">
@@ -231,7 +231,7 @@ const ConnectSec1 = () => {
                   {/* Experience */}
                   <div
                           id="experience"
-                          className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5 lg:m-2  lg:p-2  my-2"
+                          className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5   lg:p-2  my-2"
                         >
                           <div className="flex justify-between items-center lg:my-6 mt-3 mb-2">
                             <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">

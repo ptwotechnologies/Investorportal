@@ -1,22 +1,21 @@
-import express from "express";
-import cookieParser from "cookie-parser";
+// index.js
 import dotenv from "dotenv";
-import mongoose from 'mongoose'
-import userRoutes from './Routes/User.Routes.js';
-import profileRoutes from './Routes/Profile.Routes.js';
-import cors from "cors";
-import path from "path";
-
 
 dotenv.config();
 
+import express from "express";
+import cookieParser from "cookie-parser";
+import userRoutes from './Routes/User.Routes.js';
+import profileRoutes from './Routes/Profile.Routes.js';
+import cors from "cors";
+import connectDB from './lib/db.js';
+
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Middlewares
 app.use(cors({
-  origin: "*", // sirf aapke frontend ka URL allow kare
-  methods: ["GET","POST","PUT","DELETE"],
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
 
@@ -34,15 +33,16 @@ app.use(
   })
 );
 
-
-dotenv.config() 
-const MONGODB_URI = process.env.MONGODB_URI;
-
-
-// DB Connect
-mongoose.connect(MONGODB_URI)
-  .then(() => console.log('connected to mongoDB'))
-  .catch((error) => console.log('MongoDB connection error:', error));
+// Database connection middleware
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Database connection error:', error);
+    res.status(503).json({ message: 'Database connection failed' });
+  }
+});
 
 // Test Route
 app.get("/", (req, res) => {
@@ -52,7 +52,13 @@ app.get("/", (req, res) => {
 app.use("/user", userRoutes);
 app.use("/profile", profileRoutes);
 
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+// For local development
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+// Export for Vercel
+export default app;
