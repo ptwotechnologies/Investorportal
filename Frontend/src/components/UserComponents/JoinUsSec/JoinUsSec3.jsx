@@ -32,50 +32,43 @@ const JoinUsSec3 = (props) => {
     },
   ]
 
+   const data = [...items, ...items];
+
   const [active, setActive] = useState(0)
-  const trackRef = useRef(null)
+  const scrollRef = useRef(null);
   const cardsRef = useRef([])
 
-  // Observe which card is most visible to update dots
-  useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-    const cards = cardsRef.current.filter(Boolean)
-    if (!cards.length) return
+   useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        // pick the entry with the greatest intersectionRatio
-        let top = entries[0]
-        for (const e of entries) {
-          if (e.intersectionRatio > top.intersectionRatio) top = e
-        }
-        const idx = cards.findIndex((el) => el === top.target)
-        if (idx !== -1) setActive(idx)
-      },
-      {
-        root: track,
-        threshold: [0.4, 0.6, 0.8],
-      },
-    )
+    let scrollSpeed = 0.5; // px per frame
+    let animationId;
 
-    cards.forEach((el) => io.observe(el))
-    return () => io.disconnect()
-  }, [])
+    const autoScroll = () => {
+      if (!container) return;
+      container.scrollBy({ left: scrollSpeed, behavior: "auto" });
 
-  useEffect(() => {
-    const first = cardsRef.current[0]
-    if (first) {
-      first.scrollIntoView({ behavior: "auto", block: "nearest", inline: "center" })
-    }
-  }, [flow])
+      // reset to start when we reach half
+      if (container.scrollLeft >= container.scrollWidth / 2) {
+        container.scrollLeft = 0;
+      }
+
+      animationId = requestAnimationFrame(autoScroll);
+    };
+
+    animationId = requestAnimationFrame(autoScroll);
+    return () => cancelAnimationFrame(animationId);
+  }, []);
+  
+
+ 
 
   const scrollTo = (index) => {
-    const card = cardsRef.current[index]
-    if (!card) return
-    card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
-  }
-
+    const card = cardsRef.current[index];
+    if (!card) return;
+    card.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
 
        
 
@@ -133,61 +126,35 @@ const JoinUsSec3 = (props) => {
     </div>
     </div>
 
-    <div className='lg:hidden mt-11'>
-       <section aria-label="Mobile carousel" className="md:hidden">
-      <div
-        ref={trackRef}
-        dir={isRTL ? "rtl" : "ltr"}
-        className="
-          flex gap-4 px-4
-          overflow-x-auto scroll-smooth
-          snap-x snap-mandatory
-        "
-        style={{ scrollbarWidth: "thin" }}
-      >
-        {items.map((item, i) => (
-          <article
-            key={i}
-            ref={(el) => (cardsRef.current[i] = el)}
-            className="
-              snap-center shrink-0
-              w-full 
-              rounded-lg border text-card-foreground
-              overflow-hidden
-              bg-[#001032]
-            "
-            aria-roledescription="slide"
-            aria-label={`Card ${i + 1} of ${items.length}`}
+    <div className="lg:hidden mt-11">
+        <section aria-label="Mobile carousel" className="md:hidden">
+          <div
+            ref={scrollRef}
+            dir={isRTL ? "rtl" : "ltr"}
+            className="flex gap-4 px-4 overflow-x-auto"
+            style={{ scrollbarWidth: "thin" }}
           >
-            <div className="bg-[#001032] text-primary-foreground p-4 rounded-b-none">
-              <p className="text-xl leading-9 pt-6 w-[80%]">{item.title}</p>
-              <p className="mt-4 text-md opacity-90">{item.byline}</p>
-               <p className=" text-md opacity-90 ">{item.company}</p>
-            </div>
-            <div className=" p-4 border-t h-40 rounded-t-2xl bg-[#F2F4F7]" />
-          </article>
-        ))}
-      </div>
+            {data.map((item, i) => (
+              <article
+                key={i}
+                ref={(el) => (cardsRef.current[i] = el)}
+                className="snap-center shrink-0 w-full rounded-lg border text-card-foreground overflow-hidden bg-[#001032]"
+                aria-roledescription="slide"
+                aria-label={`Card ${i + 1} of ${items.length}`}
+              >
+                <div className="bg-[#001032] text-primary-foreground p-4 rounded-b-none">
+                  <p className="text-xl leading-9 pt-6 w-[80%]">{item.title}</p>
+                  <p className="mt-4 text-md opacity-90">{item.byline}</p>
+                  <p className="text-md opacity-90">{item.company}</p>
+                </div>
+                <div className="p-4 border-t h-40 rounded-t-2xl bg-[#F2F4F7]" />
+              </article>
+            ))}
+          </div>
 
-      {/* Dots */}
-      <div className="mt-4 flex items-center justify-center  gap-2" role="tablist" aria-label="Carousel pagination">
-        {items.map((_, i) => (
-          <button
-            key={i}
-            type="button"
-            onClick={() => scrollTo(i)}
-            role="tab"
-            aria-selected={active === i}
-            aria-label={`Go to slide ${i + 1}`}
-            className={`
-              h-2 w-2 rounded-full transition-colors
-              ${active === i ? "bg-foreground" : "bg-muted-foreground/40"}
-            `}
-          />
-        ))}
+         
+        </section>
       </div>
-    </section>
-    </div>
     </>
   )
 }

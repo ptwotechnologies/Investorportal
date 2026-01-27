@@ -99,16 +99,7 @@ const JoinUsSec7 = () => {
               </div>
             ))}
           </div>
-          <div className="flex justify-center mt-4">
-            {divElements.map((item, index) => (
-              <div
-                key={index}
-                className={`w-2 h-2 rounded-full mx-1 ${
-                  activeIndex === index ? 'bg-gray-600' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+        
         </div>
           
         </div>

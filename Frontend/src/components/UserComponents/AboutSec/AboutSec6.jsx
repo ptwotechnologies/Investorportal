@@ -95,7 +95,7 @@ const AboutSec6 = () => {
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"                      
+              xmlns="http://www.w3.org/2000/svg"                       
             >
               <path
                 strokeLinecap="round"
@@ -107,7 +107,7 @@ const AboutSec6 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-4 px-4">
-              <p className="text-[#0010324D]">{faq.answer}</p>
+              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -144,7 +144,7 @@ const AboutSec6 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-4 px-4">
-              <p className="text-[#0010324D]">{faq.answer}</p>
+              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

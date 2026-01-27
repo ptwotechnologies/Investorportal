@@ -107,7 +107,7 @@ const HomeSec8 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-4 px-4">
-              <p className="text-[#0010324D]">{faq.answer}</p>
+              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -139,12 +139,12 @@ const HomeSec8 = () => {
                 strokeLinejoin="round"
                 strokeWidth={2}
                 d="M19 9l-7 7-7-7"
-              />
+              /> 
             </svg>
           </div>
           {activeIndex === index && (
             <div className="mt-4 px-4">
-              <p className="text-[#0010324D]">{faq.answer}</p>
+              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

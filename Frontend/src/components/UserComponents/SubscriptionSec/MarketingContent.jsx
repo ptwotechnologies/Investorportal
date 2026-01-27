@@ -27,6 +27,7 @@ const MarketingContent = () => {
        buttonText: "Start with Basic",
        buttonBg: "#D3D3D3",
        buttonBg2: "#D3D3D3",
+       textcolor: "#000000",
      },
  
      {
@@ -50,6 +51,7 @@ const MarketingContent = () => {
        buttonText: "Start with Growth",
        buttonBg: "#001032",
        buttonBg2: "#F783FE",
+       textcolor: "#FFFFFF",
      },
  
      {
@@ -73,6 +75,7 @@ const MarketingContent = () => {
        buttonText: "Start with Pro",
        buttonBg: "#D3D3D3",
        buttonBg2: "#D3D3D3",
+       textcolor: "#000000",
      },
    ];
  
@@ -106,13 +109,13 @@ const MarketingContent = () => {
                 <div className="  my-4 mx-2 lg:m-1 rounded-sm  h-160 lg:h-150 flex flex-col  ">
                 <div style={{
                          background: `linear-gradient(180deg, ${card.titleBg} 20%, ${card.titleBg2} 100%)`,
-                      }} className=" border-2 border-[#00103280] py-4 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-sm mx-4 lg:mx-6 bg-white z-10 text-center">
+                      }} className=" border-2 border-[#00103280] py-4 shadow-[inset_0px_0px_12px_rgba(0,0,0,0.75)] rounded-sm mx-4 lg:mx-6  z-10 text-center">
                     <div className="lg:mt-1 space-y-1.5">
                     <div
                       // style={{
                       //   background: `linear-gradient(90deg, ${card.titleBg} 75%, ${card.titleBg2} 100%)`,
                       // }}
-                      className="text-[#000000]  py-1  rounded-sm w-fit px-4  mb-2  lg:text-xs mx-auto shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] "
+                      className="text-[#000000] bg-[#FFFFFF]  py-1  rounded-sm w-fit px-4  mb-2  lg:text-xs mx-auto shadow-[inset_0px_4px_12px_rgba(0,0,0,0.5)] "
                     >
                       {card.title}
                     </div>
@@ -188,7 +191,7 @@ const MarketingContent = () => {
   
                   <div className="mt-3   lg:mt-auto pt-3 lg:pt-1 text-center">
                     <button  style={{
-                         background: `linear-gradient(90deg, ${card.buttonBg} 5%, ${card.buttonBg2} 100%)`,
+                         background: `linear-gradient(90deg, ${card.buttonBg} 5%, ${card.buttonBg2} 100%)`, color: card.textcolor,
                       }}
                       className="
                            w-full

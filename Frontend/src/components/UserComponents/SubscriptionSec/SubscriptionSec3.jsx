@@ -42,21 +42,9 @@ const SubscriptionSec3 = () => {
             
           </div>
 
-           <div className='bg-[#001032] h-15 w-50 flex items-center justify-between rounded-2xl'>
-            <div>
-              <h1>name</h1>
-            </div>
-            <div className='bg-gray-300 w-20 h-full rounded-2xl'>
-            </div>
-          </div>
+        
 
-           <div className='bg-[#001032] h-15 w-50 flex items-center justify-between rounded-2xl'>
-            <div>
-              <h1>name</h1>
-            </div>
-            <div className='bg-gray-300 w-20 h-full rounded-2xl'>
-            </div>
-          </div>
+        
 
           
         </div>

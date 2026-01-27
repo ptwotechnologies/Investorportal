@@ -108,12 +108,12 @@ const DesigningContent = () => {
                <div
                  ref={scrollRef}
                  onScroll={handleScroll}
-                 className="grid gap-2 lg:gap-2  grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full"
+                 className="grid gap-2 lg:gap-2  grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full "
                >
                  {cards.map((card, idx) => ( 
                    <article
                      key={idx}
-                     className="lg:w-auto w-screen shrink-0 snap-center  lg:mr-0 lg:p-6 text-card-foreground"
+                     className="lg:w-auto w-screen shrink-0 snap-center   lg:mr-0 lg:p-6 text-card-foreground"
                    >
                     <hr className='mx-4 lg:relative lg:bottom-5'/>
                    <div className="bg-white py-5 lg:py-6 lg:pb-8 border-2 border-[#00103280] my-4 mx-2 lg:m-1 rounded-sm px-4 lg:px-6 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
@@ -215,33 +215,34 @@ const DesigningContent = () => {
                     
                    </article>
                  ))}
-   
-                  <div className="hidden lg:block">
-                    <hr className='mx-6  w-[57vw] '/>
-              <div className="bg-white  border-2 border-[#00103280]  lg:mt-7 rounded-sm  p-3 h-[92.5%] w-[57vw] ml-6 px-30 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+                  
+    <div className="hidden lg:block col-span-2 mx-6">
+                   <hr className='mx-6   '/>
+              <div className="bg-white  border-2 border-[#00103280] mt-6 h-[92.5%]  rounded-sm  p-3   px-20 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
               <div id="top" className="flex justify-between items-center ">
-               <div className="bg-[#5DD2E3] w-37 h-60 rounded-3xl">
+               <div className="bg-[#5DD2E3] w-47 h-70 rounded-3xl">
    
                </div>
-               <div className="bg-[#C2D3D5]  w-37 h-80 rounded-3xl">
+               <div className="bg-[#C2D3D5]  w-47 h-90 rounded-3xl">
    
                </div>
-               <div className="bg-[#4A66A3]  w-37 h-70 rounded-3xl mt-20">
+               <div className="bg-[#4A66A3]  w-47 h-80 rounded-3xl mt-20">
    
                </div>
    
    
               </div>
               <div id="bottom">
-                  <div className="bg-[#DBDBDB] w-full h-8 rounded-full mt-32">
+                  <div className="bg-[#DBDBDB] w-full h-12 rounded-full mt-20">
    
                   </div>
               </div>
              </div>
             </div>
+                  
                </div>
        
-         
+        
               
        
              </section>

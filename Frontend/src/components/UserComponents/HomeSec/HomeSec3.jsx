@@ -18,10 +18,10 @@ const HomeSec3 = () => {
           Perfect — let’s take you inside
         </p>
         <div className="text-white rounded-2xl font-medium hidden lg:block">
-          <Link to="/login"><button className="bg-[#001032] m-2 w-90 p-2 text-xl rounded-sm">
+          <Link to="/login"><button className="bg-[#001032] m-2 w-70 p-2 text-xl rounded-sm">
             I’d Like To Get Me Started
           </button></Link>
-          <Link to="/login"><button className="bg-[#001032] m-2 w-90 p-2 text-xl rounded-sm">
+          <Link to="/login"><button className="bg-[#001032] m-2 w-70 p-2 text-xl rounded-sm">
             How it works
           </button></Link>
         </div>

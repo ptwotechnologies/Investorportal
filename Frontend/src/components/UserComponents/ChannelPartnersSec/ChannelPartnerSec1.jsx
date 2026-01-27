@@ -37,7 +37,7 @@ const ChannelPartnerSec1 = () => {
   ];
 
   return (
-    <div className=" lg:mb-20 lg:mt-30 lg:p-2.5 lg:border border-[#b5b3b3] bg-[#E5E5E5] rounded-4xl ">
+    <div className=" lg:mb-20 lg:mt-30 mt-4 lg:p-2.5 lg:border border-[#b5b3b3] bg-[#E5E5E5] rounded-4xl ">
       <div className="lg:border border-[#E5E5E5] lg:p-7 px-2 bg-white rounded-4xl lg:py-25 py-10">
         <div id="top" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
@@ -100,9 +100,9 @@ const ChannelPartnerSec1 = () => {
 
           <div
             id="form"
-            className="p-2.5 border-3 rounded-xl border-gray-200 bg-gray-100 inner-shadow"
+            className="p-2.5 border-3 rounded-xl border-[#E4E4E4]  shadow-[inset_0px_0px_4px_rgba(0,0,0,1)]"
           >
-            <div className="bg-white rounded-xl border-3 border-gray-200 lg:p-10 px-3 py-5 shadow-lg">
+            <div className="bg-white rounded-xl border-3 border-[#E4E4E4] lg:p-10 px-3 py-5 shadow-[0px_0px_4px_rgba(0,0,0,1)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
                   className="p-3 lg:py-6 border rounded-lg"

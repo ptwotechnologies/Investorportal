@@ -5,7 +5,7 @@ const JoinUsSec1 = () => {
   return (
    <div className='lg:bg-[#D8D8D880]  text-white'>
         <div className='bg-[#001032] lg:bg-[#D8D8D880] px-5 pt-8'>
-            <h1 className='lg:hidden mt-18  text-center mx-auto border border-white w-fit px-4 py-1 rounded-full '>Join us</h1>
+            <h1 className='lg:hidden mt-18  text-center mx-auto border border-white w-fit px-4 py-1 mb-2 rounded-full '>Join us</h1>
         <div className=' text-center w-full lg:h-screen flex justify-center items-start lg:items-end lg:pb-16 '>
             <div className=' lg:w-[73%] lg:text-[#001032]' >
             <p className='text-[42px] font-semibold leading-13 lg:leading-14 tracking-wide mb-6 hidden lg:block'>Collaborate, grow, and accelerate opportunities on one unified platform</p>

@@ -357,8 +357,8 @@ function NavbarSheet({ textColor }) {
                 </div>
 
                 {/* Join Us Card (Scrollable)  */}
-                <div className="border p-1 mt-10 inner-shadow rounded-2xl">
-                  <div className="border shadow-md rounded-2xl p-1 px-2">
+                <div className="border border-[#D5D5D5] p-2 mt-10 shadow-[inset_0px_4px_4px_rgba(208,208,208,0.25)] rounded-2xl">
+                  <div className="border border-[#D5D5D5]  shadow-[0px_0px_4px_4px_rgba(20,20,20,0.3)] rounded-2xl p-1 px-2">
                     <div className="flex items-start justify-between">
                       <p className="text-[10px] mt-1">
                         Join our ecosystem of 4 portals into one
@@ -366,16 +366,24 @@ function NavbarSheet({ textColor }) {
                       <h1 className="text-sm font-medium">Join us!</h1>
                     </div>
 
-                    <div className="flex items-center justify-between mt-7 mb-4">
-                      <div className="grid grid-cols-2 place-items-center gap-2 gap-x-7">
-                        <img src={img1} alt="" className="w-9" />
-                        <img src={img2} alt="" className="w-15" />
-                        <img src={img3} alt="" className="w-15" />
-                        <img src={img4} alt="" className="w-15" />
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="grid grid-cols-2 place-items-center gap-1 gap-x-7">
+                        <div className=" border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center">
+                          <img src={img1} alt="" className=" " />
+                        </div>
+                        <div className="border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center">
+                          <img src={img2} alt="" className="" />
+                        </div>
+                        <div className="  relative left-8 border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center ">
+                          <img src={img3} alt="" className="" />
+                        </div>
+                       <div className=" relative left-8 border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center ">
+                         <img src={img4} alt="" className=" " />
+                       </div>
                       </div>
 
                       <Link to="/joinus" onClick={() => setOpenSheet(false)}>
-                        <button className="bg-[#001032] text-white rounded-md px-1 py-1 text-sm mt-9">
+                        <button className="bg-[#001032] text-white rounded-md px-3 py-2 text-sm mt-18">
                           Explore
                         </button>
                       </Link>

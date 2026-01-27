@@ -26,12 +26,12 @@ const Footer = () => {
 
           {/* Buttons */}
           <div className="flex gap-3 pt-5">
-            <button className="px-6 py-2 text-sm bg-gray-300 rounded-sm">
+           <Link to="/login"> <button className="px-6 py-2 text-sm bg-gray-300 rounded-sm">
               Sign in
-            </button>
-            <button className="px-6 py-2 text-sm bg-[#0B1C39] text-white rounded-sm">
+            </button></Link>
+           <Link to="/login"> <button className="px-6 py-2 text-sm bg-[#0B1C39] text-white rounded-sm">
               Sign up
-            </button>
+            </button></Link>
           </div>
         </div>
 
@@ -109,7 +109,7 @@ const Footer = () => {
             </div>
 
             {open === "aux" && (
-              <ul className="mt-3 space-y-2 text-gray-600">
+              <ul className="mt-1 space-y-2 text-gray-600">
                 <Link to="/subscription">
                   <li className="pb-1">Subscriptions</li>
                 </Link>
@@ -134,7 +134,7 @@ const Footer = () => {
             </div>
 
             {open === "pricing" && (
-              <ul className="mt-3 space-y-2 text-gray-600">
+              <ul className="mt-1 space-y-2 text-gray-600">
                 <Link to="/startup">
                   <li  className="pb-1">Startups</li>
                 </Link>
@@ -159,7 +159,7 @@ const Footer = () => {
             </div>
 
             {open === "resources" && (
-              <ul className="mt-3 space-y-2 text-gray-600">
+              <ul className="mt-1 space-y-2 text-gray-600">
                 <Link to="/about">
                   <li  className="pb-1">About Us</li>
                 </Link>
@@ -186,7 +186,7 @@ const Footer = () => {
             </div>
 
             {open === "policies" && (
-              <ul className="mt-3 space-y-2 text-gray-600">
+              <ul className="mt-1 space-y-2 text-gray-600">
                 <Link to="/termconditions">
                   <li  className="pb-1">Term & Conditions</li>
                 </Link>
@@ -207,7 +207,7 @@ const Footer = () => {
 
       {/* Bottom Bar */}
       <div className="flex  md:flex-row justify-between items-center lg:text-sm  text-[9px] lg:gap-4">
-        <p>Copyrights 2025 All Rights Reserved. Artestor Technologies LLP</p>
+        <p>&copy; 2026 All Rights Reserved. Artestor Technologies LLP</p>
 
         {/* Social Icons */}
         <div className="lg:hidden"> 

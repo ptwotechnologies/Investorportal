@@ -105,7 +105,8 @@ const LogicSec1 = () => {
                       />
                     </div>
                     <div className="text-start text-xs text-[#00103280] leading-5 lg:leading-7 tracking-wide lg:w-[90%]">
-                      <p>People who use our service may have uploaded your contact details and information to Instagram. Learn More</p>
+                      <p className="hidden lg:block">People who use our service may have uploaded your contact details and information to Instagram. Learn More</p>
+                      <p className="lg:hidden">Secure access to your account. All data and activity are protected.<span className="underline"> Learn More</span> </p>
                       <p className="lg:hidden mt-3">By signing up, you agree to our Terms , Privacy Policy and Cookies Policy .</p>
                     </div>
                   </div>

@@ -226,30 +226,29 @@ const StartupSec9 = () => {
                 </article>
               ))}
 
-               <div className="hidden lg:block">
-                <hr className='mx-6 w-[60vw] '/>
-           <div className="bg-white  border-2 border-[#00103280]  lg:mt-6 rounded-sm  p-3 h-[92.5%] w-[60vw] ml-6 px-30 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
-           
-           <div id="top" className="flex justify-between items-center ">
-            <div className="bg-[#5DD2E3] w-37 h-60 rounded-3xl">
-
-            </div>
-            <div className="bg-[#C2D3D5]  w-37 h-80 rounded-3xl">
-
-            </div>
-            <div className="bg-[#4A66A3]  w-37 h-70 rounded-3xl mt-20">
-
-            </div>
-
-
-           </div>
-           <div id="bottom">
-               <div className="bg-[#DBDBDB] w-full h-8 rounded-full mt-32">
-
+              <div className="hidden lg:block col-span-2 mx-6">
+                   <hr className='mx-6   '/>
+              <div className="bg-white  border-2 border-[#00103280] mt-6 h-[92.5%]  rounded-sm  p-3   px-20 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+              <div id="top" className="flex justify-between items-center ">
+               <div className="bg-[#5DD2E3] w-47 h-70 rounded-3xl">
+   
                </div>
-           </div>
-          </div>
-         </div>
+               <div className="bg-[#C2D3D5]  w-47 h-90 rounded-3xl">
+   
+               </div>
+               <div className="bg-[#4A66A3]  w-47 h-80 rounded-3xl mt-20">
+   
+               </div>
+   
+   
+              </div>
+              <div id="bottom">
+                  <div className="bg-[#DBDBDB] w-full h-12 rounded-full mt-20">
+   
+                  </div>
+              </div>
+             </div>
+            </div>
             </div>
     
       
