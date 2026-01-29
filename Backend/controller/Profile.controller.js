@@ -6,19 +6,18 @@ import fs from "fs";
 // GET Profile of logged-in user
 export const getProfile = async (req, res) => {
   try {
-    let profile = await Profile.findOne({ userId: req.user._id })
-     .populate(
-  "userId",
-  "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName"
-);
+    let profile = await Profile.findOne({ userId: req.user._id }).populate(
+      "userId",
+      "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName",
+    );
 
     if (!profile) {
       profile = await Profile.create({
         userId: req.user._id,
-        name:  "", 
+        name: "",
         bio: "",
         state: "",
-        city:"",
+        city: "",
         about: "",
         topSkills: [],
         services: [],
@@ -30,8 +29,10 @@ export const getProfile = async (req, res) => {
 
     res.status(200).json({
       ...profile.toObject(),
-       name: profile.name || `${profile.userId.businessDetails.firstName} ${profile.userId.businessDetails.lastName}`,
-     role: profile.userId?.role,
+      name:
+        profile.name ||
+        `${profile.userId.businessDetails.firstName} ${profile.userId.businessDetails.lastName}`,
+      role: profile.userId?.role,
       email: profile.userId?.email,
       phone: profile.userId?.businessDetails?.number,
       companyName: profile.userId?.businessDetails?.companyName,
@@ -42,37 +43,31 @@ export const getProfile = async (req, res) => {
   }
 };
 
-
-
-
 // UPDATE Profile of logged-in user
 export const updateProfile = async (req, res) => {
   const updatedData = req.body;
 
   try {
     // Find the profile
-    let profile = await Profile.findOne({ userId: req.user._id })  .populate(
-  "userId",
-  "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName"
-);
+    let profile = await Profile.findOne({ userId: req.user._id }).populate(
+      "userId",
+      "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName",
+    );
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found" });
     }
-    
-
 
     if (updatedData.experience && Array.isArray(updatedData.experience)) {
-  updatedData.experience = updatedData.experience.map((exp) => ({
-    ...exp,
-    description: Array.isArray(exp.description)
-      ? exp.description
-      : exp.description
-      ? [exp.description]
-      : [],
-  }));
-}
-
+      updatedData.experience = updatedData.experience.map((exp) => ({
+        ...exp,
+        description: Array.isArray(exp.description)
+          ? exp.description
+          : exp.description
+            ? [exp.description]
+            : [],
+      }));
+    }
 
     // Update profile fields
     Object.assign(profile, updatedData);
@@ -82,7 +77,7 @@ export const updateProfile = async (req, res) => {
     res.status(200).json({
       ...profile.toObject(),
       role: profile.userId?.role,
-      email: profile.userId?.email, 
+      email: profile.userId?.email,
       phone: profile.userId?.businessDetails?.number,
       companyName: profile.userId?.businessDetails?.companyName,
       message: "Profile updated successfully",
@@ -93,20 +88,18 @@ export const updateProfile = async (req, res) => {
   }
 };
 
-
 // -------------------- MULTER SETUP --------------------
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/portfolio"); // uploads folder ke andar portfolio
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
+  },
 });
 
 export const upload = multer({ storage });
-
 
 // -------------------- CONTROLLER --------------------
 export const uploadPortfolio = async (req, res) => {
@@ -128,7 +121,12 @@ export const uploadPortfolio = async (req, res) => {
     profile.portfolio.push({ title, fileUrl, thumbnailUrl });
     await profile.save();
 
-    res.status(200).json({ message: "Portfolio uploaded successfully", portfolio: profile.portfolio });
+    res
+      .status(200)
+      .json({
+        message: "Portfolio uploaded successfully",
+        portfolio: profile.portfolio,
+      });
   } catch (error) {
     console.error("UploadPortfolio Error:", error); // add this to see exact cause
     res.status(500).json({ message: "Server error", error: error.message });
@@ -173,9 +171,6 @@ export const deletePortfolioItem = async (req, res) => {
   }
 };
 
-
-
-
 const profileImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/profile");
@@ -188,8 +183,6 @@ const profileImageStorage = multer.diskStorage({
 
 export const uploadProfileImage = multer({ storage: profileImageStorage });
 
-
-
 const coverImageStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/cover"); // alag folder
@@ -201,7 +194,6 @@ const coverImageStorage = multer.diskStorage({
 });
 
 export const uploadCoverImageMulter = multer({ storage: coverImageStorage });
-
 
 export const uploadProfilePhoto = async (req, res) => {
   try {
@@ -231,6 +223,21 @@ export const uploadCoverImage = async (req, res) => {
   }
 };
 
+export const getAllProfiles = async (req, res) => {
+  try {
+    const profiles = await Profile.find({
+      userId: { $ne: req.user._id },
+    }).populate(
+      "userId",
+      "businessDetails.firstName businessDetails.lastName role"
+    );
 
+   
+    res.json(profiles); // phir bhejo response
+  } catch (error) {
+    console.error("Error in getAllProfiles:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 

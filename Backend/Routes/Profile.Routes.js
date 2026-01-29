@@ -1,5 +1,5 @@
 import express from "express";
-import { deletePortfolioItem, getProfile,  updateProfile, uploadCoverImage, uploadCoverImageMulter, uploadProfileImage, uploadProfilePhoto} from "../controller/Profile.controller.js";
+import { deletePortfolioItem, getAllProfiles, getProfile,  updateProfile, uploadCoverImage, uploadCoverImageMulter, uploadProfileImage, uploadProfilePhoto} from "../controller/Profile.controller.js";
 import { authenticateUser } from "../controller/auth.middleware.js";
 import { uploadPortfolio, upload } from "../controller/Profile.controller.js";
 import { getSettings, updateSettings } from "../controller/settings.controller.js";
@@ -19,6 +19,7 @@ router.get("/settings", authenticateUser, getSettings);
 router.put("/settings", authenticateUser, updateSettings);
 router.get("/notifications", authenticateUser, getNotifications);
 router.post("/read",authenticateUser, markAsRead);
+router.get("/all", authenticateUser, getAllProfiles);
 
 
 

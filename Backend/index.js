@@ -7,6 +7,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import userRoutes from './Routes/User.Routes.js';
 import profileRoutes from './Routes/Profile.Routes.js';
+import connectionsRoutes from './Routes/connection.Routes.js';
 import cors from "cors";
 import connectDB from './lib/db.js';
 
@@ -51,6 +52,8 @@ app.get("/", (req, res) => {
 
 app.use("/user", userRoutes);
 app.use("/profile", profileRoutes);
+app.use("/connections", connectionsRoutes);
+
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
