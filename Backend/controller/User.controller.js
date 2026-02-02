@@ -235,11 +235,20 @@ export const login = async (req, res) => {
     );
 
     res.status(200).json({
-      message: "Login successful",
-      token,
-      userId: user._id,
-      registrationStep: user.registrationStep,
-    });
+  message: "Login successful",
+  token,
+  userId: user._id,
+  registrationStep: user.registrationStep,
+  // ✅ ADD THIS - Send complete user data
+  user: {
+    _id: user._id,
+    email: user.email,
+    role: user.role,
+    businessDetails: user.businessDetails,
+    additionalDetails: user.additionalDetails,
+    paymentStatus: user.paymentStatus,
+  }
+});
 
   } catch (error) {
     console.error("Login Error:", error);

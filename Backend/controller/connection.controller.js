@@ -45,6 +45,7 @@ export const sendConnectionRequest = async (req, res) => {
 };
 
 
+// ✅ FIXED: Now populates profilePhoto and coverImage
 export const getMyConnections = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -52,12 +53,12 @@ export const getMyConnections = async (req, res) => {
     const sent = await Connection.find({
       senderId: userId,
       status: "pending",
-    }).populate("receiverId", "businessDetails.firstName businessDetails.lastName");
+    }).populate("receiverId", "businessDetails.firstName businessDetails.lastName profilePhoto coverImage");
 
     const received = await Connection.find({
       receiverId: userId,
       status: "pending",
-    }).populate("senderId", "businessDetails.firstName businessDetails.lastName");
+    }).populate("senderId", "businessDetails.firstName businessDetails.lastName profilePhoto coverImage");
 
     const accepted = await Connection.find({
       $or: [
@@ -65,7 +66,10 @@ export const getMyConnections = async (req, res) => {
         { receiverId: userId },
       ],
       status: "accepted",
-    });
+    }).populate([
+      { path: "senderId", select: "businessDetails.firstName businessDetails.lastName profilePhoto coverImage" },
+      { path: "receiverId", select: "businessDetails.firstName businessDetails.lastName profilePhoto coverImage" }
+    ]);
 
     res.json({ sent, received, accepted });
   } catch (error) {
@@ -90,6 +94,30 @@ export const updateConnectionStatus = async (req, res) => {
     res.json({ message: "Connection updated", connection });
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const withdrawConnection = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { connectionId } = req.body;
+
+    const connection = await Connection.findById(connectionId);
+    if (!connection) {
+      return res.status(404).json({ message: "Connection not found" });
+    }
+
+    
+    if (connection.senderId.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "You can only withdraw your sent requests" });
+    }
+
+    await Connection.findByIdAndDelete(connectionId);
+
+    res.status(200).json({ message: "Connection request withdrawn" });
+  } catch (error) {
+    console.error("Withdraw error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

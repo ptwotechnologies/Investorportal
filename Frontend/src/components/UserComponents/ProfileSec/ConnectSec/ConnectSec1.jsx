@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
-import { FiEdit2 } from "react-icons/fi";
 import { IoDiamondOutline } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa6";
-import { FiX } from "react-icons/fi";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import { FaLinkedin } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
 import { FaArrowLeft } from "react-icons/fa";
+import { getDomainsForRole } from "./domain.js";
 
 const ConnectSec1 = () => {
   const [profiles, setProfiles] = useState([]);
@@ -21,8 +19,38 @@ const ConnectSec1 = () => {
   const [expandedExp, setExpandedExp] = useState({});
   const [isMobileProfileOpen, setIsMobileProfileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
-  const [sentRequests, setSentRequests] = useState([]);
-  const [receivedRequests, setReceivedRequests] = useState([]);
+  const [showWithdrawConfirm, setShowWithdrawConfirm] = useState(false);
+  const [withdrawProfile, setWithdrawProfile] = useState(null);
+  const [currentUserRole, setCurrentUserRole] = useState(null);
+  const [selectedDomain, setSelectedDomain] = useState("all");
+  const [viewingRole, setViewingRole] = useState(null);
+const [sentRequests, setSentRequests] = useState([]);
+const [receivedRequests, setReceivedRequests] = useState([]);
+
+  const getPortfolioUrl = (fileUrl) => {
+    if (!fileUrl) return "";
+
+    // Already a full URL
+    if (fileUrl.startsWith("http")) return fileUrl;
+
+    // Normalize Windows backslashes to forward slashes
+    let normalized = fileUrl.replace(/\\/g, "/");
+
+    // Remove any leading slashes
+    normalized = normalized.replace(/^\/+/, "");
+
+    // Ensure we have the uploads path
+    if (!normalized.startsWith("uploads/")) {
+      // If it's a full system path, extract from "uploads" onwards
+      const uploadsIndex = normalized.indexOf("uploads/");
+      if (uploadsIndex !== -1) {
+        normalized = normalized.substring(uploadsIndex);
+      }
+    }
+
+    // Return with serverUrl and single leading slash
+    return `${serverUrl}/${normalized}`;
+  };
 
   const skillsArray = Array.isArray(selectedProfile?.topSkills)
     ? selectedProfile.topSkills
@@ -35,16 +63,168 @@ const ConnectSec1 = () => {
   const [skillsOverflow, setSkillsOverflow] = useState(false);
   const servicesText = selectedProfile?.services?.join(", ") || "";
 
+  const refreshData = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user"));
+      const userRole = user?.role;
+
+      // Fetch profiles
+      const profilesRes = await axios.get(`${serverUrl}/profile/all`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // ✅ Apply role-based filtering
+      let roleFilteredProfiles = profilesRes.data;
+
+      if (userRole === "startup") {
+        roleFilteredProfiles = profilesRes.data.filter(
+          (p) => p.userId?.role === "investor",
+        );
+      } else if (userRole === "investor") {
+        roleFilteredProfiles = profilesRes.data.filter(
+          (p) => p.userId?.role === "startup",
+        );
+      } else if (userRole === "service_professional") {
+        roleFilteredProfiles = profilesRes.data.filter(
+          (p) => p.userId?.role === "investor",
+        );
+      }
+
+      // Fetch connections
+      const connectionsRes = await axios.get(`${serverUrl}/connections/my`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setSentRequests(connectionsRes.data.sent);
+      setReceivedRequests(connectionsRes.data.received);
+
+      // Inject connection status
+      const updatedProfiles = roleFilteredProfiles.map((p) => {
+        const isSent = connectionsRes.data.sent.some(
+          (s) => s.receiverId?._id === p.userId._id,
+        );
+        const isReceived = connectionsRes.data.received.some(
+          (r) => r.senderId?._id === p.userId._id,
+        );
+        const isAccepted =
+          connectionsRes.data.accepted &&
+          connectionsRes.data.accepted.some(
+            (a) =>
+              a.senderId?._id === p.userId._id ||
+              a.receiverId?._id === p.userId._id,
+          );
+
+        let connectionId = null;
+        if (isReceived) {
+          connectionId = connectionsRes.data.received.find(
+            (r) => r.senderId?._id === p.userId._id,
+          )?._id;
+        } else if (isSent) {
+          connectionId = connectionsRes.data.sent.find(
+            (s) => s.receiverId?._id === p.userId._id,
+          )?._id;
+        } else if (isAccepted) {
+          connectionId = connectionsRes.data.accepted.find(
+            (a) =>
+              a.senderId?._id === p.userId._id ||
+              a.receiverId?._id === p.userId._id,
+          )?._id;
+        }
+
+        return {
+          ...p,
+          connectionStatus: isAccepted
+            ? "accepted"
+            : isSent
+              ? "sent"
+              : isReceived
+                ? "received"
+                : "none",
+          connectionId: connectionId,
+        };
+      });
+
+      setProfiles(updatedProfiles);
+
+      // ✅ Update available domains
+      const domains = [
+        ...new Set(
+          roleFilteredProfiles // ✅ CORRECT - All domains from role filter
+            .map((p) => p.userId?.additionalDetails?.domain)
+            .filter(Boolean),
+        ),
+      ];
+    } catch (err) {
+      console.error("Refresh error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
+    refreshData();
+  };
+
   useEffect(() => {
     const fetchProfiles = async () => {
       setLoading(true);
       setError(null);
       try {
         const token = localStorage.getItem("token");
+
+        // ✅ Get current user's role from localStorage or API
+        const user = JSON.parse(localStorage.getItem("user"));
+        const userRole = user?.role;
+        setCurrentUserRole(userRole);
+
+        let targetRole = null;
+        if (userRole === "startup") {
+          targetRole = "investor";
+        } else if (userRole === "investor") {
+          targetRole = "startup";
+        } else if (userRole === "service_professional") {
+          targetRole = "investor";
+        }
+        setViewingRole(targetRole);
+
+        // Fetch all profiles
         const res = await axios.get(`${serverUrl}/profile/all`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setProfiles(res.data);
+
+        // ✅ Filter profiles based on current user's role
+        let roleFilteredProfiles = res.data;
+
+        if (userRole === "startup") {
+          // Startup sees only Investors
+          roleFilteredProfiles = res.data.filter(
+            (p) => p.userId?.role === "investor",
+          );
+        } else if (userRole === "investor") {
+          // Investor sees only Startups
+          roleFilteredProfiles = res.data.filter(
+            (p) => p.userId?.role === "startup",
+          );
+        } else if (userRole === "service_professional") {
+          // Service Professional sees only Investors
+          roleFilteredProfiles = res.data.filter(
+            (p) => p.userId?.role === "investor",
+          );
+        }
+
+        setProfiles(roleFilteredProfiles);
+
+        // ✅ Extract unique domains from filtered profiles
+        const domains = [
+          ...new Set(
+            roleFilteredProfiles
+              .map((p) => p.userId?.additionalDetails?.domain)
+              .filter(Boolean), // Remove null/undefined
+          ),
+        ];
       } catch (err) {
         console.error(err);
         setError("Failed to fetch profiles");
@@ -63,7 +243,6 @@ const ConnectSec1 = () => {
         const res = await axios.get(`${serverUrl}/connections/my`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-
         setSentRequests(res.data.sent);
         setReceivedRequests(res.data.received);
 
@@ -71,23 +250,46 @@ const ConnectSec1 = () => {
         setProfiles((prev) =>
           prev.map((p) => {
             const isSent = res.data.sent.some(
-              (s) => s.receiverId._id === p.userId._id,
+              (s) => s.receiverId?._id === p.userId._id,
             );
             const isReceived = res.data.received.some(
-              (r) => r.senderId._id === p.userId._id,
+              (r) => r.senderId?._id === p.userId._id,
             );
+            const isAccepted =
+              res.data.accepted &&
+              res.data.accepted.some(
+                (a) =>
+                  a.senderId?._id === p.userId._id ||
+                  a.receiverId?._id === p.userId._id,
+              );
+
+            let connectionId = null;
+            if (isReceived) {
+              connectionId = res.data.received.find(
+                (r) => r.senderId?._id === p.userId._id,
+              )?._id;
+            } else if (isSent) {
+              connectionId = res.data.sent.find(
+                (s) => s.receiverId?._id === p.userId._id,
+              )?._id;
+            } else if (isAccepted) {
+              connectionId = res.data.accepted.find(
+                (a) =>
+                  a.senderId?._id === p.userId._id ||
+                  a.receiverId?._id === p.userId._id,
+              )?._id;
+            }
 
             return {
               ...p,
-              connectionStatus: isSent
-                ? "sent"
-                : isReceived
-                  ? "received"
-                  : "none",
-              connectionId: isReceived
-                ? res.data.received.find((r) => r.senderId._id === p.userId._id)
-                    ?._id
-                : null,
+              connectionStatus: isAccepted
+                ? "accepted"
+                : isSent
+                  ? "sent"
+                  : isReceived
+                    ? "received"
+                    : "none",
+              connectionId: connectionId,
             };
           }),
         );
@@ -128,7 +330,7 @@ const ConnectSec1 = () => {
     try {
       const token = localStorage.getItem("token");
 
-      await axios.post(
+      const res = await axios.post(
         `${serverUrl}/connections/send`,
         { receiverId },
         {
@@ -140,14 +342,20 @@ const ConnectSec1 = () => {
 
       alert("Connection request sent");
 
-      // UI update (optional but recommended)
+      // Get the new connection ID from response
+      const newConnectionId = res.data.connection._id;
+
+      // UI update with connectionId
       setProfiles((prev) =>
         prev.map((p) =>
-          p.userId._id === receiverId ? { ...p, connectionStatus: "sent" } : p,
+          p.userId._id === receiverId
+            ? { ...p, connectionStatus: "sent", connectionId: newConnectionId }
+            : p,
         ),
       );
     } catch (err) {
       console.error(err);
+      alert("Failed to send connection request");
     }
   };
 
@@ -171,12 +379,27 @@ const ConnectSec1 = () => {
             : p,
         ),
       );
+
+      // Show success message
+      if (status === "accepted") {
+        alert("Connection accepted!");
+      } else if (status === "ignored") {
+        alert("Connection ignored");
+      }
     } catch (err) {
       console.error(err);
+      alert("Failed to update connection");
     }
   };
 
   let filteredProfiles = profiles;
+
+  // ✅ Step 1: Filter by tab (connection status)
+  if (activeTab === "all") {
+    filteredProfiles = profiles.filter(
+      (p) => p.connectionStatus !== "received",
+    );
+  }
 
   if (activeTab === "sent") {
     filteredProfiles = profiles.filter((p) => p.connectionStatus === "sent");
@@ -188,10 +411,76 @@ const ConnectSec1 = () => {
     );
   }
 
+  if (activeTab === "connections") {
+    filteredProfiles = profiles.filter(
+      (p) => p.connectionStatus === "accepted",
+    );
+  }
+
+  // ✅ Step 2: Filter by domain (if not "all")
+  if (selectedDomain !== "all") {
+    filteredProfiles = filteredProfiles.filter(
+      (p) => p.userId?.additionalDetails?.domain === selectedDomain,
+    );
+  }
   const tabClass = (tab) =>
     activeTab === tab
       ? "bg-[#001032] text-white"
       : "border border-[#D9D9D9] text-[#001032]";
+
+  const withdrawRequest = async (connectionId) => {
+    // defensive: allow passing the whole profile object
+    if (connectionId && typeof connectionId === "object") {
+      connectionId = connectionId.connectionId || connectionId._id || null;
+    }
+
+    if (!connectionId) {
+      alert("Error: Connection ID not found. Please try again.");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token"); // ✅ token lena
+
+      if (!token) {
+        alert("You are not logged in");
+        return;
+      }
+      const res = await axios.post(
+        `${serverUrl}/connections/withdraw`,
+        { connectionId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // ✅ token yahi bhejna
+          },
+        },
+      );
+
+      alert(res.data.message);
+
+      // UI update
+      setProfiles((prev) =>
+        prev.map((p) =>
+          p.connectionId === connectionId
+            ? { ...p, connectionStatus: "none", connectionId: null }
+            : p,
+        ),
+      );
+
+      // Close confirmation dialog
+      setShowWithdrawConfirm(false);
+      setWithdrawProfile(null);
+    } catch (err) {
+      console.error(
+        "Withdraw failed:",
+        err.response?.data?.message || err.message,
+      );
+      alert(
+        "Failed to withdraw request: " +
+          (err.response?.data?.message || err.message),
+      );
+    }
+  };
 
   return (
     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
@@ -213,36 +502,51 @@ const ConnectSec1 = () => {
 
         <div className="flex gap-4 items-stretch">
           <div
-            className={`flex flex-col bg-white border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[50%] h-screen lg:h-[88vh] gap-2 
-  ${isMobileProfileOpen ? "hidden lg:flex" : "flex"}`}
+            className={`relative flex flex-col bg-white  border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[44%] h-screen lg:h-[88vh] gap-2 
+            ${isMobileProfileOpen ? "hidden lg:flex" : "flex"}`}
           >
-            <div>
-              <input
-                type="text"
-                placeholder="Search"
-                className="border border-[#D9D9D9] p-2 rounded-lg w-full"
-              />
+            <div >
+              <select
+                value={selectedDomain}
+                onChange={(e) => setSelectedDomain(e.target.value)}
+                className="border border-[#D9D9D9] p-2 rounded-lg w-full bg-white "
+              >
+                <option value="all" >All Domains</option>
+                {viewingRole &&
+                  getDomainsForRole(viewingRole).map((domain) => (
+                    <option key={domain} value={domain} >
+                      {domain}
+                    </option>
+                  ))}
+              </select>
             </div>
-            <div>
+            <div className=" flex items-center justify-between">
               <button
-                onClick={() => setActiveTab("all")}
-                className={`${tabClass("all")}  px-4 py-1 rounded-lg lg:w-30 w-25`}
+                onClick={() => handleTabClick("all")}
+                className={`${tabClass("all")}  px-8 py-1 rounded-lg lg:w-30  text-sm lg:text-[16px]`}
               >
                 All
               </button>
 
               <button
-                onClick={() => setActiveTab("received")}
-                className={`${tabClass("received")} px-4 py-1 rounded-lg border border-[#D9D9D9] lg:w-30 w-25`}
+                onClick={() => handleTabClick("received")}
+                className={`${tabClass("received")} px-5 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
               >
                 Received
               </button>
 
               <button
-                onClick={() => setActiveTab("sent")}
-                className={`${tabClass("sent")} px-4 py-1 rounded-lg border border-[#D9D9D9] lg:w-30 w-25`}
+                onClick={() => handleTabClick("sent")}
+                className={`${tabClass("sent")} px-7 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
               >
                 Sent
+              </button>
+
+              <button
+                onClick={() => handleTabClick("connections")}
+                className={`${tabClass("connections")} px-3 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
+              >
+                Connections
               </button>
             </div>
 
@@ -266,17 +570,17 @@ const ConnectSec1 = () => {
                     className="flex items-center  gap-3 border border-gray-600 rounded-lg  bg-white shadow-md hover:shadow-md transition-all"
                   >
                     <div className="w-16 h-16 my-2 ml-2 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200">
-                      {profile.userId?.profilePhoto && (
+                      {profile.profilePhoto && (
                         <img
-                          src={`${serverUrl}${profile.userId.profilePhoto}`}
+                          src={`${serverUrl}${profile.profilePhoto}`}
                           alt=""
                           className="w-full h-full object-cover rounded-full"
                         />
                       )}
                     </div>
                     <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
-                    <div className="flex items-center justify-between pr-2 lg:pr-0 lg:gap-3">
-                      <div className="my-3  w-[65%] lg:w-[72%]">
+                    <div className="flex items-center justify-between lg:gap-x-3 gap-x-2 w-full  px-2">
+                      <div className="my-3   ">
                         <h1 className="text-[#001032] font-semibold text-sm">
                           {profile.name}
                         </h1>
@@ -291,9 +595,9 @@ const ConnectSec1 = () => {
                             : "Location not added"}
                         </p>
                       </div>
-                      <div className=" w-[35%] lg:w-[28%] ">
+                      <div className="flex flex-col gap-2">
                         {profile.connectionStatus === "received" ? (
-                          <div className="flex gap-1">
+                          <div className="flex flex-col gap-1">
                             <button
                               onClick={(e) => {
                                 e.stopPropagation();
@@ -321,32 +625,78 @@ const ConnectSec1 = () => {
                             </button>
                           </div>
                         ) : profile.connectionStatus === "sent" ? (
-                          <button
-                            disabled
-                            className="bg-gray-400 text-white lg:w-30 w-20 py-1 my-1 text-sm rounded-full cursor-not-allowed"
-                          >
-                            Pending
-                          </button>
-                        ) : (
+                          <div className="flex gap-2">
+                            {/* <button
+                              disabled
+                              className="bg-gray-400 text-white w-20 py-1 my-1 text-sm rounded-full cursor-not-allowed"
+                            >
+                              Pending
+                            </button> */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setWithdrawProfile(profile);
+                                setShowWithdrawConfirm(true);
+                              }}
+                              className="bg-red-500 text-white w-20 py-1 my-1 text-sm rounded-full "
+                            >
+                              Withdraw
+                            </button>
+                          </div>
+                        ) : profile.connectionStatus === "none" ? (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               sendConnectionRequest(profile.userId._id);
                             }}
-                            className="bg-[#001032] text-white lg:w-30 w-20 py-1 my-1 text-sm rounded-full"
+                            className="bg-[#001032] text-white w-20 py-1 text-sm rounded-full"
                           >
                             Connect
                           </button>
-                        )}
+                        ) : null}
 
-                        <button className="bg-[#B1AAAA] text-white lg:w-30 w-20 py-1 my-1 text-sm rounded-full ">
-                          Message
-                        </button>
+                        {/* Message button: show only for accepted users */}
+                        {profile.connectionStatus === "accepted" && (
+                          <button className="bg-[#B1AAAA] text-white w-20 py-1 text-sm rounded-full">
+                            Message
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
                 ))}
             </div>
+
+            {/* Withdraw Confirmation Modal - Inside left div */}
+            {showWithdrawConfirm && withdrawProfile && (
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-50 rounded-md">
+                <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col gap-4 w-80">
+                  <p className="text-center">
+                    Are you sure you want to withdraw the connection request to{" "}
+                    <strong>{withdrawProfile.name}</strong>?
+                  </p>
+                  <div className="flex justify-around gap-4">
+                    <button
+                      onClick={() =>
+                        withdrawRequest(withdrawProfile?.connectionId)
+                      }
+                      className="bg-red-600 text-white px-4 py-1 rounded-lg"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      onClick={() => {
+                        setShowWithdrawConfirm(false);
+                        setWithdrawProfile(null);
+                      }}
+                      className="bg-gray-400 text-white px-4 py-1 rounded-lg"
+                    >
+                      No
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* 📱 MOBILE FULL PROFILE VIEW */}
@@ -371,8 +721,8 @@ const ConnectSec1 = () => {
                 <div
                   className="relative h-30 border border-gray-300 "
                   style={{
-                    backgroundImage: selectedProfile.userId?.coverImage
-                      ? `url(${serverUrl}${selectedProfile.userId.coverImage})`
+                    backgroundImage: selectedProfile.coverImage
+                      ? `url(${serverUrl}${selectedProfile.coverImage})`
                       : "none",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
@@ -382,9 +732,9 @@ const ConnectSec1 = () => {
                 {/* Profile photo overlap */}
                 <div className="relative px-2 -mt-12">
                   <div className="w-28 h-28  rounded-full border-2 border-gray-300 shadow-md bg-gray-200 overflow-hidden">
-                    {selectedProfile.userId?.profilePhoto && (
+                    {selectedProfile.profilePhoto && (
                       <img
-                        src={`${serverUrl}${selectedProfile.userId.profilePhoto}`}
+                        src={`${serverUrl}${selectedProfile.profilePhoto}`}
                         alt=""
                         className="w-full h-full object-cover rounded-full"
                       />
@@ -698,15 +1048,15 @@ const ConnectSec1 = () => {
           )}
 
           {/* ✅ Right Card (exact UI, untouched CSS) */}
-          <div className="hidden lg:flex w-[50%] h-[88vh] scrollbar-hide overflow-x-auto">
+          <div className="hidden lg:flex w-[56%] h-[88vh] scrollbar-hide overflow-x-auto">
             {selectedProfile ? (
               <div className="bg-white border border-gray-300 shadow-md rounded-2xl  flex flex-col justify-between w-full h-full">
                 {/* Header image section */}
                 <div
-                  className="relative h-40 border border-gray-300 mt-40"
+                  className="relative h-40 border border-gray-300 pt-40"
                   style={{
-                    backgroundImage: selectedProfile.userId?.coverImage
-                      ? `url(${serverUrl}${selectedProfile.userId.coverImage})`
+                    backgroundImage: selectedProfile.coverImage
+                      ? `url(${serverUrl}${selectedProfile.coverImage})`
                       : "none",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
@@ -716,9 +1066,9 @@ const ConnectSec1 = () => {
                 {/* Profile photo overlap */}
                 <div className="relative px-4 -mt-12">
                   <div className="w-28 h-28 rounded-full border-2 border-gray-300 shadow-md bg-gray-200 overflow-hidden">
-                    {selectedProfile.userId?.profilePhoto && (
+                    {selectedProfile.profilePhoto && (
                       <img
-                        src={`${serverUrl}${selectedProfile.userId.profilePhoto}`}
+                        src={`${serverUrl}${selectedProfile.profilePhoto}`}
                         alt=""
                         className="w-full h-full object-cover rounded-full"
                       />
@@ -931,7 +1281,7 @@ const ConnectSec1 = () => {
                         selectedProfile.portfolio.map((item) => (
                           <div
                             key={item._id}
-                            className="relative w-48 h-48 border-2 border-[#D9D9D9] rounded-md overflow-hidden cursor-pointer"
+                            className="relative w-40 h-40 border-2 border-[#D9D9D9] rounded-md overflow-hidden cursor-pointer"
                           >
                             <img
                               src={getPortfolioUrl(item.fileUrl)}

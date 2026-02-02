@@ -229,7 +229,7 @@ export const getAllProfiles = async (req, res) => {
       userId: { $ne: req.user._id },
     }).populate(
       "userId",
-      "businessDetails.firstName businessDetails.lastName role"
+      "businessDetails.firstName businessDetails.lastName role additionalDetails.domain"
     );
 
    
