@@ -1,11 +1,10 @@
-import Sidebar from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Sidebar';
-import React, { useState } from 'react'
-import RequestRaisedSec from '@/components/UserComponents/ProfileSec/RequestSec.jsx/RequestRaisedSec';
 import Mobile from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Mobile';
+import Sidebar from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Sidebar';
+import ChatSec from '@/components/UserComponents/ProfileSec/RequestSec/ChatSec';
+import React, { useState } from 'react'
 
-
-const RequestRaised = () => {
-   const [isOpen, setIsOpen] = useState(true);
+const Chat = () => {
+     const [isOpen, setIsOpen] = useState(true);
   return (
     <div className='bg-gray-100 h-screen overflow-hidden'>
     <div className='lg:flex '>
@@ -15,12 +14,12 @@ const RequestRaised = () => {
       <div className='lg:hidden fixed top-0 z-50 w-full '>
         <Mobile/>
       </div>
-     <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-25 lg:mt-0`}>
-      <RequestRaisedSec/>
+     <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-13 lg:mt-0`}>
+      <ChatSec/>
      </div>
     </div>
   </div>
   )
 }
 
-export default RequestRaised
+export default Chat

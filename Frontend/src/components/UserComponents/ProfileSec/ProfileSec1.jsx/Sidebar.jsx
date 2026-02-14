@@ -13,6 +13,7 @@ import { serverUrl } from "@/App";
 import axios from "axios";
 import { RxCross2 } from "react-icons/rx";
 import { FaHome } from "react-icons/fa";
+import { PiChatsTeardropBold } from "react-icons/pi";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
@@ -102,6 +103,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             className="text-gray-500 my-3"
             size={27}
             onClick={handleNotificationClick} // Show/hide notifications
+          />
+
+          <PiChatsTeardropBold
+            className="text-gray-500 my-3"
+            size={27}
+            onClick={handleToggle}
           />
         </div>
       </div>
@@ -240,6 +247,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               >
                 Notification
               </li>
+
+              <NavLink
+                to="/chat"
+                className={({ isActive }) =>
+                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                  }`
+                }
+              >
+                Chat
+              </NavLink>
             </ul>
           </div>
 

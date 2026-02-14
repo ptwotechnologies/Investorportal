@@ -9,6 +9,7 @@ import userRoutes from './Routes/User.Routes.js';
 import profileRoutes from './Routes/Profile.Routes.js';
 import connectionsRoutes from './Routes/connection.Routes.js';
 import cors from "cors";
+import requestRoutes from './Routes/request.Routes.js';
 import connectDB from './lib/db.js';
 
 const app = express();
@@ -53,6 +54,7 @@ app.get("/", (req, res) => {
 app.use("/user", userRoutes);
 app.use("/profile", profileRoutes);
 app.use("/connections", connectionsRoutes);
+app.use("/requests", requestRoutes);
 
 
 // For local development

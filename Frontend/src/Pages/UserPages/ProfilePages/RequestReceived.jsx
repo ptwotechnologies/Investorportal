@@ -1,6 +1,7 @@
 import Mobile from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Mobile'
 import Sidebar from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Sidebar'
-import RequestSec1 from '@/components/UserComponents/ProfileSec/RequestSec.jsx/RequestSec1';
+import RequestSec from '@/components/UserComponents/ProfileSec/RequestSec/RequestSec';
+import RequestSec1 from '@/components/UserComponents/ProfileSec/RequestSec/RequestSec1';
 import React, { useState } from 'react'
 
 
@@ -16,7 +17,7 @@ const RequestReceived = () => {
         <Mobile/>
       </div>
      <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-12 lg:mt-0`}>
-      <RequestSec1/>
+      <RequestSec/>
      </div>
     </div>
   </div>

@@ -108,6 +108,9 @@ const Mobile = () => {
                       <Link to="/connect">
                         <li>Connect</li>
                       </Link>
+                       <Link to="/chat">
+                        <li>Chat</li>
+                      </Link>
                     </ul>
                   </div>
 

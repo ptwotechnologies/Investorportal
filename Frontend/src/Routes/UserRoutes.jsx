@@ -31,6 +31,8 @@ import Pricing from '@/Pages/UserPages/Pricing'
 import ChannelPartners from '@/Pages/UserPages/ChannelPartners'
 import ProtectedRoute from "../components/UserComponents/ProtectedRoutes";
 import Dashboard from '@/Pages/UserPages/ProfilePages/Dashboard'
+import Chat from '@/Pages/UserPages/ProfilePages/Chat'
+import Deal from '@/Pages/UserPages/ProfilePages/Deal'
 
 
 
@@ -60,7 +62,9 @@ const UserRoutes = () => {
   '/userprofile',
   '/registration',
   '/payments',
-  '/dashboard'
+  '/dashboard',
+  '/chat',
+  '/deal',
    ]
 
    
@@ -100,6 +104,9 @@ const UserRoutes = () => {
              <Route path="/settings" element={ <ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/connect" element={<ProtectedRoute><Connect/></ProtectedRoute>} />
              <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
+             <Route path="/chat" element={<ProtectedRoute><Chat/></ProtectedRoute>} />
+             <Route path="/deal" element={<ProtectedRoute><Deal/></ProtectedRoute>} />
+             
       </Routes>
 
     </div>

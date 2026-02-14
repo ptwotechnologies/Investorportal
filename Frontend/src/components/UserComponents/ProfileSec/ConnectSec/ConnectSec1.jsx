@@ -523,7 +523,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
             <div className=" flex items-center justify-between">
               <button
                 onClick={() => handleTabClick("all")}
-                className={`${tabClass("all")}  px-8 py-1 rounded-lg lg:w-30  text-sm lg:text-[16px]`}
+                className={`${tabClass("all")}  px-6 py-1 rounded-lg lg:w-30  text-sm lg:text-[16px]`}
               >
                 All
               </button>
@@ -537,7 +537,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
 
               <button
                 onClick={() => handleTabClick("sent")}
-                className={`${tabClass("sent")} px-7 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
+                className={`${tabClass("sent")} px-5 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
               >
                 Sent
               </button>
@@ -567,7 +567,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
                       }
                     }}
                     key={profile._id}
-                    className="flex items-center  gap-3 border border-gray-600 rounded-lg  bg-white shadow-md hover:shadow-md transition-all"
+                    className="flex items-center  gap-3 rounded-lg  bg-white  transition-all shadow-[inset_0_0_12px_#00000040]"
                   >
                     <div className="w-16 h-16 my-2 ml-2 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200">
                       {profile.profilePhoto && (
