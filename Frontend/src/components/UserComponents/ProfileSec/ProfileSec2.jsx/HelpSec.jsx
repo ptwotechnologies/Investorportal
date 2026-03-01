@@ -1,53 +1,113 @@
-import React  from 'react'
-import { CgProfile } from "react-icons/cg";
-import { Send } from "lucide-react";
-import { IoSearchSharp } from "react-icons/io5";
-import { TfiList } from "react-icons/tfi";
-import { HiMiniLink } from "react-icons/hi2";
-import { BsSendFill } from "react-icons/bs";
-import { FiEdit2 } from "react-icons/fi";
+import React, { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
+import { TfiList } from "react-icons/tfi";
+import RightHelp from "./RightHelp";
+import axios from "axios";
+import { serverUrl } from "@/App";
 
-const HelpSec = ({ isOpen = true }) => {
- const leftPart = [
-    {
-      name: "I need assistance with sign up the account",
-    },
-    {
-      name: "Service professional is not responding",
-    },
-    {
-      name: "Can I connect with the investors?",
-    },
-    {
-      name: "Can I connect with the other startups?",
-    },
-  ];
-  const rightPart = [
-    {
-      data: "An experienced entrepreneur and business professional who consistently delivers high-quality and result-focused. An experienced entrepreneur and business professional who consistently.",
-    },
-    {
-      data: "An experienced entrepreneur and business professional who consistently delivers high-quality and result-focused. An experienced entrepreneur and business professional who consistently.",
-    },
-    {
-      data: "An experienced entrepreneur and business professional who consistently delivers high-quality and result-focused. An experienced entrepreneur and business professional who consistently.",
-    },
-    {
-      data: "An experienced entrepreneur and business professional who consistently delivers high-quality and result-focused. An experienced entrepreneur and business professional who consistently.",
-    },
-    {
-      data: "An experienced entrepreneur and business professional who consistently delivers high-quality and result-focused. An experienced entrepreneur and business professional who consistently.",
-    },
-    {
-      data: "An experienced entrepreneur and business professional who consistently delivers high-quality and result-focused. An experienced entrepreneur and business professional who consistently.",
-    }, 
-  ];
+const HelpSec = () => {
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [showChat, setShowChat] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [tickets, setTickets] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  const token = localStorage.getItem("token");
+
+  // ─── On load: fetch tickets + auto-load active ticket on right ──────────
+  useEffect(() => {
+    fetchTickets();
+    loadActiveTicket();
+  }, []);
+
+  // ─── Refetch list when filter changes ───────────────────────────────────
+  useEffect(() => {
+    fetchTickets();
+  }, [activeFilter]);
+
+  // ─── Poll active chat every 5s for new admin replies ────────────────────
+  useEffect(() => {
+    if (!selectedChat) return;
+    const interval = setInterval(async () => {
+      try {
+        const res = await axios.get(`${serverUrl}/help/${selectedChat._id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSelectedChat(res.data);
+        setTickets((prev) => prev.map((t) => (t._id === res.data._id ? res.data : t)));
+      } catch (err) {}
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [selectedChat?._id]);
+
+  const fetchTickets = async () => {
+    try {
+      setLoading(true);
+      const query = activeFilter !== "all" ? `?status=${activeFilter}` : "";
+      const res = await axios.get(`${serverUrl}/help${query}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setTickets(res.data);
+    } catch (err) {
+      console.error("Error fetching tickets:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ─── Auto load active (open) ticket on page open ────────────────────────
+  const loadActiveTicket = async () => {
+    try {
+      const res = await axios.get(`${serverUrl}/help/active`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSelectedChat(res.data);
+    } catch (err) {
+      console.error("Error loading active ticket:", err);
+    }
+  };
+
+  const handleTicketClick = async (ticket) => {
+    try {
+      const res = await axios.get(`${serverUrl}/help/${ticket._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSelectedChat(res.data);
+      setShowChat(true);
+    } catch (err) {
+      console.error("Error fetching ticket:", err);
+    }
+  };
+
+  const handleNewMessage = (updatedTicket) => {
+    setSelectedChat(updatedTicket);
+    setTickets((prev) =>
+      prev.map((t) => (t._id === updatedTicket._id ? updatedTicket : t))
+    );
+  };
+
+  const handleTicketClosed = (closedTicket) => {
+    setSelectedChat(closedTicket);
+    setTickets((prev) =>
+      prev.map((t) => (t._id === closedTicket._id ? closedTicket : t))
+    );
+    // After closing, auto-create a new blank ticket for next message
+    loadActiveTicket();
+  };
+
+  const openCount = tickets.filter((t) => t.status === "open").length;
+
+  const filteredTickets = tickets.filter((t) => {
+    const lastMsg = t.messages?.[t.messages.length - 1]?.text || "";
+    return lastMsg.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
-    <div className="md:flex w-full overflow-hidden">
-      <div className="min-h-screen bg-gray-100 lg:p-4 p-2 w-full  mx-auto">
-        {/* Header */}
-        <div className="hidden lg:flex bg-white border sticky top-4 z-20 border-gray-400 shadow-md rounded-lg px-10 justify-between items-center w-full">
+    <div className="md:flex lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
+      <div className="bg-gray-100 h-[85vh] w-full mx-auto pt-4">
+        {/* Top bar - exact original */}
+        <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
           <h1 className="text-md font-semibold text-gray-800">
             Welcome, Startup India Pvt. Ltd.
           </h1>
@@ -56,114 +116,135 @@ const HelpSec = ({ isOpen = true }) => {
               className="text-gray-600 border border-gray-600 p-1 rounded-full"
               size={24}
             />
-            <span className="font-semibold text-gray-800">
-              Switch to professional
-            </span>
+            <span className="font-semibold text-gray-800">Switch to professional</span>
           </button>
         </div>
-        <div id='mobile ' className='lg:hidden bg-white border border-gray-300 p-2 mb-2 rounded-lg '> 
-              <div className="flex justify-between items-start gap-4 w-full  ">
-              <div className="flex items-center gap-2 w-full">
-                <div className="w-12 h-12 rounded-full border border-gray-300 shadow-md shrink-0"></div>
-                <p className="text-gray-900 font-semibold text-sm">Tickets</p>
-                <div className="flex border-2 shadow-md border-gray-300 items-center px-4 justify-between rounded-2xl flex-1 min-w-[150px]">
-                  <div className="flex items-center gap- flex-1">
-                    <IoSearchSharp size={24} className="text-gray-500" />
-                    <input
-                      type="text"
-                      placeholder="Search Messages"
-                      className="p-1  outline-none w-full"
-                    />
-                  </div>
-                  <TfiList size={24} className="text-gray-500" />
+
+        <div className="flex gap-4 items-stretch">
+          {/* ─── LEFT PANEL - exact original design ─────────────────────── */}
+          <div
+            className={`relative flex flex-col bg-white border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[44%] h-screen lg:h-[88vh] gap-2 ${
+              showChat ? "hidden lg:flex" : "flex"
+            }`}
+          >
+            {/* Search - exact original */}
+            <div className="flex items-center justify-between gap-2 border-2 border-[#D9D9D9] lg:p-2 p-1 px-2 rounded-lg">
+              <input
+                type="text"
+                className="w-full outline-none"
+                placeholder="Search requests"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <TfiList size={24} className="text-gray-500 bg-white" />
+            </div>
+
+            {/* Filter tabs - exact original */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setActiveFilter("all")}
+                className={`px-6 py-1 border border-[#D9D9D9] lg:rounded-lg rounded-sm w-30 text-md lg:text-[16px] ${
+                  activeFilter === "all"
+                    ? "bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]"
+                    : ""
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setActiveFilter("open")}
+                className={`px-5 py-1 lg:rounded-lg rounded-sm border border-[#D9D9D9] w-30 text-md lg:text-[16px] ${
+                  activeFilter === "open"
+                    ? "bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]"
+                    : ""
+                }`}
+              >
+                Open
+                {openCount > 0 && (
+                  <span className="bg-[#B42A2C] text-white text-xs rounded-full px-1.5 py-0.5 mx-1">
+                    {openCount}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => setActiveFilter("closed")}
+                className={`px-5 py-1 lg:rounded-lg rounded-sm border border-[#D9D9D9] w-30 text-md lg:text-[16px] ${
+                  activeFilter === "closed"
+                    ? "bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]"
+                    : ""
+                }`}
+              >
+                Closed
+              </button>
+            </div>
+
+            {/* Chat list - exact original card design */}
+            <div className="flex flex-col gap-2 w-full max-h-140 scrollbar-hide overflow-y-auto">
+              {loading ? (
+                <div className="text-center text-gray-400 py-8 text-sm">Loading...</div>
+              ) : filteredTickets.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full py-12 text-center">
+                  <p className="text-gray-500 font-medium">No chats found</p>
+                  <p className="text-gray-400 text-xs mt-1">Send a message to start a chat</p>
                 </div>
-              </div>
-            </div>
-            </div>
-        <div className="flex gap-4 lg:mt-4 mt-2">
-          {/* Left Card */}
-           <div className="lg:h-160 h-[73vh] flex flex-col   rounded-lg border  border-gray-300 lg:p-6 p-3 shadow-md w-full lg:w-[40%]  bg-white">
-            <div id='desktop ' className='hidden lg:block'> 
-              <div className="flex justify-between items-start gap-4 w-full  ">
-              <div className="flex items-center gap-4 w-full">
-                <div className="w-12 h-12 rounded-full border border-gray-300 shadow-md shrink-0"></div>
-                <p className="text-gray-900 font-semibold">Tickets</p>
-
-                {/* Responsive input container */}
-                <div className="flex border-2 shadow-md border-gray-300 items-center px-4 justify-between rounded-2xl flex-1 min-w-[150px]">
-                  <div className="flex items-center gap-2 flex-1">
-                    <IoSearchSharp size={24} className="text-gray-500" />
-                    <input
-                      type="text"
-                      placeholder="Search Messages"
-                      className="p-2 outline-none w-full"
-                    />
-                  </div>
-                  <TfiList size={24} className="text-gray-500" />
-                </div>
-              </div>
-            </div>
-            </div>
-
-            
-
-            <hr className="border-gray-300 w-full  my-3 hidden lg:block" />
-
-            <div className="flex flex-col w-full gap-4 ">
-              {leftPart.map((item, index) => (
-                <div key={index} className="flex flex-col">
-                  <div className="flex justify-between items-start gap-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full border border-gray-300 shadow-md shrink-0"></div>
-                      <p className="text-gray-800 text-xs font-medium">{item.name}</p>
+              ) : (
+                filteredTickets.map((ticket) => (
+                  <div
+                    key={ticket._id}
+                    onClick={() => handleTicketClick(ticket)}
+                    className={`flex items-center gap-3 rounded-lg bg-white transition-all shadow-[inset_0_0_12px_#00000040] cursor-pointer ${
+                      selectedChat?._id === ticket._id ? " " : ""
+                    }`}
+                  >
+                    <div className="w-16 h-16 my-2 ml-3 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200"></div>
+                    <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
+                    <div className="flex items-center justify-between lg:gap-x-3 gap-x-2 w-full px-2">
+                      <div className="my-3">
+                        <h1 className="text-[#001032] font-semibold text-sm">
+                          Support Chat
+                        </h1>
+                        <p className="text-[#001032] text-xs line-clamp-2">
+                          {ticket.messages?.[ticket.messages.length - 1]?.text || "No messages yet"}
+                        </p>
+                        <p className="text-[#001032] text-[10px] mt-2">
+                          {new Date(ticket.updatedAt).toLocaleDateString("en-IN", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                          {" • "}
+                          {new Date(ticket.updatedAt).toLocaleTimeString("en-IN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-500 self-end w-[23%] lg:w-auto">10:08 A.M.</p>
                   </div>
-                  <hr className="border-gray-300 w-full mt-3" />
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
 
-          {/* Right Card */}
-          <div className="hidden lg:block w-[60%] items-center justify-center h-screen ml-auto overflow-hidden relative">
-            <div className='h-[calc(100vh-170px)] overflow-y-scroll scrollbar-hide'>
-              <div className="border p-6  pt-6 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full ">
-              {rightPart.map((item, index) => (
-                <div
-                  key={index}
-                  className={`
-                    border-2 p-2 flex items-center gap-10 border-gray-300 rounded-lg w-[90%]
-                    ${index % 2 !== 0 ? "flex-row-reverse ml-auto" : "flex-row"}
-                  `}
-                >
-                  <div className="shrink-0 w-18 h-18 rounded-full border-2 border-gray-300 shadow-md flex items-center justify-center "></div>
-                  <p className="flex-1 text-gray-700 text-xs">{item.data}</p>{" "}
-                  {/* use item.data */}
-                </div>
-              ))}
-            </div>
-            </div>
-
-            <div className={`hidden lg:block relative bottom-4 right-0 border p-5 border-gray-300 shadow-md rounded-lg mt-4 bg-white z-20 ${isOpen ? 'lg:w-full w-auto' : 'w-full'}`}>
-              <div className="flex border-2 shadow-md border-gray-300 items-center px-4 justify-between rounded-xl w-full min-w-[150px]">
-                {" "}
-                <input
-                  type="text"
-                  placeholder="Enter the Text"
-                  className="py-2 outline-none w-full"
-                />
-                <div className="flex items-center gap-2 flex-1">
-                  <HiMiniLink size={24} className="text-gray-500 bg-white" />
-                  <BsSendFill size={24} className="text-gray-500" />
-                </div>
+          {/* ─── RIGHT PANEL ────────────────────────────────────────────── */}
+          <div className={`lg:w-[56%] h-[88vh] ${showChat ? "flex" : "hidden lg:flex"}`}>
+            {selectedChat ? (
+              <RightHelp
+                ticket={selectedChat}
+                onBack={() => setShowChat(false)}
+                onNewMessage={handleNewMessage}
+                onTicketClosed={handleTicketClosed}
+              />
+            ) : (
+              <div className="hidden lg:flex items-center justify-center w-full text-gray-400">
+                Loading chat...
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default HelpSec
+export default HelpSec;

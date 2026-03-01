@@ -32,7 +32,13 @@ import ChannelPartners from '@/Pages/UserPages/ChannelPartners'
 import ProtectedRoute from "../components/UserComponents/ProtectedRoutes";
 import Dashboard from '@/Pages/UserPages/ProfilePages/Dashboard'
 import Chat from '@/Pages/UserPages/ProfilePages/Chat'
-import Deal from '@/Pages/UserPages/ProfilePages/Deal'
+import Deal from '@/Pages/UserPages/ProfilePages/ActiveDeal'
+import Milestones from '@/Pages/UserPages/ProfilePages/Milestones'
+import DealPayment from '@/Pages/UserPages/ProfilePages/DealPayment'
+import Negotiation from '@/Pages/UserPages/ProfilePages/Negotiation'
+import Documentation from '@/Pages/UserPages/ProfilePages/Documentation'
+import Completed from '@/Pages/UserPages/ProfilePages/Completed'
+import Disputes from '@/Pages/UserPages/ProfilePages/Disputes'
 
 
 
@@ -63,8 +69,8 @@ const UserRoutes = () => {
   '/registration',
   '/payments',
   '/dashboard',
-  '/chat',
   '/deal',
+  
    ]
 
    
@@ -104,9 +110,13 @@ const UserRoutes = () => {
              <Route path="/settings" element={ <ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/connect" element={<ProtectedRoute><Connect/></ProtectedRoute>} />
              <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
-             <Route path="/chat" element={<ProtectedRoute><Chat/></ProtectedRoute>} />
-             <Route path="/deal" element={<ProtectedRoute><Deal/></ProtectedRoute>} />
-             
+             <Route path="/deal/activedeals" element={<ProtectedRoute><Deal/></ProtectedRoute>} />
+             <Route path="/deal/milestones" element={<ProtectedRoute><Milestones/></ProtectedRoute>} />
+             <Route path="/deal/payments" element={<ProtectedRoute><DealPayment/></ProtectedRoute>} />
+             <Route path="/deal/negotiations" element={<ProtectedRoute><Negotiation/></ProtectedRoute>} />
+             <Route path="/deal/documentation" element={<ProtectedRoute><Documentation/></ProtectedRoute>} />
+             <Route path="/deal/completed" element={<ProtectedRoute><Completed/></ProtectedRoute>} />
+             <Route path="/deal/disputes" element={<ProtectedRoute><Disputes/></ProtectedRoute>} />
       </Routes>
 
     </div>

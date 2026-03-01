@@ -11,6 +11,7 @@ import connectionsRoutes from './Routes/connection.Routes.js';
 import cors from "cors";
 import requestRoutes from './Routes/request.Routes.js';
 import connectDB from './lib/db.js';
+import helpRoutes from './Routes/help.Routes.js';
 
 const app = express();
 
@@ -55,6 +56,7 @@ app.use("/user", userRoutes);
 app.use("/profile", profileRoutes);
 app.use("/connections", connectionsRoutes);
 app.use("/requests", requestRoutes);
+app.use("/help", helpRoutes);
 
 
 // For local development

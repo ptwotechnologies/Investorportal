@@ -1,10 +1,15 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
+import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
-const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) => {
+const RightReceived = ({
+  selectedRequest,
+  setSelectedRequest,
+  setMobileView,
+}) => {
   const handleClose = () => {
     setSelectedRequest(null);
-     if (setMobileView) {
+    if (setMobileView) {
       setMobileView("left");
     }
   };
@@ -74,7 +79,7 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
                       year: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
-                    }
+                    },
                   )}
                 </p>
               )}
@@ -86,9 +91,7 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
             <h4 className="text-sm font-semibold text-gray-600 mb-2">
               Service Type
             </h4>
-            <p className="text-sm text-[#001032]">
-              {selectedRequest.service}
-            </p>
+            <p className="text-sm text-[#001032]">{selectedRequest.service}</p>
           </div>
 
           {/* Description */}
@@ -103,11 +106,9 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
 
           {/* Status */}
           <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
-            <h4 className="text-sm font-semibold text-gray-600 mb-2">
-              Status
-            </h4>
+            <h4 className="text-sm font-semibold text-gray-600 mb-2">Status</h4>
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-              Forwarded
+              Pending
             </span>
           </div>
 
@@ -123,11 +124,22 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-4">
-            <button className="flex-1 bg-[#1F9E61] text-white lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-[#188c54] transition-colors">
-              Update Request
+            <button
+              onClick={() => handleInterest(selectedRequest._id)}
+              className="flex-1 bg-[#108349] text-white py-2 rounded-lg text-xs font-medium hover:bg-[#0d6b3a] transition-colors flex items-center justify-center gap-1"
+            >
+              <FaCheckCircle /> Interested
             </button>
-            <button className="flex-1 border-2 border-gray-300 text-gray-700 lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
-              Cancel Request
+            <button
+              onClick={() =>
+                setShowConfirm({
+                  requestId: selectedRequest._id,
+                  providerId: null,
+                })
+              }
+              className="flex-1 bg-[#BA1E1E] text-white py-2 rounded-lg text-xs font-medium hover:bg-[#a01818] transition-colors flex items-center justify-center gap-1"
+            >
+              <FaTimesCircle /> Ignore
             </button>
           </div>
         </div>
@@ -136,4 +148,4 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
   );
 };
 
-export default RightRaised;
+export default RightReceived;

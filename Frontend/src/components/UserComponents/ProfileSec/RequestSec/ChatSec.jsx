@@ -15,7 +15,7 @@ const ChatSec = () => {
   location: "New Delhi, Delhi",
 }));
 
-
+ 
   return (
     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
       <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto  pt-4">

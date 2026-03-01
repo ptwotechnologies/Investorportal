@@ -1,9 +1,15 @@
 import express from "express";
-import {createRequest, getAllRequests,} from "../controller/request.controller.js";
+import {acceptProvider, createRequest, forwardRequest, getAllRequests, getReceivedRequests, markInterested,} from "../controller/request.controller.js";
+import { authenticateUser } from "../controller/auth.middleware.js";
 
 const router = express.Router();
 
-router.post("/", createRequest);
-router.get("/", getAllRequests);
+router.post("/",authenticateUser, createRequest);
+router.get("/",authenticateUser, getAllRequests);
+router.put("/forward", authenticateUser, forwardRequest);
+router.get("/received", authenticateUser, getReceivedRequests);
+router.put("/interested/:requestId", authenticateUser, markInterested);
+router.put("/accept", authenticateUser, acceptProvider);
+
 
 export default router;

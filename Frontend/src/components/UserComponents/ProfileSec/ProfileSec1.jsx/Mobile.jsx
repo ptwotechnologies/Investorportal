@@ -27,6 +27,8 @@ const Mobile = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [expandedIds, setExpandedIds] = useState([]);
+  const [isDealsOpen, setIsDealsOpen] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSignOutClick = () => {
@@ -62,7 +64,7 @@ const Mobile = () => {
 
   const toggleExpanded = (id) => {
     setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -74,91 +76,115 @@ const Mobile = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <IoIosNotifications
-                  size={30} 
-                  onClick={handleNotificationClick}
-                />
+          <IoIosNotifications size={30} onClick={handleNotificationClick} />
           <Sheet>
             <SheetTrigger asChild>
               <div className="flex items-center gap-5">
-                
                 <RxHamburgerMenu size={30} className="text-[#001426]" />
               </div>
             </SheetTrigger>
 
-          <div >
+            <div>
               <SheetContent className="w-screen h-fit p-3 bg-[#D5D5D5] rounded-2xl mt-17">
-              <div className="border border-[#D9D9D9] bg-white ">
-                <SheetHeader>
-                  <SheetTitle></SheetTitle>
-                </SheetHeader>
+                <div className="border border-[#D9D9D9] bg-white ">
+                  <SheetHeader>
+                    <SheetTitle></SheetTitle>
+                  </SheetHeader>
 
-                <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-7">
-                  <div id="top">
-                    <ul className="flex flex-col gap-2">
-                      <Link to="/dashboard">
-                        <li>Dashboard</li>
-                      </Link>
-                      <Link to="/profile">
-                        <li>Profile</li>
-                      </Link>
-                      <Link to="/request">
-                        <li>Requests</li>
-                      </Link>
-                      <Link to="/connect">
-                        <li>Connect</li>
-                      </Link>
-                       <Link to="/chat">
-                        <li>Chat</li>
-                      </Link>
-                    </ul>
+                  <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-7">
+                    <div id="top">
+                      <ul className="flex flex-col gap-2">
+                        <Link to="/dashboard">
+                          <li>Dashboard</li>
+                        </Link>
+                        <Link to="/profile">
+                          <li>Profile</li>
+                        </Link>
+                        <Link to="/request">
+                          <li>Requests</li>
+                        </Link>
+                        <Link to="/connect">
+                          <li>Connect</li>
+                        </Link>
+                        {/* Deals Dropdown */}
+                        <li
+                          className="cursor-pointer flex justify-between items-center"
+                          onClick={() => setIsDealsOpen(!isDealsOpen)}
+                        >
+                          <span>Deals</span>
+                          
+                        </li>
+
+                        {isDealsOpen && (
+                          <ul className="ml-4 mt-2 flex flex-col gap-2 text-[18px]">
+                            <Link to="/deal/activedeals">
+                              <li>Active Deals</li>
+                            </Link>
+                            <Link to="/deal/milestones">
+                              <li>Milestones</li>
+                            </Link>
+                            <Link to="/deal/payments">
+                              <li>Payments</li>
+                            </Link>
+                            <Link to="/deal/negotiations">
+                              <li>Negotiations</li>
+                            </Link>
+                            <Link to="/deal/completed">
+                              <li>Completed</li>
+                            </Link>
+                            <Link to="/deal/disputes">
+                              <li>Disputes</li>
+                            </Link>
+                          </ul>
+                        )}
+                      </ul>
+                    </div>
+
+                    <div id="bottom" className="mt-10 mb-6">
+                      <ul className="flex flex-col gap-2">
+                        <Link to="/settings">
+                          <li>Settings</li>
+                        </Link>
+                        <Link to="/help">
+                          <li>Help</li>
+                        </Link>
+                      </ul>
+                    </div>
                   </div>
 
-                  <div id="bottom" className="mt-10 mb-6">
-                    <ul className="flex flex-col gap-2">
-                      <Link to="/settings">
-                        <li>Settings</li>
-                      </Link>
-                      <Link to="/help">
-                        <li>Help</li>
-                      </Link>
-                    </ul>
+                  <SheetFooter>
+                    <Button
+                      type="button"
+                      className="bg-[#001032]"
+                      onClick={handleSignOutClick}
+                    >
+                      Sign out
+                    </Button>
+
+                    <SheetClose asChild>
+                      <Button variant="outline">Cancel</Button>
+                    </SheetClose>
+                  </SheetFooter>
+                </div>
+
+                {showSignoutDialog && (
+                  <div className="absolute bottom-40  left-1/2 -translate-x-1/2 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-50 flex flex-col items-center text-sm text-[#001426] p-2">
+                    <button
+                      onClick={handleConfirmSignOut}
+                      className="w-full py-2 border-b border-gray-200 hover:bg-gray-100 text-[#001032]"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      onClick={() => setShowSignoutDialog(false)}
+                      className="w-full py-2 hover:bg-gray-100 text-[#001032]"
+                    >
+                      No
+                    </button>
                   </div>
-                </div>
-
-                <SheetFooter>
-                  <Button
-                    type="button"
-                    className="bg-[#001032]"
-                    onClick={handleSignOutClick}
-                  >
-                    Sign out
-                  </Button>
-
-                  <SheetClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                  </SheetClose>
-                </SheetFooter>
-              </div>
-
-              {showSignoutDialog && (
-                <div className="absolute bottom-40  left-1/2 -translate-x-1/2 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-50 flex flex-col items-center text-sm text-[#001426] p-2">
-                  <button
-                    onClick={handleConfirmSignOut}
-                    className="w-full py-2 border-b border-gray-200 hover:bg-gray-100 text-[#001032]"
-                  >
-                    Yes
-                  </button>
-                  <button
-                    onClick={() => setShowSignoutDialog(false)}
-                    className="w-full py-2 hover:bg-gray-100 text-[#001032]"
-                  >
-                    No
-                  </button>
-                </div>
-              )}
-            </SheetContent>
-          </div>
+                )}
+              </SheetContent>
+            </div>
           </Sheet>
         </div>
       </div>

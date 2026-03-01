@@ -9,6 +9,9 @@ import ReceivedTabSec from "./ReceivedTabSec";
 import RightNewRequest from "./RightNewRequest";
 import axios from "axios";
 import { serverUrl } from "@/App";
+import RightReceived from "./RightReceived";
+import AllTabSec from "./AllTabSec";
+import RightAllTab from "./RightAllTab";
 
 const RequestSec = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -28,7 +31,6 @@ const RequestSec = () => {
         });
 
         setRaisedRequests(res.data);
-        
       } catch (err) {
         console.error("Error fetching requests:", err);
       }
@@ -40,7 +42,7 @@ const RequestSec = () => {
   // Handle creating a new request
   const handleCreateRequest = (newRequest) => {
     setRaisedRequests((prev) => [newRequest, ...prev]);
-    
+
     setMobileView("right");
   };
 
@@ -154,17 +156,19 @@ const RequestSec = () => {
                   </TabsContent>
 
                   <TabsContent value="all" className="mt-0">
-                    <div className="">
-                      <ReceivedTabSec />
-                      <RaisedTabSec
-                        requests={raisedRequests}
-                        setSelectedRequest={setSelectedRequest}
-                      />
-                    </div>
+                    <AllTabSec
+                      setSelectedRequest={setSelectedRequest}
+                      selectedRequest={selectedRequest}
+                      setMobileView={setMobileView}
+                    />
                   </TabsContent>
 
                   <TabsContent value="received" className="mt-0">
-                    <ReceivedTabSec />
+                    <ReceivedTabSec
+                      setSelectedRequest={setSelectedRequest}
+                      selectedRequest={selectedRequest}
+                      setMobileView={setMobileView}
+                    />
                   </TabsContent>
 
                   <TabsContent value="raised" className="mt-0">
@@ -193,17 +197,12 @@ const RequestSec = () => {
               />
             )}
 
-            {activeTab === "all" && (
-              <RightRaised
-                requests={raisedRequests}
-                selectedRequest={selectedRequest}
-                setSelectedRequest={setSelectedRequest}
-                setMobileView={setMobileView}
-              />
-            )}
+            {activeTab === "all" && <RightAllTab 
+            selectedRequest={selectedRequest}
+             setSelectedRequest={setSelectedRequest}/>}
 
             {activeTab === "received" && (
-              <RightRaised
+              <RightReceived
                 requests={raisedRequests}
                 selectedRequest={selectedRequest}
                 setSelectedRequest={setSelectedRequest}

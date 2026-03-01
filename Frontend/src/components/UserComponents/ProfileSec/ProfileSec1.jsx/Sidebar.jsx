@@ -19,6 +19,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
   const [notifications, setNotifications] = useState([]);
+  const [isDealsOpen, setIsDealsOpen] = useState(false);
+
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -65,7 +67,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
   const toggleExpanded = (id) => {
     setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -77,10 +79,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <IoMdMenu className="text-white" size={27} onClick={handleToggle} />
         </div>
         <div>
-           <FaHome 
-           className="text-gray-500 my-3"
+          <FaHome
+            className="text-gray-500 my-3"
             size={27}
-             onClick={handleToggle}/>
+            onClick={handleToggle}
+          />
 
           <CgProfile
             className="text-gray-500 my-3"
@@ -248,16 +251,76 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 Notification
               </li>
 
-              <NavLink
-                to="/chat"
-                className={({ isActive }) =>
-                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
-                  }`
-                }
-              >
-                Chat
-              </NavLink>
+              {/* Deals Dropdown */}
+              <div className="my-3">
+                <div
+                  onClick={() => setIsDealsOpen(!isDealsOpen)}
+                  className="text-lg font-medium px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100"
+                >
+                  <span>Deals</span>
+                  
+                </div>
+
+                {isDealsOpen && (
+                  <div className="ml-8 mt-2 flex flex-col text-[15px] text-gray-600">
+                    <NavLink
+                      to="/deal/activedeals"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Active Deals
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/milestones"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Milestones
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/payments"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Payments
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/negotiations"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Negotiations
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/documentation"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Proposals & Documentation
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/completed"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Completed
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/disputes"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Disputes
+                    </NavLink>
+                  </div>
+                )}
+              </div>
             </ul>
           </div>
 

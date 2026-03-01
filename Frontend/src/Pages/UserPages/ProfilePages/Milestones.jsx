@@ -1,9 +1,11 @@
-import DealSec1 from '@/components/UserComponents/ProfileSec/DealSec/DealSec1';
+import DealSec1 from '@/components/UserComponents/ProfileSec/DealSec/ActiveDeals/DealSec1';
+import MilestoneSec from '@/components/UserComponents/ProfileSec/DealSec/Milestones/MilestoneSec';
 import Mobile from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Mobile';
 import Sidebar from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Sidebar';
+
 import React, { useState } from 'react'
 
-const Deal = () => {
+const Milestones = () => {
     const [isOpen, setIsOpen] = useState(true);
   return (
     <div className='bg-gray-100 h-screen overflow-hidden'>
@@ -15,11 +17,11 @@ const Deal = () => {
         <Mobile/>
       </div>
      <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-13 lg:mt-0`}>
-      <DealSec1/>
+      <MilestoneSec/>
      </div>
     </div>
   </div>
   )
 }
 
-export default Deal
+export default Milestones

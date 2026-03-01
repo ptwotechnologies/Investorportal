@@ -3,10 +3,10 @@ import { Check, Upload, IndianRupee } from "lucide-react";
 
 const DealBottomSec = () => {
   return (
-    <div className="flex items-start gap-3 w-full px-6 py-4">
-      <div className="w-[70%]">
-        <h1>Active Deals</h1>
-        <div className="mt-2 grid grid-cols-1 gap-2">
+    <div className="flex flex-col lg:flex-row items-start gap-3 w-full px-3 lg:px-6 py-4">
+      <div className="lg:w-[70%] w-full ">
+        <h1 className="font-semibold text-[5C5D78]">Active Deals</h1>
+        <div className="mt-2 grid grid-cols-1 gap-2 h-[60vh] overflow-y-auto scrollbar-hide">
           <div>
             <div className="bg-white w-full  rounded-2xl shadow-md p-3">
               {/* Top Section */}
@@ -193,22 +193,118 @@ const DealBottomSec = () => {
               </div>
             </div>
           </div>
+
+          <div>
+            <div className="bg-white w-full  rounded-2xl shadow-md p-3">
+              {/* Top Section */}
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-4">
+                  {/* Logo */}
+                  <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <span className="text-blue-600 font-bold text-lg">A</span>
+                  </div>
+
+                  {/* Title */}
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-800">
+                      NomadX
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                      Mobile App Development
+                    </p>
+                  </div>
+                </div>
+
+                {/* Status Badge */}
+                <span className="px-4 py-1 text-sm rounded-full bg-green-100 text-green-600 font-medium">
+                  In Progress
+                </span>
+              </div>
+
+              {/* Middle Section */}
+              <div className="grid grid-cols-2 gap-6 mt-3">
+                {/* Project */}
+                <div>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-gray-500">Project:</p>
+                  <p className="font-semibold text-gray-800">Arjun Patel</p>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-2 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full w-3/4 bg-linear-to-r from-purple-400 to-blue-400"></div>
+                  </div>
+                </div>
+
+                {/* Status */}
+                <div>
+                  <p className="text-sm text-gray-500">Status:</p>
+
+                  {/* Red Progress */}
+                  <div className="mt-2 h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-full w-2/3 bg-red-400"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Budget Section */}
+              <div className="grid grid-cols-3 gap-6 mt-3 text-sm">
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-500">Budget:</p>
+                  <p className="font-semibold text-gray-800">₹80,000</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-500">Paid:</p>
+                  <p className="font-semibold text-gray-800">₹45,000</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-500">Remaining:</p>
+                  <p className="font-semibold text-gray-800">₹75,000</p>
+                </div>
+              </div>
+
+              {/* Bottom Section */}
+              <div className="flex items-center justify-between mt-6">
+                <div className="flex gap-3">
+                  <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100">
+                    View Details
+                  </button>
+
+                  <button className="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600">
+                    Release Payment
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <span className="text-sm text-gray-500">Due 18 Mar 2026</span>
+
+                  <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium">
+                    No options
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          
         </div>
       </div>
 
-      <div className="w-[30%]">
-        <h1>Quick Insights</h1>
+      <div className="lg:w-[30%] w-full">
+        <h1 className="font-semibold text-[5C5D78]">Quick Insights</h1>
         <div className="mt-2">
              
-      <div className=" w-full max-w-sm space-y-6">
+      <div className=" w-full max-w-sm  bg-white rounded-t-2xl">
 
         {/* Upcoming Milestones */}
-        <div className="bg-white rounded-2xl shadow-sm p-5">
+        <div className="px-5 py-3 ">
           <h3 className="text-gray-700 font-semibold mb-4">
             Upcoming Milestones
           </h3>
 
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-sm"> 
             <div className="flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
@@ -230,19 +326,19 @@ const DealBottomSec = () => {
             </div>
           </div>
         </div>
-
+       <hr className="mx-5 my-2"/>
         {/* Payment Alerts */}
-        <div className="bg-white rounded-2xl shadow-sm p-5">
-          <h3 className="text-gray-700 font-semibold mb-4">
+        <div className=" px-5 ">
+          <h3 className="text-gray-700 font-semibold mb-2 ">
             Payment Alerts
           </h3>
 
-          <div className="bg-gray-50 rounded-xl p-4 flex justify-between items-center">
+          <div className="bg-gray-50 rounded-xl p-3 flex justify-between items-center">
             <div>
               <div className="flex items-center gap-2">
                 <IndianRupee size={16} className="text-gray-600" />
                 <span className="text-lg font-semibold text-gray-800">
-                  30,000
+                  30,000 <span className="text-sm ">pending</span> 
                 </span>
               </div>
               <p className="text-xs text-gray-500 mt-1">
@@ -256,9 +352,11 @@ const DealBottomSec = () => {
           </div>
         </div>
 
+          <hr className="mx-5 my-2 mt-4"/>
+
         {/* Recent Activities */}
-        <div className="bg-white rounded-2xl shadow-sm p-5">
-          <h3 className="text-gray-700 font-semibold mb-4">
+        <div className="px-5 pb-2">
+          <h3 className="text-gray-700 font-semibold mb-2 ">
             Recent Activities
           </h3>
 
