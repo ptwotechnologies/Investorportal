@@ -239,7 +239,7 @@ const SettingsSec = () => {
 
                 {/* ================= SAVE / CANCEL ================= */}
                {editingField && hasChanged && (
-  <div className="hidden md:flex justify-center my-20 mb-40">
+  <div className="flex justify-center my-20 mb-40">
     <div className="bg-white border-2 border-gray-400 rounded-lg shadow-md pt-10 pb-4 flex flex-col items-center text-center">
       <p className="text-sm text-gray-800 mb-12 px-10">
         Do you want to save or cancel?

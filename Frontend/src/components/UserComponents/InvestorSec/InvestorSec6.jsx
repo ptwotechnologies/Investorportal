@@ -50,8 +50,8 @@ const InvestorSec6 = () => {
           {divElements.map((item, index) => (
             <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0 snap-center lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
              <div className=' w-full  lg:gap-10  border border-[#00103280] 
-             lg:rounded-2xl shadow-lg lg:p-3 p-2 h-full min-h-[280px] flex flex-col justify-between'>
-                <p className='text-md lg:text-xl leading-6 tracking-wider py-5 lg:py-0 '>{item.paragraph}</p>
+             lg:rounded-2xl shadow-lg rounded-sm lg:p-3 lg:px-0 px-6 h-full min-h-[280px] flex flex-col justify-between'>
+                <p className='text-md lg:text-xl leading-7 tracking-wider py-5 lg:py-0 '>{item.paragraph}</p>
               <div className=' flex justify-between items-center ' >
                      <div className='font-semibold lg:text-xl text-md py-5 lg:py-0'>
                         <h1>{item.company}</h1>

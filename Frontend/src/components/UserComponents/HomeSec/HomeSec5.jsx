@@ -79,7 +79,7 @@ const HomeSec5 = () => {
           ref={scrollRef}
           onScroll={handleScroll}
           className="flex overflow-x-scroll scrollbar-hide"
-        >
+        > 
           {data.map((item, index) => ( 
             <div
               key={index}

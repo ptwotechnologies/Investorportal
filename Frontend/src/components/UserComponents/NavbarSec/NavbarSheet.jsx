@@ -18,6 +18,7 @@ import { CgProfile } from "react-icons/cg";
 import axios from "axios";
 import { serverUrl } from "@/App";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { IoIosNotifications } from "react-icons/io";
 
 function NavbarSheet({ textColor }) {
   const [openSheet, setOpenSheet] = useState(false);
@@ -90,17 +91,21 @@ function NavbarSheet({ textColor }) {
         ) : (
           <>
             {/* Profile Circle */}
-            <div className="flex items-center justify-between gap-3 cursor-pointer bg-[#001032] text-white px-3 py-1 rounded-sm">
+            <div className="flex items-center justify-between gap-3 cursor-pointer   px-3 py-1 rounded-sm">
+               <IoIosNotifications size={30} className="text-[#001032]" />
+              <div className="flex items-center justify-between gap-3 cursor-pointer bg-[#001032] text-white px-3 py-1 rounded-sm">
               {/* My Account Button */}
+
+              
               <button
                 onClick={() => setOpenProfileMenu(!openProfileMenu)}
                 className=""
               >
-                My Account
+                Dashboard
               </button>
 
               {/* Profile Image */}
-              <div
+              {/* <div
                 onClick={() => setOpenProfileMenu(!openProfileMenu)}
                 className="w-9 h-9 rounded-full overflow-hidden border-2 border-white"
               >
@@ -115,7 +120,8 @@ function NavbarSheet({ textColor }) {
                     <CgProfile size={18} className="text-white" />
                   </div>
                 )}
-              </div>
+              </div> */}
+            </div>
             </div>
           </>
         )}
@@ -151,7 +157,10 @@ function NavbarSheet({ textColor }) {
 
       {/* Mobile Menu */}
       <div className="lg:hidden">
-        <Sheet open={openSheet} onOpenChange={setOpenSheet}>
+        <Sheet open={openSheet} onOpenChange={setOpenSheet} >
+           <div className="flex justify-center items-center gap-2 border-2 border-[#787878BF] rounded-full py-0.5 px-1">
+            <IoIosNotifications size={30} className={`${textColor}`} />
+            <div className="w-0.2 h-6 border border-[#787878BF]"></div>
           <SheetTrigger onClick={() => setOpenSheet(!openSheet)}>
             {openSheet ? (
               <IoIosClose size={35} className={`${textColor}`} />
@@ -159,6 +168,7 @@ function NavbarSheet({ textColor }) {
               <RxHamburgerMenu size={27} className={`${textColor}`} />
             )}
           </SheetTrigger>
+           </div>
 
           <SheetContent className="w-[94vw] h-fit mt-20 mx-3 rounded-xl p-3 bg-[#D5D5D5] ">
             <SheetHeader className="border h-fit bg-white">
@@ -358,7 +368,7 @@ function NavbarSheet({ textColor }) {
 
                 {/* Join Us Card (Scrollable)  */}
                 <div className="border border-[#D5D5D5] p-2 mt-10 shadow-[inset_0px_4px_4px_rgba(208,208,208,0.25)] rounded-2xl">
-                  <div className="border border-[#D5D5D5]  shadow-[0px_0px_4px_4px_rgba(20,20,20,0.3)] rounded-2xl p-1 px-2">
+                  <div className="border border-[#D5D5D5]  shadow-[0px_0px_4px_4px_rgba(20,20,20,0.3)] rounded-2xl p-1 px-2 pr-3">
                     <div className="flex items-start justify-between">
                       <p className="text-[10px] mt-1">
                         Join our ecosystem of 4 portals into one
@@ -367,23 +377,23 @@ function NavbarSheet({ textColor }) {
                     </div>
 
                     <div className="flex items-center justify-between mt-4">
-                      <div className="grid grid-cols-2 place-items-center gap-1 gap-x-7">
-                        <div className=" border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center">
+                      <div className="grid grid-cols-2 place-items-center gap-1 gap-x-6">
+                        <div className=" w-15 h-12 flex items-center justify-center">
                           <img src={img1} alt="" className=" " />
                         </div>
-                        <div className="border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center">
+                        <div className="  w-15 h-12 flex items-center justify-center">
                           <img src={img2} alt="" className="" />
                         </div>
-                        <div className="  relative left-8 border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center ">
+                        <div className="  w-15 h-12 flex items-center justify-center ">
                           <img src={img3} alt="" className="" />
                         </div>
-                       <div className=" relative left-8 border-2 border-[#989898] rounded-full w-13 h-13 flex items-center justify-center ">
-                         <img src={img4} alt="" className=" " />
-                       </div>
+                        <div className="    w-15 h-12 flex items-center justify-center ">
+                          <img src={img4} alt="" className="w-20 " />
+                        </div>
                       </div>
 
                       <Link to="/joinus" onClick={() => setOpenSheet(false)}>
-                        <button className="bg-[#001032] text-white rounded-md px-3 py-2 text-sm mt-18">
+                        <button className="bg-[#001032] text-white rounded-md px-3 py-1 text-xs mt-14 mr-1">
                           Explore
                         </button>
                       </Link>
@@ -391,27 +401,52 @@ function NavbarSheet({ textColor }) {
                   </div>
                 </div>
               </div>
-
               <div className="w-full flex justify-between items-center gap-4 mt-4 text-xl sticky bottom-0 bg-white py-3 border-t">
-                <Link
-                  to="/login"
-                  onClick={() => setOpenSheet(false)}
-                  className="w-full"
-                >
-                  <button className="border border-[#001032] w-full text-[#001032] rounded-sm p-2">
-                    Sign in
-                  </button>
-                </Link>
+                {!isLoggedIn ? (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={() => setOpenSheet(false)}
+                      className="w-full"
+                    >
+                      <button className="border border-[#001032] w-full text-[#001032] rounded-sm p-2">
+                        Sign in
+                      </button>
+                    </Link>
 
-                <Link
-                  to="/login"
-                  onClick={() => setOpenSheet(false)}
-                  className="w-full"
-                >
-                  <button className="bg-[#001032] w-full text-white rounded-sm p-2">
-                    Sign up
-                  </button>
-                </Link>
+                    <Link
+                      to="/login"
+                      onClick={() => setOpenSheet(false)}
+                      className="w-full"
+                    >
+                      <button className="bg-[#001032] w-full text-white rounded-sm p-2">
+                        Sign up
+                      </button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        localStorage.removeItem("token");
+                        setOpenSheet(false);
+                        window.location.reload();
+                      }}
+                      className=" w-full text-[#001032] rounded-sm p-2 border border-[#001032]"
+                    >
+                      Logout
+                    </button>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setOpenSheet(false)}
+                      className="w-full"
+                    >
+                      <button className="border border-[#001032] w-full bg-[#001032] text-white rounded-sm p-2">
+                        Dashboard
+                      </button>
+                    </Link>
+                  </>
+                )}
               </div>
             </SheetHeader>
           </SheetContent>

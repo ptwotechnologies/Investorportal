@@ -123,12 +123,12 @@ const HelpSec = () => {
         <div className="flex gap-4 items-stretch">
           {/* ─── LEFT PANEL - exact original design ─────────────────────── */}
           <div
-            className={`relative flex flex-col bg-white border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[44%] h-screen lg:h-[88vh] gap-2 ${
+            className={`relative flex flex-col bg-white border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[34%] h-screen lg:h-[88vh] gap-2 ${
               showChat ? "hidden lg:flex" : "flex"
             }`}
           >
             {/* Search - exact original */}
-            <div className="flex items-center justify-between gap-2 border-2 border-[#D9D9D9] lg:p-2 p-1 px-2 rounded-lg">
+            <div className="flex items-center justify-between gap-2 border-2 border-[#D9D9D9] lg:p-2 p-1 px-2 rounded-sm">
               <input
                 type="text"
                 className="w-full outline-none"
@@ -143,7 +143,7 @@ const HelpSec = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setActiveFilter("all")}
-                className={`px-6 py-1 border border-[#D9D9D9] lg:rounded-lg rounded-sm w-30 text-md lg:text-[16px] ${
+                className={`px-6  border border-[#D9D9D9] rounded-sm w-30 text-md lg:text-[16px] ${
                   activeFilter === "all"
                     ? "bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]"
                     : ""
@@ -153,7 +153,7 @@ const HelpSec = () => {
               </button>
               <button
                 onClick={() => setActiveFilter("open")}
-                className={`px-5 py-1 lg:rounded-lg rounded-sm border border-[#D9D9D9] w-30 text-md lg:text-[16px] ${
+                className={`px-5 rounded-sm border border-[#D9D9D9] w-30 text-md lg:text-[16px] ${
                   activeFilter === "open"
                     ? "bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]"
                     : ""
@@ -161,14 +161,14 @@ const HelpSec = () => {
               >
                 Open
                 {openCount > 0 && (
-                  <span className="bg-[#B42A2C] text-white text-xs rounded-full px-1.5 py-0.5 mx-1">
+                  <span className="bg-[#B42A2C] text-white text-xs rounded-full px-1 py-0.1 mx-1">
                     {openCount}
                   </span>
                 )}
               </button>
               <button
                 onClick={() => setActiveFilter("closed")}
-                className={`px-5 py-1 lg:rounded-lg rounded-sm border border-[#D9D9D9] w-30 text-md lg:text-[16px] ${
+                className={`px-5 rounded-sm border border-[#D9D9D9] w-30 text-md lg:text-[16px] ${
                   activeFilter === "closed"
                     ? "bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]"
                     : ""
@@ -227,7 +227,7 @@ const HelpSec = () => {
           </div>
 
           {/* ─── RIGHT PANEL ────────────────────────────────────────────── */}
-          <div className={`lg:w-[56%] h-[88vh] ${showChat ? "flex" : "hidden lg:flex"}`}>
+          <div className={`lg:w-[66%] h-[88vh] ${showChat ? "flex" : "hidden lg:flex"}`}>
             {selectedChat ? (
               <RightHelp
                 ticket={selectedChat}

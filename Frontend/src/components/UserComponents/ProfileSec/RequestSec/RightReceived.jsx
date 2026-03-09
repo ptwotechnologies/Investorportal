@@ -1,12 +1,19 @@
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { serverUrl } from "@/App";
+import axios from "axios"; 
 
 const RightReceived = ({
   selectedRequest,
   setSelectedRequest,
   setMobileView,
 }) => {
+  const [showConfirm, setShowConfirm] = React.useState({
+    requestId: null,
+    providerId: null,
+  });
+
   const handleClose = () => {
     setSelectedRequest(null);
     if (setMobileView) {
@@ -14,11 +21,55 @@ const RightReceived = ({
     }
   };
 
+  const handleInterest = async (requestId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${serverUrl}/requests/interested/${requestId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      // Update local selectedRequest state
+      setSelectedRequest((prev) =>
+        prev && prev._id === requestId
+          ? { ...prev, status: "interested" }
+          : prev,
+      );
+    } catch (err) {
+      console.error("Interest error:", err);
+    }
+  };
+
+  const handleIgnore = async (requestId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${serverUrl}/requests/ignore`,
+        { requestId },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      // Update local state so button disables & text changes
+      setSelectedRequest((prev) =>
+        prev ? { ...prev, isIgnored: true } : prev,
+      );
+
+      // Close confirm modal
+      setShowConfirm({ requestId: null, providerId: null });
+    } catch (err) {
+      console.error("Ignore error:", err);
+    }
+  };
+
   // If no request is selected, show empty state
   if (!selectedRequest) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
-        <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+       <div className="flex flex-col items-center  p-8 text-center  border border-gray-200 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md">
+         <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
           <svg
             className="w-12 h-12 text-gray-400"
             fill="none"
@@ -39,6 +90,7 @@ const RightReceived = ({
         <p className="text-gray-500 text-sm">
           Click on a request from the left to view details
         </p>
+       </div>
       </div>
     );
   }
@@ -126,10 +178,24 @@ const RightReceived = ({
           <div className="flex gap-3 pt-4">
             <button
               onClick={() => handleInterest(selectedRequest._id)}
-              className="flex-1 bg-[#108349] text-white py-2 rounded-lg text-xs font-medium hover:bg-[#0d6b3a] transition-colors flex items-center justify-center gap-1"
+              disabled={
+                selectedRequest.status === "interested" ||
+                selectedRequest.isIgnored
+              }
+              className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
+                selectedRequest.status === "interested" ||
+                selectedRequest.isIgnored
+                  ? "bg-[#F8DEDE] text-[#B94444] cursor-not-allowed"
+                  : "bg-[#F8DEDE] text-[#B94444]"
+              }`}
             >
-              <FaCheckCircle /> Interested
+              <FaCheckCircle />{" "}
+              {selectedRequest.status === "interested"
+                ? "Interested"
+                : "Interest"}
             </button>
+
+            {/* Ignore Button */}
             <button
               onClick={() =>
                 setShowConfirm({
@@ -137,10 +203,43 @@ const RightReceived = ({
                   providerId: null,
                 })
               }
-              className="flex-1 bg-[#BA1E1E] text-white py-2 rounded-lg text-xs font-medium hover:bg-[#a01818] transition-colors flex items-center justify-center gap-1"
+              disabled={
+                selectedRequest.status === "interested" ||
+                selectedRequest.isIgnored
+              }
+              className={`flex-1 bg-[#D8D6F8] text-[#59549F] py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
+                selectedRequest.status === "interested" ||
+                selectedRequest.isIgnored
+                  ? "cursor-not-allowed opacity-60"
+                  : ""
+              }`}
             >
-              <FaTimesCircle /> Ignore
+              <FaTimesCircle />{" "}
+              {selectedRequest.isIgnored ? "Ignored" : "Ignore"}
             </button>
+
+            {/* Confirm Modal */}
+            {showConfirm.requestId === selectedRequest._id &&
+              !selectedRequest.isIgnored && (
+                <div className="absolute bg-white shadow-lg rounded-lg mt-2 border w-24 z-50">
+                  <div className="flex flex-col items-center gap-1">
+                    <button
+                      onClick={() => handleIgnore(selectedRequest._id)}
+                      className="bg-[#F8DEDE] text-[#B94444] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      onClick={() =>
+                        setShowConfirm({ requestId: null, providerId: null })
+                      }
+                      className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
           </div>
         </div>
       </div>

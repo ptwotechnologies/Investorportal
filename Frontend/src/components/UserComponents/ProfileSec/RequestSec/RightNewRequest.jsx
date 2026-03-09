@@ -84,10 +84,8 @@ const RightNewRequest = ({raisedRequests,setMobileView , selectedRequest,setSele
 
             {/* Action Buttons */}
             <div className="flex gap-3 pt-4">
-              <button className="flex-1 bg-[#1F9E61] text-white py-3 rounded-lg font-medium hover:bg-[#188c54] transition-colors">
-                Update Request
-              </button>
-              <button className="flex-1 border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+              
+              <button className="flex-1 border-2 border-gray-300 text-gray-700 py-1 rounded-lg font-medium hover:bg-gray-50 transition-colors">
                 Cancel Request
               </button>
             </div>
@@ -111,11 +109,11 @@ const RightNewRequest = ({raisedRequests,setMobileView , selectedRequest,setSele
 
       <div className=" ">
         <div className="flex items-center gap-2 ">
-          <button className="bg-[#1F9E61] lg:py-2 p-2 rounded-lg text-white lg:w-[25%] w-[30%] text-sm ">
+          <button className="bg-[#D8D6F8] text-[#59549F] lg:py-1 p-2 rounded-sm  lg:w-[25%] w-[30%] text-sm shadow-[inset_0_0_12px_#00000040]">
             New Request
           </button>
 
-          <div className="flex items-center justify-between gap-2 border-2 border-[#D9D9D9] lg:w-[75%] w-[70%] lg:p-2 p-2 px-2 rounded-lg text-sm">
+          <div className="flex items-center justify-between gap-2 border-2 border-[#D9D9D9] lg:w-[75%] w-[70%] lg:p-2 lg:py-1 p-2 px-2 rounded-sm text-sm">
             <input
               type="text"
               className="w-full outline-none"
@@ -132,17 +130,19 @@ const RightNewRequest = ({raisedRequests,setMobileView , selectedRequest,setSele
           <div 
           key={req._id || req.id}
               onClick={() => handleCardClick(req)}
-          className="flex items-center  gap-3 mb-2 rounded-lg  bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-25">
-            <div className="w-16 h-16 my-2 ml-2 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200"></div>
+          className="flex items-stretch gap- mb-1 rounded-lg  bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22">
+            <div className="flex items-center justify-center p-3 shrink-0">
+              <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200"></div>
+            </div>
             <div className="w-0.5 h-full p-0 bg-[#0010324D] "></div>
-            <div className="flex items-center justify-between lg:gap-x-3 gap-x-2 w-full  px-2">
-              <div className="my-3   ">
+            <div className="flex items-center justify-between lg:gap-x-3 gap-x-2 w-full  pl-2">
+              <div className="my-3 min-w-0 flex-1">
                 <h1 className="text-[#001032] font-semibold text-sm">
                   {req.service}
                 </h1>
-                <p className="text-[#001032]  text-xs">{req.description}</p>
+                <p className="text-[#001032] text-xs line-clamp-2">{req.description}</p>
 
-                       {req.createdAt && (
+                {req.createdAt && (
                 <p className="text-xs text-gray-500 pt-2">
                   {new Date(req.createdAt).toLocaleDateString("en-IN", {
                     day: "numeric",

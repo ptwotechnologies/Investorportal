@@ -20,9 +20,11 @@ const LogicSec1 = () => {
    const navigate = useNavigate();
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
+   const [loading, setLoading] = useState(false); // NEW: Loading state
 
    const handleLogin = async (event) => {
     event.preventDefault();
+    setLoading(true); // NEW: Start loading
     try {
       const response = await axios.post(`${serverUrl}/user/login`, {
         email,
@@ -49,9 +51,10 @@ const LogicSec1 = () => {
       } else {
         toast.error("Server Error");
       }
+    } finally {
+      setLoading(false); // NEW: Stop loading
     }
   };
-
 
   return (
     <div >
@@ -91,6 +94,7 @@ const LogicSec1 = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        disabled={loading} // NEW: Disable when loading
                         className="p-5 font-medium text-[#00103280]"
                       />
                     </div>
@@ -102,6 +106,7 @@ const LogicSec1 = () => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        disabled={loading} // NEW: Disable when loading
                         className="p-5 font-medium text-[#00103280]"
                       />
                     </div>
@@ -113,25 +118,36 @@ const LogicSec1 = () => {
                   </div>
 
                   <CardFooter className="flex-col gap-2 mt-4  bottom-0 px-0  w-full lg:static">
-                <Button type="submit" className="w-full bg-[#001032] my-2">
-                  Log in
-                </Button>
-                <Link to="/selectPortal" className="w-full"><Button  className="w-full bg-[#001032]">
-                  Sign up
-                </Button></Link>
-                <div className="fle w-full text-end">
-                <Link
-                  to="/passwordreset"
-                  className="ml-auto inline-block text-sm underline-offset-4 font-semibold hover:underline w-full text-[#001032CC]  "
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              </CardFooter>
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[#001032] my-2 relative" 
+                      disabled={loading} // NEW: Disable when loading
+                    >
+                      {loading ? ( // NEW: Show loading spinner
+                        <div className="flex items-center justify-center gap-2">
+                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                          <span>Logging in...</span>
+                        </div>
+                      ) : (
+                        "Log in"
+                      )}
+                    </Button>
+                    <Link to="/selectPortal" className="w-full">
+                      <Button className="w-full bg-[#001032]" disabled={loading}>
+                        Sign up
+                      </Button>
+                    </Link>
+                    <div className="fle w-full text-end">
+                      <Link
+                        to="/passwordreset"
+                        className="ml-auto inline-block text-sm underline-offset-4 font-semibold hover:underline w-full text-[#001032CC]  "
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
+                  </CardFooter>
                 </form>
               </CardContent>
-              
-              
             </Card>
           </div>
         </div>

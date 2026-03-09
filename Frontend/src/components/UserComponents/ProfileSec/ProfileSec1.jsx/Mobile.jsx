@@ -21,6 +21,13 @@ import { serverUrl } from "@/App";
 import axios from "axios";
 import { IoIosNotifications } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
+import { MdOutlineDashboardCustomize } from "react-icons/md";
+import { CgProfile } from "react-icons/cg";
+import { HiOutlineTicket } from "react-icons/hi";
+import { HiOutlineUserGroup } from "react-icons/hi";
+import { FaHandshake } from "react-icons/fa";
+import { IoSettingsOutline } from "react-icons/io5";
+import { BiHelpCircle } from "react-icons/bi";
 
 const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
@@ -72,11 +79,12 @@ const Mobile = () => {
     <div className="">
       <div className="flex items-center justify-between bg-white p-2 py-3">
         <div>
-          <img src={loginLogo} alt="logo" className="w-30" />
+          <Link to="/dashboard"><img src={loginLogo} alt="logo" className="w-30" /></Link>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 border-2 border-[#787878BF] rounded-full py-0.5 px-1">
           <IoIosNotifications size={30} onClick={handleNotificationClick} />
+          <div className="w-0.2 h-6 border"></div>
           <Sheet>
             <SheetTrigger asChild>
               <div className="flex items-center gap-5">
@@ -91,29 +99,54 @@ const Mobile = () => {
                     <SheetTitle></SheetTitle>
                   </SheetHeader>
 
-                  <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-7">
+                  <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-2">
                     <div id="top">
-                      <ul className="flex flex-col gap-2">
-                        <Link to="/dashboard">
+                      <ul className="flex flex-col gap-2 text-[16px]">
+                        <div className="flex items-center gap-4">
+                          <MdOutlineDashboardCustomize
+                                      className="text-gray-500 " size={25}/>
+                          <Link to="/dashboard">
                           <li>Dashboard</li>
                         </Link>
-                        <Link to="/profile">
+                        </div>
+
+                        <div  className="flex items-center gap-4">
+                          <CgProfile
+                                      className="text-gray-500 my-1" size={25}/>
+                          <Link to="/profile">
                           <li>Profile</li>
                         </Link>
-                        <Link to="/request">
+                        </div>
+
+
+                        <div className="flex items-center gap-4">
+                          <HiOutlineTicket
+                                      className="text-gray-500 " size={25} />
+                          <Link to="/request">
                           <li>Requests</li>
                         </Link>
-                        <Link to="/connect">
+                        </div>
+
+                        <div className="flex items-center gap-4">
+                          <HiOutlineUserGroup 
+                                      className="text-gray-500 my-1" size={25}/>
+                          <Link to="/connect">
                           <li>Connect</li>
                         </Link>
+                        </div>
                         {/* Deals Dropdown */}
-                        <li
+
+                       <div className="flex items-center gap-4">
+                          <FaHandshake
+                                    className="text-gray-500 " size={25}/>
+                         <li
                           className="cursor-pointer flex justify-between items-center"
                           onClick={() => setIsDealsOpen(!isDealsOpen)}
                         >
                           <span>Deals</span>
                           
                         </li>
+                       </div>
 
                         {isDealsOpen && (
                           <ul className="ml-4 mt-2 flex flex-col gap-2 text-[18px]">
@@ -129,6 +162,9 @@ const Mobile = () => {
                             <Link to="/deal/negotiations">
                               <li>Negotiations</li>
                             </Link>
+                            <Link to="/deal/documentation">
+                              <li>Proposals & Documentation</li>
+                            </Link>
                             <Link to="/deal/completed">
                               <li>Completed</li>
                             </Link>
@@ -141,13 +177,20 @@ const Mobile = () => {
                     </div>
 
                     <div id="bottom" className="mt-10 mb-6">
-                      <ul className="flex flex-col gap-2">
-                        <Link to="/settings">
+                      <ul className="flex flex-col gap-2 text-[16px]">
+                       <div className="flex items-center gap-4">
+                         <IoSettingsOutline  className=" text-gray-500 my-1" size={25} />
+                         <Link to="/settings">
                           <li>Settings</li>
                         </Link>
-                        <Link to="/help">
+                       </div>
+
+                        <div className="flex items-center gap-4">
+                          <BiHelpCircle  className=" text-gray-500" size={25}  />
+                          <Link to="/help">
                           <li>Help</li>
                         </Link>
+                        </div>
                       </ul>
                     </div>
                   </div>
@@ -168,16 +211,16 @@ const Mobile = () => {
                 </div>
 
                 {showSignoutDialog && (
-                  <div className="absolute bottom-40  left-1/2 -translate-x-1/2 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-50 flex flex-col items-center text-sm text-[#001426] p-2">
+                  <div className="absolute bottom-30  left-1/2 -translate-x-1/2 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-[88%] flex flex-col items-center text-sm  p-2">
                     <button
                       onClick={handleConfirmSignOut}
-                      className="w-full py-2 border-b border-gray-200 hover:bg-gray-100 text-[#001032]"
+                      className="w-full py-2 border-b border-gray-200 active:bg-[#001032] active:text-white rounded-md"
                     >
                       Yes
                     </button>
                     <button
                       onClick={() => setShowSignoutDialog(false)}
-                      className="w-full py-2 hover:bg-gray-100 text-[#001032]"
+                      className="w-full py-2 active:bg-[#001032] active:text-white rounded-md"
                     >
                       No
                     </button>

@@ -88,10 +88,10 @@ const Bottom = () => {
   const [otpSent, setOtpSent] = useState(false);
 
   return (
-    <div className="flex items-start gap-4 w-full px-6 py-2">
+    <div className="flex flex-col lg:flex-row items-start gap-4 w-full px-3 lg:px-6 py-2">
 
       {/* ══ LEFT: Proposal Summary ══════════════════════════════════════════ */}
-      <div className="w-[22%] flex flex-col">
+      <div className="lg:w-[22%] w-full flex flex-col">
         {/* Heading */}
         <h1 className="font-semibold text-[#5C5D78] text-base mb-3">
           Proposal Summary
@@ -173,7 +173,7 @@ const Bottom = () => {
       </div>
 
       {/* ══ MIDDLE: Documentation Viewer ════════════════════════════════════ */}
-      <div className="w-[48%] flex flex-col">
+      <div className="lg:w-[48%] w-full flex flex-col">
         {/* Heading + icons */}
         <div className="flex items-center justify-between mb-3">
           <h1 className="font-semibold text-[#5C5D78] text-base">Documentation Viewer</h1>
@@ -194,7 +194,7 @@ const Bottom = () => {
         </div>
 
         {/* Contract document card */}
-        <div className="bg-white rounded-2xl shadow-sm px-6 py-5">
+        <div className="bg-white rounded-2xl shadow-sm px-3 lg:px-6 py-5">
           {/* Document header */}
           <div className="flex items-start justify-between mb-5">
             <h2 className="font-bold text-gray-800 text-xl">Agreement Contract</h2>
@@ -244,10 +244,10 @@ const Bottom = () => {
       </div>
 
       {/* ══ RIGHT: Confirmation ══════════════════════════════════════════════ */}
-      <div className="w-[30%] flex flex-col">
+      <div className="lg:w-[30%] w-full flex flex-col">
         <h1 className="font-semibold text-[#5C5D78] text-base mb-3">Confirmation</h1>
 
-        <div className="bg-white rounded-2xl shadow-sm p-4 flex flex-col gap-4">
+        <div className="bg-white rounded-2xl shadow-sm px-3 py-4 lg:p-4 flex flex-col gap-4">
 
           {/* Secure Agreement header */}
           <div className="flex items-center gap-3 p-3 bg-[#F0EDFD] rounded-xl">

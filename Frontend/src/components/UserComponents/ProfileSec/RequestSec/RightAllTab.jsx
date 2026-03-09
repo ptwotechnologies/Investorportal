@@ -3,14 +3,63 @@ import { IoMdClose } from "react-icons/io";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const RightAllTab = ({ selectedRequest, setSelectedRequest }) => {
+  const [showConfirm, setShowConfirm] = React.useState({
+      requestId: null,
+      providerId: null,
+    });
   const handleClose = () => {
     setSelectedRequest(null);
+  };
+        
+
+   const handleInterest = async (requestId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${serverUrl}/requests/interested/${requestId}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      // Update local selectedRequest state
+      setSelectedRequest((prev) =>
+        prev && prev._id === requestId
+          ? { ...prev, status: "interested" }
+          : prev,
+      );
+    } catch (err) {
+      console.error("Interest error:", err);
+    }
+  };
+
+   const handleIgnore = async (requestId) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+        `${serverUrl}/requests/ignore`,
+        { requestId },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+
+      // Update local state so button disables & text changes
+      setSelectedRequest((prev) =>
+        prev ? { ...prev, isIgnored: true } : prev,
+      );
+
+      // Close confirm modal
+      setShowConfirm({ requestId: null, providerId: null });
+    } catch (err) {
+      console.error("Ignore error:", err);
+    }
   };
 
   if (!selectedRequest) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
-        <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+      <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center ">
+        <div className="flex flex-col items-center  p-8 text-center  border border-gray-200 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md">
+          <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4 ">
           <svg
             className="w-12 h-12 text-gray-400"
             fill="none"
@@ -31,6 +80,7 @@ const RightAllTab = ({ selectedRequest, setSelectedRequest }) => {
         <p className="text-gray-500 text-sm">
           Click on a request from the left to view details
         </p>
+        </div>
       </div>
     );
   }
@@ -67,7 +117,7 @@ const RightAllTab = ({ selectedRequest, setSelectedRequest }) => {
                       year: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
-                    }
+                    },
                   )}
                 </p>
               )}
@@ -91,15 +141,17 @@ const RightAllTab = ({ selectedRequest, setSelectedRequest }) => {
           </div>
 
           <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
-            <h4 className="text-sm font-semibold text-gray-600 mb-2">
-              Status
-            </h4>
-            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-              selectedRequest.requestType === 'forwarded' 
-                ? 'bg-blue-100 text-blue-800' 
-                : 'bg-yellow-100 text-yellow-800'
-            }`}>
-              {selectedRequest.requestType === 'forwarded' ? 'Forwarded to You' : 'Pending'}
+            <h4 className="text-sm font-semibold text-gray-600 mb-2">Status</h4>
+            <span
+              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                selectedRequest.requestType === "forwarded"
+                  ? "bg-blue-100 text-blue-800"
+                  : "bg-yellow-100 text-yellow-800"
+              }`}
+            >
+              {selectedRequest.requestType === "forwarded"
+                ? "Forwarded to You"
+                : "Pending"}
             </span>
           </div>
 
@@ -112,20 +164,71 @@ const RightAllTab = ({ selectedRequest, setSelectedRequest }) => {
             </p>
           </div>
 
-          {selectedRequest.requestType === 'forwarded' ? (
+          {selectedRequest.requestType === "forwarded" ? (
             <div className="flex gap-3 pt-4">
-              <button className="flex-1 bg-[#108349] text-white lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-[#0d6b3a] transition-colors flex items-center justify-center gap-2">
-                <FaCheckCircle /> Interested
+              <button
+                onClick={() => handleInterest(selectedRequest._id)}
+                disabled={
+                  selectedRequest.status === "interested" ||
+                  selectedRequest.isIgnored
+                }
+                className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
+                  selectedRequest.status === "interested" ||
+                  selectedRequest.isIgnored
+                    ? "bg-[#F8DEDE] text-[#B94444] cursor-not-allowed"
+                    : "bg-[#F8DEDE] text-[#B94444]"
+                }`}
+              >
+                <FaCheckCircle />{" "}
+                {selectedRequest.status === "interested"
+                  ? "Interested"
+                  : "Interest"}
               </button>
-              <button className="flex-1 bg-[#BA1E1E] text-white lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-[#a01818] transition-colors flex items-center justify-center gap-2">
-                <FaTimesCircle /> Ignore
+              <button
+                onClick={() =>
+                  setShowConfirm({
+                    requestId: selectedRequest._id,
+                    providerId: null,
+                  })
+                }
+                disabled={
+                  selectedRequest.status === "interested" ||
+                  selectedRequest.isIgnored
+                }
+                className={`flex-1 bg-[#D8D6F8] text-[#59549F] py-2 rounded-lg text-xs font-medium flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
+                  selectedRequest.status === "interested" ||
+                  selectedRequest.isIgnored
+                    ? "cursor-not-allowed opacity-60"
+                    : ""
+                }`}
+              >
+                <FaTimesCircle />{" "}
+                {selectedRequest.isIgnored ? "Ignored" : "Ignore"}
               </button>
+              {showConfirm.requestId === selectedRequest._id &&
+              !selectedRequest.isIgnored && (
+                <div className="absolute bg-white shadow-lg rounded-lg mt-2 border w-24 z-50">
+                  <div className="flex flex-col items-center gap-1">
+                    <button
+                      onClick={() => handleIgnore(selectedRequest._id)}
+                      className="bg-[#F8DEDE] text-[#B94444] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
+                    >
+                      Yes
+                    </button>
+                    <button
+                      onClick={() =>
+                        setShowConfirm({ requestId: null, providerId: null })
+                      }
+                      className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex gap-3 pt-4">
-              <button className="flex-1 bg-[#1F9E61] text-white lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-[#188c54] transition-colors">
-                Update Request
-              </button>
               <button className="flex-1 border-2 border-gray-300 text-gray-700 lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
                 Cancel Request
               </button>

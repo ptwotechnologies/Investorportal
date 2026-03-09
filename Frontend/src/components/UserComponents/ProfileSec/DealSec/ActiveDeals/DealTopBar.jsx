@@ -9,10 +9,10 @@ const DealTopBar = () => {
         <div id='top' className='flex flex-col lg:flex-row items-start justify-between w-full '>
             <div className='lg:w-[40%] w-full' > 
                 <h1 className='lg:text-xl  text-2xl font-semibold'>Active Deals</h1>
-                <p className='text-sm'>Manage all ongoing partnerships and work progress</p>
+                <p className='lg:text-sm text-xs'>Manage all ongoing partnerships and work progress</p>
 
             </div>
-            <div className='flex items-center gap-4  '>
+            <div className='lg:flex items-center gap-4 hidden  '>
                  <div className='flex items-center border border-[#D9D9D9] gap-2  rounded-md h-11 px-2'>
                     <CiSearch size={25}  />
                  <input type="text" name="" id="" placeholder='Search by startup or professional ' className=' outline-none lg:w-80 ' />
@@ -21,6 +21,20 @@ const DealTopBar = () => {
               <div className='flex items-center gap-2 bg-[#7F6DD4] text-white p-2 px-3 rounded-md'>
                 <FaPlus />
                 <button>Create Deal</button>
+
+              </div>
+
+            </div>
+
+             <div className='flex items-center gap-2 lg:hidden mt-4 w-full'>
+                 <div className='flex items-center border border-[#D9D9D9] gap-2  rounded-md  px-1 w-full'>
+                    <CiSearch size={25}  />
+                 <input type="text" name="" id="" placeholder='Search  ' className=' outline-none w-full ' />
+                 <button className='p-2 px-1 text-xs border-l border-[#D9D9D9] w-25 '>All Status</button>
+                 </div>
+              <div className='flex items-center gap-1 bg-[#7F6DD4] text-white p-2 rounded-md w-35'>
+                <FaPlus />
+                <button className='text-xs'>Create Deal</button>
 
               </div>
 

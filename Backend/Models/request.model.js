@@ -14,7 +14,7 @@ const requestSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["raised", "forwarded", "accepted", "completed"],
+      enum: ["raised", "forwarded","interested", "accepted", "completed"],
       default: "raised",
     },
 
@@ -45,6 +45,12 @@ const requestSchema = new mongoose.Schema(
       ref: "User",
       default: null,
     },
+      seenBy: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
   },
   { timestamps: true }
 );

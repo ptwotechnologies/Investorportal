@@ -474,16 +474,22 @@ const ProfileSec = () => {
       >
         <section aria-label="Profile header">
           <div
-            className="lg:h-50 h-30 bg-card relative px-0 cursor-pointer"
-            style={{
-              backgroundImage: profile?.coverImage
-                ? profile.coverImage.startsWith("blob:")
-                  ? `url(${profile.coverImage})`
-                  : `url(${serverUrl}${profile.coverImage})`
-                : "none",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
+            className={`lg:h-50 h-30 relative px-0 cursor-pointer ${
+              !profile?.coverImage
+                ? "bg-linear-to-b from-[#D8D6F8] to-[#F8DEDE]"
+                : ""
+            }`}
+            style={
+              profile?.coverImage
+                ? {
+                    backgroundImage: profile.coverImage.startsWith("blob:")
+                      ? `url(${profile.coverImage})`
+                      : `url(${serverUrl}${profile.coverImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }
+                : {}
+            }
             onClick={() => {
               setModalImage(
                 profile?.coverImage ? `${serverUrl}${profile.coverImage}` : "",
@@ -492,7 +498,9 @@ const ProfileSec = () => {
               setIsImageModalOpen(true);
             }}
           >
-            <div className="absolute inset-0 bg-black/30"></div>
+            {profile?.coverImage && (
+              <div className="absolute inset-0 bg-black/30"></div>
+            )}
             {/* Camera Icon */}
             <div className="flex justify-between">
               <IoIosCamera
@@ -533,7 +541,7 @@ const ProfileSec = () => {
                       ? `${serverUrl}${profile.profilePhoto}`
                       : ""
                   }
-                  className="lg:w-28 lg:h-28 w-22 h-22 bg-gray-300 border-3 rounded-full object-cover cursor-pointer"
+                  className="lg:w-28 lg:h-28 w-22 h-22 bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] border-2 shadow-[0px_4px_10px_rgba(0,0,0,0.25)]  rounded-full object-cover cursor-pointer"
                   onClick={() => {
                     setModalImage(
                       profile?.profilePhoto
@@ -811,7 +819,7 @@ const ProfileSec = () => {
 
       <div
         id="services"
-        className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5 lg:m-2 my-2 lg:p-2 "
+        className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-linear-to-r from-[#D8D6F8] to-[#F8DEDE] lg:px-5 lg:m-2 my-2 lg:p-2 "
       >
         <div className="flex justify-between items-center mt-3 mb-1">
           <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">
@@ -851,7 +859,7 @@ const ProfileSec = () => {
               {servicesText && servicesText.length > 120 && (
                 <button
                   onClick={() => setIsServicesExpanded(!isServicesExpanded)}
-                  className="text-[#001032] text-sm font-medium cursor-pointer bg-white px-1"
+                  className="text-[#001032] text-sm font-medium cursor-pointer  px-1"
                 >
                   {isServicesExpanded ? "See less" : "See more"}
                 </button>
@@ -1221,7 +1229,7 @@ const ProfileSec = () => {
 
       <div
         id="portfolio"
-        className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white lg:px-5 lg:m-2 lg:p-2 my-2"
+        className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-linear-to-b from-[#D8D6F8] from-5% to-[#F8DEDE] lg:px-5 lg:m-2 lg:p-2 my-2"
       >
         <div className="flex justify-between items-center my-3">
           <h1 className="text-[#001032] lg:px-9 px-4 font-semibold text-md lg:text-xl">

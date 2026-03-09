@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
+import { Link } from 'react-router-dom';
 
 const StartupSec9 = () => {
 
@@ -205,7 +206,7 @@ const StartupSec9 = () => {
                                     </div>
     
                  <div className="mt-3   lg:mt-auto pt-3 lg:pt-1 text-center">
-                        <button
+                       <Link to="/login"> <button
                           className="
                          w-full
                         mt-2 lg:mt-3
@@ -219,7 +220,7 @@ const StartupSec9 = () => {
                          
                         >
                           {card.buttonText}
-                        </button>
+                        </button></Link>
                       </div>
                 </div>
                  

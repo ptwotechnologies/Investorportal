@@ -12,13 +12,13 @@ import { BiObjectsHorizontalLeft } from "react-icons/bi";
 
 const TopBar = () => {
   return (
-    <div className="bg-white px-6 py-6">
-      <div id="top" className="flex items-start justify-between w-full ">
-        <div className="w-[40%] ">
+    <div className="bg-white lg:px-6 px-3 py-6">
+      <div id="top" className="flex flex-col lg:flex-row items-start justify-between w-full ">
+        <div className="lg:w-[40%] w-full">
           <h1 className="text-xl font-semibold">Milestones</h1>
-          <p className="text-sm">Track project progress and payment stages</p>
+          <p className="lg:text-sm text-xs">Track project progress and payment stages</p>
         </div>
-        <div className="flex items-center  gap-4 ">
+        <div className="lg:flex items-center  gap-4 hidden ">
           <div className="flex items-center border border-[#D9D9D9] gap-2  rounded-md h-10 px-2">
             <CiSearch size={25} />
             <input
@@ -45,43 +45,71 @@ const TopBar = () => {
             </ButtonGroup>
           </div>
         </div>
+
+        <div className="flex items-center  gap-2 lg:hidden mt-4 w-full">
+          <div className="flex items-center border border-[#D9D9D9] gap-2  rounded-md  px-2 w-full">
+            <CiSearch size={25} />
+            <input
+              type="text"
+              name=""
+              id=""
+              placeholder="Search "
+              className=" outline-none w-full "
+            />
+            <button className="px-1 py-2.5 border-l border-[#D9D9D9] h-full text-[10px] w-22">
+              All Status
+            </button>
+          </div>
+          <div className="flex items-center gap-2  text-white  rounded-md">
+           
+            <ButtonGroup className=" h-9">
+              <Button variant="secondary" size="sm" className="h-full bg-[#9B8EDE] text-white text-xs">
+              <IoGrid />  Grid
+              </Button>
+              <ButtonGroupSeparator />
+              <Button variant="secondary" size="sm" className="h-full text-xs">
+             <BiObjectsHorizontalLeft /> Talle
+              </Button>
+            </ButtonGroup>
+          </div>
+        </div>
       </div>
 
       <div
         id="bottom"
-        className="flex items-center justify-around gap-4 mt-10 "
+        className=" grid grid-cols-2 lg:flex items-center justify-around gap-4 lg:mt-10 mt-4"
       >
         <div className="bg-[#F2F6FB] shadow-md p-2 rounded-md w-full py-3 px-3">
           <div className="flex items-center gap-2">
             <MdOutlinePrivateConnectivity size={25} />
-            <h1 className="text-md">Total Amilestones</h1>
+            <h1 className="lg:text-md text-xs">Total Amilestones</h1>
           </div>
-          <p className="mt-2 text-3xl font-bold">21</p>
+          <p className="mt-2 lg:text-3xl text-2xl font-bold">21</p>
           <div></div>
         </div>
 
         <div className="bg-[#F3E8FD] shadow-md p-2 rounded-md w-full py-3 px-3">
           <div className="flex items-center gap-2">
             <MdOutlinePrivateConnectivity size={25} />
-            <h1 className="text-md">Due this week</h1>
+            <h1 className="lg:text-md text-xs">Due this week</h1>
           </div>
-          <p className="mt-2 text-3xl font-bold">5</p>
+          <p className="mt-2 lg:text-3xl text-2xl font-bold">5</p>
           <div></div>
         </div>
         <div className="bg-[#FEEEF2] shadow-md p-2 rounded-md w-full py-3 px-3">
           <div className="flex items-center gap-2">
             <MdOutlinePrivateConnectivity size={25} />
-            <h1 className="text-md">Overdue</h1>
+            <h1 className="lg:text-md text-xs">Overdue</h1>
           </div>
-          <p className="mt-2 text-3xl font-bold">2</p>
+          <p className="mt-2 lg:text-3xl text-2xl font-bold">2</p>
           <div></div>
         </div>
         <div className="bg-[#FEF5EE] shadow-md p-2 rounded-md w-full py-3 px-3">
           <div className="flex items-center gap-2 ">
             <MdOutlinePrivateConnectivity size={25} />
-            <h1 className="text-md">Pending Approvals</h1>
+            <h1 className="lg:text-md text-xs">Pending Approvals</h1>
           </div>
-          <p className="mt-2 text-3xl font-bold">325k</p>
+          <p className="mt-2 lg:text-3xl text-2xl font-bold">325k</p>
           <div></div>
         </div>
       </div>

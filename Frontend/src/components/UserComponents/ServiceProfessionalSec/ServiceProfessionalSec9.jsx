@@ -189,7 +189,7 @@ function ServiceProfessionalSec9() {
                                 </div>
 
              <div className="mt-3   lg:mt-auto pt-3 lg:pt-1 text-center">
-                    <button
+                    <Link to="/login"><button
                       className="
                      w-full
                     mt-2 lg:mt-3
@@ -203,7 +203,7 @@ function ServiceProfessionalSec9() {
                      
                     >
                       {card.buttonText}
-                    </button>
+                    </button></Link>
                   </div>
             </div>
              <hr className='mx-4 lg:relative top-5 hidden lg:block'/>

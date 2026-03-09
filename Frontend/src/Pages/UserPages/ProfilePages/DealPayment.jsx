@@ -6,7 +6,7 @@ import DealPaymentSec from '@/components/UserComponents/ProfileSec/DealSec/Payme
 const DealPayment = () => {
     const [isOpen, setIsOpen] = useState(true);
   return (
-     <div className='bg-gray-100 h-screen overflow-hidden'>
+     <div className='bg-gray-100 lg:h-screen overflow-hidden'>
     <div className='lg:flex '>
       <div className={`w-[20%] hidden lg:block ${isOpen ? 'w-[20%]' : 'w-[0%]'} transition-all duration-300`}>
         <Sidebar isOpen={isOpen} setIsOpen={setIsOpen}/>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import logo from "/ArtesterLogo2.png";
 import { Link } from "react-router-dom";
 import { FaXTwitter } from "react-icons/fa6";
@@ -9,6 +9,14 @@ import { clsx } from 'clsx';
 
 const Footer = () => {
   const [open, setOpen] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    setIsLoggedIn(true);
+  }
+}, []);
 
   const toggle = (section) => {
     setOpen(open === section ? null : section);
@@ -25,14 +33,41 @@ const Footer = () => {
           </div>
 
           {/* Buttons */}
-          <div className="flex gap-3 pt-5">
-           <Link to="/login"> <button className="px-6 py-2 text-sm bg-gray-300 rounded-sm">
-              Sign in
-            </button></Link>
-           <Link to="/login"> <button className="px-6 py-2 text-sm bg-[#0B1C39] text-white rounded-sm">
-              Sign up
-            </button></Link>
-          </div>
+         <div className="flex gap-3 pt-5">
+  {!isLoggedIn ? (
+    <>
+      <Link to="/login">
+        <button className="px-6 py-2 text-sm bg-gray-300 rounded-sm">
+          Sign in
+        </button>
+      </Link>
+
+      <Link to="/login">
+        <button className="px-6 py-2 text-sm bg-[#0B1C39] text-white rounded-sm">
+          Sign up
+        </button>
+      </Link>
+    </>
+  ) : (
+    <>
+      <button
+        onClick={() => {
+          localStorage.removeItem("token");
+          window.location.reload();
+        }}
+        className="px-6 py-2 text-sm bg-gray-300 rounded-sm"
+      >
+        Logout
+      </button>
+
+      <Link to="/dashboard">
+        <button className="px-6 py-2 text-sm bg-[#0B1C39] text-white rounded-sm">
+          Dashboard
+        </button>
+      </Link>
+    </>
+  )}
+</div>
         </div>
 
         {/* Right Links */}

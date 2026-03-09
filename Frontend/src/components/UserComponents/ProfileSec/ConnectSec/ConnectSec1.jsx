@@ -24,8 +24,8 @@ const ConnectSec1 = () => {
   const [currentUserRole, setCurrentUserRole] = useState(null);
   const [selectedDomain, setSelectedDomain] = useState("all");
   const [viewingRole, setViewingRole] = useState(null);
-const [sentRequests, setSentRequests] = useState([]);
-const [receivedRequests, setReceivedRequests] = useState([]);
+  const [sentRequests, setSentRequests] = useState([]);
+  const [receivedRequests, setReceivedRequests] = useState([]);
 
   const getPortfolioUrl = (fileUrl) => {
     if (!fileUrl) return "";
@@ -505,22 +505,22 @@ const [receivedRequests, setReceivedRequests] = useState([]);
             className={`relative flex flex-col bg-white  border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[44%] h-screen lg:h-[88vh] gap-2 
             ${isMobileProfileOpen ? "hidden lg:flex" : "flex"}`}
           >
-            <div >
+            <div>
               <select
                 value={selectedDomain}
                 onChange={(e) => setSelectedDomain(e.target.value)}
                 className="border border-[#D9D9D9] p-2 rounded-lg w-full bg-white "
               >
-                <option value="all" >All Domains</option>
+                <option value="all">All Domains</option>
                 {viewingRole &&
                   getDomainsForRole(viewingRole).map((domain) => (
-                    <option key={domain} value={domain} >
+                    <option key={domain} value={domain}>
                       {domain}
                     </option>
                   ))}
               </select>
             </div>
-            <div className=" flex items-center justify-between">
+            <div className=" flex items-center justify-between gap-2">
               <button
                 onClick={() => handleTabClick("all")}
                 className={`${tabClass("all")}  px-6 py-1 rounded-lg lg:w-30  text-sm lg:text-[16px]`}
@@ -530,28 +530,28 @@ const [receivedRequests, setReceivedRequests] = useState([]);
 
               <button
                 onClick={() => handleTabClick("received")}
-                className={`${tabClass("received")} px-5 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
+                className={`${tabClass("received")} px-4 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
               >
                 Received
               </button>
 
               <button
                 onClick={() => handleTabClick("sent")}
-                className={`${tabClass("sent")} px-5 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
+                className={`${tabClass("sent")} px-4 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
               >
                 Sent
               </button>
 
               <button
                 onClick={() => handleTabClick("connections")}
-                className={`${tabClass("connections")} px-3 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
+                className={`${tabClass("connections")} px-2 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
               >
                 Connections
               </button>
             </div>
 
             {/* Column 2 */}
-            <div className=" flex flex-col gap-3 w-full max-h-140 scrollbar-hide overflow-y-auto ">
+            <div className=" flex flex-col gap-1 w-full max-h-140 scrollbar-hide overflow-y-auto ">
               {loading && <p>Loading...</p>}
               {error && <p className="text-red-500">{error}</p>}
 
@@ -567,7 +567,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
                       }
                     }}
                     key={profile._id}
-                    className="flex items-center  gap-3 rounded-lg  bg-white  transition-all shadow-[inset_0_0_12px_#00000040]"
+                    className="flex items-center  gap-3 rounded-lg  bg-white  transition-all shadow-[inset_0_0_12px_#00000040] "
                   >
                     <div className="w-16 h-16 my-2 ml-2 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200">
                       {profile.profilePhoto && (
@@ -719,19 +719,29 @@ const [receivedRequests, setReceivedRequests] = useState([]);
               <div className="bg-white border border-gray-300 shadow-md rounded-b-2xl  flex flex-col  w-full min-h-full mb-15">
                 {/* Header image section */}
                 <div
-                  className="relative h-30 border border-gray-300 "
-                  style={{
-                    backgroundImage: selectedProfile.coverImage
-                      ? `url(${serverUrl}${selectedProfile.coverImage})`
-                      : "none",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                ></div>
+                  className={`relative h-30 border border-gray-300 ${
+                    !selectedProfile.coverImage
+                      ? "bg-linear-to-b from-[#D8D6F8] to-[#F8DEDE]"
+                      : ""
+                  }`}
+                  style={
+                    selectedProfile.coverImage
+                      ? {
+                          backgroundImage: `url(${serverUrl}${selectedProfile.coverImage})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }
+                      : {}
+                  }
+                >
+                  {selectedProfile.coverImage && (
+                    <div className="absolute inset-0 bg-black/30" />
+                  )}
+                </div>
 
                 {/* Profile photo overlap */}
                 <div className="relative px-2 -mt-12">
-                  <div className="w-28 h-28  rounded-full border-2 border-gray-300 shadow-md bg-gray-200 overflow-hidden">
+                  <div className="w-28 h-28  rounded-full  border-gray-300  bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] border-2 shadow-[0px_4px_10px_rgba(0,0,0,0.25)] overflow-hidden">
                     {selectedProfile.profilePhoto && (
                       <img
                         src={`${serverUrl}${selectedProfile.profilePhoto}`}
@@ -824,7 +834,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
                 {/* Services */}
                 <div
                   id="services"
-                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white px-2  my-2 py-2 "
+                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-linear-to-r from-[#D8D6F8] to-[#F8DEDE] px-2  my-2 py-2 "
                 >
                   <div className="flex justify-between items-center mt-3 mb-1">
                     <h1 className="text-[#001032]  px-2 font-semibold text-md lg:text-xl">
@@ -931,7 +941,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
                 {/* portfolio */}
                 <div
                   id="portfolio"
-                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white px-2 py-2 mb-2"
+                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-linear-to-b from-[#D8D6F8] from-5% to-[#F8DEDE] px-2 py-2 mb-2"
                 >
                   <div className="flex justify-between items-center my-3">
                     <h1 className="text-[#001032] px-2 font-semibold text-md lg:text-xl">
@@ -1053,19 +1063,28 @@ const [receivedRequests, setReceivedRequests] = useState([]);
               <div className="bg-white border border-gray-300 shadow-md rounded-2xl  flex flex-col justify-between w-full h-full">
                 {/* Header image section */}
                 <div
-                  className="relative h-40 border border-gray-300 pt-40"
-                  style={{
-                    backgroundImage: selectedProfile.coverImage
-                      ? `url(${serverUrl}${selectedProfile.coverImage})`
-                      : "none",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                ></div>
-
+                  className={`relative h-40 border border-gray-300 pt-40 ${
+                    !selectedProfile.coverImage
+                      ? "bg-linear-to-b from-[#D8D6F8] to-[#F8DEDE]"
+                      : ""
+                  }`}
+                  style={
+                    selectedProfile.coverImage
+                      ? {
+                          backgroundImage: `url(${serverUrl}${selectedProfile.coverImage})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                        }
+                      : {}
+                  }
+                >
+                  {selectedProfile.coverImage && (
+                    <div className="absolute inset-0 bg-black/30" />
+                  )}
+                </div>
                 {/* Profile photo overlap */}
                 <div className="relative px-4 -mt-12">
-                  <div className="w-28 h-28 rounded-full border-2 border-gray-300 shadow-md bg-gray-200 overflow-hidden">
+                  <div className="w-28 h-28 rounded-full border-2 border-gray-300  bg-gray-200 overflow-hidden bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999]  shadow-[0px_4px_10px_rgba(0,0,0,0.25)]">
                     {selectedProfile.profilePhoto && (
                       <img
                         src={`${serverUrl}${selectedProfile.profilePhoto}`}
@@ -1158,7 +1177,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
                 {/* Services */}
                 <div
                   id="services"
-                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white px-4  my-2 py-2 "
+                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-linear-to-r from-[#D8D6F8] to-[#F8DEDE] px-4  my-2 py-2 "
                 >
                   <div className="flex justify-between items-center mt-3 mb-1">
                     <h1 className="text-[#001032]  px-4 font-semibold text-md lg:text-xl">
@@ -1265,7 +1284,7 @@ const [receivedRequests, setReceivedRequests] = useState([]);
                 {/* portfolio */}
                 <div
                   id="portfolio"
-                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-white px-4 py-2 my-2"
+                  className="lg:border-2 border border-[#D9D9D9] rounded-xl bg-linear-to-b from-[#D8D6F8] from-5% to-[#F8DEDE] px-4 py-2 my-2"
                 >
                   <div className="flex justify-between items-center my-3">
                     <h1 className="text-[#001032] px-4 font-semibold text-md lg:text-xl">

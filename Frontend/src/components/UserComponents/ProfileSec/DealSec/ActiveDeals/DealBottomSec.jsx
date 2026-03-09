@@ -1,7 +1,7 @@
 import React from "react";
 import { Check, Upload, IndianRupee } from "lucide-react";
 
-const DealBottomSec = () => {
+const DealBottomSec = () => { 
   return (
     <div className="flex flex-col lg:flex-row items-start gap-3 w-full px-3 lg:px-6 py-4">
       <div className="lg:w-[70%] w-full ">
@@ -22,25 +22,25 @@ const DealBottomSec = () => {
                     <h2 className="text-lg font-semibold text-gray-800">
                       Stellar
                     </h2>
-                    <p className="text-sm text-gray-500">
+                    <p className="lg:text-sm text-[10px] text-gray-500">
                       Mobile App Development
                     </p>
                   </div>
                 </div>
 
                 {/* Status Badge */}
-                <span className="px-4 py-1 text-sm rounded-full bg-purple-100 text-purple-600 font-medium">
+                <div className="lg:px-4 px-1 py-1 text-[10px] lg:text-sm rounded-full bg-purple-100 text-purple-600 font-medium ">
                   Awaiting Submission
-                </span>
+                </div>
               </div>
 
               {/* Middle Section */}
-              <div className="grid grid-cols-2 gap-6 mt-3">
+              <div className="grid grid-cols-2 lg:gap-6 gap-3 mt-3">
                 {/* Project */}
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-sm text-gray-500">Project:</p>
-                    <p className="font-semibold text-gray-800">Akshay Dogra</p>
+                    <p className="font-semibold text-gray-800 lg:text-[16px] text-[10px]">Akshay Dogra</p>
                   </div>
 
                   {/* Progress Bar */}
@@ -60,13 +60,13 @@ const DealBottomSec = () => {
               </div>
 
               {/* Budget Section */}
-              <div className="grid grid-cols-3 gap-6 mt-3 text-sm">
+              <div className="grid grid-cols-3 lg:gap-6  gap-3 mt-3 text-sm ">
                 <div className="flex items-center gap-2">
                   <p className="text-gray-500">Budget</p>
                   <p className="font-semibold text-gray-800">₹1,20,000</p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mx-2">
                   <p className="text-gray-500">Paid</p>
                   <p className="font-semibold text-gray-800">₹45,000</p>
                 </div>
@@ -80,19 +80,19 @@ const DealBottomSec = () => {
               {/* Bottom Section */}
               <div className="flex items-center justify-between mt-6">
                 <div className="flex gap-3">
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100">
+                  <button className="lg:px-4 px-2 py-2 border border-gray-300 rounded-lg lg:text-sm text-[10px] font-medium hover:bg-gray-100">
                     View Details
                   </button>
 
-                  <button className="px-4 py-2 bg-indigo-500 text-white rounded-lg text-sm font-medium hover:bg-indigo-600">
+                  <button className="lg:px-4 px-2 py-2 bg-indigo-500 text-white rounded-lg lg:text-sm text-[10px] font-medium hover:bg-indigo-600">
                     Release Oats
                   </button>
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-500">Due Feb 2026</span>
+                  <span className="lg:text-sm text-[10px] text-gray-500">Due Feb 2026</span>
 
-                  <button className="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600">
+                  <button className="lg:px-4 px-2 py-2 bg-teal-500 text-white rounded-lg lg:text-sm text-[10px] font-medium hover:bg-teal-600">
                     View Details
                   </button>
                 </div>
@@ -115,14 +115,14 @@ const DealBottomSec = () => {
                     <h2 className="text-lg font-semibold text-gray-800">
                       NomadX
                     </h2>
-                    <p className="text-sm text-gray-500">
+                    <p className="lg:text-sm text-[10px] text-gray-500">
                       Mobile App Development
                     </p>
                   </div>
                 </div>
 
                 {/* Status Badge */}
-                <span className="px-4 py-1 text-sm rounded-full bg-green-100 text-green-600 font-medium">
+                <span className="lg:px-4 px-2 py-1 lg:text-sm text-[10px] rounded-full bg-green-100 text-green-600 font-medium">
                   In Progress
                 </span>
               </div>
@@ -133,7 +133,7 @@ const DealBottomSec = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-sm text-gray-500">Project:</p>
-                  <p className="font-semibold text-gray-800">Arjun Patel</p>
+                  <p className="font-semibold text-gray-800 lg:text-[16px] text-[10px]">Arjun Patel</p>
                   </div>
 
                   {/* Progress Bar */}
@@ -154,7 +154,7 @@ const DealBottomSec = () => {
               </div>
 
               {/* Budget Section */}
-              <div className="grid grid-cols-3 gap-6 mt-3 text-sm">
+              <div className="grid grid-cols-3 lg:gap-6 gap-2 mt-3 text-sm">
                 <div className="flex items-center gap-2">
                   <p className="text-gray-500">Budget:</p>
                   <p className="font-semibold text-gray-800">₹80,000</p>
@@ -166,27 +166,27 @@ const DealBottomSec = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <p className="text-gray-500">Remaining:</p>
+                  <p className="text-gray-500">Remain:</p>
                   <p className="font-semibold text-gray-800">₹75,000</p>
                 </div>
               </div>
 
               {/* Bottom Section */}
               <div className="flex items-center justify-between mt-6">
-                <div className="flex gap-3">
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100">
+                <div className="flex lg:gap-3 gap-1">
+                  <button className="lg:px-4 px-2 py-2 border border-gray-300 rounded-lg lg:text-sm text-[10px] font-medium hover:bg-gray-100">
                     View Details
                   </button>
 
-                  <button className="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600">
+                  <button className="lg:px-4 px-2 py-2 bg-teal-500 text-white rounded-lg lg:text-sm  text-[10px] font-medium hover:bg-teal-600">
                     Release Payment
                   </button>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-500">Due 18 Mar 2026</span>
+                <div className="flex items-center lg:gap-4 gap-2">
+                  <span className="lg:text-sm text-[10px] text-gray-500">Due 18 Mar 2026</span>
 
-                  <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium">
+                  <button className="lg:px-4 px-2 py-2 bg-gray-200 text-gray-700 rounded-lg lg:text-sm text-[10px] font-medium">
                     No options
                   </button>
                 </div>
@@ -209,14 +209,14 @@ const DealBottomSec = () => {
                     <h2 className="text-lg font-semibold text-gray-800">
                       NomadX
                     </h2>
-                    <p className="text-sm text-gray-500">
+                    <p className="lg:text-sm text-[10px] text-gray-500">
                       Mobile App Development
                     </p>
                   </div>
                 </div>
 
                 {/* Status Badge */}
-                <span className="px-4 py-1 text-sm rounded-full bg-green-100 text-green-600 font-medium">
+                <span className="lg:px-4 px-2 py-1 lg:text-sm text-[10px] rounded-full bg-green-100 text-green-600 font-medium">
                   In Progress
                 </span>
               </div>
@@ -227,7 +227,7 @@ const DealBottomSec = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <p className="text-sm text-gray-500">Project:</p>
-                  <p className="font-semibold text-gray-800">Arjun Patel</p>
+                  <p className="font-semibold text-gray-800 lg:text-[16px] text-[10px]">Arjun Patel</p>
                   </div>
 
                   {/* Progress Bar */}
@@ -248,7 +248,7 @@ const DealBottomSec = () => {
               </div>
 
               {/* Budget Section */}
-              <div className="grid grid-cols-3 gap-6 mt-3 text-sm">
+              <div className="grid grid-cols-3 lg:gap-6 gap-2 mt-3 text-sm">
                 <div className="flex items-center gap-2">
                   <p className="text-gray-500">Budget:</p>
                   <p className="font-semibold text-gray-800">₹80,000</p>
@@ -260,27 +260,27 @@ const DealBottomSec = () => {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <p className="text-gray-500">Remaining:</p>
+                  <p className="text-gray-500">Remain:</p>
                   <p className="font-semibold text-gray-800">₹75,000</p>
                 </div>
               </div>
 
               {/* Bottom Section */}
               <div className="flex items-center justify-between mt-6">
-                <div className="flex gap-3">
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-100">
+                <div className="flex lg:gap-3 gap-1">
+                  <button className="lg:px-4 px-2 py-2 border border-gray-300 rounded-lg lg:text-sm text-[10px] font-medium hover:bg-gray-100">
                     View Details
                   </button>
 
-                  <button className="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-medium hover:bg-teal-600">
+                  <button className="lg:px-4 px-2 py-2 bg-teal-500 text-white rounded-lg lg:text-sm  text-[10px] font-medium hover:bg-teal-600">
                     Release Payment
                   </button>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <span className="text-sm text-gray-500">Due 18 Mar 2026</span>
+                <div className="flex items-center lg:gap-4 gap-2">
+                  <span className="lg:text-sm text-[10px] text-gray-500">Due 18 Mar 2026</span>
 
-                  <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm font-medium">
+                  <button className="lg:px-4 px-2 py-2 bg-gray-200 text-gray-700 rounded-lg lg:text-sm text-[10px] font-medium">
                     No options
                   </button>
                 </div>
@@ -299,7 +299,7 @@ const DealBottomSec = () => {
       <div className=" w-full max-w-sm  bg-white rounded-t-2xl">
 
         {/* Upcoming Milestones */}
-        <div className="px-5 py-3 ">
+        <div className="lg:px-5 px-3 py-3 ">
           <h3 className="text-gray-700 font-semibold mb-4">
             Upcoming Milestones
           </h3>
@@ -328,7 +328,7 @@ const DealBottomSec = () => {
         </div>
        <hr className="mx-5 my-2"/>
         {/* Payment Alerts */}
-        <div className=" px-5 ">
+        <div className=" lg:px-5 px-3">
           <h3 className="text-gray-700 font-semibold mb-2 ">
             Payment Alerts
           </h3>
@@ -355,7 +355,7 @@ const DealBottomSec = () => {
           <hr className="mx-5 my-2 mt-4"/>
 
         {/* Recent Activities */}
-        <div className="px-5 pb-2">
+        <div className="lg:px-5 px-3 pb-2">
           <h3 className="text-gray-700 font-semibold mb-2 ">
             Recent Activities
           </h3>

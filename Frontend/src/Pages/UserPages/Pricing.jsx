@@ -27,9 +27,7 @@ const Pricing = () => {
         <div>
                         <img src={logo} className='w-60 lg:w-90 mx-auto lg:my-25 my-15'/>
                       </div>
-                     <div className="fixed bottom-0 left-0 w-full h-20
-        bg-linear-to-t from-[#edbeed] to-transparent 
-        pointer-events-none z-10" />
+                     
     </div>
   )
 }

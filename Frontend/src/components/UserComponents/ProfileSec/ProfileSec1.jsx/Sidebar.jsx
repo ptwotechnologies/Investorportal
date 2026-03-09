@@ -4,26 +4,30 @@ import { CgProfile } from "react-icons/cg";
 import requestLogo from "/requestlogo.png";
 import connectLogo from "/connectlogo.png";
 import { IoNotificationsOutline } from "react-icons/io5";
-import { IoSettings } from "react-icons/io5";
-import { IoIosHelpCircle } from "react-icons/io";
 import { PiSignOut } from "react-icons/pi";
 import loginLogo from "/ArtesterLogo2.png";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation, Link } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import { RxCross2 } from "react-icons/rx";
-import { FaHome } from "react-icons/fa";
-import { PiChatsTeardropBold } from "react-icons/pi";
+import { MdOutlineDashboardCustomize } from "react-icons/md";
+import { HiOutlineTicket } from "react-icons/hi";
+import { HiOutlineUserGroup } from "react-icons/hi";
+import { FaHandshake } from "react-icons/fa";
+import { IoSettingsOutline } from "react-icons/io5";
+import { BiHelpCircle } from "react-icons/bi";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
   const [notifications, setNotifications] = useState([]);
-  const [isDealsOpen, setIsDealsOpen] = useState(false);
+ 
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-
+const location = useLocation();
+const isDealRoute = location.pathname.startsWith("/deal");
+ const [isDealsOpen, setIsDealsOpen] = useState(isDealRoute);
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -71,6 +75,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
+  
+useEffect(() => {
+  if (isDealRoute) {
+    setIsDealsOpen(true);
+  }
+}, [location.pathname]);
+
   return (
     <div className="fixed top-0 left-0 h-full bg-[#001032] p-4 flex flex-col justify-between z-50">
       {/* Top Icons */}
@@ -79,38 +90,36 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <IoMdMenu className="text-white" size={27} onClick={handleToggle} />
         </div>
         <div>
-          <FaHome
-            className="text-gray-500 my-3"
-            size={27}
+          <MdOutlineDashboardCustomize
+            className="text-gray-500 my-4"
+            size={25}
             onClick={handleToggle}
           />
 
           <CgProfile
             className="text-gray-500 my-3"
-            size={27}
+            size={25}
             onClick={handleToggle}
           />
-          <img
-            src={requestLogo}
-            alt="Logo"
-            className="w-7 my-3"
+          <HiOutlineTicket
+            className="text-gray-500 my-3"
+            size={25}
             onClick={handleToggle}
           />
-          <img
-            src={connectLogo}
-            alt="logo"
-            className="w-7 my-3"
+          <HiOutlineUserGroup 
+            className="text-gray-500 my-3"
+            size={25}
             onClick={handleToggle}
           />
           <IoNotificationsOutline
             className="text-gray-500 my-3"
-            size={27}
+            size={25}
             onClick={handleNotificationClick} // Show/hide notifications
           />
 
-          <PiChatsTeardropBold
+          <FaHandshake
             className="text-gray-500 my-3"
-            size={27}
+            size={25}
             onClick={handleToggle}
           />
         </div>
@@ -169,13 +178,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       )}
 
       {/* Bottom Icons */}
-      <div className="text-gray-300 relative pb-4">
-        <IoSettings size={27} className="my-3" onClick={handleToggle} />
-        <IoIosHelpCircle size={27} className="my-3" onClick={handleToggle} />
-        <PiSignOut size={27} className="my-3" onClick={handleSignOutClick} />
+      <div className="text-gray-300 relative pb-3">
+        <IoSettingsOutline size={25} className="my-2 text-gray-500" onClick={handleToggle} />
+        <BiHelpCircle size={25} className="my-3 text-gray-500" onClick={handleToggle} />
+        <PiSignOut size={25} className="my-3 text-gray-500" onClick={handleSignOutClick} />
 
         {showSignoutDialog && (
-          <div className="absolute bottom-16 left-12 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-40 flex flex-col items-center text-sm text-[#001426] p-0.5">
+          <div className="absolute bottom-15 left-12 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-57 flex flex-col items-center text-sm text-[#001426] p-0.5">
             <button
               onClick={handleConfirmSignOut}
               className="w-full py-2 border-b border-gray-200 hover:bg-gray-100 text-[#001032]"
@@ -196,14 +205,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       {isOpen && (
         <div className="absolute top-0 left-full ml- w-60 bg-white h-full rounded-tr-2xl rounded-br-2xl shadow-lg transition-all duration-300 z-40">
           <div className="my-6 flex justify-center">
-            <img src={loginLogo} alt="logo" className="w-40" />
+           <Link to="/dashboard"><img src={loginLogo} alt="logo" className="w-40" /></Link> 
           </div>
           <div className="text-[#001426]">
             <ul>
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                  `block my-3 text-[17px]  px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#001032] text-white" : "text-[#001426]"
                   }`
                 }
@@ -214,7 +223,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/profile"
                 className={({ isActive }) =>
-                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                  `block my-3  text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#001032] text-white" : "text-[#001426]"
                   }`
                 }
@@ -225,7 +234,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/request"
                 className={({ isActive }) =>
-                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#001032] text-white" : "text-[#001426]"
                   }`
                 }
@@ -236,7 +245,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/connect"
                 className={({ isActive }) =>
-                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#001032] text-white" : "text-[#001426]"
                   }`
                 }
@@ -245,7 +254,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </NavLink>
 
               <li
-                className="block my-3 text-lg font-medium px-4 mx-3 rounded-md cursor-pointer"
+                className="block my-3  text-[17px] px-4 mx-3 rounded-md cursor-pointer"
                 onClick={handleNotificationClick} // open same notification box
               >
                 Notification
@@ -255,7 +264,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <div className="my-3">
                 <div
                   onClick={() => setIsDealsOpen(!isDealsOpen)}
-                  className="text-lg font-medium px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100"
+                  className=" text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100"
                 >
                   <span>Deals</span>
                   
@@ -329,7 +338,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/settings"
                 className={({ isActive }) =>
-                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                  `block my-3  text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#001032] text-white" : "text-[#001426]"
                   }`
                 }
@@ -340,7 +349,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/help"
                 className={({ isActive }) =>
-                  `block my-3 text-lg font-medium px-4 mx-3 rounded-md ${
+                  `block my-3  text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#001032] text-white" : "text-[#001426]"
                   }`
                 }
@@ -350,7 +359,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
               <li
                 onClick={handleSignOutClick}
-                className="text-lg font-medium px-4 mx-3 rounded-md cursor-pointer"
+                className=" text-[17px] px-4 mx-3 rounded-md cursor-pointer"
               >
                 Sign out
               </li>

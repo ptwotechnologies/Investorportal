@@ -5,14 +5,14 @@ import { MdOutlinePrivateConnectivity } from "react-icons/md";
 
 const TopBar = () => {
   return (
-     <div className='bg-white px-6 py-6' >
-         <div id='top' className='flex items-start justify-between w-full '>
-             <div className='w-[40%] ' > 
+     <div className='bg-white px-3 lg:px-6 py-6' >
+         <div id='top' className='flex flex-col lg:flex-row items-start justify-between w-full '>
+             <div className='lg:w-[40%] w-full' > 
                  <h1 className='text-xl font-semibold'>Disputes</h1>
-                 <p className='text-sm'>Manage and resolve conflicts between deal participants</p>
+                 <p className='lg:text-sm text-xs'>Manage and resolve conflicts between deal participants</p>
  
              </div>
-             <div className='flex items-center gap-4  '>
+             <div className='lg:flex items-center gap-4 hidden '>
                   <div className='flex items-center border border-[#D9D9D9] gap-2  rounded-md h-11 px-2'>
                      <CiSearch size={25}  />
                   <input type="text" name="" id="" placeholder='Search by deal or party ' className=' outline-none w-60 ' />
@@ -26,17 +26,33 @@ const TopBar = () => {
                </div>
  
              </div>
+
+
+             <div className='flex items-center gap-2 lg:hidden mt-4'>
+                  <div className='flex items-center border border-[#D9D9D9] gap-2  rounded-md  px-2'>
+                     <CiSearch size={25}  />
+                  <input type="text" name="" id="" placeholder='Search  ' className=' outline-none  w-full' />
+                  <button className='px-1 py-2 border-l border-[#D9D9D9] text-xs w-26'>All Status</button>
+                 
+                  </div>
+               <div className='flex items-center gap-1 bg-[#C65869] text-white p-2 px-1 rounded-md text-xs w-35'>
+                 <FaPlus  />
+                 <button>Rate Dispute</button>
+ 
+               </div>
+ 
+             </div>
  
          </div>
  
  
-         <div id='bottom' className='flex items-center justify-around gap-4 mt-10 '>
+         <div id='bottom' className='grid grid-cols-2 lg:flex items-center justify-around gap-4 lg:mt-10 mt-4'>
              <div className='bg-[#FBEDEF] shadow-md p-2 rounded-md w-full py-3 px-3'>
                  <div className='flex items-center gap-2'>
                     <MdOutlinePrivateConnectivity size={25}/>
-                    <h1 className='text-md '>Open Cases</h1>
+                    <h1 className='lg:text-[16px] text-xs'>Open Cases</h1>
                  </div>
-                 <p className='mt-2 text-3xl font-bold'>16</p>
+                 <p className='mt-2 lg:text-3xl text-2xl font-bold'>16</p>
                  <div>
  
                  </div>
@@ -47,9 +63,9 @@ const TopBar = () => {
             <div className='bg-[#EDE8FD] shadow-md p-2 rounded-md w-full py-3 px-3'>
                  <div className='flex items-center gap-2'>
                     <MdOutlinePrivateConnectivity size={25} />
-                    <h1 className='text-md'>Under Review</h1>
+                    <h1 className='lg:text-[16px] text-xs'>Under Review</h1>
                  </div>
-                 <p className='mt-2 text-3xl font-bold'>4</p>
+                 <p className='mt-2 lg:text-3xl text-2xl font-bold'>4</p>
                  <div>
  
                  </div>
@@ -58,9 +74,9 @@ const TopBar = () => {
              <div className='bg-[#F6E8F9] shadow-md p-2 rounded-md w-full py-3 px-3'>
                  <div className='flex items-center gap-2'>
                     <MdOutlinePrivateConnectivity size={25} />
-                    <h1 className='text-md'>Escalated</h1>
+                    <h1 className='lg:text-[16px] text-xs'>Escalated</h1>
                  </div>
-                 <p className='mt-2 text-3xl font-bold'>3</p>
+                 <p className='mt-2 lg:text-3xl text-2xl font-bold'>3</p>
                  <div>
  
                  </div>
@@ -69,9 +85,9 @@ const TopBar = () => {
              <div className='bg-[#EDF0F5] shadow-md p-2 rounded-md w-full py-3 px-3'>
                  <div className='flex items-center gap-2 '>
                     <MdOutlinePrivateConnectivity size={25}/>
-                    <h1 className='text-md'>Resolved</h1>
+                    <h1 className='lg:text-[16px] text-xs'>Resolved</h1>
                  </div>
-                 <p className='mt-2 text-3xl font-bold'>325k</p>
+                 <p className='mt-2 lg:text-3xl text-2xl font-bold'>325k</p>
                  <div>
  
                  </div>

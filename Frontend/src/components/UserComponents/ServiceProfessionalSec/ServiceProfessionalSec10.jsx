@@ -105,8 +105,8 @@ const ServiceProfessionalSec10 = () => {
             </svg>
           </div>
           {activeIndex === index && (
-            <div className="mt-4 px-4">
-              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
+            <div className="mt-2 px-4">
+              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -142,8 +142,8 @@ const ServiceProfessionalSec10 = () => {
             </svg>
           </div>
           {activeIndex === index && (
-            <div className="mt-4 px-4">
-              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
+            <div className="mt-2 px-4">
+              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

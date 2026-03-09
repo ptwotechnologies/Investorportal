@@ -87,7 +87,7 @@ const HomeSec8 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-xs font-medium text-[#010611b5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -106,8 +106,8 @@ const HomeSec8 = () => {
             </svg>
           </div>
           {activeIndex === index && (
-            <div className="mt-4 px-4">
-              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
+            <div className="mt-2 px-4">
+              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -143,8 +143,8 @@ const HomeSec8 = () => {
             </svg>
           </div>
           {activeIndex === index && (
-            <div className="mt-4 px-4">
-              <p className="text-[#0000004d] text-sm pr-4">{faq.answer}</p>
+            <div className="mt-2 px-4">
+              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

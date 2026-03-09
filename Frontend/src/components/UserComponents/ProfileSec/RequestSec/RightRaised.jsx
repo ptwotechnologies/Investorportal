@@ -9,11 +9,47 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
     }
   };
 
+   const getStatusStyle = (status) => {
+    switch(status) {
+      case 'raised':
+        return {
+          bgColor: 'bg-red-100',
+          textColor: 'text-yellow-800',
+          label: 'Raised'
+        };
+      case 'forwarded':
+        return {
+          bgColor: 'bg-blue-100',
+          textColor: 'text-blue-800',
+          label: 'Forwarded'
+        };
+      case 'accepted':
+        return {
+          bgColor: 'bg-green-100',
+          textColor: 'text-green-800',
+          label: 'Accepted'
+        };
+      case 'completed':
+        return {
+          bgColor: 'bg-purple-100',
+          textColor: 'text-purple-800',
+          label: 'Completed'
+        };
+      default:
+        return {
+          bgColor: 'bg-gray-100',
+          textColor: 'text-gray-800',
+          label: 'Unknown'
+        };
+    }
+  };
+
   // If no request is selected, show empty state
   if (!selectedRequest) {
     return (
       <div className="w-full h-full flex flex-col items-center justify-center p-8 text-center">
-        <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+       <div className="flex flex-col items-center  p-8 text-center  border border-gray-200 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md">
+         <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center mb-4">
           <svg
             className="w-12 h-12 text-gray-400"
             fill="none"
@@ -34,10 +70,11 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
         <p className="text-gray-500 text-sm">
           Click on a request from the left to view details
         </p>
+       </div>
       </div>
     );
   }
-
+ const statusStyle = getStatusStyle(selectedRequest.status);
   // Show selected request details
   return (
     <div className="w-full h-full flex flex-col lg:p-4 p-2 bg-white rounded-md">
@@ -106,8 +143,8 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
             <h4 className="text-sm font-semibold text-gray-600 mb-2">
               Status
             </h4>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-              Forwarded
+             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${statusStyle.bgColor} ${statusStyle.textColor}`}>
+              {statusStyle.label}
             </span>
           </div>
 
@@ -123,10 +160,8 @@ const RightRaised = ({  selectedRequest, setSelectedRequest, setMobileView }) =>
 
           {/* Action Buttons */}
           <div className="flex gap-3 pt-4">
-            <button className="flex-1 bg-[#1F9E61] text-white lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-[#188c54] transition-colors">
-              Update Request
-            </button>
-            <button className="flex-1 border-2 border-gray-300 text-gray-700 lg:py-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+           
+            <button className="flex-1 border-2 border-gray-300 text-gray-700 lg:py-2 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
               Cancel Request
             </button>
           </div>
