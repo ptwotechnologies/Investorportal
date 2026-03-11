@@ -25,7 +25,7 @@ import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { HiOutlineTicket } from "react-icons/hi";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import { FaHandshake } from "react-icons/fa";
+import { FaHandshake, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiHelpCircle } from "react-icons/bi";
 
@@ -79,10 +79,12 @@ const Mobile = () => {
     <div className="">
       <div className="flex items-center justify-between bg-white p-2 py-3">
         <div>
-          <Link to="/dashboard"><img src={loginLogo} alt="logo" className="w-30" /></Link>
+          <Link to="/dashboard">
+            <img src={loginLogo} alt="logo" className="w-30" />
+          </Link>
         </div>
 
-        <div className="flex items-center gap-2 border-2 border-[#787878BF] rounded-full py-0.5 px-1">
+        <div className="flex items-center gap-2 border-2 border-[#787878BF] rounded-full py-1 px-1 shadow-lg">
           <IoIosNotifications size={30} onClick={handleNotificationClick} />
           <div className="w-0.2 h-6 border"></div>
           <Sheet>
@@ -99,57 +101,66 @@ const Mobile = () => {
                     <SheetTitle></SheetTitle>
                   </SheetHeader>
 
-                  <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-2">
+                  <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-4">
                     <div id="top">
                       <ul className="flex flex-col gap-2 text-[16px]">
                         <div className="flex items-center gap-4">
                           <MdOutlineDashboardCustomize
-                                      className="text-gray-500 " size={25}/>
+                            className="text-gray-500 "
+                            size={25}
+                          />
                           <Link to="/dashboard">
-                          <li>Dashboard</li>
-                        </Link>
+                            <li>Dashboard</li>
+                          </Link>
                         </div>
 
-                        <div  className="flex items-center gap-4">
-                          <CgProfile
-                                      className="text-gray-500 my-1" size={25}/>
+                        <div className="flex items-center gap-4">
+                          <CgProfile className="text-gray-500 my-1" size={25} />
                           <Link to="/profile">
-                          <li>Profile</li>
-                        </Link>
+                            <li>Profile</li>
+                          </Link>
                         </div>
-
 
                         <div className="flex items-center gap-4">
                           <HiOutlineTicket
-                                      className="text-gray-500 " size={25} />
+                            className="text-gray-500 "
+                            size={25}
+                          />
                           <Link to="/request">
-                          <li>Requests</li>
-                        </Link>
+                            <li>Requests</li>
+                          </Link>
                         </div>
 
                         <div className="flex items-center gap-4">
-                          <HiOutlineUserGroup 
-                                      className="text-gray-500 my-1" size={25}/>
+                          <HiOutlineUserGroup
+                            className="text-gray-500 my-1"
+                            size={25}
+                          />
                           <Link to="/connect">
-                          <li>Connect</li>
-                        </Link>
+                            <li>Connect</li>
+                          </Link>
                         </div>
                         {/* Deals Dropdown */}
 
-                       <div className="flex items-center gap-4">
-                          <FaHandshake
-                                    className="text-gray-500 " size={25}/>
-                         <li
-                          className="cursor-pointer flex justify-between items-center"
+                        <div
+                          className="flex items-center gap-4 cursor-pointer w-full"
                           onClick={() => setIsDealsOpen(!isDealsOpen)}
                         >
-                          <span>Deals</span>
-                          
-                        </li>
-                       </div>
+                          <FaHandshake className="text-gray-500" size={25} />
+
+                          <li className="flex justify-between items-center w-full">
+                            <span>Deals</span>
+
+                            {isDealsOpen ? (
+                              <FaChevronUp className="text-gray-500" size={15} />
+                            ) : (
+                              <FaChevronDown className="text-gray-500" size={15}/>
+                            )}
+                          </li>
+                        </div>
 
                         {isDealsOpen && (
-                          <ul className="ml-4 mt-2 flex flex-col gap-2 text-[18px]">
+                          <ul className="ml-5 mt-2 flex flex-col gap-2  text-[15px] text-gray-600">
                             <Link to="/deal/activedeals">
                               <li>Active Deals</li>
                             </Link>
@@ -178,18 +189,21 @@ const Mobile = () => {
 
                     <div id="bottom" className="mt-10 mb-6">
                       <ul className="flex flex-col gap-2 text-[16px]">
-                       <div className="flex items-center gap-4">
-                         <IoSettingsOutline  className=" text-gray-500 my-1" size={25} />
-                         <Link to="/settings">
-                          <li>Settings</li>
-                        </Link>
-                       </div>
+                        <div className="flex items-center gap-4">
+                          <IoSettingsOutline
+                            className=" text-gray-500 my-1"
+                            size={25}
+                          />
+                          <Link to="/settings">
+                            <li>Settings</li>
+                          </Link>
+                        </div>
 
                         <div className="flex items-center gap-4">
-                          <BiHelpCircle  className=" text-gray-500" size={25}  />
+                          <BiHelpCircle className=" text-gray-500" size={25} />
                           <Link to="/help">
-                          <li>Help</li>
-                        </Link>
+                            <li>Help</li>
+                          </Link>
                         </div>
                       </ul>
                     </div>

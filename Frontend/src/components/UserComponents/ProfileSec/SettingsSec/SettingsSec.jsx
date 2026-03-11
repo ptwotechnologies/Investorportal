@@ -77,13 +77,18 @@ const SettingsSec = () => {
     fetchSettings();
   }, []);
 
-  const handleSave = async () => {
+  const handleSave = async (field) => {
     try {
-      await axios.put(`${serverUrl}/profile/settings`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      await axios.put(
+        `${serverUrl}/profile/settings`,
+        { [field]: formData[field] },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
+
       setEditingField(null);
     } catch (error) {
       console.error("Failed to save settings", error);
@@ -131,15 +136,30 @@ const SettingsSec = () => {
 
                   <div className="flex items-center gap-3">
                     {editingField === "name" ? (
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) =>{
-                          setFormData({ ...formData, name: e.target.value })
-                          setHasChanged(true); 
-                        }}
-                        className="border rounded px-2 py-1 text-sm"
-                      />
+                      <>
+                        <input
+                          type="text"
+                          value={formData.name}
+                          onChange={(e) => {
+                            setFormData({ ...formData, name: e.target.value });
+                            setHasChanged(true);
+                          }}
+                          className="border rounded px-2 py-1 text-sm"
+                        />
+                        <button
+                          className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
+                          onClick={() => handleSave("name")}
+                        >
+                          Save
+                        </button>
+
+                        <button
+                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
+                          onClick={() => setEditingField(null)}
+                        >
+                          Cancel
+                        </button>
+                      </>
                     ) : (
                       <span>{formData.name || "—"}</span>
                     )}
@@ -157,16 +177,35 @@ const SettingsSec = () => {
 
                   <div className="flex items-center gap-3">
                     {editingField === "password" ? (
+                    <>
                       <input
                         type="password"
                         placeholder="New password"
                         value={formData.password}
-                        onChange={(e) =>{
-                        setFormData({ ...formData, password: e.target.value })
-                        setHasChanged(true); 
+                        onChange={(e) => {
+                          setFormData({
+                            ...formData,
+                            password: e.target.value,
+                          });
+                          setHasChanged(true);
                         }}
                         className="border rounded px-2 py-1 text-sm"
                       />
+                       <button
+                          className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
+                          onClick={() => handleSave("password")}
+                        >
+                          Save
+                        </button>
+
+                        <button
+                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
+                          onClick={() => setEditingField(null)}
+                        >
+                          Cancel
+                        </button>
+
+                    </>
                     ) : (
                       <span>************</span>
                     )}
@@ -184,15 +223,31 @@ const SettingsSec = () => {
 
                   <div className="flex items-center gap-3">
                     {editingField === "email" ? (
+                      <>
                       <input
                         type="email"
                         value={formData.email}
-                        onChange={(e) =>{
-                          setFormData({ ...formData, email: e.target.value })
-                          setHasChanged(true); 
+                        onChange={(e) => {
+                          setFormData({ ...formData, email: e.target.value });
+                          setHasChanged(true);
                         }}
                         className="border rounded px-2 py-1 text-sm"
                       />
+                      <button
+                          className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
+                          onClick={() => handleSave("email")}
+                        >
+                          Save
+                        </button>
+
+                        <button
+                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
+                          onClick={() => setEditingField(null)}
+                        >
+                          Cancel
+                        </button>
+
+                      </>
                     ) : (
                       <span>{formData.email || "—"}</span>
                     )}
@@ -210,21 +265,38 @@ const SettingsSec = () => {
 
                   <div className="flex items-center gap-3">
                     {editingField === "phone" ? (
+                      <>
                       <input
                         type="text"
                         value={formData.phone}
-                        onChange={(e) =>{
-                          setFormData({ ...formData, phone: e.target.value })
-                          setHasChanged(true); 
+                        onChange={(e) => {
+                          setFormData({ ...formData, phone: e.target.value });
+                          setHasChanged(true);
                         }}
                         className="border rounded px-2 py-1 text-sm"
                       />
+                       <button
+                          className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
+                          onClick={() => handleSave("phone")}
+                        >
+                          Save
+                        </button>
+
+                        <button
+                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
+                          onClick={() => setEditingField(null)}
+                        >
+                          Cancel
+                        </button>
+
+
+                      </>
                     ) : (
                       <span>
                         {formData.phone
                           ? `+91 ${formData.phone.slice(
                               0,
-                              2
+                              2,
                             )}****${formData.phone.slice(-2)}`
                           : "—"}
                       </span>
@@ -238,38 +310,7 @@ const SettingsSec = () => {
                 </div>
 
                 {/* ================= SAVE / CANCEL ================= */}
-               {editingField && hasChanged && (
-  <div className="flex justify-center my-20 mb-40">
-    <div className="bg-white border-2 border-gray-400 rounded-lg shadow-md pt-10 pb-4 flex flex-col items-center text-center">
-      <p className="text-sm text-gray-800 mb-12 px-10">
-        Do you want to save or cancel?
-      </p>
-
-      <div className="flex gap-4 w-full px-4">
-        <button
-          className="px-6 w-1/2 py-2 border-2 border-gray-500 rounded-md hover:bg-gray-50 transition font-medium"
-          onClick={() => {
-            handleSave();
-            setHasChanged(false); // reset after save
-          }}
-        >
-          Save
-        </button>
-
-        <button
-          className="w-1/2 px-6 py-2 bg-[#001426] text-white rounded-md hover:bg-[#101e37] transition font-medium"
-          onClick={() => {
-            setEditingField(null);
-            setHasChanged(false); // reset after cancel
-          }}
-        >
-          Cancel
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
+              
               </div>
 
               {/* Left content ends here */}

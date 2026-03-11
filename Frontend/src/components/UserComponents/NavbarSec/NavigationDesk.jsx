@@ -52,16 +52,17 @@ const NavigationDesk = () => {
                     Advisory
                     </div>
                   </Link>
-                  <Link to="/subscription?tab=Marketing">
-                   <div className="text-[#001032] ml-3 font-medium">
-                    Marketing
-                    </div>
-                  </Link>
                    <Link to="/subscription?tab=Designing">
                    <div className="text-[#001032] ml-3 font-medium">
                     Designing
                     </div>
                   </Link>
+                  <Link to="/subscription?tab=Marketing">
+                   <div className="text-[#001032] ml-3 font-medium">
+                    Marketing
+                    </div>
+                  </Link>
+                  
                    <Link to="/subscription?tab=Consultancy">
                    <div className="text-[#001032] ml-3 font-medium">
                     Consultancy

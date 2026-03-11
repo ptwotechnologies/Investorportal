@@ -239,17 +239,18 @@ function NavbarSheet({ textColor }) {
                               >
                                 <p>Advisory</p>
                               </Link>
-                              <Link
-                                to="/subscription?tab=Marketing"
-                                onClick={() => setOpenSheet(false)}
-                              >
-                                <p>Marketing</p>
-                              </Link>
+                            
                               <Link
                                 to="/subscription?tab=Designing"
                                 onClick={() => setOpenSheet(false)}
                               >
                                 <p>Designing</p>
+                                  <Link
+                                to="/subscription?tab=Marketing"
+                                onClick={() => setOpenSheet(false)}
+                              >
+                                <p>Marketing</p>
+                              </Link>
                               </Link>
                               <Link
                                 to="/subscription?tab=Consultancy"

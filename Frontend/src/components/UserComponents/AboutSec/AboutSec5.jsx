@@ -10,15 +10,15 @@ const AboutSec5 = () => {
     setOpenSection(prev => prev === name ? null : name);
   };
   return (
-    <div className=' lg:p-12 '>
+    <div className=' lg:p-12 w-full'>
         <div className='text-4xl lg:text-5xl text-[#001032]  lg:mb-30 font-semibold lg:leading-14 tracking-wide p-5'>
          <h1>Who’s here and what matters?</h1>
         </div>
-        <div className='flex flex-col lg:flex-row items-center  gap-2  '>
-    <div id='left' className='lg:w-[40%] lg:p-5 mb-15'>
+        <div className='flex flex-col lg:flex-row items-center  gap-2 w-full '>
+    <div id='left' className='lg:w-[40%] lg:p-5 mb-15  w-full'>
   
   {/* SECTION 1 — Investors (DESKTOP) */}
-  <div className='hidden lg:block mb-5'>
+  <div className='hidden lg:block mb-5 '>
     <div
       className='flex items-center gap-4 cursor-pointer'
       onClick={() => toggle("investors")}
@@ -41,7 +41,7 @@ const AboutSec5 = () => {
   </div>
 
   {/* SECTION 1 MOBILE */}
-  <div className='lg:hidden bg-[#001032CC] p-7 mt-8 py-14'>
+  <div className='lg:hidden bg-[#001032CC] p-7 mt-8 py-14 '>
     <div
       className='flex items-center gap-4 cursor-pointer '
       onClick={() => toggle("investors")}

@@ -1,0 +1,8 @@
+{
+  "name": "investor-portal-workspace",
+  "version": "1.0.0",
+  "description": "Root workspace to run the React Frontend and Node.js Backend concurrently.",
+  "scripts": {
+    "dev": "npx concurrently -c \"blue,green\" --names \"BACKEND,FRONTEND\" \"npm start --prefix Backend\" \"npm run dev --prefix Frontend\""
+  }
+}

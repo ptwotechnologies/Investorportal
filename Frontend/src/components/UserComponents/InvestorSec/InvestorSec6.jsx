@@ -1,4 +1,4 @@
-import React , { useState, useRef } from 'react'
+import React , { useState, useRef, useEffect } from 'react'
 
 const InvestorSec6 = () => {
   const scrollRef = useRef(null);
@@ -39,6 +39,30 @@ const InvestorSec6 = () => {
          },
      
        ]
+
+       const cards = [...divElements, ...divElements];
+
+        useEffect(() => {
+               const container = scrollRef.current
+               if (!container) return
+           
+               let animationId
+           
+               const autoScroll = () => {
+                 container.scrollLeft += 0.5
+           
+                 if (container.scrollLeft >= container.scrollWidth / 2) {
+                   container.scrollLeft = 0
+                 }
+           
+                 animationId = requestAnimationFrame(autoScroll)
+               }
+           
+               animationId = requestAnimationFrame(autoScroll)
+           
+               return () => cancelAnimationFrame(animationId)
+             }, [])
+
        return (
          <div className='lg:mt-8 lg:px-10 mt-16 px-3' >
         <h1 className='text-2xl lg:text-5xl text-[#001032] font-bold text-center lg:text-start'>Who is this platform for?</h1>
@@ -46,15 +70,15 @@ const InvestorSec6 = () => {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex overflow-x-scroll snap-x snap-mandatory scrollbar-hide lg:px-10 pt-8 gap-2 lg:gap-5 text-[#001032] ">
-          {divElements.map((item, index) => (
-            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0 snap-center lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
+          className="flex overflow-x-scroll scrollbar-hide lg:px-10 pt-8 gap-4 lg:gap-5 text-[#001032] ">
+          {cards.map((item, index) => (
+            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0  lg:p-4  lg:mx-2   lg:shadow-none ">
              <div className=' w-full  lg:gap-10  border border-[#00103280] 
-             lg:rounded-2xl shadow-lg rounded-sm lg:p-3 lg:px-0 px-6 h-full min-h-[280px] flex flex-col justify-between'>
-                <p className='text-md lg:text-xl leading-7 tracking-wider py-5 lg:py-0 '>{item.paragraph}</p>
+             lg:rounded-2xl shadow-lg rounded-sm lg:p-3  px-7 h-full min-h-[280px] flex flex-col justify-between'>
+                <p className=' py-5 lg:py-0 text-[#001032B2] text-md lg:leading-9 tracking-wider leading-8 '>{item.paragraph}</p>
               <div className=' flex justify-between items-center ' >
                      <div className='font-semibold lg:text-xl text-md py-5 lg:py-0'>
-                        <h1>{item.company}</h1>
+                        <h1 className='text-md text-[#001032B2]'>{item.company}</h1>
                      </div>
                   <div className='flex justify-center items-center gap-3 '>
                     <div className='w-0.5 h-10 bg-[#D9D9D9] '>
@@ -68,16 +92,7 @@ const InvestorSec6 = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-center mt-2">
-          {divElements.map((item, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full mx-1 ${
-                activeIndex === index ? 'bg-gray-600' : 'bg-gray-300'
-              }`}
-            />
-          ))}
-        </div>
+        
       </div>
          <div className='lg:text-center mt-10 '>
             <h1 className=' lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 

@@ -1,4 +1,4 @@
-import React , { useState, useRef } from 'react'
+import React , { useState, useRef, useEffect } from 'react'
 
 const StartupSec6 = () => {
   const scrollRef = useRef(null);
@@ -43,6 +43,32 @@ const StartupSec6 = () => {
         },
     
       ]
+
+      const cards = [...divElements, ...divElements];
+
+
+       useEffect(() => {
+              const container = scrollRef.current
+              if (!container) return
+          
+              let animationId
+          
+              const autoScroll = () => {
+                container.scrollLeft += 0.5
+          
+                if (container.scrollLeft >= container.scrollWidth / 2) {
+                  container.scrollLeft = 0
+                }
+          
+                animationId = requestAnimationFrame(autoScroll)
+              }
+          
+              animationId = requestAnimationFrame(autoScroll)
+          
+              return () => cancelAnimationFrame(animationId)
+            }, [])
+
+
    
      return (
        <div className='lg:mt-8 lg:px-10 mt-16 px-3' >
@@ -51,18 +77,18 @@ const StartupSec6 = () => {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex overflow-x-scroll  snap-x snap-mandatory scrollbar-hide lg:px-10 pt-8 gap-2 lg:gap-5 text-[#001032] ">
-          {divElements.map((item, index) => (
-            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0 snap-center lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
+          className="flex overflow-x-scroll scrollbar-hide lg:px-10 pt-8 gap-4 lg:gap-5 text-[#001032] ">
+          {cards.map((item, index) => (
+            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0  lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
              <div className=' w-full h-full lg:gap-10  border border-[#00103280] 
-             lg:rounded-2xl rounded-sm shadow-lg lg:p-3 p-5 px-6 lg:px-0'>
-                <p className='text-sm lg:text-xl leading-6 tracking-wider hidden lg:block'>{item.paragraph}</p>
-                <p className='text-md lg:text-xl leading-7 tracking-wider lg:hidden mb-20'>{item.phonepara}</p>
+             lg:rounded-2xl rounded-sm shadow-lg lg:p-3 p-5 px-7'>
+                <p className=' hidden lg:block text-[#001032B2] text-md leading-8 tracking-wider'>{item.paragraph}</p>
+                <p className=' lg:hidden mb-20 text-[#001032B2] text-md leading-8 tracking-wider'>{item.phonepara}</p>
               <div className=' flex justify-between items-center lg:mt-25 mt-5' >
                      <div className='font-semibold lg:text-xl hidden lg:block'>
-                        <h1>{item.company}</h1>
+                        <h1 className='text-md text-[#001032B2]'>{item.company}</h1>
                      </div>
-                     <div className='font-medium text-sm  lg:hidden mr-1'>
+                     <div className='font-medium text-sm  lg:hidden mr-1 text-[#001032B2]'>
                         <h1>{item.phonecompany}</h1>
                      </div>
                   <div className='flex justify-center items-center gap-3'>
@@ -77,16 +103,7 @@ const StartupSec6 = () => {
             </div>
           ))}
         </div>
-        <div className="flex justify-center mt-2">
-          {divElements.map((item, index) => (
-            <div
-              key={index}
-              className={`w-2 h-2 rounded-full mx-1 ${
-                activeIndex === index ? 'bg-gray-600' : 'bg-gray-300'
-              }`}
-            />
-          ))}
-        </div>
+       
       </div>
          <div className='lg:text-center mt-10 '>
             <h1 className=' lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 

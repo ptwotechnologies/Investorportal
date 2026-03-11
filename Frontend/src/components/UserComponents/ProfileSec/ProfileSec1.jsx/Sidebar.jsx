@@ -16,18 +16,18 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { FaHandshake } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiHelpCircle } from "react-icons/bi";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
   const [notifications, setNotifications] = useState([]);
- 
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
-const location = useLocation();
-const isDealRoute = location.pathname.startsWith("/deal");
- const [isDealsOpen, setIsDealsOpen] = useState(isDealRoute);
+  const location = useLocation();
+  const isDealRoute = location.pathname.startsWith("/deal");
+  const [isDealsOpen, setIsDealsOpen] = useState(isDealRoute);
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -75,12 +75,11 @@ const isDealRoute = location.pathname.startsWith("/deal");
     );
   };
 
-  
-useEffect(() => {
-  if (isDealRoute) {
-    setIsDealsOpen(true);
-  }
-}, [location.pathname]);
+  useEffect(() => {
+    if (isDealRoute) {
+      setIsDealsOpen(true);
+    }
+  }, [location.pathname]);
 
   return (
     <div className="fixed top-0 left-0 h-full bg-[#001032] p-4 flex flex-col justify-between z-50">
@@ -106,7 +105,7 @@ useEffect(() => {
             size={25}
             onClick={handleToggle}
           />
-          <HiOutlineUserGroup 
+          <HiOutlineUserGroup
             className="text-gray-500 my-3"
             size={25}
             onClick={handleToggle}
@@ -179,9 +178,21 @@ useEffect(() => {
 
       {/* Bottom Icons */}
       <div className="text-gray-300 relative pb-3">
-        <IoSettingsOutline size={25} className="my-2 text-gray-500" onClick={handleToggle} />
-        <BiHelpCircle size={25} className="my-3 text-gray-500" onClick={handleToggle} />
-        <PiSignOut size={25} className="my-3 text-gray-500" onClick={handleSignOutClick} />
+        <IoSettingsOutline
+          size={25}
+          className="my-2 text-gray-500"
+          onClick={handleToggle}
+        />
+        <BiHelpCircle
+          size={25}
+          className="my-3 text-gray-500"
+          onClick={handleToggle}
+        />
+        <PiSignOut
+          size={25}
+          className="my-3 text-gray-500"
+          onClick={handleSignOutClick}
+        />
 
         {showSignoutDialog && (
           <div className="absolute bottom-15 left-12 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-57 flex flex-col items-center text-sm text-[#001426] p-0.5">
@@ -205,7 +216,9 @@ useEffect(() => {
       {isOpen && (
         <div className="absolute top-0 left-full ml- w-60 bg-white h-full rounded-tr-2xl rounded-br-2xl shadow-lg transition-all duration-300 z-40">
           <div className="my-6 flex justify-center">
-           <Link to="/dashboard"><img src={loginLogo} alt="logo" className="w-40" /></Link> 
+            <Link to="/dashboard">
+              <img src={loginLogo} alt="logo" className="w-40" />
+            </Link>
           </div>
           <div className="text-[#001426]">
             <ul>
@@ -264,10 +277,15 @@ useEffect(() => {
               <div className="my-3">
                 <div
                   onClick={() => setIsDealsOpen(!isDealsOpen)}
-                  className=" text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100"
+                  className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100"
                 >
                   <span>Deals</span>
-                  
+
+                  {isDealsOpen ? (
+                    <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                  ) : (
+                    <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                  )}
                 </div>
 
                 {isDealsOpen && (

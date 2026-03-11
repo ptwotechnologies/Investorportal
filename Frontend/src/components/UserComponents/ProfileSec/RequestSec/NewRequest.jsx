@@ -68,7 +68,7 @@ const NewRequest = ({ onCreateRequest }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-1  md:grid-cols-2 gap-4  overflow-y-auto overscroll-contain touch-pan-y h-[67vh] md:h-auto scrollbar-hide">
+      <div className="grid grid-cols-1 sm:grid-cols-1  md:grid-cols-2 gap-4  overflow-y-auto overscroll-contain touch-pan-y h-[55vh] md:h-auto scrollbar-hide">
         {raisedRequestOptions.map((option) => (
           <div
             key={option.id}

@@ -2,6 +2,7 @@ import connectDB from '../lib/db.js'; // Add this import
 import User from "../Models/User.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import resend from "../lib/resend.js";
 
 
 export const createUser = async (req, res) => {
@@ -261,7 +262,35 @@ export const login = async (req, res) => {
   }
 };
 
+export const forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
 
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
 
+    const user = await User.findOne({ email });
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
+    const { data, error } = await resend.emails.send({
+      from: 'onboarding@resend.dev',
+      to: [email],
+      subject: 'Password Reset',
+      html: '<p>This is a static message for your password reset request. Currently, password reset functionality is under development.</p>'
+    });
 
+    if (error) {
+      console.error("Resend Email Error:", error);
+      return res.status(500).json({ message: "Failed to send password reset email" });
+    }
+
+    res.status(200).json({ message: "Password reset instructions sent to your email" });
+  } catch (error) {
+    console.error("Forget Password Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

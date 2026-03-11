@@ -86,7 +86,7 @@ const RequestSec = () => {
           <div
             className={`${widths.left} ${mobileView === "right" ? "hidden md:block" : "block"} flex flex-col gap-2 transition-all duration-300`}
           >
-            <div className="border border-gray-400 bg-white rounded-md shadow-md lg:px-4 lg:pt-4 p-2 lg:h-[88vh] h-[82vh] overflow-hidden">
+            <div className="border border-gray-400 bg-white rounded-md shadow-md lg:px-4 lg:pt-4 p-2 lg:h-[88vh] h-[76vh] overflow-hidden">
               <Tabs
                 value={activeTab}
                 onValueChange={(value) => {
