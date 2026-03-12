@@ -19,6 +19,7 @@ import axios from "axios";
 import { serverUrl } from "@/App";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoIosNotifications } from "react-icons/io";
+import { IoNotificationsOutline } from "react-icons/io5";
 
 function NavbarSheet({ textColor }) {
   const [openSheet, setOpenSheet] = useState(false);
@@ -158,8 +159,8 @@ function NavbarSheet({ textColor }) {
       {/* Mobile Menu */}
       <div className="lg:hidden">
         <Sheet open={openSheet} onOpenChange={setOpenSheet} >
-           <div className="flex justify-center items-center gap-2 border-2 border-[#787878BF] rounded-full py-0.5 px-1">
-            <IoIosNotifications size={30} className={`${textColor}`} />
+           <div className="flex justify-center items-center gap-2 border-2 border-[#787878BF] rounded-full py-2 px-2">
+            <IoNotificationsOutline size={30} className={`${textColor}`} />
             <div className="w-0.2 h-6 border border-[#787878BF]"></div>
           <SheetTrigger onClick={() => setOpenSheet(!openSheet)}>
             {openSheet ? (

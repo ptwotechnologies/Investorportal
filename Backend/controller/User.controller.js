@@ -48,6 +48,7 @@ export const createUser = async (req, res) => {
       message: "User created successfully",
       userId: newUser._id,
       registrationStep: newUser.registrationStep,
+      token: jwt.sign({ userId: newUser._id, email: newUser.email, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
     });
 
   } catch (error) {

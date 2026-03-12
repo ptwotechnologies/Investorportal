@@ -12,6 +12,7 @@ import cors from "cors";
 import requestRoutes from './Routes/request.Routes.js';
 import connectDB from './lib/db.js';
 import helpRoutes from './Routes/help.Routes.js';
+import paymentRoutes from './Routes/payment.Routes.js';
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use("/profile", profileRoutes);
 app.use("/connections", connectionsRoutes);
 app.use("/requests", requestRoutes);
 app.use("/help", helpRoutes);
+app.use("/api/payment", paymentRoutes);
 
 
 // For local development

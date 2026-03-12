@@ -29,6 +29,7 @@ import { FaHandshake, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiHelpCircle } from "react-icons/bi";
 
+
 const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -84,13 +85,13 @@ const Mobile = () => {
           </Link>
         </div>
 
-        <div className="flex items-center gap-2 border-2 border-[#787878BF] rounded-full py-1 px-1 shadow-lg">
-          <IoIosNotifications size={30} onClick={handleNotificationClick} />
+        <div className="flex items-center gap-2  rounded-full py-2.5 px-3 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] mr-2">
+          <IoNotificationsOutline size={25} onClick={handleNotificationClick} className="text-gray-500" />
           <div className="w-0.2 h-6 border"></div>
           <Sheet>
             <SheetTrigger asChild>
               <div className="flex items-center gap-5">
-                <RxHamburgerMenu size={30} className="text-[#001426]" />
+                <RxHamburgerMenu size={25} className="text-[#001426]" />
               </div>
             </SheetTrigger>
 
