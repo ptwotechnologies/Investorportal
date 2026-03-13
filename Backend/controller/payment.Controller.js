@@ -7,51 +7,49 @@ import User from "../Models/User.model.js";
 dotenv.config();
 
 const razorpay = new Razorpay({
-  key_id: process.env.RZP_key_id,
-  key_secret: process.env.RZP_key_secret,
+  key_id: process.env.RZP_key_id ? process.env.RZP_key_id.trim() : "",
+  key_secret: process.env.RZP_key_secret ? process.env.RZP_key_secret.trim() : "",
 });
 
 export const checkout = async (req, res) => {
   try {
-    const { amount } = req.body;
-    
-    // Input Validation
+    const { amount, userId } = req.body; // frontend se bheja userId
+
+    // Input validation
     if (!amount || isNaN(amount) || amount <= 0) {
       return res.status(400).json({ success: false, message: "Valid amount is required" });
     }
 
+    if (!userId) {
+      return res.status(400).json({ success: false, message: "User ID is required" });
+    }
+
     if (!process.env.RZP_key_id || !process.env.RZP_key_secret) {
-       console.error("Razorpay API credentials are not set in the environment variables.");
+       console.error("Razorpay API credentials are not set in .env");
        return res.status(500).json({ success: false, message: "Server configuration error" });
     }
 
-    const receipt_id = `receipt_order_${Math.floor(Math.random() * 100000)}`;
+    const receipt_id = `rec_${Date.now()}`; // unique receipt
 
     const options = {
-      amount: Number(amount * 100), // amount in the smallest currency unit
+      amount: Number(amount * 100), // paise
       currency: "INR",
       receipt: receipt_id,
+      notes: { userId: userId } // optional, useful for webhook
     };
 
     const order = await razorpay.orders.create(options);
-    
+
     if (!order) {
       return res.status(500).json({ success: false, message: "Failed to create order with payment gateway" });
     }
 
-    // Getting userId depending on how auth middleware attaches it
-    const userId = req.user ? req.user._id : req.userId;
-
-    if (!userId) {
-       return res.status(401).json({ success: false, message: "Unauthorized: User ID not found in request" });
-    }
-
-    // Save initial transaction in DB
+    // Save transaction in DB
     const transaction = new Transaction({
       userId: userId,
       receipt_id: receipt_id,
       razorpay_order_id: order.id,
-      amount: amount, 
+      amount: amount,
       currency: "INR",
       status: "created"
     });
@@ -61,13 +59,16 @@ export const checkout = async (req, res) => {
     return res.status(200).json({
       success: true,
       order,
-      key_id: process.env.RZP_key_id,
+      key_id: process.env.RZP_key_id.trim(),
     });
+
   } catch (error) {
     console.error("Error creating Razorpay order:", error);
     return res.status(500).json({ success: false, message: "Internal Server Error", error: error.message });
   }
 };
+
+
 
 export const paymentVerification = async (req, res) => {
   try {

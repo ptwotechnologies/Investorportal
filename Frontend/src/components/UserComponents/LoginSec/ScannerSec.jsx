@@ -47,12 +47,22 @@ const ScannerSec = () => {
       return;
     }
 
+
     try {
+      const userId = localStorage.getItem("userId"); // signup se store kiya hua
+      if (!userId) {
+     toast.error("User not found. Please signup first.");
+     setLoading(false);
+     return;
+  }
       // 2. create order
+
       const result = await axios.post(
         `${serverUrl}/api/payment/checkout`, 
-        { amount: 100 },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        { amount: 100 ,
+          userId: userId
+        },
+        
       );
 
       if (!result.data.success) {
