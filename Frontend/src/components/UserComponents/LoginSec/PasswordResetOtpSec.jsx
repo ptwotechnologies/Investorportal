@@ -13,8 +13,39 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import InputOtpSec from "./InputOtpSec";
+import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { serverUrl } from "@/App";
 
 const PasswordResetOtpSec = () => {
+  const [otp, setOtp] = useState("");
+const navigate = useNavigate();
+
+const email = localStorage.getItem("resetEmail");
+
+const verifyOtp = async () => {
+
+  try {
+
+    const res = await axios.post(`${serverUrl}/user/verifyOtp`, {
+      email,
+      otp
+    });
+
+    toast.success(res.data.message);
+
+    navigate("/newpassword");
+
+  } catch (error) {
+
+    toast.error(error.response?.data?.message || "Invalid OTP");
+
+  }
+
+};
+
   return (
     <div>
           <div className="flex justify-between items-center lg:min-h-dvh  ">
@@ -55,14 +86,14 @@ const PasswordResetOtpSec = () => {
                     <CardAction></CardAction>
                   </CardHeader>
                   <CardContent className="mx-auto mt-14 lg:mt-8 lg:mb-55 mb-64">
-                    <InputOtpSec/>
+                    <InputOtpSec otp={otp} setOtp={setOtp}/>
                   </CardContent>
                   <CardFooter className="absolute bottom-5 w-full lg:static">
-                    <Link to="/newpassword" className="w-full">
-                      <Button className="w-full bg-[#001032] ">
+                  
+                      <Button className="w-full bg-[#001032] " onClick={verifyOtp}>
                         Continue
                       </Button>
-                    </Link>
+                 
                   </CardFooter>
                 </Card>
               </div>

@@ -12,8 +12,39 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { serverUrl } from "@/App";
 
 const PasswordResetSec = () => {
+  const [email, setEmail] = useState("");
+const navigate = useNavigate();
+
+const sendOtp = async (e) => {
+  e.preventDefault();
+
+  try {
+
+    const res = await axios.post(`${serverUrl}/user/forgetPassword`, {
+      email,
+    });
+
+    toast.success(res.data.message);
+
+    localStorage.setItem("resetEmail", email);
+
+    navigate("/passwordresetotp");
+
+  } catch (error) {
+
+    toast.error(error.response?.data?.message || "Error sending OTP");
+
+  }
+};
+
+
   return (
    <div>
       <div className="flex justify-between items-center lg:min-h-dvh   ">
@@ -55,27 +86,31 @@ const PasswordResetSec = () => {
                 <CardAction></CardAction>
               </CardHeader>
               <CardContent>
-                <form>
+                <form onSubmit={sendOtp}>
                 <div className="flex flex-col gap-6 px-6 lg:mb-48 mb-60">
                   <div className="grid gap-2 ">
                     <Input
                       id="email"
                       type="email"
                       placeholder="Email or Phone"
+                      value={email}
+                       onChange={(e)=>setEmail(e.target.value)}
                       required
                       className="p-5 font-medium text-[#00103280]"
                     />
                   </div>
                 </div>
-              </form>
-              </CardContent>
+            
+             
               <CardFooter className="absolute bottom-5 w-full lg:static">
-                <Link to="/passwordresetotp" className="w-full">
+                
                   <Button className="w-full bg-[#001032] ">
                     Continue
                   </Button>
-                </Link>
+             
               </CardFooter>
+               </form>
+               </CardContent>
             </Card>
           </div>
         </div>

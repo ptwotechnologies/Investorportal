@@ -53,6 +53,16 @@ const userSchema = new mongoose.Schema(
       default: "not_paid",
     },
 
+    resetOtp: {
+  type: String,
+  default: null
+},
+
+otpExpire: {
+  type: Date,
+  default: null
+},
+
     registrationStep: { type: Number, default: 1 },
   },
   { timestamps: true }

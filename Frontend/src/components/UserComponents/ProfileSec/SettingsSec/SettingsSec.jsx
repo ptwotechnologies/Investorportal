@@ -222,40 +222,8 @@ const SettingsSec = () => {
                   <label className="font-semibold">Email</label>
 
                   <div className="flex items-center gap-3">
-                    {editingField === "email" ? (
-                      <>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => {
-                          setFormData({ ...formData, email: e.target.value });
-                          setHasChanged(true);
-                        }}
-                        className="border rounded px-2 py-1 text-sm"
-                      />
-                      <button
-                          className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
-                          onClick={() => handleSave("email")}
-                        >
-                          Save
-                        </button>
-
-                        <button
-                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
-                          onClick={() => setEditingField(null)}
-                        >
-                          Cancel
-                        </button>
-
-                      </>
-                    ) : (
-                      <span>{formData.email || "—"}</span>
-                    )}
-
-                    <FiEdit2
-                      className="cursor-pointer"
-                      onClick={() => setEditingField("email")}
-                    />
+                    <span className="text-gray-600">{formData.email || "—"}</span>
+                   
                   </div>
                 </div>
 
@@ -264,48 +232,11 @@ const SettingsSec = () => {
                   <label className="font-semibold">Phone</label>
 
                   <div className="flex items-center gap-3">
-                    {editingField === "phone" ? (
-                      <>
-                      <input
-                        type="text"
-                        value={formData.phone}
-                        onChange={(e) => {
-                          setFormData({ ...formData, phone: e.target.value });
-                          setHasChanged(true);
-                        }}
-                        className="border rounded px-2 py-1 text-sm"
-                      />
-                       <button
-                          className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
-                          onClick={() => handleSave("phone")}
-                        >
-                          Save
-                        </button>
-
-                        <button
-                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
-                          onClick={() => setEditingField(null)}
-                        >
-                          Cancel
-                        </button>
-
-
-                      </>
-                    ) : (
-                      <span>
-                        {formData.phone
-                          ? `+91 ${formData.phone.slice(
-                              0,
-                              2,
-                            )}****${formData.phone.slice(-2)}`
-                          : "—"}
-                      </span>
-                    )}
-
-                    <FiEdit2
-                      className="cursor-pointer"
-                      onClick={() => setEditingField("phone")}
-                    />
+                    <span className="text-gray-600">
+                      {formData.phone
+                        ? `+91 ${formData.phone.slice(0, 2)}****${formData.phone.slice(-2)}`
+                        : "—"}
+                    </span>
                   </div>
                 </div>
 

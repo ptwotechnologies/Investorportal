@@ -1,6 +1,8 @@
 import User from "../Models/User.model.js";
 import Profile from "../Models/profile.model.js";
 import bcrypt from "bcrypt";
+import resend from "../lib/resend.js";
+import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
 
 export const getSettings = async (req, res) => {
   try {
@@ -42,13 +44,35 @@ export const updateSettings = async (req, res) => {
       password,
     } = req.body;
 
+    // Fetch current data for comparison
+    const currentUser = await User.findById(userId);
+    const currentProfile = await Profile.findOne({ userId });
+
+    if (!currentUser || !currentProfile) {
+      return res.status(404).json({ message: "User or Profile not found" });
+    }
+
+    const changes = [];
+
     /* ---------- PROFILE UPDATE ---------- */
     const profileUpdates = {};
 
-    if (name !== undefined) profileUpdates.name = name;
-    if (bio !== undefined) profileUpdates.bio = bio;
-    if (address !== undefined) profileUpdates.address = address;
-    if (about !== undefined) profileUpdates.about = about;
+    if (name !== undefined && name !== currentProfile.name) {
+      changes.push({ field: "Name", old: currentProfile.name || "—", new: name });
+      profileUpdates.name = name;
+    }
+    if (bio !== undefined && bio !== currentProfile.bio) {
+      changes.push({ field: "Bio", old: currentProfile.bio || "—", new: bio });
+      profileUpdates.bio = bio;
+    }
+    if (address !== undefined && address !== currentProfile.address) {
+      changes.push({ field: "Address", old: currentProfile.address || "—", new: address });
+      profileUpdates.address = address;
+    }
+    if (about !== undefined && about !== currentProfile.about) {
+      changes.push({ field: "About", old: currentProfile.about || "—", new: about });
+      profileUpdates.about = about;
+    }
 
     if (Object.keys(profileUpdates).length > 0) {
       await Profile.findOneAndUpdate(
@@ -60,11 +84,20 @@ export const updateSettings = async (req, res) => {
     /* ---------- USER UPDATE ---------- */
     const userUpdates = {};
 
-    if (email !== undefined) userUpdates.email = email;
-    if (phone !== undefined)
-      userUpdates["businessDetails.number"] = phone;
+    // Restrict Email Update
+    if (email !== undefined && email !== currentUser.email) {
+      // We explicitly skip updating the email in the database as per requirements.
+      // Optionally, we could notify the user that email cannot be changed here.
+      console.log(`Blocked attempt to change email from ${currentUser.email} to ${email}`);
+    }
+
+    // Restrict Phone Update
+    if (phone !== undefined && phone !== currentUser.businessDetails?.number) {
+      console.log(`Blocked attempt to change phone from ${currentUser.businessDetails?.number} to ${phone}`);
+    }
 
     if (password) {
+      changes.push({ field: "Password", old: "********", new: "******** (Updated)" });
       const salt = await bcrypt.genSalt(10);
       userUpdates.password = await bcrypt.hash(password, salt);
     }
@@ -74,6 +107,16 @@ export const updateSettings = async (req, res) => {
         userId,
         { $set: userUpdates }
       );
+    }
+
+    // Send Email Notification if changes occurred
+    if (changes.length > 0) {
+      await resend.emails.send({
+        from: "Artestor@resend.dev",
+        to: [currentUser.email],
+        subject: "Your Profile Has Been Updated",
+        html: profileUpdateTemplate(changes)
+      });
     }
 
     res.status(200).json({ message: "Settings updated successfully" });

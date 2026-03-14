@@ -12,8 +12,50 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { serverUrl } from "@/App";
+
 
 const NewPasswordSec = () => {
+  const [newPassword, setNewPassword] = useState("");
+const [confirmPassword, setConfirmPassword] = useState("");
+
+const navigate = useNavigate();
+
+const email = localStorage.getItem("resetEmail");
+
+
+const resetPassword = async (e) => {
+
+  e.preventDefault();
+
+  if(newPassword !== confirmPassword){
+    return toast.error("Passwords do not match");
+  }
+
+  try {
+
+    const res = await axios.post(`${serverUrl}/user/resetPassword`, {
+      email,
+      newPassword
+    });
+
+    toast.success(res.data.message);
+
+    navigate("/passwordsuccess");
+
+  } catch (error) {
+
+    toast.error(error.response?.data?.message || "Error");
+
+  }
+
+};
+
+
   return (
     <div>
       <div className="flex justify-between items-center  lg:min-h-dvh">
@@ -55,22 +97,26 @@ const NewPasswordSec = () => {
                 <CardAction></CardAction>
               </CardHeader>
               <CardContent>
-                <form>
+                <form onSubmit={resetPassword}> 
                   <div className="flex flex-col gap-4">
                     <div className="grid gap-2 ">
                       <Input
-                        id="email"
-                        type="email"
+                        id="newPassword"
+                        type="password"
                         placeholder="Enter new password"
+                        value={newPassword}
+                        onChange={(e)=>setNewPassword(e.target.value)}
                         required
                         className="p-5 font-normal text-[#00103280]"
                       />
                     </div>
                     <div className="grid gap-2">
                       <Input
-                        id="password"
+                        id="confirmPassword"
                         type="password"
                         placeholder="Confirm new password"
+                        value={confirmPassword}
+                        onChange={(e)=>setConfirmPassword(e.target.value)}
                         required
                         className="p-5 font-normal text-[#00103280]"
                       />
@@ -84,15 +130,16 @@ const NewPasswordSec = () => {
                         </div>
                     </div>
                   </div>
-                </form>
-              </CardContent>
-              <CardFooter className="absolute bottom-5 w-full lg:static">
-                <Link to="/passwordsuccess" className="w-full ">
-                  <Button className="w-full bg-[#001032] lg:mt-24 ">
+                   <CardFooter className="absolute bottom-5 w-full lg:static">
+                
+                  <Button type="submit" className="w-full bg-[#001032] lg:mt-24 ">
                    Reset your password
                   </Button>
-                </Link>
+           
               </CardFooter>
+                </form>
+              </CardContent>
+             
             </Card>
           </div>
         </div>

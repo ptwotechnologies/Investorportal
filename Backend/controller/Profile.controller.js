@@ -2,6 +2,8 @@ import Profile from "../Models/profile.model.js";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
+import resend from "../lib/resend.js";
+import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
 
 // GET Profile of logged-in user
 export const getProfile = async (req, res) => {
@@ -58,6 +60,25 @@ export const updateProfile = async (req, res) => {
       return res.status(404).json({ message: "Profile not found" });
     }
 
+    const changes = [];
+    const fieldsToTrack = ["name", "bio", "state", "city", "about", "topSkills", "services"];
+
+    fieldsToTrack.forEach(field => {
+      if (updatedData[field] !== undefined) {
+        let oldValue = profile[field];
+        let newValue = updatedData[field];
+
+        // Handle arrays or complex types if necessary
+        if (Array.isArray(oldValue)) {
+            if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) {
+                changes.push({ field: field.charAt(0).toUpperCase() + field.slice(1), old: oldValue.join(", ") || "—", new: newValue.join(", ") });
+            }
+        } else if (oldValue !== newValue) {
+            changes.push({ field: field.charAt(0).toUpperCase() + field.slice(1), old: oldValue || "—", new: newValue });
+        }
+      }
+    });
+
     if (updatedData.experience && Array.isArray(updatedData.experience)) {
       updatedData.experience = updatedData.experience.map((exp) => ({
         ...exp,
@@ -67,11 +88,22 @@ export const updateProfile = async (req, res) => {
             ? [exp.description]
             : [],
       }));
+      // We could add experience change detection here as well if needed
     }
 
     // Update profile fields
     Object.assign(profile, updatedData);
     await profile.save();
+
+    // Send Email Notification if changes occurred
+    if (changes.length > 0 && req.user.email) {
+        await resend.emails.send({
+          from: "Artestor@resend.dev",
+          to: [req.user.email],
+          subject: "Your Profile Has Been Updated",
+          html: profileUpdateTemplate(changes)
+        });
+    }
 
     // Send response in same format as getProfile
     res.status(200).json({
