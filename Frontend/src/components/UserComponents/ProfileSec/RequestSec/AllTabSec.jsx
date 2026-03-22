@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 
-const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
+const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllHandlers }) => {
   const [forwardedRequests, setForwardedRequests] = useState([]);
   const [raisedRequests, setRaisedRequests] = useState([]);
   const [myInterestedRequests, setMyInterestedRequests] = useState([]);
@@ -33,9 +33,30 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setForwardedRequests(receivedRes.data.forwardedRequests);
-        setMyInterestedRequests(receivedRes.data.myInterestedRequests);
-        setRaisedRequests(raisedRes.data);
+        const forwarded = receivedRes.data.forwardedRequests;
+        const myInterested = receivedRes.data.myInterestedRequests;
+        const raised = raisedRes.data;
+
+        setForwardedRequests(forwarded);
+        setMyInterestedRequests(myInterested);
+        setRaisedRequests(raised);
+
+        // Update selectedRequest if it exists and matches a fetched request
+        if (selectedRequest) {
+          const updatedRequest = 
+            forwarded.find(req => req._id === selectedRequest._id) ||
+            myInterested.find(req => req._id === selectedRequest._id) ||
+            raised.find(req => req._id === selectedRequest._id);
+          
+          if (updatedRequest) {
+            setSelectedRequest({ 
+              ...updatedRequest, 
+              requestType: selectedRequest.requestType,
+              viewType: selectedRequest.viewType,
+              professionalData: selectedRequest.professionalData 
+            });
+          }
+        }
       } catch (err) {
         console.error("Error fetching requests:", err);
       } finally {
@@ -46,8 +67,8 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
     fetchAllRequests();
   }, []);
 
-  const handleRequestClick = (req, type) => {
-    setSelectedRequest({ ...req, requestType: type });
+  const handleRequestClick = (req, type, viewType = 'request') => {
+    setSelectedRequest({ ...req, requestType: type, viewType });
     setShowDetails(true);
     setMobileView("right");
   };
@@ -70,14 +91,14 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
       setForwardedRequests((prev) =>
         prev.map((req) =>
           req._id === requestId
-            ? { ...req, status: "interested", interestedBy: [...(req.interestedBy || []), { _id: "you" }] }
+            ? { ...req, status: "interested", interestedBy: [...(req.interestedBy || []), { _id: "you" }], hasShownInterest: true }
             : req
         )
       );
 
       setSelectedRequest((prev) =>
         prev && prev._id === requestId
-          ? { ...prev, status: "interested", interestedBy: [...(prev.interestedBy || []), { _id: "you" }] }
+          ? { ...prev, status: "interested", interestedBy: [...(prev.interestedBy || []), { _id: "you" }], hasShownInterest: true }
           : prev
       );
     } catch (err) {
@@ -141,6 +162,18 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
       console.error("Error accepting provider:", err);
     }
   };
+
+  useEffect(() => {
+    if (setAllHandlers) {
+      setAllHandlers({
+        handleInterest,
+        handleIgnore,
+        handleAccept,
+        showConfirm,
+        setShowConfirm,
+      });
+    }
+  }, [showConfirm, setAllHandlers]);
 
   // NEW: Check if there are no requests
   const hasNoRequests = 
@@ -281,12 +314,12 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
                   <div className="flex gap-2 pt-2">
                     <button
                       onClick={() => handleInterest(selectedRequest._id)}
-                      disabled={selectedRequest.status === "interested" || selectedRequest.isIgnored}
+                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
                       className={`flex-1 bg-[#F8DEDE] text-[#B94444] py-2 rounded-full text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
-                        (selectedRequest.status === "interested" || selectedRequest.isIgnored) && "opacity-50 cursor-not-allowed"
+                        (selectedRequest.hasShownInterest || selectedRequest.isIgnored) && "opacity-50 cursor-not-allowed"
                       }`}
                     >
-                      {selectedRequest.status === "interested" ? "Interested" : "Interest"}
+                      {selectedRequest.hasShownInterest ? "Interested" : "Interest"}
                     </button>
 
                     <button
@@ -296,9 +329,9 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
                           providerId: null,
                         })
                       }
-                      disabled={selectedRequest.status === "interested" || selectedRequest.isIgnored}
+                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
                       className={`flex-1 py-2 rounded-full text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
-                        selectedRequest.status === "interested" || selectedRequest.isIgnored
+                        selectedRequest.hasShownInterest || selectedRequest.isIgnored
                           ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                           : "bg-[#D8D6F8] text-[#59549F]"
                       }`}
@@ -384,21 +417,21 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
                     e.stopPropagation();
                     handleInterest(req._id);
                   }}
-                  disabled={req.status === "interested" || req.isIgnored}
+                  disabled={req.hasShownInterest || req.isIgnored}
                   className={`bg-[#F8DEDE] text-[#B94444] px-2 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${
-                    (req.status === "interested" || req.isIgnored) && "opacity-50 cursor-not-allowed"
+                    (req.hasShownInterest || req.isIgnored) && "opacity-50 cursor-not-allowed"
                   }`}
                 >
-                  {req.status === "interested" ? "Interested" : "Interest"}
+                  {req.hasShownInterest ? "Interested" : "Interest"}
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     setShowConfirm({ requestId: req._id, providerId: null });
                   }}
-                  disabled={req.status === "interested" || req.isIgnored}
+                  disabled={req.hasShownInterest || req.isIgnored}
                   className={`text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${
-                    req.status === "interested" || req.isIgnored
+                    req.hasShownInterest || req.isIgnored
                       ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                       : "bg-[#D8D6F8] text-[#59549F]"
                   }`}
@@ -486,7 +519,8 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
                   return (
                     <div
                       key={user._id}
-                      className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22"
+                      onClick={() => handleRequestClick({...req, professionalData: user}, 'interested', 'profile')}
+                      className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
                     >
                       <div className="flex items-center justify-center p-3 shrink-0">
                         <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200"></div>
@@ -640,21 +674,21 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
                 e.stopPropagation();
                 handleInterest(req._id);
               }}
-              disabled={req.status === "interested" || req.isIgnored}
+              disabled={req.hasShownInterest || req.isIgnored}
               className={`bg-[#F8DEDE] text-[#B94444] text-center px-2 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${
-                (req.status === "interested" || req.isIgnored) && "opacity-50 cursor-not-allowed"
+                (req.hasShownInterest || req.isIgnored) && "opacity-50 cursor-not-allowed"
               }`}
             >
-              {req.status === "interested" ? "Interested" : "Interest"}
+              {req.hasShownInterest ? "Interested" : "Interest"}
             </button>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setShowConfirm({ requestId: req._id, providerId: null });
               }}
-              disabled={req.status === "interested" || req.isIgnored}
+              disabled={req.hasShownInterest || req.isIgnored}
               className={`text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${
-                req.status === "interested" || req.isIgnored
+                req.hasShownInterest || req.isIgnored
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-[#D8D6F8] text-[#59549F]"
               }`}
@@ -663,7 +697,7 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
             </button>
             {showConfirm.requestId === req._id &&
               showConfirm.providerId === null &&
-              req.status !== "interested" &&
+              !req.hasShownInterest &&
               !req.isIgnored && (
                 <div className="absolute bg-white shadow-lg rounded-lg mt-17 border w-24 z-50">
                   <div className="flex flex-col items-center gap-1">
@@ -740,7 +774,8 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView }) => {
               return (
                 <div
                   key={user._id}
-                  className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22"
+                  onClick={() => handleRequestClick({...req, professionalData: user}, 'interested', 'profile')}
+                  className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
                 >
                   <div className="flex items-center justify-center p-3 shrink-0">
                     <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200"></div>

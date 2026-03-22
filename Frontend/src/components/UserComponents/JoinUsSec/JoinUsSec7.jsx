@@ -35,22 +35,22 @@ const JoinUsSec7 = () => {
           
           const divElements = [
             {
-                paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
-                name:"Vivek T ",
-               company:"Company Name ",
-                companyName:"Startup"
+                paragraph:"Joining the investor portal completely changed how we access opportunities. What used to take months now happens through one connected ecosystem.",
+                name:"Amit Verma",
+               company:"Early-Stage Founder",
+               
             },
             {
-                paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
-                name:"Vivek T ",
-                company:"Company Name ",
-                companyName:"Startup"
+                paragraph:"This isn’t just a platform—it’s where serious collaborations happen. The quality of connections here is something you won’t find outside.",
+                name:"Ritika Sharma",
+                company:"Investor",
+                
             },
             {
-                paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",
+                paragraph:"I didn’t realize how many opportunities I was missing until I joined. Everything—startups, investors, and partnerships—is already inside.",
                  name:"Vivek T ",
                 company:"Company Name ",
-                companyName:"Startup"
+                
             },
                 {
                 paragraph:"“Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash”",

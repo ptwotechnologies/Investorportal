@@ -76,7 +76,7 @@ const ServiceProfessionalSec6 = () => {
           onScroll={handleScroll}
           className="flex overflow-x-scroll scrollbar-hide lg:px-10  pt-8 gap-4 lg:gap-5 text-[#001032] ">
           {cards.map((item, index) => (
-            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0 lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
+            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0 lg:p-4  lg:mx-2   ">
              <div className=' w-full h-full lg:gap-10  border border-[#00103280] 
              lg:rounded-2xl lg:shadow-lg lg:p-3 p-5 px-7   rounded-sm shadow-lg'>
                 <p className='  hidden lg:block text-[#001032B2] text-md leading-9 tracking-wider'>{item.paragraph}</p>
@@ -111,7 +111,7 @@ const ServiceProfessionalSec6 = () => {
                 If your work supports founders atany stage — from idea to scale —this ecosystem is built for you
 </h1>
                 <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block' >And if you’ve worked with startups before? That’s even better!</p>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve already worked withstartups before, that experiencemakes you even more valuable here</p>
+                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve already worked with startups before, that experience makes you even more valuable here</p>
          </div>
          <hr className='lg:hidden bg-[#00000033] '/>
       </div>

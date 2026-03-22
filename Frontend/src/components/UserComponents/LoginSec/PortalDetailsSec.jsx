@@ -229,7 +229,7 @@ const PortalDetailsSec = () => {
       <div className="flex justify-between items-center lg:min-h-dvh">
         
         {/* LEFT SIDE */}
-        <div id="left" className="w-[40%] hidden lg:block mx-auto">
+        <div id="left" className="w-[50%] hidden lg:block mx-auto">
           <div className="flex flex-col justify-between items-center gap-y-25">
             <div>
               <img src={logo} alt="Logo" className="w-100" />
@@ -245,16 +245,16 @@ const PortalDetailsSec = () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-2 text-center w-full">
+        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-2 text-center w-full">
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
             
             <Card className="w-full lg:h-auto mx-auto rounded-lg">
               
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-50 w-45 mx-auto my-3" />
+                  <img src={logo} alt="Logo" className="lg:w-50 w-45 mx-auto my-4" />
                 </CardTitle>
-                <CardDescription className="mb-1 text-[#001032] text-md lg:text-sm font-semibold">
+                <CardDescription className="mb-1 text-[#001032] text-md lg:text-sm ">
                   Get the most benefits from our pool of possible clients for you
                 </CardDescription>
               </CardHeader>
@@ -272,7 +272,7 @@ const PortalDetailsSec = () => {
                               {/* DOMAIN for Freelancer */}
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] cursor-pointer">
                                     {domain}
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
@@ -293,7 +293,7 @@ const PortalDetailsSec = () => {
                                   placeholder="Describe your domain"
                                   value={domainDescription}
                                   onChange={(e) => setDomainDescription(e.target.value)}
-                                  className="p-5 font-medium text-[#00103280]"
+                                  className="p-5  text-[#00103280]"
                                   required
                                 />
                               )}
@@ -304,7 +304,7 @@ const PortalDetailsSec = () => {
                                 placeholder="Referral Code (optional)"
                                 value={referralCode}
                                 onChange={(e) => setReferralCode(e.target.value)}
-                                className="p-5 font-medium text-[#00103280]"
+                                className="p-5  text-[#00103280]"
                               />
 
                               {/* Profile upload for Freelancer */}
@@ -328,7 +328,7 @@ const PortalDetailsSec = () => {
                                     </div>
                                   )}
                                 </div>
-                                <label className="text-left text-xs font-medium text-gray-600">(Max 10MB)</label>
+                                <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
                               </div>
                             </>
                           ) : serviceType === "Company" ? (
@@ -341,7 +341,7 @@ const PortalDetailsSec = () => {
                               {/* Company business type instead of LinkedIn */}
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
                                     {serviceBusinessType}
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
@@ -358,7 +358,7 @@ const PortalDetailsSec = () => {
                               {/* DOMAIN */}
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
                                     {domain}
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
@@ -379,7 +379,7 @@ const PortalDetailsSec = () => {
                                   placeholder="Describe your domain"
                                   value={domainDescription}
                                   onChange={(e) => setDomainDescription(e.target.value)}
-                                  className="p-5 font-medium text-[#00103280]"
+                                  className="p-5  text-[#00103280]"
                                   required
                                 />
                               )}
@@ -390,7 +390,7 @@ const PortalDetailsSec = () => {
                                 placeholder="Referral Code (optional)"
                                 value={referralCode}
                                 onChange={(e) => setReferralCode(e.target.value)}
-                                className="p-5 font-medium text-[#00103280]"
+                                className="p-5  text-[#00103280]"
                               />
 
                               {/* Profile upload */}
@@ -414,7 +414,7 @@ const PortalDetailsSec = () => {
                                     </div>
                                   )}
                                 </div>
-                                <label className="text-left text-xs font-medium text-gray-600">(Max 10MB)</label>
+                                <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
                               </div>
                             </>
                           ) : (
@@ -427,12 +427,12 @@ const PortalDetailsSec = () => {
                                 placeholder="LinkedIn Profile"
                                 value={linkedin}
                                 onChange={(e) => setLinkedin(e.target.value)}
-                                className="p-5 font-medium text-[#00103280]"
+                                className="p-5  text-[#00103280]"
                                 required
                               />
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
                                     {domain}
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
@@ -451,7 +451,7 @@ const PortalDetailsSec = () => {
                                   placeholder="Describe your domain"
                                   value={domainDescription}
                                   onChange={(e) => setDomainDescription(e.target.value)}
-                                  className="p-5 font-medium text-[#00103280]"
+                                  className="p-5  text-[#00103280]"
                                   required
                                 />
                               )}
@@ -475,7 +475,7 @@ const PortalDetailsSec = () => {
                                     </div>
                                   )}
                                 </div>
-                                <label className="text-left text-xs font-medium text-gray-600">(Max 10MB)</label>
+                                <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
                               </div>
                             </>
                           )
@@ -486,7 +486,7 @@ const PortalDetailsSec = () => {
                             </div>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
                                   {startupBusinessType}
                                   <IoIosArrowDown className="mt-1" />
                                 </button>
@@ -502,7 +502,7 @@ const PortalDetailsSec = () => {
 
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
                                   {domain}
                                   <IoIosArrowDown className="mt-1" />
                                 </button>
@@ -522,7 +522,7 @@ const PortalDetailsSec = () => {
                                 placeholder="Describe your domain"
                                 value={domainDescription}
                                 onChange={(e) => setDomainDescription(e.target.value)}
-                                className="p-5 font-medium text-[#00103280]"
+                                className="p-5 text-[#00103280]"
                                 required
                               />
                             )}
@@ -532,7 +532,7 @@ const PortalDetailsSec = () => {
                               placeholder="Referral Code (optional)"
                               value={referralCode}
                               onChange={(e) => setReferralCode(e.target.value)}
-                              className="p-5 font-medium text-[#00103280]"
+                              className="p-5  text-[#00103280]"
                             />
 
                             <div className="flex flex-col gap-2 items-center justify-center ">
@@ -555,7 +555,7 @@ const PortalDetailsSec = () => {
                                   </div>
                                 )}
                               </div>
-                              <label className="text-left text-xs font-medium text-gray-600">(Max 10MB)</label>
+                              <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
                             </div>
                           </>
                         ) : (
@@ -568,13 +568,13 @@ const PortalDetailsSec = () => {
                               placeholder="LinkedIn Profile"
                               value={linkedin}
                               onChange={(e) => setLinkedin(e.target.value)}
-                              className="p-5 font-medium text-[#00103280]"
+                              className="p-5  text-[#00103280]"
                               required
                             />
 
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
-                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] font-medium cursor-pointer">
+                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
                                   {domain}
                                   <IoIosArrowDown className="mt-1" />
                                 </button>
@@ -594,7 +594,7 @@ const PortalDetailsSec = () => {
                                 placeholder="Describe your domain"
                                 value={domainDescription}
                                 onChange={(e) => setDomainDescription(e.target.value)}
-                                className="p-5 font-medium text-[#00103280]"
+                                className="p-5  text-[#00103280]"
                                 required
                               />
                             )}
@@ -619,7 +619,7 @@ const PortalDetailsSec = () => {
                                   </div>
                                 )}
                               </div>
-                              <label className="text-left text-xs font-medium text-gray-600">(Max 10MB)</label>
+                              <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
                             </div>
                           </>
                         )}

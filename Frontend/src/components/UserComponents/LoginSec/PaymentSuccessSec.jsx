@@ -78,10 +78,10 @@ const PaymentSuccessSec = () => {
   role === "investor"
     ? paymentStatus === "approved"
       ? "Your onboarding is complete. You can continue."
-      : "We are reviewing your details. Please wait for admin approval."
+      : "We are reviewing your details. Your account will be activated within 30 minutes. You’ll receive a confirmation via email/WhatsApp once it's live."
     : paymentStatus === "approved"
       ? "Payment approved! You can continue."
-      : "We are reviewing your details. Please wait until it gets approved.";
+      : "We are reviewing your details. Your account will be activated within 30 minutes. You’ll receive a confirmation via email/WhatsApp once it's live.";
 
 
       const roleinvest= role !== "investor" ? "Payment has been received successfully!" : "Thank you for joining as an investor!";
@@ -104,17 +104,17 @@ const PaymentSuccessSec = () => {
           </div>
         </div>
 
-        <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-4 text-center w-full">
+        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-4 text-center w-full">
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
             <Card className="w-full lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-45 w-45 mx-auto lg:my-10 my-7" />
                 </CardTitle>
-                <CardDescription className="mb-1 text-[#001032] text-sm lg:text-sm font-semibold">
+                <CardDescription className="mb-1 text-[#001032] text-xs lg:text-sm ">
                   {roleinvest}
-                  <p className="mt-2">{statusMessage}</p>
-                  {loading && <p className="mt-2 text-yellow-500 font-bold">Processing...</p>}
+                  <p className="mt-2 lg:w-[80%]  mx-auto">{statusMessage}</p>
+                  {loading && <p className="mt-2 text-yellow-500 ">Processing...</p>}
                 </CardDescription>
               </CardHeader>
 
@@ -130,7 +130,7 @@ const PaymentSuccessSec = () => {
                 )}
               </CardContent>
 
-              <CardFooter className="absolute bottom-5 w-full lg:static">
+              <CardFooter className="absolute bottom-5 w-full lg:static mt-32">
                 {paymentStatus === "approved" ? (
                   <Link to="/login" className="w-full">
                     <Button className="w-full bg-[#001032]">Back to Login</Button>

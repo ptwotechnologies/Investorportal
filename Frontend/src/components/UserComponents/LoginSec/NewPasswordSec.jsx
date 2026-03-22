@@ -80,15 +80,15 @@ const resetPassword = async (e) => {
         </div>
         <div
           id="right"
-          className="lg:w-[47%]  lg:pl-20 lg:px-10 lg:py-5 text-center   w-full"
+          className="lg:w-[50%]   lg:px-10 lg:py-5 text-center   w-full"
         >
-          <div className="lg:bg-[#001032]  p-5 lg:p-3 w-full  lg:rounded-lg ">
-            <Card className="w-full  lg:h-auto mx-auto rounded-lg">
+          <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg ">
+            <Card className="w-full lg:h-auto mx-auto rounded-lg lg:border border-none">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-7" />
                 </CardTitle>
-                <CardDescription className=" mb-1 text-[#001032]  lg:text-sm font-semibold  ">
+                <CardDescription className=" mb-1 text-[#001032]  lg:text-sm  ">
                   <p className="lg:text-lg text-[15px] mb-8">Set your new password and confirm the new password</p>
                    
 
@@ -98,7 +98,7 @@ const resetPassword = async (e) => {
               </CardHeader>
               <CardContent>
                 <form onSubmit={resetPassword}> 
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 px-4 lg:px-0 lg:mb-4 mb-40">
                     <div className="grid gap-2 ">
                       <Input
                         id="newPassword"
@@ -107,7 +107,7 @@ const resetPassword = async (e) => {
                         value={newPassword}
                         onChange={(e)=>setNewPassword(e.target.value)}
                         required
-                        className="p-5 font-normal text-[#00103280]"
+                        className="p-5  text-[#00103280]"
                       />
                     </div>
                     <div className="grid gap-2">
@@ -118,7 +118,7 @@ const resetPassword = async (e) => {
                         value={confirmPassword}
                         onChange={(e)=>setConfirmPassword(e.target.value)}
                         required
-                        className="p-5 font-normal text-[#00103280]"
+                        className="p- text-[#00103280]"
                       />
                     </div>
                     <div className="text-start text-[9px] text-[#00103280] leading-4 lg:leading-6 racking-wide  px-2">
@@ -130,7 +130,7 @@ const resetPassword = async (e) => {
                         </div>
                     </div>
                   </div>
-                   <CardFooter className="absolute bottom-5 w-full lg:static">
+                   <CardFooter className="absolute bottom-5 right-2 left-2 lg:static">
                 
                   <Button type="submit" className="w-full bg-[#001032] lg:mt-24 ">
                    Reset your password

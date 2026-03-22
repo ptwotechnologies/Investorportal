@@ -135,39 +135,7 @@ const SettingsSec = () => {
                   <label className="font-semibold">Name</label>
 
                   <div className="flex items-center gap-3">
-                    {editingField === "name" ? (
-                      <>
-                        <input
-                          type="text"
-                          value={formData.name}
-                          onChange={(e) => {
-                            setFormData({ ...formData, name: e.target.value });
-                            setHasChanged(true);
-                          }}
-                          className="border rounded px-2 py-1 text-sm"
-                        />
-                        <button
-                          className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
-                          onClick={() => handleSave("name")}
-                        >
-                          Save
-                        </button>
-
-                        <button
-                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
-                          onClick={() => setEditingField(null)}
-                        >
-                          Cancel
-                        </button>
-                      </>
-                    ) : (
-                      <span>{formData.name || "—"}</span>
-                    )}
-
-                    <FiEdit2
-                      className="cursor-pointer"
-                      onClick={() => setEditingField("name")}
-                    />
+                    <span className="text-gray-600">{formData.name || "—"}</span>
                   </div>
                 </div>
 
@@ -189,7 +157,7 @@ const SettingsSec = () => {
                           });
                           setHasChanged(true);
                         }}
-                        className="border rounded px-2 py-1 text-sm"
+                        className="border rounded px-2 py-1 text-sm w-32 md:w-auto"
                       />
                        <button
                           className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
@@ -197,14 +165,6 @@ const SettingsSec = () => {
                         >
                           Save
                         </button>
-
-                        <button
-                          className="bg-[#001032] text-white text-sm px-3 py-1 rounded-sm"
-                          onClick={() => setEditingField(null)}
-                        >
-                          Cancel
-                        </button>
-
                     </>
                     ) : (
                       <span>************</span>

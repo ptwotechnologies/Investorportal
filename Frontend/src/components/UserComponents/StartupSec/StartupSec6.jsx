@@ -79,7 +79,7 @@ const StartupSec6 = () => {
           onScroll={handleScroll}
           className="flex overflow-x-scroll scrollbar-hide lg:px-10 pt-8 gap-4 lg:gap-5 text-[#001032] ">
           {cards.map((item, index) => (
-            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0  lg:p-4  lg:mx-2  shadow-2xl lg:shadow-none ">
+            <div key={index} className="w-full  lg:w-[30%] h-fit  shrink-0  lg:p-4  lg:mx-2   ">
              <div className=' w-full h-full lg:gap-10  border border-[#00103280] 
              lg:rounded-2xl rounded-sm shadow-lg lg:p-3 p-5 px-7'>
                 <p className=' hidden lg:block text-[#001032B2] text-md leading-8 tracking-wider'>{item.paragraph}</p>
@@ -111,13 +111,13 @@ const StartupSec6 = () => {
                 If your startup sits anywhere along this path and you want a clearer, guided way to reach investors, this ecosystem fits you</h1>
                 <h1 className=' lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 
             lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg lg:hidden'>
-                If your work supports founders atany stage — from idea to scale —this ecosystem is built for you
+               If your startup fits any of these stages and you want a clearer, faster path to funding and expert support, this portal is built exactly for you.
 </h1>
                 <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-2xl pb-15 lg:pb-0 hidden lg:block  mx-auto w-190' >And if you already have traction or early advisors on board — that accelerates your growth inside Artestor even more</p>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve already worked withstartups before, that experiencemakes you even more valuable here</p>
+                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve been refining your product or speaking with investors already?</p>
          </div>
          <hr className='lg:hidden bg-[#00000033] '/>
-      </div>
+      </div> 
      )
 }
 

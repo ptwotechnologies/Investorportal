@@ -26,7 +26,8 @@ export const createRequest = async (req, res) => {
 // GET ALL REQUESTS
 export const getAllRequests = async (req, res) => {
   try {
-    const requests = await Request.find({ raisedBy: req.user._id }) 
+    const requests = await Request.find({ raisedBy: req.user._id })
+      .populate("interestedBy", "businessDetails role")
       .sort({ createdAt: -1 });
     res.status(200).json(requests);
   } catch (error) {
@@ -46,6 +47,9 @@ export const forwardRequest = async (req, res) => {
 
     request.forwardedTo = userIds;
     request.status = "forwarded";
+    
+    // Clear seenBy so the newly forwarded providers will receive an unseen notification
+    request.seenBy = [];
 
     await request.save();
 
@@ -69,10 +73,11 @@ export const getReceivedRequests = async (req, res) => {
     .sort({ createdAt: -1 })
     .lean();
 
-    // Add isSeen field
+    // Add isSeen and hasShownInterest fields
     const forwardedWithSeen = forwardedRequests.map(req => ({
       ...req,
-      isSeen: req.seenBy?.some(id => id.toString() === userId.toString()) || false
+      isSeen: req.seenBy?.some(id => id.toString() === userId.toString()) || false,
+      hasShownInterest: req.interestedBy?.some(id => id.toString() === userId.toString()) || false
     }));
 
     // My raised requests where someone showed interest
@@ -81,11 +86,17 @@ export const getReceivedRequests = async (req, res) => {
       interestedBy: { $ne: [] }
     })
     .populate("interestedBy", "businessDetails role")
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .lean();
+
+    const interestedWithSeen = myInterestedRequests.map(req => ({
+      ...req,
+      isSeen: req.seenBy?.some(id => id.toString() === userId.toString()) || false,
+    }));
 
     res.status(200).json({
       forwardedRequests: forwardedWithSeen,
-      myInterestedRequests
+      myInterestedRequests: interestedWithSeen
     });
 
   } catch (error) {
@@ -124,6 +135,9 @@ export const markInterested = async (req, res) => {
         request.status = "interested";
         console.log("Updating status to interested");
       }
+
+      // Remove the raiser from seenBy so they get an unseen notification about this interest
+      request.seenBy = request.seenBy.filter(id => id.toString() !== request.raisedBy.toString());
     }
 
     await request.save();
@@ -209,8 +223,11 @@ export const markRequestAsSeen = async (req, res) => {
       return res.status(404).json({ message: "Request not found" });
     }
 
-    // Check if user is in forwardedTo list
-    if (!request.forwardedTo.some(id => id.toString() === userId.toString())) {
+    // Check if user is in forwardedTo list OR is the raiser
+    const isForwarded = request.forwardedTo.some(id => id.toString() === userId.toString());
+    const isRaiser = request.raisedBy.toString() === userId.toString();
+
+    if (!isForwarded && !isRaiser) {
       return res.status(403).json({ message: "Not allowed" });
     }
 

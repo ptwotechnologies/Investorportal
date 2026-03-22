@@ -15,23 +15,23 @@ const JoinUsSec4 = () => {
   const divElements = [
     {
       paragraph:
-        "UI/UX designers and content creators who want clear briefs and decision-ready clients",
-      company: "Design & Branding",
+        "Founders shaping their first version, validating their idea, and defining the right direction for product and funding",
+      company: "Early Stage",
     },
     {
       paragraph:
-        "UI/UX designers and content creators who want clear briefs and decision-ready clients",
-      company: "Design & Branding",
+        "Teams preparing their investment story, strengthening traction signals, and building credibility for outreach",
+      company: "Pre-seed to Seed",
     },
     {
       paragraph:
-        "UI/UX designers and content creators who want clear briefs and decision-ready clients",
-      company: "Design & Branding",
+        "Boutique agencies seeking founders with stage-fit budgets, repeatable scopes, and clear expectations",
+      company: "Agencies",
     },
     {
       paragraph:
-        "UI/UX designers and content creators who want clear briefs and decision-ready clients",
-      company: "Design & Branding",
+        "Platform partners tools and services that complement founder’s needs, integrations and partnerships welcome",
+      company: "Partners",
     },
   ];
 
@@ -102,25 +102,15 @@ const JoinUsSec4 = () => {
           className=" lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 
             lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg hidden lg:block"
         >
-          If you want a quieter pipeline of genuine leads and fewer low-value
-          calls, Artestor removes the noise and brings you quality
+          If your work fits any of these lanes and you want a quieter, more direct way to find serious clients, this portal is for you
         </h1>
-        <h1
-          className=" lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 
-            lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg lg:hidden"
-        >
-          If your work supports founders atany stage — from idea to scale —this
-          ecosystem is built for you
-        </h1>
+       
         <p className="text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block">
           And if you’ve worked with startups before? That’s even better!
         </p>
-        <p className="text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden">
-          And if you’ve already worked withstartups before, that experiencemakes
-          you even more valuable here
-        </p>
+        
       </div>
-      <hr className="lg:hidden bg-[#00000033] " />
+      
     </div>
   );
 };

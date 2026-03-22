@@ -10,7 +10,7 @@ const JoinUsSec1 = () => {
             <div className=' lg:w-[73%] lg:text-[#001032]' >
             <p className='text-[42px] font-semibold leading-13 lg:leading-14 tracking-wide mb-6 hidden lg:block'>Collaborate, grow, and accelerate opportunities on one unified platform</p>
             <p className='text-4xl font-semibold leading-13 lg:leading-14 tracking-wide mb-6 lg:hidden '>Collaborate, grow, and accelerate opportunities on one unified platform - An ecosystem for every business</p>
-        <p className='text-2xl leading-8 tracking-wide hidden lg:block'>Grow Your Business by Partnering with India</p>
+        <p className='text-2xl leading-8 tracking-wide hidden lg:block'>Join India’s Fastest-Growing Business Ecosystem</p>
         <Link to="/login"><button className='  mt-3 lg:bg-[#001426] lg:text-white bg-white text-[#001032] 
         p-2 px-14 rounded-sm text-lg mb-15 lg:mb-0'>Get Listed</button></Link>
         </div>

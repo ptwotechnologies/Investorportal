@@ -150,7 +150,7 @@ const HomeSec2 = () => {
               </p>
             </div>
 
-            <div className=" w-[30%]">
+            <div className=" w-[30%] ">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Channel Partners</h3>
              <Link to="/channelpartners"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">

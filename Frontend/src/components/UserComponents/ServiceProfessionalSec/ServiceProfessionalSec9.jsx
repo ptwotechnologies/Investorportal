@@ -142,9 +142,9 @@ function ServiceProfessionalSec9() {
                       <p className="text-sm ">Annual onboarding fee</p>
                     </div>
 
-                    <div className="bg-[#0000001A] flex items-center text-xs lg:gap-4 pl-6 gap-2 px-2 py-1 rounded-sm mt-6 lg:mt-4">
-                    <p className="font-bold">
-                      15 <span className="font-normal">connects</span>
+                    <div className="bg-[#0000001A] flex items-center text-[10px] lg:gap-4 pl-6 gap-2 px-2 py-1 rounded-sm mt-6 lg:mt-4">
+                    <p className="">
+                      15 <span className="">connects</span>
                     </p>
                     <div className="h-6 w-0.5 bg-[#8282825C]"></div>
                     <p>

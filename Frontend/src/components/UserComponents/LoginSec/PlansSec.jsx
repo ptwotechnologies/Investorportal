@@ -92,7 +92,7 @@ const PlansSec = ({ userId }) => {
   ];
 
   // ⭐ API Call
-  const handlePlanSelect = async (amount) => {
+  const handlePlanSelect = async (amount, planName) => {
     if (!userId) {
       alert("User ID missing!");
       return;
@@ -101,13 +101,13 @@ const PlansSec = ({ userId }) => {
     try {
       const payload = {
         userId,
-        plan: { amount },
+        plan: { amount, planName },
       };
 
       const res = await axios.put(`${serverUrl}/user/plan`, payload);
 
       if (res.status === 200) {
-        navigate("/scanner", { state: { userId } });
+        navigate("/scanner", { state: { userId, amount, planName } });
       }
     } catch (error) {
       console.error("Plan API Error:", error);
@@ -244,7 +244,7 @@ const PlansSec = ({ userId }) => {
                    
                     hover:opacity-90
                   "
-                      onClick={() => handlePlanSelect(card.amount)}
+                      onClick={() => handlePlanSelect(card.amount, card.planName)}
                     >
                       {card.buttonText}
                     </button>

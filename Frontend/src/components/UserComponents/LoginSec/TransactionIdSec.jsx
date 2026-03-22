@@ -88,7 +88,7 @@ const TransactionIdSec = () => {
         {/* RIGHT SIDE */}
         <div
           id="right"
-          className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center w-full"
+          className="lg:w-[50%]  lg:px-10 lg:py-5 text-center w-full"
         >
           <div className="lg:bg-[#001032] h-screen lg:h-auto lg:p-3 w-full lg:rounded-lg ">
             <Card className="w-full lg:h-auto mx-auto rounded-lg">
@@ -102,9 +102,9 @@ const TransactionIdSec = () => {
                   />
                 </CardTitle>
 
-                <CardDescription className="text-[#001032] text-lg lg:text-sm font-semibold mt-8">
+                <CardDescription className="text-[#001032] text-md  mt-8">
                   <p className="lg:w-[80%] mx-auto">
-                    Confirm the payment by adding transaction detail
+                   Confirm the payment by adding transaction detail
                   </p>
                 </CardDescription>
 
@@ -121,7 +121,7 @@ const TransactionIdSec = () => {
                         value={transactionId}
                         onChange={(e) => setTransactionId(e.target.value)}
                         required
-                        className="lg:p-5 font-medium text-[#00103280]"
+                        className="lg:p-5 text-[#00103280]"
                       />
                     </div>
                   </div>
@@ -131,7 +131,7 @@ const TransactionIdSec = () => {
                       type="submit"
                       className="w-full bg-[#001032] mt-5 lg:mt-0"
                     >
-                      Continue
+                      Submit & Continue
                     </Button>
                   </CardFooter>
                 </form>

@@ -502,16 +502,16 @@ const ConnectSec1 = () => {
 
         <div className="flex gap-4 items-stretch">
           <div
-            className={`relative flex flex-col bg-white  border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[44%] h-screen lg:h-[88vh] gap-2 
+            className={`relative flex flex-col bg-white  border border-gray-400 lg:p-4 p-2 rounded-md shadow-md w-full md:w-[44%] h-screen lg:h-[88vh] gap-2 
             ${isMobileProfileOpen ? "hidden lg:flex" : "flex"}`}
           >
             <div>
               <select
                 value={selectedDomain}
                 onChange={(e) => setSelectedDomain(e.target.value)}
-                className="border border-[#D9D9D9] p-2 rounded-lg w-full bg-white "
+                className="border border-[#D9D9D9] p-2 rounded-sm w-full bg-white"
               >
-                <option value="all">All Domains</option>
+                <option value="all" >All Domains</option>
                 {viewingRole &&
                   getDomainsForRole(viewingRole).map((domain) => (
                     <option key={domain} value={domain}>
@@ -520,152 +520,146 @@ const ConnectSec1 = () => {
                   ))}
               </select>
             </div>
-            <div className=" flex items-center justify-between gap-2">
-              <button
-                onClick={() => handleTabClick("all")}
-                className={`${tabClass("all")}  px-6 py-1 rounded-lg lg:w-30  text-sm lg:text-[16px]`}
-              >
-                All
-              </button>
+            <div className="flex items-center justify-between gap-2">
+  <button
+    onClick={() => handleTabClick("all")}
+    className={`${tabClass("all")} flex-1 py-1 rounded-sm text-sm lg:text-[16px]`}
+  >
+    All
+  </button>
 
-              <button
-                onClick={() => handleTabClick("received")}
-                className={`${tabClass("received")} px-4 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
-              >
-                Received
-              </button>
+  <button
+    onClick={() => handleTabClick("received")}
+    className={`${tabClass("received")} flex-1 py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px]`}
+  >
+    Received
+  </button>
 
-              <button
-                onClick={() => handleTabClick("sent")}
-                className={`${tabClass("sent")} px-4 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
-              >
-                Sent
-              </button>
+  <button
+    onClick={() => handleTabClick("sent")}
+    className={`${tabClass("sent")} flex-1 py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px]`}
+  >
+    Sent
+  </button>
 
-              <button
-                onClick={() => handleTabClick("connections")}
-                className={`${tabClass("connections")} px-2 py-1 rounded-lg border border-[#D9D9D9] lg:w-30  text-sm lg:text-[16px]`}
-              >
-                Connections
-              </button>
-            </div>
+  <button
+    onClick={() => handleTabClick("connections")}
+    className={`${tabClass("connections")} flex-1 py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px]`}
+  >
+    Connections
+  </button>
+</div>
 
             {/* Column 2 */}
-            <div className=" flex flex-col gap-1 w-full max-h-140 scrollbar-hide overflow-y-auto ">
-              {loading && <p>Loading...</p>}
-              {error && <p className="text-red-500">{error}</p>}
+            <div className="flex flex-col gap-1 w-full max-h-140 scrollbar-hide overflow-y-auto">
+  {loading && (
+    <div className="h-130 lg:h-123 flex items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#59549F]"></div>
+        <p className="text-sm text-gray-500">Loading profiles...</p>
+      </div>
+    </div>
+  )}
+  
+  {error && <p className="text-red-500">{error}</p>}
 
-              {!loading &&
-                !error &&
-                filteredProfiles.map((profile) => (
-                  <div
-                    onClick={() => {
-                      setSelectedProfile(profile);
+  {!loading &&
+    !error &&
+    filteredProfiles.map((profile) => (
+      <div
+        onClick={() => {
+          setSelectedProfile(profile);
 
-                      if (window.innerWidth < 1024) {
-                        setIsMobileProfileOpen(true);
-                      }
-                    }}
-                    key={profile._id}
-                    className="flex items-center  gap-3 rounded-lg  bg-white  transition-all shadow-[inset_0_0_12px_#00000040] "
-                  >
-                    <div className="w-16 h-16 my-2 ml-2 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200">
-                      {profile.profilePhoto && (
-                        <img
-                          src={`${serverUrl}${profile.profilePhoto}`}
-                          alt=""
-                          className="w-full h-full object-cover rounded-full"
-                        />
-                      )}
-                    </div>
-                    <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
-                    <div className="flex items-center justify-between lg:gap-x-3 gap-x-2 w-full  px-2">
-                      <div className="my-3   ">
-                        <h1 className="text-[#001032] font-semibold text-sm">
-                          {profile.name}
-                        </h1>
-                        <p className="text-[#001032]  text-xs">
-                          {window.innerWidth < 1024
-                            ? profile.bio?.slice(0, 40) + "..."
-                            : profile.bio?.slice(0, 60) + "..."}
-                        </p>
-                        <p className="text-[#001032]   text-[10px]">
-                          {profile.city && profile.state
-                            ? `${profile.city}, ${profile.state}`
-                            : "Location not added"}
-                        </p>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        {profile.connectionStatus === "received" ? (
-                          <div className="flex flex-col gap-1">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                respondToRequest(
-                                  profile.connectionId,
-                                  "accepted",
-                                );
-                              }}
-                              className="bg-green-600 text-white px-4 py-1 text-xs rounded-full"
-                            >
-                              Accept
-                            </button>
+          if (window.innerWidth < 1024) {
+            setIsMobileProfileOpen(true);
+          }
+        }}
+        key={profile._id}
+        className="flex items-center gap-3 rounded-lg h-22 transition-all shadow-[inset_0_0_12px_#00000040] bg-white"
+      >
+        <div className="w-16 h-16 my-2 ml-2 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200">
+          {profile.profilePhoto && (
+            <img
+              src={`${serverUrl}${profile.profilePhoto}`}
+              alt=""
+              className="w-full h-full object-cover rounded-full"
+            />
+          )}
+        </div>
+        <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
+        <div className="flex items-center justify-between gap-x-2 w-full px-2 min-w-0">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-[#001032] font-semibold text-sm truncate">
+              {profile.name}
+            </h1>
+            <p className="text-[#001032] text-xs line-clamp-1">
+              {profile.bio}
+            </p>
+            <p className="text-[#001032] text-[10px] truncate mt-2">
+              {profile.city && profile.state
+                ? `${profile.city}, ${profile.state}`
+                : "Location not added"}
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 shrink-0">
+            {profile.connectionStatus === "received" ? (
+              <div className="flex flex-col gap-1">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    respondToRequest(profile.connectionId, "accepted");
+                  }}
+                  className="bg-green-600 text-white px-4 py-1 text-xs rounded-full"
+                >
+                  Accept
+                </button>
 
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                respondToRequest(
-                                  profile.connectionId,
-                                  "ignored",
-                                );
-                              }}
-                              className="bg-red-500 text-white px-4 py-1 text-xs rounded-full"
-                            >
-                              Ignore
-                            </button>
-                          </div>
-                        ) : profile.connectionStatus === "sent" ? (
-                          <div className="flex gap-2">
-                            {/* <button
-                              disabled
-                              className="bg-gray-400 text-white w-20 py-1 my-1 text-sm rounded-full cursor-not-allowed"
-                            >
-                              Pending
-                            </button> */}
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setWithdrawProfile(profile);
-                                setShowWithdrawConfirm(true);
-                              }}
-                              className="bg-red-500 text-white w-20 py-1 my-1 text-sm rounded-full "
-                            >
-                              Withdraw
-                            </button>
-                          </div>
-                        ) : profile.connectionStatus === "none" ? (
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              sendConnectionRequest(profile.userId._id);
-                            }}
-                            className="bg-[#001032] text-white w-20 py-1 text-sm rounded-full"
-                          >
-                            Connect
-                          </button>
-                        ) : null}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    respondToRequest(profile.connectionId, "ignored");
+                  }}
+                  className="bg-red-500 text-white px-4 py-1 text-xs rounded-full"
+                >
+                  Ignore
+                </button>
+              </div>
+            ) : profile.connectionStatus === "sent" ? (
+              <div className="flex gap-2">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setWithdrawProfile(profile);
+                    setShowWithdrawConfirm(true);
+                  }}
+                  className="bg-red-500 text-white w-20 py-1 my-1 text-sm rounded-full"
+                >
+                  Withdraw
+                </button>
+              </div>
+            ) : profile.connectionStatus === "none" ? (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  sendConnectionRequest(profile.userId._id);
+                }}
+                className="bg-[#001032] text-white w-20 py-1 text-sm rounded-full"
+              >
+                Connect
+              </button>
+            ) : null}
 
-                        {/* Message button: show only for accepted users */}
-                        {profile.connectionStatus === "accepted" && (
-                          <button className="bg-[#B1AAAA] text-white w-20 py-1 text-sm rounded-full">
-                            Message
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-            </div>
+            {/* Message button: show only for accepted users */}
+            {profile.connectionStatus === "accepted" && (
+              <button className="bg-[#B1AAAA] text-white w-20 py-1 text-sm rounded-full">
+                Message
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+</div>
 
             {/* Withdraw Confirmation Modal - Inside left div */}
             {showWithdrawConfirm && withdrawProfile && (

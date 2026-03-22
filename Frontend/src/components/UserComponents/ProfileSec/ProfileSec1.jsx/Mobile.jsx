@@ -19,6 +19,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { IoIosNotifications } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
@@ -36,6 +37,22 @@ const Mobile = () => {
   const [notifications, setNotifications] = useState([]);
   const [expandedIds, setExpandedIds] = useState([]);
   const [isDealsOpen, setIsDealsOpen] = useState(false);
+  const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
+
+  useEffect(() => {
+    const checkRequests = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${serverUrl}/requests`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setHasRaisedRequests(res.data.length > 0);
+      } catch (err) {
+        console.error("Error fetching raised requests count", err);
+      }
+    };
+    checkRequests();
+  }, []);
 
   const navigate = useNavigate();
 
@@ -85,13 +102,13 @@ const Mobile = () => {
           </Link>
         </div>
 
-        <div className="flex items-center gap-2  rounded-full py-2.5 px-3 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] mr-2">
-          <IoNotificationsOutline size={25} onClick={handleNotificationClick} className="text-gray-500" />
+        <div className="flex items-center gap-2  rounded-full py-2 px-2 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] mr-2">
+          <IoNotificationsOutline size={20} onClick={handleNotificationClick} className="text-gray-500 ml-1" />
           <div className="w-0.2 h-6 border"></div>
           <Sheet>
             <SheetTrigger asChild>
               <div className="flex items-center gap-5">
-                <RxHamburgerMenu size={25} className="text-[#001426]" />
+                <RxHamburgerMenu size={20} className="text-[#001426] ml-0.5" />
               </div>
             </SheetTrigger>
 
@@ -144,10 +161,17 @@ const Mobile = () => {
                         {/* Deals Dropdown */}
 
                         <div
-                          className="flex items-center gap-4 cursor-pointer w-full"
-                          onClick={() => setIsDealsOpen(!isDealsOpen)}
+                          className="flex items-center gap-4.5 cursor-pointer w-full"
+                          onClick={() => {
+                            if (hasRaisedRequests === false) {
+                              toast.error("You have to raise a request to open deals");
+                              return;
+                            }
+                            setIsDealsOpen(!isDealsOpen);
+                          }}
                         >
-                          <FaHandshake className="text-gray-500" size={25} />
+                          <FaHandshake className="text-gray-500" size={28} />
+                         
 
                           <li className="flex justify-between items-center w-full">
                             <span>Deals</span>
@@ -161,27 +185,27 @@ const Mobile = () => {
                         </div>
 
                         {isDealsOpen && (
-                          <ul className="ml-5 mt-2 flex flex-col gap-2  text-[15px] text-gray-600">
+                          <ul className="ml-15 mt-2 flex flex-col gap-2  text-[15px] text-gray-600 ">
                             <Link to="/deal/activedeals">
-                              <li>Active Deals</li>
+                              <li type="disc"> Active Deals</li>
                             </Link>
                             <Link to="/deal/milestones">
-                              <li>Milestones</li>
+                              <li  type="disc">Milestones</li>
                             </Link>
                             <Link to="/deal/payments">
-                              <li>Payments</li>
+                              <li  type="disc">Payments</li>
                             </Link>
                             <Link to="/deal/negotiations">
-                              <li>Negotiations</li>
+                              <li  type="disc">Negotiations</li>
                             </Link>
                             <Link to="/deal/documentation">
-                              <li>Proposals & Documentation</li>
+                              <li  type="disc"> Documentation</li>
                             </Link>
                             <Link to="/deal/completed">
-                              <li>Completed</li>
+                              <li  type="disc">Completed</li>
                             </Link>
                             <Link to="/deal/disputes">
-                              <li>Disputes</li>
+                              <li  type="disc">Disputes</li>
                             </Link>
                           </ul>
                         )}

@@ -9,6 +9,7 @@ import loginLogo from "/ArtesterLogo2.png";
 import { NavLink, useNavigate, useLocation, Link } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { HiOutlineTicket } from "react-icons/hi";
@@ -28,6 +29,22 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const isDealRoute = location.pathname.startsWith("/deal");
   const [isDealsOpen, setIsDealsOpen] = useState(isDealRoute);
+  const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
+
+  useEffect(() => {
+    const checkRequests = async () => {
+      try {
+        const res = await axios.get(`${serverUrl}/requests`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        setHasRaisedRequests(res.data.length > 0);
+      } catch (err) {
+        console.error("Error fetching raised requests count", err);
+      }
+    };
+    if (token) checkRequests();
+  }, [token]);
+
   const handleToggle = () => {
     setIsOpen(!isOpen);
   };
@@ -90,34 +107,34 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
         <div>
           <MdOutlineDashboardCustomize
-            className="text-gray-500 my-4"
+            className="text-white my-4"
             size={25}
             onClick={handleToggle}
           />
 
           <CgProfile
-            className="text-gray-500 my-3"
+            className="text-white my-3"
             size={25}
             onClick={handleToggle}
           />
           <HiOutlineTicket
-            className="text-gray-500 my-3"
+            className="text-white my-3"
             size={25}
             onClick={handleToggle}
           />
           <HiOutlineUserGroup
-            className="text-gray-500 my-3"
+            className="text-white my-3"
             size={25}
             onClick={handleToggle}
           />
           <IoNotificationsOutline
-            className="text-gray-500 my-3"
+            className="text-white my-3"
             size={25}
             onClick={handleNotificationClick} // Show/hide notifications
           />
 
           <FaHandshake
-            className="text-gray-500 my-3"
+            className="text-white my-3"
             size={25}
             onClick={handleToggle}
           />
@@ -180,17 +197,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       <div className="text-gray-300 relative pb-3">
         <IoSettingsOutline
           size={25}
-          className="my-2 text-gray-500"
+          className="my-2 text-white"
           onClick={handleToggle}
         />
         <BiHelpCircle
           size={25}
-          className="my-3 text-gray-500"
+          className="my-3 text-white"
           onClick={handleToggle}
         />
         <PiSignOut
           size={25}
-          className="my-3 text-gray-500"
+          className="my-3 text-white"
           onClick={handleSignOutClick}
         />
 
@@ -276,7 +293,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               {/* Deals Dropdown */}
               <div className="my-3">
                 <div
-                  onClick={() => setIsDealsOpen(!isDealsOpen)}
+                  onClick={() => {
+                    if (hasRaisedRequests === false) {
+                      toast.error("You have to raise a request to open deals");
+                      return;
+                    }
+                    setIsDealsOpen(!isDealsOpen);
+                  }}
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100"
                 >
                   <span>Deals</span>
@@ -289,7 +312,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </div>
 
                 {isDealsOpen && (
-                  <div className="ml-8 mt-2 flex flex-col text-[15px] text-gray-600">
+                  <div className="ml-7 mt-2 flex flex-col text-[15px] text-gray-600">
                     <NavLink
                       to="/deal/activedeals"
                       className="flex items-center gap-2 py-1 hover:text-[#001032]"
@@ -327,7 +350,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       className="flex items-center gap-2 py-1 hover:text-[#001032]"
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Proposals & Documentation
+                       Documentation
                     </NavLink>
 
                     <NavLink

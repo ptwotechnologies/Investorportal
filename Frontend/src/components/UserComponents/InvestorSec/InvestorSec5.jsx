@@ -83,7 +83,7 @@ const InvestorSec5 = () => {
           Consultations that move you forward
         </h1>
         <h1 className='lg:hidden text-3xl font-semibold pb-7'>
-          Why service providers choose this portal?
+          Why investors choose this portal?
         </h1>
        <div className='hidden lg:block'>
             <div className="grid lg:grid-cols-3 lg:gap-x-30 gap-5 lg:gap-y-30 lg:m-10 lg:mx-25">

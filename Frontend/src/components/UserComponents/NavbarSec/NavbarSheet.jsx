@@ -92,9 +92,9 @@ function NavbarSheet({ textColor }) {
         ) : (
           <>
             {/* Profile Circle */}
-            <div className="flex items-center justify-between gap-3 cursor-pointer   px-3 py-1 rounded-sm">
-               <IoIosNotifications size={30} className="text-[#001032]" />
-              <div className="flex items-center justify-between gap-3 cursor-pointer bg-[#001032] text-white px-3 py-1 rounded-sm">
+            <div className="flex items-center justify-between  cursor-pointer   px-3 py-1 rounded-full bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)]">
+               <IoNotificationsOutline size={25} className="text-[#001032]" />
+              <div className="flex items-center justify-between  cursor-pointer   px-2 py-1 rounded-sm">
               {/* My Account Button */}
 
               
@@ -156,17 +156,20 @@ function NavbarSheet({ textColor }) {
         </div>
       )}
 
-      {/* Mobile Menu */}
       <div className="lg:hidden">
         <Sheet open={openSheet} onOpenChange={setOpenSheet} >
-           <div className="flex justify-center items-center gap-2 border-2 border-[#787878BF] rounded-full py-2 px-2">
-            <IoNotificationsOutline size={30} className={`${textColor}`} />
-            <div className="w-0.2 h-6 border border-[#787878BF]"></div>
+           <div className={isLoggedIn ? "flex justify-center items-center gap-2 bg-white rounded-full py-2 px-2.5 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)]" : "flex justify-center items-center"}>
+            {isLoggedIn && (
+              <>
+                <IoNotificationsOutline size={20} className="text-[#12355C]"  />
+                <div className="w-0.2 h-6 border "></div>
+              </>
+            )}
           <SheetTrigger onClick={() => setOpenSheet(!openSheet)}>
             {openSheet ? (
-              <IoIosClose size={35} className={`${textColor}`} />
+              <IoIosClose size={25} className={isLoggedIn ? "text-[#12355C]" : (textColor || "text-[#12355C]")} />
             ) : (
-              <RxHamburgerMenu size={27} className={`${textColor}`} />
+              <RxHamburgerMenu size={25} className={isLoggedIn ? "text-[#12355C]" : (textColor || "text-[#12355C]")} />
             )}
           </SheetTrigger>
            </div>

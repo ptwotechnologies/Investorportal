@@ -3,7 +3,14 @@ import logo from "/ArtesterLogo2.png";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios"; // or your custom API service
+import axios from "axios"; 
+import { sendOtp, verifyOtp } from "@/lib/phoneAuth";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+  InputOTPSeparator,
+} from "@/components/ui/input-otp";
 
 import {
   Card,
@@ -47,6 +54,9 @@ const RegisterPortalSec = () => {
   const [firmName, setFirmName] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [businessType, setBusinessType] = useState(activeTab);
+  const [otp, setOtp] = useState("");
+const [otpSent, setOtpSent] = useState(false);
+const [phoneVerified, setPhoneVerified] = useState(false);
 
   const tabs = role === "service_professional" ? serviceTabs.map((t)=>({id:t,label:t})) : investorTabs.map((t) => ({ id: t, label: t }));
 
@@ -54,6 +64,11 @@ const RegisterPortalSec = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!phoneVerified) {
+      alert("Please verify your phone number first.");
+      return;
+    }
 
     if (!role) {
       alert("Role not found. Please go back and select a role.");
@@ -126,14 +141,10 @@ const RegisterPortalSec = () => {
         // Save userId to localStorage for later use
         localStorage.setItem("userId", response.data.userId);
 
-        navigate("/portaldetails", { 
+        navigate("/emailverification", { 
           state: { 
             userId: response.data.userId,
             role,
-            investorType: role === "investor" ? businessType : null,
-            firmName: role === "investor" ? firmName || null : null,
-            serviceType: role === "service_professional" ? businessType : null,
-            companyName: role === "service_professional" || role === "startup" ? companyName || null : null,
           } 
         });
       } else {
@@ -145,6 +156,38 @@ const RegisterPortalSec = () => {
       alert(error.response?.data?.message || "Server error");
     }
   };
+
+  const handleSendOtp = async () => {
+  try {
+    const phoneNumber = "+91" + mobile; // India code
+
+    await sendOtp(phoneNumber);
+
+    setOtpSent(true);
+    alert("OTP sent successfully");
+
+  } catch (error) {
+    console.error(error);
+    alert("Failed to send OTP");
+  }
+};
+
+const handleVerifyOtp = async () => {
+  try {
+
+    const user = await verifyOtp(otp);
+
+    console.log(user);
+
+    setPhoneVerified(true);
+
+    alert("Phone number verified");
+
+  } catch (error) {
+    console.error(error);
+    alert("Invalid OTP");
+  }
+};
 
   return (
     <div>
@@ -168,14 +211,14 @@ const RegisterPortalSec = () => {
           </div>
         </div>
 
-        <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10  text-center w-full">
+        <div id="right" className="lg:w-[50%]  lg:px-10  text-center w-full">
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
             <Card className="w-full lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-55 w-40 mx-auto  mb-1" />
+                  <img src={logo} alt="Logo" className="lg:w-55 w-40 mx-auto  my-3" />
                 </CardTitle>
-                <CardDescription className="mb-1 text-[#001032] text-sm lg:text-sm font-semibold">
+                <CardDescription className="mb-1 text-[#001032] text-sm lg:text-sm ">
                   Get the most benefits from our pool of possible clients for you
                 </CardDescription>
                 <CardAction></CardAction>
@@ -192,7 +235,7 @@ const RegisterPortalSec = () => {
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
                       required
-                      className="p-5 font-medium text-[#00103280]"
+                      className="p-5  text-[#00103280]"
                     />
                     <Input
                       id="lastName"
@@ -201,7 +244,7 @@ const RegisterPortalSec = () => {
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
                       required
-                      className="p-5 font-medium text-[#00103280]"
+                      className="p-5  text-[#00103280]"
                     />
                     </div>
                     <Input
@@ -211,7 +254,7 @@ const RegisterPortalSec = () => {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="p-5 font-medium text-[#00103280]"
+                      className="p-5  text-[#00103280]"
                     />
                     <Input
                       id="password"
@@ -220,7 +263,7 @@ const RegisterPortalSec = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
-                      className="p-5 font-medium text-[#00103280]"
+                      className="p-5  text-[#00103280]"
                     />
                      <Input
                       id="confirmpassword"
@@ -229,17 +272,60 @@ const RegisterPortalSec = () => {
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                       required
-                      className="p-5 font-medium text-[#00103280]"
+                      className="p-5  text-[#00103280]"
                     />
-                    <Input
-                      id="mobile"
-                      type="text"
-                      placeholder="Mobile Number"
-                      value={mobile}
-                      onChange={(e) => setMobile(e.target.value)}
-                      required
-                      className="p-5 font-medium text-[#00103280]"
-                    />
+                    <div className="flex gap-2">
+                       <Input
+                        id="mobile"
+                        type="text"
+                        placeholder="Mobile Number"
+                        value={mobile}
+                        onChange={(e) => setMobile(e.target.value)}
+                        required
+                        disabled={phoneVerified}
+                        className="p-5  text-[#00103280] flex-1"
+                      />
+                      <Button 
+                        type="button" 
+                        onClick={handleSendOtp} 
+                        disabled={otpSent || phoneVerified}
+                        className="bg-[#001032] h-auto px-4"
+                      >
+                        {otpSent ? "Sent" : "Send OTP"}
+                      </Button>
+                    </div>
+
+                    <div id="recaptcha-container" className="hidden"></div>
+
+                    {otpSent && !phoneVerified && (
+                      <div className="flex flex-col items-center gap-3 p-2 border border-[#0010321A] rounded-md">
+                        <p className="text-sm  text-[#001032]">Enter OTP</p>
+                        <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)}>
+                          <InputOTPGroup>
+                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={2} />
+                          </InputOTPGroup>
+                          <InputOTPSeparator />
+                          <InputOTPGroup>
+                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={5} />
+                          </InputOTPGroup>
+                        </InputOTP>
+                        <Button 
+                          type="button" 
+                          onClick={handleVerifyOtp} 
+                          className="w-full bg-[#001032]"
+                        >
+                          Verify OTP
+                        </Button>
+                      </div>
+                    )}
+
+                    {phoneVerified && (
+                      <p className="text-green-600 text-sm  text-left">✓ Phone number verified</p>
+                    )}
 
                     {/* Role-specific field: for startup show Company Name input, otherwise show dropdown */}
                     {isStartup ? (
@@ -251,7 +337,7 @@ const RegisterPortalSec = () => {
                           value={companyName}
                           onChange={(e) => setCompanyName(e.target.value)}
                           required
-                          className="p-5 font-medium text-[#00103280]"
+                          className="p-5  text-[#00103280]"
                         />
                         <Input
                           id="website"
@@ -260,7 +346,7 @@ const RegisterPortalSec = () => {
                           value={website}
                           onChange={(e) => setWebsite(e.target.value)}
                           required
-                          className="p-5 font-medium text-[#00103280]"
+                          className="p-5  text-[#00103280]"
                         />
                       </>
                     ) : (
@@ -276,7 +362,6 @@ const RegisterPortalSec = () => {
                               px-5
                               flex justify-between items-center
                               text-[#00103280]
-                              font-medium
                               cursor-pointer
                             "
                           >
@@ -313,7 +398,7 @@ const RegisterPortalSec = () => {
                               value={firmName}
                               onChange={(e) => setFirmName(e.target.value)}
                               required
-                              className="p-5 font-medium text-[#00103280]"
+                              className="p-5  text-[#00103280]"
                             />
                             <Input
                               id="website"
@@ -322,7 +407,7 @@ const RegisterPortalSec = () => {
                               value={website}
                               onChange={(e) => setWebsite(e.target.value)}
                               required
-                              className="p-5 font-medium text-[#00103280]"
+                              className="p-5  text-[#00103280]"
                             />
                           </>
                         ) : (
@@ -332,7 +417,7 @@ const RegisterPortalSec = () => {
                             placeholder="Website (if any)"
                             value={optionalWebsite}
                             onChange={(e) => setOptionalWebsite(e.target.value)}
-                            className="p-5 font-medium text-[#00103280]"
+                            className="p-5  text-[#00103280]"
                           />
                         )}
                       </>
@@ -349,7 +434,7 @@ const RegisterPortalSec = () => {
                               value={companyName}
                               onChange={(e) => setCompanyName(e.target.value)}
                               required
-                              className="p-5 font-medium text-[#00103280]"
+                              className="p-5  text-[#00103280]"
                             />
                             <Input
                               id="website"
@@ -358,7 +443,7 @@ const RegisterPortalSec = () => {
                               value={website}
                               onChange={(e) => setWebsite(e.target.value)}
                               required
-                              className="p-5 font-medium text-[#00103280]"
+                              className="p-5  text-[#00103280]"
                             />
                           </>
                         ) : (
@@ -368,7 +453,7 @@ const RegisterPortalSec = () => {
                             placeholder="Website (if any)"
                             value={optionalWebsite}
                             onChange={(e) => setOptionalWebsite(e.target.value)}
-                            className="p-5 font-medium text-[#00103280]"
+                            className="p-5  text-[#00103280]"
                           />
                         )}
                       </>

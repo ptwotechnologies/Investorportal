@@ -168,34 +168,38 @@ const ProfileSec = () => {
   };
 
   const handleUpload = async () => {
-    if (!selectedFile) {
-      alert("Please select a file");
-      return;
-    }
+  if (!selectedFile) {
+    alert("Please select a file");
+    return;
+  }
 
-    if (portfolioFiles.length >= MAX_PORTFOLIO_IMAGES) {
-      alert(`Cannot upload more than ${MAX_PORTFOLIO_IMAGES} images.`);
-      setSelectedFile(null);
-      return;
-    }
+  if (portfolioFiles.length >= MAX_PORTFOLIO_IMAGES) {
+    alert(`Cannot upload more than ${MAX_PORTFOLIO_IMAGES} images.`);
+    setSelectedFile(null);
+    return;
+  }
 
-    const formData = new FormData();
-    formData.append("file", selectedFile);
+  const formData = new FormData();
+  formData.append("file", selectedFile); // ✅ Keep as 'file'
+  formData.append("type", "portfolio"); // ✅ ADD THIS - tells R2 where to store
 
-    try {
-      await axios.post(`${serverUrl}/profile/portfolio`, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+  try {
+    await axios.post(`${serverUrl}/profile/portfolio`, formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "multipart/form-data", // ✅ ADD THIS
+      },
+    });
 
-      setSelectedFile(null);
-      await fetchProfile(); // refresh UI
-    } catch (err) {
-      console.error("Upload failed:", err);
-      alert("Upload failed");
-    }
-  };
+    setSelectedFile(null);
+    await fetchProfile();
+    alert("Portfolio uploaded successfully!");
+  } catch (err) {
+    console.error("Upload failed:", err);
+    console.error("Error details:", err.response?.data);
+    alert("Upload failed: " + (err.response?.data?.message || err.message));
+  }
+};
 
   const uploadProfilePhoto = async (file) => {
     const formData = new FormData();
@@ -208,13 +212,14 @@ const ProfileSec = () => {
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+             "Content-Type": "multipart/form-data",
           },
         },
       );
 
       setProfile((prev) => ({
         ...prev,
-        profilePhoto: `${serverUrl}${res.data.profilePhoto}`, // <-- backend URL
+        profilePhoto: res.data.profilePhoto, // <-- backend URL
       }));
     } catch (err) {
       console.error("Profile photo upload failed", err);
@@ -232,6 +237,7 @@ const ProfileSec = () => {
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
           },
         },
       );
@@ -439,6 +445,17 @@ const ProfileSec = () => {
     }
   }, [profile.name]);
 
+  // ✅ Helper function to get correct image URL
+const getImageUrl = (imageUrl) => {
+  if (!imageUrl) return "";
+  
+  // If already a full URL (R2), return as-is
+  if (imageUrl.startsWith("http")) return imageUrl;
+  
+  // If local path, add serverUrl
+  return `${serverUrl}${imageUrl}`;
+};
+
   return (
     <div>
       <div className="hidden lg:block">
@@ -452,15 +469,15 @@ const ProfileSec = () => {
             </p>
           </div>
           <div className="flex items-center gap-x-3">
-            <img
-              src={
-                profile?.profilePhoto
-                  ? `${serverUrl}${profile.profilePhoto}`
-                  : "/default-profile.png" // koi default blank image ya avatar
-              }
-              alt="Profile"
-              className="w-8 h-8 rounded-full object-cover border-2 border-[#001032]"
-            />
+           <img
+  src={
+    profile?.profilePhoto
+      ? getImageUrl(profile.profilePhoto) // ✅ FIXED
+      : "/default-profile.png"
+  }
+  alt="Profile"
+  className="w-8 h-8 rounded-full object-cover border-2 border-[#001032]"
+/>
             <p className="text-[#001426] font-semibold">
               Switch to professional
             </p>
@@ -480,23 +497,23 @@ const ProfileSec = () => {
                 : ""
             }`}
             style={
-              profile?.coverImage
-                ? {
-                    backgroundImage: profile.coverImage.startsWith("blob:")
-                      ? `url(${profile.coverImage})`
-                      : `url(${serverUrl}${profile.coverImage})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }
-                : {}
-            }
-            onClick={() => {
-              setModalImage(
-                profile?.coverImage ? `${serverUrl}${profile.coverImage}` : "",
-              );
-              setIsCover(true); // cover photo
-              setIsImageModalOpen(true);
-            }}
+  profile?.coverImage
+    ? {
+        backgroundImage: profile.coverImage.startsWith("blob:")
+          ? `url(${profile.coverImage})`
+          : `url(${getImageUrl(profile.coverImage)})`, // ✅ FIXED
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }
+    : {}
+}
+onClick={() => {
+  setModalImage(
+    profile?.coverImage ? getImageUrl(profile.coverImage) : "" // ✅ FIXED
+  );
+  setIsCover(true);
+  setIsImageModalOpen(true);
+}}
           >
             {profile?.coverImage && (
               <div className="absolute inset-0 bg-black/30"></div>
@@ -535,23 +552,23 @@ const ProfileSec = () => {
             <div className="flex justify-start gap-12 items-center ">
               <div className="lg:w-28 lg:h-14 w-22 h-18 rounded-full relative bottom-12  lg:bottom-16 lg:left-9 left-4">
                 {/* Profile Image */}
-                <img
-                  src={
-                    profile?.profilePhoto
-                      ? `${serverUrl}${profile.profilePhoto}`
-                      : ""
-                  }
-                  className="lg:w-28 lg:h-28 w-22 h-22 bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] border-2 shadow-[0px_4px_10px_rgba(0,0,0,0.25)]  rounded-full object-cover cursor-pointer"
-                  onClick={() => {
-                    setModalImage(
-                      profile?.profilePhoto
-                        ? `${serverUrl}${profile.profilePhoto}`
-                        : "",
-                    );
-                    setIsCover(false); // profile photo
-                    setIsImageModalOpen(true);
-                  }}
-                />
+               <img
+  src={
+    profile?.profilePhoto
+      ? getImageUrl(profile.profilePhoto) // ✅ FIXED
+      : ""
+  }
+  className="lg:w-28 lg:h-28 w-22 h-22 bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] border-2 shadow-[0px_4px_10px_rgba(0,0,0,0.25)] rounded-full object-cover cursor-pointer"
+  onClick={() => {
+    setModalImage(
+      profile?.profilePhoto
+        ? getImageUrl(profile.profilePhoto) // ✅ FIXED
+        : ""
+    );
+    setIsCover(false);
+    setIsImageModalOpen(true);
+  }}
+/>
 
                 {/* Hidden File Input */}
                 <input

@@ -12,8 +12,8 @@ const SelectPortalSec = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center   lg:min-h-dvh">
-        <div id="left" className=" w-[40%] hidden lg:block mx-auto ">
+      <div className="flex justify-between items-center  lg:min-h-dvh">
+        <div id="left" className=" w-[50%] hidden lg:block mx-auto ">
           <div className="flex flex-col justify-between items-center gap-y-25">
             <div>
               <img src={logo} alt="Logo" className=" w-100 " />
@@ -32,7 +32,7 @@ const SelectPortalSec = () => {
             </div>
           </div>
         </div>
-        <div id="right" className="lg:w-[60%] lg:pl-20 lg:px-10 lg:py-2    ">
+        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-2   w-full   ">
           <div className="lg:bg-[#001032]   lg:p-3 w-full lg:rounded-lg  ">
             <div className=" lg:h-auto  rounded-md bg-white ">
               <div id="top" className="text-center ">
@@ -41,22 +41,22 @@ const SelectPortalSec = () => {
                   alt="Logo"
                   className=" lg:w-55  w-45 mx-auto lg:py-16 py-14"
                 />
-                <p className=" mb-20 lg:mb-10 px-5 lg:px-10 font-medium text-[#001032]">
+                <p className=" mb-20 lg:mb-10 px-5 lg:px-10  text-[#001032]">
                   Get the most benefits from our pool of possible clients for
                   you
                 </p>
-                <p className="text-[#001032] border border-[#00142666] mx-10 md:mx-40 lg:mx-50 text-xl font-semibold rounded-md lg:mb-15 mb-10 p-2">
+                <p className="text-[#001032] border border-[#00142666] mx-10 md:mx-40 lg:mx-50 text-xl  rounded-md lg:mb-15 mb-10 p-2">
                   Which side are you on?
                 </p>
               </div>
               <div id="bottom " className="hidden lg:block">
-                <div className="flex justify-center items-center gap-3 p-3 pb-10 text-white ">
+                <div className="flex justify-center items-center gap-3 p-3 pb-17 text-white ">
                   <div className="bg-[#001032CC] rounded-sm p-3">
-                    <div className="flex justify-start items-center py-5 gap-2 ">
-                      <div className="bg-[#FFFFFF] w-10 h-10"></div>
-                      <h1 className="text-lg font-semibold">Startup</h1>
+                    <div className="flex justify-start items-center py-3 gap-2 ">
+                      <div className="bg-[#FFFFFF] w-6 h-6"></div>
+                      <h1 className="text-sm ">Startup</h1>
                     </div>
-                    <p className="text-sm leading-6 tracking-wide mb-5 ">
+                    <p className="text-xs leading-5 tracking-wide mb-2 ">
                       Start exploring, connect with others, get listed, build
                       your portfolio and go live
                     </p>
@@ -68,18 +68,18 @@ const SelectPortalSec = () => {
                             state: { role: "startup" },
                           });
                         }}
-                        className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
+                        className="text-sm flex justify-center items-center  mb-2 mt-3 bg-white text-[#000000] p-1 px-2 rounded-sm"
                       >
-                        Get Started <IoIosArrowRoundForward size={25} />
+                        Get Started <IoIosArrowRoundForward size={20} />
                       </button>
                     </div>
                   </div>
                   <div className="bg-[#002A30CC] rounded-sm p-3">
-                    <div className="flex justify-start items-center py-5 gap-2 ">
-                      <div className="bg-[#FFFFFF] w-10 h-10"></div>
-                      <h1 className="text-lg font-semibold">Investor</h1>
+                    <div className="flex justify-start items-center py-3 gap-2 ">
+                      <div className="bg-[#FFFFFF] w-6 h-6"></div>
+                      <h1 className="text-sm ">Investor</h1>
                     </div>
-                    <p className="text-sm leading-6 tracking-wide mb-5 ">
+                    <p className="text-xs leading-5 tracking-wide mb-2 ">
                       Start exploring, connect with others, get listed, build
                       your portfolio and go live
                     </p>
@@ -91,20 +91,20 @@ const SelectPortalSec = () => {
                             state: { role: "investor" },
                           });
                         }}
-                        className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
+                        className="text-sm flex justify-center items-center  mb-2 mt-3 bg-white text-[#000000] p-1 px-2 rounded-sm"
                       >
-                        Get Started <IoIosArrowRoundForward size={25} />
+                        Get Started <IoIosArrowRoundForward size={20} />
                       </button>
                     </div>
                   </div>
                   <div className="bg-[#65677E] rounded-sm p-3">
-                    <div className="flex justify-start items-center py-5 gap-2 ">
-                      <div className="bg-[#FFFFFF] w-10 h-10"></div>
-                      <h1 className="text-lg font-semibold">
+                    <div className="flex justify-start items-center py-3 gap-2 ">
+                      <div className="bg-[#FFFFFF] w-6 h-6"></div>
+                      <h1 className="text-sm ">
                         Service Professional
                       </h1>
                     </div>
-                    <p className="text-sm leading-6 tracking-wide mb-5 ">
+                    <p className="text-xs leading-5 tracking-wide mb-2 ">
                       Start exploring, connect with others, get listed, build
                       your portfolio and go live
                     </p>
@@ -116,9 +116,9 @@ const SelectPortalSec = () => {
                             state: { role: "service_professional" },
                           });
                         }}
-                        className="text-lg flex justify-center items-center font-semibold mb-2 mt-5 bg-white text-[#000000] p-1 px-2 rounded-sm"
+                        className="text-sm flex justify-center items-center  mb-2 mt-3 bg-white text-[#000000] p-1 px-2 rounded-sm"
                       >
-                        Get Started <IoIosArrowRoundForward size={25} />
+                        Get Started <IoIosArrowRoundForward size={20} />
                       </button>
                     </div>
                   </div>

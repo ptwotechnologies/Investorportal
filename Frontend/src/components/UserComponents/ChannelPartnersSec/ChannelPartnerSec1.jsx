@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
 
+
 const ChannelPartnerSec1 = () => {
   const scrollRef = useRef(null);
 
@@ -34,6 +35,21 @@ const ChannelPartnerSec1 = () => {
       line1: "Join once,",
       line2: "Let the ecosystem work for you",
     },
+  ];
+
+  const images = [
+    "/channelpartner1.png",,
+    "channelpartner2.png",
+    "channelpartner3.png",
+    "channelpartner4.png",
+    "channelpartner5.png",
+    "channelpartner6.png",
+    "channelpartner7.png",
+    "channelpartner10.png",
+    "channelpartner9.png",
+    "channelpartner8.png",
+    "channelpartner11.png",
+    "channelpartner12.png",
   ];
 
   return (
@@ -77,11 +93,17 @@ const ChannelPartnerSec1 = () => {
 
               {/* boxes */}
               <div className="grid grid-cols-4 gap-3 mt-6 lg:w-[80%] mb-6 lg:mb-0">
-                {[...Array(12)].map((_, i) => (
+                {images.map((img, i) => (
                   <div
                     key={i}
-                    className="h-15 border border-gray-400 rounded-md"
-                  />
+                    className="h-20 rounded-md overflow-hidden border p-5 "
+                  >
+                    <img
+                      src={img}
+                      alt={`img-${i}`}
+                      className="w-full h-full "
+                    />
+                  </div>
                 ))}
               </div>
 

@@ -59,7 +59,7 @@ const LogicSec1 = () => {
   return (
     <div >
       <div className="flex lg:justify-between items-center   lg:min-h-dvh  ">
-        <div id="left" className=" w-[40%] hidden lg:block mx-auto  ">
+        <div id="left" className=" w-[50%] hidden lg:block mx-auto  ">
          <div className="flex flex-col justify-between items-center gap-y-25">
            <div>
             <img src={logo} alt="Logo" className=" w-100 " />
@@ -71,14 +71,14 @@ const LogicSec1 = () => {
           </div>
          </div>
         </div>
-        <div id="right" className="lg:w-[47%] w-full lg:pl-20 lg:px-10 lg:py-5 text-center ">
+        <div id="right" className="lg:w-[50%] w-full  lg:px-10 lg:py-5 text-center ">
           <div className="lg:bg-[#001032]   lg:p-3 w-full lg:rounded-lg  ">
             <Card className="w-full     mx-auto rounded-lg   lg:h-auto h-screen ">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-7" />
                 </CardTitle>
-                <CardDescription className=" text-[#001032] text-sm lg:text-sm font-semibold my-5 ">
+                <CardDescription className=" text-[#001032] text-sm lg:text-sm  my-5 ">
                   Sign Up to explore the tools and resources of the portal
                 </CardDescription>
                 <CardAction></CardAction>
@@ -95,7 +95,7 @@ const LogicSec1 = () => {
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         disabled={loading} // NEW: Disable when loading
-                        className="p-5 font-medium text-[#00103280]"
+                        className="p-5  text-[#00103280]"
                       />
                     </div>
                     <div className="grid gap-2">
@@ -107,7 +107,7 @@ const LogicSec1 = () => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         disabled={loading} // NEW: Disable when loading
-                        className="p-5 font-medium text-[#00103280]"
+                        className="p-5  text-[#00103280]"
                       />
                     </div>
                     <div className="text-start text-xs text-[#00103280] leading-5 lg:leading-7 tracking-wide lg:w-[90%]">
@@ -140,7 +140,7 @@ const LogicSec1 = () => {
                     <div className="fle w-full text-end">
                       <Link
                         to="/passwordreset"
-                        className="ml-auto inline-block text-sm underline-offset-4 font-semibold hover:underline w-full text-[#001032CC]  "
+                        className="ml-auto inline-block text-sm underline-offset-4  hover:underline w-full text-[#001032CC]  "
                       >
                         Forgot password?
                       </Link>

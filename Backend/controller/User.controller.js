@@ -1,8 +1,10 @@
 import connectDB from '../lib/db.js'; // Add this import
 import User from "../Models/User.model.js";
+import PendingUser from "../Models/PendingUser.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import resend from "../lib/resend.js";
+import verificationTemplate from "../emailTemplates/verificationTemplate.js";
 
 
 export const createUser = async (req, res) => {
@@ -25,7 +27,7 @@ export const createUser = async (req, res) => {
       }
     }
 
-    // 2. Check if email already exists
+    // 2. Check if email already exists in User collection
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered" });
@@ -35,20 +37,41 @@ export const createUser = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // 4. Create user
-    const newUser = await User.create({
-      role,
-      email,
-      password: hashedPassword,
-      businessDetails,
-      registrationStep: 2, // Step 2 after business details
-    });
+    // 4. Generate Verification OTP
+    const verificationOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const verificationOtpExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+    // 5. Create Pending User
+    // We update if already exists in Pending to avoid multiple records for same email
+    const pendingUser = await PendingUser.findOneAndUpdate(
+      { email },
+      {
+        role,
+        password: hashedPassword,
+        businessDetails,
+        verificationOtp,
+        verificationOtpExpire,
+      },
+      { upsert: true, new: true }
+    );
+
+    // 6. Send Verification Email
+    try {
+      await resend.emails.send({
+        from: "Artestor@resend.dev",
+        to: [email],
+        subject: "Verify Your Email - Artestor Investor Portal",
+        html: verificationTemplate(pendingUser._id, verificationOtp)
+      });
+    } catch (emailError) {
+      console.error("Failed to send verification email:", emailError);
+      // We still created the user, they can try resending OTP from the UI
+    }
 
     res.status(201).json({
-      message: "User created successfully",
-      userId: newUser._id,
-      registrationStep: newUser.registrationStep,
-      token: jwt.sign({ userId: newUser._id, email: newUser.email, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
+      message: "Verification email sent",
+      userId: pendingUser._id,
+      registrationStep: 1,
     });
 
   } catch (error) {
@@ -362,9 +385,83 @@ export const resetPassword = async (req, res) => {
     });
 
   } catch (error) {
-
     res.status(500).json({ message: "Server error" });
-
   }
+};
 
+export const verifyEmail = async (req, res) => {
+  try {
+    const { userId, otp } = req.body;
+
+    if (!userId || !otp) {
+      return res.status(400).json({ message: "User ID and OTP are required" });
+    }
+
+    // Look in PendingUser collection
+    const pendingUser = await PendingUser.findById(userId);
+    if (!pendingUser) {
+      return res.status(404).json({ message: "Verification record not found or expired" });
+    }
+
+    if (pendingUser.verificationOtp !== otp || pendingUser.verificationOtpExpire < Date.now()) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    // OTP Correct! Now create the real User
+    const newUser = await User.create({
+      email: pendingUser.email,
+      password: pendingUser.password,
+      role: pendingUser.role,
+      businessDetails: pendingUser.businessDetails,
+      isVerified: true,
+      registrationStep: 2,
+    });
+
+    // Delete the pending record
+    await PendingUser.findByIdAndDelete(userId);
+
+    res.status(200).json({
+      message: "Email verified successfully",
+      registrationStep: newUser.registrationStep,
+      token: jwt.sign({ userId: newUser._id, email: newUser.email, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
+      userId: newUser._id,
+    });
+  } catch (error) {
+    console.error("Verify Email Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const resendVerificationOtp = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const pendingUser = await PendingUser.findById(userId);
+    if (!pendingUser) {
+      return res.status(404).json({ message: "Verification record not found. Please sign up again." });
+    }
+
+    const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const newExpire = Date.now() + 10 * 60 * 1000;
+
+    pendingUser.verificationOtp = newOtp;
+    pendingUser.verificationOtpExpire = newExpire;
+    await pendingUser.save();
+
+    await resend.emails.send({
+      from: "Artestor@resend.dev",
+      to: [pendingUser.email],
+      subject: "Your New Verification Code - Artestor Investor Portal",
+      html: verificationTemplate(pendingUser._id, newOtp)
+    });
+
+    res.status(200).json({ message: "Verification OTP resent successfully" });
+  } catch (error) {
+    console.error("Resend OTP Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };

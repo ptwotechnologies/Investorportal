@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -33,7 +33,12 @@ const loadScript = (src) => {
 
 const ScannerSec = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
+
+  const { planName, amount: selectedAmount } = location.state || {};
+  const displayPlanName = planName || "Growth Plan";
+  const displayAmount = selectedAmount || 9999;
 
   const checkoutHandler = async () => {
     setLoading(true);
@@ -59,7 +64,7 @@ const ScannerSec = () => {
 
       const result = await axios.post(
         `${serverUrl}/api/payment/checkout`, 
-        { amount: 100 ,
+        { amount: displayAmount ,
           userId: userId
         },
         
@@ -153,18 +158,19 @@ const ScannerSec = () => {
             </div>
           </div>
         </div>
-        <div id="right" className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-3 text-center">
+        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-3 text-center">
           <div className="lg:bg-[#001032] lg:p-3 w-full  lg:rounded-lg ">
             <Card className="w-full  lg:h-auto mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-7" />
+                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto  my-2" />
                 </CardTitle>
-                <CardDescription className=" mb-1 text-[#001032] text-lg lg:text-sm font-semibold hidden lg:block ">
-                  Complete the payment by scanning the QR code below
+                <CardDescription className=" mb-1 text-[#001032] rounded-md text-lg lg:text-sm border border-[#001032] mx-auto px-7 py-2">
+                  Secure Onboarding Payment
                 </CardDescription>
-                <CardDescription className=" mb-1 text-[#001032] text-xl   lg:hidden font-bold">
-                  Complete the payment
+
+               <CardDescription className=" mb-1 text-[#001032] text-sm lg:text-lg lg:text-sm lg:w-[47%] w-[88%] mx-auto mt-3 lg:mt-0 ">
+                  You are completing your onboarding for: [{displayPlanName}] – ₹{displayAmount?.toLocaleString()}/year
                 </CardDescription>
                 <CardAction></CardAction>
               </CardHeader>
@@ -172,7 +178,7 @@ const ScannerSec = () => {
                 <div className="w-70 h-70 mx-auto border-2 border-[#00142666]">
                   <img src={qrImg} alt="QR" />
                 </div>
-                <p className="lg:text-xs text-xs text-[#001032B2] lg:w-[50%] w-[98%] mx-auto lg:my-1 my-6 font-medium tracking-wide leading-6">Scan the QR code and proceed with the payment as per the chosen plan</p>
+                <p className="lg:text-xs text-xs text-[#001032B2] lg:w-[50%] w-[98%] mx-auto lg:my-1 my-6 font-medium tracking-wide leading-6">Scan the QR code using any UPI app to complete your payment</p>
               </CardContent>
               <CardFooter className="absolute bottom-5 w-full lg:static">
                 <Button 
@@ -180,7 +186,7 @@ const ScannerSec = () => {
                   onClick={checkoutHandler}
                   disabled={loading}
                 >
-                  {loading ? "Processing..." : "Continue"}
+                  {loading ? "Processing..." : "I have completed the payment"}
                 </Button>
               </CardFooter>
 

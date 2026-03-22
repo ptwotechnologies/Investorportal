@@ -31,7 +31,7 @@ const Calendar2 = ({ onChange }) => {
           id="date"
           value={value}
           placeholder="Founded on"
-          className="bg-background pr-10 p-3 py-6 text-[#00103280] font-semibold"
+          className="bg-background pr-10 p-3 py-6 text-[#00103280] "
           onChange={(e) => {
             const newDate = new Date(e.target.value);
             setValue(e.target.value);

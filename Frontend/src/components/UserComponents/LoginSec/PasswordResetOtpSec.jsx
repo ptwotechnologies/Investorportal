@@ -70,7 +70,7 @@ const verifyOtp = async () => {
             </div>
             <div
               id="right"
-              className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-8 text-center  w-full"
+              className="lg:w-[50%] lg:px-10 lg:py-8 text-center  w-full "
             >
               <div className="lg:bg-[#001032]   lg:p-3 w-full  lg:rounded-lg ">
                 <Card className="w-full  lg:h-auto mx-auto rounded-lg">
@@ -78,7 +78,7 @@ const verifyOtp = async () => {
                     <CardTitle>
                       <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-10 mb-15" />
                     </CardTitle>
-                    <CardDescription className=" mb-1 text-[#001032] text-lg lg:text-sm font-semibold  ">
+                    <CardDescription className=" mb-1 text-[#001032] text-sm  ">
                        <p className="lg:w-[80%]  mx-auto">Enter the five digit code received in the text or email</p>
     
                     </CardDescription>

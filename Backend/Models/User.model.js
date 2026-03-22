@@ -63,6 +63,10 @@ otpExpire: {
   default: null
 },
 
+    isVerified: { type: Boolean, default: false },
+    verificationOtp: { type: String, default: null },
+    verificationOtpExpire: { type: Date, default: null },
+
     registrationStep: { type: Number, default: 1 },
   },
   { timestamps: true }

@@ -8,27 +8,23 @@ const JoinUsSec3 = (props) => {
   const items = [
     {
       title:
-        "Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead",
-      byline: "Designation,",
-      company:"Company"
+        "Unlock access to high-value opportunities across startups, impact projects, commerce, and institutional initiatives — all in one place.",
+      
     },
     {
       title:
-        "Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead",
-      byline: "Designation,",
-      company:"Company"
+        "Step inside a closed network of verified founders, investors, and enablers where real collaborations and deals actually happen.",
+      
     },
     {
       title:
-        "Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead",
-      byline: "Designation,",
-      company:"Company"
+        "Tap into four powerful ecosystems — incubation, NGO, eCommerce, and foundation — without switching platforms or missing connections.",
+      
     },
     {
       title:
-        "Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead",
-      byline: "Designation,",
-      company:"Company"
+        "Discover, connect, and act on opportunities faster. Everything you need to collaborate, invest, and grow is already inside.",
+      
     },
   ]
 
@@ -74,27 +70,23 @@ const JoinUsSec3 = (props) => {
 
     const divElements = [
        {
-           paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-           designation:"Designation ",
-          company:"Company.",
+           paragraph:"Unlock access to high-value opportunities across startups, impact projects, commerce, and institutional initiatives — all in one place.",
+          
           color:"#002A30"
        },
        {
-           paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-           designation:"Designation ",
-          company:"Company.",
+           paragraph:"Step inside a closed network of verified founders, investors, and enablers where real collaborations and deals actually happen.",
+          
            color:"#001032"
        },
        {
-           paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-           designation:"Designation ",
-          company:"Company.",
+           paragraph: "Tap into four powerful ecosystems — incubation, NGO, eCommerce, and foundation — without switching platforms or missing connections.",
+          
            color:"#616B80"
        },
            {
-           paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals. Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, so you can focus on your deals.”",
-           designation:"Designation ",
-          company:"Company.",
+           paragraph:"Discover, connect, and act on opportunities faster. Everything you need to collaborate, invest, and grow is already inside.",
+          
            color:"#2E5055"
        },
    
@@ -108,16 +100,15 @@ const JoinUsSec3 = (props) => {
         <div className=' mt-17 p-10 grid grid-cols-2 w-full gap-5 '>
          {divElements.map((item, index) => (
              <div key={index} className="  p-4 mx-2 text-white ">
-              <div className='flex flex-row  justify-center items-center w-full h-full gap-10  border border-[#00103280]
+              <div className='flex flex-row  justify-center items-start w-full h-full gap-10  border border-[#00103280]
               rounded-2xl shadow-lg' style={{backgroundColor: item.color}}>
                 <div className='px-5'>
-                  <p className=' text-sm leading-6 tracking-wider'>{item.paragraph}</p>
-                <p className='text-sm pt-5 '>{item.designation}</p>
-                   <p className='text-sm  '>{item.company}</p>
+                  <p className=' text-lg leading-8 tracking-wider mt-9'>{item.paragraph}</p>
+                
                    
                 </div>
                <div className=' block' >
-                   <div className='w-[180px] h-[285px] bg-[#D9D9D9] rounded-2xl'>
+                   <div className='w-[180px] h-[250px] bg-[#D9D9D9] rounded-2xl'>
                    </div>
               </div>
                </div>
@@ -138,14 +129,13 @@ const JoinUsSec3 = (props) => {
               <article
                 key={i}
                 ref={(el) => (cardsRef.current[i] = el)}
-                className="snap-center shrink-0 w-full rounded-lg border text-card-foreground overflow-hidden bg-[#001032]"
+                className="snap-center shrink-0 w-full rounded-lg border text-card-foreground overflow-hidden bg-[#001032] flex flex-col justify-between"
                 aria-roledescription="slide"
                 aria-label={`Card ${i + 1} of ${items.length}`}
               >
                 <div className="bg-[#001032] text-primary-foreground p-4 rounded-b-none">
                   <p className="text-xl leading-9 pt-6 w-[80%]">{item.title}</p>
-                  <p className="mt-4 text-md opacity-90">{item.byline}</p>
-                  <p className="text-md opacity-90">{item.company}</p>
+                  
                 </div>
                 <div className="p-4 border-t h-40 rounded-t-2xl bg-[#F2F4F7]" />
               </article>

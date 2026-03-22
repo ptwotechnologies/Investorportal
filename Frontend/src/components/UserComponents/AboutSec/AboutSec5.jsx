@@ -58,7 +58,7 @@ const AboutSec5 = () => {
     {/* paragraph INSIDE same blue box */}
     {openSection === "investors" && (
       <p className='my-6 text-md text-white ml-13'>
-        They use the portal to find refined, verified startups...
+        They use the portal to find refined, verified startups that are already prepared and aligned with their interests. Since we offer investor consultations and pitch improvement support, what they receive is already filtered, focused, and investment-ready.
       </p>
     )}
   </div>

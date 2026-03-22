@@ -4,43 +4,43 @@ const JoinUsSec9 = () => {
  const [activeIndex, setActiveIndex] = useState(null);
    const faqs = [
      {
-       question: 'Is this an agency or a curated investor & expert platform?',
+       question: 'Is this just another agency trying to sell me stuff?',
        answer: 'This is a curated platform—not an agency. We don’t represent startups or sell services. Instead, we provide direct access to verified investors, experts, and growth resources in one structured ecosystem.',
      },
      {
-       question: 'Who is this platform built for?',
+       question: 'Is this just another agency trying to sell me stuff?',
        answer: 'The platform is built for founders actively building or scaling startups, as well as investors and experts looking for credible, high-quality opportunities and engagements.',
      },
      {
-       question: 'How do you verify investors and experts?',
+       question: 'Who’s behind this platform?',
        answer: 'All investors and experts are reviewed based on experience, relevance, and intent. This ensures founders interact with serious, qualified participants—not random listings or inactive profiles.',
      },
       {
-       question: 'Is my startup information safe and confidential?',
+       question: 'Who’s behind this platform?',
        answer: 'Yes. Your data and interactions are protected. Sensitive details are only shared when you choose to engage, and all platform activity follows strict privacy and security standards.',
      },
      {
-       question: 'How do founders and investors connect on the platform?',
+       question: 'Getting Started',
        answer: 'Founders can create a profile, showcase their startup, and explore relevant investors or experts. Connections happen through structured access—profiles, consultations, and platform-enabled interactions.',
      },
      {
-       question: 'Do I need to pay to join the platform?',
+       question: 'Getting Started',
        answer: 'You can sign up and explore the platform at no cost. Advanced features such as premium visibility, expert consultations, or investor tools may require a paid plan.',
      },
      {
-       question: 'Who are the experts on this platform?',
+       question: 'Eligibility',
        answer: 'Experts are experienced founders, operators, investors, and domain specialists who have worked hands-on with startups across growth, product, legal, and fundraising stages.',
      },
      {
-       question: 'How do expert consultations work?',
+       question: 'Eligibility',
        answer: 'Founders can browse expert profiles, book sessions, and get focused, one-to-one guidance. Each consultation is structured to deliver clear, actionable outcomes.',
      },
      {
-       question: 'What makes this platform different from other investor portals?',
+       question: 'Expert Consultations',
        answer: 'We prioritize quality over volume. Every participant is curated, interactions are intentional, and the platform is designed to save time, reduce noise, and create real outcomes for founders and investors.',
      },
      {
-       question: 'Is this platform right for me right now?',
+       question: 'Expert Consultations',
        answer: 'If you’re building a startup and need credible access—to investors, expertise, or strategic support—this platform is designed to help you move forward with clarity and confidence.',
      },
    ];
@@ -48,23 +48,23 @@ const JoinUsSec9 = () => {
    const faqs2 = [
      
      {
-       question: 'Is this an agency or a curated investor & expert platform?',
+       question: 'Is there a fee to get listed?',
        answer: 'This is a curated platform—not an agency. We don’t represent startups or sell services. Instead, we provide direct access to verified investors, experts, and growth resources in one structured ecosystem.',
      },
      {
-       question: 'Who is this platform built for?',
+       question: 'Do I need to pitch to startups?',
        answer: 'The platform is built for founders actively building or scaling startups, as well as investors and experts looking for credible, high-quality opportunities and engagements.',
      },
      {
-       question: 'How do you verify investors and experts?',
+       question: 'Is there a contract for each project?',
        answer: 'All investors and experts are reviewed based on experience, relevance, and intent. This ensures founders interact with serious, qualified participants—not random listings or inactive profiles.',
      },
       {
-       question: 'Is my startup information safe and confidential?',
+       question: 'How do you prevent scams?',
        answer: 'Yes. Your data and interactions are protected. Sensitive details are only shared when you choose to engage, and all platform activity follows strict privacy and security standards.',
      },
      {
-       question: 'How do founders and investors connect on the platform?',
+       question: 'How long does approval take?',
        answer: 'Founders can create a profile, showcase their startup, and explore relevant investors or experts. Connections happen through structured access—profiles, consultations, and platform-enabled interactions.',
      },
    ];

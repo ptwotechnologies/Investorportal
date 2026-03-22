@@ -69,7 +69,7 @@ const sendOtp = async (e) => {
         </div>
         <div
           id="right"
-          className="lg:w-[47%] lg:pl-20 lg:px-10 lg:py-5 text-center  w-full"
+          className="lg:w-[50%]  lg:px-10 lg:py-5 text-center  w-full"
         >
           <div className="lg:bg-[#001032] lg:p-3 w-full  lg:rounded-lg ">
             <Card className="w-full  lg:h-auto mx-auto rounded-lg">
@@ -77,7 +77,7 @@ const sendOtp = async (e) => {
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-13 my-10 mb-15" />
                 </CardTitle>
-                <CardDescription className=" mb-1 text-[#001032] text-lg lg:text-sm font-semibold  ">
+                <CardDescription className=" mb-1 text-[#001032] text-lg lg:text-sm   ">
                   <p className="text-lg mb-8">Trouble logging in?</p>
                    <p className="lg:w-[80%] text-sm  mx-auto">Enter your email or phone and we'll send you a link or code to get back into your account.</p>
 
@@ -96,13 +96,13 @@ const sendOtp = async (e) => {
                       value={email}
                        onChange={(e)=>setEmail(e.target.value)}
                       required
-                      className="p-5 font-medium text-[#00103280]"
+                      className="p-5 text-[#00103280]"
                     />
                   </div>
                 </div>
             
              
-              <CardFooter className="absolute bottom-5 w-full lg:static">
+              <CardFooter className="absolute bottom-5 w-full lg:static right-2 left-2">
                 
                   <Button className="w-full bg-[#001032] ">
                     Continue
