@@ -16,24 +16,9 @@ import paymentRoutes from './Routes/payment.Routes.js';
 
 const app = express();
 
-const allowedOrigins = [
-  "https://artestor.copteno.com",
-  "https://investorportal-sigma.vercel.app",
-  "http://localhost:5173",
-  "http://localhost:3000"
-];
-
 app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  } else {
-    // Fallback for production if origin is missing but it's a known production request
-    if (process.env.NODE_ENV === 'production' && !origin) {
-        res.setHeader('Access-Control-Allow-Origin', 'https://artestor.copteno.com');
-    }
-  }
-  
+  const origin = req.headers.origin || "*";
+  res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -43,6 +28,11 @@ app.use((req, res, next) => {
   }
   next();
 });
+
+// Check for required env variables
+if (!process.env.MONGODB_URI) {
+    console.warn("WARNING: MONGODB_URI is not defined");
+}
 
 app.use(express.json());
 app.use(cookieParser());
