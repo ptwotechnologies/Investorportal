@@ -79,10 +79,10 @@ const InvestorSec5 = () => {
    <>
     <div className='bg-linear-to-t from-[#002A30] to-[#001032] from-40% text-white lg:mt-25 mt-5 py-7  rounded-sm lg:rounded-none p-5 shadow-2xl lg:shadow-none' >
          
-        <h1 className="text-5xl px-8 py-15 font-semibold hidden lg:block">
+        <h1 className="text-5xl px-8 py-15 font-medium hidden lg:block">
           Consultations that move you forward
         </h1>
-        <h1 className='lg:hidden text-3xl font-semibold pb-7'>
+        <h1 className='lg:hidden text-3xl font-medium pb-7'>
           Why investors choose this portal?
         </h1>
        <div className='hidden lg:block'>
@@ -93,7 +93,7 @@ const InvestorSec5 = () => {
             <div className="border-l h-20 border-[#FFFFFF4D] p-2"></div>
             <div>
               <h1 className="text-6xl">{item.number}</h1>
-              <p className="font-medium tracking-wide text-xl ">
+              <p className="tracking-wide text-xl ">
               {item.phoneScreenHeading}
               </p>
               <p className="text-lg font-light tracking-wide ">
@@ -114,7 +114,7 @@ const InvestorSec5 = () => {
             <div className="border-l h-23 border-[#FFFFFF4D] p-2"></div>
             <div>
               <h1 className="text-5xl">{item.number}</h1>
-              <p className="text-md font-medium tracking-wide   ">
+              <p className="text-md  tracking-wide   ">
               {item.phoneScreenHeading}
               </p>
               <p className="text-sm tracking-wide font-light">
@@ -128,7 +128,7 @@ const InvestorSec5 = () => {
        </div>
     </div>
     <div className='shadow-2xl p-7 pt-10 m-2 lg:hidden text-center '>
-         <h1 className='text-xl font-bold text-[#001032]'>Sounds like the right fit?</h1>
+         <h1 className='text-xl font-medium text-[#001032]'>Sounds like the right fit?</h1>
          <h1 className='text-md mt-3 text-[#001032]'>Let’s help you meet better founders </h1>
          <Link to="/login"><button className='bg-[#002A30] p-2 lg:p-3 text-white lg:my-8 my-3 mt-8 px-10 rounded-lg text-lg'>Let’s get started 
     </button></Link>

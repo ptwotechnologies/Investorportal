@@ -6,7 +6,7 @@ const JoinUsSec5 = () => {
     <div className=''>
     
             <div id='top' className='text-start lg:p-5 pt-7 lg:mt-25 text-[#001032] '>
-                <h1 className='lg:text-5xl text-3xl font-semibold px-3'>Portals to Explore</h1>
+                <h1 className='lg:text-5xl text-3xl font-medium px-3'>Portals to Explore</h1>
             </div>
     
             <div className='hidden lg:block '>
@@ -14,12 +14,12 @@ const JoinUsSec5 = () => {
                 <div className='bg-[#001426] rounded-sm p-6 w-full'>
                     <div className='flex justify-start items-center py-4 gap-4 '>
                         <div className='bg-[#FFFFFF] w-22 h-22'></div>
-                        <h1 className='text-2xl font-semibold'>NGO Portal</h1>
+                        <h1 className='text-2xl font-medium'>NGO Portal</h1>
                     </div>
                     <h1 className='text-sm leading-6 tracking-wide py-4'>Sign up and create your account</h1>
                     <p className='text-sm leading-6 tracking-wide w-[50%]'>Start exploring, connect with others, get listed, build your portfolio and go live</p>
                     <div className='flex justify-end items-center gap-3'>
-                        <button className='text-2xl font-semibold mb-2 mt-5'>Explore</button>
+                        <button className='text-2xl  mb-2 mt-5'>Explore</button>
                         <IoIosArrowRoundForward size={25} className='mt-5'/>
                     </div>
     
@@ -27,13 +27,13 @@ const JoinUsSec5 = () => {
                 <div className='bg-[#002A30] rounded-sm p-6'>
                     <div className='flex justify-start items-center py-4 gap-4 '>
                         <div className='bg-[#FFFFFF] w-22 h-22'></div>
-                        <h1 className='text-2xl font-semibold'>Incubation Portal</h1>
+                        <h1 className='text-2xl font-medium'>Incubation Portal</h1>
                     </div>
                     <h1 className='text-sm leading-6 tracking-wide py-4'>Sign up and create your account</h1>
                     <p className='text-sm leading-6 tracking-wide w-[50%]'>Start exploring, connect with others, get listed, build your portfolio and
 go live</p>
                     <div className='flex justify-end items-center gap-3'>
-                        <button className='text-2xl font-semibold mb-2 mt-5 bg-white text-[#000000] p-2 px-3 rounded-sm'> Get Started</button>
+                        <button className='text-2xl  mb-2 mt-5 bg-white text-[#000000] p-2 px-3 rounded-sm'> Get Started</button>
                     </div>
     
     
@@ -41,13 +41,13 @@ go live</p>
                 <div className='bg-[#002A30] rounded-sm p-6'>
                     <div className='flex justify-start items-center py-4 gap-4 '>
                         <div className='bg-[#FFFFFF] w-22 h-22'></div>
-                        <h1 className='text-2xl font-semibold'>Ash Portal</h1>
+                        <h1 className='text-2xl font-medium'>Ash Portal</h1>
                     </div>
                     <h1 className='text-sm leading-6 tracking-wide py-4'>Sign up and create your account</h1>
                     <p className='text-sm leading-6 tracking-wide w-[50%]'>Start exploring, connect with others, get listed, build your portfolio and
 go live</p>
                     <div className='flex justify-end items-center gap-3'>
-                        <button className='text-2xl font-semibold mb-2 mt-5'>Explore</button>
+                        <button className='text-2xl mb-2 mt-5'>Explore</button>
                         <IoIosArrowRoundForward size={25} className='mt-5'/>
                     </div>
     
@@ -56,12 +56,12 @@ go live</p>
                 <div className='bg-[#001426] rounded-sm p-6'>
                     <div className='flex justify-start items-center py-4 gap-4 '>
                         <div className='bg-[#FFFFFF] w-22 h-22'></div>
-                        <h1 className='text-2xl font-semibold'>ECOM Portal</h1>
+                        <h1 className='text-2xl font-medium'>ECOM Portal</h1>
                     </div>
                     <h1 className='text-sm leading-6 tracking-wide py-4'>Sign up and create your account</h1>
                     <p className='text-sm leading-6 tracking-wide w-[50%]'>Start exploring, connect with others, get listed, build your portfolio and go live</p>
                     <div className='flex justify-end items-center gap-3'>
-                        <button className='text-2xl font-semibold mb-2 mt-5'>Explore</button>
+                        <button className='text-2xl mb-2 mt-5'>Explore</button>
                         <IoIosArrowRoundForward size={25} className='mt-5'/>
                     </div>
     
@@ -74,27 +74,27 @@ go live</p>
             <div className='lg:hidden'>
                  <div id='bottom' className=' grid grid-cols-1 gap-6 w-full  p-4 py-12 text-white '>
                 <div className='bg-[#001426] rounded-sm p-3 px-4 w-full'>
-                        <h1 className='text-xl font-semibold'>NGO Portal</h1>
+                        <h1 className='text-xl font-medium'>NGO Portal</h1>
                     <h1 className='text-sm leading-6 tracking-wide py-2  pt-4 font-extralight'>Pick your onboarding plan</h1>
                     <p className='text-sm leading-6 tracking-wider w-full font-extralight'>We’ll help you set up your profile, engage with donors, and manage operational needs</p>
                      <button className='text-md mb-2 mt-7 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button>
                 </div>
     
                  <div className='bg-[#002A30] rounded-sm p-3 px-4 w-full'>
-                        <h1 className='text-xl font-semibold'>Inqbate Portal</h1>
+                        <h1 className='text-xl font-medium'>Inqbate Portal</h1>
                     <h1 className='text-sm leading-6 tracking-wide py-2  pt-4 font-extralight'>Pick your onboarding plan</h1>
                     <p className='text-sm leading-6 tracking-wider w-full font-extralight'>We’ll walk you through the platform, and discuss how to use your expert consult credit</p>
                      <button className='text-md mb-2 mt-7 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button>
                 </div>
                  <div className='bg-[#001426] rounded-sm p-3 px-4 w-full'>
-                        <h1 className='text-xl font-semibold'>Ash Portal
+                        <h1 className='text-xl font-medium'>Ash Portal
 </h1>
                     <h1 className='text-sm leading-6 tracking-wide py-2  pt-4 font-extralight'>Pick your onboarding plan</h1>
                     <p className='text-sm leading-6 tracking-wider w-full font-extralight'>We’ll walk you through the platform, and discuss how to use your expert consult credit</p>
                      <button className='text-md mb-2 mt-7 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button>
                 </div>
                  <div className='bg-[#002A30] rounded-sm p-3 px-4 w-full'>
-                        <h1 className='text-xl font-semibold'>ECOM Portal</h1>
+                        <h1 className='text-xl font-medium'>ECOM Portal</h1>
                     <h1 className='text-sm leading-6 tracking-wide py-2  pt-4 font-extralight'>Pick your onboarding plan</h1>
                     <p className='text-sm leading-6 tracking-wider w-full font-extralight'>We’ll walk you through the platform, and discuss how to use your expert consult credit</p>
                      <button className='text-md mb-2 mt-7 bg-white text-[#000000] p-2 px-6 rounded-sm'> Get Started</button>

@@ -87,10 +87,10 @@ function ServiceProfessionalSec9() {
       <section className="mx-auto w-full lg:px-6 py-10 md:py-16 ">
 
         <header className="lg:mb-8 mb-4 px-4 md:mb-12">
-          <h1 className="hidden lg:block text-[#001032] text-3xl font-semibold tracking-tight md:text-5xl">
+          <h1 className="hidden lg:block text-[#001032] text-3xl font-medium tracking-tight md:text-5xl">
             Start your journey
           </h1>
-           <h1 className=" lg:hidden text-[#001032] text-3xl mt-6 font-bold tracking-tight md:text-5xl">
+           <h1 className=" lg:hidden text-[#001032] text-3xl mt-6 font-medium tracking-tight md:text-5xl">
            Onboarding Plans
           </h1>
         </header>

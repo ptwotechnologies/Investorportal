@@ -75,8 +75,8 @@ const InvestorSec10 = () => {
      
        return (
          <div className="w-full mx-auto px-4 py-6 pb-10 lg:py-10 lg:px-30 mt-8">
-        <h1 className="text-3xl font-bold mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
-      <h1 className="text-3xl font-bold mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
+        <h1 className="text-3xl font-medium mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
+      <h1 className="text-3xl font-medium mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
        <h1 className="text-md mb-6 text-[#001032] hidden lg:block ">Trust & Safety</h1>
        <div className='hidden lg:block'>
         <div className=' grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 '>

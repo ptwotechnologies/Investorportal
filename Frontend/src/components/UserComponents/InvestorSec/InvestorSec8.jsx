@@ -59,7 +59,7 @@ const InvestorSec8 = () => {
          <div className='mt-15  ' >
   
        <div className="relative">
-        <h1 className='text-5xl font-semibold px-10 pb-10 text-[#001032]'>Trusted by investors</h1>
+        <h1 className='text-5xl font-medium px-10 pb-10 text-[#001032]'>Trusted by investors</h1>
         <div
           ref={scrollRef}
           onScroll={handleScroll}

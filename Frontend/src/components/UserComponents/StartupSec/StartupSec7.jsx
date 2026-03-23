@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom'
 const StartupSec7 = () => {
   return (
      <div className=" mt-10 lg:p-10  ">
-      <h1 className="text-[#001032] text-3xl lg:text-5xl font-bold text-center lg:text-start">
+      <h1 className="text-[#001032] text-3xl lg:text-5xl font-medium text-center lg:text-start">
        How do I get started?
       </h1>
       <div className='hidden lg:block'>
         <div className="flex  justify-center items-center gap-40 pt-15 ">
         <div id="left" className="w-[40%] ">
-         <div className='text-[#001032] text-2xl font-medium leading-8 tracking-wide '>
+         <div className='text-[#001032] text-2xl  leading-8 tracking-wide '>
             <h1 className='py-6'>Choose your on-boarding plan</h1>
             <hr />
          <h1 className='py-6'>Create your profile and list your services</h1>
@@ -21,7 +21,7 @@ const StartupSec7 = () => {
           <hr />
          </div>
          <div className='flex justify-between items-center gap-1 mt-2'>
-            <h1 className='py-6 text-3xl font-semibold'>Get Onboarded</h1>
+            <h1 className='py-6 text-3xl '>Get Onboarded</h1>
             <p className='bg-[#D9D9D9] rounded-full p-5 py-6 text-5xl mr-10'>1/4</p>
          </div>
         </div>
@@ -36,7 +36,7 @@ const StartupSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] mb-8 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Choose your on-boarding plan</h1>
+            <h1 className='text-2xl font-medium pb-5'>Choose your on-boarding plan</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ All plans include guidance, investor visibility and platform tools</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just choose what aligns with your startup’s current stage</p>
@@ -85,7 +85,7 @@ const StartupSec7 = () => {
       </div>
 
       <div className='lg:hidden text-center  mt-8'>
-              <h1 className='text-[#001032] text-2xl font-semibold text-center'>Ready to on-board...?</h1>
+              <h1 className='text-[#001032] text-2xl font-medium text-center'>Ready to on-board...?</h1>
                 <Link to="/login"><button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button></Link>
                         <div  className="w-full  h-fit  p-4 text-start mt-5">
                    <div className=' w-full h-full gap-10  shadow-xl border px-6 pb-6  rounded-md p-4'>
@@ -93,7 +93,7 @@ const StartupSec7 = () => {
                       <p className=' text-sm leading-6 tracking-wider '>Instead of chasing leads or spending on ads, get consistent work from real founders Together we create a cleaner, more predictable work pipeline</p>
       
                        <div className=' flex justify-between items-center lg:mt-25 mt-15 ' >
-                           <div className='font-semibold text-sm'>
+                           <div className=' text-sm'>
                               <h1>Join once. </h1>
                                 <p>Let the work come for you</p>
                            </div>

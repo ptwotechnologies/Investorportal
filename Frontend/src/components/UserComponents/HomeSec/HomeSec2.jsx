@@ -12,7 +12,7 @@ const HomeSec2 = () => {
         <div
         id="top"
         className="flex flex-col lg:flex-row lg:justify-center lg:bg-white bg-[#001032] rounded-2xl
-  lg:items-center gap-20  p-5 font-medium leading-6 tracking-wider text-white lg:text-[#001032]
+  lg:items-center gap-20  p-5  leading-6 tracking-wider text-white lg:text-[#001032]
   overflow-x-hidden px-4 sm:px-6 md:px-10 "
       >
         <div className=" flex lg:flex-col gap-3 justify-center items-center">
@@ -97,7 +97,7 @@ const HomeSec2 = () => {
     <div className="col-span-3 flex flex-col items-center">
       <div className="w-15 h-15 bg-[#DEDEDE] rounded-full"></div>
       <p className="text-md text-center mt-5 font-light">
-        100% Transparent Pricing
+        100% Transparent <br/> Pricing
       </p>
     </div>
 
@@ -112,8 +112,8 @@ const HomeSec2 = () => {
         className="bg-[#001032] w-full text-white rounded-4xl lg:rounded-none mt-13 px-4"
       >
         <div className="">
-          <h1 className="text-5xl font-semibold p-10  hidden lg:block ">Who is this portal for?</h1>
-           <h1 className="text-[44px] font-semibold px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-10 ">Who is this  portal  for?</h1>
+          <h1 className="text-5xl font-normal p-10  hidden lg:block ">Who is this portal for?</h1>
+           <h1 className="text-[44px] font-normal px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-10 ">Who is this  portal  for?</h1>
           <div className="hidden lg:block">
             <div className="flex justify-center items-center  mx-20  ">
             <div className=" w-[30%]">

@@ -86,15 +86,15 @@ const HomeSec1 = () => {
           <div id='phone' className='lg:hidden text-white flex items-center gap-3  overflow-x-scroll  scrollbar-hide '>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
-                 <p className='p-3 h-25 text-sm font-light w-[80%]'>Investors are already discovering founders like you</p>
+                 <p className='p-3 h-25 text-sm font-light w-full'>Investors are already discovering founders like you</p>
               </div>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
-                 <p className='p-3 h-25 text-sm font-light w-[80%]'>Access expert-led services at startup-first pricing</p>
+                 <p className='p-3 h-25 text-sm font-light w-full'>Access expert-led services at startup-first pricing</p>
               </div>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
-                 <p className='p-3 h-25 text-sm font-light w-[80%]'>Get free advisory from mentors and venture experts</p>
+                 <p className='p-3 h-25 text-sm font-light w-full'>Get free advisory from mentors and venture experts</p>
               </div>
           </div>
         </div>
@@ -116,7 +116,7 @@ const HomeSec1 = () => {
           </div>
     </div>
      <div className="flex justify-center items-center gap-2 border-2 border-[#002A30]  w-[70%] 
-     mt-32 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm font-semibold lg:hidden">
+     mt-32 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm  lg:hidden">
        <Link to="/login"> <button>See How It Works</button></Link>
         <IoIosArrowRoundForward size={25} className="mt-1" />
           </div>

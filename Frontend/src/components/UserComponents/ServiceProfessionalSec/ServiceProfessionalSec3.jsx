@@ -4,39 +4,39 @@ const ServiceProfessionalSec3 = () => {
   return (
     <>
     <div className=" p-10 pt-15 hidden lg:block">
-      <h1 className="text-[#001032CC] text-5xl font-bold">
+      <h1 className="text-[#001032CC] text-5xl font-medium">
         Gaps in the Market
       </h1>
       <div className="flex justify-center items-center gap-13 pt-15">
         <div id="left" className="w-[40%] ">
-          <h1 className="text-xl font-semibold pb-2">Most service pros chase noisy leads, deal with scope creep, and lose hours on discovery calls that never convert. We fix that.</h1>
+          <h1 className="text-xl  pb-2">Most service pros chase noisy leads, deal with scope creep, and lose hours on discovery calls that never convert. We fix that.</h1>
           <ul className="list-disc pl-4 px-4 font-medium">
             <li >
-              <h2 className='text-xl font-medium my-2' >Predictable project flow:</h2>
-              <p className=" text-lg text-wide leading-7">
+              <h2 className='text-xl  my-2' >Predictable project flow:</h2>
+              <p className=" text-lg text-wide  leading-7">
                 Get matched to startups that match your expertise and capacity.
               </p>
             </li>
             <li >
-              <h2 className='text-xl font-medium my-2' >Verified decisions: </h2>
+              <h2 className='text-xl  my-2' >Verified decisions: </h2>
               <p className=" text-lg text-wide leading-7">
                 Work only with founders vetted for clarity, intent and budgets.
               </p>
             </li>
              <li >
-              <h2 className='text-xl font-medium my-2'  >Clear scopes, fair rates:</h2>
+              <h2 className='text-xl my-2'  >Clear scopes, fair rates:</h2>
               <p className=" text-lg text-wide leading-7">
                 Set deliverables and pricing up-front — no hidden surprises.
               </p>
             </li>
             <li>
-              <h2 className='text-xl font-medium my-2'>Payment protection:</h2>
+              <h2 className='text-xl  my-2'>Payment protection:</h2>
               <p className=" text-lg text-wide leading-7">
                 Platform-assisted payments and milestone release keep work steady.
               </p>
             </li>
              <li>
-              <h2 className='text-xl font-medium my-2' >Long-term relationships:</h2>
+              <h2 className='text-xl my-2' >Long-term relationships:</h2>
               <p className=" text-lg text-wide leading-7">
                 Convert single projects into recurring collaborations and retainers.
               </p>

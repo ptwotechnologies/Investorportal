@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const InvestorSec7 = () => {
   return (
    <div className=" mt-10 lg:p-10  ">
-      <h1 className="text-[#001032] text-3xl lg:text-5xl font-bold text-center lg:text-start">
+      <h1 className="text-[#001032] text-3xl lg:text-5xl font-medium text-center lg:text-start">
        How do I get started?
       </h1>
       <div className='hidden lg:block'>
@@ -36,7 +36,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] mb-8 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Choose your on-boarding plan</h1>
+            <h1 className='text-2xl font-medium pb-5'>Choose your on-boarding plan</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Select the tier that aligns with your investment style and focus</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just pick what fits your business goals</p>
@@ -48,7 +48,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Create your investor profile, past deals & experience</h1>
+            <h1 className='text-2xl font-medium pb-5'>Create your investor profile, past deals & experience</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Add categories, pricing, experience and turnaround timelines</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Share your sectors, thesis, past deals, and preferred ticket sizes.</p>
@@ -60,7 +60,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Get verified in 24 hours</h1>
+            <h1 className='text-2xl font-medium pb-5'>Get verified in 24 hours</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Our team confirms your details to maintain credibility in the system</p>
             
@@ -71,7 +71,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Go live on the portal</h1>
+            <h1 className='text-2xl font-medium pb-5'>Go live on the portal</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Start discovering refined founders and evaluating real opportunities</p>
            
@@ -85,7 +85,7 @@ const InvestorSec7 = () => {
       </div>
 
        <div className='lg:hidden text-center  mt-8'>
-                    <h1 className='text-[#001032] text-2xl font-semibold text-center'>Ready to on-board...?</h1>
+                    <h1 className='text-[#001032] text-2xl font-medium text-center'>Ready to on-board...?</h1>
                       <Link to="/login"><button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button></Link>
                               <div  className="w-full  h-fit  p-4 text-start mt-5">
                          <div className=' w-full h-full gap-10  shadow-xl border px-6 pb-6  rounded-md p-4'>

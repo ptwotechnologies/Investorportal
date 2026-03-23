@@ -52,7 +52,7 @@ const SubscriptionSec4 = ({ urlTab }) => {
   return (
      <>
     <div className="container mx-auto lg:px-10 lg:mt-25 ">
-      <h1 className='text-3xl lg:text-5xl text-[#001032] font-semibold lg:mb-5 mb-2 lg:pt-0 px-4 lg:px-5 '>Subscription Models</h1>
+      <h1 className='text-3xl lg:text-5xl text-[#001032] font-medium lg:mb-5 mb-2 lg:pt-0 px-4 lg:px-5 '>Subscription Models</h1>
       <p className='text-2xl lg:text-5xl text-[#001032] font-light px-4 lg:px-5  mb-15'>Grow Your Business by Partnering with us</p>
       <div className='hidden lg:block px-5'>
         <div className="flex justify-between items-center flex-wrap  bg-[#B5B5B5] rounded-full lg:my-5 lg:mb-15 p-1 ">
