@@ -12,11 +12,14 @@ const HomeSec3 = () => {
     <div className="">
       <div id="top" className="text-center mt-8 lg:mt-16">
         <h1 className="text-2xl lg:text-4xl font-normal lg:tracking-wider mb-1  lg:mb-4 text-[#12355C] ">
+        <h1 className="text-2xl lg:text-4xl font-normal lg:tracking-wider mb-1  lg:mb-4 text-[#12355C] ">
           Sound like your story? 
         </h1>
         <p className="text-xl lg:text-2xl font-normal lg:tracking-wider text-[#12355C] mb-9 ">
+        <p className="text-xl lg:text-2xl font-normal lg:tracking-wider text-[#12355C] mb-9 ">
           Perfect — let’s take you inside
         </p>
+        <div className="text-white rounded-2xl  hidden lg:block">
         <div className="text-white rounded-2xl  hidden lg:block">
           <Link to="/login"><button className="bg-[#001032] m-2 w-70 p-2 text-xl rounded-sm">
             I’d Like To Get Me Started
@@ -25,6 +28,7 @@ const HomeSec3 = () => {
             How it works
           </button></Link>
         </div>
+        <div className="text-white rounded-2xl  flex justify-center items-center lg:hidden">
         <div className="text-white rounded-2xl  flex justify-center items-center lg:hidden">
           <Link to="/login"> <button className="bg-[#001032] m-2 w-fit p-2 text-md lg:text-xl rounded-sm">
             How it works
@@ -41,12 +45,16 @@ const HomeSec3 = () => {
        <div className="flex justify-center items-center">
          <div className=" p-2  w-full mt-14">
           <h1 className="text-5xl font-normal mb-7">What makes us different?</h1>
+          <h1 className="text-5xl font-normal mb-7">What makes us different?</h1>
           <p className="text-md w-[80%] leading-8 tracking-wide mb-15">You see, we’ve also spent years refining pitches, chasing warm intros, paying for ads, and hoping something would finally move. Most of it didn’t.</p>
             <p className="mb-2">That’s when we realized —</p>
               <p className="text-2xl   mb-2">The problem wasn’t the founders. </p>
                 <p className="text-2xl  mb-17 ">It was the system around them</p>
+              <p className="text-2xl   mb-2">The problem wasn’t the founders. </p>
+                <p className="text-2xl  mb-17 ">It was the system around them</p>
                 <hr className='w-full mb-5 ' />
 
+                <h1 className='text-xl  mb-5 ' onClick={() => setIsOpen(!isOpen)}>Really! The system is built to exhaust founders</h1>
                 <h1 className='text-xl  mb-5 ' onClick={() => setIsOpen(!isOpen)}>Really! The system is built to exhaust founders</h1>
                 {isOpen && (
         <div className="leading-20 tracking-wider w-[94%]">
@@ -70,12 +78,14 @@ const HomeSec3 = () => {
       )}
                 <hr  />
                 <h1 className='my-4 text-xl '  onClick={() => setIsSecondOpen(!isSecondOpen)}>Keep your financials clean and transparent</h1>
+                <h1 className='my-4 text-xl '  onClick={() => setIsSecondOpen(!isSecondOpen)}>Keep your financials clean and transparent</h1>
                 {isSecondOpen && (
                   <div className="leading-20 tracking-wider w-[94%]">
                     <p className="text-sm leading-6" >Keep your financials clean and transparent</p>
                   </div>
                 )}
                  <hr  />
+                 <h1 className='my-4 text-xl 'onClick={() => setIsThirdOpen(!isThirdOpen)}>Get simplified compliance and support</h1>
                  <h1 className='my-4 text-xl 'onClick={() => setIsThirdOpen(!isThirdOpen)}>Get simplified compliance and support</h1>
                  {isThirdOpen && (
                   <div className="leading-20 tracking-wider w-[94%]">
@@ -121,6 +131,7 @@ const HomeSec3 = () => {
       </div>
 
       <div className="pb-12 pt-5 mr-18" >
+        <p className="bg-white w-[45%] text-center rounded-4xl  ml-auto p-2 px-3  text-[#001032] tracking-wide ">Simply, a one stop solution for startups & founders!</p>
         <p className="bg-white w-[45%] text-center rounded-4xl  ml-auto p-2 px-3  text-[#001032] tracking-wide ">Simply, a one stop solution for startups & founders!</p>
       </div>
 

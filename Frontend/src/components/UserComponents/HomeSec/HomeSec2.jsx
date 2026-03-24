@@ -13,6 +13,7 @@ const HomeSec2 = () => {
         id="top"
         className="flex flex-col lg:flex-row lg:justify-center lg:bg-white bg-[#001032] rounded-2xl
   lg:items-center gap-20  p-5  leading-6 tracking-wider text-white lg:text-[#001032]
+  lg:items-center gap-20  p-5  leading-6 tracking-wider text-white lg:text-[#001032]
   overflow-x-hidden px-4 sm:px-6 md:px-10 "
       >
         <div className=" flex lg:flex-col gap-3 justify-center items-center">
