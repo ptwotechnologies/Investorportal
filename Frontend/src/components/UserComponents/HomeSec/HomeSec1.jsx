@@ -87,16 +87,14 @@ const HomeSec1 = () => {
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
                  <p className='p-3 h-25 text-sm font-light w-full'>Investors are already discovering founders like you</p>
-                 <p className='p-3 h-25 text-sm font-light w-full'>Investors are already discovering founders like you</p>
+                 
               </div>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
                  <p className='p-3 h-25 text-sm font-light w-full'>Access expert-led services at startup-first pricing</p>
-                 <p className='p-3 h-25 text-sm font-light w-full'>Access expert-led services at startup-first pricing</p>
               </div>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
-                 <p className='p-3 h-25 text-sm font-light w-full'>Get free advisory from mentors and venture experts</p>
                  <p className='p-3 h-25 text-sm font-light w-full'>Get free advisory from mentors and venture experts</p>
               </div>
           </div>
