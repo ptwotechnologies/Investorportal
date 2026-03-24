@@ -65,7 +65,7 @@ const InvestorSec6 = () => {
 
        return (
          <div className='lg:mt-8 lg:px-10 mt-16 px-3' >
-        <h1 className='text-2xl lg:text-5xl text-[#001032] font-bold text-center lg:text-start'>Who is this platform for?</h1>
+        <h1 className='text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start'>Who is this platform for?</h1>
        <div className="relative">
         <div
           ref={scrollRef}
@@ -77,7 +77,7 @@ const InvestorSec6 = () => {
              lg:rounded-2xl shadow-lg rounded-sm lg:p-3  px-7 h-full min-h-[280px] flex flex-col justify-between'>
                 <p className=' py-5 lg:py-0 text-[#001032B2] text-md lg:leading-9 tracking-wider leading-8 '>{item.paragraph}</p>
               <div className=' flex justify-between items-center ' >
-                     <div className='font-semibold lg:text-xl text-md py-5 lg:py-0'>
+                     <div className=' lg:text-xl text-md py-5 lg:py-0'>
                         <h1 className='text-md text-[#001032B2]'>{item.company}</h1>
                      </div>
                   <div className='flex justify-center items-center gap-3 '>
@@ -103,8 +103,8 @@ const InvestorSec6 = () => {
                 If your investment approach fits any of these lanes and you prefer clearer, higher-quality deal flow, this platform is built for you.
 
 </h1>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block w-[40%] mx-auto' >And if you already invest in early-stage teams, you’ll find even stronger alignment here.</p>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve already invested in startups before — that makes your experience even more valuable here.</p>
+                <p className='text-[#001032] mt-3  p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block w-[40%] mx-auto' >And if you already invest in early-stage teams, you’ll find even stronger alignment here.</p>
+                <p className='text-[#001032] mt-3  p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve already invested in startups before — that makes your experience even more valuable here.</p>
          </div>
          <hr className='lg:hidden bg-[#00000033] '/>
       </div>

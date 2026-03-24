@@ -46,16 +46,16 @@ function BenefitCard({ title, body }) {
   return (
     <div className="rounded-lg bg-card text-card-foreground border border-border p-5 md:p-6 flex flex-col justify-between">
       <div>
-        <h3 className="text-sm md:text-base font-medium text-foreground/90 text-pretty">{title}</h3>
+        <h3 className="text-sm md:text-base  text-foreground/90 text-pretty">{title}</h3>
         <p className="mt-3 text-xs md:text-sm leading-6 text-foreground/70">{body}</p>
       </div>
       <div className="mt-10 flex items-center justify-between">
         <div>
-          <p className="text-xs text-[#001032] font-semibold">Join once.</p>
-          <p className="text-xs text-[#001032] font-semibold">Let the ecosystem work for you.</p>
+          <p className="text-xs text-[#001032] ">Join once.</p>
+          <p className="text-xs text-[#001032] ">Let the ecosystem work for you.</p>
         </div>
         <div className='h-18 w-px bg-[#00000033]'></div>
-        <button type="button" className="rounded-full   text-xs font-medium bg-[#001032] p-5 py-10 text-center text-white">
+        <button type="button" className="rounded-full   text-xs  bg-[#001032] p-5 py-10 text-center text-white">
           Get Listed
         </button>
       </div>

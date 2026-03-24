@@ -6,7 +6,7 @@ function Item({ label }) {
     <div className="flex flex-col items-center gap-2 gap-y-4">
       {/* decorative placeholder icon */}
       <div className="h-14 w-14 bg-[#E5E5E5]  border border-border" />
-      <p className="text-center text-md font-semibold text-[#001032]">Verified Client pipelines</p>
+      <p className="text-center text-md  text-[#001032]">Verified Client pipelines</p>
       
     </div>
   )
@@ -40,14 +40,14 @@ const JoinUsSec2 = () => {
           <div className="flex justify-center items-center gap-7">
             <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5]  mb-5 mx-auto"></div>
-              <p className="text-[#001032] font-medium text-center tracking-wide leading-8 text-xl">Verified Client <br/> ipelines</p>
+              <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Verified Client <br/> ipelines</p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
             </div>
             <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5]  mb-5 mx-auto"></div>
-              <p className="text-[#001032] font-medium text-center tracking-wide leading-8 text-xl">Admin-Controlled
+              <p className="text-[#001032] text-center tracking-wide leading-8 text-xl">Admin-Controlled
          Payments</p>
             </div>
             <div>
@@ -55,7 +55,7 @@ const JoinUsSec2 = () => {
             </div>
              <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5]  mb-5 mx-auto"></div>
-              <p className="text-[#001032] font-medium text-center tracking-wide leading-8 text-xl">Post-Sales <br/>
+              <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Post-Sales <br/>
    Support</p>
             </div>
             <div>
@@ -63,7 +63,7 @@ const JoinUsSec2 = () => {
             </div>
              <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5]  mb-5 mx-auto"></div>
-              <p className="text-[#001032] font-medium text-center tracking-wide leading-8 text-xl">Automated Client
+              <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Automated Client
         Matching</p>
             </div>
             <div>
@@ -71,7 +71,7 @@ const JoinUsSec2 = () => {
             </div>
             <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5]  mb-5 mx-auto"></div>
-              <p className="text-[#001032] font-medium text-center tracking-wide leading-8 text-xl">Industry Experts
+              <p className="text-[#001032] text-center tracking-wide leading-8 text-xl">Industry Experts
        Guidance</p>
             </div>
             <div>

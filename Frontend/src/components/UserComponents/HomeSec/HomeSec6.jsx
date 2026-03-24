@@ -10,7 +10,7 @@ const HomeSec6 = () => {
         className="text-center lg:p-5 lg:pt-10 text-[#001032] lg:bg-[#F9972A1A] lg:mt-10 mt-6"
       >
         <div className="hidden lg:block">
-          <h1 className="text-3xl lg:text-5xl font-semibold p-3 lg:p-5 lg:pb-10 ">
+          <h1 className="text-3xl lg:text-5xl font-normal p-3 lg:p-5 lg:pb-10 ">
             Great! <br />
             How do I get started then?
           </h1>
@@ -20,8 +20,8 @@ const HomeSec6 = () => {
           </p>
         </div>
 
-        <div className="lg:hidden font-medium text-[#001032]">
-          <h1 className="text-3xl lg:text-5xl font-semibold p-3 lg:p-5 lg:pb-10 ">
+        <div className="lg:hidden font-normal text-[#001032]">
+          <h1 className="text-3xl lg:text-5xl  p-3 lg:p-5 lg:pb-10 ">
             Awesome! <br />
             How do I start building?
           </h1>
@@ -39,7 +39,7 @@ const HomeSec6 = () => {
           <div className="bg-[#001032] rounded-sm p-6 w-full">
             <div className="flex justify-start items-center py-4 gap-4 ">
               <div className="bg-[#FFFFFF] w-15 h-15"></div>
-              <h1 className="text-2xl font-semibold">Startup</h1>
+              <h1 className="text-2xl  ">Startup</h1>
             </div>
             <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
               Pick your onboarding plan
@@ -52,7 +52,7 @@ const HomeSec6 = () => {
          
               <div className="flex items-center gap-3 group-hover:hidden transition-all">
                 <div className="mt-5">
-                  <button className="text-2xl font-semibold  mt-5">
+                  <button className="text-2xl   mt-5">
                     Startups
                   </button>
                 </div>
@@ -64,7 +64,7 @@ const HomeSec6 = () => {
                 <button
                   className="
         hidden group-hover:block 
-        text-2xl font-semibold  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
+        text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
       "
                 >
                   Get Started
@@ -75,7 +75,7 @@ const HomeSec6 = () => {
           <div className="bg-[#616B80] rounded-sm p-6">
             <div className="flex justify-start items-center py-4 gap-4 ">
               <div className="bg-[#FFFFFF] w-15 h-15"></div>
-              <h1 className="text-2xl font-semibold">Investor</h1>
+              <h1 className="text-2xl ">Investor</h1>
             </div>
             <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
               Create your investor account
@@ -87,7 +87,7 @@ const HomeSec6 = () => {
           
               <div className="flex items-center gap-3 group-hover:hidden transition-all">
                 <div className="mt-5">
-                  <button className="text-2xl font-semibold mb-2 mt-5">
+                  <button className="text-2xl  mb-2 mt-5">
                     Investors
                   </button>
                 </div>
@@ -99,7 +99,7 @@ const HomeSec6 = () => {
                 <button
                   className="
         hidden group-hover:block 
-        text-2xl font-semibold  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
+        text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
       "
                 >
                   Get Started
@@ -110,7 +110,7 @@ const HomeSec6 = () => {
           <div className="bg-[#002A30CC] rounded-sm p-6">
             <div className="flex justify-start items-center py-4 gap-4 ">
               <div className="bg-[#FFFFFF] w-15 h-15"></div>
-              <h1 className="text-2xl font-semibold">Service Professionals</h1>
+              <h1 className="text-2xl ">Service Professionals</h1>
             </div>
             <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
               Choose your onboarding plan
@@ -122,7 +122,7 @@ const HomeSec6 = () => {
             
               <div className="flex items-center gap-3 group-hover:hidden transition-all">
                 <div className="mt-5">
-                  <button className="text-2xl font-semibold  mt-5">
+                  <button className="text-2xl   mt-5">
                    Service Professionals
                   </button>
                 </div>
@@ -134,7 +134,7 @@ const HomeSec6 = () => {
                 <button
                   className="
         hidden group-hover:block 
-        text-2xl font-semibold  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
+        text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
       "
                 >
                   Get Started
@@ -151,7 +151,7 @@ const HomeSec6 = () => {
           className=" grid grid-cols-1 gap-6 w-full  p-4 py-12 text-white "
         >
           <div className="bg-[#001032CC] rounded-sm p-3 px-4 w-full">
-            <h1 className="text-xl font-semibold">I’m a Startup</h1>
+            <h1 className="text-xl ">I’m a Startup</h1>
             <h1 className="text-sm leading-6 tracking-wide py-2  pt-4 ">
               Pick your onboarding plan
             </h1>
@@ -168,7 +168,7 @@ const HomeSec6 = () => {
           </div>
 
           <div className="bg-[#616B80] rounded-sm p-3 px-4 w-full">
-            <h1 className="text-xl font-semibold">Investors</h1>
+            <h1 className="text-xl ">I’m a Investor</h1>
             <h1 className="text-sm leading-6 tracking-wide py-2  pt-4 ">
               Create your investor account.
             </h1>
@@ -183,7 +183,7 @@ const HomeSec6 = () => {
             </Link>
           </div>
           <div className="bg-[#002A30CC] rounded-sm p-3 px-4 w-full">
-            <h1 className="text-xl font-semibold">Service Professionals</h1>
+            <h1 className="text-xl ">I’m a Service Professional</h1>
             <h1 className="text-sm leading-6 tracking-wide py-2  pt-4 ">
               Choose your onboarding plan
             </h1>

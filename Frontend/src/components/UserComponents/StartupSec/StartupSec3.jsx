@@ -4,39 +4,39 @@ const StartupSec3 = () => {
   return (
      <>
     <div className=" p-10 lg:pt-35 hidden lg:block">
-      <h1 className="text-[#001032CC] text-5xl font-bold">
+      <h1 className="text-[#001032CC] text-5xl font-medium">
         The broken loops in the market
       </h1>
       <div className="flex justify-center items-center gap-13 pt-15">
         <div id="left" className="w-[40%] ">
-          <h1 className="text-2xl font-semibold py-10">The support system founders actually need</h1>
-          <ul className="list-disc pl-4 p-4 font-medium">
+          <h1 className="text-2xl  py-10">The support system founders actually need</h1>
+          <ul className="list-disc pl-4 p-4 ">
             <li >
-              <h2 className='text-xl font-semibold' >Early-stage direction</h2>
+              <h2 className='text-xl ' >Early-stage direction</h2>
               <p className=" text-lg font-light">
                 Most founders build without clarity — we give you structure from Day 1.
               </p>
             </li>
             <li >
-              <h2 className='text-xl font-semibold'>Real opportunity visibility  </h2>
+              <h2 className='text-xl '>Real opportunity visibility  </h2>
               <p className=" text-lg font-light">
                 Investors discover your startup through relevance, not random outreach.
               </p>
             </li>
              <li >
-              <h2 className='text-xl font-semibold'>Access to expert insight</h2>
+              <h2 className='text-xl '>Access to expert insight</h2>
               <p className=" text-lg font-light">
                 Work with vetted specialists who align their expertise with your milestones.
               </p>
             </li>
             <li>
-              <h2 className='text-xl font-semibold'>Protected collaboration</h2>
+              <h2 className='text-xl '>Protected collaboration</h2>
               <p className=" text-lg font-light">
                 Every interaction is moderated so you stay safe, informed, and stress-free.
               </p>
             </li>
              <li>
-              <h2 className='text-xl font-semibold' >Strategic founder guidance</h2>
+              <h2 className='text-xl ' >Strategic founder guidance</h2>
               <p className=" text-lg font-light">
                 Get personalised help on pricing, positioning, storytelling, and readiness.
               </p>

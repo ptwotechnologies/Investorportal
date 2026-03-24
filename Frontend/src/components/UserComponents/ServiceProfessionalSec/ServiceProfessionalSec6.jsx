@@ -69,7 +69,7 @@ const ServiceProfessionalSec6 = () => {
 
     return (
       <div className='lg:mt-8 lg:px-10 mt-16 px-3' >
-        <h1 className='text-2xl lg:text-5xl text-[#001032] font-bold text-center lg:text-start'>Who is this platform for?</h1>
+        <h1 className='text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start'>Who is this platform for?</h1>
        <div className="relative">
         <div
           ref={scrollRef}
@@ -85,7 +85,7 @@ const ServiceProfessionalSec6 = () => {
                      <div className='font-semibold lg:text-xl hidden lg:block'>
                         <h1 className='text-md text-[#001032B2]'>{item.company}</h1>
                      </div>
-                     <div className='font-medium text-sm  lg:hidden mr-1  text-[#001032B2]'>
+                     <div className=' text-sm  lg:hidden mr-1  text-[#001032B2]'>
                         <h1>{item.phonecompany}</h1>
                      </div>
                   <div className='flex justify-center items-center gap-3'>
@@ -110,8 +110,8 @@ const ServiceProfessionalSec6 = () => {
             lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg lg:hidden'>
                 If your work supports founders atany stage — from idea to scale —this ecosystem is built for you
 </h1>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block' >And if you’ve worked with startups before? That’s even better!</p>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve already worked with startups before, that experience makes you even more valuable here</p>
+                <p className='text-[#001032] mt-3  p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block' >And if you’ve worked with startups before? That’s even better!</p>
+                <p className='text-[#001032] mt-3  p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve already worked with startups before, that experience makes you even more valuable here</p>
          </div>
          <hr className='lg:hidden bg-[#00000033] '/>
       </div>

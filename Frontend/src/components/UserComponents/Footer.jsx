@@ -74,7 +74,7 @@ useEffect(() => {
         <div id="desktop" className="hidden lg:block">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-10 text-sm">
             <div>
-              <h4 className="font-semibold mb-2">Auxiliaries</h4>
+              <h4 className=" mb-2">Auxiliaries</h4>
               <ul className="space-y-2 text-gray-600">
                 <Link to="/subscription">
                   <li className="pb-2">Subscriptions</li>
@@ -86,7 +86,7 @@ useEffect(() => {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-2">Pricing</h4>
+              <h4 className=" mb-2">Pricing</h4>
               <ul className="space-y-2 text-gray-600">
                 <Link to="/startup">
                   <li className="pb-2">Startups</li>
@@ -98,7 +98,7 @@ useEffect(() => {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-2">Resources</h4>
+              <h4 className=" mb-2">Resources</h4>
               <ul className="space-y-2 text-gray-600">
                 <Link to="/about">
                   <li className="pb-2">About Us</li>
@@ -113,7 +113,7 @@ useEffect(() => {
             </div>
 
             <div>
-              <h4 className="font-semibold mb-2">Policies</h4>
+              <h4 className=" mb-2">Policies</h4>
               <ul className="space-y-2 text-gray-600">
                 <Link to="/termconditions">
                   <li className="pb-2">Term & Conditions</li>
@@ -136,7 +136,7 @@ useEffect(() => {
               onClick={() => toggle("aux")}
               className="flex justify-between items-center cursor-pointer"
             >
-              <h4 className="font-semibold">Auxiliaries</h4>
+              <h4 className="">Auxiliaries</h4>
               <MdKeyboardArrowDown size={20} className={`transform transition ${
                   open === "aux" ? "rotate-180" : ""
                 }`} />
@@ -161,7 +161,7 @@ useEffect(() => {
               onClick={() => toggle("pricing")}
               className="flex justify-between items-center cursor-pointer"
             >
-              <h4 className="font-semibold">Pricing</h4>
+              <h4 className="">Pricing</h4>
               <MdKeyboardArrowDown  size={20} className={`transform transition ${
                   open === "pricing" ? "rotate-180" : ""
                 }`} />
@@ -186,7 +186,7 @@ useEffect(() => {
               onClick={() => toggle("resources")}
               className="flex justify-between items-center cursor-pointer"
             >
-              <h4 className="font-semibold">Resources</h4>
+              <h4 className="">Resources</h4>
               <MdKeyboardArrowDown  size={20} className={`transform transition ${
                   open === "resources" ? "rotate-180" : ""
                 }`}/>
@@ -214,7 +214,7 @@ useEffect(() => {
               onClick={() => toggle("policies")}
               className="flex justify-between items-center cursor-pointer"
             >
-              <h4 className="font-semibold">Policies</h4>
+              <h4 className="">Policies</h4>
               <MdKeyboardArrowDown  size={20} className={`transform transition ${
                   open === "policies" ? "rotate-180" : ""
                 }`} />
@@ -263,7 +263,7 @@ useEffect(() => {
 
       {/* Disclaimer */}
       <div className="mt-10 text-xs  leading-5">
-        <p className="mb-4 font-semibold">Disclaimer:</p>
+        <p className="mb-4 ">Disclaimer:</p>
         <p className="mb-3">
           The information contained herein is provided for informational and
           discussion purposes only and is not intended to be a recommendation

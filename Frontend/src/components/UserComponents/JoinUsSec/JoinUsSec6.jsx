@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const JoinUsSec6 = () => {
   return (
     <div className=" mt-10 lg:p-10  ">
-      <h1 className="text-[#001032] text-3xl lg:text-5xl font-bold text-center lg:text-start">
+      <h1 className="text-[#001032] text-3xl lg:text-5xl font-medium text-center lg:text-start">
        How do I get started?
       </h1>
       <div className='hidden lg:block'>
@@ -36,7 +36,7 @@ const JoinUsSec6 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] mb-8 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Choose your on-boarding plan</h1>
+            <h1 className='text-2xl font-medium pb-5'>Choose your on-boarding plan</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ All plans include access to the portal and startup requests</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just pick what fits your business goals</p>
@@ -48,7 +48,7 @@ const JoinUsSec6 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Create your profile and list your services</h1>
+            <h1 className='text-2xl font-medium pb-5'>Create your profile and list your services</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Add categories, pricing, sample work, and turnaround timelines</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ We use this to match you with real startup needs</p>
@@ -60,7 +60,7 @@ const JoinUsSec6 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Get approved in 24 hours</h1>
+            <h1 className='text-2xl font-medium pb-5'>Get approved in 24 hours</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Our team reviews all listings to ensure legitimacy and relevance</p>
             
@@ -71,7 +71,7 @@ const JoinUsSec6 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Go live on the portal</h1>
+            <h1 className='text-2xl font-medium pb-5'>Go live on the portal</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Get discovered by verified startups, respond to interest, and convert leads directly</p>
            
@@ -85,7 +85,7 @@ const JoinUsSec6 = () => {
       </div>
 
       <div className='lg:hidden text-center  mt-8'>
-        <h1 className='text-[#001032] text-2xl font-semibold text-center'>Ready to on-board...?</h1>
+        <h1 className='text-[#001032] text-2xl font-medium text-center'>Ready to on-board...?</h1>
           <Link to="/login"><button className='bg-[#001032] text-white px-5 py-3 rounded-sm shadow-2xl mt-7 '>Click here & Get started</button></Link>
                  
       </div>

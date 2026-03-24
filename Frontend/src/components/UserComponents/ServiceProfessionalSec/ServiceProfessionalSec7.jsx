@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom'
 const ServiceProfessionalSec7 = () => {
   return (
     <div className=" lg:mt-10 mt-5 lg:p-10  ">
-      <h1 className="text-[#001032] text-3xl lg:text-5xl font-bold text-center lg:text-start">
+      <h1 className="text-[#001032] text-3xl lg:text-5xl font-medium text-center lg:text-start">
        How do I get started?
       </h1>
       <div className='hidden lg:block'>
         <div className="flex  justify-center items-center gap-40 pt-15 ">
         <div id="left" className="w-[40%] ">
-         <div className='text-[#001032] text-2xl font-medium leading-8 tracking-wide '>
+         <div className='text-[#001032] text-2xl  leading-8 tracking-wide '>
             <h1 className='py-6'>Choose your on-boarding plan</h1>
             <hr />
          <h1 className='py-6'>Create your profile and list your services</h1>
@@ -21,7 +21,7 @@ const ServiceProfessionalSec7 = () => {
           <hr />
          </div>
          <div className='flex justify-between items-center gap-15'>
-            <h1 className='py-6 text-4xl font-medium'>Get Onboarded</h1>
+            <h1 className='py-6 text-4xl '>Get Onboarded</h1>
             <p className='bg-[#D9D9D9] rounded-full p-6 text-4xl mr-10 mt-2'>1/4</p>
          </div>
         </div>
@@ -36,7 +36,7 @@ const ServiceProfessionalSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] mb-8 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Choose your on-boarding plan</h1>
+            <h1 className='text-2xl  pb-5'>Choose your on-boarding plan</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ All plans include access to the portal and service professional’s requests</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ It include discovery, visibility and ecosystem support</p>
@@ -48,7 +48,7 @@ const ServiceProfessionalSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Create your profile and list your services</h1>
+            <h1 className='text-2xl  pb-5'>Create your profile and list your services</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Add categories, pricing, sample work, and turnaround timelines</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Share your expertise, experience, portfolio, skills and categories</p>
@@ -60,7 +60,7 @@ const ServiceProfessionalSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Get approved in 24 hours</h1>
+            <h1 className='text-2xl  pb-5'>Get approved in 24 hours</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ We verify credibility, clarity and fit for startup requirements</p>
             
@@ -71,7 +71,7 @@ const ServiceProfessionalSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Go live on the portal</h1>
+            <h1 className='text-2xl  pb-5'>Go live on the portal</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Respond to founder requests and start taking meaningful work</p>
            

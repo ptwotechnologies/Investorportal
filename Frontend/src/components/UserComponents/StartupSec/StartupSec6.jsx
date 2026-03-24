@@ -72,7 +72,7 @@ const StartupSec6 = () => {
    
      return (
        <div className='lg:mt-8 lg:px-10 mt-16 px-3' >
-        <h1 className='text-2xl lg:text-5xl text-[#001032] font-bold text-center lg:text-start'>Who is this platform for?</h1>
+        <h1 className='text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start'>Who is this platform for?</h1>
        <div className="relative">
         <div
           ref={scrollRef}
@@ -85,10 +85,10 @@ const StartupSec6 = () => {
                 <p className=' hidden lg:block text-[#001032B2] text-md leading-8 tracking-wider'>{item.paragraph}</p>
                 <p className=' lg:hidden mb-20 text-[#001032B2] text-md leading-8 tracking-wider'>{item.phonepara}</p>
               <div className=' flex justify-between items-center lg:mt-25 mt-5' >
-                     <div className='font-semibold lg:text-xl hidden lg:block'>
+                     <div className='lg:text-xl hidden lg:block'>
                         <h1 className='text-md text-[#001032B2]'>{item.company}</h1>
                      </div>
-                     <div className='font-medium text-sm  lg:hidden mr-1 text-[#001032B2]'>
+                     <div className=' text-sm  lg:hidden mr-1 text-[#001032B2]'>
                         <h1>{item.phonecompany}</h1>
                      </div>
                   <div className='flex justify-center items-center gap-3'>
@@ -113,8 +113,8 @@ const StartupSec6 = () => {
             lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg lg:hidden'>
                If your startup fits any of these stages and you want a clearer, faster path to funding and expert support, this portal is built exactly for you.
 </h1>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-2xl pb-15 lg:pb-0 hidden lg:block  mx-auto w-190' >And if you already have traction or early advisors on board — that accelerates your growth inside Artestor even more</p>
-                <p className='text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve been refining your product or speaking with investors already?</p>
+                <p className='text-[#001032] mt-3  p-2 lg:text-md text-2xl pb-15 lg:pb-0 hidden lg:block  mx-auto w-190' >And if you already have traction or early advisors on board — that accelerates your growth inside Artestor even more</p>
+                <p className='text-[#001032] mt-3  p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve been refining your product or speaking with investors already?</p>
          </div>
          <hr className='lg:hidden bg-[#00000033] '/>
       </div> 

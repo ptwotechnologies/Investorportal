@@ -6,10 +6,10 @@ const HomeSec4 = () => {
      <div >
       <div className="lg:bg-[#002A30] bg-[#002A30CC] text-white rounded-sm lg:rounded-none">
         <div id="top ">
-        <h1 className="text-4xl px-8 lg:py-15 pt-8 font-semibold hidden lg:block">
+        <h1 className="text-4xl px-8 lg:py-15 pt-8 font-normal hidden lg:block">
           Consultations that move you forward
         </h1>
-        <h1 className="text-3xl px-6  pt-8 font-semibold lg:hidden">
+        <h1 className="text-3xl px-6  pt-8 font-normal lg:hidden">
           Consultations that push you forward
         </h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 lg:gap-x-70 lg:gap-y-30 gap-y-10 mx-6 my-10 lg:m-10 lg:mx-32 pb-20">

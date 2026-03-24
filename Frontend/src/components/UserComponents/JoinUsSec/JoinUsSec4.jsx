@@ -60,7 +60,7 @@ const JoinUsSec4 = () => {
 
   return (
     <div className="lg:mt-8 lg:px-10 mt-16 px-3">
-      <h1 className="text-2xl lg:text-5xl text-[#001032] font-bold text-center lg:text-start">
+      <h1 className="text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start">
         Who is this platform for?
       </h1>
       <div className="relative">
@@ -83,7 +83,7 @@ const JoinUsSec4 = () => {
                 </p>
                 
                 <div className=" flex justify-between items-center lg:mt-20 mt-10">
-                  <div className="font-semibold lg:text-xl ">
+                  <div className=" lg:text-xl ">
                     <h1 className="text-md text-[#001032B2]">{item.company}</h1>
                   </div>
                   
@@ -105,7 +105,7 @@ const JoinUsSec4 = () => {
           If your work fits any of these lanes and you want a quieter, more direct way to find serious clients, this portal is for you
         </h1>
        
-        <p className="text-[#001032] mt-3 font-medium p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block">
+        <p className="text-[#001032] mt-3  p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block">
           And if you’ve worked with startups before? That’s even better!
         </p>
         

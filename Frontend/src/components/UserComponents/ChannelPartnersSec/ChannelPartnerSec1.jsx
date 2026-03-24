@@ -269,7 +269,7 @@ const ChannelPartnerSec1 = () => {
         </div>
 
         <div id="bottom" className="lg:mt-30 lg:px-10 ">
-          <h1 className="lg:hidden text-xl text-[#001032] font-semibold px-5 my-10">
+          <h1 className="lg:hidden text-xl text-[#001032] font-medium px-5 my-10">
             Experience to be remembered
           </h1>
 
@@ -306,7 +306,7 @@ const ChannelPartnerSec1 = () => {
             h-full
           "
                 >
-                  <h1 className="text-[#001032] font-semibold mt-3 mb-7 lg:hidden">
+                  <h1 className="text-[#001032]  mt-3 mb-7 lg:hidden">
                     {card.heading}
                   </h1>
                   <p className="text-[#001032] lg:pb-30 pb-5 lg:text-lg text-[14px] tracking-wide lg:leading-7">
@@ -315,10 +315,10 @@ const ChannelPartnerSec1 = () => {
 
                   <div className="flex justify-between items-center mt-6">
                     <div>
-                      <p className="text-[#001032] font-semibold text-sm lg:text-md">
+                      <p className="text-[#001032]  text-sm lg:text-md">
                         {card.line1}
                       </p>
-                      <p className="font-semibold text-[#001032] text-sm lg:text-md">
+                      <p className=" text-[#001032] text-sm lg:text-md">
                         {card.line2}
                       </p>
                     </div>

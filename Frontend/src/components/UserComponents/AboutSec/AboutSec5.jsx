@@ -11,7 +11,7 @@ const AboutSec5 = () => {
   };
   return (
     <div className=' lg:p-12 w-full'>
-        <div className='text-4xl lg:text-5xl text-[#001032]  lg:mb-30 font-semibold lg:leading-14 tracking-wide p-5'>
+        <div className='text-4xl lg:text-5xl text-[#001032]  lg:mb-30 font-medium lg:font-normal lg:leading-14 tracking-wide p-5'>
          <h1>Who’s here and what matters?</h1>
         </div>
         <div className='flex flex-col lg:flex-row items-center  gap-2 w-full '>
@@ -27,14 +27,14 @@ const AboutSec5 = () => {
         ? <IoMdArrowRoundDown className='text-[#272626]' size={35} />
         : <IoMdArrowRoundForward className='text-[#272626]' size={35} />
       }
-      <h1 className='text-[#000000] font-medium text-4xl'>
+      <h1 className='text-[#000000] font-medium lg:font-normal text-4xl'>
         Investors
       </h1>
     </div>
 
     {/* Paragraph INSIDE SAME BLOCK */}
     {openSection === "investors" && (
-      <p className='my-6 font-medium text-md tracking-wide text-[#000000]'>
+      <p className='my-6  text-md tracking-wide text-[#000000]'>
         They use the portal to find refined, verified startups that are already prepared and aligned with their interests. Since we offer investor consultations and pitch improvement support, what they receive is already filtered, focused, and investment-ready.
       </p>
     )}
@@ -50,7 +50,7 @@ const AboutSec5 = () => {
         ? <IoMdArrowRoundDown className='text-white' size={30} />
         : <IoMdArrowRoundForward className='text-white' size={30} />
       }
-      <h1 className='text-white font-medium text-2xl'>
+      <h1 className='text-white font-medium lg:font-normal text-2xl'>
         Investors
       </h1>
     </div>
@@ -76,7 +76,7 @@ const AboutSec5 = () => {
         ? <IoMdArrowRoundDown className='text-white lg:text-[#272626]' size={35} />
         : <IoMdArrowRoundForward className='text-white lg:text-[#272626]' size={35} />
       }
-      <h1 className='font-medium lg:text-4xl text-2xl  text-white lg:text-[#000000]'>
+      <h1 className='font-medium lg:font-normal lg:text-4xl text-2xl  text-white lg:text-[#000000]'>
         Service Professionals
       </h1>
     </div>
@@ -102,7 +102,7 @@ const AboutSec5 = () => {
         ? <IoMdArrowRoundDown className='text-white lg:text-[#272626]' size={35} />
         : <IoMdArrowRoundForward className='text-white lg:text-[#272626]' size={35} />
       }
-      <h1 className='font-medium lg:text-4xl text-2xl text-white lg:text-[#000000]'>
+      <h1 className='font-medium lg:font-normal lg:text-4xl text-2xl text-white lg:text-[#000000]'>
         Channel Partners
       </h1>
     </div>
