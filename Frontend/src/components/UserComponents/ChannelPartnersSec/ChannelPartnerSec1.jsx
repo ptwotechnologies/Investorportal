@@ -38,9 +38,9 @@ const ChannelPartnerSec1 = () => {
   ];
 
   const images = [
-    "/channelpartner1.png",,
+    "/channelpartner1.png",
     "channelpartner2.png",
-    "channelpartner3.png",
+    "channelpartner14.png",
     "channelpartner4.png",
     "channelpartner5.png",
     "channelpartner6.png",
@@ -54,10 +54,10 @@ const ChannelPartnerSec1 = () => {
 
   return (
     <div className=" lg:mb-20 lg:mt-30 mt-4 lg:p-2.5 lg:border border-[#b5b3b3] bg-[#E5E5E5] rounded-4xl ">
-      <div className="lg:border border-[#E5E5E5] lg:p-7 px-2 bg-white rounded-4xl lg:py-25 py-10">
+      <div className="lg:border border-[#E5E5E5] lg:p-7 px-1 bg-white rounded-4xl lg:py-25 py-10">
         <div id="top" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
-            <div className="px-4">
+            <div className="lg:px-4 px-2">
               <h1 className="lg:text-6xl text-4xl font-medium text-[#001032] lg:mb-7 mb-2 mt-6 leading-tight">
                 Register as <br /> channel partner
               </h1>
@@ -92,16 +92,16 @@ const ChannelPartnerSec1 = () => {
               </p>
 
               {/* boxes */}
-              <div className="grid grid-cols-4 gap-3 mt-6 lg:w-[80%] mb-6 lg:mb-0">
+              <div className="grid grid-cols-4 gap-2 lg:gap-3 mt-6 lg:w-[80%] mb-6 lg:mb-0">
                 {images.map((img, i) => (
                   <div
                     key={i}
-                    className="h-20 rounded-md overflow-hidden border p-5 "
+                    className="h-16 lg:h-20 rounded-md overflow-hidden border p-2 lg:p-4 flex items-center justify-center"
                   >
                     <img
                       src={img}
                       alt={`img-${i}`}
-                      className="w-full h-full "
+                      className="max-w-full max-h-full object-contain"
                     />
                   </div>
                 ))}

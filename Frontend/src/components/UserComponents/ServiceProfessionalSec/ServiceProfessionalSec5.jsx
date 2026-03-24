@@ -135,10 +135,10 @@ const ServiceProfessionalSec5 = () => {
         </div>
        </div>
     </div>
-    <div className='shadow-2xl p-7 pt-15 m-2 lg:hidden text-center '>
+    <div className='shadow-2xl p-7 pt-8 m-2 lg:hidden text-center '>
       <h1 className='text-xl font-medium text-[#001032]'>Feels like a dream?</h1>
-      <h1 className='text-md mt-3 text-[#001032]'>Let’s turn it into your everyday work</h1>
-      <Link to="/login"><button className='bg-[#002A30] p-2 lg:p-3 text-white lg:my-8 my-3 mt-8 px-10 rounded-lg text-lg'>Let’s get started 
+      <h1 className='text-md mt-2 text-[#001032]'>Let’s turn it into your everyday work</h1>
+      <Link to="/login"><button className='bg-[#002A30] p-2 lg:p-3 text-white lg:my-8 my-2 mt-6 px-7 rounded-lg text-lg'>Let’s get started 
  </button></Link>
     </div>
    </>

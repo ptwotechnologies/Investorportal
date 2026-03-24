@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const HomeSec2 = () => {
   return (
-    <div className=" mt-12 lg:mt-25 bg-[#001032] lg:bg-[white] rounded-md">
+    <div className=" mt-5 lg:mt-25 bg-[#001032] lg:bg-[white] rounded-md">
       <div className="hidden lg:block">
         <div
         id="top"
@@ -113,7 +113,7 @@ const HomeSec2 = () => {
       >
         <div className="">
           <h1 className="text-5xl font-normal p-10  hidden lg:block ">Who is this portal for?</h1>
-           <h1 className="text-[44px] font-normal px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-10 ">Who is this  portal  for?</h1>
+           <h1 className="text-[44px] font-normal px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-11.5 ">Who is this  portal  for?</h1>
           <div className="hidden lg:block">
             <div className="flex justify-center items-center  mx-20  ">
             <div className=" w-[30%]">
