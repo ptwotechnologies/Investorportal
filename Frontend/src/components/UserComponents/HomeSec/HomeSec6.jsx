@@ -26,7 +26,7 @@ const HomeSec6 = () => {
             How do I start building?
           </h1>
           <p className="text-sm lg:text-lg w-[320px] mx-auto pt-3 ">
-            Easy — pick your profile and Artestor will guide your next step.
+            Easy — pick your profile and Copteno will guide your next step.
           </p>
         </div>
       </div>

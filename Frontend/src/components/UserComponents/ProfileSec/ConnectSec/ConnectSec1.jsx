@@ -7,6 +7,7 @@ import { FaLinkedin } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
 import { FaArrowLeft } from "react-icons/fa";
 import { getDomainsForRole } from "./domain.js";
+import toast, { Toaster } from "react-hot-toast";
 
 const ConnectSec1 = () => {
   const [profiles, setProfiles] = useState([]);
@@ -340,7 +341,7 @@ const ConnectSec1 = () => {
         },
       );
 
-      alert("Connection request sent");
+      toast.success("Connection request sent");
 
       // Get the new connection ID from response
       const newConnectionId = res.data.connection._id;
@@ -355,7 +356,7 @@ const ConnectSec1 = () => {
       );
     } catch (err) {
       console.error(err);
-      alert("Failed to send connection request");
+      toast.error("Failed to send connection request");
     }
   };
 
@@ -382,13 +383,13 @@ const ConnectSec1 = () => {
 
       // Show success message
       if (status === "accepted") {
-        alert("Connection accepted!");
+        toast.success("Connection accepted!");
       } else if (status === "ignored") {
-        alert("Connection ignored");
+        toast.error("Connection ignored");
       }
     } catch (err) {
       console.error(err);
-      alert("Failed to update connection");
+      toast.error("Failed to update connection");
     }
   };
 
@@ -435,7 +436,7 @@ const ConnectSec1 = () => {
     }
 
     if (!connectionId) {
-      alert("Error: Connection ID not found. Please try again.");
+      toast.error("Error: Connection ID not found. Please try again.");
       return;
     }
 
@@ -443,7 +444,7 @@ const ConnectSec1 = () => {
       const token = localStorage.getItem("token"); // ✅ token lena
 
       if (!token) {
-        alert("You are not logged in");
+        toast.error("You are not logged in");
         return;
       }
       const res = await axios.post(
@@ -456,7 +457,7 @@ const ConnectSec1 = () => {
         },
       );
 
-      alert(res.data.message);
+      toast.error(res.data.message);
 
       // UI update
       setProfiles((prev) =>
@@ -475,7 +476,7 @@ const ConnectSec1 = () => {
         "Withdraw failed:",
         err.response?.data?.message || err.message,
       );
-      alert(
+      toast.error(
         "Failed to withdraw request: " +
           (err.response?.data?.message || err.message),
       );
@@ -1399,6 +1400,7 @@ const ConnectSec1 = () => {
           </div>
         </div>
       </div>
+       <Toaster/>
     </div>
   );
 };

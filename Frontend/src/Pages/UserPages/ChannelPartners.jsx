@@ -2,7 +2,7 @@ import ChannelPartnerSec1 from '@/components/UserComponents/ChannelPartnersSec/C
 import ChannelPartnerSec2 from '@/components/UserComponents/ChannelPartnersSec/ChannelPartnerSec2'
 import ChannelPartnerSec3 from '@/components/UserComponents/ChannelPartnersSec/ChannelPartnerSec3'
 import React from 'react'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer';
 
 const ChannelPartners = () => {

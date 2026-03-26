@@ -10,8 +10,8 @@ const AdminSec2 = () => {
     name: "Angela Moss",
     company: "Highnest Studios",
     phone: "+91 8766270884",
-    website: "www.artestor.com",
-    email: "info@artestor.com",
+    website: "www.Copteno.com",
+    email: "info@Copteno.com",
     role: "Founder, CEO",
   });
 

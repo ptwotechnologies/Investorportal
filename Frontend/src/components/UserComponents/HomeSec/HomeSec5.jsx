@@ -9,7 +9,7 @@ const HomeSec5 = () => {
       paragraph:
         "“Helps decode your runway, spotlight where cash burns, and show exactly how to extend it. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash.”",
       lgPara:
-        "Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
+        "Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
       name: "Vivek T ",
       lgname: "Sanjay Kumar",
       company: "Elvehico ",
@@ -18,9 +18,9 @@ const HomeSec5 = () => {
     },
     {
       paragraph:
-        "“With Artestor, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
+        "“With Copteno, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
       lgPara:
-        "With Artestor, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
+        "With Copteno, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
       name: "Vivek T ",
       lgname: "Niharika Sharma",
       company2: "TSAH",
@@ -29,9 +29,9 @@ const HomeSec5 = () => {
     },
     {
       paragraph:
-        "“Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
+        "“Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
       lgPara:
-        "Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
+        "Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
       name: "Vivek T ",
       lgname: "Niharika Sharma",
       company2: "Founder",

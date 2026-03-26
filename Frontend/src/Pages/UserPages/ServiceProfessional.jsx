@@ -9,7 +9,7 @@ import ServiceProfessionalSec7 from '../../components/UserComponents/ServiceProf
 import ServiceProfessionalSec8 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec8';
 import ServiceProfessionalSec10 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec10';
 import ServiceProfessionalSec9 from '../../components/UserComponents/ServiceProfessionalSec/ServiceProfessionalSec9';
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer';
 
 const ServiceProfessional = () => {

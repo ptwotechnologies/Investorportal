@@ -20,13 +20,13 @@ const ServiceProfessionalSec4 = () => {
         color:"#002A30"
      },
      {
-         paragraph:"“Artestor cut our onboarding friction — clear scopes, upfront budgets, and founders who actually know what they want”",
+         paragraph:"“Copteno cut our onboarding friction — clear scopes, upfront budgets, and founders who actually know what they want”",
          name:"Sharanya ",
         company:"Growth Consultant",
          color:"#001032"
      },
      {
-         paragraph:"“Artestor cut our onboarding friction — clear scopes, upfront budgets, and founders who actually know what they want”",
+         paragraph:"Copteno cut our onboarding friction — clear scopes, upfront budgets, and founders who actually know what they want”",
          name:"Sharanya ",
         company:"Growth Consultant",
          color:"#001032"

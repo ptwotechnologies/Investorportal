@@ -9,7 +9,7 @@ const verificationTemplate = (userId, otp) => {
     <div style="font-family: sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; padding: 20px; border-radius: 10px;">
       <h2 style="color: #333; text-align: center;">Email Verification</h2>
       <p>Hello,</p>
-      <p>Thank you for registering with Artestor Investor Portal. Please click the button below to verify your email address:</p>
+      <p>Thank you for registering with Copteno Investor Portal. Please click the button below to verify your email address:</p>
       
       <div style="text-align: center; margin: 30px 0;">
         <a href="${verificationLink}" style="background-color: #001032; color: #white; padding: 12px 30px; border-radius: 5px; text-decoration: none; font-weight: bold; display: inline-block;">
@@ -28,7 +28,7 @@ const verificationTemplate = (userId, otp) => {
       <p>This OTP and link are valid for 10 minutes. If you did not request this, please ignore this email.</p>
       
       <p style="margin-top: 30px; font-size: 12px; color: #888;">
-        This is an automated message from Artestor Investor Portal.
+        This is an automated message from Copteno Investor Portal.
       </p>
     </div>
   `;

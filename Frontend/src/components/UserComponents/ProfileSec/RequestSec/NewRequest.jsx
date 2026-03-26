@@ -3,6 +3,7 @@ import { HiMiniLink } from "react-icons/hi2";
 import { BsSendFill } from "react-icons/bs";
 import { serverUrl } from "@/App";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const raisedRequestOptions = [
   { id: 1, label: "Connect with Incubators" },
@@ -29,7 +30,7 @@ const NewRequest = ({ onCreateRequest }) => {
 
   const handleSend = async () => {
     if (!selectedService || !description.trim()) {
-      alert("Please select a service and enter a description");
+      toast.error("Please select a service and enter a description");
       return;
     }
 
@@ -60,7 +61,7 @@ const NewRequest = ({ onCreateRequest }) => {
       setSelectedRequest(null);
     } catch (err) {
       console.error("Failed to create request:", err);
-      alert("Failed to create request. Please try again.");
+      toast.error("Failed to create request. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -114,6 +115,7 @@ const NewRequest = ({ onCreateRequest }) => {
           </div>
         </div>
       </div>
+      <Toaster/>
     </div>
   );
 };

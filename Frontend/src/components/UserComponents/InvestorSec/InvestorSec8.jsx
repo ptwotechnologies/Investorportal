@@ -35,7 +35,7 @@ const InvestorSec8 = () => {
      
       const divElements = [
         {
-            paragraph:"Artestor helped streamline our funnel. We met founders who were clear, prepared, and genuinely ready for investment talks",
+            paragraph:"Copteno helped streamline our funnel. We met founders who were clear, prepared, and genuinely ready for investment talks",
             name:"Tapan Verma  ",
            company:"Kapinort ventures",
         },

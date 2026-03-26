@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "@/App";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import toast, { Toaster } from "react-hot-toast";
 
 const EmailVerification = () => {
   const navigate = useNavigate();
@@ -88,9 +89,9 @@ const EmailVerification = () => {
     try {
       await axios.post(`${serverUrl}/user/resend-otp`, { userId });
       setTimer(60);
-      alert("Verification code resent to your email.");
+      toast.success("Verification code resent to your email.");
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to resend OTP");
+      toast.error(err.response?.data?.message || "Failed to resend OTP");
     } finally {
       setResending(false);
     }
@@ -143,6 +144,7 @@ const EmailVerification = () => {
           </p>
         </CardFooter>
       </Card>
+      <Toaster/>
     </div>
   );
 };

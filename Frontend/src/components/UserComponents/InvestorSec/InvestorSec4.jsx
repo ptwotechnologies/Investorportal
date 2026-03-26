@@ -14,19 +14,19 @@ const InvestorSec4 = () => {
    
      const divElements = [
        {
-           paragraph:"Artestor streamlines how we review andassess early-stage opportunities. Theplatform filters noise, organizes data, and delivers founder profiles that are actually investor-ready. ",
+           paragraph:"Copteno streamlines how we review andassess early-stage opportunities. Theplatform filters noise, organizes data, and delivers founder profiles that are actually investor-ready. ",
            designation:"Fund Manager,  ",
           company:"Nandini Sharma",
           color:"#002A30"
        },
        {
-           paragraph:"The due diligence clarity here is far better than open networks. Every startup we evaluate arrives structured, verified, and aligned with our investment thesis. Artestor reduces our overhead and makes screening rounds far more efficient",
+           paragraph:"The due diligence clarity here is far better than open networks. Every startup we evaluate arrives structured, verified, and aligned with our investment thesis. Copteno reduces our overhead and makes screening rounds far more efficient",
            designation:"Shruti M,",
           company:" Venture Partner",
            color:"#001032"
        },
        {
-           paragraph:"We rely on Artestor to identify strongfounders earlier. The platform presents traction, financials, and milestones in a format built for investors, not noise. It’s become a reliable source of quality deal flow and long-term opportunities ",
+           paragraph:"We rely on Copteno to identify strongfounders earlier. The platform presents traction, financials, and milestones in a format built for investors, not noise. It’s become a reliable source of quality deal flow and long-term opportunities ",
            designation:"Kalyani P, ",
           company:"Angel Investor",
            color:"#616B80"

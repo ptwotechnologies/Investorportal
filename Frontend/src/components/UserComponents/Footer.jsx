@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Link } from "react-router-dom";
 import { FaXTwitter } from "react-icons/fa6";
 import { CiLinkedin } from "react-icons/ci";
@@ -28,12 +28,12 @@ useEffect(() => {
         {/* Left Section */}
         <div className="max-w-sm">
           {/* Logo */}
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex items-center gap-2 mb-">
             <img src={logo} className="w-50" />
           </div>
 
           {/* Buttons */}
-         <div className="flex gap-3 pt-5">
+         <div className="flex gap-3 pt-5 mb-2">
   {!isLoggedIn ? (
     <>
       <Link to="/login">
@@ -76,8 +76,8 @@ useEffect(() => {
             <div>
               <h4 className=" mb-2">Auxiliaries</h4>
               <ul className="space-y-2 text-gray-600">
-                <Link to="/subscription">
-                  <li className="pb-2">Subscriptions</li>
+                <Link to="/BusinessRefinementProgram">
+                  <li className="pb-2">Business Refinement <br/> Program</li>
                 </Link>
                 <Link to="/profile">
                   <li>Profiles</li>
@@ -145,8 +145,8 @@ useEffect(() => {
 
             {open === "aux" && (
               <ul className="mt-1 space-y-2 text-gray-600">
-                <Link to="/subscription">
-                  <li className="pb-1">Subscriptions</li>
+                <Link to="/BusinessRefinementProgram">
+                  <li className="pb-1">Business Refinement Program</li>
                 </Link>
                 <Link to="/profile">
                   <li>Profiles</li>
@@ -242,7 +242,7 @@ useEffect(() => {
 
       {/* Bottom Bar */}
       <div className="flex  md:flex-row justify-between items-center lg:text-sm  text-[9px] lg:gap-4">
-        <p>&copy; 2026 All Rights Reserved. Artestor Technologies LLP</p>
+        <p>&copy; 2026 All Rights Reserved. Copteno Technologies LLP</p>
 
         {/* Social Icons */}
         <div className="lg:hidden"> 
@@ -271,7 +271,7 @@ useEffect(() => {
           shall not constitute or imply an offer of any kind. Any investment
           opportunities and/or products or services shown here will only be
           completed pursuant to formal offering materials, a letter of intent,
-          and/or any other agreements as determined by Artestor containing full
+          and/or any other agreements as determined by Copteno containing full
           details regarding risks, minimum investment, fees, and expenses of
           such transaction. The terms of any product, service, or particular
           investment opportunity, including size, costs, and other
@@ -279,19 +279,19 @@ useEffect(() => {
           for such product, service or particular investment opportunity and may
           differ materially from those presented in this presentation. Such
           terms are subject to change without notice. For more information on
-          Artestor and its products and services.
+          Copteno and its products and services.
         </p>
         <p className="mb-3">
-          Quotes included in these materials related to Artestor's services
+          Quotes included in these materials related to Copteno's services
           should not be construed in any way as an endorsement of AngelList's
           advice, analysis, or other service rendered to its clients.
         </p>
         <p>
           “Assets on platform” refers to the amount of money being deployed by
-          fund managers who use Artestor’s software, which includes fund
+          fund managers who use Copteno’s software, which includes fund
           administration services. This does not refer to any amount of money
-          being deployed with or managed by Artestor’s affiliated exempt
-          reporting adviser, Artestor Technologies LLP (“Artestor Technologies”)
+          being deployed with or managed by Copteno’s affiliated exempt
+          reporting adviser, Copteno Technologies LLP (“Copteno Technologies”)
         </p>
       </div>
     </footer>

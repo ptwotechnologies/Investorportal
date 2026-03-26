@@ -34,7 +34,7 @@ const profileUpdateTemplate = (changes) => {
         If you did not make these changes, please contact support immediately.
       </p>
       <p style="font-size: 12px; color: #888;">
-        This is an automated message from Artestor Investor Portal.
+        This is an automated message from Copteno Investor Portal.
       </p>
     </div>
   `;

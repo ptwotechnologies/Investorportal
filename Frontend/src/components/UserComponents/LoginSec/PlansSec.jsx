@@ -4,6 +4,7 @@ import { CgAsterisk } from "react-icons/cg";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "@/App";
+import toast, { Toaster } from "react-hot-toast";
 
 const PlansSec = ({ userId }) => {
   const navigate = useNavigate();
@@ -94,7 +95,7 @@ const PlansSec = ({ userId }) => {
   // ⭐ API Call
   const handlePlanSelect = async (amount, planName) => {
     if (!userId) {
-      alert("User ID missing!");
+      toast.error("User ID missing!");
       return;
     }
 
@@ -111,7 +112,7 @@ const PlansSec = ({ userId }) => {
       }
     } catch (error) {
       console.error("Plan API Error:", error);
-      alert(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -280,6 +281,7 @@ const PlansSec = ({ userId }) => {
         </div>
        </div>
       </section>
+      <Toaster/>
     </main>
   );
 };

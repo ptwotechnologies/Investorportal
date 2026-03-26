@@ -8,7 +8,7 @@ import JoinUsSec7 from '@/components/UserComponents/JoinUsSec/JoinUsSec7'
 import JoinUsSec8 from '@/components/UserComponents/JoinUsSec/JoinUsSec8'
 import JoinUsSec9 from '@/components/UserComponents/JoinUsSec/JoinUsSec9'
 import React from 'react'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer'
 
 const JoinUs = () => {

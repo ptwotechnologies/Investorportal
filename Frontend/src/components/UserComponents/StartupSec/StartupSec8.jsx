@@ -37,7 +37,7 @@ const StartupSec8 = () => {
    
      const divElements = [
        {
-           paragraph:"Artestor helped us understand our actual runway, identify blind spots, and present our metrics with confidence",
+           paragraph:"Copteno helped us understand our actual runway, identify blind spots, and present our metrics with confidence",
            name:"Anchal Dogra ",
           company:"Arulyog Welbeing ",
            
@@ -49,7 +49,7 @@ const StartupSec8 = () => {
            
        },
        {
-           paragraph:"Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors",
+           paragraph:"Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors",
             name:"Vivek T ",
            company:"Company Name ",
           

@@ -9,7 +9,7 @@ import SubscriptionSec4 from '@/components/UserComponents/SubscriptionSec/Subscr
 import SubscriptionSec5 from '@/components/UserComponents/SubscriptionSec/SubscriptionSec5'
 
 import SubscriptionSec6 from '@/components/UserComponents/SubscriptionSec/SubscriptionSec6'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import React from 'react'
 import Footer from '@/components/UserComponents/Footer';
 

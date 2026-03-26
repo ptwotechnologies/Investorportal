@@ -2,7 +2,7 @@ import ContactUsSec1 from '@/components/UserComponents/ContactUsSec/ContactUsSec
 import ContactUsSec2 from '@/components/UserComponents/ContactUsSec/ContactUsSec2'
 import ContactUsSec3 from '@/components/UserComponents/ContactUsSec/ContactUsSec3'
 import React from 'react'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer';
 
 const ContactUs = () => {

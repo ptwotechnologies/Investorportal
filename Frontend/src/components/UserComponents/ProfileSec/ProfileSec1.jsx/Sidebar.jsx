@@ -5,11 +5,11 @@ import requestLogo from "/requestlogo.png";
 import connectLogo from "/connectlogo.png";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { PiSignOut } from "react-icons/pi";
-import loginLogo from "/ArtesterLogo2.png";
+import loginLogo from "/coptenologo2.png";
 import { NavLink, useNavigate, useLocation, Link } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { ToastBar, Toaster } from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { HiOutlineTicket } from "react-icons/hi";
@@ -56,7 +56,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const handleConfirmSignOut = () => {
     localStorage.removeItem("token");
     setShowSignoutDialog(false);
-    alert("Signed out!");
+    toast.success("Signed out!");
     navigate("/login");
   };
 
@@ -408,6 +408,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
       )}
+      <Toaster/>
     </div>
   );
 };

@@ -31,13 +31,13 @@ const NavigationDesk = () => {
           <NavigationMenuTrigger className="bg-[#001032] text-white px-7 py-1 rounded-full text-lg  ">Auxiliaries</NavigationMenuTrigger>
           <NavigationMenuContent className="inner-shadow left-[-100px]">
             <ul className="grid w-[800px] h-80 gap-4 shadow-md border rounded-xl p-4">
-              <li className='flex items-start justify-center gap-15 gap-y-20'>
+              <li className='flex items-start justify-center gap-5 gap-y-20'>
                 <NavigationMenuLink asChild >
-                  <div className='w-[30%]'>
-                    <Link to="/subscription" >
-                    <div className="font-medium border border-[#D5D5D5] text-[#5C5C5C] rounded-full p-1 w-fit px-3 hover:bg-[#D5D5D5]">Subscriptions</div>
+                  <div className='w-[40%]'>
+                    <Link to="/BusinessRefinementProgram" >
+                    <div className="font-medium border border-[#D5D5D5] text-[#5C5C5C] rounded-full p-1 w-fit px-3 hover:bg-[#D5D5D5]">Business Refinement Program</div>
                   </Link>
-                  <Link to="/subscription?tab=HR" >
+                  {/* <Link to="/subscription?tab=HR" >
                    <div className="text-[#001032] ml-3 font-medium mt-3 ">
                      HR
                     </div>
@@ -72,7 +72,10 @@ const NavigationDesk = () => {
                    <div className="text-[#001032] ml-3 font-medium">
                     Development
                     </div>
-                  </Link>
+                  </Link> */}
+                  <div className='bg-red-400 h-50 border '>
+h
+                  </div>
                   </div>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild>
@@ -159,7 +162,7 @@ const NavigationDesk = () => {
                     About Us
                     </div>
                     <div className='text-xs text-[#000000] ml-3 w-[80%]'>
-                       Want to know about Artestor’s mission and vision 
+                       Want to know about Copteno’s mission and vision 
                     </div>
                   </Link>
 

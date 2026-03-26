@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import loginLogo from "/ArtesterLogo2.png";
+import loginLogo from "/coptenologo2.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
@@ -19,7 +19,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { IoIosNotifications } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
@@ -63,7 +63,7 @@ const Mobile = () => {
   const handleConfirmSignOut = () => {
     localStorage.removeItem("token");
     setShowSignoutDialog(false);
-    alert("Signed out!"); // Replace with real logout
+    toast.success("Signed out!"); // Replace with real logout
     navigate("/login");
   };
 
@@ -315,6 +315,7 @@ const Mobile = () => {
           </div>
         </div>
       )}
+      <Toaster/>
     </div>
   );
 };

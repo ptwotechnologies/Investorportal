@@ -113,7 +113,7 @@ const StartupSec6 = () => {
             lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg lg:hidden'>
                If your startup fits any of these stages and you want a clearer, faster path to funding and expert support, this portal is built exactly for you.
 </h1>
-                <p className='text-[#001032] mt-3  p-2 lg:text-md text-2xl pb-15 lg:pb-0 hidden lg:block  mx-auto w-190' >And if you already have traction or early advisors on board — that accelerates your growth inside Artestor even more</p>
+                <p className='text-[#001032] mt-3  p-2 lg:text-md text-2xl pb-15 lg:pb-0 hidden lg:block  mx-auto w-190' >And if you already have traction or early advisors on board — that accelerates your growth inside Copteno even more</p>
                 <p className='text-[#001032] mt-3  p-2 lg:text-md text-lg  pb-6 lg:hidden' >And if you’ve been refining your product or speaking with investors already?</p>
          </div>
          <hr className='lg:hidden bg-[#00000033] '/>

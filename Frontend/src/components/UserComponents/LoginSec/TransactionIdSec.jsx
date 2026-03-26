@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "@/App";
+import toast, { Toaster } from "react-hot-toast";
 
 const TransactionIdSec = () => {
   const navigate = useNavigate();
@@ -34,12 +35,12 @@ const TransactionIdSec = () => {
     e.preventDefault();
 
     if (!transactionId) {
-      alert("Please enter Transaction ID or UTR number");
+      toast.error("Please enter Transaction ID or UTR number");
       return;
     }
 
     if (!userId) {
-      alert("User ID missing! Please restart signup.");
+      toast.error("User ID missing! Please restart signup.");
       return;
     }
 
@@ -55,11 +56,11 @@ const TransactionIdSec = () => {
       if (res.status === 200) {
         navigate("/paymentsuccess", { state: { userId } });
       } else {
-        alert("Something went wrong!");
+        toast.error("Something went wrong!");
       }
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Server error");
+      toast.error(err.response?.data?.message || "Server error");
     }
   };
 
@@ -79,7 +80,7 @@ const TransactionIdSec = () => {
             </div>
             <div>
               <p className="  text-lg w-full  text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP
               </p>
             </div>
           </div>
@@ -141,6 +142,7 @@ const TransactionIdSec = () => {
           </div>
         </div>
       </div>
+       <Toaster/>
     </div>
   );
 };

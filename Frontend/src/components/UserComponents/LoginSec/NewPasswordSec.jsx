@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 
@@ -144,6 +144,7 @@ const resetPassword = async (e) => {
           </div>
         </div>
       </div>
+      <Toaster/>
     </div>
   )
 }

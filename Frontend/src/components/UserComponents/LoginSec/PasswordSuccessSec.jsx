@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import paymentSuccess from "/paymentsuccess.png"
 import {

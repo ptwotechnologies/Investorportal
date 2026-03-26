@@ -88,12 +88,12 @@ const AdminSec3 = () => {
                 </div>
                 <div className="h-6 flex items-center">
                   <span className="text-sm text-[#001426] font-medium">
-                    www.artestor.com
+                    www.Copteno.com
                   </span>
                 </div>
                 <div className="h-6 flex items-center">
                   <span className="text-sm text-[#001426] font-medium underline">
-                    info@artestor.com
+                    info@Copteno.com
                   </span>
                 </div>
                 <div className="h-6 flex items-center">

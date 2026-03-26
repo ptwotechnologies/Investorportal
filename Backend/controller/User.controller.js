@@ -58,9 +58,9 @@ export const createUser = async (req, res) => {
     // 6. Send Verification Email
     try {
       await resend.emails.send({
-        from: "Artestor@resend.dev",
+        from: "Copteno@resend.dev",
         to: [email],
-        subject: "Verify Your Email - Artestor Investor Portal",
+        subject: "Verify Your Email - Copteno Investor Portal",
         html: verificationTemplate(pendingUser._id, verificationOtp)
       });
     } catch (emailError) {
@@ -309,7 +309,7 @@ export const forgetPassword = async (req, res) => {
     await user.save();
 
     await resend.emails.send({
-      from: "Artestor@resend.dev",
+      from: "Copteno@resend.dev",
       to: [email],
       subject: "Password Reset OTP",
       html: `
@@ -453,9 +453,9 @@ export const resendVerificationOtp = async (req, res) => {
     await pendingUser.save();
 
     await resend.emails.send({
-      from: "Artestor@resend.dev",
+      from: "Copteno@resend.dev",
       to: [pendingUser.email],
-      subject: "Your New Verification Code - Artestor Investor Portal",
+      subject: "Your New Verification Code - Copteno Investor Portal",
       html: verificationTemplate(pendingUser._id, newOtp)
     });
 

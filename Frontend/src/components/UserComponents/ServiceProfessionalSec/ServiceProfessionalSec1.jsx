@@ -12,7 +12,7 @@ const ServiceProfessionalSec1 = () => {
       <h1 className='hidden lg:block text-5xl lg:text-4xl lg:font-bold font-semibold lg:leading-14 leading-15 tracking-wider lg:w-[80%] '>Grow Your Services by Partnering with </h1>
         <h1 className='hidden lg:block text-5xl lg:text-4xl lg:font-bold font-semibold lg:leading-14 leading-15 tracking-wider lg:w-[90%] ' >India’s Most Trusted Founder Ecosystem</h1>
         <h1 className='lg:hidden text-4xl font-semibold tracking-wider leading-13'>Grow Your Business by Working With India’s Most Serious & Verified Startups</h1>
-        <p className='text-2xl lg:leading-9 tracking-wider lg:w-[80%] font-medium py-7 hidden lg:block text-[#001032]'>Join Artestor to get verified leads, fair terms, and predictable projects</p>
+        <p className='text-2xl lg:leading-9 tracking-wider lg:w-[80%] font-medium py-7 hidden lg:block text-[#001032]'>Join Copteno to get verified leads, fair terms, and predictable projects</p>
         <Link to="/login"><button className='  mt-7 lg:bg-[#001032] lg:text-white bg-white text-[#001032] p-2 lg:p-4 px-6 lg:px-13 rounded-sm text-xl lg:font-medium mb-15 lg:mb-0'>Get Discovered
 </button></Link>
      </div>

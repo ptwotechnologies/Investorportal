@@ -9,7 +9,7 @@ import StartupSec7 from '../../components/UserComponents/StartupSec/StartupSec7'
 import StartupSec8 from '../../components/UserComponents/StartupSec/StartupSec8'
 import StartupSec9 from '../../components/UserComponents/StartupSec/StartupSec9'
 import StartupSec10 from '../../components/UserComponents/StartupSec/StartupSec10'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer'
 
 const Startup = () => {

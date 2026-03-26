@@ -127,7 +127,7 @@ export const updateProfile = async (req, res) => {
     // Send Email Notification if changes occurred
     if (changes.length > 0 && req.user.email) {
         await resend.emails.send({
-          from: "Artestor@resend.dev",
+          from: "Copteno@resend.dev",
           to: [req.user.email],
           subject: "Your Profile Has Been Updated",
           html: profileUpdateTemplate(changes)

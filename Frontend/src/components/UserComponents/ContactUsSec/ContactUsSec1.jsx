@@ -74,7 +74,7 @@ const ContactUsSec1 = () => {
           <div className="md:pr-6 p-3">
             <h1 className="text-[30px] text-[#F9F9F7] md:text-4xl lg:text-5xl font-semibold  tracking-wide leading-10 lg:leading-16 w-[78%]">Connect with our experts</h1>
             <p className="py-3 text-xs leading-5 lg:leading-8 tracking-wider w-[90%] lg:w-[80%] text-[#F9F9F7]">
-              Our experts in Artestor will support you and solve your queries in multiple domains:
+              Our experts in Copteno will support you and solve your queries in multiple domains:
             </p>
 
             <ul className="mt-5 space-y-3">

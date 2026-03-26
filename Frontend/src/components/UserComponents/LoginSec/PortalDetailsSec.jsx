@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Calendar2 from "./Calendar2";
 import { serverUrl } from "@/App";
+import toast, { Toaster } from "react-hot-toast";
 
 const PortalDetailsSec = () => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const PortalDetailsSec = () => {
     const file = e.target.files[0];
     if (!file) return setLogoFile(null);
     if (file.size > MAX_LOGO_SIZE) {
-      alert("File must be less than 10MB");
+      toast.error("File must be less than 10MB");
       e.target.value = "";
       setLogoFile(null);
       return;
@@ -81,7 +82,7 @@ const PortalDetailsSec = () => {
     e.preventDefault();
 
     if (!userId) {
-      alert("User ID missing! Please signup again.");
+      toast.error("User ID missing! Please signup again.");
       return;
     }
 
@@ -92,95 +93,95 @@ const PortalDetailsSec = () => {
         if (serviceType === "Freelancer") {
           // Freelancers: only domain, referral and file are required/optional
           if (domain === "Select Domain" || domain === " Domain") {
-            alert("Please select a domain");
+           toast.error("Please select a domain");
             return;
           }
           if (domain === "Other" && !domainDescription) {
-            alert("Please describe your domain");
+           toast.error("Please describe your domain");
             return;
           }
         } else if (serviceType === "Company") {
           // Companies: require foundedOn and business type (replace LinkedIn)
           if (!foundedOn) {
-            alert("Please select founding date");
+            toast.error("Please select founding date");
             return;
           }
           if (serviceBusinessType === "Select Business Type") {
-            alert("Please select a business type");
+            toast.error("Please select a business type");
             return;
           }
           if (domain === "Select Domain" || domain === " Domain") {
-            alert("Please select a domain");
+           toast.error("Please select a domain");
             return;
           }
           if (domain === "Other" && !domainDescription) {
-            alert("Please describe your domain");
+           toast.error("Please describe your domain");
             return;
           }
         } else {
           // fallback to previous behavior
           if (!foundedOn) {
-            alert("Please select founding date");
+           toast.error("Please select founding date");
             return;
           }
           if (!linkedin) {
-            alert("LinkedIn profile is required");
+           toast.error("LinkedIn profile is required");
             return;
           }
           if (domain === "Select Domain" || domain === " Domain") {
-            alert("Please select a domain");
+           toast.error("Please select a domain");
             return;
           }
           if (domain === "Other" && !domainDescription) {
-            alert("Please describe your domain");
+           toast.error("Please describe your domain");
             return;
           }
         }
       } else if (role === "startup") {
         if (!foundedOn) {
-          alert("Please select founding date");
+         toast.error("Please select founding date");
           return;
         }
         if (startupBusinessType === "Select Business Type") {
-          alert("Please select a business type");
+         toast.error("Please select a business type");
           return;
         }
         if (domain === "Select Domain" || domain === " Domain") {
-          alert("Please select a domain");
+         toast.error("Please select a domain");
           return;
         }
         if (domain === "Other" && !domainDescription) {
-          alert("Please describe your domain");
+         toast.error("Please describe your domain");
           return;
         }
       } else {
         // investor and others keep previous behavior
         if (!foundedOn) {
-          alert("Please select founding date");
+         toast.error("Please select founding date");
           return;
         }
         if (!linkedin) {
-          alert("LinkedIn profile is required");
+         toast.error("LinkedIn profile is required");
           return;
         }
         if (domain === "Select Domain" || domain === " Domain") {
-          alert("Please select a domain");
+          toast.error("Please select a domain");
           return;
         }
         if (domain === "Other" && !domainDescription) {
-          alert("Please describe your domain");
+         toast.error("Please describe your domain");
           return;
         }
       }
 
       if (logoFile && logoFile.size > MAX_LOGO_SIZE) {
-        alert("File must be less than 2MB");
+        toast.error("File must be less than 2MB");
         return;
       }
     } else {
       // Generic required checks for other roles (avoid undefined vars)
       if (!linkedin) {
-        alert("All fields are required!");
+        toast.error("All fields are required!");
         return;
       }
     }
@@ -216,11 +217,11 @@ const PortalDetailsSec = () => {
       if (response.status === 200) {
         navigate("/onboardingplans", { state: { userId } });
       } else {
-        alert("Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
     } catch (error) {
       console.error("Axios Error:", error);
-      alert(error.response?.data?.message || "Server error");
+     toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -238,7 +239,7 @@ const PortalDetailsSec = () => {
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP
               </p>
             </div>
           </div>
@@ -642,6 +643,7 @@ const PortalDetailsSec = () => {
         </div>
 
       </div>
+      <Toaster/>
     </div>
   );
 };

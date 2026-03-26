@@ -9,7 +9,7 @@ import InvestorSec7 from '@/components/UserComponents/InvestorSec/InvestorSec7'
 import InvestorSec8 from '@/components/UserComponents/InvestorSec/InvestorSec8'
 import InvestorSec9 from '@/components/UserComponents/InvestorSec/InvestorSec9'
 import React from 'react'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer'
 
 const Investor = () => {

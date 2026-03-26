@@ -5,7 +5,7 @@ import AboutSec3 from '../../components/UserComponents/AboutSec/AboutSec3'
 import AboutSec4 from '../../components/UserComponents/AboutSec/AboutSec4'
 import AboutSec5 from '../../components/UserComponents/AboutSec/AboutSec5'
 import AboutSec6 from '../../components/UserComponents/AboutSec/AboutSec6'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer'
 
 const About = () => {

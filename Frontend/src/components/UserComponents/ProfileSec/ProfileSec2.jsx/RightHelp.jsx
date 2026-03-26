@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Paperclip, Send } from "lucide-react";
 import axios from "axios";
 import { serverUrl } from "@/App";
+import toast, { Toaster } from "react-hot-toast";
 
 const RightHelp = ({ ticket, onBack, onNewMessage, onTicketClosed }) => {
   const [message, setMessage] = useState("");
@@ -30,7 +31,7 @@ const RightHelp = ({ ticket, onBack, onNewMessage, onTicketClosed }) => {
       setMessage("");
     } catch (err) {
       console.error("Send message error:", err);
-      alert("Failed to send message. Please try again.");
+      toast.error("Failed to send message. Please try again.");
     } finally {
       setSending(false);
     }
@@ -157,6 +158,7 @@ const RightHelp = ({ ticket, onBack, onNewMessage, onTicketClosed }) => {
           </div>
         )}
       </div>
+       <Toaster/>
     </div>
   );
 };

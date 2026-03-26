@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
 
 const SelectPortalSec = () => {
   const [role, setRole] = useState("");
@@ -26,7 +27,7 @@ const SelectPortalSec = () => {
             </div>
             <div>
               <p className="  text-lg w-full  text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Artestor
+                Terms, Privacy Disclosures Cookie Settings © Copteno
                 Technologies LLP
               </p>
             </div>
@@ -174,7 +175,7 @@ const SelectPortalSec = () => {
                     onClick={() => {
                       localStorage.setItem("role", role);
                       if (!role) {
-                        alert("Please select a role");
+                        toast.error("Please select a role");
                         return;
                       }
                        localStorage.setItem("role", role);
@@ -189,6 +190,7 @@ const SelectPortalSec = () => {
           </div>
         </div>
       </div>
+      <Toaster/>
     </div>
   );
 };

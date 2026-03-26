@@ -41,19 +41,19 @@ const ServiceProfessionalSec8 = () => {
           companyName:"Freelancer"
       },
       {
-          paragraph:"We scaled our consulting practice without hiring SDRs —Artestor did the discovery for us",
+          paragraph:"We scaled our consulting practice without hiring SDRs —Copteno did the discovery for us",
           name:"Nandini Jain  ",
           company:"Digital Marketer",
           companyName:"Agency Owner"
       },
       {
-          paragraph:"Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
+          paragraph:"Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
            name:"Nandini Jain  ",
           company:"Digital Marketer",
           companyName:"Agency Owner"
       },
           {
-          paragraph:"Artestor helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
+          paragraph:"Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
            name:"Nandini Jain  ",
           company:"Digital Marketer",
           companyName:"Agency Owner"

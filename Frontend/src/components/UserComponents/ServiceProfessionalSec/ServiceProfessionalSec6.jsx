@@ -105,7 +105,7 @@ const ServiceProfessionalSec6 = () => {
          <div className='lg:text-center mt-10 '>
             <h1 className=' lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 
             lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg hidden lg:block'>
-                If you want a quieter pipeline of genuine leads and fewer low-value calls, Artestor removes the noise and brings you quality</h1>
+                If you want a quieter pipeline of genuine leads and fewer low-value calls,Copteno removes the noise and brings you quality</h1>
                 <h1 className=' lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 
             lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg lg:hidden'>
                 If your work supports founders atany stage — from idea to scale —this ecosystem is built for you

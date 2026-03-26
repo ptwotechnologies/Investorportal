@@ -207,23 +207,23 @@ function NavbarSheet({ textColor }) {
                           <div
                             className="flex justify-between items-center py-2 cursor-pointer"
                             onClick={(e) => {
-                              e.stopPropagation();
-                              toggleNested("subscriptions");
+                              // e.stopPropagation();
+                              toggleNested("Business Refinement Program");
                             }}
                           >
-                            <p className="text-[#001032] font-medium">
-                              Subscriptions
-                            </p>
-                            <IoIosArrowDown
+                            <Link to="/BusinessRefinementProgram" className="text-[#001032] font-medium">
+                              Business Refinement Program
+                            </Link>
+                            {/* <IoIosArrowDown
                               className={`${
-                                openNested === "subscriptions"
+                                openNested === "Business Refinement Program"
                                   ? "rotate-180 duration-300"
                                   : "duration-300"
                               }`}
-                            />
+                            /> */}
                           </div>
 
-                          {openNested === "subscriptions" && (
+                          {/* {openNested === "Business Refinement Program" && (
                             <div className="pl-2 text-[15px] flex flex-col gap-1 mb-2">
                               <Link
                                 to="/subscription?tab=HR"
@@ -269,7 +269,7 @@ function NavbarSheet({ textColor }) {
                                 <p>Development</p>
                               </Link>
                             </div>
-                          )}
+                          )} */}
 
                           {/* Profiles */}
                           <div

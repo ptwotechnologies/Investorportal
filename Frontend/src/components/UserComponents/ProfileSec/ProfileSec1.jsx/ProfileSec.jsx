@@ -22,6 +22,7 @@ import { statesData } from "./StateCity";
 import { IoDiamondOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
+import toast, { Toaster } from "react-hot-toast";
 
 const ProfileSec = () => {
   const MAX_PORTFOLIO_IMAGES = 20;
@@ -120,6 +121,7 @@ const ProfileSec = () => {
       setPortfolioFiles(res.data.portfolio || []);
     } catch (err) {
       console.error(err);
+      
     }
   };
 
@@ -161,7 +163,7 @@ const ProfileSec = () => {
               ],
       });
 
-      alert("Profile updated successfully");
+      toast.success("Profile updated successfully");
     } catch (err) {
       console.error(err);
     }
@@ -169,12 +171,12 @@ const ProfileSec = () => {
 
   const handleUpload = async () => {
   if (!selectedFile) {
-    alert("Please select a file");
+    toast.error("Please select a file");
     return;
   }
 
   if (portfolioFiles.length >= MAX_PORTFOLIO_IMAGES) {
-    alert(`Cannot upload more than ${MAX_PORTFOLIO_IMAGES} images.`);
+    toast.error(`Cannot upload more than ${MAX_PORTFOLIO_IMAGES} images.`);
     setSelectedFile(null);
     return;
   }
@@ -193,11 +195,11 @@ const ProfileSec = () => {
 
     setSelectedFile(null);
     await fetchProfile();
-    alert("Portfolio uploaded successfully!");
+    toast.success("Portfolio uploaded successfully!");
   } catch (err) {
     console.error("Upload failed:", err);
     console.error("Error details:", err.response?.data);
-    alert("Upload failed: " + (err.response?.data?.message || err.message));
+    toast.error("Upload failed: " + (err.response?.data?.message || err.message));
   }
 };
 
@@ -264,7 +266,7 @@ const ProfileSec = () => {
       setProfile((prev) => ({ ...prev, profilePhoto: null }));
     } catch (err) {
       console.error(err);
-      alert("Profile photo delete failed");
+      toast.error("Profile photo delete failed");
     }
   };
 
@@ -281,7 +283,7 @@ const ProfileSec = () => {
       setProfile((prev) => ({ ...prev, coverImage: null }));
     } catch (err) {
       console.error(err);
-      alert("Cover photo delete failed");
+      toast.error("Cover photo delete failed");
     }
   };
 
@@ -340,7 +342,7 @@ const ProfileSec = () => {
     if (!file) return;
 
     if (portfolioFiles.length >= MAX_PORTFOLIO_IMAGES) {
-      alert(`You can upload maximum ${MAX_PORTFOLIO_IMAGES} images.`);
+      toast.error(`You can upload maximum ${MAX_PORTFOLIO_IMAGES} images.`);
       return;
     }
 
@@ -1589,7 +1591,7 @@ onClick={() => {
                     fetchProfile(); // agar tumhare state me update nahi ho raha
                   } catch (err) {
                     console.error("Crop save failed:", err);
-                    alert("Failed to save cropped image");
+                    toast.error("Failed to save cropped image");
                   }
                 }}
               >
@@ -1881,6 +1883,7 @@ onClick={() => {
           </div>
         </div>
       )}
+       <Toaster/>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -44,7 +44,7 @@ const LogicSec1 = () => {
       if (error.response && error.response.data) {
         // Show short toast for incomplete signup/payment to match desired UX
         if (error.response.status === 403 && /complete all signup steps/i.test(error.response.data.message)) {
-          toast.error("plz complete all steps");
+          toast("plz complete all steps");
         } else {
           toast.error(error.response.data.message);
         }
@@ -67,7 +67,7 @@ const LogicSec1 = () => {
           <p className=" text-[#001032] text-xl   ">resources and investor connect</p>
           </div>
           <div >
-            <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP</p>
+            <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP</p>
           </div>
          </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import toast, { Toaster } from "react-hot-toast";
 
 const interests = [
   {
@@ -25,7 +26,7 @@ const interests = [
 
 
 
-const ContactForm = () => {
+const ContactForm = () => { 
 
     const [selected, setSelected] = useState("startup")
 
@@ -35,7 +36,7 @@ const ContactForm = () => {
     const payload = Object.fromEntries(formData.entries())
     // You can replace this with your submission logic or API route
     console.log("[v0] Contact form payload:", { ...payload, interest: selected })
-    alert("Form submitted! Check console for payload.")
+    toast.success("Form submitted! Check console for payload.")
   }
 
   return (
@@ -153,6 +154,7 @@ const ContactForm = () => {
         Please note that this is not an application to seek funding or other services for a new venture or business. By
         clicking Get Started you agree to Arbostar’s Privacy Policy.
       </p>
+       <Toaster/>
     </form>
   )
 }

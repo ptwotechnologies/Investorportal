@@ -14,13 +14,13 @@ const StartupSec4 = () => {
   
     const divElements = [
       {
-          paragraph:"Artestor turned our scattershot outreach into a clear fundraising path.We tightened our story, found the right leads, and closed our first term sheet — faster than we expected.",
+          paragraph:"Copteno turned our scattershot outreach into a clear fundraising path.We tightened our story, found the right leads, and closed our first term sheet — faster than we expected.",
           designation:"Niharika Sharma, Cofounder",
          company:"Elvehico",
          color:"#002A30"
       },
       {
-          paragraph:"Before Artestor we pitched everywhere and got nowhere. Here we met investors who actually understood our metrics and moved the conversation forward",
+          paragraph:"Before Copteno we pitched everywhere and got nowhere. Here we met investors who actually understood our metrics and moved the conversation forward",
           designation:"Shravani, Co-founder ",
          company:"Smriti Adventures",
           color:"#001032"

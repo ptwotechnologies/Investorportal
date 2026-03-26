@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import qrImg from "/qr.jpg";
 import {
@@ -14,7 +14,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 // Provide a load script utility
 const loadScript = (src) => {
@@ -83,7 +83,7 @@ const ScannerSec = () => {
         key: result.data.key_id, // Safely fetching Key ID from the backend API directly
         amount: amount.toString(),
         currency: currency,
-        name: "Artestor Technologies",
+        name: "Copteno Technologies",
         description: "Test Transaction",
         image: logo, // Use our logo
         order_id: order_id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -119,7 +119,7 @@ const ScannerSec = () => {
           contact: "9999999999",
         },
         notes: {
-          address: "Artestor Office",
+          address: "Copteno Office",
         },
         theme: {
           color: "#001032",
@@ -154,7 +154,7 @@ const ScannerSec = () => {
               <p className=" text-#001032] text-xl   ">resources and investor connect</p>
             </div>
             <div>
-              <p className="  text-lg w-full  text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP</p>
+              <p className="  text-lg w-full  text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP</p>
             </div>
           </div>
         </div>
@@ -169,7 +169,7 @@ const ScannerSec = () => {
                   Secure Onboarding Payment
                 </CardDescription>
 
-               <CardDescription className=" mb-1 text-[#001032] text-sm lg:text-lg lg:text-sm lg:w-[47%] w-[88%] mx-auto mt-3 lg:mt-0 ">
+               <CardDescription className=" mb-1 text-[#001032] text-sm lg:text-sm lg:w-[47%] w-[88%] mx-auto mt-3 lg:mt-0 ">
                   You are completing your onboarding for: [{displayPlanName}] – ₹{displayAmount?.toLocaleString()}/year
                 </CardDescription>
                 <CardAction></CardAction>
@@ -194,6 +194,7 @@ const ScannerSec = () => {
           </div>
         </div>
       </div>
+      <Toaster/>
     </div>
   );
 };

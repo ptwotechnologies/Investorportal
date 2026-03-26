@@ -3,7 +3,7 @@ import PricingSec2 from '@/components/UserComponents/PricingSec/PricingSec2'
 import PricingSec3 from '@/components/UserComponents/PricingSec/PricingSec3'
 import PricingSec4 from '@/components/UserComponents/PricingSec/PricingSec4'
 import React from 'react'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer'
 
 const Pricing = () => {

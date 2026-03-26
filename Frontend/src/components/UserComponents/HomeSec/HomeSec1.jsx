@@ -24,7 +24,7 @@ const HomeSec1 = () => {
             </h1>
 
             <p className="w-[89%] md:w-[68%] mt-3 lg:text-xl text-[#FFFFFFCC] lg:text-[#001032B5] leading-9 tracking-wide  font-light lg:font-normal">
-              Access curated investors, verified experts, and essential growth tools — all connected seamlessly inside Artestor 
+              Access curated investors, verified experts, and essential growth tools — all connected seamlessly inside Copteno
             </p>
 
            <Link to="/login"> <button className="lg:mt-11 mt-8 lg:bg-[#001032] bg-white text-[#12355C] lg:text-white  lg:p-4 p-3 lg:px-17 px-8 text-xl rounded-sm">
@@ -86,16 +86,16 @@ const HomeSec1 = () => {
           <div id='phone' className='lg:hidden text-white flex items-center gap-3  overflow-x-scroll  scrollbar-hide '>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
-                 <p className='p-3 h-25 text-sm font-light w-full'>Investors are already discovering founders like you</p>
+                 <p className='py-3 h-25 text-sm font-light w-full'>Investors are already discovering founders like you</p>
                  
               </div>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
-                 <p className='p-3 h-25 text-sm font-light w-full'>Access expert-led services at startup-first pricing</p>
+                 <p className='py-3 h-25 text-sm font-light w-full'>Access expert-led services at startup-first pricing</p>
               </div>
               <div>
                  <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
-                 <p className='p-3 h-25 text-sm font-light w-full'>Get free advisory from mentors and venture experts</p>
+                 <p className='py-3 h-25 text-sm font-light w-full'>Get free advisory from mentors and venture experts</p>
               </div>
           </div>
         </div>

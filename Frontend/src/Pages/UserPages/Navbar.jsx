@@ -1,7 +1,7 @@
 // import React from 'react';
 // import { Link, useLocation } from 'react-router-dom';
-// import logoDark from '/ArtesterLogo2.png';
-// import logoLight from '/ArtesterLogo1.png';
+// import logoDark from '/coptenologo2.png';
+// import logoLight from '/coptenologo1.png';
 // import NavbarSheet from '../../components/UserComponents/NavbarSec/NavbarSheet';
 // import NavigationDesk from '@/components/UserComponents/NavbarSec/NavigationDesk';
 
@@ -70,8 +70,8 @@
 
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import logoDark from '/ArtesterLogo2.png';
-import logoLight from '/ArtesterLogo1.png';
+import logoDark from '/coptenologo2.png';
+import logoLight from '/coptenologo1.png';
 import NavbarSheet from '../../components/UserComponents/NavbarSec/NavbarSheet';
 import NavigationDesk from '@/components/UserComponents/NavbarSec/NavigationDesk';
 

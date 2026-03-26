@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { serverUrl } from "@/App";
+import toast, { Toaster } from "react-hot-toast";
 
 const RegisterPortalSec = () => {
   const location = useLocation();
@@ -66,31 +67,31 @@ const [phoneVerified, setPhoneVerified] = useState(false);
     e.preventDefault();
 
     if (!phoneVerified) {
-      alert("Please verify your phone number first.");
+      toast.error("Please verify your phone number first.");
       return;
     }
 
     if (!role) {
-      alert("Role not found. Please go back and select a role.");
+      toast.error("Role not found. Please go back and select a role.");
       return;
     }
 
     // Validate passwords match
     if (password !== confirmPassword) {
-      alert("Passwords do not match. Please try again.");
+      toast.error("Passwords do not match. Please try again.");
       return;
     }
 
     // Validate password length
     if (password.length < 6) {
-      alert("Password must be at least 6 characters long.");
+      toast.error("Password must be at least 6 characters long.");
       return;
     }
 
     // Role-specific validations
     if (role === "investor") {
       if (businessType === "Venture Firm" && !firmName) {
-        alert("Please enter your firm name");
+        toast.error("Please enter your firm name");
         return;
       }
       
@@ -98,7 +99,7 @@ const [phoneVerified, setPhoneVerified] = useState(false);
 
     if (role === "service_professional") {
       if (businessType === "Company" && !companyName) {
-        alert("Please enter your company name");
+        toast.error("Please enter your company name");
         return;
       }
      
@@ -106,11 +107,11 @@ const [phoneVerified, setPhoneVerified] = useState(false);
 
     if (role === "startup") {
       if (!companyName) {
-        alert("Please enter your company name");
+        toast.error("Please enter your company name");
         return;
       }
       if (!website) {
-        alert("Please enter a website");
+      toast.error("Please enter a website");
         return;
       }
     }
@@ -149,11 +150,11 @@ const [phoneVerified, setPhoneVerified] = useState(false);
         });
       } else {
         console.error("Unexpected response:", response);
-        alert("Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
     } catch (error) {
       console.error("Axios Error: ", error);
-      alert(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -164,11 +165,11 @@ const [phoneVerified, setPhoneVerified] = useState(false);
     await sendOtp(phoneNumber);
 
     setOtpSent(true);
-    alert("OTP sent successfully");
+    toast.success("OTP sent successfully");
 
   } catch (error) {
     console.error(error);
-    alert("Failed to send OTP");
+    toast.error("Failed to send OTP");
   }
 };
 
@@ -181,11 +182,11 @@ const handleVerifyOtp = async () => {
 
     setPhoneVerified(true);
 
-    alert("Phone number verified");
+    toast.success("Phone number verified");
 
   } catch (error) {
     console.error(error);
-    alert("Invalid OTP");
+    toast.error("Invalid OTP");
   }
 };
 
@@ -205,7 +206,7 @@ const handleVerifyOtp = async () => {
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP
               </p>
             </div>
           </div>
@@ -474,6 +475,7 @@ const handleVerifyOtp = async () => {
           </div>
         </div>
       </div>
+      <Toaster/>
     </div>
   );
 };

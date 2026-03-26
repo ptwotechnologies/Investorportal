@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import { IoIosArrowRoundForward } from "react-icons/io";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -35,7 +35,7 @@ const userId = location.state?.userId || localStorage.getItem("userId");
                   <p className=" text-[#001032] text-xl   ">resources and investor connect</p>
                   </div>
                   <div >
-                    <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © Artestor Technologies LLP</p>
+                    <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP</p>
                   </div>
                  </div>
                 </div>

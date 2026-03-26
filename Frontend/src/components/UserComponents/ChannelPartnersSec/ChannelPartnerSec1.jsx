@@ -63,7 +63,7 @@ const ChannelPartnerSec1 = () => {
               </h1>
 
               <p className="text-[#001032] lg:mb-7 mb-5 lg:text-2xl lg:w-[80%]  text-md leading-6">
-                Our experts in Artestor will support you and solve your queries
+                Our experts in Copteno will support you and solve your queries
                 in multiple domains:
               </p>
 
@@ -192,7 +192,7 @@ const ChannelPartnerSec1 = () => {
               <p className="lg:text-[16px] text-[14px] text-[#1D2A29CC] ">
                 Please note that this is an application to seek funding or other
                 services for a new venture or business. By clicking "Get
-                Started" you agree to Artestor’s Privacy Policy
+                Started" you agree to Copteno’s Privacy Policy
               </p>
             </div>
           </div>

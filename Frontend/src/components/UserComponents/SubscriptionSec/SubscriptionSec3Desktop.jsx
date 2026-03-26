@@ -7,7 +7,7 @@ const SubscriptionSec3Desktop = () => {
      <div className='px-14 my-10 '>
       
       <div>
-        <h1 className='text-5xl font-medium mb-15 '>Major players in Artestor ecosystem</h1>
+        <h1 className='text-5xl font-medium mb-15 '>Major players in Copteno ecosystem</h1>
 
         <div className='grid grid-cols-5 gap-x-30  gap-y-6 overflow-x-scroll snap-x snap-mandatory scrollbar-hide text-white'>
           <div className='bg-[#001032] h-20 w-70 flex items-start gap-3 justify-between rounded-2xl'>

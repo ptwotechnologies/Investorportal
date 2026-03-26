@@ -7,7 +7,7 @@ import HomeSec5 from '../../components/UserComponents/HomeSec/HomeSec5'
 import HomeSec6 from '../../components/UserComponents/HomeSec/HomeSec6'
 import HomeSec7 from '../../components/UserComponents/HomeSec/HomeSec7'
 import HomeSec8 from '../../components/UserComponents/HomeSec/HomeSec8'
-import logo from "/ArtesterLogo2.png";
+import logo from "/coptenologo2.png";
 import Footer from '@/components/UserComponents/Footer'
 
 const Home = () => {
