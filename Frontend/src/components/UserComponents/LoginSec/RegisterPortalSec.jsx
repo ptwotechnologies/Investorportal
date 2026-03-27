@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
@@ -62,6 +62,19 @@ const [phoneVerified, setPhoneVerified] = useState(false);
   const tabs = role === "service_professional" ? serviceTabs.map((t)=>({id:t,label:t})) : investorTabs.map((t) => ({ id: t, label: t }));
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    return () => {
+      if (window.recaptchaVerifier) {
+        try {
+          window.recaptchaVerifier.clear();
+          window.recaptchaVerifier = null;
+        } catch (error) {
+          console.error("Cleanup error:", error);
+        }
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -159,19 +172,31 @@ const [phoneVerified, setPhoneVerified] = useState(false);
   };
 
   const handleSendOtp = async () => {
-  try {
-    const phoneNumber = "+91" + mobile; // India code
+    try {
+      // Remove all non-digit characters
+      let cleanMobile = mobile.replace(/\D/g, "");
 
-    await sendOtp(phoneNumber);
+      // If user typed 91 at the start of a 12-digit number, treat it as the country code
+      if (cleanMobile.length === 12 && cleanMobile.startsWith("91")) {
+        cleanMobile = cleanMobile.substring(2);
+      }
 
-    setOtpSent(true);
-    toast.success("OTP sent successfully");
+      // Basic validation: must be a 10-digit number
+      if (cleanMobile.length !== 10) {
+        toast.error("Please enter a valid 10-digit mobile number.");
+        return;
+      }
 
-  } catch (error) {
-    console.error(error);
-    toast.error("Failed to send OTP");
-  }
-};
+      const phoneNumber = "+91" + cleanMobile;
+
+      await sendOtp(phoneNumber);
+      setOtpSent(true);
+      toast.success("OTP sent successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to send OTP. Please try again.");
+    }
+  };
 
 const handleVerifyOtp = async () => {
   try {
@@ -206,7 +231,7 @@ const handleVerifyOtp = async () => {
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.
               </p>
             </div>
           </div>
@@ -296,7 +321,8 @@ const handleVerifyOtp = async () => {
                       </Button>
                     </div>
 
-                    <div id="recaptcha-container" className="hidden"></div>
+                    {/* Recaptcha Container - Must be in the DOM and visible for the badge */}
+                    <div id="recaptcha-container"></div>
 
                     {otpSent && !phoneVerified && (
                       <div className="flex flex-col items-center gap-3 p-2 border border-[#0010321A] rounded-md">

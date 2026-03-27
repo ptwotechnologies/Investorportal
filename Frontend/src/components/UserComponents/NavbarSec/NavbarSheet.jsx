@@ -29,7 +29,9 @@ function NavbarSheet({ textColor }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profile, setProfile] = useState(null);
   const [openProfileMenu, setOpenProfileMenu] = useState(false);
+  const [openNotificationMenu, setOpenNotificationMenu] = useState(false);
   const profileRef = useRef(null);
+  const notificationRef = useRef(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -51,6 +53,25 @@ function NavbarSheet({ textColor }) {
     };
 
     fetchProfile();
+
+    const handleClickOutside = (event) => {
+      const isBellClick = event.target.closest(".bell-icon");
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target) &&
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target) &&
+        !isBellClick
+      ) {
+        setOpenProfileMenu(false);
+        setOpenNotificationMenu(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const toggleTopSection = (sectionName) => {
@@ -75,7 +96,7 @@ function NavbarSheet({ textColor }) {
   };
 
   return (
-    <div className="text-[#001032]">
+    <div className="text-[#001032] relative">
       {/* Desktop Sign In / Sign Up */}
       <div className="hidden lg:block text-lg relative" ref={profileRef}>
         {!isLoggedIn ? (
@@ -93,13 +114,25 @@ function NavbarSheet({ textColor }) {
           <>
             {/* Profile Circle */}
             <div className="flex items-center justify-between  cursor-pointer   px-3 py-1 rounded-full bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)]">
-               <IoNotificationsOutline size={25} className="text-[#001032]" />
+               <IoNotificationsOutline 
+                 size={25} 
+                 className=" ml-1 text-gray-500 cursor-pointer bell-icon" 
+                 onClick={(e) => {
+                   e.stopPropagation();
+                   setOpenNotificationMenu(!openNotificationMenu);
+                   setOpenProfileMenu(false);
+                 }}
+               />
+                <div className="w-0.2 h-6 border mr-1.5 ml-2"></div>
               <div className="flex items-center justify-between  cursor-pointer   px-2 py-1 rounded-sm">
               {/* My Account Button */}
 
               
               <button
-                onClick={() => setOpenProfileMenu(!openProfileMenu)}
+                onClick={() => {
+                  setOpenProfileMenu(!openProfileMenu);
+                  setOpenNotificationMenu(false);
+                }}
                 className=""
               >
                 Dashboard
@@ -156,20 +189,33 @@ function NavbarSheet({ textColor }) {
         </div>
       )}
 
+      {openNotificationMenu && (
+        <div ref={notificationRef} className="absolute right-0 lg:right-40 lg:mt-3 mt-12 w-64 bg-white rounded-xl shadow-lg border z-50 p-4">
+          <p className="text-sm text-gray-500 text-center">Notification not found</p>
+        </div>
+      )}
+
       <div className="lg:hidden">
         <Sheet open={openSheet} onOpenChange={setOpenSheet} >
-           <div className={isLoggedIn ? "flex justify-center items-center gap-2 bg-white rounded-full py-2 px-2.5 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)]" : "flex justify-center items-center"}>
+           <div className={isLoggedIn ? "flex justify-center items-center gap-2 bg-white rounded-full py-1 px-2 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)]" : "flex justify-center items-center"}>
             {isLoggedIn && (
               <>
-                <IoNotificationsOutline size={20} className="text-[#12355C]"  />
+                <IoNotificationsOutline 
+                  size={18} 
+                  className="text-[#12355C] cursor-pointer bell-icon" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setOpenNotificationMenu(!openNotificationMenu);
+                  }}
+                />
                 <div className="w-0.2 h-6 border "></div>
               </>
             )}
           <SheetTrigger onClick={() => setOpenSheet(!openSheet)}>
             {openSheet ? (
-              <IoIosClose size={25} className={isLoggedIn ? "text-[#12355C]" : (textColor || "text-[#12355C]")} />
+              <IoIosClose size={25} className={isLoggedIn ? "text-[#12355C] ml-1" : (textColor || "text-[#12355C]")} />
             ) : (
-              <RxHamburgerMenu size={25} className={isLoggedIn ? "text-[#12355C]" : (textColor || "text-[#12355C]")} />
+              <RxHamburgerMenu size={18} className={isLoggedIn ? "text-[#12355C] mr-1" : (textColor || "text-[#12355C]")} />
             )}
           </SheetTrigger>
            </div>
@@ -187,7 +233,7 @@ function NavbarSheet({ textColor }) {
                       onClick={() => toggleTopSection("aux")}
                     >
                       <div className="flex justify-between items-center">
-                        <p className="text-[#001032] font-medium">
+                        <p className="text-[#001032] ">
                           Auxiliaries
                         </p>
                         <div className="bg-[#001032] rounded-lg text-white px-2 py-0.5">
@@ -204,14 +250,59 @@ function NavbarSheet({ textColor }) {
                       {openTopSection === "aux" && (
                         <div className="px-2 py-4 rounded-md">
                           {/* Subscriptions */}
+                         
+
+                          {/* Profiles */}
                           <div
+                            className="flex justify-between items-center py-2 cursor-pointer"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleNested("profiles");
+                            }}
+                          >
+                            <p className="text-[#001032] text-[17px]">
+                              Profiles
+                            </p>
+                            <IoIosArrowDown
+                              className={`${
+                                openNested === "profiles"
+                                  ? "rotate-180 duration-300"
+                                  : "duration-300"
+                              }`}
+                            />
+                          </div>
+
+                          {openNested === "profiles" && (
+                            <div className="pl- mt-2 flex flex-col gap-3 text-[15px]">
+                              <Link
+                                to="/startup"
+                                onClick={() => setOpenSheet(false)}
+                              >
+                                <p>Startup</p>
+                              </Link>
+                              <Link
+                                to="/investor"
+                                onClick={() => setOpenSheet(false)}
+                              >
+                                <p>Investors</p>
+                              </Link>
+                              <Link
+                                to="/serviceprofessional"
+                                onClick={() => setOpenSheet(false)}
+                              >
+                                <p>Service Professionals</p>
+                              </Link>
+                            </div>
+                          )}
+
+                           <div
                             className="flex justify-between items-center py-2 cursor-pointer"
                             onClick={(e) => {
                               // e.stopPropagation();
                               toggleNested("Business Refinement Program");
                             }}
                           >
-                            <Link to="/BusinessRefinementProgram" className="text-[#001032] font-medium">
+                            <Link to="/BusinessRefinementProgram" className="text-[#001032] text-[17px]">
                               Business Refinement Program
                             </Link>
                             {/* <IoIosArrowDown
@@ -271,48 +362,7 @@ function NavbarSheet({ textColor }) {
                             </div>
                           )} */}
 
-                          {/* Profiles */}
-                          <div
-                            className="flex justify-between items-center py-2 cursor-pointer"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleNested("profiles");
-                            }}
-                          >
-                            <p className="text-[#001032] font-medium">
-                              Profiles
-                            </p>
-                            <IoIosArrowDown
-                              className={`${
-                                openNested === "profiles"
-                                  ? "rotate-180 duration-300"
-                                  : "duration-300"
-                              }`}
-                            />
-                          </div>
 
-                          {openNested === "profiles" && (
-                            <div className="pl-4 mt-2 flex flex-col gap-3 text-[15px]">
-                              <Link
-                                to="/startup"
-                                onClick={() => setOpenSheet(false)}
-                              >
-                                <p>Startup</p>
-                              </Link>
-                              <Link
-                                to="/investor"
-                                onClick={() => setOpenSheet(false)}
-                              >
-                                <p>Investors</p>
-                              </Link>
-                              <Link
-                                to="/serviceprofessional"
-                                onClick={() => setOpenSheet(false)}
-                              >
-                                <p>Service Professionals</p>
-                              </Link>
-                            </div>
-                          )}
                         </div>
                       )}
                     </li>
@@ -321,7 +371,7 @@ function NavbarSheet({ textColor }) {
 
                     {/* Pricing  */}
                     <Link to="/pricing" onClick={() => setOpenSheet(false)}>
-                      <li className="p-3 text-[#001032] font-medium">
+                      <li className="p-3 text-[#001032] ">
                         Pricing
                       </li>
                     </Link>
@@ -334,7 +384,7 @@ function NavbarSheet({ textColor }) {
                       onClick={() => toggleTopSection("resources")}
                     >
                       <div className="flex justify-between items-center">
-                        <p className="text-[#001032] font-medium">Resources</p>
+                        <p className="text-[#001032] ">Resources</p>
                         <div className="bg-[#001032] rounded-lg text-white px-2 py-0.5">
                           <IoIosArrowDown
                             className={`${
@@ -347,7 +397,7 @@ function NavbarSheet({ textColor }) {
                       </div>
 
                       {openTopSection === "resources" && (
-                        <div className="py-4 px-2 rounded-md flex flex-col gap-3">
+                        <div className="py-4 px-2 rounded-md flex flex-col gap-3 text-[17px]">
                           <Link to="/about" onClick={() => setOpenSheet(false)}>
                             <p>About Us</p>
                           </Link>
@@ -378,8 +428,9 @@ function NavbarSheet({ textColor }) {
                       <p className="text-[10px] mt-1">
                         Join our ecosystem of 4 portals into one
                       </p>
-                      <h1 className="text-sm font-medium">Join us!</h1>
+                     
                     </div>
+                     <h1 className="text-sm relative left-43 top-11">Join us!</h1>
 
                     <div className="flex items-center justify-between mt-4">
                       <div className="grid grid-cols-2 place-items-center gap-1 gap-x-6">
@@ -398,7 +449,7 @@ function NavbarSheet({ textColor }) {
                       </div>
 
                       <Link to="/joinus" onClick={() => setOpenSheet(false)}>
-                        <button className="bg-[#001032] text-white rounded-md px-3 py-1 text-xs mt-14 mr-1">
+                        <button className="bg-[#001032] text-white rounded-md px-3 py-1 text-xs mt-13 mr-1">
                           Explore
                         </button>
                       </Link>

@@ -29,7 +29,7 @@ useEffect(() => {
         <div className="max-w-sm">
           {/* Logo */}
           <div className="flex items-center gap-2 mb-">
-            <img src={logo} className="w-50" />
+            <img src={logo} className="w-40" />
           </div>
 
           {/* Buttons */}
@@ -242,7 +242,7 @@ useEffect(() => {
 
       {/* Bottom Bar */}
       <div className="flex  md:flex-row justify-between items-center lg:text-sm  text-[9px] lg:gap-4">
-        <p>&copy; 2026 All Rights Reserved. Copteno Technologies LLP</p>
+        <p>&copy; 2026 All Rights Reserved. Copteno Technologies Pvt. Ltd.</p>
 
         {/* Social Icons */}
         <div className="lg:hidden"> 
@@ -283,7 +283,7 @@ useEffect(() => {
         </p>
         <p className="mb-3">
           Quotes included in these materials related to Copteno's services
-          should not be construed in any way as an endorsement of AngelList's
+          should not be construed in any way as an endorsement of Copteno's
           advice, analysis, or other service rendered to its clients.
         </p>
         <p>
@@ -291,7 +291,7 @@ useEffect(() => {
           fund managers who use Copteno’s software, which includes fund
           administration services. This does not refer to any amount of money
           being deployed with or managed by Copteno’s affiliated exempt
-          reporting adviser, Copteno Technologies LLP (“Copteno Technologies”)
+          reporting adviser, Copteno Technologies Pvt. Ltd. (“Copteno Technologies”)
         </p>
       </div>
     </footer>

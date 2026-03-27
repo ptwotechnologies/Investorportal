@@ -98,17 +98,17 @@ const Mobile = () => {
       <div className="flex items-center justify-between bg-white p-2 py-3">
         <div>
           <Link to="/dashboard">
-            <img src={loginLogo} alt="logo" className="w-30" />
+            <img src={loginLogo} alt="logo" className="w-30 ml-1" />
           </Link>
         </div>
 
-        <div className="flex items-center gap-2  rounded-full py-2 px-2 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] mr-2">
-          <IoNotificationsOutline size={20} onClick={handleNotificationClick} className="text-gray-500 ml-1" />
-          <div className="w-0.2 h-6 border"></div>
+        <div className="flex items-center   rounded-full py-1 px-2 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] mr-2">
+          <IoNotificationsOutline size={18} onClick={handleNotificationClick} className="text-gray-500 ml-1" />
+          <div className="w-0.2 h-6 border mx-1"></div>
           <Sheet>
             <SheetTrigger asChild>
-              <div className="flex items-center gap-5">
-                <RxHamburgerMenu size={20} className="text-[#001426] ml-0.5" />
+              <div className="flex items-center ">
+                <RxHamburgerMenu size={18} className="text-[#001426] mx-1 " />
               </div>
             </SheetTrigger>
 

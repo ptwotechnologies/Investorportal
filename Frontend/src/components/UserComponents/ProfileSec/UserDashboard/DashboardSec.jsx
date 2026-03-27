@@ -72,7 +72,7 @@ const DashboardSec = () => {
           className="flex justify-between items-center  border-2 border-[#D9D9D9]  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-xl bg-white lg:px-5 px-3  mx-2 py-2  lg:p-2"
         >
           <div >
-            <p className="font-semibold text-[#001032] text-sm lg:text-[16px]">
+            <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">
               Welcome, {profile?.companyName || profile?.name || "User"}!
             </p>
           </div>

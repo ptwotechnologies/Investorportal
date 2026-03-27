@@ -26,9 +26,9 @@ const StartupSec4 = () => {
           color:"#001032"
       },
       {
-          paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. AngelList handles all overhead and back-office services, ”",
+          paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. Copteno Technologies handles all overhead and back-office services, ”",
           designation:"Designation ",
-         company:"Company.",
+         company:" tefo.RE",
           color:"#616B80"
       }, 
           
@@ -46,7 +46,7 @@ const StartupSec4 = () => {
            <div key={index} className="w-[38%] h-auto  shrink-0 snap-center  p-4  mx-2 text-white  ">
             <div className='flex flex-row  justify-center items-start w-full  gap-10  border border-[#00103280] 
             rounded-2xl shadow-lg' style={{backgroundColor: item.color}}>
-              <div className='px-5'>
+              <div className='px-5 flex flex-col justify-between'>
                 <p className=' text-lg leading-8 tracking-wider pb-5 pt-6 '>{item.paragraph}</p>
               <p className='text-lg pt-5 '>{item.name}</p>
                  <p className='text-lg  pb-3 '>{item.company}</p>

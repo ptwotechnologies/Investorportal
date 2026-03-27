@@ -47,11 +47,6 @@ const HomeSec8 = () => {
   ];
 
   const faqs2 = [
-    
-    {
-      question: 'Is this an agency or a curated investor & expert platform?',
-      answer: 'This is a curated platform—not an agency. We don’t represent startups or sell services. Instead, we provide direct access to verified investors, experts, and growth resources in one structured ecosystem.',
-    },
     {
       question: 'Who is this platform built for?',
       answer: 'The platform is built for founders actively building or scaling startups, as well as investors and experts looking for credible, high-quality opportunities and engagements.',
@@ -64,6 +59,14 @@ const HomeSec8 = () => {
       question: 'Is my startup information safe and confidential?',
       answer: 'Yes. Your data and interactions are protected. Sensitive details are only shared when you choose to engage, and all platform activity follows strict privacy and security standards.',
     },
+    
+    {
+      question: 'Is this an agency or a curated investor & expert platform?',
+      answer: 'This is a curated platform—not an agency. We don’t represent startups or sell services. Instead, we provide direct access to verified investors, experts, and growth resources in one structured ecosystem.',
+    },
+    
+    
+    
     {
       question: 'How do founders and investors connect on the platform?',
       answer: 'Founders can create a profile, showcase their startup, and explore relevant investors or experts. Connections happen through structured access—profiles, consultations, and platform-enabled interactions.',
@@ -87,7 +90,7 @@ const HomeSec8 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs  text-[#010611b5]">{faq.question}</h2>
+            <h2 className="text-[13px] text-[#010611b5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -107,7 +110,7 @@ const HomeSec8 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -124,7 +127,7 @@ const HomeSec8 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs  text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px]  text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -144,7 +147,7 @@ const HomeSec8 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

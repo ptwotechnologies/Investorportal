@@ -80,7 +80,7 @@ const TransactionIdSec = () => {
             </div>
             <div>
               <p className="  text-lg w-full  text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP
+                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.
               </p>
             </div>
           </div>

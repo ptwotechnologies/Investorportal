@@ -154,7 +154,7 @@ const ScannerSec = () => {
               <p className=" text-#001032] text-xl   ">resources and investor connect</p>
             </div>
             <div>
-              <p className="  text-lg w-full  text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies LLP</p>
+              <p className="  text-lg w-full  text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.</p>
             </div>
           </div>
         </div>

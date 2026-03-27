@@ -113,7 +113,7 @@ const Navbar = () => {
     logoDesktop = logoDark;
     logoMobile = logoLight;
   } else if (
-    ['/about', '/pricing', '/channelpartners', '/subscription'].includes(location.pathname)
+    ['/about', '/pricing', '/channelpartners', '/BusinessRefinementProgram'].includes(location.pathname)
   ) {
     bgDesktop = 'bg-white';
     bgMobile = 'bg-white';
@@ -139,7 +139,7 @@ const Navbar = () => {
           <img src={logoDesktop} alt="Logo" className="w-45 hidden lg:block" />
         </Link>
         <Link to="/">
-          <img src={logoMobile} alt="Logo" className="w-35 lg:hidden" />
+          <img src={logoMobile} alt="Logo" className="w-30 lg:hidden" />
         </Link>
       </div>
 

@@ -47,26 +47,29 @@ const JoinUsSec9 = () => {
  
    const faqs2 = [
      
+     
      {
        question: 'Is there a fee to get listed?',
        answer: 'This is a curated platform—not an agency. We don’t represent startups or sell services. Instead, we provide direct access to verified investors, experts, and growth resources in one structured ecosystem.',
      },
      {
+       question: 'How do you prevent scams?',
+       answer: 'Yes. Your data and interactions are protected. Sensitive details are only shared when you choose to engage, and all platform activity follows strict privacy and security standards.',
+     },
+     {
        question: 'Do I need to pitch to startups?',
        answer: 'The platform is built for founders actively building or scaling startups, as well as investors and experts looking for credible, high-quality opportunities and engagements.',
+     },
+      {
+       question: 'How long does approval take?',
+       answer: 'Founders can create a profile, showcase their startup, and explore relevant investors or experts. Connections happen through structured access—profiles, consultations, and platform-enabled interactions.',
      },
      {
        question: 'Is there a contract for each project?',
        answer: 'All investors and experts are reviewed based on experience, relevance, and intent. This ensures founders interact with serious, qualified participants—not random listings or inactive profiles.',
      },
-      {
-       question: 'How do you prevent scams?',
-       answer: 'Yes. Your data and interactions are protected. Sensitive details are only shared when you choose to engage, and all platform activity follows strict privacy and security standards.',
-     },
-     {
-       question: 'How long does approval take?',
-       answer: 'Founders can create a profile, showcase their startup, and explore relevant investors or experts. Connections happen through structured access—profiles, consultations, and platform-enabled interactions.',
-     },
+     
+    
    ];
  
    const toggleFAQ = (index) => {
@@ -74,8 +77,8 @@ const JoinUsSec9 = () => {
    };
      return (
        <div className="w-full mx-auto px-4 py-10 lg:px-30 mt-10">
-        <h1 className="text-3xl font-medium mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
-      <h1 className="text-3xl font-medium mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
+        <h1 className="text-3xl  mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
+      <h1 className="text-3xl  mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
        <h1 className="text-md mb-6 text-[#001032] hidden lg:block ">Trust & Safety</h1>
        <div className='hidden lg:block'>
         <div className=' grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 '>
@@ -85,7 +88,7 @@ const JoinUsSec9 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -105,7 +108,7 @@ const JoinUsSec9 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -122,7 +125,7 @@ const JoinUsSec9 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -142,7 +145,7 @@ const JoinUsSec9 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

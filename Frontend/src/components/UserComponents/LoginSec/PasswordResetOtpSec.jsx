@@ -63,7 +63,7 @@ const verifyOtp = async () => {
                 <div>
                   <p className="  text-lg w-full  text-[#000000] relative top-45">
                     Terms, Privacy Disclosures Cookie Settings © norf.kD
-                    Technologies LLP
+                    Technologies Pvt. Ltd.
                   </p>
                 </div>
               </div>

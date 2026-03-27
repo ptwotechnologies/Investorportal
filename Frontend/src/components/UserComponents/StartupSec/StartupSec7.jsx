@@ -36,7 +36,7 @@ const StartupSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] mb-8 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-medium pb-5'>Choose your on-boarding plan</h1>
+            <h1 className='text-2xl  pb-5'>Choose your on-boarding plan</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ All plans include guidance, investor visibility and platform tools</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just choose what aligns with your startup’s current stage</p>
@@ -48,7 +48,7 @@ const StartupSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Create your profile and list your services</h1>
+            <h1 className='text-2xl  pb-5'>Create your profile and list your services</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Add your startup info, goals, deck, metrics and product details</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ We use this to match you with investors, mentors and experts</p>
@@ -60,7 +60,7 @@ const StartupSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Get approved in 24 hours</h1>
+            <h1 className='text-2xl  pb-5'>Get approved in 24 hours</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Our team reviews your profile to ensure it’s clear, credible and relevant for the ecosystem</p>
             
@@ -71,7 +71,7 @@ const StartupSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-semibold pb-5'>Go live on the portal</h1>
+            <h1 className='text-2xl  pb-5'>Go live on the portal</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Get discovered by investors, respond to interest, and move toward your funding journey</p>
            

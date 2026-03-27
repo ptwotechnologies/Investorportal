@@ -93,7 +93,7 @@ const UserRoutes = () => {
           <Route path="/investor" element={<Investor />} />
           <Route path="/pricing" element={<Pricing/>} />
           <Route path="/channelpartners" element={<ChannelPartners/>} />
-          <Route path="/subscription" element={<Subscriptions/>} />
+          <Route path="/BusinessRefinementProgram" element={<Subscriptions/>} />
           <Route path="/joinus" element={<JoinUs/>} />
            <Route path="/contactus" element={<ContactUs/>} />
            <Route path="/login" element={<Login/>} />

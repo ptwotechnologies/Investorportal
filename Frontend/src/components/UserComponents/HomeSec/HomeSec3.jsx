@@ -127,17 +127,17 @@ const HomeSec3 = () => {
         </div>
 
         <div id="phoneScreenBottom" className="lg:hidden bg-[#001032CC] rounded-t-sm mt-10 p-7 py-4 text-white">
-          <h1 className="text-3xl font-normal leading-12 tracking-wider w-[90%]">Built by founders, 
+          <h1 className="text-3xl font-normal leading-10 tracking-wider w-[90%]">Built by founders, 
 who lived it first</h1>
-             <p className="text-md  leading-8 tracking-wide mt-4 mb-10 w-[93%]">We’ve been through it — chasing investors, burning capital on ads, trusting agencies that never delivered. Most of it led nowhere.</p>
-              <p className="text-lg  leading-8 tracking-wider " >That’s when we realized — </p>
-               <p className=' text-lg  leading-8 tracking-wider w-[70%]'> the system was broken, not our ideas.</p>
+             <p className="text-md  leading-6.5 tracking-wide mt-4 mb-10 w-[93%]">We’ve been through it — chasing investors, burning capital on ads, trusting agencies that never delivered. Most of it led nowhere.</p>
+              <p className="text-lg  leading-6.5 tracking-wider " >That’s when we realized — </p>
+               <p className=' text-lg  leading-6.5 tracking-wider w-[70%]'> the system was broken, not our ideas.</p>
                   
-                <p className="bg-[#616B80] p-3 text-sm rounded-4xl text-center mt-9 mb-3">Really! The system is built to drain founders…</p>
+                <p className="bg-[#616B80] p-3 text-xs rounded-4xl text-center mt-9 mb-3">Really! The system is built to drain founders…</p>
                 <p className="px-3 text-sm font-light">First, the ad platforms charge you for every single click (doesn’t matter if those clicks) <Link to="/" className="cursor-pointer">See more...</Link></p>
                 <hr className="border-t border-[#FFFFFF33] mt-9 m-3 "/>
 
-                <p className="bg-[#616B80] p-3  text-sm rounded-4xl text-center mt-6 mb-3">That’s when we decided, we need to fix this... </p>
+                <p className="bg-[#616B80] p-3  text-xs rounded-4xl text-center mt-6 mb-3">That’s when we decided, we need to fix this... </p>
                 <p className="px-2 pl-3 text-sm font-light pb-4">So our team sat together, spent months on planning, strategizing, building and came up <Link to="/" className="cursor-pointer">See more...</Link></p>
         </div>
         <div className="lg:hidden p-4">

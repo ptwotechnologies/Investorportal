@@ -51,11 +51,7 @@ const StartupSec10 = () => {
         question: 'Who is this platform for?',
         answer: 'This platform is built for startup founders at early to growth stages who are actively building, validating, or scaling their business and need access to investors, experts, and structured support.',
       },
-      {
-        question: 'Do I need to be fundraising to join?',
-        answer: 'No. You don’t need to be actively fundraising. Founders can use the platform to refine their strategy, validate their approach, access expert guidance, and prepare for future fundraising.',
-      },
-      {
+       {
         question: 'Is there a free plan for startups?',
         answer: 'Yes. Founders can create a profile and explore the platform with basic access. Premium features such as enhanced visibility, investor access, and expert consultations may require a paid plan.',
       },
@@ -63,6 +59,12 @@ const StartupSec10 = () => {
         question: 'Can I upgrade or cancel anytime?',
         answer: 'Yes. Plans are flexible, and you can upgrade, downgrade, or cancel based on your needs.',
       },
+      {
+        question: 'Do I need to be fundraising to join?',
+        answer: 'No. You don’t need to be actively fundraising. Founders can use the platform to refine their strategy, validate their approach, access expert guidance, and prepare for future fundraising.',
+      },
+     
+      
       {
         question: 'Is this platform right for my startup right now?',
         answer: 'If you’re serious about building, learning, and connecting with the right people—not chasing random introductions—this platform is designed to support your journey.',
@@ -75,8 +77,8 @@ const StartupSec10 = () => {
    
      return (
        <div className="w-full mx-auto px-4 py-6 pb-10 lg:py-10 lg:px-30 ">
-        <h1 className="text-3xl font-medium mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
-      <h1 className="text-3xl font-medium mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
+        <h1 className="text-3xl  mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
+      <h1 className="text-3xl  mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
        <h1 className="text-md mb-6 text-[#001032] hidden lg:block ">Trust & Safety</h1>
        <div className='hidden lg:block'>
         <div className=' grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 '>
@@ -86,7 +88,7 @@ const StartupSec10 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px]  text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -106,7 +108,7 @@ const StartupSec10 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -123,7 +125,7 @@ const StartupSec10 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -143,7 +145,7 @@ const StartupSec10 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-4 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

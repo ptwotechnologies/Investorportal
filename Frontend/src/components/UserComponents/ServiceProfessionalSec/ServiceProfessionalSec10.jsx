@@ -46,23 +46,25 @@ const ServiceProfessionalSec10 = () => {
    ];
  
    const faqs2 = [
-     
-     {
-       question: 'What types of service professionals are accepted?',
-       answer: 'We welcome professionals across product, technology, growth, marketing, legal, compliance, finance, HR, operations, and fundraising support.',
-     },
-     {
+    {
        question: 'Who can join as a service professional?',
        answer: 'Experienced consultants, advisors, operators, and service providers with proven startup or industry experience can join the platform. All profiles are reviewed to maintain quality and credibility.',
-     },
-     {
-       question: 'Is this platform right for me as a service professional?',
-       answer: 'If you value meaningful work, credible founders, and structured engagements over random leads, this platform is designed to support your professional growth.',
      },
       {
        question: 'Can I leave or pause my profile anytime?',
        answer: 'Yes. You can update, pause, or deactivate your profile at any time without penalties.',
      },
+     
+     {
+       question: 'What types of service professionals are accepted?',
+       answer: 'We welcome professionals across product, technology, growth, marketing, legal, compliance, finance, HR, operations, and fundraising support.',
+     },
+     
+     {
+       question: 'Is this platform right for me as a service professional?',
+       answer: 'If you value meaningful work, credible founders, and structured engagements over random leads, this platform is designed to support your professional growth.',
+     },
+     
      {
        question: 'Is there a cost to join as a service professional?',
        answer: 'Basic profile creation is available. Certain features such as premium visibility, advanced tools, or enhanced access may be part of a paid plan.',
@@ -75,8 +77,8 @@ const ServiceProfessionalSec10 = () => {
  
    return (
     <div className="w-full mx-auto px-4 py-6 pb-10 lg:py-10 lg:px-30 ">
-        <h1 className="text-3xl font-medium mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
-      <h1 className="text-3xl font-medium mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
+        <h1 className="text-3xl  mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
+      <h1 className="text-3xl  mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
        <h1 className="text-md mb-6 text-[#001032] hidden lg:block ">Trust & Safety</h1>
        <div className='hidden lg:block'>
         <div className=' grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 '>
@@ -86,7 +88,7 @@ const ServiceProfessionalSec10 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px]  text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -106,7 +108,7 @@ const ServiceProfessionalSec10 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -123,7 +125,7 @@ const ServiceProfessionalSec10 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -143,7 +145,7 @@ const ServiceProfessionalSec10 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

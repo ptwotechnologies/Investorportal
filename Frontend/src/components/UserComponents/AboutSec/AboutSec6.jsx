@@ -47,23 +47,25 @@ const AboutSec6 = () => {
    ];
  
    const faqs2 = [
-     
-     {
-       question: 'Is this an agency or a curated investor & expert platform?',
-       answer: 'This is a curated platform—not an agency. We don’t represent startups or sell services. Instead, we provide direct access to verified investors, experts, and growth resources in one structured ecosystem.',
-     },
      {
        question: 'Who is this platform built for?',
        answer: 'The platform is built for founders actively building or scaling startups, as well as investors and experts looking for credible, high-quality opportunities and engagements.',
      },
-     {
+      {
        question: 'How do you verify investors and experts?',
        answer: 'All investors and experts are reviewed based on experience, relevance, and intent. This ensures founders interact with serious, qualified participants—not random listings or inactive profiles.',
      },
-      {
+     {
        question: 'Is my startup information safe and confidential?',
        answer: 'Yes. Your data and interactions are protected. Sensitive details are only shared when you choose to engage, and all platform activity follows strict privacy and security standards.',
      },
+     {
+       question: 'Is this an agency or a curated investor & expert platform?',
+       answer: 'This is a curated platform—not an agency. We don’t represent startups or sell services. Instead, we provide direct access to verified investors, experts, and growth resources in one structured ecosystem.',
+     },
+     
+    
+      
      {
        question: 'How do founders and investors connect on the platform?',
        answer: 'Founders can create a profile, showcase their startup, and explore relevant investors or experts. Connections happen through structured access—profiles, consultations, and platform-enabled interactions.',
@@ -76,8 +78,8 @@ const AboutSec6 = () => {
 
   return (
    <div className="w-full mx-auto px-4 py-5 pb-10 lg:px-30 ">
-        <h1 className="text-3xl font-bold mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
-      <h1 className="text-3xl font-bold mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
+        <h1 className="text-3xl  mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
+      <h1 className="text-3xl mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
        <h1 className="text-md mb-6 text-[#001032] hidden lg:block ">Trust & Safety</h1>
        <div className='hidden lg:block'>
         <div className=' grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 '>
@@ -87,7 +89,7 @@ const AboutSec6 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px]  text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -107,7 +109,7 @@ const AboutSec6 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>
@@ -124,7 +126,7 @@ const AboutSec6 = () => {
             className="flex justify-between items-center cursor-pointer p-4"
             onClick={() => toggleFAQ(index)}
           >
-            <h2 className="text-xs font-medium text-[#001032B5]">{faq.question}</h2>
+            <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
             <svg
               className={`w-4 h-4 transform ${
                 activeIndex === index ? "rotate-180" : ""
@@ -144,7 +146,7 @@ const AboutSec6 = () => {
           </div>
           {activeIndex === index && (
             <div className="mt-2 px-4">
-              <p className="text-gray-600 text-xs pr-4">{faq.answer}</p>
+              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
             </div>
           )}
         </div>

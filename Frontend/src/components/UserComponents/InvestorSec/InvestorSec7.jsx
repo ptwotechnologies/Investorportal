@@ -10,7 +10,7 @@ const InvestorSec7 = () => {
       <div className='hidden lg:block'>
         <div className="flex  justify-center items-center gap-40 pt-15 ">
         <div id="left" className="w-[40%] ">
-         <div className='text-[#001032] text-2xl font-medium leading-8 tracking-wide '>
+         <div className='text-[#001032] text-2xl  leading-8 tracking-wide '>
             <h1 className='py-6'>Choose your on-boarding plan</h1>
             <hr />
          <h1 className='py-6'>Create your profile and list your services</h1>
@@ -36,7 +36,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] mb-8 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-medium pb-5'>Choose your on-boarding plan</h1>
+            <h1 className='text-2xl  pb-5'>Choose your on-boarding plan</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Select the tier that aligns with your investment style and focus</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just pick what fits your business goals</p>
@@ -48,7 +48,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-medium pb-5'>Create your investor profile, past deals & experience</h1>
+            <h1 className='text-2xl  pb-5'>Create your investor profile, past deals & experience</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Add categories, pricing, experience and turnaround timelines</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Share your sectors, thesis, past deals, and preferred ticket sizes.</p>
@@ -60,7 +60,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-medium pb-5'>Get verified in 24 hours</h1>
+            <h1 className='text-2xl pb-5'>Get verified in 24 hours</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Our team confirms your details to maintain credibility in the system</p>
             
@@ -71,7 +71,7 @@ const InvestorSec7 = () => {
         <div>
           <div className='w-10 h-10 bg-[#EEEEEE] my-6 lg:hidden'>
             </div>
-            <h1 className='text-2xl font-medium pb-5'>Go live on the portal</h1>
+            <h1 className='text-2xl  pb-5'>Go live on the portal</h1>
            
             <p className='text-md leading-9 tracking-wider'>→ Start discovering refined founders and evaluating real opportunities</p>
            
