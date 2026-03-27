@@ -11,39 +11,51 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
-import InputOtpSec from "./InputOtpSec";
-import { useState } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
+import InputOtpSec from "./InputOtpSec";
+import { verifyOtp as verifyFirebaseOtp } from "@/lib/phoneAuth";
 
 const PasswordResetOtpSec = () => {
   const [otp, setOtp] = useState("");
 const navigate = useNavigate();
+const location = useLocation();
 
 const email = localStorage.getItem("resetEmail");
+const phone = location.state?.phone;
+const isPhone = !!phone;
+
+useEffect(() => {
+  if (!email && !phone) {
+    navigate("/passwordreset");
+  }
+}, [email, phone, navigate]);
 
 const verifyOtp = async () => {
-
-  try {
-
-    const res = await axios.post(`${serverUrl}/user/verifyOtp`, {
-      email,
-      otp
-    });
-
-    toast.success(res.data.message);
-
-    navigate("/newpassword");
-
-  } catch (error) {
-
-    toast.error(error.response?.data?.message || "Invalid OTP");
-
+  if (!otp || otp.length < 6) {
+    return toast.error("Please enter a valid 6-digit code");
   }
 
+  try {
+    if (isPhone) {
+      await verifyFirebaseOtp(otp);
+      toast.success("Phone verified successfully");
+      navigate("/newpassword", { state: { phone } });
+    } else {
+      const res = await axios.post(`${serverUrl}/user/verifyOtp`, {
+        email,
+        otp
+      });
+      toast.success(res.data.message);
+      navigate("/newpassword");
+    }
+
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Invalid or expired OTP");
+  }
 };
 
   return (

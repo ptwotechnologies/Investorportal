@@ -288,41 +288,54 @@ export const login = async (req, res) => {
 
 export const forgetPassword = async (req, res) => {
   try {
+    const { emailOrPhone } = req.body;
 
-    const { email } = req.body;
-
-    if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+    if (!emailOrPhone) {
+      return res.status(400).json({ message: "Email or Phone is required" });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({
+      $or: [
+        { email: emailOrPhone },
+        { "businessDetails.number": emailOrPhone }
+      ]
+    });
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const isEmail = emailOrPhone.includes("@");
 
-    user.resetOtp = otp;
-    user.otpExpire = Date.now() + 5 * 60 * 1000;
+    if (isEmail) {
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      user.resetOtp = otp;
+      user.otpExpire = Date.now() + 5 * 60 * 1000;
+      await user.save();
 
-    await user.save();
+      await resend.emails.send({
+        from: "Copteno@resend.dev",
+        to: [user.email],
+        subject: "Password Reset OTP",
+        html: `
+          <h2>Password Reset</h2>
+          <p>Your OTP is:</p>
+          <h1>${otp}</h1>
+          <p>This OTP will expire in 5 minutes</p>
+        `
+      });
 
-    await resend.emails.send({
-      from: "Copteno@resend.dev",
-      to: [email],
-      subject: "Password Reset OTP",
-      html: `
-        <h2>Password Reset</h2>
-        <p>Your OTP is:</p>
-        <h1>${otp}</h1>
-        <p>This OTP will expire in 5 minutes</p>
-      `
-    });
-
-    res.status(200).json({
-      message: "OTP sent to email"
-    });
+      res.status(200).json({
+        message: "OTP sent to email",
+        type: "email"
+      });
+    } else {
+      res.status(200).json({
+        message: "User found, proceeding with phone verification",
+        type: "phone",
+        phone: user.businessDetails.number
+      });
+    }
 
   } catch (error) {
     console.error(error);
@@ -332,11 +345,8 @@ export const forgetPassword = async (req, res) => {
 
 
 export const verifyOtp = async (req, res) => {
-
   try {
-
     const { email, otp } = req.body;
-
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -352,20 +362,20 @@ export const verifyOtp = async (req, res) => {
     });
 
   } catch (error) {
-
     res.status(500).json({ message: "Server error" });
-
   }
-
 };
 
 export const resetPassword = async (req, res) => {
-
   try {
+    const { email, phone, newPassword } = req.body;
 
-    const { email, newPassword } = req.body;
-
-    const user = await User.findOne({ email });
+    let user;
+    if (email) {
+      user = await User.findOne({ email });
+    } else if (phone) {
+      user = await User.findOne({ "businessDetails.number": phone });
+    }
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });

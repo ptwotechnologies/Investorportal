@@ -11,22 +11,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
-
 
 const NewPasswordSec = () => {
   const [newPassword, setNewPassword] = useState("");
 const [confirmPassword, setConfirmPassword] = useState("");
 
 const navigate = useNavigate();
+const location = useLocation();
 
 const email = localStorage.getItem("resetEmail");
-
+const phone = location.state?.phone;
 
 const resetPassword = async (e) => {
 
@@ -37,22 +36,24 @@ const resetPassword = async (e) => {
   }
 
   try {
+    const payload = { newPassword };
+    if (phone) {
+      payload.phone = phone;
+    } else if (email) {
+      payload.email = email;
+    } else {
+      return toast.error("User session expired. Please restart the process.");
+    }
 
-    const res = await axios.post(`${serverUrl}/user/resetPassword`, {
-      email,
-      newPassword
-    });
+    const res = await axios.post(`${serverUrl}/user/resetPassword`, payload);
 
     toast.success(res.data.message);
-
+    localStorage.removeItem("resetEmail");
     navigate("/passwordsuccess");
 
   } catch (error) {
-
-    toast.error(error.response?.data?.message || "Error");
-
+    toast.error(error.response?.data?.message || "Error resetting password");
   }
-
 };
 
 

@@ -18,31 +18,39 @@ import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 
+import { sendOtp } from "@/lib/phoneAuth";
+
 const PasswordResetSec = () => {
-  const [email, setEmail] = useState("");
-const navigate = useNavigate();
+  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-const sendOtp = async (e) => {
-  e.preventDefault();
+  const handleContinue = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+    setLoading(true);
 
-  try {
+    try {
+      const res = await axios.post(`${serverUrl}/user/forgetPassword`, {
+        emailOrPhone,
+      });
 
-    const res = await axios.post(`${serverUrl}/user/forgetPassword`, {
-      email,
-    });
-
-    toast.success(res.data.message);
-
-    localStorage.setItem("resetEmail", email);
-
-    navigate("/passwordresetotp");
-
-  } catch (error) {
-
-    toast.error(error.response?.data?.message || "Error sending OTP");
-
-  }
-};
+      if (res.data.type === "email") {
+        toast.success(res.data.message);
+        localStorage.setItem("resetEmail", emailOrPhone);
+        navigate("/passwordresetotp");
+      } else if (res.data.type === "phone") {
+        const phoneNumber = "+91" + res.data.phone;
+        await sendOtp(phoneNumber);
+        toast.success("OTP sent to your mobile");
+        navigate("/passwordresetotp", { state: { phone: emailOrPhone } });
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Error processing request");
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   return (
@@ -86,26 +94,27 @@ const sendOtp = async (e) => {
                 <CardAction></CardAction>
               </CardHeader>
               <CardContent>
-                <form onSubmit={sendOtp}>
+                <form onSubmit={handleContinue}>
                 <div className="flex flex-col gap-6 px-6 lg:mb-48 mb-60">
                   <div className="grid gap-2 ">
                     <Input
                       id="email"
-                      type="email"
+                      type="text"
                       placeholder="Email or Phone"
-                      value={email}
-                       onChange={(e)=>setEmail(e.target.value)}
+                      value={emailOrPhone}
+                       onChange={(e)=>setEmailOrPhone(e.target.value)}
                       required
                       className="p-5 text-[#00103280]"
                     />
                   </div>
                 </div>
+                <div id="recaptcha-container"></div>
             
              
               <CardFooter className="absolute bottom-5 w-full lg:static right-2 left-2">
                 
-                  <Button className="w-full bg-[#001032] ">
-                    Continue
+                  <Button className="w-full bg-[#001032] " disabled={loading}>
+                    {loading ? "Processing..." : "Continue"}
                   </Button>
              
               </CardFooter>
