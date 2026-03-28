@@ -58,6 +58,7 @@ const RegisterPortalSec = () => {
   const [otp, setOtp] = useState("");
 const [otpSent, setOtpSent] = useState(false);
 const [phoneVerified, setPhoneVerified] = useState(false);
+const [isSubmitted, setIsSubmitted] = useState(false);
 
   const tabs = role === "service_professional" ? serviceTabs.map((t)=>({id:t,label:t})) : investorTabs.map((t) => ({ id: t, label: t }));
 
@@ -155,12 +156,8 @@ const [phoneVerified, setPhoneVerified] = useState(false);
         // Save userId to localStorage for later use
         localStorage.setItem("userId", response.data.userId);
 
-        navigate("/emailverification", { 
-          state: { 
-            userId: response.data.userId,
-            role,
-          } 
-        });
+        setIsSubmitted(true);
+        toast.success("Success! Please check your email for the verification link.");
       } else {
         console.error("Unexpected response:", response);
         toast.error("Something went wrong. Please try again.");
@@ -214,6 +211,33 @@ const handleVerifyOtp = async () => {
     toast.error("Invalid OTP");
   }
 };
+
+  if (isSubmitted) {
+    return (
+      <div className="flex justify-center items-center lg:min-h-screen p-4">
+        <Card className="w-full max-w-md p-8 text-center shadow-lg">
+          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-[#001032]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-[#001032] mb-4">Check your email</h2>
+          <p className="text-gray-600 mb-8">
+            We've sent a verification link to <span className="font-semibold">{email}</span>. 
+            Please click the link in the email to activate your account.
+          </p>
+          <div className="space-y-4">
+            <Button 
+              className="w-full bg-[#001032]"
+              onClick={() => window.location.reload()}
+            >
+              Back to Registration
+            </Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div>

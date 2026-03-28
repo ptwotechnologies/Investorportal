@@ -20,7 +20,6 @@ import PasswordReset from '@/Pages/UserPages/LoginPages/PasswordReset'
 import PasswordResetOtpSec from '@/components/UserComponents/LoginSec/PasswordResetOtpSec'
 import NewPassword from '@/Pages/UserPages/LoginPages/NewPassword'
 import PasswordSuccess from '@/Pages/UserPages/LoginPages/PasswordSuccess'
-import EmailVerification from '@/components/UserComponents/LoginSec/EmailVerification';
 import VerifyEmailLink from '@/components/UserComponents/LoginSec/VerifyEmailLink';
 import Profile from '@/Pages/UserPages/ProfilePages/Profile'
 import Help from '@/Pages/UserPages/ProfilePages/Help'
@@ -50,7 +49,6 @@ const UserRoutes = () => {
   '/login',
   '/selectPortal',
   '/registerportal',
-  "/emailverification",
   "/verify-email-link" ,
   '/portaldetails',
   '/onboardingplans',
@@ -104,7 +102,6 @@ const UserRoutes = () => {
             <Route path="/scanner" element={<Scanner/>} />
             <Route path="/transactionId" element={<TransactionId/>} />
             <Route path="/paymentsuccess" element={<PaymentSuccess/>} />
-            <Route path="/emailverification" element={<EmailVerification/>} />
             <Route path="/verify-email-link" element={<VerifyEmailLink/>} />
             <Route path="/passwordreset" element={<PasswordReset/>} />
             <Route path="/passwordresetotp" element={<PasswordResetOtpSec/>} />

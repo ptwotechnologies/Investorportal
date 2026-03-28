@@ -12,9 +12,9 @@ const VerifyEmailLink = () => {
   useEffect(() => {
     const verify = async () => {
       const userId = searchParams.get("userId");
-      const otp = searchParams.get("otp");
+      const token = searchParams.get("token") || searchParams.get("otp");
 
-      if (!userId || !otp) {
+      if (!userId || !token) {
         setStatus("error");
         return;
       }
@@ -22,7 +22,7 @@ const VerifyEmailLink = () => {
       try {
         const response = await axios.post(`${serverUrl}/user/verify-email`, {
           userId,
-          otp,
+          otp: token,
         });
 
         if (response.status === 200) {

@@ -69,9 +69,8 @@ export const createUser = async (req, res) => {
     }
 
     res.status(201).json({
-      message: "Verification email sent",
+      message: "Success! Visit your email to verify your account.",
       userId: pendingUser._id,
-      registrationStep: 1,
     });
 
   } catch (error) {
@@ -465,11 +464,11 @@ export const resendVerificationOtp = async (req, res) => {
     await resend.emails.send({
       from: "Copteno@resend.dev",
       to: [pendingUser.email],
-      subject: "Your New Verification Code - Copteno Investor Portal",
+      subject: "Resend Verification Link - Copteno Investor Portal",
       html: verificationTemplate(pendingUser._id, newOtp)
     });
 
-    res.status(200).json({ message: "Verification OTP resent successfully" });
+    res.status(200).json({ message: "Verification link resent successfully" });
   } catch (error) {
     console.error("Resend OTP Error:", error);
     res.status(500).json({ message: "Server error" });
