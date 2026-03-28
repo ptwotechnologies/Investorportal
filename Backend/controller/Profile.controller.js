@@ -3,22 +3,23 @@ import resend, { RESEND_FROM } from "../lib/resend.js";
 import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
 // -------------------- CLOUD MULTER SETUP --------------------
 
+import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import multer from "multer";
 import multerS3 from "multer-s3";
-import AWS from "aws-sdk";
 
-const s3 = new AWS.S3({
-  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`, 
-  accessKeyId: process.env.R2_ACCESS_KEY,
-  secretAccessKey: process.env.R2_SECRET_KEY,
-  signatureVersion: "v4",
-  region: "auto", 
+const s3 = new S3Client({
+  region: "auto",
+  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY,
+    secretAccessKey: process.env.R2_SECRET_KEY,
+  },
 });
 
 export const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: "user-images",
+    bucket: "copteno",
 
     key: function (req, file, cb) {
       const type = req.body.type || "general";
@@ -155,15 +156,18 @@ export const updateProfile = async (req, res) => {
 export const uploadPortfolio = async (req, res) => {
   try {
     if (!req.file) {
+      console.error("Upload Portfolio Error: No file provided");
       return res.status(400).json({ message: "No file uploaded" });
     }
+
+    console.log("Uploaded Portfolio File Details:", req.file);
 
     const profile = await Profile.findOne({ userId: req.user._id });
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
     const title = req.body.title || "Portfolio File";
 
-    const fileUrl = req.file.location; // 🔥 CHANGE
+    const fileUrl = req.file.location;
     const thumbnailUrl = fileUrl;
 
     profile.portfolio.push({ title, fileUrl, thumbnailUrl });
@@ -174,8 +178,8 @@ export const uploadPortfolio = async (req, res) => {
       portfolio: profile.portfolio,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in uploadPortfolio:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -183,34 +187,50 @@ export const uploadPortfolio = async (req, res) => {
 export const deletePortfolioItem = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("Delete Portfolio Item - Request ID:", id);
+
     const profile = await Profile.findOne({ userId: req.user._id });
+    if (!profile) return res.status(404).json({ message: "Profile not found" });
 
     const item = profile.portfolio.id(id);
     if (!item) {
+      console.error("Delete Error: Item not found in DB for ID:", id);
       return res.status(404).json({ message: "Portfolio item not found" });
     }
 
-    // 🔹 Safe key extraction
-    const url = new URL(item.fileUrl);
-    const key = url.pathname.substring(1);
+    console.log("Delete Error: Item to delete:", item);
 
-    await s3
-      .deleteObject({
-        Bucket: "user-images",
-        Key: key,
-      })
-      .promise();
+    // 🔹 Delete from R2 if URL is valid
+    if (item.fileUrl && item.fileUrl.startsWith("http")) {
+      try {
+        const url = new URL(item.fileUrl);
+        // Remove leading slash if present
+        const key = url.pathname.startsWith('/') ? url.pathname.substring(1) : url.pathname;
+        
+        console.log("Attempting to delete R2 Key:", key);
+
+        const deleteCommand = new DeleteObjectCommand({
+          Bucket: "copteno",
+          Key: key,
+        });
+
+        await s3.send(deleteCommand);
+        console.log("Successfully deleted from R2");
+      } catch (s3Err) {
+        console.error("R2 Delete Error (skipping to allow DB cleanup):", s3Err.message);
+      }
+    }
 
     profile.portfolio.pull(id);
     await profile.save();
 
     res.status(200).json({
-      message: "Deleted successfully",
+      message: "Portfolio item deleted successfully",
       portfolio: profile.portfolio,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error in deletePortfolioItem:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -220,15 +240,29 @@ export const deletePortfolioItem = async (req, res) => {
 
 export const uploadProfilePhoto = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ userId: req.user._id });
-    if (!profile) return res.status(404).json({ message: "Profile not found" });
+    if (!req.file) {
+      console.error("Upload Profile Photo Error: No file provided by multer");
+      return res.status(400).json({ message: "No file uploaded. Check field name (should be 'image')." });
+    }
 
-    profile.profilePhoto = req.file.location; // 🔥 CHANGE
+    console.log("Uploaded File Details:", req.file);
+
+    const profile = await Profile.findOne({ userId: req.user._id });
+    if (!profile) {
+      console.error(`Profile not found for user ${req.user._id}`);
+      return res.status(404).json({ message: "Profile not found" });
+    }
+
+    profile.profilePhoto = req.file.location;
     await profile.save();
 
-    res.json({ profilePhoto: profile.profilePhoto });
+    res.json({ 
+      message: "Profile photo uploaded successfully",
+      profilePhoto: profile.profilePhoto 
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error uploading profile photo" });
+    console.error("Error in uploadProfilePhoto:", err);
+    res.status(500).json({ message: "Error uploading profile photo", error: err.message });
   }
 };
 
@@ -236,15 +270,26 @@ export const uploadProfilePhoto = async (req, res) => {
 
 export const uploadCoverImage = async (req, res) => {
   try {
+    if (!req.file) {
+      console.error("Upload Cover Image Error: No file provided");
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+     console.log("Uploaded Cover File Details:", req.file);
+
     const profile = await Profile.findOne({ userId: req.user._id });
     if (!profile) return res.status(404).json({ message: "Profile not found" });
 
-    profile.coverImage = req.file.location; // 🔥 CHANGE
+    profile.coverImage = req.file.location;
     await profile.save();
 
-    res.json({ coverImage: profile.coverImage });
+    res.json({ 
+      message: "Cover image uploaded successfully",
+      coverImage: profile.coverImage 
+    });
   } catch (err) {
-    res.status(500).json({ message: "Error uploading cover image" });
+     console.error("Error in uploadCoverImage:", err);
+    res.status(500).json({ message: "Error uploading cover image", error: err.message });
   }
 };
 

@@ -182,8 +182,8 @@ const ProfileSec = () => {
   }
 
   const formData = new FormData();
-  formData.append("file", selectedFile); // ✅ Keep as 'file'
-  formData.append("type", "portfolio"); // ✅ ADD THIS - tells R2 where to store
+  formData.append("type", "portfolio"); // 🔹 Append 'type' FIRST
+  formData.append("file", selectedFile); 
 
   try {
     await axios.post(`${serverUrl}/profile/portfolio`, formData, {
@@ -296,15 +296,7 @@ const ProfileSec = () => {
   };
 
   const getPortfolioUrl = (fileUrl) => {
-    if (!fileUrl) return "";
-    // If the URL is absolute, return as-is
-    if (fileUrl.startsWith("http")) return fileUrl;
-
-    // Normalize Windows backslashes to forward slashes and ensure a leading slash
-    let normalized = fileUrl.replace(/\\/g, "/");
-    if (!normalized.startsWith("/")) normalized = `/${normalized}`;
-
-    return `${serverUrl}${normalized}`;
+    return getImageUrl(fileUrl);
   };
 
   useEffect(() => {
@@ -449,7 +441,15 @@ const ProfileSec = () => {
 
   // ✅ Helper function to get correct image URL
 const getImageUrl = (imageUrl) => {
-  if (!imageUrl) return "";
+  if (!imageUrl) return null;
+  
+  // ✅ Transform R2 Private API URL to Public URL
+  const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
+  const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
+  
+  if (imageUrl.startsWith(privateBaseUrl)) {
+    return imageUrl.replace(privateBaseUrl, publicBaseUrl);
+  }
   
   // If already a full URL (R2), return as-is
   if (imageUrl.startsWith("http")) return imageUrl;
@@ -511,7 +511,7 @@ const getImageUrl = (imageUrl) => {
 }
 onClick={() => {
   setModalImage(
-    profile?.coverImage ? getImageUrl(profile.coverImage) : "" // ✅ FIXED
+    profile?.coverImage ? getImageUrl(profile.coverImage) : null
   );
   setIsCover(true);
   setIsImageModalOpen(true);
@@ -557,15 +557,15 @@ onClick={() => {
                <img
   src={
     profile?.profilePhoto
-      ? getImageUrl(profile.profilePhoto) // ✅ FIXED
-      : ""
+      ? getImageUrl(profile.profilePhoto)
+      : null
   }
   className="lg:w-28 lg:h-28 w-22 h-22 bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] border-2 shadow-[0px_4px_10px_rgba(0,0,0,0.25)] rounded-full object-cover cursor-pointer"
   onClick={() => {
     setModalImage(
       profile?.profilePhoto
-        ? getImageUrl(profile.profilePhoto) // ✅ FIXED
-        : ""
+        ? getImageUrl(profile.profilePhoto)
+        : null
     );
     setIsCover(false);
     setIsImageModalOpen(true);
@@ -1255,17 +1255,20 @@ onClick={() => {
             Portfolio
           </h1>
           <div
-            className="mr-2 p-2  rounded-md shrink-0 snap-center flex items-center justify-center cursor-pointer hover:bg-gray-100"
+            className="mr-2 p-2 rounded-md shrink-0 snap-center flex items-center justify-center cursor-pointer hover:bg-gray-100"
             onClick={() =>
-              document.getElementById("portfolioUploadMobile").click()
+              document.getElementById("portfolioUploadInput").click()
             }
           >
             <input
               type="file"
-              id="portfolioUploadMobile"
+              id="portfolioUploadInput"
               accept="image/*"
               className="hidden"
-              onChange={(e) => setSelectedFile(e.target.files[0])}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) setSelectedFile(file);
+              }}
             />
             <p className=" text-xl font-semibold">
               <FaPlus />
@@ -1278,58 +1281,44 @@ onClick={() => {
           <div className="flex flex-wrap lg:pl-9 pl-4 gap-4 mb-4">
             {/* Upload Card */}
 
-            {/* Existing Images */}
+            {/* Uploaded Images List */}
             {portfolioFiles.map((item, idx) => {
               if (!item?.fileUrl) return null;
-
               return (
-                <div
-                  key={idx}
-                  className="relative group w-48 h-48 border-2 border-[#D9D9D9] rounded-md overflow-hidden"
-                >
-                  {/* ❌ Delete icon */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      handleDeletePortfolio(item._id);
-                    }}
-                    className="absolute top-2 right-2 z-10 bg-black/60 text-white rounded-full p-1
-        opacity-0 group-hover:opacity-100 transition"
-                  >
+                <div key={idx} className="relative group w-48 h-48 border-2 border-[#D9D9D9] rounded-md overflow-hidden">
+                  <button onClick={(e) => { e.stopPropagation(); handleDeletePortfolio(item._id); }} className="absolute top-2 right-2 z-10 bg-black/60 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition">
                     <FiX size={18} />
                   </button>
-
-                  {/* Image */}
-                  <a
-                    href={getPortfolioUrl(item.fileUrl)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img
-                      src={getPortfolioUrl(item.fileUrl)}
-                      alt="Portfolio"
-                      className="w-full h-full object-cover group-hover:scale-105 transition"
-                    />
+                  <a href={getPortfolioUrl(item.fileUrl)} target="_blank" rel="noopener noreferrer">
+                    <img src={getPortfolioUrl(item.fileUrl)} alt="Portfolio" className="w-full h-full object-cover group-hover:scale-105 transition" />
                   </a>
                 </div>
               );
             })}
-            {/* <div
-              className="w-48 h-48 border-2 border-dashed rounded-md flex items-center justify-center cursor-pointer hover:bg-gray-100"
-              onClick={() =>
-                document.getElementById("portfolioUploadDesktop").click()
-              }
-            >
-              <input
-                type="file"
-                id="portfolioUploadDesktop"
-                accept="image/*"
-                className="hidden"
-                onChange={(e) => setSelectedFile(e.target.files[0])}
-              />
-              <p className="text-gray-400 text-xl font-semibold">+ Upload</p>
-            </div> */}
+            
+            {/* 🆕 Desktop Upload Placeholder (if no file selected) */}
+            {!selectedFile && portfolioFiles.length < MAX_PORTFOLIO_IMAGES && (
+              <div
+                className="w-48 h-48 border-2 border-dashed border-gray-400 rounded-md flex flex-col items-center justify-center cursor-pointer hover:bg-gray-50 transition"
+                onClick={() => document.getElementById("portfolioUploadInput").click()}
+              >
+                 <FaPlus className="text-gray-400 text-2xl mb-1" />
+                 <p className="text-gray-400 text-sm font-medium">Add to Portfolio</p>
+              </div>
+            )}
+            
+            {/* 🆕 File Preview (if file selected but not yet uploaded) */}
+            {selectedFile && (
+               <div className="relative w-48 h-48 border-2 border-blue-400 rounded-md overflow-hidden bg-gray-100">
+                  <img src={URL.createObjectURL(selectedFile)} alt="Preview" className="w-full h-full object-cover opacity-60" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <p className="text-blue-600 font-bold text-sm bg-white/80 px-2 py-1 rounded">Selected</p>
+                  </div>
+                   <button onClick={() => setSelectedFile(null)} className="absolute top-2 right-2 z-10 bg-red-500 text-white rounded-full p-1">
+                    <FiX size={18} />
+                  </button>
+               </div>
+            )}
           </div>
         </div>
 

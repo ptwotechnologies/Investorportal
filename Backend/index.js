@@ -57,9 +57,22 @@ app.use("/user", userRoutes);
 app.use("/profile", profileRoutes);
 app.use("/connections", connectionsRoutes);
 app.use("/requests", requestRoutes);
-app.use("/help", helpRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/help", helpRoutes);
 
+
+// ✅ GLOBAL ERROR HANDLER
+app.use((err, req, res, next) => {
+  console.error("--- SERVER ERROR ---");
+  console.error("Message:", err.message);
+  console.error("Stack:", err.stack);
+  console.error("---------------------");
+
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+    error: process.env.NODE_ENV === "development" ? err : {}
+  });
+});
 
 // For local development
 if (process.env.NODE_ENV !== 'production') {
