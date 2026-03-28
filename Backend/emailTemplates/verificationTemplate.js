@@ -1,7 +1,7 @@
 const verificationTemplate = (userId, token) => {
   // Use local frontend URL in development or production URL accordingly
-  // const frontendUrl = "https://investorportal-sigma.vercel.app";
-  const frontendUrl = "http://localhost:5173"; // Default Vite port
+  const frontendUrl = "https://investorportal-sigma.vercel.app";
+  // const frontendUrl = "http://localhost:5173"; // Default Vite port
 
   const verificationLink = `${frontendUrl}/verify-email-link?userId=${userId}&token=${token}`;
 
