@@ -3,7 +3,7 @@ import User from "../Models/User.model.js";
 import PendingUser from "../Models/PendingUser.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import resend from "../lib/resend.js";
+import resend, { RESEND_FROM } from "../lib/resend.js";
 import verificationTemplate from "../emailTemplates/verificationTemplate.js";
 
 
@@ -58,7 +58,7 @@ export const createUser = async (req, res) => {
     // 6. Send Verification Email
     try {
       await resend.emails.send({
-        from: "Copteno@resend.dev",
+        from: RESEND_FROM,
         to: [email],
         subject: "Verify Your Email - Copteno Investor Portal",
         html: verificationTemplate(pendingUser._id, verificationOtp)
@@ -313,7 +313,7 @@ export const forgetPassword = async (req, res) => {
       await user.save();
 
       await resend.emails.send({
-        from: "Copteno@resend.dev",
+        from: RESEND_FROM,
         to: [user.email],
         subject: "Password Reset OTP",
         html: `
@@ -462,7 +462,7 @@ export const resendVerificationOtp = async (req, res) => {
     await pendingUser.save();
 
     await resend.emails.send({
-      from: "Copteno@resend.dev",
+      from: RESEND_FROM,
       to: [pendingUser.email],
       subject: "Resend Verification Link - Copteno Investor Portal",
       html: verificationTemplate(pendingUser._id, newOtp)

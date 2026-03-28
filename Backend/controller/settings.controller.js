@@ -1,7 +1,7 @@
 import User from "../Models/User.model.js";
 import Profile from "../Models/profile.model.js";
 import bcrypt from "bcrypt";
-import resend from "../lib/resend.js";
+import resend, { RESEND_FROM } from "../lib/resend.js";
 import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
 
 export const getSettings = async (req, res) => {
@@ -112,7 +112,7 @@ export const updateSettings = async (req, res) => {
     // Send Email Notification if changes occurred
     if (changes.length > 0) {
       await resend.emails.send({
-        from: "Copteno@resend.dev",
+        from: RESEND_FROM,
         to: [currentUser.email],
         subject: "Your Profile Has Been Updated",
         html: profileUpdateTemplate(changes)

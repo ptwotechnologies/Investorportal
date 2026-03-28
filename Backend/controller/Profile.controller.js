@@ -1,5 +1,5 @@
 import Profile from "../Models/profile.model.js";
-import resend from "../lib/resend.js";
+import resend, { RESEND_FROM } from "../lib/resend.js";
 import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
 // -------------------- CLOUD MULTER SETUP --------------------
 
@@ -127,7 +127,7 @@ export const updateProfile = async (req, res) => {
     // Send Email Notification if changes occurred
     if (changes.length > 0 && req.user.email) {
         await resend.emails.send({
-          from: "Copteno@resend.dev",
+          from: RESEND_FROM,
           to: [req.user.email],
           subject: "Your Profile Has Been Updated",
           html: profileUpdateTemplate(changes)
