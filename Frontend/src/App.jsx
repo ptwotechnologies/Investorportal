@@ -6,8 +6,8 @@ import { Toaster } from 'react-hot-toast'
 import ScrollToTop from './ScrollToTop'
 import axios from "axios";
 
-    // export const serverUrl = "https://investorportal-sigma.vercel.app"
-   export const serverUrl = "http://localhost:3000"
+     export const serverUrl = "https://investorportal-sigma.vercel.app"
+  //  export const serverUrl = "http://localhost:3000"
 
 function App() {
   const [count, setCount] = useState(0)

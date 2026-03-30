@@ -57,6 +57,7 @@ export const createUser = async (req, res) => {
 
     // 6. Send Verification Email
     try {
+      console.log("DEBUG: Sending email using FROM:", RESEND_FROM, "to RECIPIENT:", email);
       const emailResponse = await resend.emails.send({
         from: RESEND_FROM,
         to: [email],
@@ -483,6 +484,7 @@ export const resendVerificationOtp = async (req, res) => {
     pendingUser.verificationOtpExpire = newExpire;
     await pendingUser.save();
 
+    console.log("DEBUG: Resending verification email FROM:", RESEND_FROM, "to RECIPIENT:", pendingUser.email);
     const emailResponse = await resend.emails.send({
       from: RESEND_FROM,
       to: [pendingUser.email],
