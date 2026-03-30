@@ -50,18 +50,41 @@ const PortalDetailsSec = () => {
   const [serviceBusinessType, setServiceBusinessType] = useState(" Business Type");
   const serviceBusinessOptions = ["Manufacturing", "Trading", "Service Based"];
 
+  // 🔹 New R2 states
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState("");
+
   // Maximum logo / file size in bytes (2MB)
   const MAX_LOGO_SIZE = 10 * 1024 * 1024;
-  const handleLogoChange = (e) => {
+  const handleLogoChange = async (e) => {
     const file = e.target.files[0];
-    if (!file) return setLogoFile(null);
+    if (!file) return;
+
     if (file.size > MAX_LOGO_SIZE) {
       toast.error("File must be less than 10MB");
       e.target.value = "";
-      setLogoFile(null);
       return;
     }
+
     setLogoFile(file);
+    setIsUploading(true);
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", role === "startup" ? "pitchdeck" : "portal_profile");
+
+    try {
+      const res = await axios.post(`${serverUrl}/user/portal-upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setUploadedUrl(res.data.fileUrl);
+      toast.success("File uploaded successfully");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("File upload failed");
+    } finally {
+      setIsUploading(false);
+    }
   };
   // control which fields to show (investor, service professionals, startup)
   const showPortalFields = role === "investor" || role === "service_professional" || role === "startup";
@@ -202,6 +225,8 @@ const PortalDetailsSec = () => {
         referralCode: referralCode || null,
         profileFileName: role === "startup" ? null : (logoFile ? logoFile.name : null),
         pitchDeckFileName: role === "startup" ? (logoFile ? logoFile.name : null) : null,
+        profileUrl: role === "startup" ? "" : uploadedUrl, // 🔹 Added for R2
+        pitchDeckUrl: role === "startup" ? uploadedUrl : "", // 🔹 Added for R2
         startupBusinessType: role === "startup" ? (startupBusinessType === "Select Business Type" ? null : startupBusinessType) : null,
         serviceBusinessType: role === "service_professional" && serviceType === "Company" ? (serviceBusinessType === "Select Business Type" ? null : serviceBusinessType) : null,
       };
@@ -633,7 +658,9 @@ const PortalDetailsSec = () => {
 
                   {/* SUBMIT BUTTON */}
                   <CardFooter className="flex-col gap-2 lg:mt-4 w-full px-0 mt-15">
-                    <Button type="submit" className="w-full bg-[#001032]">Continue</Button>
+                    <Button type="submit" className="w-full bg-[#001032]" disabled={isUploading}>
+                      {isUploading ? "Uploading File..." : "Continue"}
+                    </Button>
                   </CardFooter>
                 </form>
               </CardContent>

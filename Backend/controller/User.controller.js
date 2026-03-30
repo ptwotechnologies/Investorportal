@@ -57,15 +57,18 @@ export const createUser = async (req, res) => {
 
     // 6. Send Verification Email
     try {
-      await resend.emails.send({
+      const emailResponse = await resend.emails.send({
         from: RESEND_FROM,
         to: [email],
         subject: "Verify Your Email - Copteno Investor Portal",
         html: verificationTemplate(pendingUser._id, verificationOtp)
       });
+      
+      if (emailResponse.error) {
+        console.error("Resend API Error details:", emailResponse.error);
+      }
     } catch (emailError) {
-      console.error("Failed to send verification email:", emailError);
-      // We still created the user, they can try resending OTP from the UI
+      console.error("Failed to send verification email (system error):", emailError);
     }
 
     res.status(201).json({
@@ -94,8 +97,6 @@ export const updateAdditionalDetails = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    
-
     if (user.role === "service_professional") {
       if (user.businessDetails && user.businessDetails.serviceType === "Company") {
         if (!user.businessDetails.companyName) {
@@ -111,12 +112,15 @@ export const updateAdditionalDetails = async (req, res) => {
     }
 
     // Update additionalDetails and registrationStep
-    user.additionalDetails = additionalDetails;
-     if (user.role === "investor") {
+    user.additionalDetails = {
+      ...user.additionalDetails,
+      ...additionalDetails
+    };
+
+    if (user.role === "investor") {
       user.registrationStep = 4;        // onboarding complete
       user.paymentStatus = "pending";  // logical approval
     } 
-    // 🔥 OTHER ROLES
     else {
       user.registrationStep = 3;
     }
@@ -130,6 +134,24 @@ export const updateAdditionalDetails = async (req, res) => {
   } catch (error) {
     console.error("Update Additional Details Error:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const uploadPortalFile = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    // Return the R2 public location
+    res.status(200).json({
+      message: "File uploaded successfully",
+      fileUrl: req.file.location,
+      fileName: req.file.originalname,
+    });
+  } catch (error) {
+    console.error("Portal File Upload Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 };
 
@@ -461,12 +483,20 @@ export const resendVerificationOtp = async (req, res) => {
     pendingUser.verificationOtpExpire = newExpire;
     await pendingUser.save();
 
-    await resend.emails.send({
+    const emailResponse = await resend.emails.send({
       from: RESEND_FROM,
       to: [pendingUser.email],
       subject: "Resend Verification Link - Copteno Investor Portal",
       html: verificationTemplate(pendingUser._id, newOtp)
     });
+
+    if (emailResponse.error) {
+      console.error("Resend API Error during OTP resend:", emailResponse.error);
+      return res.status(500).json({ 
+        message: "Failed to send email", 
+        error: emailResponse.error.message 
+      });
+    }
 
     res.status(200).json({ message: "Verification link resent successfully" });
   } catch (error) {

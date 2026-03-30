@@ -1,5 +1,6 @@
 import express from "express";
-import { createUser, getPaymentStatus, login,  updateAdditionalDetails, updatePayment, updatePlan, forgetPassword, verifyOtp, resetPassword, verifyEmail, resendVerificationOtp } from "../controller/User.controller.js";
+import { createUser, getPaymentStatus, login,  updateAdditionalDetails, updatePayment, updatePlan, forgetPassword, verifyOtp, resetPassword, verifyEmail, resendVerificationOtp, uploadPortalFile } from "../controller/User.controller.js";
+import { portalUpload } from "../middleware/userUpload.middleware.js";
 
 const router = express.Router();
 
@@ -15,6 +16,7 @@ router.post("/verifyOtp", verifyOtp);
 router.post("/resetPassword", resetPassword);
 router.post("/verify-email", verifyEmail);
 router.post("/resend-otp", resendVerificationOtp);
+router.post("/portal-upload", portalUpload.single("file"), uploadPortalFile);
 
 
 export default router;

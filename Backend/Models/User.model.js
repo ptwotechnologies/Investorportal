@@ -36,6 +36,8 @@ const userSchema = new mongoose.Schema(
       logoFileName: { type: String, default: "" },
       profileFileName: { type: String, default: "" },
       pitchDeckFileName: { type: String, default: "" },
+      profileUrl: { type: String, default: "" }, // 🔹 Added for R2
+      pitchDeckUrl: { type: String, default: "" }, // 🔹 Added for R2
       startupBusinessType: { type: String, default: "" },
       serviceBusinessType: { type: String, default: "" },
     },
