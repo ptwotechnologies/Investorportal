@@ -49,7 +49,7 @@ const UserRoutes = () => {
   '/login',
   '/selectPortal',
   '/registerportal',
-  "/verify-email-link" ,
+  "/verify-email" ,
   '/portaldetails',
   '/onboardingplans',
   '/scanner',
@@ -102,7 +102,7 @@ const UserRoutes = () => {
             <Route path="/scanner" element={<Scanner/>} />
             <Route path="/transactionId" element={<TransactionId/>} />
             <Route path="/paymentsuccess" element={<PaymentSuccess/>} />
-            <Route path="/verify-email-link" element={<VerifyEmailLink/>} />
+            <Route path="/verify-email" element={<VerifyEmailLink/>} />
             <Route path="/passwordreset" element={<PasswordReset/>} />
             <Route path="/passwordresetotp" element={<PasswordResetOtpSec/>} />
             <Route path="/newpassword" element={<NewPassword/>} />
