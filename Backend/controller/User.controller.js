@@ -65,8 +65,12 @@ export const createUser = async (req, res) => {
         html: verificationTemplate(pendingUser._id, verificationOtp)
       });
       
+      console.log("DEBUG: Full Resend API Response:", JSON.stringify(emailResponse, null, 2));
+
       if (emailResponse.error) {
-        console.error("Resend API Error details:", emailResponse.error);
+        console.error("Resend API ERROR:", emailResponse.error);
+      } else {
+        console.log("DEBUG: Email SUCCESS! ID:", emailResponse.data?.id);
       }
     } catch (emailError) {
       console.error("Failed to send verification email (system error):", emailError);
@@ -498,6 +502,8 @@ export const resendVerificationOtp = async (req, res) => {
         message: "Failed to send email", 
         error: emailResponse.error.message 
       });
+    } else {
+      console.log("DEBUG: OTP Email resent successfully! ID:", emailResponse.data?.id);
     }
 
     res.status(200).json({ message: "Verification link resent successfully" });
