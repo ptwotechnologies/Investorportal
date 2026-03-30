@@ -461,6 +461,8 @@ export const verifyEmail = async (req, res) => {
       registrationStep: newUser.registrationStep,
       token: jwt.sign({ userId: newUser._id, email: newUser.email, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
       userId: newUser._id,
+      role: newUser.role,
+      serviceType: newUser.businessDetails ? newUser.businessDetails.serviceType : null,
     });
   } catch (error) {
     console.error("Verify Email Error:", error);

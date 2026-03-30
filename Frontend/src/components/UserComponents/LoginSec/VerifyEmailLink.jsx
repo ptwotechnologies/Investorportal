@@ -30,10 +30,20 @@ const VerifyEmailLink = () => {
 
         if (response.status === 200) {
           localStorage.setItem("token", response.data.token);
-          localStorage.setItem("userId", userId);
+          // the backend returns the newly created real user's _id
+          localStorage.setItem("userId", response.data.userId); 
+          if (response.data.role) localStorage.setItem("role", response.data.role);
+          if (response.data.serviceType) localStorage.setItem("serviceType", response.data.serviceType);
+
           setStatus("success");
           setTimeout(() => {
-            navigate("/portaldetails", { state: { userId } });
+            navigate("/portaldetails", { 
+              state: { 
+                userId: response.data.userId, 
+                role: response.data.role,
+                serviceType: response.data.serviceType 
+              } 
+            });
           }, 2000);
         }
       } catch (err) {

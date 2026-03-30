@@ -2,7 +2,9 @@ const verificationTemplate = (userId, token) => {
   // Use local frontend URL in development or production URL accordingly
   const frontendUrl = process.env.FRONTEND_URL || "https://copteno.com/";
 
-  const verificationLink = `${frontendUrl}/verify-email?userId=${userId}&token=${token}`;
+  // Remove any trailing slash from the frontendUrl to prevent double slashes (//)
+  const cleanFrontendUrl = frontendUrl.replace(/\/$/, "");
+  const verificationLink = `${cleanFrontendUrl}/verify-email?userId=${userId}&token=${token}`;
 
   return `
     <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 40px auto; border: 1px solid #e1e4e8; padding: 40px; border-radius: 12px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
