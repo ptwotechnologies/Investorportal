@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,6 +21,14 @@ const LogicSec1 = () => {
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
    const [loading, setLoading] = useState(false); // NEW: Loading state
+
+   useEffect(() => {
+     const token = localStorage.getItem("token");
+     if (token) {
+       toast("You are already logged in", { icon: "ℹ️", id: "already-logged-in-toast" });
+       navigate("/dashboard");
+     }
+   }, [navigate]);
 
    const handleLogin = async (event) => {
     event.preventDefault();

@@ -151,7 +151,7 @@ const HomeSec6 = () => {
           className=" grid grid-cols-1 gap-6 w-full  p-4 py-12 text-white "
         >
           <div className="bg-[#001032CC] rounded-sm p-3 px-4 w-full">
-            <h1 className="text-xl ">I’m a Startup</h1>
+            <h1 className="text-xl ">I’m a startup</h1>
             <h1 className="text-sm leading-6 tracking-wide py-2  pt-4 ">
               Pick your onboarding plan
             </h1>
@@ -159,7 +159,7 @@ const HomeSec6 = () => {
               Learn how to use your founder credits and start building with
               expert guidance.
             </p>
-            <Link to="/startup">
+            <Link to="/login">
               <button className="text-md mb-2 mt-10 bg-white text-[#000000] p-2 px-6 rounded-sm">
                 {" "}
                 Get Started
@@ -168,14 +168,14 @@ const HomeSec6 = () => {
           </div>
 
           <div className="bg-[#616B80] rounded-sm p-3 px-4 w-full">
-            <h1 className="text-xl ">I’m a Investor</h1>
+            <h1 className="text-xl ">I’m a investor</h1>
             <h1 className="text-sm leading-6 tracking-wide py-2  pt-4 ">
               Create your investor account.
             </h1>
             <p className="text-sm leading-6 tracking-wider w-full ">
               Share your focus areas, deal sizes, and investment interests.
             </p>
-            <Link to="/investor">
+            <Link to="/login">
               <button className="text-md mb-2 mt-10 bg-white text-[#000000] p-2 px-6 rounded-sm">
                 {" "}
                 Get Started
@@ -183,14 +183,14 @@ const HomeSec6 = () => {
             </Link>
           </div>
           <div className="bg-[#002A30CC] rounded-sm p-3 px-4 w-full">
-            <h1 className="text-xl ">I’m a Service Professional</h1>
+            <h1 className="text-xl ">I’m a service professional</h1>
             <h1 className="text-sm leading-6 tracking-wide py-2  pt-4 ">
               Choose your onboarding plan
             </h1>
             <p className="text-sm leading-6 tracking-wider w-full ">
               Connect with verified startups and convert leads directly.
             </p>
-            <Link to="/serviceprofessional">
+            <Link to="/login">
               <button className="text-md mb-2 mt-10 bg-white text-[#000000] p-2 px-6 rounded-sm">
                 {" "}
                 Get Started

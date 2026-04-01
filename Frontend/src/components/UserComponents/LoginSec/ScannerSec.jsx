@@ -170,15 +170,15 @@ const ScannerSec = () => {
                 </CardDescription>
 
                <CardDescription className=" mb-1 text-[#001032] text-sm lg:text-sm lg:w-[47%] w-[88%] mx-auto mt-3 lg:mt-0 ">
-                  You are completing your onboarding for: [{displayPlanName}] – ₹{displayAmount?.toLocaleString()}/year
+                  
                 </CardDescription>
                 <CardAction></CardAction>
               </CardHeader>
               <CardContent>
-                <div className="w-70 h-70 mx-auto border-2 border-[#00142666]">
-                  <img src={qrImg} alt="QR" />
+                <div className="lg:w-[60%] w-[98%] mx-auto my-30 lg:mt-30 lg:mb-40">
+                  You’re one step away from getting started with the <span className="font-medium"> [{displayPlanName}] – ₹{displayAmount?.toLocaleString()}/year. </span> Complete your secure payment to continue.
                 </div>
-                <p className="lg:text-xs text-xs text-[#001032B2] lg:w-[50%] w-[98%] mx-auto lg:my-1 my-6 font-medium tracking-wide leading-6">Scan the QR code using any UPI app to complete your payment</p>
+                
               </CardContent>
               <CardFooter className="absolute bottom-5 w-full lg:static">
                 <Button 
@@ -186,7 +186,7 @@ const ScannerSec = () => {
                   onClick={checkoutHandler}
                   disabled={loading}
                 >
-                  {loading ? "Processing..." : "I have completed the payment"}
+                  {loading ? "Processing..." : "Continue"}
                 </Button>
               </CardFooter>
 

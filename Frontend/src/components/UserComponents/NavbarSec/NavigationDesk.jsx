@@ -23,16 +23,16 @@ const NavigationDesk = () => {
 
   return (
     <NavigationMenu viewport={isMobile}>
-      <NavigationMenuList className="flex-wrap bg-[#001032] rounded-full px-1 py-1 inline-flex items-center gap-0 ">
+      <NavigationMenuList className="flex-wrap bg-white rounded-full px-1 py-1 inline-flex items-center gap-0 border border-[#001032]">
         <NavigationMenuItem>
-          <NavigationMenuTrigger className="bg-[#001032] text-white px-7 py-1 rounded-full text-lg  ">
+          <NavigationMenuTrigger className="text-[#001032] bg-white px-7 py-1 rounded-full text-lg  ">
             Auxiliaries
           </NavigationMenuTrigger>
           <NavigationMenuContent className="inner-shadow left-[-100px]">
             <ul className="grid w-[800px] h-80 gap-4 shadow-md border rounded-xl p-4">
               <li className="flex items-start justify-center gap-5 gap-y-20">
                 <NavigationMenuLink asChild>
-                  <div className="w-[33%] border border-[#D0D0D0] rounded-2xl">
+                  <div className="w-[33%] border border-[#D0D0D0] rounded-2xl mt-1.5">
                     <Link to="/BusinessRefinementProgram">
                       <div className="relative bottom-2 font-medium border border-[#D5D5D5] text-[#5C5C5C] rounded-full p-1 w-full bg-[#DEDEDE] px-3 hover:bg-[#D5D5D5] ">
                         Business Refinement Program
@@ -122,7 +122,7 @@ const NavigationDesk = () => {
                   </div>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild>
-                  <div className="border border-[#D0D0D040] inner-shadow rounded-xl p-2  w-[30%]">
+                  <div className="border border-[#D0D0D040] inner-shadow rounded-xl p-2  w-[30%] mt-1.5">
                     <div className="border border-[#D0D0D040] shadow-md rounded-xl p-3 text-center">
                       <h1 className="text-[#5C5C5C] font-medium">Join us!</h1>
                       <p className="text-xs">
@@ -174,7 +174,7 @@ const NavigationDesk = () => {
           >
             <Link
               to="/pricing"
-              className="bg-[#001032] text-white px-11 py-1 rounded-full text-[19px]"
+              className="bg-white text-[#001032] px-11 py-1 rounded-full text-[19px]"
             >
               Pricing
             </Link>
@@ -182,7 +182,7 @@ const NavigationDesk = () => {
         </NavigationMenuItem>
 
         <NavigationMenuItem className="hidden md:block">
-          <NavigationMenuTrigger className="bg-[#001032] text-white px-7 py-1 rounded-full text-lg">
+          <NavigationMenuTrigger className="text-[#001032] bg-white px-7 py-1 rounded-full text-lg">
             Resources
           </NavigationMenuTrigger>
           <NavigationMenuContent className="inner-shadow left-[-250px] ">

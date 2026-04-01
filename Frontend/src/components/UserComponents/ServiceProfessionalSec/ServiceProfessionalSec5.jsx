@@ -90,7 +90,7 @@ const ServiceProfessionalSec5 = () => {
         <h1 className="text-5xl px-8 py-15  hidden lg:block">
           Consultations that move you forward
         </h1>
-        <h1 className='lg:hidden text-3xl font-semibold pb-7'>
+        <h1 className='lg:hidden text-3xl font-medium pb-7'>
           Why service providers choose Copteno?
         </h1>
        <div className='hidden lg:block'>

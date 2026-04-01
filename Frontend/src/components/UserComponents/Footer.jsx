@@ -115,14 +115,15 @@ useEffect(() => {
             <div>
               <h4 className=" mb-2">Policies</h4>
               <ul className="space-y-2 text-gray-600">
-                <Link to="/termconditions">
-                  <li className="pb-2">Term & Conditions</li>
-                </Link>
+                
                 <Link to="/privacypolicy">
                   <li className="pb-2">Privacy Policy</li>
                 </Link>
                 <Link to="/cookiespolicy">
-                  <li>Cookies Policy</li>
+                  <li className="pb-2">Cookies Policy</li>
+                </Link>
+                <Link to="/termconditions">
+                  <li>Term & Conditions</li>
                 </Link>
               </ul>
             </div>
@@ -222,14 +223,15 @@ useEffect(() => {
 
             {open === "policies" && (
               <ul className="mt-1 space-y-2 text-gray-600">
-                <Link to="/termconditions">
-                  <li  className="pb-1">Term & Conditions</li>
-                </Link>
+                
                 <Link to="/privacypolicy">
                   <li  className="pb-1">Privacy Policy</li>
                 </Link>
                 <Link to="/cookiespolicy">
-                  <li>Cookies Policy</li>
+                  <li className="pb-1">Cookies Policy</li>
+                </Link>
+                <Link to="/termconditions">
+                  <li>Term & Conditions</li>
                 </Link>
               </ul>
             )}

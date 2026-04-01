@@ -52,6 +52,7 @@ const SettingsSec = () => {
   };
 
   const [visibleOptions, setVisibleOptions] = useState(getVisibleOptions());
+  const [isLoading, setIsLoading] = useState(true);
 
   // Update on resize dynamically
   React.useEffect(() => {
@@ -70,6 +71,8 @@ const SettingsSec = () => {
       setFormData(res.data);
     } catch (error) {
       console.error("Failed to fetch settings", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,6 +103,14 @@ const SettingsSec = () => {
     if (path.startsWith("http")) return path;
     return `${serverUrl}${path.startsWith("/") ? path : `/${path}`}`;
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#001032]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-4">

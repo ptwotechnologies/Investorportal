@@ -149,7 +149,7 @@ const ChannelPartnerSec1 = () => {
                 placeholder="Website"
               />
 
-              <div className="mt-6 border p-3 lg:py-6 flex items-center lg:gap-3 gap-1">
+              <div className="mt-6 border p-3 lg:py-6 flex items-center  justify-between lg:gap-3 gap-1 ">
                 <div className="w-[80%]">
                   <p className="text-[#002B31] tracking-wider leading-5 font-medium lg:text-md text-sm ">
                     Are you already registered as Service Professional?
@@ -160,7 +160,7 @@ const ChannelPartnerSec1 = () => {
                   </p>
                 </div>
 
-                <div className="flex flex-col items-center lg:gap-4 gap-3 w-[20%]">
+                <div className="flex flex-col items-start lg:gap-4 gap-3 lg:w-[10%] w-[15%] ml-3 ">
                   <label className="  text-gray-700 ">
                     <input type="radio" name="reg" /> Yes
                   </label>

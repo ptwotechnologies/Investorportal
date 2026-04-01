@@ -190,7 +190,7 @@ function NavbarSheet({ textColor }) {
       )}
 
       {openNotificationMenu && (
-        <div ref={notificationRef} className="absolute right-0 lg:right-40 lg:mt-3 mt-12 w-64 bg-white rounded-xl shadow-lg border z-50 p-4">
+        <div ref={notificationRef} className="absolute right-0 lg:right-40 lg:mt-3 mt-12 w-[92vw] max-h-[60vh] bg-white rounded-xl shadow-lg border z-50 p-4">
           <p className="text-sm text-gray-500 text-center">Notification not found</p>
         </div>
       )}
@@ -213,9 +213,9 @@ function NavbarSheet({ textColor }) {
             )}
           <SheetTrigger onClick={() => setOpenSheet(!openSheet)}>
             {openSheet ? (
-              <IoIosClose size={25} className={isLoggedIn ? "text-[#12355C] ml-1" : (textColor || "text-[#12355C]")} />
+              <IoIosClose size={25} className={isLoggedIn ? "text-[#12355C] ml-1" :  (textColor || "text-[#12355C]")} />
             ) : (
-              <RxHamburgerMenu size={18} className={isLoggedIn ? "text-[#12355C] mr-1" : (textColor || "text-[#12355C]")} />
+              <RxHamburgerMenu size={isLoggedIn ? 18 : 25} className={isLoggedIn ? "text-[#12355C] mr-1 " : (textColor || "text-[#12355C]")} />
             )}
           </SheetTrigger>
            </div>
@@ -248,7 +248,7 @@ function NavbarSheet({ textColor }) {
                       </div>
 
                       {openTopSection === "aux" && (
-                        <div className="px-2 py-4 rounded-md">
+                        <div className=" py-4 rounded-md ">
                           {/* Subscriptions */}
                          
 
@@ -260,7 +260,7 @@ function NavbarSheet({ textColor }) {
                               toggleNested("profiles");
                             }}
                           >
-                            <p className="text-[#001032] text-[17px]">
+                            <p className="text-[#001032] text-[18px]">
                               Profiles
                             </p>
                             <IoIosArrowDown
@@ -273,7 +273,7 @@ function NavbarSheet({ textColor }) {
                           </div>
 
                           {openNested === "profiles" && (
-                            <div className="pl- mt-2 flex flex-col gap-3 text-[15px]">
+                            <div className="pl- mt-2 flex flex-col gap-3 text-[17px]">
                               <Link
                                 to="/startup"
                                 onClick={() => setOpenSheet(false)}
@@ -302,7 +302,7 @@ function NavbarSheet({ textColor }) {
                               toggleNested("Business Refinement Program");
                             }}
                           >
-                            <Link to="/BusinessRefinementProgram" className="text-[#001032] text-[17px]">
+                            <Link to="/BusinessRefinementProgram" onClick={() => setOpenSheet(false)} className="text-[#001032] text-[18px]">
                               Business Refinement Program
                             </Link>
                             {/* <IoIosArrowDown
@@ -397,7 +397,7 @@ function NavbarSheet({ textColor }) {
                       </div>
 
                       {openTopSection === "resources" && (
-                        <div className="py-4 px-2 rounded-md flex flex-col gap-3 text-[17px]">
+                        <div className="py-4 rounded-md flex flex-col gap-3 text-[17px]">
                           <Link to="/about" onClick={() => setOpenSheet(false)}>
                             <p>About Us</p>
                           </Link>

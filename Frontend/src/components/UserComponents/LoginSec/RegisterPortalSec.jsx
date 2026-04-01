@@ -56,9 +56,10 @@ const RegisterPortalSec = () => {
   const [companyName, setCompanyName] = useState("");
   const [businessType, setBusinessType] = useState(activeTab);
   const [otp, setOtp] = useState("");
-const [otpSent, setOtpSent] = useState(false);
-const [phoneVerified, setPhoneVerified] = useState(false);
-const [isSubmitted, setIsSubmitted] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [phoneVerified, setPhoneVerified] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
 
   const tabs = role === "service_professional" ? serviceTabs.map((t)=>({id:t,label:t})) : investorTabs.map((t) => ({ id: t, label: t }));
 
@@ -179,11 +180,16 @@ const [isSubmitted, setIsSubmitted] = useState(false);
       }
 
       // Basic validation: must be a 10-digit number
+      if (cleanMobile.length < 10) {
+        toast.error("Incomplete number. Please enter a 10-digit mobile number.");
+        return;
+      }
       if (cleanMobile.length !== 10) {
         toast.error("Please enter a valid 10-digit mobile number.");
         return;
       }
 
+      setIsSendingOtp(true);
       const phoneNumber = "+91" + cleanMobile;
 
       await sendOtp(phoneNumber);
@@ -192,6 +198,8 @@ const [isSubmitted, setIsSubmitted] = useState(false);
     } catch (error) {
       console.error(error);
       toast.error("Failed to send OTP. Please try again.");
+    } finally {
+      setIsSendingOtp(false);
     }
   };
 
@@ -338,10 +346,10 @@ const handleVerifyOtp = async () => {
                       <Button 
                         type="button" 
                         onClick={handleSendOtp} 
-                        disabled={otpSent || phoneVerified}
+                        disabled={phoneVerified || isSendingOtp}
                         className="bg-[#001032] h-auto px-4"
                       >
-                        {otpSent ? "Sent" : "Send OTP"}
+                        {isSendingOtp ? "Sending..." : phoneVerified ? "Send OTP" : otpSent ? "Resend" : "Send OTP"}
                       </Button>
                     </div>
 

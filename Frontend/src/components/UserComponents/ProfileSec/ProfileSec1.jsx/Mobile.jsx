@@ -259,7 +259,7 @@ const Mobile = () => {
                     </button>
                     <button
                       onClick={() => setShowSignoutDialog(false)}
-                      className="w-full py-2 active:bg-[#001032] active:text-white rounded-md"
+                      className="w-full py-2 active:bg-[#001032] bg-[#001032] active:text-white  text-white rounded-md"
                     >
                       No
                     </button>
@@ -268,7 +268,7 @@ const Mobile = () => {
               </SheetContent>
             </div>
           </Sheet>
-        </div>
+        </div> 
       </div>
 
       {showNotifications && (
@@ -315,7 +315,6 @@ const Mobile = () => {
           </div>
         </div>
       )}
-      <Toaster/>
     </div>
   );
 };

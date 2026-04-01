@@ -117,7 +117,7 @@ const RequestSec = () => {
           <div
             className={`${widths.left} ${mobileView === "right" ? "hidden md:block" : "block"} flex flex-col gap-2 transition-all duration-300`}
           >
-            <div className="border border-gray-400 bg-white rounded-md shadow-md lg:px-4 lg:pt-4 p-2 lg:h-[88vh] h-[76vh] overflow-hidden">
+            <div className="border border-gray-400 bg-white rounded-md shadow-md lg:px-4 lg:pt-4 p-2 lg:h-[88vh] h-[calc(100dvh-110px)] overflow-hidden">
               <Tabs
                 value={activeTab}
                 onValueChange={(value) => {
@@ -180,7 +180,7 @@ const RequestSec = () => {
                   </TabsTrigger>
                 </TabsList>
 
-                <div className="overflow-y-auto  h-[calc(92vh-140px)]  scrollbar-hide ">
+                <div className="overflow-y-auto  h-[calc(100dvh-210px)] lg:h-[calc(92vh-140px)]  scrollbar-hide ">
                   <TabsContent value="newRequest" className="mt-0">
                     <NewRequest onCreateRequest={handleCreateRequest} />
                   </TabsContent>

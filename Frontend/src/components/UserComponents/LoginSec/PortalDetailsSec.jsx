@@ -45,18 +45,19 @@ const PortalDetailsSec = () => {
   const [logoFile, setLogoFile] = useState(null);
   // Startup-specific business type selection (shown instead of LinkedIn)
   const [startupBusinessType, setStartupBusinessType] = useState(" Business Type");
-  const startupBusinessOptions = ["Manufacturing", "Trading", "Service Based"];
+  const startupBusinessOptions = ["Manufacturing", "Trading", "Service Based","Other"];
   // Service-professional company business type (replaces LinkedIn for companies)
   const [serviceBusinessType, setServiceBusinessType] = useState(" Business Type");
-  const serviceBusinessOptions = ["Manufacturing", "Trading", "Service Based"];
+  const serviceBusinessOptions = ["Manufacturing", "Trading", "Service Based","Other"];
 
   // 🔹 New R2 states
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState("");
 
-  // Maximum logo / file size in bytes (2MB)
+  // Maximum logo / file size in bytes (10MB)
   const MAX_LOGO_SIZE = 10 * 1024 * 1024;
-  const handleLogoChange = async (e) => {
+  
+  const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -67,10 +68,16 @@ const PortalDetailsSec = () => {
     }
 
     setLogoFile(file);
-    setIsUploading(true);
+    setUploadedUrl(""); 
+  };
 
+  const uploadFileToCloud = async (e) => {
+    if (e) e.preventDefault();
+    if (!logoFile) return;
+
+    setIsUploading(true);
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", logoFile);
     formData.append("type", role === "startup" ? "pitchdeck" : "portal_profile");
 
     try {
@@ -250,6 +257,66 @@ const PortalDetailsSec = () => {
     }
   };
 
+  const renderFileUpload = (label) => (
+    <div className="flex flex-col gap-2 items-center justify-center">
+      <div className="w-full">
+        <input
+          id={`logoInput_${label.replace(/\s+/g, '')}`}
+          type="file"
+          accept="image/*,application/pdf"
+          onChange={handleFileSelect}
+          className="hidden"
+        />
+        {!logoFile ? (
+          <label htmlFor={`logoInput_${label.replace(/\s+/g, '')}`} className="cursor-pointer inline-flex flex-col items-center gap-2 px-3 py-3 w-full border  rounded-md hover:bg-gray-50 transition-colors">
+            <img src={logoIcon} alt="Upload" className="w-12 h-12 object-contain my-3" />
+            <span className="text-sm text-[#00103280]">{label}</span>
+          </label>
+        ) : (
+          <div className="relative inline-flex flex-col items-center justify-center gap-2 px-3 py-4 pb-12 w-full border border-blue-200 bg-blue-50/50 rounded-md">
+            <button 
+              type="button" 
+              onClick={(e) => { 
+                e.preventDefault(); 
+                setLogoFile(null); 
+                setUploadedUrl(""); 
+                document.getElementById(`logoInput_${label.replace(/\s+/g, '')}`).value = ''; 
+              }} 
+              className="absolute top-2 right-2 text-white bg-red-400 hover:bg-red-600 font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-sm cursor-pointer z-10"
+              title="Remove File"
+            >
+              ✕
+            </button>
+            <img 
+              src={logoFile.type.includes("image") ? URL.createObjectURL(logoFile) : logoIcon} 
+              alt="preview" 
+              className="w-16 h-16 object-cover rounded border-2 border-white shadow-sm" 
+            />
+            <p className="text-xs text-center text-[#00103280] break-words w-full px-4">{logoFile.name}</p>
+
+            <div className="absolute bottom-2 right-2">
+              <button
+                type="button"
+                onClick={uploadFileToCloud}
+                disabled={isUploading || !!uploadedUrl}
+                className={`text-xs px-3 py-1.5 rounded text-white font-medium shadow-sm transition-colors ${
+                  uploadedUrl 
+                    ? "bg-[#001032] cursor-default" 
+                    : isUploading 
+                      ? "bg-gray-400 cursor-wait" 
+                      : "bg-[#001032] cursor-pointer"
+                }`}
+              >
+                {uploadedUrl ? "Uploaded ✓" : isUploading ? "Uploading..." : "Upload"}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+      <label className="text-left text-xs text-gray-600">(Max 10MB)</label>
+    </div>
+  );
+
   return (
     <div>
       <div className="flex justify-between items-center lg:min-h-dvh">
@@ -334,28 +401,7 @@ const PortalDetailsSec = () => {
                               />
 
                               {/* Profile upload for Freelancer */}
-                              <div className="flex flex-col gap-2 items-center justify-center ">
-                                <div className="w-full ">
-                                  <input
-                                    id="logoInput"
-                                    type="file"
-                                    accept="image/*,application/pdf"
-                                    onChange={handleLogoChange}
-                                    className="hidden "
-                                  />
-                                  <label htmlFor="logoInput" className="cursor-pointer inline-flex flex-col items-center gap-2 px-3 py-3  w-full border  rounded-md">
-                                    <img src={logoIcon} alt="Upload" className="w-19 h-19 object-contain" />
-                                    <span className="text-sm text-[#00103280]">Profile  Upload</span>
-                                  </label>
-                                  {logoFile && (
-                                    <div className="flex items-center gap-2">
-                                      <img src={URL.createObjectURL(logoFile)} alt="preview" className="w-10 h-10 object-cover rounded" />
-                                      <p className="text-sm text-[#00103280]">{logoFile.name}</p>
-                                    </div>
-                                  )}
-                                </div>
-                                <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
-                              </div>
+                              {renderFileUpload("Profile Upload")}
                             </>
                           ) : serviceType === "Company" ? (
                             <>
@@ -420,28 +466,7 @@ const PortalDetailsSec = () => {
                               />
 
                               {/* Profile upload */}
-                              <div className="flex flex-col gap-2 items-center justify-center ">
-                                <div className="w-full ">
-                                  <input
-                                    id="logoInput"
-                                    type="file"
-                                    accept="image/*,application/pdf"
-                                    onChange={handleLogoChange}
-                                    className="hidden "
-                                  />
-                                  <label htmlFor="logoInput" className="cursor-pointer inline-flex flex-col items-center gap-2 px-3 py-3  w-full border  rounded-md">
-                                    <img src={logoIcon} alt="Upload" className="w-19 h-19 object-contain" />
-                                    <span className="text-sm text-[#00103280]">Profile  Upload</span>
-                                  </label>
-                                  {logoFile && (
-                                    <div className="flex items-center gap-2">
-                                      <img src={URL.createObjectURL(logoFile)} alt="preview" className="w-10 h-10 object-cover rounded" />
-                                      <p className="text-sm text-[#00103280]">{logoFile.name}</p>
-                                    </div>
-                                  )}
-                                </div>
-                                <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
-                              </div>
+                              {renderFileUpload("Profile Upload")}
                             </>
                           ) : (
                             <>
@@ -481,28 +506,7 @@ const PortalDetailsSec = () => {
                                   required
                                 />
                               )}
-                              <div className="flex flex-col gap-2 items-center justify-center ">
-                                <div className="w-full ">
-                                  <input
-                                    id="logoInput"
-                                    type="file"
-                                    accept="image/*,application/pdf"
-                                    onChange={handleLogoChange}
-                                    className="hidden "
-                                  />
-                                  <label htmlFor="logoInput" className="cursor-pointer inline-flex flex-col items-center gap-2 px-3 py-3  w-full border  rounded-md">
-                                    <img src={logoIcon} alt="Upload" className="w-12 h-12 object-contain" />
-                                    <span className="text-sm text-[#00103280]">Profile  Upload</span>
-                                  </label>
-                                  {logoFile && (
-                                    <div className="flex items-center gap-2">
-                                      <img src={URL.createObjectURL(logoFile)} alt="preview" className="w-10 h-10 object-cover rounded" />
-                                      <p className="text-sm text-[#00103280]">{logoFile.name}</p>
-                                    </div>
-                                  )}
-                                </div>
-                                <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
-                              </div>
+                              {renderFileUpload("Profile Upload")}
                             </>
                           )
                         ) : role === "startup" ? (
@@ -517,7 +521,7 @@ const PortalDetailsSec = () => {
                                   <IoIosArrowDown className="mt-1" />
                                 </button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                              <DropdownMenuContent className="mt-2 w-[87vw] lg:w-[39.5vw] bg-white rounded-md shadow-sm ">
                                 {startupBusinessOptions.map((item) => (
                                   <DropdownMenuItem key={item} onClick={() => setStartupBusinessType(item)}>
                                     {item}
@@ -533,7 +537,7 @@ const PortalDetailsSec = () => {
                                   <IoIosArrowDown className="mt-1" />
                                 </button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                              <DropdownMenuContent className="mt-2 w-[87vw] lg:w-[39.5vw] bg-white rounded-md shadow-sm">
                                 {domainOptions.map((item) => (
                                   <DropdownMenuItem key={item} onClick={() => setDomain(item)}>
                                     {item}
@@ -561,28 +565,7 @@ const PortalDetailsSec = () => {
                               className="p-5  text-[#00103280]"
                             />
 
-                            <div className="flex flex-col gap-2 items-center justify-center ">
-                              <div className="w-full ">
-                                <input
-                                  id="logoInput"
-                                  type="file"
-                                  accept="image/*,application/pdf"
-                                  onChange={handleLogoChange}
-                                  className="hidden "
-                                />
-                                <label htmlFor="logoInput" className="cursor-pointer inline-flex flex-col items-center gap-2 px-3 py-3  w-full border  rounded-md">
-                                  <img src={logoIcon} alt="Upload" className="w-12 h-12 object-contain my-3" />
-                                  <span className="text-sm text-[#00103280]">Pitchdeck Upload</span>
-                                </label>
-                                {logoFile && (
-                                  <div className="flex items-center gap-2">
-                                    <img src={URL.createObjectURL(logoFile)} alt="preview" className="w-10 h-10 object-cover rounded" />
-                                    <p className="text-sm text-[#00103280]">{logoFile.name}</p>
-                                  </div>
-                                )}
-                              </div>
-                              <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
-                            </div>
+                            {renderFileUpload("Pitchdeck Upload")}
                           </>
                         ) : (
                           <>
@@ -625,28 +608,7 @@ const PortalDetailsSec = () => {
                               />
                             )}
 
-                            <div className="flex flex-col gap-2 items-center justify-center ">
-                              <div className="w-full ">
-                                <input
-                                  id="logoInput"
-                                  type="file"
-                                  accept="image/*,application/pdf"
-                                  onChange={handleLogoChange}
-                                  className="hidden "
-                                />
-                                <label htmlFor="logoInput" className="cursor-pointer inline-flex flex-col items-center gap-2 px-3 py-3  w-full border  rounded-md">
-                                  <img src={logoIcon} alt="Upload" className="w-12 h-12 object-contain" />
-                                  <span className="text-sm text-[#00103280]">Profile  Upload</span>
-                                </label>
-                                {logoFile && (
-                                  <div className="flex items-center gap-2">
-                                    <img src={URL.createObjectURL(logoFile)} alt="preview" className="w-10 h-10 object-cover rounded" />
-                                    <p className="text-sm text-[#00103280]">{logoFile.name}</p>
-                                  </div>
-                                )}
-                              </div>
-                              <label className="text-left text-xs  text-gray-600">(Max 10MB)</label>
-                            </div>
+                            {renderFileUpload("Profile Upload")}
                           </>
                         )}
                       </>
@@ -658,8 +620,8 @@ const PortalDetailsSec = () => {
 
                   {/* SUBMIT BUTTON */}
                   <CardFooter className="flex-col gap-2 lg:mt-4 w-full px-0 mt-15">
-                    <Button type="submit" className="w-full bg-[#001032]" disabled={isUploading}>
-                      {isUploading ? "Uploading File..." : "Continue"}
+                    <Button type="submit" className="w-full bg-[#001032]" disabled={isUploading || !uploadedUrl}>
+                      {isUploading ? "Uploading File..." : !uploadedUrl ? "Please upload file to continue" : "Continue"}
                     </Button>
                   </CardFooter>
                 </form>

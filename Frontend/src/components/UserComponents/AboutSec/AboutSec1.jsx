@@ -18,8 +18,8 @@ const AboutSec1 = () => {
      </div>
 
      <div id='right' className='w-full lg:w-[50%] lg:mt-28'>
-       <div className='h-[220px] lg:h-[420px] bg-[#D8D8D8] lg:rounded-sm'>
-
+       <div className='h-[220px] lg:h-[420px] bg-[#D8D8D8] lg:rounded-sm border'>
+<img src="/aboutsec1.jpeg" alt="" className='w-full h-full'/>
 
        </div>
      </div>

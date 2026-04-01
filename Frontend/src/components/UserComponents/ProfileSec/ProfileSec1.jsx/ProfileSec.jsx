@@ -71,6 +71,7 @@ const ProfileSec = () => {
   });
 
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploadingPortfolio, setIsUploadingPortfolio] = useState(false);
   const [profileImageFile, setProfileImageFile] = useState(null);
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
@@ -93,6 +94,8 @@ const ProfileSec = () => {
   const [isCropModalOpen, setIsCropModalOpen] = useState(false);
   const [isContactEdit, setIsContactEdit] = useState(false);
   const [contactForm, setContactForm] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSavingProfile, setIsSavingProfile] = useState(false);
 
   const fetchProfile = async () => {
     try {
@@ -112,7 +115,7 @@ const ProfileSec = () => {
                 {
                   title: "",
                   company: "",
-                  duration: "",
+                  duration: { startDate: "", endDate: "", present: false },
                   location: "",
                   description: [""],
                 },
@@ -122,6 +125,8 @@ const ProfileSec = () => {
     } catch (err) {
       console.error(err);
       
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -141,22 +146,23 @@ const ProfileSec = () => {
 
   const updateProfileData = async (data) => {
     try {
+      setIsSavingProfile(true);
       const token = localStorage.getItem("token");
       const res = await axios.put(`${serverUrl}/profile/`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       setProfile({
-        ...res.data.profile,
-        experience: Array.isArray(res.data.profile.experience)
-          ? res.data.profile.experience
-          : res.data.profile.experience
-            ? [res.data.profile.experience]
+        ...res.data,
+        experience: Array.isArray(res.data.experience)
+          ? res.data.experience
+          : res.data.experience
+            ? [res.data.experience]
             : [
                 {
                   title: "",
                   company: "",
-                  duration: "",
+                  duration: { startDate: "", endDate: "", present: false },
                   location: "",
                   description: [""],
                 },
@@ -166,6 +172,8 @@ const ProfileSec = () => {
       toast.success("Profile updated successfully");
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsSavingProfile(false);
     }
   };
 
@@ -186,6 +194,7 @@ const ProfileSec = () => {
   formData.append("file", selectedFile); 
 
   try {
+    setIsUploadingPortfolio(true);
     await axios.post(`${serverUrl}/profile/portfolio`, formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -200,6 +209,8 @@ const ProfileSec = () => {
     console.error("Upload failed:", err);
     console.error("Error details:", err.response?.data);
     toast.error("Upload failed: " + (err.response?.data?.message || err.message));
+  } finally {
+    setIsUploadingPortfolio(false);
   }
 };
 
@@ -290,7 +301,7 @@ const ProfileSec = () => {
   const exp = profile?.experience?.[0] || {
     title: "",
     company: "",
-    duration: "",
+    duration: { startDate: "", endDate: "", present: false },
     location: "",
     description: [""],
   };
@@ -383,7 +394,7 @@ const ProfileSec = () => {
     const isFilled =
       newExperience.title.trim() !== "" ||
       newExperience.company.trim() !== "" ||
-      newExperience.duration.trim() !== "" ||
+      (newExperience.duration?.startDate?.trim() !== "" || newExperience.duration?.endDate?.trim() !== "" || newExperience.duration?.present) ||
       newExperience.location.trim() !== "" ||
       newExperience.description.some((desc) => desc.trim() !== "");
 
@@ -458,6 +469,14 @@ const getImageUrl = (imageUrl) => {
   return `${serverUrl}${imageUrl}`;
 };
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-[80vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#001032]"></div>
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="hidden lg:block">
@@ -525,9 +544,10 @@ onClick={() => {
               <IoIosCamera
                 size={30}
                 className="absolute right-2 top-2 bg-white rounded-full p-1 cursor-pointer z-10"
-                onClick={() =>
-                  document.getElementById("coverPhotoInput").click()
-                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  document.getElementById("coverPhotoInput").click();
+                }}
               />
             </div>
             {/* Hidden Input */}
@@ -536,6 +556,7 @@ onClick={() => {
               accept="image/*"
               id="coverPhotoInput"
               className="hidden"
+              onClick={(e) => e.stopPropagation()}
               onChange={(e) => {
                 const file = e.target.files[0];
                 if (!file) return;
@@ -726,13 +747,14 @@ onClick={() => {
             {editSections.header && (
               <div className="flex justify-end px-2 lg:pl-13 mb-4">
                 <button
-                  onClick={() => {
-                    updateProfileData(profile);
+                  disabled={isSavingProfile}
+                  onClick={async () => {
+                    await updateProfileData(profile);
                     setEditSections((prev) => ({ ...prev, header: false }));
                   }}
-                  className="bg-blue-500 text-white px-4 py-1 rounded-md h-10 mb-2"
+                  className={`bg-blue-500 text-white px-4 py-1 rounded-md h-10 mb-2 ${isSavingProfile ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  Save
+                  {isSavingProfile ? "Saving..." : "Save"}
                 </button>
               </div>
             )}
@@ -819,13 +841,14 @@ onClick={() => {
         {editSections.aboutAndSkills && (
           <div className="flex justify-end px-4 lg:px-0 mb-4 ">
             <button
-              onClick={() => {
-                updateProfileData(profile);
+              disabled={isSavingProfile}
+              onClick={async () => {
+                await updateProfileData(profile);
                 setEditSections((prev) => ({ ...prev, aboutAndSkills: false }));
               }}
-              className="bg-blue-500 text-white px-4 py-1 rounded-md"
+              className={`bg-blue-500 text-white px-4 py-1 rounded-md ${isSavingProfile ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              Save
+              {isSavingProfile ? "Saving..." : "Save"}
             </button>
           </div>
         )}
@@ -885,22 +908,23 @@ onClick={() => {
         {editSections.services && (
           <div className="flex justify-end px-4 lg:px-0 mb-4 lg:pl-9">
             <button
-              onClick={() => {
+              disabled={isSavingProfile}
+              onClick={async () => {
                 // Convert services to array if user edited as string
                 const payload = {
                   ...profile,
                   services:
                     typeof profile.services === "string"
-                      ? [profile.services]
+                      ? profile.services.split(",").map(s => s.trim()).filter(Boolean)
                       : profile.services,
                 };
 
-                updateProfileData(payload);
+                await updateProfileData(payload);
                 setEditSections((prev) => ({ ...prev, services: false }));
               }}
-              className="bg-blue-500 text-white px-4 py-1 rounded-md"
+              className={`bg-blue-500 text-white px-4 py-1 rounded-md ${isSavingProfile ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              Save
+              {isSavingProfile ? "Saving..." : "Save"}
             </button>
           </div>
         )}
@@ -1208,10 +1232,13 @@ onClick={() => {
               onClick={async () => {
                 // Remove blank experiences
                 const filteredExp = profile.experience.filter((exp) => {
+                  const hasDuration = exp.duration && typeof exp.duration === 'object'
+                    ? (exp.duration.startDate?.trim() !== "" || exp.duration.endDate?.trim() !== "" || exp.duration.present)
+                    : (typeof exp.duration === 'string' && exp.duration.trim() !== "");
                   return (
                     exp.title.trim() !== "" ||
                     exp.company.trim() !== "" ||
-                    exp.duration.trim() !== "" ||
+                    hasDuration ||
                     exp.location.trim() !== "" ||
                     (Array.isArray(exp.description) &&
                       exp.description.some((desc) => desc.trim() !== ""))
@@ -1233,9 +1260,10 @@ onClick={() => {
                 // Close edit mode
                 setExperienceEdit({});
               }}
-              className="bg-blue-500 text-white px-4 py-1 rounded-md"
+              disabled={isSavingProfile}
+              className={`bg-blue-500 text-white px-4 py-1 rounded-md ${isSavingProfile ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              Save
+              {isSavingProfile ? "Saving..." : "Save"}
             </button>
           </div>
         )}
@@ -1360,14 +1388,14 @@ onClick={() => {
           <div className="flex justify-end px-4 mb-4">
             <button
               onClick={handleUpload}
-              disabled={portfolioFiles.length >= MAX_PORTFOLIO_IMAGES}
+              disabled={portfolioFiles.length >= MAX_PORTFOLIO_IMAGES || isUploadingPortfolio}
               className={`bg-blue-500 text-white px-4 py-1 rounded-md ${
-                portfolioFiles.length >= MAX_PORTFOLIO_IMAGES
+                portfolioFiles.length >= MAX_PORTFOLIO_IMAGES || isUploadingPortfolio
                   ? "opacity-50 cursor-not-allowed"
                   : ""
               }`}
             >
-              Upload
+              {isUploadingPortfolio ? "Uploading..." : "Upload"}
             </button>
           </div>
         )}
@@ -1475,10 +1503,11 @@ onClick={() => {
         {editSections.socialMedia && (
           <div className="flex justify-end px-4 mb-4 lg:px-0">
             <button
+              disabled={isSavingProfile}
               onClick={handleSaveSocialMedia}
-              className="bg-blue-500 text-white px-4 py-1 rounded-md"
+              className={`bg-blue-500 text-white px-4 py-1 rounded-md ${isSavingProfile ? "opacity-50 cursor-not-allowed" : ""}`}
             >
-              Save
+              {isSavingProfile ? "Saving..." : "Save"}
             </button>
           </div>
         )}
@@ -1498,7 +1527,7 @@ onClick={() => {
                 setIsImageModalOpen(false);
               }}
             >
-              Delete
+              Remove
             </button>
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-md"
@@ -1511,7 +1540,7 @@ onClick={() => {
                 setIsImageModalOpen(false);
               }}
             >
-              Edit
+              Change
             </button>
             <button
               className="bg-gray-300 px-4 py-2 rounded-md"
@@ -1700,9 +1729,10 @@ onClick={() => {
 
                     setIsContactEdit(false);
                   }}
-                  className="px-4 py-1 bg-blue-600 text-white rounded"
+                  disabled={isSavingProfile}
+                  className={`px-4 py-1 bg-blue-600 text-white rounded ${isSavingProfile ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  Save
+                  {isSavingProfile ? "Saving..." : "Save"}
                 </button>
               </div>
             )}
@@ -1858,16 +1888,16 @@ onClick={() => {
               </button>
 
               <button
+                disabled={isSavingProfile}
                 onClick={handleSaveNewExperience}
-                className="bg-blue-500 text-white px-4 py-1 rounded-md"
+                className={`bg-blue-500 text-white px-4 py-1 rounded-md ${isSavingProfile ? "opacity-50 cursor-not-allowed" : ""}`}
               >
-                Save
+                {isSavingProfile ? "Saving..." : "Save"}
               </button>
             </div>
           </div>
         </div>
       )}
-       <Toaster/>
     </div>
   );
 };

@@ -84,7 +84,8 @@ const AboutSec5 = () => {
     {/* paragraph stays INSIDE SAME DIV */}
     {openSection === "service" && (
       <p className='text-md lg:text-base text-white lg:text-[#000000] mt-4 ml-13 lg:ml-0'>
-         They use the portal to find refined, verified startups...
+         They use the portal to offer their expertise to the right clients, gain visibility, and build consistent business opportunities.
+With structured onboarding and smart matching, they can showcase their services, get discovered easily, and grow their practice with confidence.
       </p>
     )}
   </div>
@@ -110,7 +111,8 @@ const AboutSec5 = () => {
     {/* paragraph INSIDE SAME DIV */}
     {openSection === "channel" && (
       <p className='text-md lg:text-base text-white lg:text-[#000000] mt-4 ml-13 lg:ml-0'>
-         They use the portal to find refined, verified startups...
+         They use the portal to connect opportunities with the right stakeholders, enabling seamless collaboration and value exchange.
+Through a structured ecosystem, they can bridge gaps, expand their network, and create consistent deal flow across industries.
       </p>
     )}
   </div>

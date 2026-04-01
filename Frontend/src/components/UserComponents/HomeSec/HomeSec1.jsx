@@ -85,16 +85,22 @@ const HomeSec1 = () => {
 
           <div id='phone' className='lg:hidden text-white flex items-center gap-3  overflow-x-scroll  scrollbar-hide '>
               <div>
-                 <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
+                 <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'>
+                  <img src="/homepage3.jpeg" alt="" className='w-full h-full object-cover rounded-2xl' />
+                 </div>
                  <p className='py-3 h-25 text-sm font-light w-full'>Investors are already discovering founders like you</p>
                  
               </div>
               <div>
-                 <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
+                 <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'>
+                  <img src="/homepage4.jpeg" alt="" className='w-full h-full object-cover rounded-2xl' />
+                 </div>
                  <p className='py-3 h-25 text-sm font-light w-full'>Access expert-led services at startup-first pricing</p>
               </div>
               <div>
-                 <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'></div>
+                 <div className='w-50 h-45 rounded-2xl bg-[#FFFFFF]'>
+                  <img src="/homepage5.jpeg" alt="" className='w-full h-full object-cover rounded-2xl' />
+                 </div>
                  <p className='py-3 h-25 text-sm font-light w-full'>Get free advisory from mentors and venture experts</p>
               </div>
           </div>
@@ -103,9 +109,13 @@ const HomeSec1 = () => {
         <div
           id="right"
           className="w-full lg:w-[50%] lg:bg-white rounded-md lg:rounded-sm mt-auto flex justify-center items-center  ">
-          <div className="rounded-sm bg-gray-200 w-full h-[870px]  hidden lg:block"></div>  
+          <div className="rounded-sm bg-gray-200 w-full h-[870px]  hidden lg:block">
+            <img src="/homepagesec1.jpeg" alt="" className='w-full h-full'/>
+            </div>  
            <div className="lg:hidden  h-90 w-full  mt-10">
-            <div className="rounded-4xl  bg-gray-200  w-full h-[200px] object-cover  border border-[#001032]"></div>   
+            <div className="rounded-4xl    w-full h-[200px]   border border-[#001032]">
+            <img src="/homepage2.jpeg" alt="" className='w-full h-full object-cover   rounded-4xl'/>
+              </div>   
                </div>
         </div>
       </div>
@@ -116,7 +126,7 @@ const HomeSec1 = () => {
           </div></Link>
           </div>
     </div>
-     <div className="flex justify-center items-center gap-2 border-2 border-[#002A30]  w-[70%]  relative 
+     <div className="flex justify-center items-center gap-2 border border-[#002A30]  w-[70%]  relative 
      my-1 mt-29 mx-auto p-3 px-4 text-[#001032] text-xl rounded-sm  lg:hidden">
        <Link to="/login"> <button>See How It Works</button></Link>
         <IoIosArrowRoundForward size={25} className="mt-1" />

@@ -4,7 +4,8 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import PlansSec from "./PlansSec";
+import StartupPlansSec from "./StartupPlansSec";
+import ServiceProfessionalPlanSec from './ServiceProfessionalPlanSec';
 
 const OnboardingPlanSec = () => {
 
@@ -51,13 +52,14 @@ const userId = location.state?.userId || localStorage.getItem("userId");
                 <p className="text-[#001032] border-2 border-[#00103280] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mx-5 hidden lg:block   lg:mx-50 text-lg  rounded-md  p-2">
                   Choose the best suited onboarding plan for you
                 </p>
-                <p className="text-[#001032] border-2 border-[#00103280]  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mb-2 mx-4 lg:hidden text-lg  rounded-sm  p-2">
+                <p className="text-[#001032] border-2 border-[#00103280]  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mb-2 mx-2 lg:hidden text-lg  rounded-sm  p-2">
                   Choose the Onboarding Plan
                 </p>
               </div>
               <div id="bottom " className=" w-full ">
                <div>
-                <PlansSec userId={userId}/>
+                {role === "startup" && <StartupPlansSec userId={userId}/>}
+                {role === "service_professional" && <ServiceProfessionalPlanSec userId={userId}/>}
                </div>
               </div>
 
