@@ -289,6 +289,7 @@ function NavbarSheet({ textColor }) {
                               <Link
                                 to="/serviceprofessional"
                                 onClick={() => setOpenSheet(false)}
+                                className="mb-1"
                               >
                                 <p>Service Professionals</p>
                               </Link>

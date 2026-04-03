@@ -53,12 +53,12 @@ const InvestorSec3 = () => {
       </div>
     </div>
 
-    <div id="phoneScreen" className="lg:hidden">
+    {/* <div id="phoneScreen" className="lg:hidden">
       <div className="w-full h-16 bg-[#0010329E] rounded-t-sm"></div>
       <div className="w-full h-16 bg-[#EEEEEE] rounded-t-sm"></div>
       <div className="w-full h-16 bg-[#002A308A] rounded-t-sm"></div>
       <div className="w-full h-64 bg-[#FFFFFF] rounded-sm shadow-md "></div>
-    </div>
+    </div> */}
     </>
   )
 }

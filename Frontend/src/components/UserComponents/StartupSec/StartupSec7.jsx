@@ -26,8 +26,10 @@ const StartupSec7 = () => {
          </div>
         </div>
         <div id="right" className="w-[60%]  ">
-          <div className="w-full h-[500px] bg-[#EEEEEE] rounded-sm "></div>
-         
+          <div className="w-full h-[500px] bg-[#EEEEEE] rounded-sm ">
+            <img src="/onboardingplan2.png" alt="" className='w-full h-full rounded-sm object-cover '/>
+          </div>
+          
         </div>
       </div>
       </div>
@@ -41,7 +43,9 @@ const StartupSec7 = () => {
             <p className='text-md leading-9 tracking-wider'>→ All plans include guidance, investor visibility and platform tools</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Just choose what aligns with your startup’s current stage</p>
            
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  mb-8'> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm  mb-8'> 
+              <img src="/onboardingplan2.png" alt="" className='w-full h-full rounded-sm  '/>
+             </div>
              <hr className='mx-6'  />
         </div>
 
@@ -53,7 +57,9 @@ const StartupSec7 = () => {
             <p className='text-md leading-9 tracking-wider'>→ Add your startup info, goals, deck, metrics and product details</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ We use this to match you with investors, mentors and experts</p>
            
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm mt-6 my-8'> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm mt-6 my-8'> 
+              <img src="/onboardingplan1.png" alt="" className='w-full h-full rounded-sm  '/>
+             </div>
               <hr className='mx-6' />
         </div>
 
@@ -64,7 +70,9 @@ const StartupSec7 = () => {
            
             <p className='text-md leading-9 tracking-wider'>→ Our team reviews your profile to ensure it’s clear, credible and relevant for the ecosystem</p>
             
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm  my-8'> 
+              <img src="/onboardingplan3.png" alt="" className='w-full h-full rounded-sm  '/>
+             </div>
              <hr className='mx-6'  />
         </div>
 
@@ -75,7 +83,9 @@ const StartupSec7 = () => {
            
             <p className='text-md leading-9 tracking-wider'>→ Get discovered by investors, respond to interest, and move toward your funding journey</p>
            
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm  my-8'> 
+              <img src="/onboardingplan4.png" alt="" className='w-full h-full rounded-sm  '/>
+             </div>
               <hr className='mx-6'  />
         </div>
 

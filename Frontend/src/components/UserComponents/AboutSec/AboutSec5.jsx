@@ -125,7 +125,7 @@ Through a structured ecosystem, they can bridge gaps, expand their network, and 
 
             <div id='right' className=' w-[60%]  pl-12 hidden lg:block '>
             <div className='w-full h-[480px] bg-[#D8D8D8] rounded-sm '>
-
+                <img src="/investorpage1.png" alt="" className="w-full h-full border rounded-sm" />
             </div>
         </div>
 

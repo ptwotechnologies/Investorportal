@@ -33,7 +33,7 @@ const SubscriptionSec2 = () => {
         
 
         <div id='phone' className='lg:hidden'>
-            <div className='grid  grid-cols-[1fr_auto_1fr] gap-2 gap-y-4 text-[#001032] place-items-center w-fit'>
+            <div className='grid  grid-cols-[1fr_auto_1fr] gap-2 gap-y-4 text-[#001032] place-items-center w-fit '>
                 <div className='border-2 border-[#002A30] rounded-full p-2 px-4 text-center h-17 flex items-center justify-center'>
                     <h1>AI Matchmaking</h1>
                 </div>

@@ -33,7 +33,7 @@ const JoinUsSec2 = () => {
 
   return (
    <>
-    <div className="mt-15  hidden  lg:block">
+    <div className="mt-  hidden  lg:block">
       
       <div className=" m-16">
         <div className="flex justify-evenly items-center gap-20">
@@ -85,7 +85,7 @@ const JoinUsSec2 = () => {
 
     <div id="phoneScreen" className="   lg:hidden">
       <section className="w-full bg-background ">
-      <div className="mx-auto  px-4 py-8 ">
+      <div className="mx-auto  px-4 py-2 ">
         <div className='grid grid-cols-3 gap-y-10 '>
           <Item />
           <Divider/>

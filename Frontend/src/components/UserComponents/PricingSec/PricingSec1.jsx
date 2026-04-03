@@ -1,6 +1,5 @@
 import React from 'react'
-import img from "/homeSec1.png";
-import img1 from "/priceImg.png"
+
 import { Link } from 'react-router-dom';
 
 const PricingSec1 = () => {
@@ -17,8 +16,8 @@ const PricingSec1 = () => {
     
          <div id='right' className='w-full  my-5 lg:px-10 '>
            <div className='h-[250px] lg:h-[600px] bg-[#D8D8D8] lg:rounded-sm rounded-2xl '>
-            <img src={img} alt="Image" className='object-cover h-full w-full lg:hidden rounded-2xl'/>
-            <img src={img1} alt="Image" className='object-cover h-[90%] w-[90%] hidden lg:block mx-auto rounded-2xl'/>
+            <img src="/pricepage2.png" alt="Image" className='h-full w-full lg:hidden rounded-2xl'/>
+            <img src="/pricepage1.png" alt="Image" className=' w-full h-full object-cover border hidden lg:block mx-auto rounded-sm'/>
            </div>
          </div>
         </div> 

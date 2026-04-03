@@ -108,8 +108,8 @@ const HomeSec3 = () => {
           </div>
 
           <div className="mt-15 mx-10">
-         <div className="  h-115 w-full rounded-md relative top-16 bg-gray-200">
-            
+         <div className="  h-125 w-full rounded-md relative top-16 bg-gray-200">
+           <img src="/homepage92.png" alt="" className='w-full h-full rounded-md object-cover ' />
         </div>
         
           

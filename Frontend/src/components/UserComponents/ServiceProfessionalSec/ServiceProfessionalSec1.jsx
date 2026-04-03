@@ -1,11 +1,10 @@
 import React from 'react'
-import img from "/homeSec1.png";
 import { Link } from 'react-router-dom';
 
 
 const ServiceProfessionalSec1 = () => {
   return (
-    <div className='pt-30 lg:pt-35 w-full lg:px-6 px-4 py-2 flex flex-col lg:flex-row justify-around items-start  h-[800px] lg:h-auto rounded-b-2xl lg:rounded-none
+    <div className='pt-25 lg:pt-35 w-full lg:px-6 px-4 py-2 flex flex-col lg:flex-row justify-around items-start  h-[750px] lg:h-auto rounded-b-2xl lg:rounded-none
           bg-linear-to-b from-[#001032] from-40% via-blue-[#001032] at-130% to-[#003198] lg:bg-none text-white '>
       <h6 className='lg:hidden mx-auto mb-3 border border-white px-3 py-2 rounded-full text-sm'>For Service Professionals</h6>
      <div id='left' className='w-full text-center lg:text-start lg:w-[50%] lg:my-5 lg:text-[#001032]   lg:pt-3 '>
@@ -18,8 +17,9 @@ const ServiceProfessionalSec1 = () => {
      </div>
 
      <div id='right' className='w-full my-5 lg:w-[50%] '>
-       <div className='h-[280px] lg:h-[470px] bg-[#D8D8D8] lg:rounded-sm rounded-2xl '>
-        <img src={img} alt="Image" className='object-cover h-full w-full lg:hidden rounded-2xl'/>
+       <div className='h-60 lg:h-[470px] bg-[#D8D8D8] lg:rounded-sm rounded-2xl '>
+        <img src="/servicepage2.png" alt="Image" className=' h-full w-full  lg:hidden rounded-2xl border shadow-md'/>
+        <img src="/servicepage1.png" alt="Image" className='object-cover h-full w-full lg:block hidden rounded-2xl border lg:rounded-sm shadow '/>
        </div>
      </div>
     </div>

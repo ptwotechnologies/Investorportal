@@ -16,7 +16,7 @@ function AboutSec2() {
         </div>
         <div id='right' className=' w-[40%] hidden lg:block  '>
             <div className='w-[90%] h-[380px] bg-[#D8D8D8] rounded-4xl ml-5 mt-5'>
-
+           <img src="/aboutpage2.png" alt="" className='w-full h-full rounded-4xl '/>
             </div>
         </div>
        </div>

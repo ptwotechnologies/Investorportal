@@ -12,30 +12,38 @@ const ScrollAreaSec = () => {
   <div className="flex  px-2">
     
     {/* Card 1 */}
-    <div className="w-58 shrink-0  pr-3">
+    <div className="w-68 shrink-0  pr-3">
       <hr className='border-t border-[#FFFFFF33] pb-4 w-[98%]'/>
       <h3 className='text-sm pb-2 '>Startups</h3>
-     <Link to="/startup"> <div className='rounded-sm  h-70 bg-gray-200'>   </div>
-      <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' /></Link>
-      <p className='text-xs leading-5 tracking-wide w-[80%] mb-10 relative bottom-6 font-extralight'>You’re building something real and ready to scale</p>
+     <Link to="/startup"> <div className='rounded-sm  h-70 bg-gray-200'> 
+      <img src="/homepage8.png" alt="" className="w-full h-full rounded-sm" />
+        </div>
+      {/* <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' />*/}</Link> 
+      <p className='text-xs leading-5 tracking-wide w-[90%] mb-10  font-extralight'>You’re building something real and ready to scale</p>
     </div>
 
     {/* Card 2 */}
-    <div className="w-58  pr-3 shrink-0">
+    <div className="w-68  pr-3 shrink-0">
       <hr className='border-t border-[#FFFFFF33] pb-4 w-[98%]'/>
       <h3 className='text-sm pb-2 '>Investors</h3>
-     <Link to="/investor"> <div className='rounded-sm object-cover h-70 bg-gray-200'>   </div>
-      <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' /></Link>
-      <p className='text-xs leading-5 tracking-wide w-[80%] mb-10 relative bottom-6 font-extralight'>You seek refined, investment-ready startup in your space</p>
+     <Link to="/investor"> <div className='rounded-sm object-cover h-70 bg-gray-200'>  
+             <img src="/homepage6.png" alt="" className="w-full h-full rounded-sm" />
+       </div>
+      {/* <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' /> */}
+      </Link>
+      <p className='text-xs leading-5 tracking-wide w-[90%] mb-10 font-extralight'>You seek refined, investment-ready startup in your space</p>
     </div>
 
     {/* Card 3 */}
-    <div className="w-58 pr-3 shrink-0">
+    <div className="w-68 pr-3 shrink-0">
       <hr className='border-t border-[#FFFFFF33] pb-4 w-[98%]'/>
       <h3 className='text-sm pb-2 '>Service Professionals</h3>
-      <Link to="/serviceprofessional"> <div className='rounded-sm object-cover  h-70 bg-gray-200'>   </div>
-     <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' /></Link>
-      <p className='text-xs leading-5 tracking-wide w-[80%] mb-10 relative bottom-6 font-extralight'>You want genuine startup leads without paid ads</p>
+      <Link to="/serviceprofessional"> <div className='rounded-sm object-cover  h-70 bg-gray-200'> 
+         <img src="/homepage7.png" alt="" className="w-full h-full rounded-sm" />
+                
+          </div>
+     {/* <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' /> */}</Link>
+      <p className='text-xs leading-5 tracking-wide w-[95%] mb-10  font-extralight'>You want genuine startup leads without paid ads</p>
     </div>
 
      {/* Card 4 */}

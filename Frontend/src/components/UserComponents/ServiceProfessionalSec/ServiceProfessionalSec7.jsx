@@ -26,7 +26,9 @@ const ServiceProfessionalSec7 = () => {
          </div>
         </div>
         <div id="right" className="w-[60%]  ">
-          <div className="w-full h-[500px] bg-[#EEEEEE] rounded-sm"></div>
+          <div className="w-full h-[500px] bg-[#EEEEEE] rounded-sm">
+            <img src="/onboardingplan2.png" alt="" className='w-full h-full rounded-sm  object-cover '/>
+          </div>
          
         </div>
       </div>
@@ -41,7 +43,9 @@ const ServiceProfessionalSec7 = () => {
             <p className='text-md leading-9 tracking-wider'>→ All plans include access to the portal and service professional’s requests</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ It include discovery, visibility and ecosystem support</p>
             
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  mb-8 '> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm  mb-8 '>
+              <img src="/onboardingplan2.png" alt="" className='w-full h-full rounded-sm  '/>
+               </div>
              <hr className='mx-6'  />
         </div>
 
@@ -53,7 +57,9 @@ const ServiceProfessionalSec7 = () => {
             <p className='text-md leading-9 tracking-wider'>→ Add categories, pricing, sample work, and turnaround timelines</p>
             <p className='text-md leading-9 tracking-wider pb-9'>→ Share your expertise, experience, portfolio, skills and categories</p>
            
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm mt-6 my-8'> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm mt-6 my-8'>
+              <img src="/onboardingplan1.png" alt="" className='w-full h-full rounded-sm  '/>
+               </div>
               <hr className='mx-6' />
         </div>
 
@@ -64,7 +70,9 @@ const ServiceProfessionalSec7 = () => {
            
             <p className='text-md leading-9 tracking-wider'>→ We verify credibility, clarity and fit for startup requirements</p>
             
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm  my-8'> 
+              <img src="/onboardingplan3.png" alt="" className='w-full h-full rounded-sm  '/>
+             </div>
              <hr className='mx-6'  />
         </div>
 
@@ -75,7 +83,9 @@ const ServiceProfessionalSec7 = () => {
            
             <p className='text-md leading-9 tracking-wider'>→ Respond to founder requests and start taking meaningful work</p>
            
-             <div className='h-[300px] bg-[#FFFFFF] rounded-sm  my-8'> </div>
+             <div className='h-[250px] bg-[#FFFFFF] rounded-sm  my-8'> 
+              <img src="/onboardingplan4.png" alt="" className='w-full h-full rounded-sm  '/>
+             </div>
              <hr className='mx-6'  />
         </div>
 

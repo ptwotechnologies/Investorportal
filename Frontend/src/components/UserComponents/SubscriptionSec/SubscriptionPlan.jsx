@@ -82,7 +82,7 @@ const SubscriptionPlan = () => {
                 "Startup documentation structuring",
               ],
                bottomText:"Guidance for up to 5 legal documents Most startups choose this before approaching investors",
-               buttonText2:"Prepared to execute development, marketing & growth services effectively",
+               buttonText2:"Prepared to execute  growth services effectively",
               buttonText: "Apply for Foundation",
               buttonBg: "#EDADE1",
               buttonBg2: "#F783FE",
@@ -195,7 +195,7 @@ const SubscriptionPlan = () => {
                        </div>
 
                        {/* Body — grows to fill remaining height */}
-                       <div className="border border-[#00103280] px-4 lg:px-6 py-5 lg:py-6 relative bottom-15 rounded-sm flex flex-col flex-1">
+                       <div className="border border-[#00103280] px-4 lg:px-6 py-5 lg:py-6 -mt-15 rounded-sm flex flex-col flex-1">
                          <div className="bg-[#0000001A] flex items-center text-[11px] lg:gap-4 pl-6 gap-2 px-2 py-1 rounded-sm mt-15">
                            <p>Expert Access</p>
                            <div className="h-6 w-0.5 bg-[#8282825C]"></div>

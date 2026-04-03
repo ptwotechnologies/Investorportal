@@ -19,19 +19,19 @@ const ChannelPartnerSec1 = () => {
   const cardData = [
     {
       heading: "AI Understands Your Brief",
-      text: "The process felt human, even though it’s AI-driven. The brief understanding was spot-on, and the quality of connections was miles ahead of typical marketplaces. It’s built for people who value real work over noise.",
+      text: "Instead of spending money on ads, pitching endlessly, or chasing unclear leads, plug into a system built for real, verified work. Together with a straightforward way to grow your practice with startups that are filtered and ready to move",
       line1: "Join once,",
       line2: "Let the ecosystem work for you",
     },
     {
       heading: "Get 3 Perfect Matches",
-      text: "I used to spend hours sending proposals that went nowhere. Through this platform, I started getting real, qualified leads who were actually ready to move. The 90-day partnership helped me grow my client base and confidence.",
+      text: "Instead of chasing random leads or wasting time on unqualified prospects, you receive a curated set of high-fit opportunities. Each match is aligned with your expertise and goals, helping you focus only on connections that have real potential to convert.",
       line1: "Join once,",
       line2: "Let the ecosystem work for you",
     },
     {
       heading: "Human Support Throughout",
-      text: "I used to spend hours sending proposals that went nowhere. Through this platform, I started getting real, qualified leads who were actually ready to move. The 90-day partnership helped me grow my client base and confidence.",
+      text: "Instead of figuring everything out alone or relying only on tools, you get consistent human guidance at every step. From onboarding to closing deals, experts support you with clarity, feedback, and real-world insight so you always move forward with confidence.",
       line1: "Join once,",
       line2: "Let the ecosystem work for you",
     },
@@ -204,18 +204,18 @@ const ChannelPartnerSec1 = () => {
           </h1>
 
           <div className="shadow-xl border bg-white p-4 rounded-md mt-5 mx-3">
-            <div className="bg-gray-200 w-full h-40 rounded-md"></div>
+            <div className="bg-gray-200 w-full h-50 rounded-md">
+              <img src="/channelpartnerpage1.png" alt="" className="w-full h-full  rounded-md" />
+            </div>
 
             <div>
-              <p className="text-sm my-2">
-                The process felt human, even though it’s AI-driven. The brief
-                understanding was spot-on, The process felt human, even though
-                it’s AI-
+              <p className="text-xs my-2">
+                Bring your startup community into the investment ecosystem. Refer founders and ventures to the platform and earn partnership benefits.
               </p>
-              <div className="flex justify-between items-center mt-9 text-sm">
-                <div>
-                  <p>The process felt </p>
-                  <p>human, even</p>
+              <div className="flex justify-between items-center mt-5 text-xs">
+                <div className="font-light">
+                  <p>Co-working Spaces </p>
+                  
                 </div>
                 <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">
                   Get Started
@@ -225,18 +225,17 @@ const ChannelPartnerSec1 = () => {
           </div>
           <hr className="my-6 mx-6 " />
           <div className="shadow-xl border bg-white p-4 rounded-md  mx-3">
-            <div className="bg-gray-200 w-full h-40 rounded-md"></div>
+            <div className="bg-gray-200 w-full h-50 rounded-md">
+              <img src="/channelpartnerpage2.png" alt="" className="w-full h-full  rounded-md" />
+            </div>
 
             <div>
-              <p className="text-sm my-2">
-                The process felt human, even though it’s AI-driven. The brief
-                understanding was spot-on, The process felt human, even though
-                it’s AI-
+              <p className="text-xs my-2">
+                Support your startups beyond mentorship by enabling funding access. Partner with us to connect your founders with investors.
               </p>
-              <div className="flex justify-between items-center mt-9 text-sm">
-                <div>
-                  <p>The process felt </p>
-                  <p>human, even</p>
+              <div className="flex justify-between items-center mt-5 text-xs">
+                <div className="font-light">
+                  <p>Incubation Centers</p>
                 </div>
                 <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">
                   Get Started
@@ -247,18 +246,18 @@ const ChannelPartnerSec1 = () => {
 
           <hr className="my-6 mx-6 " />
           <div className="shadow-xl border bg-white p-4 rounded-md  mx-3">
-            <div className="bg-gray-200 w-full h-40 rounded-md"></div>
+            <div className="bg-gray-200 w-full h-50 rounded-md">
+              <img src="/channelpartnerpage3.jpeg" alt="" className="w-full h-full  rounded-md" />
+            </div>
 
             <div>
-              <p className="text-sm my-2">
-                The process felt human, even though it’s AI-driven. The brief
-                understanding was spot-on, The process felt human, even though
-                it’s AI-
+              <p className="text-xs my-2">
+                Turn your events into powerful funding gateways.If you host startup meetups, pitch events, or investor gatherings, you can partner with us.
               </p>
-              <div className="flex justify-between items-center mt-9 text-sm">
+              <div className="flex justify-between items-center mt-5 text-xs">
                 <div>
-                  <p>The process felt </p>
-                  <p>human, even</p>
+                  <p>Business Event <br/> Organizers </p>
+                 
                 </div>
                 <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">
                   Get Started
@@ -325,7 +324,7 @@ const ChannelPartnerSec1 = () => {
 
                     <div className="h-15 w-0.5 bg-[#00000033] mx-1"></div>
 
-                    <div className="lg:w-20 lg:h-20 w-18 h-18 lg:bg-[#001032] bg-[#00103233] rounded-full"></div>
+                    <div className="lg:w-20 lg:h-20 w-18 h-18 lg:bg-[#001032] bg-[#00103233]  rounded-full"></div>
                   </div>
                 </div>
               </div>
