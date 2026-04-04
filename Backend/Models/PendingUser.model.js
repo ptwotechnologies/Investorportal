@@ -8,6 +8,7 @@ const pendingUserSchema = new mongoose.Schema(
     businessDetails: { type: Object, default: {} },
     verificationOtp: { type: String, required: true },
     verificationOtpExpire: { type: Date, required: true },
+    isVerified: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

@@ -33,6 +33,7 @@ import { serverUrl } from "@/App";
 import toast, { Toaster } from "react-hot-toast";
 
 const RegisterPortalSec = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   // Role comes from SelectPortal; default to what was chosen or investor
   const role = location.state?.role || localStorage.getItem("role") || "investor";
@@ -60,10 +61,53 @@ const RegisterPortalSec = () => {
   const [phoneVerified, setPhoneVerified] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [pendingUserId, setPendingUserId] = useState(null);
+  const [isVerified, setIsVerified] = useState(false);
+
+  useEffect(() => {
+    let interval;
+    if (isSubmitted && pendingUserId && !isVerified) {
+      interval = setInterval(async () => {
+        try {
+          const response = await axios.post(`${serverUrl}/user/check-verification`, {
+            userId: pendingUserId
+          });
+
+          if (response.data.verified) {
+            setIsVerified(true);
+            const { token, userId: newUserId, role: newRole, serviceType: newServiceType } = response.data;
+            
+            // Save to localStorage just like verifyEmailLink does
+            localStorage.setItem("token", token);
+            localStorage.setItem("userId", newUserId);
+            if (newRole) localStorage.setItem("role", newRole);
+            if (newServiceType) localStorage.setItem("serviceType", newServiceType);
+
+            toast.success("Email verified! Redirecting...");
+            
+            // Wait 2 seconds so user sees the success
+            setTimeout(() => {
+              navigate("/portaldetails", { 
+                state: { 
+                  userId: newUserId, 
+                  role: newRole, 
+                  serviceType: newServiceType 
+                } 
+              });
+            }, 2000);
+          }
+        } catch (error) {
+          console.error("Polling error:", error);
+        }
+      }, 5000);
+    }
+    return () => clearInterval(interval);
+  }, [isSubmitted, pendingUserId, isVerified, navigate]);
 
   const tabs = role === "service_professional" ? serviceTabs.map((t)=>({id:t,label:t})) : investorTabs.map((t) => ({ id: t, label: t }));
 
-  const navigate = useNavigate();
+  // navigate moved to top
+
 
   useEffect(() => {
     return () => {
@@ -155,7 +199,9 @@ const RegisterPortalSec = () => {
 
       if (response.status === 201) {
         // Save userId to localStorage for later use
-        localStorage.setItem("userId", response.data.userId);
+        const signupUserId = response.data.userId;
+        localStorage.setItem("userId", signupUserId);
+        setPendingUserId(signupUserId);
 
         setIsSubmitted(true);
         toast.success("Success! Please check your email for the verification link.");
@@ -224,23 +270,34 @@ const handleVerifyOtp = async () => {
     return (
       <div className="flex justify-center items-center lg:min-h-screen p-4">
         <Card className="w-full max-w-md p-8 text-center shadow-lg">
-          <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-[#001032]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
+          <div className={`w-20 h-20 ${isVerified ? 'bg-green-50' : 'bg-blue-50'} rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-500`}>
+            {isVerified ? (
+              <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+              </svg>
+            ) : (
+              <svg className="w-10 h-10 text-[#001032]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            )}
           </div>
-          <h2 className="text-2xl font-bold text-[#001032] mb-4">Check your email</h2>
+          <h2 className="text-2xl font-bold text-[#001032] mb-4">
+            {isVerified ? "Email Verified!" : "Check your email"}
+          </h2>
           <p className="text-gray-600 mb-8">
-            We've sent a verification link to <span className="font-semibold">{email}</span>. 
-            Please click the link in the email to activate your account.
+            {isVerified 
+              ? "Your email has been successfully verified. We're redirecting you now..." 
+              : <>We've sent a verification link to <span className="font-semibold">{email}</span>. Please click the link in the email to activate your account.</>}
           </p>
           <div className="space-y-4">
-            <Button 
-              className="w-full bg-[#001032]"
-              onClick={() => window.location.reload()}
-            >
-              Back to Registration
-            </Button>
+            {!isVerified && (
+              <Button 
+                className="w-full bg-[#001032]"
+                onClick={() => window.location.reload()}
+              >
+                Back to Registration
+              </Button>
+            )}
           </div>
         </Card>
       </div>

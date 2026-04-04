@@ -6,7 +6,6 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 const raisedRequestOptions = [
-  { id: 1, label: "Connect with Incubators" },
   { id: 2, label: "Require Advisory Service" },
   { id: 3, label: "Require Legal Service" },
   { id: 4, label: "Require CXO Service" },
@@ -15,11 +14,8 @@ const raisedRequestOptions = [
   { id: 7, label: "Require Development Service" },
   { id: 8, label: "Require Finance Service" },
   { id: 9, label: "Require Design Service" },
-  { id: 10, label: "Require Funding Solutions" },
   { id: 11, label: "Require Marketing Service" },
-  { id: 12, label: "Connect with Investors" },
   { id: 13, label: "Require Consultation Service" },
-  { id: 14, label: "Other" },
 ];
 
 const NewRequest = ({ onCreateRequest }) => {

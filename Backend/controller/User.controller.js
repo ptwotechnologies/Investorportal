@@ -453,8 +453,10 @@ export const verifyEmail = async (req, res) => {
       registrationStep: 2,
     });
 
-    // Delete the pending record
-    await PendingUser.findByIdAndDelete(userId);
+    // Mark the pending record as verified instead of immediate deletion
+    // this allows the registration page on another device to poll for completion
+    pendingUser.isVerified = true;
+    await pendingUser.save();
 
     res.status(200).json({
       message: "Email verified successfully",
@@ -466,6 +468,49 @@ export const verifyEmail = async (req, res) => {
     });
   } catch (error) {
     console.error("Verify Email Error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const checkVerificationStatus = async (req, res) => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    // Check the pending record first
+    const pendingUser = await PendingUser.findById(userId);
+
+    // If PendingUser is gone, it MIGHT be because it was already deleted by another polling session
+    // Or it might be because verification completed and delete happened.
+    // However, in our flow, we set isVerified: true first.
+    
+    if (pendingUser && pendingUser.isVerified) {
+      // Find the real user
+      const user = await User.findOne({ email: pendingUser.email });
+      if (user) {
+        // Success! Clean up the pending record now.
+        await PendingUser.findByIdAndDelete(userId);
+
+        return res.status(200).json({
+          verified: true,
+          message: "Email verified successfully",
+          registrationStep: user.registrationStep,
+          token: jwt.sign({ userId: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
+          userId: user._id,
+          role: user.role,
+          serviceType: user.businessDetails ? user.businessDetails.serviceType : null,
+        });
+      }
+    }
+
+    // Still pending
+    return res.status(200).json({ verified: false });
+
+  } catch (error) {
+    console.error("Check Verification Error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
