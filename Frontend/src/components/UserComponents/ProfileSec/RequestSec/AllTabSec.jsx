@@ -13,6 +13,7 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
     requestId: null,
     providerId: null,
   });
+  const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true); // NEW: Loading state
 
   const navigate = useNavigate();
@@ -23,20 +24,18 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
       try {
         const token = localStorage.getItem("token");
         
-        // Fetch received requests
-        const receivedRes = await axios.get(`${serverUrl}/requests/received`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        // Fetch raised requests
-        const raisedRes = await axios.get(`${serverUrl}/requests`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Fetch received requests, raised requests, and profiles concurrently
+        const [receivedRes, raisedRes, profileRes] = await Promise.all([
+          axios.get(`${serverUrl}/requests/received`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${serverUrl}/requests`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${serverUrl}/profile/all`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
 
         const forwarded = receivedRes.data.forwardedRequests;
         const myInterested = receivedRes.data.myInterestedRequests;
         const raised = raisedRes.data;
 
+        setProfiles(profileRes.data);
         setForwardedRequests(forwarded);
         setMyInterestedRequests(myInterested);
         setRaisedRequests(raised);
@@ -174,6 +173,17 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
       });
     }
   }, [showConfirm, setAllHandlers]);
+
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
+    const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
+    if (imageUrl.startsWith(privateBaseUrl)) {
+      return imageUrl.replace(privateBaseUrl, publicBaseUrl);
+    }
+    if (imageUrl.startsWith("http")) return imageUrl;
+    return `${serverUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+  };
 
   // NEW: Check if there are no requests
   const hasNoRequests = 
@@ -516,14 +526,24 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
               {myInterestedRequests.map((req) =>
                 req.interestedBy.map((user) => {
                   const isAccepted = req.acceptedProvider === user._id;
+                  const userProfile = profiles.find(p => p.userId?._id === user._id || p.userId === user._id);
+                  const displayName = userProfile?.name || user.name || 'Professional Name';
                   return (
                     <div
                       key={user._id}
-                      onClick={() => handleRequestClick({...req, professionalData: user}, 'interested', 'profile')}
+                      onClick={() => handleRequestClick({...req, professionalData: user}, 'interested', 'request')}
                       className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
                     >
                       <div className="flex items-center justify-center p-3 shrink-0">
-                        <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200"></div>
+                        <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
+                          {userProfile?.profilePhoto ? (
+                            <img src={getImageUrl(userProfile.profilePhoto) || ""} alt="" className="w-full h-full object-cover rounded-full" />
+                          ) : (
+                            <span className="text-xl font-bold text-gray-600">
+                              {displayName.charAt(0).toUpperCase()}
+                            </span>
+                          )}
+                        </div>
                       </div>
                       <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
                       <div className="flex items-center justify-between w-full pr-4 px-3 py-3">
@@ -771,14 +791,24 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
           {myInterestedRequests.map((req) =>
             req.interestedBy.map((user) => {
               const isAccepted = req.acceptedProvider === user._id;
+              const userProfile = profiles.find(p => p.userId?._id === user._id || p.userId === user._id);
+              const displayName = userProfile?.name || user.name || 'Professional Name';
               return (
                 <div
                   key={user._id}
-                  onClick={() => handleRequestClick({...req, professionalData: user}, 'interested', 'profile')}
+                  onClick={() => handleRequestClick({...req, professionalData: user}, 'interested', 'request')}
                   className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
                 >
                   <div className="flex items-center justify-center p-3 shrink-0">
-                    <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200"></div>
+                    <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
+                      {userProfile?.profilePhoto ? (
+                        <img src={getImageUrl(userProfile.profilePhoto) || ""} alt="" className="w-full h-full object-cover rounded-full" />
+                      ) : (
+                        <span className="text-xl font-bold text-gray-600">
+                          {displayName.charAt(0).toUpperCase()}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
                   <div className="flex items-center justify-between w-full pr-4 px-3 py-3">

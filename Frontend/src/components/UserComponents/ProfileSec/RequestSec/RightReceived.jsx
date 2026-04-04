@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose, IoMdArrowBack } from "react-icons/io";
 import { FaCheckCircle, FaTimesCircle, FaLinkedin } from "react-icons/fa";
 import { IoDiamondOutline } from "react-icons/io5";
 import { serverUrl } from "@/App";
@@ -37,18 +37,15 @@ const RightReceived = ({
     }
   };
 
-  const getPortfolioUrl = (fileUrl) => {
-    if (!fileUrl) return "";
-    if (fileUrl.startsWith("http")) return fileUrl;
-    let normalized = fileUrl.replace(/\\/g, "/");
-    normalized = normalized.replace(/^\/+/, "");
-    if (!normalized.startsWith("uploads/")) {
-      const uploadsIndex = normalized.indexOf("uploads/");
-      if (uploadsIndex !== -1) {
-        normalized = normalized.substring(uploadsIndex);
-      }
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
+    const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
+    if (imageUrl.startsWith(privateBaseUrl)) {
+      return imageUrl.replace(privateBaseUrl, publicBaseUrl);
     }
-    return `${serverUrl}/${normalized}`;
+    if (imageUrl.startsWith("http")) return imageUrl;
+    return `${serverUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
   };
 
   // Fetch professional profile when viewType is 'profile'
@@ -143,9 +140,17 @@ const RightReceived = ({
       <div className="w-full h-full flex flex-col lg:p-4 p-2 bg-white rounded-md overflow-y-auto scrollbar-hide">
         {/* Header with Close Button */}
         <div className="flex items-center justify-between mb-4 pb-3 border-b shrink-0">
-          <h2 className="text-lg font-semibold text-[#001032]">
-            Professional Profile
-          </h2>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSelectedRequest && setSelectedRequest({ ...selectedRequest, viewType: 'request' })}
+              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <IoMdArrowBack size={20} className="text-gray-600" />
+            </button>
+            <h2 className="text-lg font-semibold text-[#001032]">
+              Professional Profile
+            </h2>
+          </div>
           <button
             onClick={handleClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -166,7 +171,7 @@ const RightReceived = ({
             style={
               profile.coverImage
                 ? {
-                    backgroundImage: `url(${serverUrl}${profile.coverImage})`,
+                    backgroundImage: `url(${getImageUrl(profile.coverImage)})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }
@@ -183,7 +188,7 @@ const RightReceived = ({
             <div className="w-24 h-24 rounded-full border-2 border-gray-300 bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] shadow-[0px_4px_10px_rgba(0,0,0,0.25)] overflow-hidden">
               {profile.profilePhoto ? (
                 <img
-                  src={`${serverUrl}${profile.profilePhoto}`}
+                  src={getImageUrl(profile.profilePhoto) || ""}
                   alt=""
                   className="w-full h-full object-cover rounded-full"
                 />
@@ -324,7 +329,7 @@ const RightReceived = ({
                     className="relative w-32 h-32 border-2 border-[#D9D9D9] rounded-md overflow-hidden"
                   >
                     <img
-                      src={getPortfolioUrl(item.fileUrl)}
+                      src={getImageUrl(item.fileUrl) || ""}
                       alt=""
                       className="w-full h-full object-cover"
                     />
@@ -534,12 +539,66 @@ const RightReceived = ({
             </p>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col gap-3 pt-4 mt-4 border-t shrink-0">
+        {selectedRequest.professionalData ? (() => {
+          const professional = selectedRequest.professionalData;
+          const isAccepted = selectedRequest.acceptedProvider && 
+            (typeof selectedRequest.acceptedProvider === 'string' 
+              ? selectedRequest.acceptedProvider === professional._id 
+              : selectedRequest.acceptedProvider.toString() === professional._id.toString());
+          
+          return (
+            <>
+              <button
+                onClick={() => setSelectedRequest && setSelectedRequest({ ...selectedRequest, viewType: 'profile' })}
+                className="w-full bg-[#D8D6F8] text-[#59549F] py-2.5 rounded-full text-sm font-medium transition-colors shadow-[inset_0_0_12px_#00000040]"
+              >
+                View Profile
+              </button>
+              
+              <div className="flex gap-3">
+                {isAccepted ? (
+                  <button
+                    onClick={() => navigate('/deal')}
+                    className="w-full bg-[#D5D5D5] text-[#434343] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
+                  >
+                    Deal
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleAccept && handleAccept(selectedRequest._id, professional._id)}
+                      className="flex-1 bg-[#D8D6F8] text-[#59549F] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
+                    >
+                      <FaCheckCircle /> Accept
+                    </button>
+                    <button
+                      onClick={() =>
+                        setShowConfirm &&
+                        setShowConfirm({
+                          requestId: selectedRequest._id,
+                          providerId: professional._id,
+                        })
+                      }
+                      className="flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
+                    >
+                      <FaTimesCircle /> Ignore
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          );
+        })() : (
+          <div className="flex gap-3">
             <button
               onClick={() => handleInterest && handleInterest(selectedRequest._id)}
               disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
-              className={`flex-1 bg-[#F8DEDE] text-[#B94444] lg:py-3 py-2 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
+              className={`flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
                 (selectedRequest.hasShownInterest || selectedRequest.isIgnored) && "opacity-50 cursor-not-allowed"
               }`}
             >
@@ -554,7 +613,7 @@ const RightReceived = ({
                 })
               }
               disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
-              className={`flex-1 lg:py-3 py-2 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
+              className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
                 selectedRequest.hasShownInterest || selectedRequest.isIgnored
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-[#D8D6F8] text-[#59549F]"
@@ -563,37 +622,47 @@ const RightReceived = ({
               <FaTimesCircle /> {selectedRequest.isIgnored ? "Ignored" : "Ignore"}
             </button>
           </div>
-
-          {/* Confirmation Dialog */}
-          {showConfirm && 
-            showConfirm.requestId === selectedRequest._id &&
-            showConfirm.providerId === null && (
-              <div className="bg-white shadow-lg rounded-lg p-4 border mt-4">
-                <p className="text-sm text-gray-700 mb-3">Are you sure you want to ignore this request?</p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleIgnore && handleIgnore(selectedRequest._id)}
-                    className="flex-1 bg-[#F8DEDE] text-[#B94444] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040]"
-                  >
-                    Yes
-                  </button>
-                  <button
-                    onClick={() =>
-                      setShowConfirm &&
-                      setShowConfirm({
-                        requestId: null,
-                        providerId: null,
-                      })
-                    }
-                    className="flex-1 bg-white text-[#001032] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040] border"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            )}
-        </div>
+        )}
       </div>
+
+      {/* Confirmation Dialog */}
+      {showConfirm && 
+        showConfirm.requestId === selectedRequest._id && (
+          (!selectedRequest.professionalData && showConfirm.providerId === null) || 
+          (selectedRequest.professionalData && showConfirm.providerId === (selectedRequest.professionalData._id || selectedRequest.professionalData))
+        ) && (
+          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-4 border w-64 z-50">
+            <p className="text-sm text-gray-700 mb-3">
+              Are you sure you want to ignore this {selectedRequest.professionalData ? 'professional' : 'request'}?
+            </p>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  if (selectedRequest.professionalData) {
+                    handleIgnore && handleIgnore(selectedRequest._id, selectedRequest.professionalData._id || selectedRequest.professionalData);
+                  } else {
+                    handleIgnore && handleIgnore(selectedRequest._id);
+                  }
+                }}
+                className="flex-1 bg-[#F8DEDE] text-[#B94444] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040]"
+              >
+                Yes
+              </button>
+              <button
+                onClick={() =>
+                  setShowConfirm &&
+                  setShowConfirm({
+                    requestId: null,
+                    providerId: null,
+                  })
+                }
+                className="flex-1 bg-white text-[#001032] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040] border"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        )}
     </div>
   );
 };

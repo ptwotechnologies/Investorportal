@@ -97,6 +97,17 @@ const ReceivedTabSec = ({
     setMobileView("left");
   };
 
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
+    const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
+    if (imageUrl.startsWith(privateBaseUrl)) {
+      return imageUrl.replace(privateBaseUrl, publicBaseUrl);
+    }
+    if (imageUrl.startsWith("http")) return imageUrl;
+    return `${serverUrl}${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+  };
+
   const handleInterest = async (requestId) => {
     try {
       const token = localStorage.getItem("token");
@@ -521,15 +532,15 @@ const ReceivedTabSec = ({
                     <div
                       key={user._id}
                       onClick={() => {
-                        console.log("Card clicked - Opening profile");
-                        handleRequestClick({...req, professionalData: user}, 'profile');
+                        console.log("Card clicked - Opening request with profile details");
+                        handleRequestClick({...req, professionalData: user}, 'request');
                       }}
                       className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
                     >
                       <div className="flex items-center justify-center p-3 shrink-0">
                         <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
                           {userProfile?.profilePhoto ? (
-                            <img src={`${serverUrl}${userProfile.profilePhoto}`} alt="" className="w-full h-full object-cover rounded-full" />
+                            <img src={getImageUrl(userProfile.profilePhoto) || ""} alt="" className="w-full h-full object-cover rounded-full" />
                           ) : (
                             <span className="text-xl font-bold text-gray-600">
                               {displayName.charAt(0).toUpperCase()}
@@ -777,15 +788,15 @@ const ReceivedTabSec = ({
           <div
             key={user._id}
             onClick={() => {
-              console.log("Card clicked - Opening profile");
-              handleRequestClick({...req, professionalData: user}, 'profile');
+              console.log("Card clicked - Opening request with profile details");
+              handleRequestClick({...req, professionalData: user}, 'request');
             }}
             className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
           >
             <div className="flex items-center justify-center p-3 shrink-0">
               <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
                 {userProfile?.profilePhoto ? (
-                  <img src={`${serverUrl}${userProfile.profilePhoto}`} alt="" className="w-full h-full object-cover rounded-full" />
+                  <img src={getImageUrl(userProfile.profilePhoto) || ""} alt="" className="w-full h-full object-cover rounded-full" />
                 ) : (
                   <span className="text-xl font-bold text-gray-600">
                     {displayName.charAt(0).toUpperCase()}
