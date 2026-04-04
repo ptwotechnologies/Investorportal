@@ -428,6 +428,7 @@ export const resetPassword = async (req, res) => {
 export const verifyEmail = async (req, res) => {
   try {
     const { userId, otp } = req.body;
+    console.log("DEBUG: verifyEmail call with userId:", userId, "otp:", otp);
 
     if (!userId || !otp) {
       return res.status(400).json({ message: "User ID and OTP are required" });
@@ -436,11 +437,51 @@ export const verifyEmail = async (req, res) => {
     // Look in PendingUser collection
     const pendingUser = await PendingUser.findById(userId);
     if (!pendingUser) {
+      console.log("DEBUG: Pending record not found for userId:", userId);
+      // Try to see if they are already in the User collection
+      const alreadyVerifiedUser = await User.findOne({ 
+        $or: [
+          { _id: userId }, // unlikely as IDs change
+          { verificationOtp: otp } // searching by otp might find them if we didn't clear it
+        ]
+      });
+
+      if (alreadyVerifiedUser) {
+        console.log("DEBUG: User already exists in User collection, likely verified already.");
+        return res.status(200).json({
+          message: "Email already verified",
+          registrationStep: alreadyVerifiedUser.registrationStep,
+          token: jwt.sign({ userId: alreadyVerifiedUser._id, email: alreadyVerifiedUser.email, role: alreadyVerifiedUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
+          userId: alreadyVerifiedUser._id,
+          role: alreadyVerifiedUser.role,
+          serviceType: alreadyVerifiedUser.businessDetails ? alreadyVerifiedUser.businessDetails.serviceType : null,
+        });
+      }
+
       return res.status(404).json({ message: "Verification record not found or expired" });
     }
 
     if (pendingUser.verificationOtp !== otp || pendingUser.verificationOtpExpire < Date.now()) {
+      console.log("DEBUG: OTP Mismatch or Expired. Storage:", pendingUser.verificationOtp, "Received:", otp);
       return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    // Check if real user already exists (idempotency)
+    const existingUser = await User.findOne({ email: pendingUser.email });
+    if (existingUser) {
+      // User is already verified and exists in User collection
+      // Just mark pending as verified for polling and return success
+      pendingUser.isVerified = true;
+      await pendingUser.save();
+      
+      return res.status(200).json({
+        message: "Email already verified",
+        registrationStep: existingUser.registrationStep,
+        token: jwt.sign({ userId: existingUser._id, email: existingUser.email, role: existingUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
+        userId: existingUser._id,
+        role: existingUser.role,
+        serviceType: existingUser.businessDetails ? existingUser.businessDetails.serviceType : null,
+      });
     }
 
     // OTP Correct! Now create the real User
@@ -488,12 +529,12 @@ export const checkVerificationStatus = async (req, res) => {
     // However, in our flow, we set isVerified: true first.
     
     if (pendingUser && pendingUser.isVerified) {
+      console.log("DEBUG: checkVerificationStatus found verified PendingUser for userId:", userId);
       // Find the real user
       const user = await User.findOne({ email: pendingUser.email });
       if (user) {
-        // Success! Clean up the pending record now.
-        await PendingUser.findByIdAndDelete(userId);
-
+        console.log("DEBUG: Found real user, returning success to poller.");
+        // Success! We don't delete immediately here to avoid race conditions with the phone tab
         return res.status(200).json({
           verified: true,
           message: "Email verified successfully",
