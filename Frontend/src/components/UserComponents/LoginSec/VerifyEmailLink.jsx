@@ -6,7 +6,10 @@ import { serverUrl } from "../../../App";
 const VerifyEmailLink = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [status, setStatus] = useState("verifying"); // verifying, success, error
+  const [statusState, setStatusState] = useState({ type: "verifying", message: "" });
+  
+  const status = statusState.type;
+  const message = statusState.message;
 
   useEffect(() => {
     const verify = async () => {
@@ -16,7 +19,7 @@ const VerifyEmailLink = () => {
       console.log("DEBUG: Verifying with userId:", userId, "token:", token);
 
       if (!userId || !token) {
-        setStatus("error");
+        setStatusState({ type: "error", message: "Invalid verification link." });
         return;
       }
 
@@ -30,12 +33,11 @@ const VerifyEmailLink = () => {
 
         if (response.status === 200) {
           localStorage.setItem("token", response.data.token);
-          // the backend returns the newly created real user's _id
           localStorage.setItem("userId", response.data.userId); 
           if (response.data.role) localStorage.setItem("role", response.data.role);
           if (response.data.serviceType) localStorage.setItem("serviceType", response.data.serviceType);
 
-          setStatus("success");
+          setStatusState({ type: "success", message: "" });
           setTimeout(() => {
             navigate("/portaldetails", { 
               state: { 
@@ -48,7 +50,8 @@ const VerifyEmailLink = () => {
         }
       } catch (err) {
         console.error("Verification failed", err);
-        setStatus("error");
+        const errorMsg = err.response?.data?.message || "The verification link is invalid or has expired.";
+        setStatusState({ type: "error", message: errorMsg });
       }
     };
 
@@ -86,7 +89,7 @@ const VerifyEmailLink = () => {
               </svg>
             </div>
             <h2 className="text-xl font-semibold mb-2" style={{color: '#ef4444'}}>Verification Failed</h2>
-            <p className="text-gray-600">The verification link is invalid or has expired.</p>
+            <p className="text-gray-600">{message || "The verification link is invalid or has expired."}</p>
             <button
               onClick={() => navigate("/registerportal")}
               className="mt-6 w-full bg-[#001032] text-white py-2 rounded-md hover:bg-opacity-90 transition"

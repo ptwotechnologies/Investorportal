@@ -63,6 +63,7 @@ const RegisterPortalSec = () => {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [pendingUserId, setPendingUserId] = useState(null);
   const [isVerified, setIsVerified] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     let interval;
@@ -175,6 +176,7 @@ const RegisterPortalSec = () => {
       }
     }
 
+    setIsSubmitting(true);
     try {
       const businessDetails = {
         number: mobile,
@@ -209,9 +211,8 @@ const RegisterPortalSec = () => {
         console.error("Unexpected response:", response);
         toast.error("Something went wrong. Please try again.");
       }
-    } catch (error) {
-      console.error("Axios Error: ", error);
-      toast.error(error.response?.data?.message || "Server error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -355,10 +356,9 @@ const handleVerifyOtp = async () => {
                     <Input
                       id="lastName"
                       type="text"
-                      placeholder="Last Name"
+                      placeholder="Last Name (Optional)"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      required
                       className="p-5  text-[#00103280]"
                     />
                     </div>
@@ -580,8 +580,15 @@ const handleVerifyOtp = async () => {
                   </div>
 
                   <CardFooter className="flex-col gap-2 lg:mt-5 mb-1 w-full px-0 mt-15">
-                    <Button type="submit" className="w-full bg-[#001032]">
-                      Continue
+                    <Button type="submit" className="w-full bg-[#001032]" disabled={isSubmitting}>
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Processing...
+                        </div>
+                      ) : (
+                        "Continue"
+                      )}
                     </Button>
                   </CardFooter>
                 </form>

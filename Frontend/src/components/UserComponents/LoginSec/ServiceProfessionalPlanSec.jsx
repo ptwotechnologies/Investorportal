@@ -182,12 +182,14 @@ const ServiceProfessionalPlanSec = () => {
   ];
 
   // ⭐ API Call
+  const [isSubmittingPlan, setIsSubmittingPlan] = useState(false);
   const handlePlanSelect = async (amount, planName) => {
     if (!userId) {
       toast.error("User ID missing!");
       return;
     }
 
+    setIsSubmittingPlan(true);
     try {
       const payload = {
         userId,
@@ -202,6 +204,8 @@ const ServiceProfessionalPlanSec = () => {
     } catch (error) {
       console.error("Plan API Error:", error);
       toast.error(error.response?.data?.message || "Server error");
+    } finally {
+      setIsSubmittingPlan(false);
     }
   };
 
@@ -383,12 +387,21 @@ const ServiceProfessionalPlanSec = () => {
                         text-background text-md 
                        
                         hover:opacity-90
+                        disabled:opacity-70 disabled:cursor-not-allowed
                       "
                         onClick={() =>
                           handlePlanSelect(card.amount, card.planName)
                         }
+                        disabled={isSubmittingPlan}
                       >
-                        {card.buttonText}
+                        {isSubmittingPlan ? (
+                          <div className="flex items-center justify-center gap-2">
+                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                             Processing...
+                          </div>
+                        ) : (
+                          card.buttonText
+                        )}
                       </button>
                     </div>
                   </div>
@@ -399,7 +412,6 @@ const ServiceProfessionalPlanSec = () => {
           </div>
         </div>
       </section>
-      <Toaster />
     </main>
   );
 };

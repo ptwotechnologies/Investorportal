@@ -150,3 +150,8 @@
   overflow: hidden;
 }
 
+/* Hide the reCAPTCHA badge for a cleaner UI */
+.grecaptcha-badge { 
+  visibility: hidden !important;
+}
+

@@ -53,6 +53,7 @@ const PortalDetailsSec = () => {
   // 🔹 New R2 states
   const [isUploading, setIsUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Maximum logo / file size in bytes (10MB)
   const MAX_LOGO_SIZE = 10 * 1024 * 1024;
@@ -110,6 +111,7 @@ const PortalDetailsSec = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     if (!userId) {
       toast.error("User ID missing! Please signup again.");
@@ -251,9 +253,8 @@ const PortalDetailsSec = () => {
       } else {
         toast.error("Something went wrong. Please try again.");
       }
-    } catch (error) {
-      console.error("Axios Error:", error);
-     toast.error(error.response?.data?.message || "Server error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -620,8 +621,23 @@ const PortalDetailsSec = () => {
 
                   {/* SUBMIT BUTTON */}
                   <CardFooter className="flex-col gap-2 lg:mt-4 w-full px-0 mt-15">
-                    <Button type="submit" className="w-full bg-[#001032]" disabled={isUploading || !uploadedUrl}>
-                      {isUploading ? "Uploading File..." : !uploadedUrl ? "Please upload file to continue" : "Continue"}
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[#001032]" 
+                      disabled={isUploading || !uploadedUrl || isSubmitting}
+                    >
+                      {isSubmitting ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          Processing...
+                        </div>
+                      ) : isUploading ? (
+                        "Uploading File..."
+                      ) : !uploadedUrl ? (
+                        "Please upload file to continue"
+                      ) : (
+                        "Continue"
+                      )}
                     </Button>
                   </CardFooter>
                 </form>
