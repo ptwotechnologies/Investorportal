@@ -247,7 +247,7 @@ const ChannelPartnerSec1 = () => {
           <hr className="my-6 mx-6 " />
           <div className="shadow-xl border bg-white p-4 rounded-md  mx-3">
             <div className="bg-gray-200 w-full h-50 rounded-md">
-              <img src="/channelpartnerpage3.jpeg" alt="" className="w-full h-full  rounded-md" />
+              <img src="/channelpartnerpage3.png" alt="" className="w-full h-full  rounded-md" />
             </div>
 
             <div>
@@ -255,8 +255,8 @@ const ChannelPartnerSec1 = () => {
                 Turn your events into powerful funding gateways.If you host startup meetups, pitch events, or investor gatherings, you can partner with us.
               </p>
               <div className="flex justify-between items-center mt-5 text-xs">
-                <div>
-                  <p>Business Event <br/> Organizers </p>
+                <div className="font-light">
+                  <p>Business Event  Organizers </p>
                  
                 </div>
                 <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">

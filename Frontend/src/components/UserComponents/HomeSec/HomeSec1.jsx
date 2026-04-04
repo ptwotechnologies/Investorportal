@@ -109,7 +109,7 @@ const HomeSec1 = () => {
               <div>
                 <div className="w-50 h-45 rounded-2xl bg-[#FFFFFF]">
                   <img
-                    src="/homepage3.jpeg"
+                    src="/homepage3.png"
                     alt=""
                     className="w-full h-full  rounded-2xl"
                   />
