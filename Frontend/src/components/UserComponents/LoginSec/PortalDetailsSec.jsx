@@ -99,7 +99,7 @@ const PortalDetailsSec = () => {
 
 
   // (Non-investor fields removed — this flow is investor-only for now)  
-  const domainOptions = ["Technology", "Legal & Compliance", "Marketing", "Designing", "Development", "Other"];
+  const domainOptions = ["Technology", "Legal & Compliance", "Marketing", "Designing", "Development","Advisory ","CXO","HR","Finance","Consultation","Other"];
 
   // Retrieve userId from localStorage if missing
   useEffect(() => {

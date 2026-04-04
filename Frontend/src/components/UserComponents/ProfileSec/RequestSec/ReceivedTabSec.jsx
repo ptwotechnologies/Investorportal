@@ -169,6 +169,12 @@ const ReceivedTabSec = ({
             : req,
         ),
       );
+
+      setSelectedRequest((prev) =>
+        prev && prev._id === requestId
+          ? { ...prev, acceptedProvider: providerId, status: "accepted" }
+          : prev
+      );
     } catch (err) {
       console.error("Error accepting provider:", err);
     }
@@ -198,6 +204,17 @@ const ReceivedTabSec = ({
                 }
               : req
           )
+        );
+
+        setSelectedRequest((prev) =>
+          prev && prev._id === requestId
+            ? {
+                ...prev,
+                interestedBy: prev.interestedBy.filter(
+                  (user) => user._id !== providerId
+                ),
+              }
+            : prev
         );
       } else {
         setForwardedRequests((prev) =>
@@ -579,7 +596,7 @@ const ReceivedTabSec = ({
                           </h1>
                           {/* Show Service Type instead of Description */}
                           <p className="text-[#001032] text-xs line-clamp-1 mt-1">
-                            {req.service}
+                            {userProfile?.userId?.additionalDetails?.domain || req.service}
                           </p>
 
                           {req.createdAt && (
@@ -848,7 +865,7 @@ const ReceivedTabSec = ({
                 </h1>
                 {/* Show Service Type instead of Description */}
                 <p className="text-[#001032] text-xs line-clamp-1 mt-1">
-                  {req.service}
+                  {userProfile?.userId?.additionalDetails?.domain || req.service}
                 </p>
 
                 {req.createdAt && (

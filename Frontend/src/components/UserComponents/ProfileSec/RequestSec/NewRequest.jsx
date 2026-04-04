@@ -6,16 +6,16 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 const raisedRequestOptions = [
-  { id: 2, label: "Require Advisory Service" },
-  { id: 3, label: "Require Legal Service" },
-  { id: 4, label: "Require CXO Service" },
-  { id: 5, label: "Require Compliance Service" },
-  { id: 6, label: "Require HR Service" },
-  { id: 7, label: "Require Development Service" },
-  { id: 8, label: "Require Finance Service" },
-  { id: 9, label: "Require Design Service" },
-  { id: 11, label: "Require Marketing Service" },
-  { id: 13, label: "Require Consultation Service" },
+  { id: 2, label: "Advisory Service" },
+  { id: 3, label: "Legal Service" },
+  { id: 4, label: "CXO Service" },
+  { id: 5, label: "Compliance Service" },
+  { id: 6, label: "HR Service" },
+  { id: 7, label: "Development Service" },
+  { id: 8, label: "Finance Service" },
+  { id: 9, label: "Design Service" },
+  { id: 11, label: "Marketing Service" },
+  { id: 13, label: "Consultation Service" },
 ];
 
 const NewRequest = ({ onCreateRequest }) => {
@@ -65,17 +65,17 @@ const NewRequest = ({ onCreateRequest }) => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 sm:grid-cols-1  md:grid-cols-2 gap-4  overflow-y-auto overscroll-contain touch-pan-y h-[calc(100dvh-250px)] pb-20 md:pb-0 md:h-auto scrollbar-hide">
+      <div className="grid grid-cols-1 sm:grid-cols-1  md:grid-cols-2 gap-4 lg:gap-10  overflow-y-auto overscroll-contain touch-pan-y h-[calc(100dvh-250px)] pb-20 md:pb-0 md:h-auto scrollbar-hide ">
         {raisedRequestOptions.map((option) => (
           <div
             key={option.id}
-            className="flex items-center gap-3 cursor-pointer"
+            className="flex items-center gap-3 cursor-pointer "
             onClick={() => {
               setSelectedRequest(option.id);
               setSelectedService(option.label);
             }}
           >
-            <div className="shrink-0 p-3 border-2 border-gray-200 rounded-full shadow-[inset_0_0_12px_#00000040]">
+            <div className="shrink-0 p-3 border-2 border-gray-200 rounded-full shadow-[inset_0_0_12px_#00000040] ">
               <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#59549F]">
                 {selectedRequest === option.id && (
                   <div className="w-3 h-3 rounded-full bg-[#59549F]"></div>
@@ -89,7 +89,7 @@ const NewRequest = ({ onCreateRequest }) => {
         ))}
       </div>
 
-      <div className="lg:border lg:p-3 mt-7  lg:border-gray-400 rounded-lg lg:static fixed bottom-1.5 left-1.5 right-1.5 z-20 ">
+      <div className="lg:border lg:p-3 mt-14  lg:border-gray-400 rounded-lg lg:static fixed bottom-1.5 left-1.5 right-1.5 z-20 ">
         <div className="flex border-2 shadow-md border-gray-300 items-center px-4 py-1 lg:py-0 justify-between rounded-xl flex-1  bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]">
           <input
             type="text"

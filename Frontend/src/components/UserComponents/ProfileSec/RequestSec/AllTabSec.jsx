@@ -163,6 +163,12 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
             : req
         )
       );
+
+      setSelectedRequest((prev) =>
+        prev && prev._id === requestId
+          ? { ...prev, acceptedProvider: providerId, status: "accepted" }
+          : prev
+      );
     } catch (err) {
       console.error("Error accepting provider:", err);
     }
@@ -371,7 +377,9 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                   <div className="flex items-center justify-between w-full pr-4 px-3 py-3">
                     <div className="min-w-0 flex-1 pr-2">
                       <h1 className="text-[#001032] font-semibold text-sm line-clamp-1">{displayName}</h1>
-                      <p className="text-[#001032] text-xs line-clamp-1 mt-1">{req.service}</p>
+                      <p className="text-[#001032] text-xs line-clamp-1 mt-1">
+                        {userProfile?.userId?.additionalDetails?.domain || req.service}
+                      </p>
                       {req.createdAt && (
                         <p className="text-xs text-gray-500 mt-2">
                           {new Date(req.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
@@ -494,7 +502,9 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
               <div className="flex items-center justify-between w-full pr-4 px-3 py-3">
                 <div className="min-w-0 flex-1 pr-2">
                   <h1 className="text-[#001032] font-semibold text-sm line-clamp-1">{displayName}</h1>
-                  <p className="text-[#001032] text-xs line-clamp-1 mt-1">{req.service}</p>
+                  <p className="text-[#001032] text-xs line-clamp-1 mt-1">
+                    {userProfile?.userId?.additionalDetails?.domain || req.service}
+                  </p>
                   {req.createdAt && (
                     <p className="text-xs text-gray-500 mt-2">
                       {new Date(req.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
