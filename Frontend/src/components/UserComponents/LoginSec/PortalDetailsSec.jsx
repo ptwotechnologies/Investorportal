@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Calendar2 from "./Calendar2";
 import { serverUrl } from "@/App";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const PortalDetailsSec = () => {
   const navigate = useNavigate();
@@ -648,7 +648,7 @@ const PortalDetailsSec = () => {
         </div>
 
       </div>
-      <Toaster/>
+
     </div>
   );
 };

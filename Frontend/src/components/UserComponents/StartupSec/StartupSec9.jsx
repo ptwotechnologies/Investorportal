@@ -245,6 +245,9 @@ const StartupSec9 = () => {
                 <div className="pb-4 lg:pb-0">
                   <h3 className="text-3xl lg:text-2xl font-semibold text-[#001032] ">
                     {card.planName}
+                    <span className="text-[18px] font-semibold ml-1">
+                            {card.recommendedPlan}
+                          </span>
                   </h3>
                   <p className="text-sm  text-[#3C1D3A]">{card.planDesc}</p>
                 </div>
@@ -257,6 +260,14 @@ const StartupSec9 = () => {
                     </span>
                   </p>
                   <p className="text-sm ">{card.amountDesc}</p>
+                  {card.amountButton && (
+                          <>
+                            <button className="bg-linear-to-r from-[#BA1E1E] from-70% to-[#B77070] w-full py-1 text-start px-2 text-md text-white rounded-sm my-4">
+                              {card.amountButton}
+                            </button>
+                            <hr />
+                          </>
+                        )}
                 </div>
 
                 <div className="bg-[#0000001A] flex items-center text-[10px] lg:gap-4 pl-6 gap-2 px-2 py-1 rounded-sm mt-6 lg:mt-4">

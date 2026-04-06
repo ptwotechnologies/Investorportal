@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "@/App";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const TransactionIdSec = () => {
   const navigate = useNavigate();
@@ -142,7 +142,7 @@ const TransactionIdSec = () => {
           </div>
         </div>
       </div>
-       <Toaster/>
+
     </div>
   );
 };

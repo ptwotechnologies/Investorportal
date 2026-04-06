@@ -9,7 +9,7 @@ import loginLogo from "/coptenologo2.png";
 import { NavLink, useNavigate, useLocation, Link } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
-import toast, { ToastBar, Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { HiOutlineTicket } from "react-icons/hi";
@@ -408,7 +408,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
       )}
-      <Toaster/>
+
     </div>
   );
 };

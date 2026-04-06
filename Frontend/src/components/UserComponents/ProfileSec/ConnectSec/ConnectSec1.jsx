@@ -7,7 +7,7 @@ import { FaLinkedin } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
 import { FaArrowLeft } from "react-icons/fa";
 import { getDomainsForRole } from "./domain.js";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const ConnectSec1 = () => {
   const [profiles, setProfiles] = useState([]);
@@ -1400,7 +1400,7 @@ const ConnectSec1 = () => {
           </div>
         </div>
       </div>
-       <Toaster/>
+
     </div>
   );
 };

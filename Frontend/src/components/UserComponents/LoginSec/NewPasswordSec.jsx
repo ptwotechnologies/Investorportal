@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { serverUrl } from "@/App";
 
 const NewPasswordSec = () => {
@@ -145,7 +145,7 @@ const resetPassword = async (e) => {
           </div>
         </div>
       </div>
-      <Toaster/>
+
     </div>
   )
 }

@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { serverUrl } from "@/App";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const RegisterPortalSec = () => {
   const navigate = useNavigate();
@@ -597,7 +597,7 @@ const handleVerifyOtp = async () => {
           </div>
         </div>
       </div>
-      <Toaster/>
+
     </div>
   );
 };

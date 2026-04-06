@@ -266,7 +266,7 @@ const ServiceProfessionalPlanSec = () => {
                       <div className="pb-4 lg:pb-0">
                         <h3 className="text-3xl lg:text-lg font-semibold text-[#001032] ">
                           {card.planName}{" "}
-                          <span className="text-[17px] font-normal">
+                          <span className="text-[17px] font-semibold">
                             {card.recommendedPlan}
                           </span>
                         </h3>
@@ -352,7 +352,7 @@ const ServiceProfessionalPlanSec = () => {
                               <button className="bg-[#FDFDFD] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] lg:w-36 w-46 p-1 text-xs rounded-sm">
                                 {card.middleButton1}
                               </button>
-                              <button className="bg-[#FDFDFD] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] lg:w-36 w-46 p-1 text-xs rounded-sm ml-25">
+                              <button className="bg-[#FDFDFD] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] lg:w-36 w-46 p-1 text-xs rounded-sm ml-20">
                                 {card.middleButton2}
                               </button>
                               <button className="bg-[#FDFDFD] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] lg:w-36 w-46 p-1 text-xs rounded-sm">

@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { serverUrl } from "@/App";
 import InputOtpSec from "./InputOtpSec";
 import { verifyOtp as verifyFirebaseOtp } from "@/lib/phoneAuth";
@@ -111,7 +111,7 @@ const verifyOtp = async () => {
               </div>
             </div>
           </div>
-          <Toaster/>
+
         </div>
   )
 }

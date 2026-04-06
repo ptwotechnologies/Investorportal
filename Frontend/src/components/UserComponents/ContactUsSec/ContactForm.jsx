@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const interests = [
   {
@@ -153,7 +153,7 @@ const ContactForm = () => {
         Please note that this is not an application to seek funding or other services for a new venture or business. By
         clicking Get Started you agree to Copteno Technologies Privacy Policy.
       </p>
-       <Toaster/>
+
     </form>
   )
 }

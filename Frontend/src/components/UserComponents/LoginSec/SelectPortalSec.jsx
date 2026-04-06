@@ -5,7 +5,7 @@ import { IoIosArrowRoundForward } from "react-icons/io";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 const SelectPortalSec = () => {
   const [role, setRole] = useState("");
@@ -190,7 +190,7 @@ const SelectPortalSec = () => {
           </div>
         </div>
       </div>
-      <Toaster/>
+
     </div>
   );
 };

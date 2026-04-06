@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { serverUrl } from "@/App";
 
 const LogicSec1 = () => {
@@ -160,7 +160,7 @@ const LogicSec1 = () => {
           </div>
         </div>
       </div>
-      <Toaster/>
+
     </div>
   )
 }

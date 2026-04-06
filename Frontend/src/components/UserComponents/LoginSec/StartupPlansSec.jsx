@@ -78,7 +78,7 @@ const StartupPlansSec = ({ userId }) => {
             "Increased exposure in search & listings",
             "Improved positioning in connection requests"
 
-          ],
+          ], 
         },
         {
           heading: "Investor Advantage",
@@ -282,7 +282,7 @@ const StartupPlansSec = ({ userId }) => {
                       <div className="pb-4 lg:pb-0">
                         <h3 className="text-3xl lg:text-lg font-semibold text-[#001032] ">
                           {card.planName}{" "}
-                          <span className="text-[17px] font-normal">
+                          <span className="text-[17px] font-semibold">
                             {card.recommendedPlan}
                           </span>
                         </h3>

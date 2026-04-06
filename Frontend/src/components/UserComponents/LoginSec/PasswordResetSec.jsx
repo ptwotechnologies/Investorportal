@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 
@@ -124,7 +124,7 @@ const PasswordResetSec = () => {
           </div>
         </div>
       </div>
-      <Toaster/>
+
     </div>
   )
 }
