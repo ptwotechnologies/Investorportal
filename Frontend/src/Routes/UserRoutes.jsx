@@ -40,6 +40,7 @@ import Negotiation from '@/Pages/UserPages/ProfilePages/Negotiation'
 import Documentation from '@/Pages/UserPages/ProfilePages/Documentation'
 import Completed from '@/Pages/UserPages/ProfilePages/Completed'
 import Disputes from '@/Pages/UserPages/ProfilePages/Disputes'
+import DealDraft from '@/Pages/UserPages/ProfilePages/DealDraft'
 
 
 
@@ -113,7 +114,8 @@ const UserRoutes = () => {
              <Route path="/settings" element={ <ProtectedRoute><Settings /></ProtectedRoute>} />
             <Route path="/connect" element={<ProtectedRoute><Connect/></ProtectedRoute>} />
              <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>} />
-             <Route path="/deal/activedeals" element={<ProtectedRoute><Deal/></ProtectedRoute>} />
+              <Route path="/deal/activedeals" element={<ProtectedRoute><Deal/></ProtectedRoute>} />
+             <Route path="/deal/dealdraft" element={<ProtectedRoute><DealDraft/></ProtectedRoute>} />
              <Route path="/deal/milestones" element={<ProtectedRoute><Milestones/></ProtectedRoute>} />
              <Route path="/deal/payments" element={<ProtectedRoute><DealPayment/></ProtectedRoute>} />
              <Route path="/deal/negotiations" element={<ProtectedRoute><Negotiation/></ProtectedRoute>} />

@@ -152,10 +152,6 @@ const PortalDetailsSec = () => {
           }
         } else {
           // fallback to previous behavior
-          if (!foundedOn) {
-           toast.error("Please select founding date");
-            return;
-          }
           if (!linkedin) {
            toast.error("LinkedIn profile is required");
             return;
@@ -188,26 +184,14 @@ const PortalDetailsSec = () => {
         }
       } else {
         // investor and others keep previous behavior
-        if (!foundedOn) {
-         toast.error("Please select founding date");
-          return;
-        }
         if (!linkedin) {
          toast.error("LinkedIn profile is required");
-          return;
-        }
-        if (domain === "Select Domain" || domain === " Domain") {
-          toast.error("Please select a domain");
-          return;
-        }
-        if (domain === "Other" && !domainDescription) {
-         toast.error("Please describe your domain");
           return;
         }
       }
 
       if (logoFile && logoFile.size > MAX_LOGO_SIZE) {
-        toast.error("File must be less than 2MB");
+        toast.error("File must be less than 10MB");
         return;
       }
     } else {
@@ -229,7 +213,7 @@ const PortalDetailsSec = () => {
       const additionalDetails = {
         linkedinProfile: linkedinProfileArr,
         foundedon: foundedOn ? foundedOn.toISOString().split("T")[0] : null,
-        domain: domain === "Select Domain" ? null : domain,
+        domain: (domain === "Select Domain" || domain === " Domain") ? null : domain,
         domainDescription: domain === "Other" ? domainDescription : null,
         referralCode: referralCode || null,
         profileFileName: role === "startup" ? null : (logoFile ? logoFile.name : null),
@@ -258,13 +242,13 @@ const PortalDetailsSec = () => {
     }
   };
 
-  const renderFileUpload = (label) => (
+  const renderFileUpload = (label, subText = "(Max 10MB)", acceptTypes = "image/*,application/pdf") => (
     <div className="flex flex-col gap-2 items-center justify-center">
       <div className="w-full">
         <input
           id={`logoInput_${label.replace(/\s+/g, '')}`}
           type="file"
-          accept="image/*,application/pdf"
+          accept={acceptTypes}
           onChange={handleFileSelect}
           className="hidden"
         />
@@ -314,7 +298,7 @@ const PortalDetailsSec = () => {
           </div>
         )}
       </div>
-      <label className="text-left text-xs text-gray-600">(Max 10MB)</label>
+      <label className="text-center text-xs text-gray-600 whitespace-pre-wrap">{subText}</label>
     </div>
   );
 
@@ -342,7 +326,7 @@ const PortalDetailsSec = () => {
         <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-2 text-center w-full">
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
             
-            <Card className="w-full lg:h-auto mx-auto rounded-lg">
+            <Card className="w-full lg:min-h-[600px] mx-auto rounded-lg flex flex-col">
               
               <CardHeader>
                 <CardTitle>
@@ -354,8 +338,8 @@ const PortalDetailsSec = () => {
               </CardHeader>
 
               {/* FORM START */}
-              <CardContent>
-                <form onSubmit={handleSubmit}>
+              <CardContent className="flex flex-col flex-grow">
+                <form onSubmit={handleSubmit} className="flex flex-col flex-grow justify-between">
                   <div className="flex flex-col gap-3">
 
                     {showPortalFields ? (
@@ -402,7 +386,7 @@ const PortalDetailsSec = () => {
                               />
 
                               {/* Profile upload for Freelancer */}
-                              {renderFileUpload("Profile Upload")}
+                              {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
                             </>
                           ) : serviceType === "Company" ? (
                             <>
@@ -467,13 +451,10 @@ const PortalDetailsSec = () => {
                               />
 
                               {/* Profile upload */}
-                              {renderFileUpload("Profile Upload")}
+                              {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
                             </>
                           ) : (
                             <>
-                              <div>
-                                <Calendar2 onChange={(date) => setFoundedOn(date)} />
-                              </div>
                               <Input
                                 type="text"
                                 placeholder="LinkedIn Profile"
@@ -507,7 +488,14 @@ const PortalDetailsSec = () => {
                                   required
                                 />
                               )}
-                              {renderFileUpload("Profile Upload")}
+                              <Input
+                                type="text"
+                                placeholder="Referral Code (optional)"
+                                value={referralCode}
+                                onChange={(e) => setReferralCode(e.target.value)}
+                                className="p-5  text-[#00103280]"
+                              />
+                              {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
                             </>
                           )
                         ) : role === "startup" ? (
@@ -566,13 +554,10 @@ const PortalDetailsSec = () => {
                               className="p-5  text-[#00103280]"
                             />
 
-                            {renderFileUpload("Pitchdeck Upload")}
+                            {renderFileUpload("Pitchdeck Upload", "Upload your Pitch Deck\nPitch Deck must be in pdf format. (Max 10MB)", "application/pdf")}
                           </>
                         ) : (
                           <>
-                            <div>
-                              <Calendar2 onChange={(date) => setFoundedOn(date)} />
-                            </div>
                             <Input
                               type="text"
                               placeholder="LinkedIn Profile"
@@ -581,35 +566,13 @@ const PortalDetailsSec = () => {
                               className="p-5  text-[#00103280]"
                               required
                             />
-
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
-                                  {domain}
-                                  <IoIosArrowDown className="mt-1" />
-                                </button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
-                                {domainOptions.map((item) => (
-                                  <DropdownMenuItem key={item} onClick={() => setDomain(item)}>
-                                    {item}
-                                  </DropdownMenuItem>
-                                ))}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            {domain === "Other" && (
-                              <Input
-                                type="text"
-                                placeholder="Describe your domain"
-                                value={domainDescription}
-                                onChange={(e) => setDomainDescription(e.target.value)}
-                                className="p-5  text-[#00103280]"
-                                required
-                              />
-                            )}
-
-                            {renderFileUpload("Profile Upload")}
+                            <Input
+                              type="text"
+                              placeholder="Referral Code (optional)"
+                              value={referralCode}
+                              onChange={(e) => setReferralCode(e.target.value)}
+                              className="p-5  text-[#00103280]"
+                            />
                           </>
                         )}
                       </>
@@ -620,11 +583,11 @@ const PortalDetailsSec = () => {
                   </div>
 
                   {/* SUBMIT BUTTON */}
-                  <CardFooter className="flex-col gap-2 lg:mt-4 w-full px-0 mt-15">
+                  <CardFooter className="flex-col gap-2 lg:mt-4 w-full px-0 mt-auto ">
                     <Button 
                       type="submit" 
                       className="w-full bg-[#001032]" 
-                      disabled={isUploading || !uploadedUrl || isSubmitting}
+                      disabled={isUploading || (role !== "investor" && !uploadedUrl) || isSubmitting}
                     >
                       {isSubmitting ? (
                         <div className="flex items-center gap-2">
@@ -633,8 +596,8 @@ const PortalDetailsSec = () => {
                         </div>
                       ) : isUploading ? (
                         "Uploading File..."
-                      ) : !uploadedUrl ? (
-                        "Please upload file to continue"
+                      ) : (role !== "investor" && !uploadedUrl) ? (
+                        " Continue"
                       ) : (
                         "Continue"
                       )}
