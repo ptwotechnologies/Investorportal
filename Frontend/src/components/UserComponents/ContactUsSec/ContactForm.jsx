@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import toast from "react-hot-toast";
+import axios from "axios";
+import { serverUrl } from "../../../App";
 
 const interests = [
   {
@@ -29,14 +31,32 @@ const interests = [
 const ContactForm = () => { 
 
     const [selected, setSelected] = useState("startup")
+    const [loading, setLoading] = useState(false)
+    const [termsAccepted, setTermsAccepted] = useState(false)
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault()
+    
+    if (!termsAccepted) {
+      toast.error("Please accept the terms and conditions.");
+      return;
+    }
+
     const formData = new FormData(e.currentTarget)
-    const payload = Object.fromEntries(formData.entries())
-    // You can replace this with your submission logic or API route
-    console.log("[v0] Contact form payload:", { ...payload, interest: selected })
-    toast.success("Form submitted! Check console for payload.")
+    const payload = { ...Object.fromEntries(formData.entries()), interest: selected }
+    
+    setLoading(true)
+    try {
+      const response = await axios.post(`${serverUrl}/api/contact-us/submit`, payload)
+      toast.success(response.data.message || "Contact request submitted successfully!")
+      e.target.reset()
+      setSelected("startup")
+    } catch (error) {
+      console.error("Submission error", error);
+      toast.error(error.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -132,7 +152,7 @@ const ContactForm = () => {
                   By clicking, you agree to our Term and Conditions 
                 </p>
                 <div className="flex lg:items-center items-start lg:gap-3 gap-1">
-                  <input type="checkbox" className="mt-1 lg:mt-0" />
+                  <input type="checkbox" checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="mt-1 lg:mt-0" />
                   <span className=" tracking-wide text-xs lg:text-md">
                     I have read all the terms and conditions 
                     
@@ -143,9 +163,10 @@ const ContactForm = () => {
       <div className="pt-3 pb-20">
         <button
           type="submit"
-          className="inline-flex items-center justify-center rounded-sm bg-[#001032] px-6 py-3 text-sm font-medium text-primary-foreground"
+          disabled={loading}
+          className="inline-flex items-center justify-center rounded-sm bg-[#001032] px-6 py-3 text-sm font-medium text-primary-foreground text-white"
         >
-          Get Started
+          {loading ? "Submitting..." : "Get Started"}
         </button>
       </div>
 

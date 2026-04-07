@@ -1,12 +1,71 @@
 import React, { useRef, useState } from "react";
 import { FaCircleCheck } from "react-icons/fa6";
 import { BsBoxArrowInUpRight } from "react-icons/bs";
+import axios from "axios";
+import { serverUrl } from "../../../App";
+import toast from "react-hot-toast";
 
 
 const ChannelPartnerSec1 = () => {
   const scrollRef = useRef(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    companyName: "",
+    website: "",
+    alreadyRegistered: false,
+    termsAccepted: false
+  });
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (name === "reg") {
+      setFormData(prev => ({ ...prev, alreadyRegistered: value === "true" }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.termsAccepted) {
+      toast.error("Please accept the terms and conditions.");
+      return;
+    }
+
+    if (!formData.alreadyRegistered) {
+      toast.error("You must register as a Service Professional before applying to be a channel partner.");
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const response = await axios.post(`${serverUrl}/api/channel-partner/submit`, formData);
+      toast.success(response.data.message || "Application submitted successfully!");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        companyName: "",
+        website: "",
+        alreadyRegistered: false,
+        termsAccepted: false
+      });
+    } catch (error) {
+      console.error("Submission error", error);
+      toast.error(error.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleScroll = () => {
     const scrollWidth = scrollRef.current.scrollWidth;
@@ -124,27 +183,47 @@ const ChannelPartnerSec1 = () => {
             id="form"
             className="p-2.5 border-3 rounded-xl border-[#E4E4E4]  shadow-[inset_0px_0px_4px_rgba(0,0,0,1)]"
           >
-            <div className="bg-white rounded-xl border-3 border-[#E4E4E4] lg:p-10 px-3 py-5 shadow-[0px_0px_4px_rgba(0,0,0,1)]">
+            <form onSubmit={handleSubmit} className="bg-white rounded-xl border-3 border-[#E4E4E4] lg:p-10 px-3 py-5 shadow-[0px_0px_4px_rgba(0,0,0,1)]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <input
+                  required
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
                   className="p-3 lg:py-6 border rounded-lg"
                   placeholder="First name"
                 />
                 <input
+                  required
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
                   className="p-3 lg:py-6 border rounded-lg"
                   placeholder="Last name"
                 />
               </div>
 
               <input
+                required
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 className="p-3 lg:py-6 border rounded-lg w-full mt-4"
                 placeholder="Work email address"
               />
               <input
+                required
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
                 className="p-3 lg:py-6 border rounded-lg w-full mt-4"
                 placeholder="Company name"
               />
               <input
+                name="website"
+                value={formData.website}
+                onChange={handleChange}
                 className="p-3 lg:py-6 border rounded-lg w-full mt-4"
                 placeholder="Website"
               />
@@ -162,10 +241,10 @@ const ChannelPartnerSec1 = () => {
 
                 <div className="flex flex-col items-start lg:gap-4 gap-3 lg:w-[10%] w-[15%] ml-3 ">
                   <label className="  text-gray-700 ">
-                    <input type="radio" name="reg" /> Yes
+                    <input type="radio" name="reg" value="true" checked={formData.alreadyRegistered === true} onChange={handleChange} /> Yes
                   </label>
                   <label className=" text-gray-700 ">
-                    <input type="radio" name="reg" /> No
+                    <input type="radio" name="reg" value="false" checked={formData.alreadyRegistered === false} onChange={handleChange} /> No
                   </label>
                 </div>
               </div>
@@ -177,7 +256,7 @@ const ChannelPartnerSec1 = () => {
                   channel partner.
                 </p>
                 <div className="flex lg:items-center items-start lg:gap-3 gap-1">
-                  <input type="checkbox" className="mt-1 lg:mt-0" />
+                  <input type="checkbox" name="termsAccepted" checked={formData.termsAccepted} onChange={handleChange} className="mt-1 lg:mt-0" />
                   <span className=" tracking-wide text-sm lg:text-md">
                     I have read all the terms and conditions and I’m ready to be
                     a channel partner.
@@ -185,8 +264,8 @@ const ChannelPartnerSec1 = () => {
                 </div>
               </div>
 
-              <button className="mt-6 lg:mb-35 mb-20 bg-[#001032] text-white px-8 py-3 rounded-sm text-lg">
-                Get Started
+              <button type="submit" disabled={loading} className="mt-6 lg:mb-35 mb-20 bg-[#001032] text-white px-8 py-3 rounded-sm text-lg">
+                {loading ? "Submitting..." : "Get Started"}
               </button>
 
               <p className="lg:text-[16px] text-[14px] text-[#1D2A29CC] ">
@@ -194,7 +273,7 @@ const ChannelPartnerSec1 = () => {
                 services for a new venture or business. By clicking "Get
                 Started" you agree to Copteno’s Privacy Policy
               </p>
-            </div>
+            </form>
           </div>
         </div>
 
