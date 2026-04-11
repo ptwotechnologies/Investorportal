@@ -192,6 +192,9 @@ const Mobile = () => {
                             <Link to="/deal/activedeals">
                               <li type="disc"> Active Deals</li>
                             </Link>
+                            <Link to="/deal/communication">
+                              <li type="disc"> Communication</li>
+                            </Link>
                             <Link to="/deal/milestones">
                               <li  type="disc">Milestones</li>
                             </Link>

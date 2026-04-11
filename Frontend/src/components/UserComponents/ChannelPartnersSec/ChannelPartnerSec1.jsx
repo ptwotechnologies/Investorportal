@@ -4,6 +4,7 @@ import { BsBoxArrowInUpRight } from "react-icons/bs";
 import axios from "axios";
 import { serverUrl } from "../../../App";
 import toast from "react-hot-toast";
+import ChannelPartnerSec4 from "./ChannelPartnerSec4";
 
 
 const ChannelPartnerSec1 = () => {
@@ -419,6 +420,10 @@ const ChannelPartnerSec1 = () => {
               />
             ))}
           </div>
+        </div>
+
+         <div>
+          <ChannelPartnerSec4/>
         </div>
       </div>
     </div>

@@ -312,7 +312,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </div>
 
                 {isDealsOpen && (
-                  <div className="ml-7 mt-2 flex flex-col text-[15px] text-gray-600">
+                  <div className="ml-7 mt-2 flex flex-col text-[13px] text-gray-600">
 
                     <NavLink
                       to="/deal/dealdraft"
@@ -329,6 +329,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Active Deals
                     </NavLink>
+
+                    <NavLink
+                      to="/deal/communication"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                       Communication
+                    </NavLink>
+
 
                     <NavLink
                       to="/deal/milestones"

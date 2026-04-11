@@ -46,6 +46,7 @@ const userSchema = new mongoose.Schema(
 
     plan: {
       amount: { type: Number, default: 0 },
+      planName: { type: String, default: "" },
     },
  
     transactionId: { type: String, default: "" },

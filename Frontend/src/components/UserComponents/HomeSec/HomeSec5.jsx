@@ -10,33 +10,36 @@ const HomeSec5 = () => {
         "“Helps decode your runway, spotlight where cash burns, and show exactly how to extend it. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash.”",
       lgPara:
         "Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
-      name: "Vivek T ",
-      lgname: "Sanjay Kumar",
+      name: "Arjun Mehta ",
+      lgname: "Arjun Mehta",
       company: "Elvehico ",
       company2: "Founder",
       companyName: "Early-stage product team",
+       image: "https://randomuser.me/api/portraits/men/45.jpg"
     },
     {
       paragraph:
         "“With Copteno, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
       lgPara:
         "With Copteno, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
-      name: "Vivek T ",
+      name: "Niharika Sharma ",
       lgname: "Niharika Sharma",
       company2: "TSAH",
       company: "TSAH ",
       companyName: "Founder",
+      image: "https://randomuser.me/api/portraits/women/68.jpg"
     },
     {
       paragraph:
         "“Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
       lgPara:
-        "Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
+        "Before Copteno, our financial story felt scattered. With its insights, we streamlined our data, identified key gaps, and built a much stronger narrative for investors. It became an essential part of our decision-making process.",
       name: "Vivek T ",
-      lgname: "Niharika Sharma",
+      lgname: "Sanjay Kumar",
       company2: "Founder",
       company: "TSAH",
       companyName: "Startup",
+      image: "https://randomuser.me/api/portraits/men/32.jpg"
     },
   ]
  
@@ -107,12 +110,16 @@ const HomeSec5 = () => {
                   </div>
                   <div className="flex justify-center items-center gap-5">
                     <div className="border-l h-20 border-[#00000033]"></div>
-                    <div className="w-[60px] h-[100px] bg-[#001032] rounded-4xl"></div>
+                    <div className="w-[60px] h-[100px]  rounded-4xl">
+                      <img src={item.image} alt="" className='w-full h-full object-cover rounded-4xl'/>
+                    </div>
                   </div>
                 </div>
 
                 <div className="hidden lg:block mt-3">
-                  <div className="w-[180px] h-[200px] bg-[#D9D9D9] rounded-sm"></div>
+                  <div className="w-[180px] h-[200px] bg-[#D9D9D9] rounded-sm">
+                    <img src={item.image} alt="" className='w-full h-full object-cover rounded-sm'/>
+                  </div>
                   <p className="text-sm pt-2 text-[#001032B5]">
                     {item.lgname}
                   </p>

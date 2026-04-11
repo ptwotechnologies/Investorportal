@@ -1,13 +1,97 @@
 import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const DevelopmentContent = () => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const scrollRef = React.useRef(null);
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
+  const handlePlanSelect = (amount, planName) => {
+    // ✅ Agar user login nahi hai
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
+    // ✅ Free plan
+    if (!amount || amount === 0) {
+      navigate("/paymentsuccess", {
+        state: { userId, planName, isFreePlan: true },
+      });
+      return;
+    }
+
+    // ✅ Paid plan - Direct to Razorpay (no backend API call)
+    navigate("/scanner", {
+      state: { userId, amount, planName },
+    });
+  };
 
   const cards = [
+     {
+      title: "Entry Access",
+      titleBg: "#BA1E1E",
+      titleBg2: "#B77070",
+      // amount: 9999,
+      amountduration: "Free",
+      amountDesc: "Create your presence and discover client opportunities",
+      planName: "Explorer Access",
+      planDesc: "Receive relevant client opportunities and start engaging instantly",
+      network1:"Opportunity Network",
+      network2:"Limited Access",
+      network3:"Standard Support",
+      sections: [
+        {
+          heading: "Core Access",
+          features: [
+            "Profile creation & guided visibility",
+            "Access to unified dashboard",
+            "Receive curated service requirements",
+            "Visibility into relevant startup needs",
+            "Access to managed matching system",
+            "Participate in limited deal workflows",
+          ],
+        },
+        {
+          heading: "Deal & Execution System",
+          features: [
+            "Accept 1 client opportunity",
+            "Milestone-based execution tracking",
+            "Negotiation interface",
+            "Documentation handling",
+            "Payment workflow visibility",
+            "Dispute resolution system",
+          ],
+        },
+         {
+          heading: "Opportunity Access",
+          features: [
+            "Receive up to 3–5 relevant client requests",
+            "View detailed requirement previews",
+            "Visibility into startup requirements",
+            "Access to active opportunity sections",
+            "Unlock full plan to convert more opportunities",
+          ],
+        },
+        {
+          heading: "Trust Layer",
+          features: [
+            "Entry into verified professional ecosystem",
+            "Platform-level quality control",
+            "Standard support ticket system",
+          ],
+        },
+        {
+          heading: "Visibility Level",
+          features: ["Entry-level visibility to startups", "Basic discoverability within ecosystem"],
+        },
+      ],
+
+      buttonText: "Start Exploring",
+    },
     {
       title: "Value Focused",
       titleBg: "#BA1E1E",
@@ -225,9 +309,9 @@ const DevelopmentContent = () => {
 
                 <div className="text-[#3C1D3A]">
                   <p className="lg:text-2xl text-3xl font-bold tracking-wide lg:mt-3">
-                    Rs {card.amount}
+                    {card.amount ? `Rs ${card.amount}` : "Free"}
                     <span className="font-normal text-xl lg:text-md">
-                      {card.amountduration}
+                      {card.amount ? card.amountduration : ""}
                     </span>
                   </p>
                   <p className="text-sm ">{card.amountDesc}</p>
@@ -319,7 +403,10 @@ const DevelopmentContent = () => {
                   )}
 
                 <div className="  lg:mt-1 pt-3 lg:pt-1 text-center">
-                  <Link to="/login"><button
+                  <button
+                    onClick={() =>
+                      handlePlanSelect(card.amount, card.planName)
+                    }
                     className=" 
                         w-full
                       
@@ -333,11 +420,24 @@ const DevelopmentContent = () => {
                   >
                     {card.buttonText}
                   </button>
-                  </Link>
                 </div>
               </div>
             </article>
           ))}
+
+          <div className="hidden lg:block col-span-2 mx-6">
+            <hr className="mx-6   " />
+            <div className="bg-white  border-2 border-[#00103280] mt-7 h-[95.5%]  rounded-sm  p-3   px-20 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+              <div id="top" className="flex justify-between items-center ">
+                <div className="bg-[#5DD2E3] w-47 h-140 rounded-3xl"></div>
+                <div className="bg-[#C2D3D5]  w-47 h-160 rounded-3xl"></div>
+                <div className="bg-[#4A66A3]  w-47 h-150 rounded-3xl mt-20"></div>
+              </div>
+              <div id="bottom">
+                <div className="bg-[#DBDBDB] w-full h-12 rounded-full mt-40"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </main>

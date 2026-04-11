@@ -33,7 +33,16 @@ const VerifyEmailLink = () => {
 
         if (response.status === 200) {
           localStorage.setItem("token", response.data.token);
-          localStorage.setItem("userId", response.data.userId); 
+          localStorage.setItem("userId", response.data.userId);
+          localStorage.setItem("paymentStatus", response.data.paymentStatus || "not_paid");
+          localStorage.setItem(
+            "user",
+            JSON.stringify({
+              userId: response.data.userId,
+              role: response.data.role,
+              paymentStatus: response.data.paymentStatus || "not_paid",
+            })
+          );
           if (response.data.role) localStorage.setItem("role", response.data.role);
           if (response.data.serviceType) localStorage.setItem("serviceType", response.data.serviceType);
 

@@ -15,6 +15,7 @@ import helpRoutes from './Routes/help.Routes.js';
 import paymentRoutes from './Routes/payment.Routes.js';
 import channelPartnerRoutes from './Routes/ChannelPartner.Routes.js';
 import contactUsRoutes from './Routes/ContactUs.Routes.js';
+import partnerReferralRoutes from './Routes/PartnerReferral.Routes.js';
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/help", helpRoutes);
 app.use("/api/channel-partner", channelPartnerRoutes);
 app.use("/api/contact-us", contactUsRoutes);
+app.use("/api/partner-referral", partnerReferralRoutes);
 
 
 // ✅ GLOBAL ERROR HANDLER

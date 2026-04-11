@@ -10,7 +10,7 @@ const MilestoneSec = () => {
       </div>
 
       <div id='bottom'>
-        <BottomSec/>
+        {/* <BottomSec/> */}
 
       </div>
     </div>

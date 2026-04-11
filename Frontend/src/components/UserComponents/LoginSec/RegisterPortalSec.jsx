@@ -76,11 +76,20 @@ const RegisterPortalSec = () => {
 
           if (response.data.verified) {
             setIsVerified(true);
-            const { token, userId: newUserId, role: newRole, serviceType: newServiceType } = response.data;
+            const { token, userId: newUserId, role: newRole, serviceType: newServiceType, paymentStatus } = response.data;
             
             // Save to localStorage just like verifyEmailLink does
             localStorage.setItem("token", token);
             localStorage.setItem("userId", newUserId);
+            localStorage.setItem("paymentStatus", paymentStatus || "not_paid");
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                userId: newUserId,
+                role: newRole,
+                paymentStatus: paymentStatus || "not_paid",
+              })
+            );
             if (newRole) localStorage.setItem("role", newRole);
             if (newServiceType) localStorage.setItem("serviceType", newServiceType);
 

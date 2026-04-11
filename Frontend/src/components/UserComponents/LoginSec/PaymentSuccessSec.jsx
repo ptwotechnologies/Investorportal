@@ -11,17 +11,19 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { serverUrl } from "@/App";
 import { SpinnerButton } from "./StatusSpinner";
 
 const PaymentSuccessSec = () => {
+  const location = useLocation();
+  const isFreePlan = location.state?.isFreePlan === true;
+
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState(null);
   const [role, setRole] = useState(null);
 
-  
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
@@ -31,12 +33,13 @@ const PaymentSuccessSec = () => {
     }
   }, []);
 
-  
   const checkPaymentStatus = async () => {
-    if (!userId) return; 
+    if (!userId) return;
 
     try {
-      const res = await axios.post(`${serverUrl}/user/payment-status`, { userId });
+      const res = await axios.post(`${serverUrl}/user/payment-status`, {
+        userId,
+      });
       console.log("API response:", res.data);
 
       const status = res.data?.paymentStatus?.toLowerCase() || "pending";
@@ -49,42 +52,44 @@ const PaymentSuccessSec = () => {
     }
   };
 
-  
   useEffect(() => {
-  if (!userId || paymentStatus === "approved") return;
+    if (!userId || paymentStatus === "approved") return;
+    if (role === "investor") return; // ⭐ only investor skips
 
-  checkPaymentStatus(); // initial hit
-
-  const interval = setInterval(() => {
     checkPaymentStatus();
-  }, 360000); // 6 minutes
+    const interval = setInterval(() => {
+      checkPaymentStatus();
+    }, 360000);
 
-  return () => clearInterval(interval);
-}, [userId, paymentStatus]);
-
-
-
-
+    return () => clearInterval(interval);
+  }, [userId, paymentStatus, role]); // ⭐ removed isFreePlan
 
   useEffect(() => {
-  const storedRole = localStorage.getItem("role");
-  if (storedRole) {
-    setRole(storedRole);
-  }
-}, []);
+    const storedRole = localStorage.getItem("role");
+    if (storedRole) {
+      setRole(storedRole);
+    }
+  }, []);
 
-  
+  const roleinvest =
+    role === "investor"
+      ? "Thank you for joining as an investor!"
+      : isFreePlan
+        ? paymentStatus === "approved"
+          ? "Your free account is now active!" // ⭐ approved free plan
+          : "Your free account is being reviewed!"
+        : paymentStatus === "approved"
+          ? "Payment has been received successfully!"
+          : "Payment has been received successfully!";
+
   const statusMessage =
-  role === "investor"
-    ? paymentStatus === "approved"
-      ? "Your onboarding is complete. You can continue."
-      : "We are reviewing your details. Your account will be activated within 30 minutes. You’ll receive a confirmation via email/WhatsApp once it's live."
-    : paymentStatus === "approved"
-      ? "Payment approved! You can continue."
-      : "We are reviewing your details. Your account will be activated within 30 minutes. You’ll receive a confirmation via email/WhatsApp once it's live.";
-
-
-      const roleinvest= role !== "investor" ? "Payment has been received successfully!" : "Thank you for joining as an investor!";
+    paymentStatus === "approved"
+      ? "Your account is active. You can now log in."
+      : role === "investor"
+        ? "We are reviewing your details. Your account will be activated within 30 minutes. You'll receive a confirmation via email/WhatsApp once it's live."
+        : isFreePlan
+          ? "Your account is under review. You'll be notified via email/WhatsApp once it's activated." // ⭐ no payment language
+          : "We are reviewing your payment. Your account will be activated within 30 minutes. You'll receive a confirmation via email/WhatsApp once it's live.";
 
   return (
     <div>
@@ -93,50 +98,79 @@ const PaymentSuccessSec = () => {
           <div className="flex flex-col justify-between items-center gap-y-25">
             <div>
               <img src={logo} alt="Logo" className="w-100" />
-              <p className="text-[#001032] text-xl w-full">Allows you to get funding,</p>
-              <p className="text-[#001032] text-xl">resources and investor connect</p>
+              <p className="text-[#001032] text-xl w-full">
+                Allows you to get funding,
+              </p>
+              <p className="text-[#001032] text-xl">
+                resources and investor connect
+              </p>
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © norf.kD Technologies Pvt. Ltd.
+                Terms, Privacy Disclosures Cookie Settings © norf.kD
+                Technologies Pvt. Ltd.
               </p>
             </div>
           </div>
         </div>
 
-        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-4 text-center w-full">
+        <div
+          id="right"
+          className="lg:w-[50%]  lg:px-10 lg:py-4 text-center w-full"
+        >
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
-            <Card className="w-full lg:h-auto mx-auto rounded-lg">
+            <Card className="w-full lg:min-h-[600px] mx-auto rounded-lg">
               <CardHeader>
                 <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-45 w-45 mx-auto lg:my-10 my-7" />
+                  <img
+                    src={logo}
+                    alt="Logo"
+                    className="lg:w-45 w-45 mx-auto lg:my-10 my-7"
+                  />
                 </CardTitle>
                 <CardDescription className="mb-1 text-[#001032] text-xs lg:text-sm ">
                   {roleinvest}
                   <p className="mt-2 lg:w-[80%]  mx-auto">{statusMessage}</p>
-                  {loading && <p className="mt-2 text-yellow-500 ">Processing...</p>}
+                  {loading && (
+                    <p className="mt-2 text-yellow-500 ">Processing...</p>
+                  )}
                 </CardDescription>
               </CardHeader>
 
               <CardContent>
-              {paymentStatus === "approved" ? (
+                {paymentStatus === "approved" ? (
                   <div className="w-30 h-30 lg:w-40 lg:h-40 mx-auto border-2 border-[#00142666] rounded-full my-16 mt-20 lg:my-12">
-                  <img src={paymentSuccess} alt="QR" />
-                </div>
+                    <img src={paymentSuccess} alt="QR" />
+                  </div>
                 ) : (
                   <div className="my-16 mt-20 lg:my-12">
-                  <SpinnerButton/>
-                </div>
+                    <SpinnerButton />
+                  </div>
                 )}
               </CardContent>
 
               <CardFooter className="absolute bottom-5 w-full lg:static mt-32">
+                
                 {paymentStatus === "approved" ? (
-                  <Link to="/login" className="w-full">
-                    <Button className="w-full bg-[#001032]">Back to Login</Button>
+                  <Link
+                    to="/login"
+                    className="w-full"
+                    onClick={() => {
+                      // ⭐ Clear auth token so login page doesn't auto-redirect
+                      localStorage.removeItem("token");
+                      localStorage.removeItem("userId");
+                      localStorage.removeItem("role");
+                    }}
+                  >
+                    <Button className="w-full bg-[#001032]">
+                      Back to Login
+                    </Button>
                   </Link>
                 ) : (
-                  <Button className="w-full bg-[#001032] opacity-50 cursor-not-allowed" disabled>
+                  <Button
+                    className="w-full bg-[#001032] opacity-50 cursor-not-allowed"
+                    disabled
+                  >
                     Processing...
                   </Button>
                 )}

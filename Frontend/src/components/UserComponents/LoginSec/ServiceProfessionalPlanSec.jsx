@@ -6,26 +6,91 @@ import axios from "axios";
 import { serverUrl } from "@/App";
 import toast, { Toaster } from "react-hot-toast";
 
-const ServiceProfessionalPlanSec = () => {
+const ServiceProfessionalPlanSec = ({ userId }) => {
   const navigate = useNavigate();
+  const resolvedUserId = userId || localStorage.getItem("userId");
 
   const cards = [
-    {
-      title: "Value Focused",
+     {
+      title: "Entry Access",
       titleBg: "#BA1E1E",
       titleBg2: "#B77070",
-      amount: 9999,
-      amountduration: "/year",
-      amountDesc: "Annual onboarding access",
-      planName: "Access Plan",
-      planDesc: "For professionals entering structured deal flow",
+      // amount: 9999,
+      amountduration: "Free",
+      amountDesc: "Create your presence and discover client opportunities",
+      planName: "Explorer Access",
+      planDesc: "Receive relevant client opportunities and start engaging instantly",
+      network1:"Opportunity Network",
+      network2:"Limited Access",
+      network3:"Standard Support",
       sections: [
         {
           heading: "Core Access",
           features: [
-            "Professional profile creation & visibility",
+            "Profile creation & guided visibility",
             "Access to unified dashboard",
-            "Receive service requests from startups",
+            "Receive curated service requirements",
+            "Visibility into relevant startup needs",
+            "Access to managed matching system",
+            "Participate in limited deal workflows",
+          ],
+        },
+        {
+          heading: "Deal & Execution System",
+          features: [
+            "Accept 1 client opportunity",
+            "Milestone-based execution tracking",
+            "Negotiation interface",
+            "Documentation handling",
+            "Payment workflow visibility",
+            "Dispute resolution system",
+          ],
+        },
+         {
+          heading: "Opportunity Access",
+          features: [
+            "Receive up to 3–5 relevant client requests",
+            "View detailed requirement previews",
+            "Visibility into startup requirements",
+            "Access to active opportunity sections",
+            "Unlock full plan to convert more opportunities",
+          ],
+        },
+        {
+          heading: "Trust Layer",
+          features: [
+            "Entry into verified professional ecosystem",
+            "Platform-level quality control",
+            "Standard support ticket system",
+          ],
+        },
+        {
+          heading: "Visibility Level",
+          features: ["Entry-level visibility to startups", "Basic discoverability within ecosystem"],
+        },
+      ],
+
+      buttonText: "Start Exploring",
+    },
+    {
+      title: "Most Popular Plan",
+      titleBg: "#BA1E1E",
+      titleBg2: "#B77070",
+      amount: 9999,
+      amountduration: "(one-time) ",
+      amountDesc: "Recoverable with just 1–2 client conversions",
+      planName: "Professional Plan",
+      planDesc: "For professionals ready to unlock consistent client opportunities",
+       network1:"Deal Flow Access",
+      network2:"Full Access",
+      network3:"Priority Support",
+      sections: [
+        {
+          heading: "Core Access",
+          features: [
+            "Profile creation & enhanced visibility",
+            "Access to unified dashboard",
+            "Receive curated client requests from startups",
             "Send & accept connection requests",
             "Participate in complete deal workflows",
           ],
@@ -34,26 +99,23 @@ const ServiceProfessionalPlanSec = () => {
         {
           heading: "Deal & Execution System",
           features: [
-            "Active deals management",
+            "Active deals management across clients",
             "Milestone-based execution tracking",
-            "Negotiation interface",
+            "Negotiation interface access",
             "Documentation handling",
             "Payment workflow visibility",
             "Dispute resolution system",
           ],
         },
         {
-          heading: "Revenue Opportunity",
+          heading: "Opportunity Access",
           features: [
-            "Eligible for Channel Partner model",
-            {
-              title: "Earn:",
-              subPoints: [
-                "20% on startup onboarding",
-                "20% on business plan conversions",
-              ],
-            },
-            "Build additional income streams beyond services",
+            "Receive more frequent & relevant client requests",
+            "Full access to detailed requirement insights",
+            "Increased visibility in startup discovery",
+            "Access to active opportunity sections",
+            "Priority access to incoming requests",
+            "Higher chances of client conversion",
           ],
         },
         {
@@ -61,153 +123,157 @@ const ServiceProfessionalPlanSec = () => {
           features: [
             "Verified startup ecosystem access",
             "Platform-level quality control",
-            "Support ticket system",
+            "Priority support ticket system",
           ],
         },
         {
           heading: "Visibility Level",
           features: [
-            "Standard listing visibility",
-            "Basic discoverability in service listings",
+            "Enhanced listing visibility across platform",
+            "Improved discoverability in service listings",
           ],
         },
       ],
 
-      buttonText: "Start Receiving Opportunities",
+      buttonText: "Start Getting Clients",
     },
-    {
-      title: "Outcome Driven",
-      titleBg: "#119BCD",
-      titleBg2: "#61C9EF",
-      amount: 19999,
-      amountduration: "/year",
-      amountDesc: "Visibility + deal flow enhancement",
-      amountButton: "Everything in Access +",
-      planName: "Growth Plan",
-      recommendedPlan: "(Recommended)",
-      planDesc: "For professionals seeking consistent deal flow",
-      sections: [
-        {
-          heading: "Visibility Boost",
-          features: [
-            "Priority in startup service requests",
-            "Higher ranking in service listings",
-            "Increased exposure across platform",
-            "Improved positioning in search",
-          ],
-        },
-        {
-          heading: "Deal Advantage",
-          features: [
-            "Increased chances of being selected",
-            "Better exposure to active & high-intent startups",
-            "Faster interaction visibility",
-          ],
-        },
-        {
-          heading: "Revenue Scaling",
-          features: [
-            "Increased deal participation opportunities",
-            "Stronger potential for recurring client flow",
-          ],
-        },
-      ],
-      middleButton1: "Higher visibility",
-      middleButton2: "More Onboarding",
-      middleButton3: "More Commission",
-      bottomSection: [
-        {
-          bottomButton: "  Increase Your Deal Flow",
-          bottomPara:
-            "Get more service requests, higher visibility, and increase your chances of closing deals",
-        },
-      ],
+    // {
+    //   title: "Outcome Driven",
+    //   titleBg: "#119BCD",
+    //   titleBg2: "#61C9EF",
+    //   amount: 19999,
+    //   amountduration: "/year",
+    //   amountDesc: "Visibility + deal flow enhancement",
+    //   amountButton: "Everything in Access +",
+    //   planName: "Growth Plan",
+    //   recommendedPlan: "(Recommended)",
+    //   planDesc: "For professionals seeking consistent deal flow",
+    //   sections: [
+    //     {
+    //       heading: "Visibility Boost",
+    //       features: [
+    //         "Priority in startup service requests",
+    //         "Higher ranking in service listings",
+    //         "Increased exposure across platform",
+    //         "Improved positioning in search",
+    //       ],
+    //     },
+    //     {
+    //       heading: "Deal Advantage",
+    //       features: [
+    //         "Increased chances of being selected",
+    //         "Better exposure to active & high-intent startups",
+    //         "Faster interaction visibility",
+    //       ],
+    //     },
+    //     {
+    //       heading: "Revenue Scaling",
+    //       features: [
+    //         "Increased deal participation opportunities",
+    //         "Stronger potential for recurring client flow",
+    //       ],
+    //     },
+    //   ],
+    //   middleButton1: "Higher visibility",
+    //   middleButton2: "More Onboarding",
+    //   middleButton3: "More Commission",
+    //   bottomSection: [
+    //     {
+    //       bottomButton: "  Increase Your Deal Flow",
+    //       bottomPara:
+    //         "Get more service requests, higher visibility, and increase your chances of closing deals",
+    //     },
+    //   ],
 
-      buttonText: "Increase Your Deal Flow",
-    },
-    {
-      title: "Authority & Scale",
-      titleBg: "#FEC432",
-      titleBg2: "#F2D795",
-      amount: 49999,
-      amountduration: "/year",
-      amountDesc: "High visibility + authority positioning",
-      amountButton: "Everything in Growth +",
-      planName: "Authority Plan",
-      planDesc: "For professionals building premium positioning",
-      sections: [
-        {
-          heading: "Premium Positioning",
-          features: [
-            "Featured placement in professional listings",
-            "Authority badge (credibility signal)",
-            "Highlighted presence across platform",
-          ],
-        },
-        {
-          heading: "High-Value Access",
-          features: [
-            "Priority in high-ticket startup deals",
-            "Better exposure to serious founders",
-            "Stronger placement in deal ecosystem",
-          ],
-        },
-        {
-          heading: "Brand Advantage",
-          features: [
-            "Increased trust & perceived expertise",
-            "Position as preferred ecosystem partner",
-            "Stronger brand visibility within network"
-          ],
-        },
-        {
-          heading: "Revenue Expansion",
-          features: [
-            "Higher conversion chances from requests",
-            "Increased channel partner earnings potential",
-            "Access to higher-value opportunities"
-          ],
-        },
-      ],
-      bottomSection: [
-        {
-          bottomButton: "Attract High-Value Clients",
-          bottomPara:
-            "Position yourself as a trusted expert and get access to serious, high-intent startups",
-        },
-      ],
+    //   buttonText: "Increase Your Deal Flow",
+    // },
+    // {
+    //   title: "Authority & Scale",
+    //   titleBg: "#FEC432",
+    //   titleBg2: "#F2D795",
+    //   amount: 49999,
+    //   amountduration: "/year",
+    //   amountDesc: "High visibility + authority positioning",
+    //   amountButton: "Everything in Growth +",
+    //   planName: "Authority Plan",
+    //   planDesc: "For professionals building premium positioning",
+    //   sections: [
+    //     {
+    //       heading: "Premium Positioning",
+    //       features: [
+    //         "Featured placement in professional listings",
+    //         "Authority badge (credibility signal)",
+    //         "Highlighted presence across platform",
+    //       ],
+    //     },
+    //     {
+    //       heading: "High-Value Access",
+    //       features: [
+    //         "Priority in high-ticket startup deals",
+    //         "Better exposure to serious founders",
+    //         "Stronger placement in deal ecosystem",
+    //       ],
+    //     },
+    //     {
+    //       heading: "Brand Advantage",
+    //       features: [
+    //         "Increased trust & perceived expertise",
+    //         "Position as preferred ecosystem partner",
+    //         "Stronger brand visibility within network"
+    //       ],
+    //     },
+    //     {
+    //       heading: "Revenue Expansion",
+    //       features: [
+    //         "Higher conversion chances from requests",
+    //         "Increased channel partner earnings potential",
+    //         "Access to higher-value opportunities"
+    //       ],
+    //     },
+    //   ],
+    //   bottomSection: [
+    //     {
+    //       bottomButton: "Attract High-Value Clients",
+    //       bottomPara:
+    //         "Position yourself as a trusted expert and get access to serious, high-intent startups",
+    //     },
+    //   ],
 
-      buttonText: "Establish Your Authority",
-    },
+    //   buttonText: "Establish Your Authority",
+    // },
   ];
 
   // ⭐ API Call
-  const [isSubmittingPlan, setIsSubmittingPlan] = useState(false);
+  const [submittingPlan, setSubmittingPlan] = useState(null);
   const handlePlanSelect = async (amount, planName) => {
-    if (!userId) {
-      toast.error("User ID missing!");
-      return;
-    }
+  if (!resolvedUserId) {
+    toast.error("User ID missing!");
+    return;
+  }
 
-    setIsSubmittingPlan(true);
-    try {
-      const payload = {
-        userId,
-        plan: { amount, planName },
-      };
+  const isFreePlan = !amount || amount === 0;
+  setSubmittingPlan(planName);
 
-      const res = await axios.put(`${serverUrl}/user/plan`, payload);
+  try {
+    // ⭐ Always call API — free plan gets auto-approved on backend
+    const payload = { userId: resolvedUserId, plan: { amount: amount || 0, planName } };
+    const res = await axios.put(`${serverUrl}/user/plan`, payload);
 
-      if (res.status === 200) {
-        navigate("/scanner", { state: { userId, amount, planName } });
+    if (res.status === 200) {
+      if (isFreePlan) {
+        // ⭐ Free plan — go directly to success, no scanner/payment needed
+        navigate("/paymentsuccess", { state: { userId: resolvedUserId, planName, isFreePlan: true } });
+      } else {
+        navigate("/scanner", { state: { userId: resolvedUserId, amount, planName } });
       }
-    } catch (error) {
-      console.error("Plan API Error:", error);
-      toast.error(error.response?.data?.message || "Server error");
-    } finally {
-      setIsSubmittingPlan(false);
     }
-  };
+  } catch (error) {
+    console.error("Plan API Error:", error);
+    toast.error(error.response?.data?.message || "Server error");
+  } finally {
+    setSubmittingPlan(null);
+  }
+};
 
   // ⭐ Scroll logic untouched
   const scrollRef = useRef(null);
@@ -224,14 +290,16 @@ const ServiceProfessionalPlanSec = () => {
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
+  
+
   return (
     <main className="bg-background text-foreground ">
-      <section className="mx-auto w-full lg:px-2  lg:py-7">
+      <section className="mx-auto w-full lg:px-4  lg:py-7">
         <div className="lg:h-[62vh] lg:overflow-y-auto scrollbar-hide">
           <div
             ref={scrollRef}
             className="
-                grid gap-2 lg:gap-2  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+                grid gap-2 lg:gap-2  grid-cols-1 md:grid-cols-2 lg:grid-cols-2
                 
                 w-full
               "
@@ -252,19 +320,19 @@ const ServiceProfessionalPlanSec = () => {
                     
                   "
                 >
-                  <div className="bg-white py-5 lg:py-3 border-2 border-[#00103280] m-2 lg:m-1 rounded-sm px-4 lg:px-2 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+                  <div className="bg-white py-5 lg:py-3 border-2 border-[#00103280] m-2 lg:m-1 rounded-sm px-4 lg:px-4 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
                     <div className=" lg:mt-1 space-y-1.5 ">
                       <div
                         style={{
                           background: `linear-gradient(90deg, ${card.titleBg} 75%, ${card.titleBg2} 100%)`,
                         }}
-                        className="text-white  py-1  rounded-sm  px-4 lg:px-2 mb-4 lg:mb-3 lg:text-xs lg:w-35 w-50 text-center"
+                        className="text-white  py-1  rounded-sm  px-6 mb-4 lg:mb-3 lg:text-xs w-fit text-center"
                       >
                         {card.title}
                       </div>
 
                       <div className="pb-4 lg:pb-0">
-                        <h3 className="text-3xl lg:text-lg font-semibold text-[#001032] ">
+                        <h3 className="text-3xl lg:text-xl font-semibold text-[#001032] ">
                           {card.planName}{" "}
                           <span className="text-[17px] font-semibold">
                             {card.recommendedPlan}
@@ -275,10 +343,10 @@ const ServiceProfessionalPlanSec = () => {
                         </p>
                       </div>
                       <div className="text-[#3C1D3A]">
-                        <p className="lg:text-lg text-3xl font-bold tracking-wide  ">
-                          Rs {card.amount}
-                          <span className="font-normal text-xl lg:text-md">
-                            {card.amountduration}
+                        <p className="lg:text-2xl text-3xl font-bold tracking-wide  ">
+                          {card.amount ? `Rs ${card.amount}` : "Free"}
+                          <span className="font-normal text-xl lg:text-[15px] ml-2">
+                            {card.amount ? card.amountduration : ""}
                           </span>
                         </p>
                         <p className="text-sm lg:text-[10px]">
@@ -294,12 +362,12 @@ const ServiceProfessionalPlanSec = () => {
                         )}
                       </div>
                     </div>
-                    <div className="bg-[#0000001A] flex items-center text-[12px] lg:text-[10px] gap-2 px-2 py-1 rounded-sm mt-4 lg:mt-4">
-                      <p className="">Deal Flow Access</p>
+                    <div className="bg-[#0000001A] flex items-center justify-center text-[12px] lg:text-[10px] gap-2 px-2 py-1 rounded-sm mt-4 lg:mt-4">
+                      <p className="">{card.network1}</p>
                       <div className="h-6 w-0.5 bg-[#8282825C]"></div>
-                      <p>Annual Plan</p>
+                      <p>{card.network2}</p>
                       <div className="h-6 w-0.5 bg-[#8282825C]"></div>
-                      <p>Priority Support</p>
+                      <p>{card.network3}</p>
                     </div>
                     <hr className="mt-4" />
 
@@ -392,9 +460,9 @@ const ServiceProfessionalPlanSec = () => {
                         onClick={() =>
                           handlePlanSelect(card.amount, card.planName)
                         }
-                        disabled={isSubmittingPlan}
+                        disabled={submittingPlan !== null}
                       >
-                        {isSubmittingPlan ? (
+                        {submittingPlan === card.planName ? (
                           <div className="flex items-center justify-center gap-2">
                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                              Processing...

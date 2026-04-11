@@ -8,24 +8,91 @@ import toast, { Toaster } from "react-hot-toast";
 
 const StartupPlansSec = ({ userId }) => {
   const navigate = useNavigate();
+  const resolvedUserId = userId || localStorage.getItem("userId");
 
   const cards = [
     {
-      title: "Most Affordable Plan",
+      title: "Entry Access",
+      titleBg: "#BA1E1E",
+      titleBg2: "#B77070",
+      // amount: 9999,
+      amountduration: "Free",
+      amountDesc: "Discover opportunities before unlocking full access",
+      planName: "Explorer Access",
+      planDesc: "Experience how the Copteno ecosystem works",
+      network1:"Execution Network",
+      network2:"Limited Access",
+      network3:"Standard Support",
+      sections: [
+        {
+          heading: "Core Access",
+          features: [
+            "Startup profile creation & guided onboarding",
+            "Access to unified dashboard",
+            "Ability to raise 1 structured requirement",
+            "Requirement validation & activation support",
+            "Access to managed matching system",
+            "Curated responses from relevant professionals",
+          ],
+        },
+        {
+          heading: "Deal & Execution System",
+          features: [
+            "Initiate 1 deal flow",
+            "Milestone-based execution tracking(limited)",
+            "Negotiation interface(preview)",
+            "Documentation handling(visibility)",
+            "Payment workflow visibility",
+            "Dispute resolution system",
+          ],
+        },
+         {
+          heading: "Opportunity Preview (Investor Layer)",
+          features: [
+            "See potential investor match count",
+            "View limited investor categories",
+            "Blurred preview of investor profiles",
+            "Visibility into funding alignment indicators",
+            "Limited access to investor-related sections",
+            "Unlock investor visibility & connections",
+            "X investors aligned with your profile"
+          ],
+        },
+        {
+          heading: "Trust Layer",
+          features: [
+            "Entry into verified execution ecosystem",
+            "Platform-level quality control",
+            "Support ticket system",
+          ],
+        },
+        {
+          heading: "Visibility Level",
+          features: ["Requirement-based visibility within ecosystem", "Entry-level exposure to service professionals"],
+        },
+      ],
+
+      buttonText: "Start Exploring",
+    },
+    {
+      title: "Best for Early-Stage Startups",
       titleBg: "#BA1E1E",
       titleBg2: "#B77070",
       amount: 9999,
-      amountduration: "/year",
-      amountDesc: "Annual onboarding access",
-      planName: "Foundation Plan",
+      amountduration: "(one-time)",
+      amountDesc: "Where startups begin getting discovered by investors",
+      planName: "Investor Gateway Plan",
       planDesc: "For early-stage startups entering the ecosystem",
+      network1:"Investor Network",
+      network2:"Full Access",
+      network3:"Priority Support",
       sections: [
         {
           heading: "Core Access",
           features: [
             "Startup profile creation & visibility",
             "Access to unified dashboard",
-            "Send & receive investor connection request",
+            "Receive investor interest & connections",
             "Raise service requirements",
             "Access verified service professionals",
             "Participate in deal workflows",
@@ -42,6 +109,17 @@ const StartupPlansSec = ({ userId }) => {
             "Dispute resolution system",
           ],
         },
+         {
+          heading: "Investor Access",
+          features: [
+            "Startup listing visible to investor network",
+            "Inclusion in investor discovery layer",
+            "Opportunity to receive inbound investor interest",
+            "Visibility during investor exploration",
+            "Access to investor-focused ecosystem sections",
+            "Increased chances of investor attention",
+          ],
+        },
         {
           heading: "Trust Layer",
           features: [
@@ -52,178 +130,181 @@ const StartupPlansSec = ({ userId }) => {
         },
         {
           heading: "Visibility Level",
-          features: ["Standard listing visibility", "Basic discoverability"],
+          features: ["Enhanced listing visibility across ecosystem", "Improved discoverability in investor & deals"],
         },
       ],
 
-      buttonText: "Enter the Ecosystem",
+      buttonText: "Unlock Investor Access",
     },
-    {
-      title: "Starter Growth Plan",
-      titleBg: "#119BCD",
-      titleBg2: "#61C9EF",
-      amount: 19999,
-      amountduration: "/year",
-      amountDesc: "Enhanced visibility & positioning",
-      amountButton: "Everything in Foundation +",
-      planName: "Growth Plan",
-      recommendedPlan: "(Recommended)",
-      planDesc: "For startups aiming to get noticed & build momentum",
-      sections: [
-        {
-          heading: "Visibility Boost",
-          features: [
-            "Priority listing over foundation users",
-            "Higher ranking in investor discovery",
-            "Increased exposure in search & listings",
-            "Improved positioning in connection requests"
+    // {
+    //   title: "Starter Growth Plan",
+    //   titleBg: "#119BCD",
+    //   titleBg2: "#61C9EF",
+    //   amount: 19999,
+    //   amountduration: "/year",
+    //   amountDesc: "Enhanced visibility & positioning",
+    //   amountButton: "Everything in Foundation +",
+    //   planName: "Growth Plan",
+    //   recommendedPlan: "(Recommended)",
+    //   planDesc: "For startups aiming to get noticed & build momentum",
+    //   sections: [
+    //     {
+    //       heading: "Visibility Boost",
+    //       features: [
+    //         "Priority listing over foundation users",
+    //         "Higher ranking in investor discovery",
+    //         "Increased exposure in search & listings",
+    //         "Improved positioning in connection requests"
 
-          ], 
-        },
-        {
-          heading: "Investor Advantage",
-          features: [
-            "Higher probability of profile views",
-            "Better placement during investor browsing",
-            "Enhanced connection acceptance chances", 
-          ],
-        },
-        {
-          heading: "Performance Edge",
-          features: [
-            "Visibility-based prioritization across platform",
-            "Faster interaction visibility in ecosystem",
-          ],
-        },
-      ],
-      bottomSection:[
-        {
-          bottomButton:" Get Discovered Faster",
-          bottomPara:"Start appearing ahead of other startups and increase your chances of investor attention."
-        }
-      ],
+    //       ], 
+    //     },
+    //     {
+    //       heading: "Investor Advantage",
+    //       features: [
+    //         "Higher probability of profile views",
+    //         "Better placement during investor browsing",
+    //         "Enhanced connection acceptance chances", 
+    //       ],
+    //     },
+    //     {
+    //       heading: "Performance Edge",
+    //       features: [
+    //         "Visibility-based prioritization across platform",
+    //         "Faster interaction visibility in ecosystem",
+    //       ],
+    //     },
+    //   ],
+    //   bottomSection:[
+    //     {
+    //       bottomButton:" Get Discovered Faster",
+    //       bottomPara:"Start appearing ahead of other startups and increase your chances of investor attention."
+    //     }
+    //   ],
 
-      buttonText: "Increase Your Visibility",
-    },
-    {
-      title: "Founder Pro Plan",
-      titleBg: "#FEC432",
-      titleBg2: "#F2D795",
-      amount: 49999,
-      amountduration: "/year",
-      amountDesc: "High visibility + strong positioning",
-      amountButton: "Everything in Growth +",
-      planName: "Scale Plan",
-      planDesc: "For startups actively raising & closing deals",
-      sections: [
-        {
-          heading: "Premium Positioning",
-          features: [
-            "Featured startup placement",
-            "Premium credibility badge",
-            "Highlighted presence across platform",
-          ],
-        },
-        {
-          heading: "Connection Priority",
-          features: [
-            "Higher priority in investor interactions",
-            "Stronger placement in deal ecosystem",
-            "Better exposure to serious stakeholders",
-          ],
-        },
-        {
-          heading: "Ecosystem Advantage",
-          features: [
-            "Increased visibility in high-intent sections",
-            "Stronger brand perception within platform",
-          ],
-        },
+    //   buttonText: "Increase Your Visibility",
+    // },
+    // {
+    //   title: "Founder Pro Plan",
+    //   titleBg: "#FEC432",
+    //   titleBg2: "#F2D795",
+    //   amount: 49999,
+    //   amountduration: "/year",
+    //   amountDesc: "High visibility + strong positioning",
+    //   amountButton: "Everything in Growth +",
+    //   planName: "Scale Plan",
+    //   planDesc: "For startups actively raising & closing deals",
+    //   sections: [
+    //     {
+    //       heading: "Premium Positioning",
+    //       features: [
+    //         "Featured startup placement",
+    //         "Premium credibility badge",
+    //         "Highlighted presence across platform",
+    //       ],
+    //     },
+    //     {
+    //       heading: "Connection Priority",
+    //       features: [
+    //         "Higher priority in investor interactions",
+    //         "Stronger placement in deal ecosystem",
+    //         "Better exposure to serious stakeholders",
+    //       ],
+    //     },
+    //     {
+    //       heading: "Ecosystem Advantage",
+    //       features: [
+    //         "Increased visibility in high-intent sections",
+    //         "Stronger brand perception within platform",
+    //       ],
+    //     },
         
-      ],
-       bottomSection:[
-        {
-          bottomButton:"Drive Real Traction",
-          bottomPara:"Position your startup as a serious player and attract stronger investor interest"
-        }
-      ],
+    //   ],
+    //    bottomSection:[
+    //     {
+    //       bottomButton:"Drive Real Traction",
+    //       bottomPara:"Position your startup as a serious player and attract stronger investor interest"
+    //     }
+    //   ],
 
 
-      buttonText: "Accelerate Your Growth",
-    },
-    {
-      title: "Elite Founder Plan",
-      titleBg: "#108349",
-      titleBg2: "#49CE8B",
-      amount: 99999,
-      amountduration: "/year",
-      amountDesc: "Top-tier positioning & visibility",
-      amountButton: "Everything in Scale +",
-      planName: "Elite Plan",
-      planDesc: "For startups seeking maximum exposure & dominance",
-      sections: [
-        {
-          heading: "Maximum Visibility",
-          features: [
-            "Top placement across platform",
-            "Highest discovery priority",
-            "Dominant presence in listings",
-          ],
-        },
-        {
-          heading: "Investor Exposure",
-          features: [
-            "Maximum visibility to investors",
-            "Strongest positioning in connection ecosystem",
-          ],
-        },
-        {
-          heading: "Strategic Advantage",
-          features: [
-            "Priority across all interaction layers",
-            "Early access to upcoming premium features",
-          ],
-        },
+    //   buttonText: "Accelerate Your Growth",
+    // },
+    // {
+    //   title: "Elite Founder Plan",
+    //   titleBg: "#108349",
+    //   titleBg2: "#49CE8B",
+    //   amount: 99999,
+    //   amountduration: "/year",
+    //   amountDesc: "Top-tier positioning & visibility",
+    //   amountButton: "Everything in Scale +",
+    //   planName: "Elite Plan",
+    //   planDesc: "For startups seeking maximum exposure & dominance",
+    //   sections: [
+    //     {
+    //       heading: "Maximum Visibility",
+    //       features: [
+    //         "Top placement across platform",
+    //         "Highest discovery priority",
+    //         "Dominant presence in listings",
+    //       ],
+    //     },
+    //     {
+    //       heading: "Investor Exposure",
+    //       features: [
+    //         "Maximum visibility to investors",
+    //         "Strongest positioning in connection ecosystem",
+    //       ],
+    //     },
+    //     {
+    //       heading: "Strategic Advantage",
+    //       features: [
+    //         "Priority across all interaction layers",
+    //         "Early access to upcoming premium features",
+    //       ],
+    //     },
         
-      ],
-       bottomSection:[
-        {
-          bottomButton:"  Dominate Visibility",
-          bottomPara:"Be among the first startups investors see and maximize your exposure across the platform"
-        }
-      ],
+    //   ],
+    //    bottomSection:[
+    //     {
+    //       bottomButton:"  Dominate Visibility",
+    //       bottomPara:"Be among the first startups investors see and maximize your exposure across the platform"
+    //     }
+    //   ],
 
-      buttonText: "Lead the Ecosystem",
-    },
+    //   buttonText: "Lead the Ecosystem",
+    // },
   ];
 
   // ⭐ API Call
-  const [isSubmittingPlan, setIsSubmittingPlan] = useState(false);
-  const handlePlanSelect = async (amount, planName) => {
-    if (!userId) {
-      toast.error("User ID missing!");
-      return;
-    }
+  const [submittingPlan, setSubmittingPlan] = useState(null);
+ const handlePlanSelect = async (amount, planName) => {
+  if (!resolvedUserId) {
+    toast.error("User ID missing!");
+    return;
+  }
 
-    setIsSubmittingPlan(true);
-    try {
-      const payload = {
-        userId,
-        plan: { amount, planName },
-      };
+  const isFreePlan = !amount || amount === 0;
+  setSubmittingPlan(planName);
 
-      const res = await axios.put(`${serverUrl}/user/plan`, payload);
+  try {
+    // ⭐ Always call API for both free and paid
+    const payload = { userId: resolvedUserId, plan: { amount: amount || 0, planName } };
+    const res = await axios.put(`${serverUrl}/user/plan`, payload);
 
-      if (res.status === 200) {
-        navigate("/scanner", { state: { userId, amount, planName } });
+    if (res.status === 200) {
+      if (isFreePlan) {
+        navigate("/paymentsuccess", { state: { userId: resolvedUserId, planName, isFreePlan: true } });
+      } else {
+        navigate("/scanner", { state: { userId: resolvedUserId, amount, planName } });
       }
-    } catch (error) {
-      console.error("Plan API Error:", error);
-      toast.error(error.response?.data?.message || "Server error");
-    } finally {
-      setIsSubmittingPlan(false);
     }
-  };
+  } catch (error) {
+    console.error("Plan API Error:", error);
+    toast.error(error.response?.data?.message || "Server error");
+  } finally {
+    setSubmittingPlan(null);
+  }
+};
 
   // ⭐ Scroll logic untouched
   const scrollRef = useRef(null);
@@ -242,12 +323,12 @@ const StartupPlansSec = ({ userId }) => {
 
   return (
     <main className="bg-background text-foreground ">
-      <section className="mx-auto w-full lg:px-2  lg:py-7">
+      <section className="mx-auto w-full lg:px-4 lg:py-7">
         <div className="lg:h-[62vh] lg:overflow-y-auto scrollbar-hide">
           <div
             ref={scrollRef}
             className="
-            grid gap-2 lg:gap-2  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 
+            grid gap-2 lg:gap-4  grid-cols-1 md:grid-cols-2 lg:grid-cols-2
             
             w-full
           "
@@ -268,19 +349,19 @@ const StartupPlansSec = ({ userId }) => {
                 
               "
                 >
-                  <div className="bg-white py-5 lg:py-3 border-2 border-[#00103280] m-2 lg:m-1 rounded-sm px-4 lg:px-2 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+                  <div className="bg-white py-5 lg:py-3 border-2 border-[#00103280] m-2 lg:m-1 rounded-sm px-4 lg:px-4 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
                     <div className=" lg:mt-1 space-y-1.5 ">
                       <div
                         style={{
                           background: `linear-gradient(90deg, ${card.titleBg} 75%, ${card.titleBg2} 100%)`,
                         }}
-                        className="text-white  py-1  rounded-sm  px-4 lg:px-2 mb-4 lg:mb-3 lg:text-xs lg:w-35 w-50 text-center"
+                        className="text-white  py-1  rounded-sm  px-6 mb-4 lg:mb-3 lg:text-xs w-fit text-center"
                       >
                         {card.title}
                       </div>
 
                       <div className="pb-4 lg:pb-0">
-                        <h3 className="text-3xl lg:text-lg font-semibold text-[#001032] ">
+                        <h3 className="text-3xl lg:text-xl font-semibold text-[#001032] ">
                           {card.planName}{" "}
                           <span className="text-[17px] font-semibold">
                             {card.recommendedPlan}
@@ -291,10 +372,10 @@ const StartupPlansSec = ({ userId }) => {
                         </p>
                       </div>
                       <div className="text-[#3C1D3A]">
-                        <p className="lg:text-lg text-3xl font-bold tracking-wide  ">
-                          Rs {card.amount}
-                          <span className="font-normal text-xl lg:text-md">
-                            {card.amountduration}
+                        <p className="lg:text-2xl text-3xl font-bold tracking-wide  ">
+                         {card.amount ? `Rs ${card.amount}` : "Free"}
+                          <span className="font-normal text-xl lg:text-[15px] ml-2">
+                            {card.amount ? card.amountduration : ""}
                           </span>
                         </p>
                         <p className="text-sm lg:text-[10px]">
@@ -311,14 +392,14 @@ const StartupPlansSec = ({ userId }) => {
                        
                       </div>
                     </div>
-                    <div className="bg-[#0000001A] flex items-center text-[10px] lg:text-[8px] gap-2 px-2 py-1 rounded-sm mt-4 lg:mt-4">
-                      <p className="">Investor Network</p>
+                    <div className="bg-[#0000001A] flex items-center justify-center text-[10px]  gap-3 px-2 py-1 rounded-sm mt-4 lg:mt-4">
+                      <p className="">{card.network1}</p>
                       <div className="h-6 w-0.5 bg-[#8282825C]"></div>
                       <p>
-                        Annual Plan
+                        {card.network2}
                       </p>
                       <div className="h-6 w-0.5 bg-[#8282825C]"></div>
-                      <p>Priority Support</p>
+                      <p>{card.network3}</p>
                     </div>
                     <hr className="mt-4" />
 
@@ -373,9 +454,9 @@ const StartupPlansSec = ({ userId }) => {
                         onClick={() =>
                           handlePlanSelect(card.amount, card.planName)
                         }
-                        disabled={isSubmittingPlan}
+                        disabled={submittingPlan !== null}
                       >
-                        {isSubmittingPlan ? (
+                        {submittingPlan === card.planName ? (
                           <div className="flex items-center justify-center gap-2">
                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                              Processing...
@@ -391,7 +472,7 @@ const StartupPlansSec = ({ userId }) => {
               </>
             ))}
 
-            <div className="hidden lg:block">
+            {/* <div className="hidden lg:block">
               <div className="bg-white  border-2 border-[#00103280]  lg:mt-2 rounded-sm  p-3 h-[113vh] w-[37vw] ml-1 px-7 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
                 <div id="top" className="flex justify-between items-center ">
                   <div className="bg-[#5DD2E3] w-37 h-120 rounded-3xl"></div>
@@ -402,7 +483,7 @@ const StartupPlansSec = ({ userId }) => {
                   <div className="bg-[#DBDBDB] w-full h-8 rounded-full mt-35"></div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </section>

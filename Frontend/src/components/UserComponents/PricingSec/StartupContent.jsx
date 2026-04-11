@@ -1,13 +1,102 @@
 import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const DesigningContent = () => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const scrollRef = React.useRef(null);
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId");
+
+  const handlePlanSelect = (amount, planName) => {
+    // ✅ Agar user login nahi hai
+    if (!userId) {
+      navigate("/login");
+      return;
+    }
+
+    // ✅ Free plan
+    if (!amount || amount === 0) {
+      navigate("/paymentsuccess", {
+        state: { userId, planName, isFreePlan: true },
+      });
+      return;
+    }
+
+    // ✅ Paid plan - Direct to Razorpay (no backend API call)
+    navigate("/scanner", {
+      state: { userId, amount, planName },
+    });
+  };
 
   const cards = [
+    {
+      title: "Entry Access",
+      titleBg: "#BA1E1E",
+      titleBg2: "#B77070",
+      // amount: 9999,
+      amountduration: "Free",
+      amountDesc: "Discover opportunities before unlocking full access",
+      planName: "Explorer Access",
+      planDesc: "Experience how the Copteno ecosystem works",
+      network1: "Execution Network",
+      network2: "Limited Access",
+      network3: "Standard Support",
+      sections: [
+        {
+          heading: "Core Access",
+          features: [
+            "Startup profile creation & guided onboarding",
+            "Access to unified dashboard",
+            "Ability to raise 1 structured requirement",
+            "Requirement validation & activation support",
+            "Access to managed matching system",
+            "Curated responses from relevant professionals",
+          ],
+        },
+        {
+          heading: "Deal & Execution System",
+          features: [
+            "Initiate 1 deal flow",
+            "Milestone-based execution tracking(limited)",
+            "Negotiation interface(preview)",
+            "Documentation handling(visibility)",
+            "Payment workflow visibility",
+            "Dispute resolution system",
+          ],
+        },
+        {
+          heading: "Opportunity Preview (Investor Layer)",
+          features: [
+            "See potential investor match count",
+            "View limited investor categories",
+            "Blurred preview of investor profiles",
+            "Visibility into funding alignment indicators",
+            "Limited access to investor-related sections",
+            "Unlock investor visibility & connections",
+            "X investors aligned with your profile",
+          ],
+        },
+        {
+          heading: "Trust Layer",
+          features: [
+            "Entry into verified execution ecosystem",
+            "Platform-level quality control",
+            "Support ticket system",
+          ],
+        },
+        {
+          heading: "Visibility Level",
+          features: [
+            "Requirement-based visibility within ecosystem",
+            "Entry-level exposure to service professionals",
+          ],
+        },
+      ],
+
+      buttonText: "Start Exploring",
+    },
     {
       title: "Most Affordable Plan",
       titleBg: "#BA1E1E",
@@ -240,9 +329,9 @@ const DesigningContent = () => {
 
                 <div className="text-[#3C1D3A]">
                   <p className="lg:text-2xl text-3xl font-bold tracking-wide lg:mt-3">
-                    Rs {card.amount}
+                    {card.amount ? `Rs ${card.amount}` : "Free"}
                     <span className="font-normal text-xl lg:text-md">
-                      {card.amountduration}
+                      {card.amount ? card.amountduration : ""}
                     </span>
                   </p>
                   <p className="text-sm ">{card.amountDesc}</p>
@@ -280,47 +369,49 @@ const DesigningContent = () => {
                 </div>
 
                 <div className="lg:mt-auto mt-3">
-                      {card.bottomSection?.map((bottom, index) => (
-                        <div key={index} className="bg-[#FFF7D6] h-40 lg:h-50 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-sm p-2 px-2">
-                         <button className=" w-fit  text-start lg:text-[20px] text-sm rounded-sm bg-[#FFE4E6] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] px-4 py-1 mb-5 text-[#B42318] font-medium">
-                            {bottom.bottomButton}
-                          </button>
-                          <p className="lg:text-[20px] ">
-                            {bottom.bottomPara}
-                          </p>
-
-                        </div>
-                      ))}
+                  {card.bottomSection?.map((bottom, index) => (
+                    <div
+                      key={index}
+                      className="bg-[#FFF7D6] h-40 lg:h-50 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-sm p-2 px-2"
+                    >
+                      <button className=" w-fit  text-start lg:text-[20px] text-sm rounded-sm bg-[#FFE4E6] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] px-4 py-1 mb-5 text-[#B42318] font-medium">
+                        {bottom.bottomButton}
+                      </button>
+                      <p className="lg:text-[20px] ">{bottom.bottomPara}</p>
                     </div>
+                  ))}
+                </div>
 
                 <div className=" lg:mt-1 pt-3 lg:pt-1 text-center">
-                 <Link to="/login"><button
+                  <button
+                    onClick={() =>
+                      handlePlanSelect(card.amount, card.planName)
+                    }
                     className="
-                            w-full
-                          
-                           p-2 lg:p-1
-                           mx-auto 
-                           rounded-sm bg-[#002A30] 
-                           text-background text-md 
-                          
-                           hover:opacity-90
-                         "
+                          w-full
+                        
+                         p-2 lg:p-1
+                         mx-auto 
+                         rounded-sm bg-[#002A30] 
+                         text-background text-md 
+                        
+                         hover:opacity-90
+                       "
                   >
                     {card.buttonText}
                   </button>
-                  </Link> 
                 </div>
               </div>
             </article>
           ))}
 
-          <div className="hidden lg:block col-span-2 mx-6">
+          <div className="hidden lg:block mx-7">
             <hr className="mx-6   " />
-            <div className="bg-white  border-2 border-[#00103280] mt-7 h-[94.5%]  rounded-sm  p-3   px-20 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+            <div className="bg-white  border-2 border-[#00103280] mt-7 h-[94.5%]  rounded-sm  p-3    shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
               <div id="top" className="flex justify-between items-center ">
-                <div className="bg-[#5DD2E3] w-47 h-70 rounded-3xl"></div>
-                <div className="bg-[#C2D3D5]  w-47 h-90 rounded-3xl"></div>
-                <div className="bg-[#4A66A3]  w-47 h-80 rounded-3xl mt-20"></div>
+                <div className="bg-[#5DD2E3] w-27 h-140 rounded-3xl"></div>
+                <div className="bg-[#C2D3D5]  w-27 h-160 rounded-3xl"></div>
+                <div className="bg-[#4A66A3]  w-27 h-150 rounded-3xl mt-20"></div>
               </div>
               <div id="bottom">
                 <div className="bg-[#DBDBDB] w-full h-12 rounded-full mt-20"></div>

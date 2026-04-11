@@ -162,31 +162,41 @@ export const uploadPortalFile = async (req, res) => {
 
 
 
+// In updatePlan controller
 export const updatePlan = async (req, res) => {
   try {
     const { userId, plan } = req.body;
 
-    if (!userId || !plan || typeof plan.amount !== "number") {
-      return res.status(400).json({ message: "Valid plan amount is required" }); 
+    // ⭐ Allow amount 0 — free plan is valid
+    if (!userId || !plan || plan.amount === undefined || plan.amount === null) {
+      return res.status(400).json({ message: "userId and plan are required" });
     }
 
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-     if (user.role === "investor") {
-      return res.status(403).json({
-        message: "Investors are not allowed to select plans",
-      });
+    if (user.role === "investor") {
+      return res.status(403).json({ message: "Investors are not allowed to select plans" });
     }
 
+    // ⭐ Save planName too in DB
+    user.plan = {
+      amount: plan.amount || 0,
+      planName: plan.planName || "",
+    };
+    user.registrationStep = 4;
 
-    user.plan = plan;
-    user.registrationStep = 4; // Step 4 after plan selection
+    // ⭐ Always set pending — admin approves everyone
+    if (user.paymentStatus !== "approved") {
+      user.paymentStatus = "pending";
+    }
+
     await user.save();
 
     res.status(200).json({
       message: "Plan updated successfully",
       registrationStep: user.registrationStep,
+      paymentStatus: user.paymentStatus,
     });
   } catch (error) {
     console.error("Update Plan Error:", error);
@@ -273,9 +283,9 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    if (user.role !== "investor" && user.paymentStatus !== "approved") {
+    if (user.paymentStatus !== "approved") {
       return res.status(403).json({
-        message: "Please complete all signup steps and payment to login.",
+        message: "Please complete all signup steps and wait for admin approval to login.",
       });
     }
 
@@ -481,6 +491,7 @@ export const verifyEmail = async (req, res) => {
         userId: existingUser._id,
         role: existingUser.role,
         serviceType: existingUser.businessDetails ? existingUser.businessDetails.serviceType : null,
+        paymentStatus: existingUser.paymentStatus || "not_paid",
       });
     }
 
@@ -506,6 +517,7 @@ export const verifyEmail = async (req, res) => {
       userId: newUser._id,
       role: newUser.role,
       serviceType: newUser.businessDetails ? newUser.businessDetails.serviceType : null,
+      paymentStatus: newUser.paymentStatus || "not_paid",
     });
   } catch (error) {
     console.error("Verify Email Error:", error);
@@ -543,6 +555,7 @@ export const checkVerificationStatus = async (req, res) => {
           userId: user._id,
           role: user.role,
           serviceType: user.businessDetails ? user.businessDetails.serviceType : null,
+          paymentStatus: user.paymentStatus || "not_paid",
         });
       }
     }

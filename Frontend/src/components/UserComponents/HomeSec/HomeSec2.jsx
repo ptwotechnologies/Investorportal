@@ -16,26 +16,26 @@ const HomeSec2 = () => {
   overflow-x-hidden px-4 sm:px-6 md:px-10 "
       >
         <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-25 lg:h-25  rounded-full  ">
-            <img src="/homepage10.jpg" alt="" className="object-cover h-full w-full"/>
-          </div>
+          <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
+  <img src="/homepage10.png" alt="" className="h-full w-full object-contain scale-120" />
+</div>
           <p className="text-sm text-center  w-[80%] text-[#001032] ">
             Free Expert Guidance
           </p>
         </div>
 
         <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-25 lg:h-25  rounded-full  ">
-             <img src="/homepage11.jpg" alt="" className="object-cover h-full w-full"/>
-          </div>
+         <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
+  <img src="/homepage11.png" alt="" className="h-full w-full object-contain " />
+</div>
           <p className="text-sm text-center  w-[80%] text-[#001032] ">
             Connected Startup Community
           </p>
         </div>
 
         <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-25 lg:h-25  rounded-full  ">
-              <img src="/homepage12.jpg" alt="" className="object-cover h-full w-full"/>
+          <div className="w-45 h-40 lg:w-25 lg:h-25 overflow-hidden rounded-full  ">
+              <img src="/homepage12.png" alt="" className="object-cover h-full w-full"/>
           </div>
           <p className="text-sm text-center  w-[80%] text-[#001032] ">
             Access to Real Audiences
@@ -43,18 +43,18 @@ const HomeSec2 = () => {
         </div>
 
         <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-25 lg:h-25  rounded-full  ">
-              <img src="/homepage13.jpg" alt="" className="object-cover h-full w-full"/>
-          </div>
+          <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center ">
+  <img src="/homepage13.png" alt="" className="h-full w-full object-cover scale-150 " />
+</div>
           <p className="text-sm text-center  w-[80%] text-[#001032] ">
             Cross-Domain Collaboration
           </p>
         </div>
 
         <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-25 lg:h-25  rounded-full  ">
-              <img src="/homepage14.jpg" alt="" className="object-cover h-full w-full"/>
-          </div>
+          <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
+  <img src="/homepage14.png" alt="" className="h-full w-full object-contain scale-130" />
+</div>
           <p className="text-sm text-center  w-[80%] text-[#001032] ">
             100% Transparent Pricing
           </p>
@@ -67,7 +67,7 @@ const HomeSec2 = () => {
 
     <div className="flex flex-col items-center">
       <div className="w-15 h-15  rounded-full overflow-hidden">
-        <img src="/homepage10.jpg" alt="" className=" w-full h-full object-cover scale-115 rounded-full "/>
+        <img src="/homepage10.png" alt="" className=" w-full h-full object-cover scale-115 rounded-full "/>
       </div>
       <p className="text-md text-center w-35 mt-5 font-light">
         Free Expert Guidance
@@ -80,7 +80,7 @@ const HomeSec2 = () => {
 
     <div className="flex flex-col items-center">
       <div className="w-15 h-15  rounded-full overflow-hidden">
-        <img src="/homepage11.jpg" alt="" className=" w-full h-full object-cover scale-115  rounded-full "/>
+        <img src="/homepage11.png" alt="" className=" w-full h-full    rounded-full "/>
       </div>
       <p className="text-md text-center w-35 mt-5 font-light">
         Connected Startup Community
@@ -91,7 +91,7 @@ const HomeSec2 = () => {
 
     <div className="flex flex-col items-center">
       <div className="w-15 h-15  rounded-full overflow-hidden">
-          <img src="/homepage12.jpg" alt="" className=" w-full h-full object-cover scale-125 rounded-full "/>
+          <img src="/homepage12.png" alt="" className=" w-full h-full object-cover  rounded-full "/>
       </div>
       <p className="text-md text-center w-35 mt-5 font-light">
         Access to Real Audiences
@@ -103,8 +103,8 @@ const HomeSec2 = () => {
       </div>
 
     <div className="flex flex-col items-center">
-      <div className="w-15 h-15  rounded-full overflow-hidden">
-          <img src="/homepage13.jpg" alt="" className=" w-full h-full object-cover scale-150  rounded-full "/>
+      <div className="w-15 h-15  rounded-full ">
+          <img src="/homepage13.png" alt="" className=" w-full h-full object-cover scale-150  rounded-full "/>
       </div>
       <p className="text-md text-center w-35 mt-5 font-light">
         Cross-Domain Collaboration
@@ -114,7 +114,7 @@ const HomeSec2 = () => {
     {/* Centered last item */}
     <div className="col-span-3 flex flex-col items-center">
       <div className="w-15 h-15  rounded-full overflow-hidden">
-            <img src="/homepage14.jpg" alt="" className=" w-full h-full object-cover scale-125  rounded-full "/>
+            <img src="/homepage14.png" alt="" className=" w-full h-full object-cover scale-125  rounded-full "/>
       </div>
       <p className="text-md text-center mt-5 font-light">
         100% Transparent <br/> Pricing

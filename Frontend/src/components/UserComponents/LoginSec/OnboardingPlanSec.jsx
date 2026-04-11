@@ -42,14 +42,14 @@ const userId = location.state?.userId || localStorage.getItem("userId");
                 </div>
         <div 
           id="right"
-          className="lg:w-[60%]  lg:px-2 lg:py-2  "
+          className="lg:w-[50%]  lg:px-2 lg:py-2  "
         >
-          <div className="lg:bg-[#001032]  lg:p-3 w-screen lg:w-auto lg:rounded-lg ">
+          <div className="lg:bg-[#001032]  lg:p-3 w-screen lg:w-auto lg:rounded-lg  lg:min-h-[600px]">
             <div className="bg-white  lg:h-auto rounded-md ">
               <div id="top" className="text-center">
                 <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:py-6 py-8" />
                 
-                <p className="text-[#001032] border-2 border-[#00103280] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mx-5 hidden lg:block   lg:mx-50 text-lg  rounded-md  p-2">
+                <p className="text-[#001032] border-2 border-[#00103280] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mx-5 hidden lg:block   lg:mx-30 text-lg  rounded-md  p-2">
                   Choose the best suited onboarding plan for you
                 </p>
                 <p className="text-[#001032] border-2 border-[#00103280]  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mb-2 mx-2 lg:hidden text-lg  rounded-sm  p-2">
@@ -58,8 +58,10 @@ const userId = location.state?.userId || localStorage.getItem("userId");
               </div>
               <div id="bottom " className=" w-full ">
                <div>
-                {role === "startup" && <StartupPlansSec userId={userId}/>}
-                {role === "service_professional" && <ServiceProfessionalPlanSec userId={userId}/>}
+                {role === "startup" && <StartupPlansSec userId={userId}/>} 
+                 {role === "service_professional" && <ServiceProfessionalPlanSec userId={userId}/>}
+               
+              
                </div>
               </div>
 
