@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { FaUser } from "react-icons/fa";
 import { TfiList } from "react-icons/tfi";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,9 +12,14 @@ import { serverUrl } from "@/App";
 import RightReceived from "./RightReceived";
 import AllTabSec from "./AllTabSec";
 import RightAllTab from "./RightAllTab";
+import { IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 
 const RequestSec = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("all");
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [upgradeModalType, setUpgradeModalType] = useState("interest"); // 'request' or 'interest'
   const [raisedRequests, setRaisedRequests] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [mobileView, setMobileView] = useState("left");
@@ -79,6 +84,11 @@ const RequestSec = () => {
     setMobileView("right");
   };
 
+  const triggerUpgradeModal = useCallback((type) => {
+    setUpgradeModalType(type);
+    setShowUpgradeModal(true);
+  }, []);
+
   const getCardWidths = () => {
     switch (activeTab) {
       case "newRequest":
@@ -92,6 +102,10 @@ const RequestSec = () => {
         return { left: "w-full md:w-[40%]", right: "w-full md:w-[60%]" };
     }
   };
+
+  const decrementUnseenCount = useCallback(() => {
+    setUnseenCount((prev) => Math.max(0, prev - 1));
+  }, []);
 
   const widths = getCardWidths();
 
@@ -152,7 +166,7 @@ const RequestSec = () => {
                   </div>
                 </div>
 
-                <TabsList className="w-full bg-transparent gap-2 h-7  p-0 ">
+                <TabsList className="w-full bg-transparent gap-2 h-7 p-0 flex ">
                   <TabsTrigger
                     value="all"
                     className="px-6 py-1 h-7.5 border border-[#D9D9D9] rounded-sm flex-1 text-sm lg:text-[16px] data-[state=active]:text-[#59549F] data-[state=active]:bg-[#D8D6F8] data-[state=active]:shadow-[inset_0_0_12px_#00000040]!"
@@ -180,9 +194,12 @@ const RequestSec = () => {
                   </TabsTrigger>
                 </TabsList>
 
-                <div className="overflow-y-auto  h-[calc(100dvh-210px)] lg:h-[calc(92vh-140px)]  scrollbar-hide ">
+                <div className="overflow-y-auto h-[calc(100dvh-210px)] lg:h-[calc(92vh-140px)] scrollbar-hide">
                   <TabsContent value="newRequest" className="mt-0">
-                    <NewRequest onCreateRequest={handleCreateRequest} />
+                    <NewRequest
+                      onCreateRequest={handleCreateRequest}
+                      triggerUpgradeModal={triggerUpgradeModal}
+                    />
                   </TabsContent>
 
                   <TabsContent value="all" className="mt-0">
@@ -191,6 +208,7 @@ const RequestSec = () => {
                       selectedRequest={selectedRequest}
                       setMobileView={setMobileView}
                       setAllHandlers={setAllHandlers}
+                      triggerUpgradeModal={triggerUpgradeModal}
                     />
                   </TabsContent>
 
@@ -200,7 +218,8 @@ const RequestSec = () => {
                       selectedRequest={selectedRequest}
                       setMobileView={setMobileView}
                       setReceivedHandlers={setReceivedHandlers}
-                      decrementUnseenCount={() => setUnseenCount(prev => Math.max(0, prev - 1))}
+                      decrementUnseenCount={decrementUnseenCount}
+                      triggerUpgradeModal={triggerUpgradeModal}
                     />
                   </TabsContent>
 
@@ -264,6 +283,101 @@ const RequestSec = () => {
           </div>
         </div>
       </div>
+
+      {/* ✅ Centralized Upgrade Modal */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative">
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+            >
+              <IoClose size={22} />
+            </button>
+
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-3xl">⭐</span>
+              <div>
+                <h2 className="text-lg font-bold text-[#001032] leading-tight">
+                  You Have More <br />
+                  <span className="text-[#D8D6F8]">Opportunities</span> Waiting
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-sm text-gray-500 mb-4">
+              {upgradeModalType === "request"
+                ? "You've already used your free request."
+                : "You've already used your free interest."}{" "}
+              <br />
+              More professionals are ready to respond to your needs.
+            </p>
+
+            <div className="bg-[#FFF8E7] border border-[#FFD700] rounded-lg px-4 py-3 flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-500 text-lg">⚡</span>
+                <div>
+                  <p className="text-sm font-semibold text-[#B8860B]">
+                    Unlock more {upgradeModalType === "request" ? "requests" : "interests"}
+                  </p>
+                  <p className="text-xs text-gray-600">to continue getting matched instantly</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 rounded-xl p-4 mb-5">
+              <p className="text-sm font-bold text-[#001032] mb-3">With Full Access, you can:</p>
+              <ul className="space-y-2">
+                {[
+                  {
+                    icon: "📋",
+                    color: "bg-blue-100",
+                    text:
+                      upgradeModalType === "request"
+                        ? "Raise multiple service requests"
+                        : "Show interest in multiple requests",
+                  },
+                  { icon: "⚡", color: "bg-green-100", text: "Get faster & better matches" },
+                  {
+                    icon: "📈",
+                    color: "bg-purple-100",
+                    text:
+                      upgradeModalType === "request"
+                        ? "Increase visibility to top professionals"
+                        : "Increase visibility to startups",
+                  },
+                  { icon: "🤝", color: "bg-orange-100", text: "Execute deals without limits" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <div
+                      className={`w-8 h-8 rounded-full ${item.color} flex items-center justify-center text-sm shrink-0`}
+                    >
+                      {item.icon}
+                    </div>
+                    <span className="text-sm text-gray-700">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <button
+              onClick={() => {
+                navigate("/pricing");
+                setShowUpgradeModal(false);
+              }}
+              className="w-full py-3 bg-[#D8D6F8] text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 mb-2"
+            >
+              🔒 Unlock Full Access
+            </button>
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="w-full py-2 text-gray-500 text-sm font-medium hover:text-gray-700"
+            >
+              Maybe Later
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

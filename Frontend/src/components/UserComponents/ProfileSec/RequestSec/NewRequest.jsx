@@ -24,53 +24,48 @@ const raisedRequestOptions = [
   { id: 14, label: "Other" },
 ];
 
-const NewRequest = ({ onCreateRequest }) => {
+const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
   const navigate = useNavigate();
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [userPlan, setUserPlan] = useState(null);
   const [requestsCount, setRequestsCount] = useState(0);
-  const [isLoadingUserData, setIsLoadingUserData] = useState(true);
 
   const userId = localStorage.getItem("userId");
 
   // Fetch user's plan and existing requests count
   useEffect(() => {
     const fetchUserData = async () => {
+      setIsLoadingUserData(true);
       try {
         const token = localStorage.getItem("token");
-        
-        // Fetch user's plan
+
         const userRes = await axios.get(`${serverUrl}/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-        
-        const planName = userRes.data.plan || "Explorer Access"; // Default to free plan
+
+        // ⭐ Fix: extract planName from plan object
+        const planName = userRes.data.plan?.planName || "Explorer Access";
         setUserPlan(planName);
 
-        // Fetch user's requests count
         const requestsRes = await axios.get(`${serverUrl}/requests`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
-        
+
         setRequestsCount(requestsRes.data.length || 0);
       } catch (error) {
         console.error("Error fetching user data:", error);
+        setUserPlan("Explorer Access"); // ⭐ default to free plan on error — safer
+        setRequestsCount(0);
       } finally {
         setIsLoadingUserData(false);
       }
     };
 
-    if (userId) {
-      fetchUserData();
-    }
+    if (userId) fetchUserData();
   }, [userId]);
 
   // Check if user is on free plan and reached request limit
@@ -78,14 +73,19 @@ const NewRequest = ({ onCreateRequest }) => {
   const hasReachedLimit = isFreePlan && requestsCount >= 1;
 
   const handleSend = async () => {
-    if (!selectedService || !description.trim()) {
-      toast.error("Please select a service and enter a description");
+    if (isLoadingUserData) {
+      // ⭐ check loading first
+      toast("Please wait...");
       return;
     }
-
-    // Check if user has reached free plan limit
     if (hasReachedLimit) {
-      setShowUpgradeModal(true);
+      // ⭐ check limit second
+      triggerUpgradeModal("request");
+      return;
+    }
+    if (!selectedService || !description.trim()) {
+      // ⭐ then validate form
+      toast.error("Please select a service and enter a description");
       return;
     }
 
@@ -104,7 +104,7 @@ const NewRequest = ({ onCreateRequest }) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       // Call the parent handler with the new request
@@ -114,11 +114,16 @@ const NewRequest = ({ onCreateRequest }) => {
       setDescription("");
       setSelectedService(null);
       setSelectedRequest(null);
-      setRequestsCount(requestsCount + 1);
+      setRequestsCount((prev) => prev + 1);
       toast.success("Request created successfully!");
     } catch (err) {
       console.error("Failed to create request:", err);
-      toast.error("Failed to create request. Please try again.");
+
+      if (err.response?.status === 403 && err.response?.data?.limitReached) {
+        triggerUpgradeModal("request"); // ⭐ show modal if backend blocks it
+      } else {
+        toast.error("Failed to create request. Please try again.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -126,68 +131,6 @@ const NewRequest = ({ onCreateRequest }) => {
 
   return (
     <div>
-      {/* ✅ Upgrade Modal for Free Plan Limit */}
-      {showUpgradeModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-          <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 animate-in">
-            {/* Close Button */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-[#001032]">Upgrade Your Plan</h2>
-              <button
-                onClick={() => setShowUpgradeModal(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <IoClose size={24} />
-              </button>
-            </div>
-
-            {/* Modal Content */}
-            <div className="mb-6">
-              <p className="text-lg text-[#3C1D3A] font-semibold mb-3">
-                Your quota is full
-              </p>
-              <p className="text-sm text-gray-600 mb-4">
-                You are currently on the <span className="font-semibold">Free Plan</span> which allows you to raise only <span className="font-bold">1 request</span>.
-              </p>
-              <p className="text-sm text-gray-600">
-                To raise more requests and unlock additional features, please upgrade your plan.
-              </p>
-            </div>
-
-            {/* Benefits Preview */}
-            <div className="bg-blue-50 rounded-lg p-4 mb-6 border border-blue-200">
-              <p className="text-sm font-semibold text-[#119BCD] mb-2">
-                With a Paid Plan, you get:
-              </p>
-              <ul className="text-xs text-gray-700 space-y-1">
-                <li>✓ Unlimited requests</li>
-                <li>✓ Higher visibility</li>
-                <li>✓ Priority support</li>
-                <li>✓ Access to premium features</li>
-              </ul>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowUpgradeModal(false)}
-                className="flex-1 px-4 py-2 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
-              >
-                Later
-              </button>
-              <button
-                onClick={() => {
-                  navigate("/pricing");
-                  setShowUpgradeModal(false);
-                }}
-                className="flex-1 px-4 py-2 bg-[#002A30] text-white rounded-lg font-medium hover:opacity-90 transition-opacity"
-              >
-                Upgrade Now
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-1  md:grid-cols-2 gap-4  overflow-y-auto overscroll-contain touch-pan-y h-[calc(100dvh-250px)] pb-20 md:pb-0 md:h-auto scrollbar-hide ">
         {raisedRequestOptions.map((option) => (
@@ -225,17 +168,17 @@ const NewRequest = ({ onCreateRequest }) => {
           />
           <div className="flex items-center gap-2 ">
             <HiMiniLink size={20} className="text-[#59549F] " />
+
             <button
               onClick={handleSend}
-              disabled={isSubmitting || !selectedService || !description.trim()}
-              className="disabled:opacity-50 disabled:cursor-not-allowed "
+              disabled={isSubmitting}
+              className="disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <BsSendFill size={20} className="text-[#59549F]" />
             </button>
           </div>
         </div>
       </div>
-
     </div>
   );
 };

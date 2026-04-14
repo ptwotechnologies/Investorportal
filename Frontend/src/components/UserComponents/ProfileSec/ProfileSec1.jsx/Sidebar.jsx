@@ -28,22 +28,27 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isDealRoute = location.pathname.startsWith("/deal");
-  const [isDealsOpen, setIsDealsOpen] = useState(isDealRoute);
+  const [isDealsOpen, setIsDealsOpen] = useState(false);
   const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
+  const [requestsLoading, setRequestsLoading] = useState(true);
 
   useEffect(() => {
     const checkRequests = async () => {
+      setRequestsLoading(true); // ⭐ start loading
       try {
         const res = await axios.get(`${serverUrl}/requests`, {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: { Authorization: `Bearer ${token}` },
         });
         setHasRaisedRequests(res.data.length > 0);
       } catch (err) {
         console.error("Error fetching raised requests count", err);
+        setHasRaisedRequests(false);
+      } finally {
+        setRequestsLoading(false); // ⭐ done loading
       }
     };
     if (token) checkRequests();
-  }, [token]);
+  }, [token, location.pathname]);
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -92,11 +97,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
+  // ✅ Only open if user has raised requests
   useEffect(() => {
-    if (isDealRoute) {
+    if (isDealRoute && hasRaisedRequests) {
       setIsDealsOpen(true);
     }
-  }, [location.pathname]);
+  }, [location.pathname, hasRaisedRequests]); // ⭐ add hasRaisedRequests to deps
 
   return (
     <div className="fixed top-0 left-0 h-full bg-[#001032] p-4 flex flex-col justify-between z-50">
@@ -294,7 +300,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <div className="my-3">
                 <div
                   onClick={() => {
-                    if (hasRaisedRequests === false) {
+                    if (requestsLoading) {
+                      toast("Checking your requests..."); // ⭐ wait for check
+                      return;
+                    }
+                    if (!hasRaisedRequests) {
                       toast.error("You have to raise a request to open deals");
                       return;
                     }
@@ -307,19 +317,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   {isDealsOpen ? (
                     <FaChevronUp className="text-gray-500 text-sm" size={12} />
                   ) : (
-                    <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                    <FaChevronDown
+                      className="text-gray-500 text-sm"
+                      size={12}
+                    />
                   )}
                 </div>
 
                 {isDealsOpen && (
                   <div className="ml-7 mt-2 flex flex-col text-[13px] text-gray-600">
-
                     <NavLink
                       to="/deal/dealdraft"
                       className="flex items-center gap-2 py-1 hover:text-[#001032]"
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                       Deal Draft
+                      Deal Draft
                     </NavLink>
 
                     <NavLink
@@ -335,9 +347,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       className="flex items-center gap-2 py-1 hover:text-[#001032]"
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                       Communication
+                      Communication
                     </NavLink>
-
 
                     <NavLink
                       to="/deal/milestones"
@@ -368,7 +379,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       className="flex items-center gap-2 py-1 hover:text-[#001032]"
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                       Documentation
+                      Documentation
                     </NavLink>
 
                     <NavLink
@@ -426,7 +437,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

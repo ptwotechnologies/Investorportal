@@ -1,4 +1,5 @@
 import Request from "../Models/request.model.js";
+import User from "../Models/User.model.js";
 
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
@@ -9,11 +10,36 @@ export const createRequest = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    // ⭐ Import User model at top of file
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // ⭐ Check free plan limit
+    const isFreePlan =
+      user.plan?.planName === "Explorer Access" ||
+      !user.plan?.planName ||
+      user.plan?.amount === 0;
+
+    if (isFreePlan) {
+      const existingCount = await Request.countDocuments({
+        raisedBy: req.user._id,
+      });
+
+      if (existingCount >= 1) {
+        return res.status(403).json({
+          message: "Free plan limit reached. Please upgrade.",
+          limitReached: true,
+        });
+      }
+    }
+
     const newRequest = await Request.create({
       service,
       description,
       raisedBy: req.user._id,
-      status: "raised"
+      status: "raised",
     });
 
     res.status(201).json(newRequest);
@@ -21,7 +47,6 @@ export const createRequest = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 // GET ALL REQUESTS
 export const getAllRequests = async (req, res) => {
@@ -37,7 +62,7 @@ export const getAllRequests = async (req, res) => {
 
 export const forwardRequest = async (req, res) => {
   try {
-    const { requestId, userIds } = req.body; 
+    const { requestId, userIds } = req.body;
 
     const request = await Request.findById(requestId);
 
@@ -47,19 +72,17 @@ export const forwardRequest = async (req, res) => {
 
     request.forwardedTo = userIds;
     request.status = "forwarded";
-    
+
     // Clear seenBy so the newly forwarded providers will receive an unseen notification
     request.seenBy = [];
 
     await request.save();
 
     res.status(200).json({ message: "Request forwarded successfully" });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 export const getReceivedRequests = async (req, res) => {
   try {
@@ -67,38 +90,39 @@ export const getReceivedRequests = async (req, res) => {
 
     // Requests forwarded to me
     const forwardedRequests = await Request.find({
-      forwardedTo: userId
+      forwardedTo: userId,
     })
-    .populate("raisedBy", "businessDetails role")
-    .sort({ createdAt: -1 })
-    .lean();
+      .populate("raisedBy", "businessDetails role")
+      .sort({ createdAt: -1 })
+      .lean();
 
     // Add isSeen and hasShownInterest fields
-    const forwardedWithSeen = forwardedRequests.map(req => ({
-      ...req,
-      isSeen: req.seenBy?.some(id => id.toString() === userId.toString()) || false,
-      hasShownInterest: req.interestedBy?.some(id => id.toString() === userId.toString()) || false
-    }));
+    const forwardedWithSeen = forwardedRequests.map((req) => ({
+  ...req,
+  isSeen: req.seenBy?.some((id) => id.toString() === userId.toString()) || false,
+  hasShownInterest: req.interestedBy?.some((id) => id.toString() === userId.toString()) || false,
+  isIgnored: req.ignoredBy?.some((id) => id.toString() === userId.toString()) || false, // ⭐ add this
+}));
 
     // My raised requests where someone showed interest
     const myInterestedRequests = await Request.find({
       raisedBy: userId,
-      interestedBy: { $ne: [] }
+      interestedBy: { $ne: [] },
     })
-    .populate("interestedBy", "businessDetails role")
-    .sort({ createdAt: -1 })
-    .lean();
+      .populate("interestedBy", "businessDetails role")
+      .sort({ createdAt: -1 })
+      .lean();
 
-    const interestedWithSeen = myInterestedRequests.map(req => ({
+    const interestedWithSeen = myInterestedRequests.map((req) => ({
       ...req,
-      isSeen: req.seenBy?.some(id => id.toString() === userId.toString()) || false,
+      isSeen:
+        req.seenBy?.some((id) => id.toString() === userId.toString()) || false,
     }));
 
     res.status(200).json({
       forwardedRequests: forwardedWithSeen,
-      myInterestedRequests: interestedWithSeen
+      myInterestedRequests: interestedWithSeen,
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -122,14 +146,41 @@ export const markInterested = async (req, res) => {
     console.log("Current interestedBy:", request.interestedBy);
 
     // Check if user is in forwardedTo list
-    if (!request.forwardedTo.some(id => id.toString() === userId.toString())) {
+    if (
+      !request.forwardedTo.some((id) => id.toString() === userId.toString())
+    ) {
       return res.status(403).json({ message: "Not allowed" });
     }
 
+
+     // ⭐ Check free plan limit on backend
+    const user = await User.findById(userId);
+    const isFreePlan =
+      user.plan?.planName === "Explorer Access" ||
+      !user.plan?.planName ||
+      user.plan?.amount === 0;
+
+    if (isFreePlan) {
+      // Count requests where this user already showed interest
+      const alreadyInterestedCount = await Request.countDocuments({
+        forwardedTo: userId,
+        interestedBy: userId,
+      });
+
+      if (alreadyInterestedCount >= 1) {
+        return res.status(403).json({
+          message: "Free plan limit reached. Please upgrade.",
+          limitReached: true,
+        });
+      }
+    }
+
     // Add user to interestedBy array if not already present
-    if (!request.interestedBy.some(id => id.toString() === userId.toString())) {
+    if (
+      !request.interestedBy.some((id) => id.toString() === userId.toString())
+    ) {
       request.interestedBy.push(userId);
-      
+
       // Update status to interested when FIRST person shows interest
       if (request.status === "forwarded") {
         request.status = "interested";
@@ -137,7 +188,9 @@ export const markInterested = async (req, res) => {
       }
 
       // Remove the raiser from seenBy so they get an unseen notification about this interest
-      request.seenBy = request.seenBy.filter(id => id.toString() !== request.raisedBy.toString());
+      request.seenBy = request.seenBy.filter(
+        (id) => id.toString() !== request.raisedBy.toString(),
+      );
     }
 
     await request.save();
@@ -145,21 +198,19 @@ export const markInterested = async (req, res) => {
     console.log("After save - status:", request.status);
     console.log("After save - interestedBy:", request.interestedBy);
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: "Interest sent",
       request: {
         _id: request._id,
         status: request.status,
-        interestedBy: request.interestedBy
-      }
+        interestedBy: request.interestedBy,
+      },
     });
-
   } catch (error) {
     console.error("Error in markInterested:", error);
     res.status(500).json({ message: error.message });
   }
 };
-
 
 export const acceptProvider = async (req, res) => {
   try {
@@ -182,11 +233,13 @@ export const acceptProvider = async (req, res) => {
 
     // Check if providerId is in interestedBy array
     const isInterested = request.interestedBy.some(
-      id => id.toString() === providerId.toString()
+      (id) => id.toString() === providerId.toString(),
     );
 
     if (!isInterested) {
-      return res.status(400).json({ message: "Provider has not shown interest" });
+      return res
+        .status(400)
+        .json({ message: "Provider has not shown interest" });
     }
 
     request.acceptedProvider = providerId;
@@ -197,15 +250,14 @@ export const acceptProvider = async (req, res) => {
     console.log("Updated request status:", request.status);
     console.log("Updated acceptedProvider:", request.acceptedProvider);
 
-    res.status(200).json({ 
+    res.status(200).json({
       message: "Provider accepted successfully",
       request: {
         _id: request._id,
         status: request.status,
-        acceptedProvider: request.acceptedProvider
-      }
+        acceptedProvider: request.acceptedProvider,
+      },
     });
-
   } catch (error) {
     console.error("Error in acceptProvider:", error);
     res.status(500).json({ message: error.message });
@@ -224,7 +276,9 @@ export const markRequestAsSeen = async (req, res) => {
     }
 
     // Check if user is in forwardedTo list OR is the raiser
-    const isForwarded = request.forwardedTo.some(id => id.toString() === userId.toString());
+    const isForwarded = request.forwardedTo.some(
+      (id) => id.toString() === userId.toString(),
+    );
     const isRaiser = request.raisedBy.toString() === userId.toString();
 
     if (!isForwarded && !isRaiser) {
@@ -232,14 +286,80 @@ export const markRequestAsSeen = async (req, res) => {
     }
 
     // Add user to seenBy array if not already present
-    if (!request.seenBy.some(id => id.toString() === userId.toString())) {
+    if (!request.seenBy.some((id) => id.toString() === userId.toString())) {
       request.seenBy.push(userId);
       await request.save();
     }
 
     res.status(200).json({ message: "Request marked as seen" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const ignoreRequest = async (req, res) => {
+  try {
+    const { requestId, providerId } = req.body;
+    const userId = req.user._id;
+
+    const request = await Request.findById(requestId);
+    if (!request) return res.status(404).json({ message: "Request not found" });
+
+    // ⭐ Provider ignoring a forwarded request
+    if (!providerId) {
+      // Check user is in forwardedTo
+      if (!request.forwardedTo.some(id => id.toString() === userId.toString())) {
+        return res.status(403).json({ message: "Not allowed" });
+      }
+
+      // ⭐ Check free plan limit on backend
+      const user = await User.findById(userId);
+      const isFreePlan =
+        user.plan?.planName === "Explorer Access" ||
+        !user.plan?.planName ||
+        user.plan?.amount === 0;
+
+      if (isFreePlan) {
+        const alreadyIgnoredCount = await Request.countDocuments({
+          forwardedTo: userId,
+          ignoredBy: userId,
+        });
+
+        if (alreadyIgnoredCount >= 1) {
+          return res.status(403).json({
+            message: "Free plan limit reached. Please upgrade.",
+            limitReached: true,
+          });
+        }
+      }
+
+      // Add to ignoredBy if not already present
+      if (!request.ignoredBy.some(id => id.toString() === userId.toString())) {
+        request.ignoredBy.push(userId);
+      }
+
+      await request.save();
+      return res.status(200).json({ message: "Request ignored successfully" });
+    }
+
+    // ⭐ Buyer ignoring an interested professional — no limit needed
+    if (providerId) {
+      // Check raiser is the one doing this
+      if (request.raisedBy.toString() !== userId.toString()) {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
+
+      // Remove provider from interestedBy
+      request.interestedBy = request.interestedBy.filter(
+        id => id.toString() !== providerId.toString()
+      );
+
+      await request.save();
+      return res.status(200).json({ message: "Provider ignored successfully" });
+    }
 
   } catch (error) {
+    console.error("Error in ignoreRequest:", error);
     res.status(500).json({ message: error.message });
   }
 };

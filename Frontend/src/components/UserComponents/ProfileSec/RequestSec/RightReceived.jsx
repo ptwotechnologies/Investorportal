@@ -595,30 +595,30 @@ const RightReceived = ({
           );
         })() : (
           <div className="flex gap-3">
-            <button
-              onClick={() => handleInterest && handleInterest(selectedRequest._id)}
-              disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
-              className={`flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
-                (selectedRequest.hasShownInterest || selectedRequest.isIgnored) && "opacity-50 cursor-not-allowed"
-              }`}
-            >
+           <button
+  onClick={() => handleInterest && handleInterest(selectedRequest._id)}
+  disabled={selectedRequest.isIgnored} // ⭐ only disabled when ignored
+  className={`flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
+    (selectedRequest.hasShownInterest || selectedRequest.isIgnored) && "opacity-50 cursor-not-allowed"
+  }`}
+>
               <FaCheckCircle /> {selectedRequest.hasShownInterest ? "Interested" : "Interest"}
             </button>
             <button
-              onClick={() =>
-                setShowConfirm &&
-                setShowConfirm({
-                  requestId: selectedRequest._id,
-                  providerId: null,
-                })
-              }
-              disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
-              className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
-                selectedRequest.hasShownInterest || selectedRequest.isIgnored
-                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-[#D8D6F8] text-[#59549F]"
-              }`}
-            >
+  onClick={() =>
+    setShowConfirm &&
+    setShowConfirm({
+      requestId: selectedRequest._id,
+      providerId: null,
+    })
+  }
+  disabled={selectedRequest.isIgnored} // ⭐ only disabled when ignored
+  className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
+    selectedRequest.hasShownInterest || selectedRequest.isIgnored
+      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+      : "bg-[#D8D6F8] text-[#59549F]"
+  }`}
+>
               <FaTimesCircle /> {selectedRequest.isIgnored ? "Ignored" : "Ignore"}
             </button>
           </div>

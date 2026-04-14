@@ -51,6 +51,12 @@ const requestSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    ignoredBy: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
+],
   },
   { timestamps: true }
 );

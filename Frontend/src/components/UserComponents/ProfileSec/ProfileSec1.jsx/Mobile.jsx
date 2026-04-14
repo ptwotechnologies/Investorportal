@@ -16,7 +16,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -30,7 +30,6 @@ import { FaHandshake, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiHelpCircle } from "react-icons/bi";
 
-
 const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -38,21 +37,29 @@ const Mobile = () => {
   const [expandedIds, setExpandedIds] = useState([]);
   const [isDealsOpen, setIsDealsOpen] = useState(false);
   const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
+  const location = useLocation();
+  const [requestsLoading, setRequestsLoading] = useState(true);
 
   useEffect(() => {
-    const checkRequests = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${serverUrl}/requests`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setHasRaisedRequests(res.data.length > 0);
-      } catch (err) {
-        console.error("Error fetching raised requests count", err);
-      }
-    };
-    checkRequests();
-  }, []);
+  const checkRequests = async () => {
+    const token = localStorage.getItem("token"); // ⭐ define token here
+    if (!token) return; // ⭐ guard if no token
+    
+    setRequestsLoading(true);
+    try {
+      const res = await axios.get(`${serverUrl}/requests`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setHasRaisedRequests(res.data.length > 0);
+    } catch (err) {
+      console.error("Error fetching raised requests count", err);
+      setHasRaisedRequests(false);
+    } finally {
+      setRequestsLoading(false);
+    }
+  };
+  checkRequests();
+}, [location.pathname]); // ⭐ remove token from deps since it's read inside
 
   const navigate = useNavigate();
 
@@ -103,7 +110,11 @@ const Mobile = () => {
         </div>
 
         <div className="flex items-center   rounded-full py-1 px-2 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] mr-2">
-          <IoNotificationsOutline size={18} onClick={handleNotificationClick} className="text-gray-500 ml-1" />
+          <IoNotificationsOutline
+            size={18}
+            onClick={handleNotificationClick}
+            className="text-gray-500 ml-1"
+          />
           <div className="w-0.2 h-6 border mx-1"></div>
           <Sheet>
             <SheetTrigger asChild>
@@ -163,23 +174,34 @@ const Mobile = () => {
                         <div
                           className="flex items-center gap-4.5 cursor-pointer w-full"
                           onClick={() => {
-                            if (hasRaisedRequests === false) {
-                              toast.error("You have to raise a request to open deals");
+                            if (requestsLoading) {
+                              toast("Checking your requests..."); // ⭐ wait for check
+                              return;
+                            }
+                            if (!hasRaisedRequests) {
+                              toast.error(
+                                "You have to raise a request to open deals",
+                              );
                               return;
                             }
                             setIsDealsOpen(!isDealsOpen);
                           }}
                         >
                           <FaHandshake className="text-gray-500" size={28} />
-                         
 
                           <li className="flex justify-between items-center w-full">
                             <span>Deals</span>
 
                             {isDealsOpen ? (
-                              <FaChevronUp className="text-gray-500" size={15} />
+                              <FaChevronUp
+                                className="text-gray-500"
+                                size={15}
+                              />
                             ) : (
-                              <FaChevronDown className="text-gray-500" size={15}/>
+                              <FaChevronDown
+                                className="text-gray-500"
+                                size={15}
+                              />
                             )}
                           </li>
                         </div>
@@ -196,22 +218,22 @@ const Mobile = () => {
                               <li type="disc"> Communication</li>
                             </Link>
                             <Link to="/deal/milestones">
-                              <li  type="disc">Milestones</li>
+                              <li type="disc">Milestones</li>
                             </Link>
                             <Link to="/deal/payments">
-                              <li  type="disc">Payments</li>
+                              <li type="disc">Payments</li>
                             </Link>
                             <Link to="/deal/negotiations">
-                              <li  type="disc">Negotiations</li>
+                              <li type="disc">Negotiations</li>
                             </Link>
                             <Link to="/deal/documentation">
-                              <li  type="disc"> Documentation</li>
+                              <li type="disc"> Documentation</li>
                             </Link>
                             <Link to="/deal/completed">
-                              <li  type="disc">Completed</li>
+                              <li type="disc">Completed</li>
                             </Link>
                             <Link to="/deal/disputes">
-                              <li  type="disc">Disputes</li>
+                              <li type="disc">Disputes</li>
                             </Link>
                           </ul>
                         )}
@@ -274,7 +296,7 @@ const Mobile = () => {
               </SheetContent>
             </div>
           </Sheet>
-        </div> 
+        </div>
       </div>
 
       {showNotifications && (

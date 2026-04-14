@@ -1,10 +1,10 @@
 import { serverUrl } from "@/App";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
 
-const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllHandlers }) => {
+const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllHandlers, triggerUpgradeModal }) => {
   const [forwardedRequests, setForwardedRequests] = useState([]);
   const [raisedRequests, setRaisedRequests] = useState([]);
   const [myInterestedRequests, setMyInterestedRequests] = useState([]);
@@ -15,6 +15,9 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
   });
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userPlan, setUserPlan] = useState(null);
+  const [interestCount, setInterestCount] = useState(0);
+  const [ignoreCount, setIgnoreCount] = useState(0);
 
   const navigate = useNavigate();
 
@@ -32,10 +35,14 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
       try {
         const token = localStorage.getItem("token");
         
-        const [receivedRes, raisedRes, profileRes] = await Promise.all([
+        const userId = localStorage.getItem("userId");
+        const [receivedRes, raisedRes, profileRes, userRes] = await Promise.all([
           axios.get(`${serverUrl}/requests/received`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${serverUrl}/requests`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${serverUrl}/profile/all`, { headers: { Authorization: `Bearer ${token}` } }),
+          userId 
+            ? axios.get(`${serverUrl}/user/${userId}`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => ({ data: { plan: null } }))
+            : Promise.resolve({ data: { plan: null } }),
         ]);
 
         const forwarded = receivedRes.data.forwardedRequests;
@@ -46,6 +53,19 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
         setForwardedRequests(forwarded);
         setMyInterestedRequests(myInterested);
         setRaisedRequests(raised);
+
+        const planName = userRes.data.plan?.planName || "Explorer Access";
+        setUserPlan(planName);
+
+        const alreadyInterestedCount = receivedRes.data.forwardedRequests.filter(
+          (r) => r.hasShownInterest,
+        ).length;
+        setInterestCount(alreadyInterestedCount);
+
+        const alreadyIgnoredCount = receivedRes.data.forwardedRequests.filter(
+          (r) => r.isIgnored,
+        ).length;
+        setIgnoreCount(alreadyIgnoredCount);
 
         if (selectedRequest) {
           const updatedRequest = 
@@ -84,7 +104,13 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
     setMobileView("left");
   };
 
-  const handleInterest = async (requestId) => {
+  const handleInterest = useCallback(async (requestId) => {
+    const isFreePlan = userPlan === "Explorer Access" || !userPlan;
+    if (isFreePlan && (interestCount + ignoreCount) >= 1) {
+      triggerUpgradeModal("interest");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("token");
       await axios.put(
@@ -96,58 +122,121 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
       setForwardedRequests((prev) =>
         prev.map((req) =>
           req._id === requestId
-            ? { ...req, status: "interested", interestedBy: [...(req.interestedBy || []), { _id: "you" }], hasShownInterest: true }
-            : req
-        )
-      );
-
-      setSelectedRequest((prev) =>
-        prev && prev._id === requestId
-          ? { ...prev, status: "interested", interestedBy: [...(prev.interestedBy || []), { _id: "you" }], hasShownInterest: true }
-          : prev
-      );
-    } catch (err) {
-      console.error("Error marking interest:", err);
-    }
-  };
-
-  const handleIgnore = async (requestId, providerId = null) => {
-    if (providerId) {
-      setMyInterestedRequests((prev) =>
-        prev.map((req) =>
-          req._id === requestId
             ? {
                 ...req,
-                interestedBy: req.interestedBy.filter(
-                  (user) => user._id !== providerId
-                ),
+                status: "interested",
+                interestedBy: [...(req.interestedBy || []), { _id: "you" }],
+                hasShownInterest: true,
               }
-            : req
-        )
-      );
-    } else {
-      setForwardedRequests((prev) =>
-        prev.map((req) =>
-          req._id === requestId
-            ? { ...req, isIgnored: true }
-            : req
-        )
+            : req,
+        ),
       );
 
       setSelectedRequest((prev) =>
         prev && prev._id === requestId
-          ? { ...prev, isIgnored: true }
-          : prev
+          ? {
+              ...prev,
+              status: "interested",
+              interestedBy: [...(prev.interestedBy || []), { _id: "you" }],
+              hasShownInterest: true,
+            }
+          : prev,
       );
+
+      setInterestCount((prev) => prev + 1);
+    } catch (err) {
+      if (err.response?.status === 403 && err.response?.data?.limitReached) {
+        triggerUpgradeModal("interest");
+      } else {
+        console.error("Error marking interest:", err);
+      }
+    }
+  }, [userPlan, interestCount, triggerUpgradeModal]);
+
+  const handleIgnore = useCallback(async (requestId, providerId = null) => {
+    if (providerId) {
+      // Buyer ignoring a professional's interest
+      try {
+        const token = localStorage.getItem("token");
+        await axios.put(
+          `${serverUrl}/requests/ignore`,
+          { requestId, providerId },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setMyInterestedRequests((prev) =>
+          prev.map((req) =>
+            req._id === requestId
+              ? {
+                  ...req,
+                  interestedBy: req.interestedBy.filter(
+                    (user) => user._id !== providerId
+                  ),
+                }
+              : req
+          )
+        );
+
+        setSelectedRequest((prev) =>
+          prev && prev._id === requestId
+            ? {
+                ...prev,
+                interestedBy: prev.interestedBy.filter(
+                  (user) => user._id !== providerId,
+                ),
+              }
+            : prev,
+        );
+      } catch (err) {
+        console.error("Error ignoring professional:", err);
+      }
+    } else {
+      // Provider ignoring a forwarded request
+      const isFreePlan = userPlan === "Explorer Access" || !userPlan;
+      if (isFreePlan && (interestCount + ignoreCount) >= 1) {
+        triggerUpgradeModal("interest");
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem("token");
+        await axios.put(
+          `${serverUrl}/requests/ignore`,
+          { requestId, providerId: null },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setForwardedRequests((prev) =>
+          prev.map((req) =>
+            req._id === requestId
+              ? { ...req, isIgnored: true }
+              : req
+          )
+        );
+
+        setSelectedRequest((prev) =>
+          prev && prev._id === requestId
+            ? { ...prev, isIgnored: true }
+            : prev
+        );
+
+        setIgnoreCount((prev) => prev + 1);
+      } catch (err) {
+        if (err.response?.status === 403 && err.response?.data?.limitReached) {
+          triggerUpgradeModal("interest");
+        } else {
+          console.error("Error ignoring request:", err);
+        }
+      }
     }
     
     setShowConfirm({
       requestId: null,
       providerId: null,
     });
-  };
+  }, [userPlan, ignoreCount, triggerUpgradeModal]);
 
-  const handleAccept = async (requestId, providerId) => {
+  const handleAccept = useCallback(async (requestId, providerId) => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
@@ -172,19 +261,37 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
     } catch (err) {
       console.error("Error accepting provider:", err);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (setAllHandlers) {
-      setAllHandlers({
-        handleInterest,
-        handleIgnore,
-        handleAccept,
-        showConfirm,
-        setShowConfirm,
+      setAllHandlers((prev) => {
+        // Only update if references have actually changed
+        if (
+          prev.handleInterest === handleInterest &&
+          prev.handleIgnore === handleIgnore &&
+          prev.handleAccept === handleAccept &&
+          prev.showConfirm === showConfirm
+        ) {
+          return prev;
+        }
+        return {
+          handleInterest,
+          handleIgnore,
+          handleAccept,
+          showConfirm,
+          setShowConfirm,
+        };
       });
     }
-  }, [showConfirm, setAllHandlers]);
+  }, [
+    showConfirm,
+    setAllHandlers,
+    handleInterest,
+    handleIgnore,
+    handleAccept,
+    setShowConfirm,
+  ]);
 
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
