@@ -39,9 +39,9 @@ const Startup = () => {
       <div className='hidden lg:block'>
         <StartupSec8/>
       </div>
-      <div>
+      {/* <div>
         <StartupSec9/>
-      </div>
+      </div> */}
       <div>
         <StartupSec10/>
       </div>

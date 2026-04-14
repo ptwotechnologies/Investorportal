@@ -2,6 +2,7 @@ import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const DevelopmentContent = () => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -18,13 +19,12 @@ const DevelopmentContent = () => {
 
     // ✅ Free plan
     if (!amount || amount === 0) {
-      navigate("/paymentsuccess", {
-        state: { userId, planName, isFreePlan: true },
-      });
+      toast.success("You are already logged in");
+      navigate("/dashboard");
       return;
     }
 
-    // ✅ Paid plan - Direct to Razorpay (no backend API call)
+    // ✅ Paid plan - Direct to Razorpay
     navigate("/scanner", {
       state: { userId, amount, planName },
     });
@@ -92,22 +92,25 @@ const DevelopmentContent = () => {
 
       buttonText: "Start Exploring",
     },
-    {
-      title: "Value Focused",
+     {
+      title: "Most Popular Plan",
       titleBg: "#BA1E1E",
       titleBg2: "#B77070",
       amount: 9999,
-      amountduration: "/year",
-      amountDesc: "Annual onboarding access",
-      planName: "Access Plan",
-      planDesc: "For professionals entering structured deal flow",
+      amountduration: "(one-time) ",
+      amountDesc: "Recoverable with just 1–2 client conversions",
+      planName: "Professional Plan",
+      planDesc: "For professionals ready to unlock consistent client opportunities",
+       network1:"Deal Flow Access",
+      network2:"Full Access",
+      network3:"Priority Support",
       sections: [
         {
           heading: "Core Access",
           features: [
-            "Professional profile creation & visibility",
+            "Profile creation & enhanced visibility",
             "Access to unified dashboard",
-            "Receive service requests from startups",
+            "Receive curated client requests from startups",
             "Send & accept connection requests",
             "Participate in complete deal workflows",
           ],
@@ -116,26 +119,23 @@ const DevelopmentContent = () => {
         {
           heading: "Deal & Execution System",
           features: [
-            "Active deals management",
+            "Active deals management across clients",
             "Milestone-based execution tracking",
-            "Negotiation interface",
+            "Negotiation interface access",
             "Documentation handling",
             "Payment workflow visibility",
             "Dispute resolution system",
           ],
         },
         {
-          heading: "Revenue Opportunity",
+          heading: "Opportunity Access",
           features: [
-            "Eligible for Channel Partner model",
-            {
-              title: "Earn:",
-              subPoints: [
-                "20% on startup onboarding",
-                "20% on business plan conversions",
-              ],
-            },
-            "Build additional income streams beyond services",
+            "Receive more frequent & relevant client requests",
+            "Full access to detailed requirement insights",
+            "Increased visibility in startup discovery",
+            "Access to active opportunity sections",
+            "Priority access to incoming requests",
+            "Higher chances of client conversion",
           ],
         },
         {
@@ -143,19 +143,19 @@ const DevelopmentContent = () => {
           features: [
             "Verified startup ecosystem access",
             "Platform-level quality control",
-            "Support ticket system",
+            "Priority support ticket system",
           ],
         },
         {
           heading: "Visibility Level",
           features: [
-            "Standard listing visibility",
-            "Basic discoverability in service listings",
+            "Enhanced listing visibility across platform",
+            "Improved discoverability in service listings",
           ],
         },
       ],
 
-      buttonText: "Start Receiving Opportunities",
+      buttonText: "Start Getting Clients",
     },
     {
       title: "Outcome Driven",
@@ -425,7 +425,7 @@ const DevelopmentContent = () => {
             </article>
           ))}
 
-          <div className="hidden lg:block col-span-2 mx-6">
+          {/* <div className="hidden lg:block col-span-2 mx-6">
             <hr className="mx-6   " />
             <div className="bg-white  border-2 border-[#00103280] mt-7 h-[95.5%]  rounded-sm  p-3   px-20 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
               <div id="top" className="flex justify-between items-center ">
@@ -437,7 +437,7 @@ const DevelopmentContent = () => {
                 <div className="bg-[#DBDBDB] w-full h-12 rounded-full mt-40"></div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </main>

@@ -21,6 +21,7 @@ const ReceivedTabSec = ({
   const [showConfirm, setShowConfirm] = useState({
     requestId: null,
     providerId: null,
+    origin: null,
   });
   const [loading, setLoading] = useState(true);
   const [interestCount, setInterestCount] = useState(0);
@@ -143,6 +144,12 @@ const ReceivedTabSec = ({
 
   const handleInterest = useCallback(
     async (requestId) => {
+      // Find the request to check its current status
+      const targetReq = forwardedRequests.find(r => r._id === requestId);
+      if (targetReq?.hasShownInterest || targetReq?.isIgnored) {
+        return; // Already in a final state, do nothing
+      }
+
       const isFreePlan = userPlan === "Explorer Access" || !userPlan;
       if (isFreePlan && (interestCount + ignoreCount) >= 1) {
         triggerUpgradeModal("interest");
@@ -220,6 +227,11 @@ const ReceivedTabSec = ({
     async (requestId, providerId = null) => {
       // ⭐ Only limit ignore for forwarded requests (provider side), not for buyer ignoring interested professionals
       if (!providerId) {
+        const targetReq = forwardedRequests.find(r => r._id === requestId);
+        if (targetReq?.hasShownInterest || targetReq?.isIgnored) {
+          return; // Already in a final state, do nothing
+        }
+
         const isFreePlan = userPlan === "Explorer Access" || !userPlan;
         if (isFreePlan && (interestCount + ignoreCount) >= 1) {
           triggerUpgradeModal("interest");
@@ -272,7 +284,7 @@ const ReceivedTabSec = ({
           setIgnoreCount((prev) => prev + 1); // ⭐ increment ignore count
         }
 
-        setShowConfirm({ requestId: null, providerId: null });
+        setShowConfirm({ requestId: null, providerId: null, origin: null });
       } catch (err) {
         if (err.response?.status === 403 && err.response?.data?.limitReached) {
           triggerUpgradeModal("interest"); // ⭐ backend also blocks
@@ -423,14 +435,38 @@ const ReceivedTabSec = ({
               </div>
 
               <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
-                <h4 className="text-xs font-semibold text-gray-600 mb-1">
-                  Status
-                </h4>
-                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                  {selectedRequest.hasShownInterest
-                    ? "Interested"
-                    : "Forwarded"}
+                <h4 className="text-xs font-semibold text-gray-600 mb-1">Status</h4>
+                <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                  selectedRequest.hasShownInterest
+                    ? "bg-green-100 text-green-800"
+                    : "bg-yellow-100 text-yellow-800"
+                }`}>
+                  {selectedRequest.hasShownInterest ? "Interested" : "Pending"}
                 </span>
+              </div>
+
+              {/* Budget & Priority */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                  <h4 className="text-xs font-semibold text-gray-600 mb-1">
+                    Budget
+                  </h4>
+                  <p className="text-xs text-[#001032]">
+                    {selectedRequest.budget || "N/A"}
+                  </p>
+                </div>
+                <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                  <h4 className="text-xs font-semibold text-gray-600 mb-1">
+                    Priority
+                  </h4>
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                    selectedRequest.priority === 'High' ? 'bg-red-100 text-red-700' :
+                    selectedRequest.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-green-100 text-green-700'
+                  }`}>
+                    {selectedRequest.priority || "Low"}
+                  </span>
+                </div>
               </div>
 
               <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
@@ -445,7 +481,7 @@ const ReceivedTabSec = ({
               <div className="flex gap-2 pt-2">
                 <button
                   onClick={() => handleInterest(selectedRequest._id)}
-                  disabled={selectedRequest.isIgnored}
+                  disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
                   className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
                     selectedRequest.hasShownInterest ||
                     selectedRequest.isIgnored
@@ -460,9 +496,10 @@ const ReceivedTabSec = ({
                     setShowConfirm({
                       requestId: selectedRequest._id,
                       providerId: null,
+                      origin: 'detail',
                     })
                   }
-                  disabled={selectedRequest.isIgnored}
+                  disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
                   className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
                     selectedRequest.hasShownInterest ||
                     selectedRequest.isIgnored
@@ -475,7 +512,8 @@ const ReceivedTabSec = ({
               </div>
 
               {showConfirm.requestId === selectedRequest._id &&
-                showConfirm.providerId === null && (
+                showConfirm.providerId === null && 
+                showConfirm.origin === 'detail' && (
                   <div className="bg-white shadow-lg rounded-lg p-3 border">
                     <p className="text-sm text-gray-700 mb-3">
                       Are you sure you want to ignore this request?
@@ -492,6 +530,7 @@ const ReceivedTabSec = ({
                           setShowConfirm({
                             requestId: null,
                             providerId: null,
+                            origin: null,
                           })
                         }
                         className="flex-1 bg-white text-[#001032] px-3 py-2 rounded-full text-xs shadow-[inset_0_0_12px_#00000040] border"
@@ -509,8 +548,7 @@ const ReceivedTabSec = ({
         <div className="hidden md:block h-130 lg:h-123 overflow-y-auto scrollbar-hide">
           {forwardedRequests.map((req) => {
             const raiserProfile = getRaiserProfile(req);
-            const raiserName =
-              raiserProfile?.name || req.raisedBy?.name || "Requester Name";
+            const raiserName = raiserProfile ? (raiserProfile.name || raiserProfile.email) : (req.raisedBy?.name || req.raisedBy?.email || "Requester");
 
             return (
               <div
@@ -580,9 +618,10 @@ const ReceivedTabSec = ({
                         setShowConfirm({
                           requestId: req._id,
                           providerId: null,
+                          origin: 'list',
                         });
                       }}
-                      disabled={req.isIgnored}
+                      disabled={req.hasShownInterest || req.isIgnored}
                       className={`text-center px-3 py-1 rounded flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${
                         req.hasShownInterest || req.isIgnored
                           ? "bg-gray-300 text-gray-500 cursor-not-allowed rounded-full"
@@ -593,7 +632,8 @@ const ReceivedTabSec = ({
                     </button>
 
                     {showConfirm.requestId === req._id &&
-                      showConfirm.providerId === null && (
+                      showConfirm.providerId === null && 
+                      showConfirm.origin === 'list' && (
                         <div className="absolute bg-white shadow-lg rounded-lg mt-17 border w-24 z-50 ">
                           <div className="flex flex-col items-center rounded-lg gap-1">
                             <button
@@ -612,6 +652,7 @@ const ReceivedTabSec = ({
                                 setShowConfirm({
                                   requestId: null,
                                   providerId: null,
+                                  origin: null,
                                 });
                               }}
                               className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
@@ -640,10 +681,20 @@ const ReceivedTabSec = ({
                         user._id.toString());
 
                   const userProfile = profiles.find(
-                    (p) => p.userId?._id === user._id || p.userId === user._id,
+                    (p) => {
+                      const pUserId = (p.userId?._id || p.userId)?.toString();
+                      const targetUserId = (user._id || user)?.toString();
+                      return pUserId === targetUserId;
+                    }
                   );
-                  const displayName =
-                    userProfile?.name || user.name || "Professional Name";
+                  const displayName = 
+                    userProfile?.name || 
+                    user.name || 
+                    (user.firstName || user.lastName ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : "") ||
+                    (userProfile?.userId?.firstName || userProfile?.userId?.lastName ? `${userProfile.userId.firstName || ""} ${userProfile.userId.lastName || ""}`.trim() : "") ||
+                    user.email ||
+                    (userProfile?.userId?.email) || 
+                    "Professional";
 
                   return (
                     <div
@@ -729,7 +780,8 @@ const ReceivedTabSec = ({
                                   console.log("Accept clicked");
                                   handleAccept(req._id, user._id);
                                 }}
-                                className="bg-[#D8D6F8] text-[#59549F] text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-24 shadow-[inset_0_0_12px_#00000040]"
+                                disabled={req.isIgnored}
+                                className={`bg-[#D8D6F8] text-[#59549F] text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${req.isIgnored && "opacity-50 cursor-not-allowed"}`}
                               >
                                 Accept
                               </button>
@@ -740,15 +792,18 @@ const ReceivedTabSec = ({
                                   setShowConfirm({
                                     requestId: req._id,
                                     providerId: user._id,
+                                    origin: 'list',
                                   });
                                 }}
-                                className="bg-[#F8DEDE] text-[#B94444] text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-24 shadow-[inset_0_0_12px_#00000040]"
+                                disabled={isAccepted}
+                                className={`bg-[#F8DEDE] text-[#B94444] text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${isAccepted && "opacity-50 cursor-not-allowed"}`}
                               >
                                 Ignore
                               </button>
 
                               {showConfirm.requestId === req._id &&
-                                showConfirm.providerId === user._id && (
+                                showConfirm.providerId === user._id && 
+                                showConfirm.origin === 'list' && (
                                   <div
                                     className="absolute bg-white shadow-lg rounded-lg mt-2 border w-28 z-50"
                                     onClick={(e) => e.stopPropagation()}
@@ -772,7 +827,7 @@ const ReceivedTabSec = ({
                                             providerId: null,
                                           });
                                         }}
-                                        className="bg-[#FFFFFF] text-[#001032] px-3 py-1 rounded-full text-xs shadow-[inset_0_0_12px_#00000040]"
+                                        className="bg-[#FFFFFF] text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
                                       >
                                         Cancel
                                       </button>
@@ -799,8 +854,7 @@ const ReceivedTabSec = ({
     <div className="h-130 lg:h-123 overflow-y-auto scrollbar-hide">
       {forwardedRequests.map((req) => {
         const raiserProfile = getRaiserProfile(req);
-        const raiserName =
-          raiserProfile?.name || req.raisedBy?.name || "Requester Name";
+        const raiserName = raiserProfile ? (raiserProfile.name || raiserProfile.email) : (req.raisedBy?.name || req.raisedBy?.email || "Requester");
 
         return (
           <div
@@ -867,9 +921,13 @@ const ReceivedTabSec = ({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setShowConfirm({ requestId: req._id, providerId: null });
+                    setShowConfirm({
+                      requestId: req._id,
+                      providerId: null,
+                      origin: 'list',
+                    });
                   }}
-                  disabled={req.isIgnored}
+                  disabled={req.hasShownInterest || req.isIgnored}
                   className={`text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${
                     req.hasShownInterest || req.isIgnored
                       ? "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -881,6 +939,8 @@ const ReceivedTabSec = ({
 
                 {showConfirm.requestId === req._id &&
                   showConfirm.providerId === null &&
+                  showConfirm.origin === 'list' &&
+                  !req.hasShownInterest &&
                   !req.isIgnored && (
                     <div className="absolute bg-white shadow-lg rounded-lg mt-17 border w-24 z-50">
                       <div className="flex flex-col items-center gap-1">
@@ -900,9 +960,10 @@ const ReceivedTabSec = ({
                             setShowConfirm({
                               requestId: null,
                               providerId: null,
+                              origin: null,
                             });
                           }}
-                          className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs shadow-[inset_0_0_12px_#00000040]"
+                          className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
                         >
                           Cancel
                         </button>
@@ -917,8 +978,7 @@ const ReceivedTabSec = ({
 
       {/* Interested professionals cards */}
       {myInterestedRequests.length > 0 && (
-        <div className="mt-4">
-          <h2 className="text-sm font-semibold text-gray-500 mb-2 px-1">Interested Professionals</h2>
+        <div className="mt-0">
           {myInterestedRequests.map((req) =>
             req.interestedBy.map((user) => {
               const isAccepted =
@@ -928,10 +988,20 @@ const ReceivedTabSec = ({
                   : req.acceptedProvider.toString() === user._id.toString());
 
               const userProfile = profiles.find(
-                (p) => p.userId?._id === user._id || p.userId === user._id,
+                (p) => {
+                  const pUserId = (p.userId?._id || p.userId)?.toString();
+                  const targetUserId = (user._id || user)?.toString();
+                  return pUserId === targetUserId;
+                }
               );
-              const displayName =
-                userProfile?.name || user.name || "Professional Name";
+              const displayName = 
+                userProfile?.name || 
+                user.name || 
+                (user.firstName || user.lastName ? `${user.firstName || ""} ${user.lastName || ""}`.trim() : "") ||
+                (userProfile?.userId?.firstName || userProfile?.userId?.lastName ? `${userProfile.userId.firstName || ""} ${userProfile.userId.lastName || ""}`.trim() : "") ||
+                user.email ||
+                (userProfile?.userId?.email) || 
+                "Professional";
 
               return (
                 <div
@@ -998,30 +1068,25 @@ const ReceivedTabSec = ({
                         </button>
                       ) : (
                         <>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleAccept(req._id, user._id);
-                            }}
-                            className="bg-[#D8D6F8] text-[#59549F] text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-24 shadow-[inset_0_0_12px_#00000040]"
-                          >
-                            Accept
-                          </button>
+                          <button onClick={(e) => { e.stopPropagation(); handleAccept(req._id, user._id); }} disabled={req.isIgnored || isAccepted} className={`bg-[#D8D6F8] text-[#59549F] text-center px-3 py-1 rounded-full text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${(req.isIgnored || isAccepted) && "opacity-50 cursor-not-allowed"}`}>Accept</button>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
                               setShowConfirm({
                                 requestId: req._id,
                                 providerId: user._id,
+                                origin: 'list',
                               });
                             }}
-                            className="bg-[#F8DEDE] text-[#B94444] text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-24 shadow-[inset_0_0_12px_#00000040]"
+                            disabled={isAccepted}
+                            className={`bg-[#F8DEDE] text-[#B94444] text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${isAccepted && "opacity-50 cursor-not-allowed"}`}
                           >
                             Ignore
                           </button>
 
                           {showConfirm.requestId === req._id &&
-                            showConfirm.providerId === user._id && (
+                            showConfirm.providerId === user._id && 
+                            showConfirm.origin === 'list' && (
                               <div
                                 className="absolute bg-white shadow-lg rounded-lg mt-2 border w-28 z-50 transition-all duration-200"
                                 onClick={(e) => e.stopPropagation()}
@@ -1043,6 +1108,7 @@ const ReceivedTabSec = ({
                                       setShowConfirm({
                                         requestId: null,
                                         providerId: null,
+                                        origin: null,
                                       });
                                     }}
                                     className="bg-[#FFFFFF] text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"

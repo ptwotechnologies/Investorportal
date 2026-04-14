@@ -4,10 +4,10 @@ import User from "../Models/User.model.js";
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
   try {
-    const { service, description } = req.body;
+    const { service, description, budget, priority } = req.body;
 
-    if (!service || !description) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!service || !description || !budget) {
+      return res.status(400).json({ message: "Service, description and budget are required" });
     }
 
     // ⭐ Import User model at top of file
@@ -38,6 +38,8 @@ export const createRequest = async (req, res) => {
     const newRequest = await Request.create({
       service,
       description,
+      budget,
+      priority: priority || "Low",
       raisedBy: req.user._id,
       status: "raised",
     });
@@ -360,6 +362,32 @@ export const ignoreRequest = async (req, res) => {
 
   } catch (error) {
     console.error("Error in ignoreRequest:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteRequest = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+    const userId = req.user._id;
+
+    const request = await Request.findById(requestId);
+
+    if (!request) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    if (request.raisedBy.toString() !== userId.toString()) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    if (request.interestedBy.length > 0) {
+      return res.status(400).json({ message: "Cannot cancel request with interests" });
+    }
+
+    await Request.findByIdAndDelete(requestId);
+    res.status(200).json({ message: "Request cancelled successfully" });
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };

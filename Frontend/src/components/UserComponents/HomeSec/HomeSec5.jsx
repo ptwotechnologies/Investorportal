@@ -15,7 +15,7 @@ const HomeSec5 = () => {
       company: "Elvehico ",
       company2: "Founder",
       companyName: "Early-stage product team",
-       image: "https://randomuser.me/api/portraits/men/45.jpg"
+      //  image: "https://randomuser.me/api/portraits/men/45.jpg"
     },
     {
       paragraph:
@@ -27,7 +27,7 @@ const HomeSec5 = () => {
       company2: "TSAH",
       company: "TSAH ",
       companyName: "Founder",
-      image: "https://randomuser.me/api/portraits/women/68.jpg"
+      // image: "https://randomuser.me/api/portraits/women/68.jpg"
     },
     {
       paragraph:
@@ -39,7 +39,7 @@ const HomeSec5 = () => {
       company2: "Founder",
       company: "TSAH",
       companyName: "Startup",
-      image: "https://randomuser.me/api/portraits/men/32.jpg"
+      // image: "https://randomuser.me/api/portraits/men/32.jpg"
     },
   ]
  
@@ -111,14 +111,14 @@ const HomeSec5 = () => {
                   <div className="flex justify-center items-center gap-5">
                     <div className="border-l h-20 border-[#00000033]"></div>
                     <div className="w-[60px] h-[100px]  rounded-4xl">
-                      <img src={item.image} alt="" className='w-full h-full object-cover rounded-4xl'/>
+                      {/* <img src={item.image} alt="" className='w-full h-full object-cover rounded-4xl'/> */}
                     </div>
                   </div>
                 </div>
 
-                <div className="hidden lg:block mt-3">
+                <div className="hidden lg:block mt-3"> 
                   <div className="w-[180px] h-[200px] bg-[#D9D9D9] rounded-sm">
-                    <img src={item.image} alt="" className='w-full h-full object-cover rounded-sm'/>
+                    {/* <img src={item.image} alt="" className='w-full h-full object-cover rounded-sm'/> */}
                   </div>
                   <p className="text-sm pt-2 text-[#001032B5]">
                     {item.lgname}

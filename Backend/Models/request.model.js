@@ -52,11 +52,20 @@ const requestSchema = new mongoose.Schema(
       },
     ],
     ignoredBy: [
-  {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-],
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+    ],
+    budget: {
+      type: String,
+      required: true,
+    },
+    priority: {
+      type: String,
+      enum: ["Low", "Medium", "High"],
+      default: "Low",
+    },
   },
   { timestamps: true }
 );

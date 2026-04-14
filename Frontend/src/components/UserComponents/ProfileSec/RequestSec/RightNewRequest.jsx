@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { TfiList } from "react-icons/tfi";
 import { IoMdClose } from "react-icons/io";
+import axios from "axios";
+import { serverUrl } from "@/App";
+import { toast } from "react-hot-toast";
 
-const RightNewRequest = ({raisedRequests,setMobileView , selectedRequest,setSelectedRequest,}) => {
-   const [expandedRequest, setExpandedRequest] = useState(null);
+const RightNewRequest = ({raisedRequests, setRaisedRequests, setMobileView , selectedRequest,setSelectedRequest,}) => {
+  const [expandedRequest, setExpandedRequest] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const handleCardClick = (req) => {
     setExpandedRequest(req);
@@ -12,13 +17,47 @@ const RightNewRequest = ({raisedRequests,setMobileView , selectedRequest,setSele
 
   const handleCloseExpanded = () => {
     setExpandedRequest(null);
+    setShowCancelConfirm(false);
+  };
+
+  const handleCancelClick = () => {
+    if (!expandedRequest) return;
+    if (expandedRequest.interestedBy?.length > 0) {
+      toast.error("Cannot cancel request that has interested professionals.");
+      return;
+    }
+    setShowCancelConfirm(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    setShowCancelConfirm(false);
+    setIsDeleting(true);
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${serverUrl}/requests/${expandedRequest._id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      toast.success("Request cancelled successfully");
+      
+      if (setRaisedRequests) {
+        setRaisedRequests(prev => prev.filter(r => r._id !== expandedRequest._id));
+      }
+      handleCloseExpanded();
+    } catch (error) {
+      console.error("Error cancelling request:", error);
+      toast.error(error.response?.data?.message || "Failed to cancel request");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   if (expandedRequest) {
+    const hasInterests = expandedRequest.interestedBy?.length > 0;
     return (
-      <div className="w-full h-full flex flex-col p-4 bg-white">
+      <div className="w-full h-full flex flex-col bg-white rounded-md relative overflow-hidden">
         {/* Header with Close Button */}
-        <div className="flex items-center justify-between mb-4 pb-3 border-b">
+        <div className="flex items-center justify-between mb-4 pb-3 border-b p-4 bg-white sticky top-0 z-10 shrink-0">
           <h2 className="text-lg font-semibold text-[#001032]">Request Details</h2>
           <button
             onClick={handleCloseExpanded}
@@ -29,7 +68,7 @@ const RightNewRequest = ({raisedRequests,setMobileView , selectedRequest,setSele
         </div>
 
         {/* Expanded Card Content */}
-        <div className="flex-1 overflow-y-auto scrollbar-hide">
+        <div className="flex-1 overflow-y-auto scrollbar-hide p-4 pb-20">
           <div className="space-y-6">
             {/* Avatar Section */}
             <div className="flex items-center gap-4">
@@ -81,16 +120,55 @@ const RightNewRequest = ({raisedRequests,setMobileView , selectedRequest,setSele
                 {expandedRequest._id || expandedRequest.id || "N/A"}
               </p>
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
-              
-              <button className="flex-1 border-2 border-gray-300 text-gray-700 py-1 rounded-lg font-medium hover:bg-gray-50 transition-colors">
-                Cancel Request
-              </button>
-            </div>
           </div>
         </div>
+
+        {/* Fixed Action Buttons at Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t z-10 invisible"></div>
+        <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t flex gap-3 z-10 w-full">
+          <button 
+            onClick={handleCancelClick}
+            disabled={hasInterests || isDeleting}
+            className={`w-full border-2 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+              hasInterests 
+                ? "border-gray-200 text-gray-300 cursor-not-allowed bg-gray-50" 
+                : "border-[#59549F] text-[#59549F] hover:bg-[#59549F] hover:text-white"
+            }`}
+          >
+            {isDeleting ? "Cancelling..." : "Cancel Request"}
+          </button>
+        </div>
+
+        {/* Custom Confirmation Popup */}
+        {showCancelConfirm && (
+          <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/5 backdrop-blur-[2px]">
+            <div className="bg-white shadow-[0_4px_24px_rgba(0,0,0,0.15)] rounded-2xl p-6 border w-[85%] max-w-sm text-center transform transition-all animate-in fade-in zoom-in duration-200">
+              <div className="w-16 h-16 bg-[#59549F]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-[#59549F]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-[#001032] mb-2">Cancel Request</h3>
+              <p className="text-sm text-gray-600 mb-6 px-2">
+                Are you sure you want to cancel this request? This action cannot be undone.
+              </p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleConfirmCancel}
+                  className="flex-1 bg-[#59549F] text-white py-2.5 rounded-full text-sm font-semibold hover:bg-white hover:text-[#59549F] border-[#59549F] border shadow-lg shadow-gray-200 transition-all active:scale-95"
+                >
+                  Yes, Cancel
+                </button>
+                <button
+                  onClick={() => setShowCancelConfirm(false)}
+                  className="flex-1 bg-gray-100 text-gray-700 py-2.5 rounded-full text-sm font-semibold hover:bg-gray-200 transition-all active:scale-95"
+                >
+                  Back
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

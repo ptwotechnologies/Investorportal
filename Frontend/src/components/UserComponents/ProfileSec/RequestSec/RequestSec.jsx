@@ -14,6 +14,8 @@ import AllTabSec from "./AllTabSec";
 import RightAllTab from "./RightAllTab";
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import TwinCardModal from "./TwinCardModal";
+import InterestUpgradeModal from "./InterestUpgradeModal";
 
 const RequestSec = () => {
   const navigate = useNavigate();
@@ -38,6 +40,11 @@ const RequestSec = () => {
     showConfirm: { requestId: null, providerId: null },
     setShowConfirm: null,
   });
+
+  const [requestAttemptCount, setRequestAttemptCount] = useState(0);
+
+  const [showTwinCardModal, setShowTwinCardModal] = useState(false);
+  const [showInterestUpgradeModal, setShowInterestUpgradeModal] = useState(false);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -85,9 +92,25 @@ const RequestSec = () => {
   };
 
   const triggerUpgradeModal = useCallback((type) => {
+    if (type === 'request') {
+      const newCount = requestAttemptCount + 1;
+      setRequestAttemptCount(newCount);
+      
+      // Threshold: Show twin card on 3rd+ consecutive attempt in this session
+      if (newCount >= 3) {
+        setShowTwinCardModal(true);
+        return;
+      }
+    }
+
+    if (type === 'interest') {
+      setShowInterestUpgradeModal(true);
+      return;
+    }
+
     setUpgradeModalType(type);
     setShowUpgradeModal(true);
-  }, []);
+  }, [requestAttemptCount]);
 
   const getCardWidths = () => {
     switch (activeTab) {
@@ -226,6 +249,7 @@ const RequestSec = () => {
                   <TabsContent value="raised" className="mt-0">
                     <RaisedTabSec
                       requests={raisedRequests}
+                      setRaisedRequests={setRaisedRequests}
                       setSelectedRequest={setSelectedRequest}
                       selectedRequest={selectedRequest}
                       setMobileView={setMobileView}
@@ -242,6 +266,7 @@ const RequestSec = () => {
             {activeTab === "newRequest" && (
               <RightNewRequest
                 raisedRequests={raisedRequests}
+                setRaisedRequests={setRaisedRequests}
                 selectedRequest={selectedRequest}
                 setSelectedRequest={setSelectedRequest}
                 setMobileView={setMobileView}
@@ -251,6 +276,7 @@ const RequestSec = () => {
             {activeTab === "all" && <RightAllTab 
             selectedRequest={selectedRequest}
              setSelectedRequest={setSelectedRequest}
+             setRaisedRequests={setRaisedRequests}
              setMobileView={setMobileView}
              handleInterest={allHandlers.handleInterest}
              handleIgnore={allHandlers.handleIgnore}
@@ -275,6 +301,7 @@ const RequestSec = () => {
            {activeTab === "raised" && (
   <RightRaised
     requests={raisedRequests}
+    setRaisedRequests={setRaisedRequests}
     selectedRequest={selectedRequest}
     setSelectedRequest={setSelectedRequest}
     setMobileView={setMobileView}  // ← ADD THIS LINE
@@ -286,7 +313,7 @@ const RequestSec = () => {
 
       {/* ✅ Centralized Upgrade Modal */}
       {showUpgradeModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center backdrop-blur-sm bg-black/60 p-4">
           <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative">
             <button
               onClick={() => setShowUpgradeModal(false)}
@@ -300,7 +327,7 @@ const RequestSec = () => {
               <div>
                 <h2 className="text-lg font-bold text-[#001032] leading-tight">
                   You Have More <br />
-                  <span className="text-[#D8D6F8]">Opportunities</span> Waiting
+                  <span className="text-[#59549F]">Opportunities</span> Waiting
                 </h2>
               </div>
             </div>
@@ -365,7 +392,7 @@ const RequestSec = () => {
                 navigate("/pricing");
                 setShowUpgradeModal(false);
               }}
-              className="w-full py-3 bg-[#D8D6F8] text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 mb-2"
+              className="w-full py-3 bg-[#59549F] text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 mb-2"
             >
               🔒 Unlock Full Access
             </button>
@@ -377,6 +404,22 @@ const RequestSec = () => {
             </button>
           </div>
         </div>
+      )}
+
+      {/* ✅ special Twin Card Upgrade Modal for persistent users */}
+      {showTwinCardModal && (
+        <TwinCardModal 
+          onClose={() => setShowTwinCardModal(false)} 
+          lightbulbImg="/lightbulb_idea.png"
+          lockImg="/request_locked.png"
+        />
+      )}
+
+      {/* ✅ special Interest Upgrade Modal for professionals */}
+      {showInterestUpgradeModal && (
+        <InterestUpgradeModal 
+          onClose={() => setShowInterestUpgradeModal(false)} 
+        />
       )}
     </div>
   );

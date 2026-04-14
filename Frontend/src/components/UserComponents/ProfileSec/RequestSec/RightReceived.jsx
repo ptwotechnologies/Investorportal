@@ -62,8 +62,12 @@ const RightReceived = ({
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          const profile = res.data.find(p => p.userId._id === professionalUserId);
-          setProfessionalProfile(profile || null);
+          const profile = res.data.find(p => {
+             const pUserId = (p.userId?._id || p.userId)?.toString();
+             const targetUserId = (professionalUserId._id || professionalUserId)?.toString();
+             return pUserId === targetUserId;
+           });
+           setProfessionalProfile(profile || null);
         } catch (err) {
           console.error("Error fetching professional profile:", err);
         } finally {
@@ -137,7 +141,7 @@ const RightReceived = ({
     }
 
     return (
-      <div className="w-full h-full flex flex-col lg:p-4 p-2 bg-white rounded-md overflow-y-auto scrollbar-hide">
+      <div className="w-full h-full flex flex-col lg:p-4 p-2 bg-white rounded-md relative overflow-hidden">
         {/* Header with Close Button */}
         <div className="flex items-center justify-between mb-4 pb-3 border-b shrink-0">
           <div className="flex items-center gap-2">
@@ -200,9 +204,12 @@ const RightReceived = ({
             </div>
 
             <div className="mt-4">
-              <h2 className="text-gray-900 text-lg font-semibold">
-                {profile.name || professional.name || 'Professional Name'}
-              </h2>
+              {profile.name || 
+               professional.name || 
+               (professional.firstName || professional.lastName ? `${professional.firstName || ""} ${professional.lastName || ""}`.trim() : "") ||
+               (profile?.userId?.firstName || profile?.userId?.lastName ? `${profile.userId.firstName || ""} ${profile.userId.lastName || ""}`.trim() : "") ||
+               professional.email || 
+               'Professional'}
               <p className="text-sm text-gray-800 mt-1 leading-tight">
                 {profile.bio || 'No bio available'}
               </p>
@@ -388,13 +395,27 @@ const RightReceived = ({
           {/* Request Details Section */}
           <div className="border-2 border-[#D9D9D9] rounded-xl bg-gray-50 px-4 py-3 my-3">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Request Details</h4>
-            <p className="text-sm text-[#001032] font-medium">{selectedRequest.service}</p>
-            <p className="text-xs text-gray-600 mt-1">{selectedRequest.description}</p>
+            <div className="flex justify-between items-start">
+              <div>
+                <p className="text-sm text-[#001032] font-medium">{selectedRequest.service}</p>
+                <p className="text-xs text-gray-600 mt-1">{selectedRequest.description}</p>
+              </div>
+              <div className="flex flex-col items-end gap-1">
+                <p className="text-[10px] font-bold text-gray-400 uppercase">Budget: <span className="text-[#001032]">{selectedRequest.budget || 'N/A'}</span></p>
+                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
+                  selectedRequest.priority === 'High' ? 'bg-red-100 text-red-700' :
+                  selectedRequest.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                  'bg-green-100 text-green-700'
+                }`}>
+                  {selectedRequest.priority || 'Low'}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Action Buttons - Show Deal button if accepted, otherwise Accept/Ignore */}
-        <div className="flex gap-3 pt-4 mt-4 border-t shrink-0">
+        <div className="flex flex-col gap-3 pt-4 border-t shrink-0 relative bg-white">
           {isAccepted ? (
             <button
               onClick={() => navigate('/deal')}
@@ -403,7 +424,7 @@ const RightReceived = ({
               Deal
             </button>
           ) : (
-            <>
+            <div className="flex gap-3 w-full">
               <button
                 onClick={() => handleAccept && handleAccept(selectedRequest._id, professional._id)}
                 className="flex-1 bg-[#D8D6F8] text-[#59549F] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
@@ -416,53 +437,63 @@ const RightReceived = ({
                   setShowConfirm({
                     requestId: selectedRequest._id,
                     providerId: professional._id,
+                    origin: 'detail',
                   })
                 }
                 className="flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
               >
                 <FaTimesCircle /> Ignore
               </button>
-            </>
-          )}
-        </div>
-
-        {/* Confirmation Dialog - Only show if not accepted */}
-        {!isAccepted && showConfirm && 
-          showConfirm.requestId === selectedRequest._id &&
-          showConfirm.providerId === professional._id && (
-            <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-4 border w-64 z-50">
-              <p className="text-sm text-gray-700 mb-3">
-                Are you sure you want to ignore this professional?
-              </p>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleIgnore && handleIgnore(selectedRequest._id, professional._id)}
-                  className="flex-1 bg-[#F8DEDE] text-[#B94444] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040]"
-                >
-                  Yes
-                </button>
-                <button
-                  onClick={() =>
-                    setShowConfirm &&
-                    setShowConfirm({
-                      requestId: null,
-                      providerId: null,
-                    })
-                  }
-                  className="flex-1 bg-white text-[#001032] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040] border"
-                >
-                  Cancel
-                </button>
-              </div>
             </div>
           )}
+
+          {/* Confirmation Tooltip */}
+          {showConfirm && 
+            showConfirm.requestId === selectedRequest._id && 
+            String(showConfirm.providerId) === String(professional._id) && 
+            showConfirm.origin === 'detail' && (
+              <div className="absolute bottom-full mb-4 left-1/2 transform -translate-x-1/2 bg-white shadow-[0_-4px_24px_rgba(0,0,0,0.15)] rounded-2xl p-4 border w-64 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                <div className="text-center">
+                  <div className="w-12 h-12 bg-[#F8DEDE] rounded-full flex items-center justify-center mx-auto mb-3">
+                    <FaTimesCircle className="text-[#B94444] text-xl" />
+                  </div>
+                  <h4 className="text-sm font-bold text-[#001032] mb-1">Confirm Action</h4>
+                  <p className="text-xs text-gray-500 mb-4 px-2">
+                    Are you sure you want to ignore this professional?
+                  </p>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleIgnore && handleIgnore(selectedRequest._id, professional._id)}
+                      className="flex-1 bg-[#F8DEDE] text-[#B94444] py-2 rounded-full text-xs font-bold shadow-[inset_0_0_12px_#00000040] hover:bg-[#b94444] hover:text-white transition-all active:scale-95"
+                    >
+                      Yes, Ignore
+                    </button>
+                    <button
+                      onClick={() =>
+                        setShowConfirm &&
+                        setShowConfirm({
+                          requestId: null,
+                          providerId: null,
+                          origin: null,
+                        })
+                      }
+                      className="flex-1 bg-gray-50 text-[#001032] py-2 rounded-full text-xs font-bold hover:bg-gray-100 transition-all border shadow-sm active:scale-95"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+                <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-r border-b rotate-45"></div>
+              </div>
+            )}
+        </div>
       </div>
     );
   }
 
   // Show Request Details View (for professionals) - rest remains same
   return (
-    <div className="w-full h-full flex flex-col lg:p-4 p-2 bg-white rounded-md">
+    <div className="w-full h-full flex flex-col lg:p-4 p-2 bg-white rounded-md relative overflow-hidden">
       {/* Header with Close Button */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b shrink-0">
         <h2 className="text-lg font-semibold text-[#001032]">
@@ -524,9 +555,37 @@ const RightReceived = ({
           {/* Status */}
           <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Status</h4>
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-              {selectedRequest.hasShownInterest ? "Interested" : selectedRequest.status === "forwarded" ? "Forwarded" : "Pending"}
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+              selectedRequest.hasShownInterest
+                ? "bg-green-100 text-green-800"
+                : "bg-yellow-100 text-yellow-800"
+            }`}>
+              {selectedRequest.hasShownInterest ? "Interested" : "Pending"}
             </span>
+          </div>
+
+          {/* Budget & Priority */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+              <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                Budget
+              </h4>
+              <p className="text-sm text-[#001032]">
+                {selectedRequest.budget || "N/A"}
+              </p>
+            </div>
+            <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+              <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                Priority
+              </h4>
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase ${
+                selectedRequest.priority === 'High' ? 'bg-red-100 text-red-700' :
+                selectedRequest.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                'bg-green-100 text-green-700'
+              }`}>
+                {selectedRequest.priority || "Low"}
+              </span>
+            </div>
           </div>
 
           {/* Request ID */}
@@ -543,13 +602,12 @@ const RightReceived = ({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex flex-col gap-3 pt-4 mt-4 border-t shrink-0">
+      <div className="flex flex-col gap-3 pt-4 border-t shrink-0 relative bg-white">
         {selectedRequest.professionalData ? (() => {
           const professional = selectedRequest.professionalData;
           const isAccepted = selectedRequest.acceptedProvider && 
-            (typeof selectedRequest.acceptedProvider === 'string' 
-              ? selectedRequest.acceptedProvider === professional._id 
-              : selectedRequest.acceptedProvider.toString() === professional._id.toString());
+            (String(selectedRequest.acceptedProvider._id || selectedRequest.acceptedProvider) === 
+             String(professional._id || professional));
           
           return (
             <>
@@ -560,7 +618,7 @@ const RightReceived = ({
                 View Profile
               </button>
               
-              <div className="flex gap-3">
+              <div className="flex gap-3 w-full">
                 {isAccepted ? (
                   <button
                     onClick={() => navigate('/deal')}
@@ -572,19 +630,23 @@ const RightReceived = ({
                   <>
                     <button
                       onClick={() => handleAccept && handleAccept(selectedRequest._id, professional._id)}
-                      className="flex-1 bg-[#D8D6F8] text-[#59549F] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
+                      disabled={selectedRequest.isIgnored}
+                      className={`flex-1 text-center py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${selectedRequest.isIgnored ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#D8D6F8] text-[#59549F]"}`}
                     >
                       <FaCheckCircle /> Accept
                     </button>
                     <button
-                      onClick={() =>
+                      onClick={() => {
+                        if (isAccepted) return;
                         setShowConfirm &&
                         setShowConfirm({
                           requestId: selectedRequest._id,
                           providerId: professional._id,
-                        })
-                      }
-                      className="flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
+                          origin: 'detail',
+                        });
+                      }}
+                      disabled={isAccepted}
+                      className={`flex-1 text-center py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${isAccepted ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#F8DEDE] text-[#B94444]"}`}
                     >
                       <FaTimesCircle /> Ignore
                     </button>
@@ -594,75 +656,86 @@ const RightReceived = ({
             </>
           );
         })() : (
-          <div className="flex gap-3">
-           <button
-  onClick={() => handleInterest && handleInterest(selectedRequest._id)}
-  disabled={selectedRequest.isIgnored} // ⭐ only disabled when ignored
-  className={`flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
-    (selectedRequest.hasShownInterest || selectedRequest.isIgnored) && "opacity-50 cursor-not-allowed"
-  }`}
->
+          <div className="flex gap-3 w-full">
+            <button
+              onClick={() => handleInterest && handleInterest(selectedRequest._id)}
+              disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
+              className={`flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
+                (selectedRequest.hasShownInterest || selectedRequest.isIgnored) && "opacity-50 cursor-not-allowed"
+              }`}
+            >
               <FaCheckCircle /> {selectedRequest.hasShownInterest ? "Interested" : "Interest"}
             </button>
             <button
-  onClick={() =>
-    setShowConfirm &&
-    setShowConfirm({
-      requestId: selectedRequest._id,
-      providerId: null,
-    })
-  }
-  disabled={selectedRequest.isIgnored} // ⭐ only disabled when ignored
-  className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
-    selectedRequest.hasShownInterest || selectedRequest.isIgnored
-      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-      : "bg-[#D8D6F8] text-[#59549F]"
-  }`}
->
+              onClick={() => {
+                if (selectedRequest.hasShownInterest || selectedRequest.isIgnored) return;
+                setShowConfirm &&
+                setShowConfirm({
+                  requestId: selectedRequest._id,
+                  providerId: null,
+                  origin: 'detail',
+                });
+              }}
+              disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
+              className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${
+                selectedRequest.hasShownInterest || selectedRequest.isIgnored
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-[#D8D6F8] text-[#59549F]"
+              }`}
+            >
               <FaTimesCircle /> {selectedRequest.isIgnored ? "Ignored" : "Ignore"}
             </button>
           </div>
         )}
-      </div>
 
-      {/* Confirmation Dialog */}
-      {showConfirm && 
-        showConfirm.requestId === selectedRequest._id && (
-          (!selectedRequest.professionalData && showConfirm.providerId === null) || 
-          (selectedRequest.professionalData && showConfirm.providerId === (selectedRequest.professionalData._id || selectedRequest.professionalData))
-        ) && (
-          <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-lg p-4 border w-64 z-50">
-            <p className="text-sm text-gray-700 mb-3">
-              Are you sure you want to ignore this {selectedRequest.professionalData ? 'professional' : 'request'}?
-            </p>
-            <div className="flex gap-2">
-              <button
-                onClick={() => {
-                  if (selectedRequest.professionalData) {
-                    handleIgnore && handleIgnore(selectedRequest._id, selectedRequest.professionalData._id || selectedRequest.professionalData);
-                  } else {
-                    handleIgnore && handleIgnore(selectedRequest._id);
-                  }
-                }}
-                className="flex-1 bg-[#F8DEDE] text-[#B94444] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040]"
-              >
-                Yes
-              </button>
-              <button
-                onClick={() =>
-                  setShowConfirm &&
-                  setShowConfirm({
-                    requestId: null,
-                    providerId: null,
-                  })
-                }
-                className="flex-1 bg-white text-[#001032] px-3 py-2 rounded-full text-sm shadow-[inset_0_0_12px_#00000040] border"
-              >
-                Cancel
-              </button>
+        {showConfirm && 
+          showConfirm.requestId === selectedRequest._id && 
+          showConfirm.origin === 'detail' && (
+            (!selectedRequest.professionalData && showConfirm.providerId === null) || 
+            (selectedRequest.professionalData && 
+             String(showConfirm.providerId) === String(selectedRequest.professionalData._id || selectedRequest.professionalData))
+          ) && (
+            <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 bg-white shadow-[0_-4px_20px_rgba(0,0,0,0.15)] rounded-2xl p-4 border w-64 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+              <div className="text-center">
+                <div className="w-10 h-10 bg-[#F8DEDE] rounded-full flex items-center justify-center mx-auto mb-3">
+                  <FaTimesCircle className="text-[#B94444] text-lg" />
+                </div>
+                <p className="text-sm font-semibold text-[#001032] mb-1">Are you sure?</p>
+                <p className="text-xs text-gray-500 mb-4">
+                  You want to ignore this {selectedRequest.professionalData ? 'professional' : 'request'}?
+                </p>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      if (selectedRequest.professionalData) {
+                        handleIgnore && handleIgnore(selectedRequest._id, selectedRequest.professionalData._id || selectedRequest.professionalData);
+                      } else {
+                        handleIgnore && handleIgnore(selectedRequest._id);
+                      }
+                    }}
+                    className="flex-1 bg-[#F8DEDE] text-[#B94444] py-2 rounded-full text-xs font-bold shadow-[inset_0_0_12px_#00000040] hover:bg-[#b94444] hover:text-white transition-colors"
+                  >
+                    Yes
+                  </button>
+                  <button
+                    onClick={() =>
+                      setShowConfirm &&
+                      setShowConfirm({
+                        requestId: null,
+                        providerId: null,
+                        origin: null,
+                      })
+                    }
+                    className="flex-1 bg-gray-100 text-[#001032] py-2 rounded-full text-xs font-bold hover:bg-gray-200 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+              <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-r border-b rotate-45"></div>
             </div>
-          </div>
-        )}
+          )}
+      </div>
     </div>
   );
 };

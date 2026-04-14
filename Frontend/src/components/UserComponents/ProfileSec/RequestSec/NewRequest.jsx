@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { HiMiniLink } from "react-icons/hi2";
 import { BsSendFill } from "react-icons/bs";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoChevronDown } from "react-icons/io5";
+import { IoMdCheckmark } from "react-icons/io";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -33,6 +34,9 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
   const [isLoadingUserData, setIsLoadingUserData] = useState(true);
   const [userPlan, setUserPlan] = useState(null);
   const [requestsCount, setRequestsCount] = useState(0);
+  const [budget, setBudget] = useState("");
+  const [priority, setPriority] = useState(null);
+  const [isPriorityOpen, setIsPriorityOpen] = useState(false);
 
   const userId = localStorage.getItem("userId");
 
@@ -83,9 +87,20 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
       triggerUpgradeModal("request");
       return;
     }
-    if (!selectedService || !description.trim()) {
-      // ⭐ then validate form
-      toast.error("Please select a service and enter a description");
+    if (!selectedService) {
+      toast.error("Please select a service option first");
+      return;
+    }
+    if (!budget.trim()) {
+      toast.error("Please enter an estimated budget");
+      return;
+    }
+    if (!priority) {
+      toast.error("Please select a priority level");
+      return;
+    }
+    if (!description.trim()) {
+      toast.error("Please enter a description for your request");
       return;
     }
 
@@ -98,6 +113,8 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
         {
           service: selectedService,
           description,
+          budget,
+          priority,
         },
         {
           headers: {
@@ -134,24 +151,91 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
 
       <div className="grid grid-cols-1 sm:grid-cols-1  md:grid-cols-2 gap-4  overflow-y-auto overscroll-contain touch-pan-y h-[calc(100dvh-250px)] pb-20 md:pb-0 md:h-auto scrollbar-hide ">
         {raisedRequestOptions.map((option) => (
-          <div
-            key={option.id}
-            className="flex items-center gap-3 cursor-pointer "
-            onClick={() => {
-              setSelectedRequest(option.id);
-              setSelectedService(option.label);
-            }}
-          >
-            <div className="shrink-0 p-3 border-2 border-gray-200 rounded-full shadow-[inset_0_0_12px_#00000040] ">
-              <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#59549F]">
-                {selectedRequest === option.id && (
-                  <div className="w-3 h-3 rounded-full bg-[#59549F]"></div>
-                )}
+          <div key={option.id} className="flex flex-col gap-2 relative">
+            <div
+              className={`flex items-center gap-3 cursor-pointer transition-all duration-300 ${selectedRequest === option.id ? "border-[#59549F]" : ""}`}
+              onClick={() => {
+                setSelectedRequest(option.id);
+                setSelectedService(option.label);
+              }}
+            >
+              <div className="shrink-0 p-3 border-2 border-gray-200 rounded-full shadow-[inset_0_0_12px_#00000040] ">
+                <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center border-[#59549F]">
+                  {selectedRequest === option.id && (
+                    <div className="w-3 h-3 rounded-full bg-[#59549F]"></div>
+                  )}
+                </div>
               </div>
+              <span className="text-sm text-[#001032] leading-tight border-2 border-gray-300 rounded-xl px-4 py-3 flex-1 hover:border-gray-400 transition-colors text-center shadow-[inset_0_0_12px_#00000040]">
+                {option.label}
+              </span>
             </div>
-            <span className="text-sm text-[#001032] leading-tight border-2 border-gray-300 rounded-xl px-4 py-3 flex-1 hover:border-gray-400 transition-colors text-center shadow-[inset_0_0_12px_#00000040]">
-              {option.label}
-            </span>
+
+            {/* Absolute Overlay Dropdowns when selected */}
+            {selectedRequest === option.id && (
+              <div className="absolute z-50 left-15 right-0 top-[90%] mt-2 p-4 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-wrap gap-4">
+                <div className="flex-1 min-w-[140px]">
+                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">Estimated Budget <span className="text-red-500">*</span></label>
+                  <input 
+                    type="text"
+                    placeholder="e.g. 50k - 1 Lac"
+                    value={budget}
+                    onChange={(e) => setBudget(e.target.value)}
+                    className="w-full p-2.5 bg-white border border-gray-200 rounded-full text-xs outline-none focus:ring-2 focus:ring-[#59549F]/20 focus:border-[#59549F] transition-all shadow-sm px-4"
+                  />
+                </div>
+                <div className="flex-1 min-w-[140px] relative">
+                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">Priority Level <span className="text-red-500">*</span></label>
+                  <div className="relative">
+                    <button 
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsPriorityOpen(!isPriorityOpen);
+                      }}
+                      className="w-full p-2.5 bg-white border border-gray-200 rounded-full text-xs outline-none focus:ring-2 focus:ring-[#59549F]/20 focus:border-[#59549F] transition-all shadow-sm cursor-pointer flex items-center justify-between px-4 group hover:border-[#59549F]/50"
+                    >
+                      <span className={`${priority ? "text-gray-700" : "text-gray-400"}`}>
+                        {priority ? `${priority} Priority` : "Select Priority Level"}
+                      </span>
+                      <IoChevronDown 
+                        className={`transition-transform duration-200 text-gray-400 group-hover:text-[#59549F] ${isPriorityOpen ? "rotate-180" : ""}`} 
+                        size={14} 
+                      />
+                    </button>
+
+                    {isPriorityOpen && (
+                      <div className="absolute z-[60] left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                        {["Low", "Medium", "High"].map((p) => (
+                          <div
+                            key={p}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setPriority(p);
+                              setIsPriorityOpen(false);
+                            }}
+                            className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center justify-between hover:bg-gray-50 ${priority === p ? "text-[#59549F] font-semibold bg-[#59549F]/5" : "text-gray-600"}`}
+                          >
+                            <span>{p} Priority</span>
+                            {priority === p && <IoMdCheckmark size={12} />}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedRequest(null);
+                    setSelectedService(null);
+                  }}
+                  className="absolute top-2 right-2 text-gray-400 hover:text-[#59549F] transition-colors p-1"
+                >
+                  <IoClose size={16} />
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -160,7 +244,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
         <div className="flex border-2 shadow-md border-gray-300 items-center px-4 py-1 lg:py-0 justify-between rounded-xl flex-1  bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]">
           <input
             type="text"
-            placeholder="Description"
+            placeholder="Description *"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="py-2 outline-none w-full text-[#59549F] bg-transparent placeholder:text-[#59549F]  "

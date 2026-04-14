@@ -39,9 +39,9 @@ const ServiceProfessional = () => {
       <div className='hidden lg:block'>
         <ServiceProfessionalSec8/>
       </div>
-       <div >
+       {/* <div >
         <ServiceProfessionalSec9/>
-      </div>
+      </div> */}
       <div >
         <ServiceProfessionalSec10/>
       </div>

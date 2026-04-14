@@ -2,6 +2,7 @@ import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const DesigningContent = () => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -18,13 +19,12 @@ const DesigningContent = () => {
 
     // ✅ Free plan
     if (!amount || amount === 0) {
-      navigate("/paymentsuccess", {
-        state: { userId, planName, isFreePlan: true },
-      });
+      toast.success("You are already logged in");
+      navigate("/dashboard");
       return;
     }
 
-    // ✅ Paid plan - Direct to Razorpay (no backend API call)
+    // ✅ Paid plan - Direct to Razorpay
     navigate("/scanner", {
       state: { userId, amount, planName },
     });
@@ -97,22 +97,25 @@ const DesigningContent = () => {
 
       buttonText: "Start Exploring",
     },
-    {
-      title: "Most Affordable Plan",
+     {
+      title: "Best for Early-Stage Startups",
       titleBg: "#BA1E1E",
       titleBg2: "#B77070",
       amount: 9999,
-      amountduration: "/year",
-      amountDesc: "Annual onboarding access",
-      planName: "Foundation Plan",
+      amountduration: "(one-time)",
+      amountDesc: "Where startups begin getting discovered by investors",
+      planName: "Investor Gateway Plan",
       planDesc: "For early-stage startups entering the ecosystem",
+      network1:"Investor Network",
+      network2:"Full Access",
+      network3:"Priority Support",
       sections: [
         {
           heading: "Core Access",
           features: [
             "Startup profile creation & visibility",
             "Access to unified dashboard",
-            "Send & receive investor connection request",
+            "Receive investor interest & connections",
             "Raise service requirements",
             "Access verified service professionals",
             "Participate in deal workflows",
@@ -129,6 +132,17 @@ const DesigningContent = () => {
             "Dispute resolution system",
           ],
         },
+         {
+          heading: "Investor Access",
+          features: [
+            "Startup listing visible to investor network",
+            "Inclusion in investor discovery layer",
+            "Opportunity to receive inbound investor interest",
+            "Visibility during investor exploration",
+            "Access to investor-focused ecosystem sections",
+            "Increased chances of investor attention",
+          ],
+        },
         {
           heading: "Trust Layer",
           features: [
@@ -139,11 +153,11 @@ const DesigningContent = () => {
         },
         {
           heading: "Visibility Level",
-          features: ["Standard listing visibility", "Basic discoverability"],
+          features: ["Enhanced listing visibility across ecosystem", "Improved discoverability in investor & deals"],
         },
       ],
 
-      buttonText: "Enter the Ecosystem",
+      buttonText: "Unlock Investor Access",
     },
     {
       title: "Starter Growth Plan",
@@ -405,7 +419,7 @@ const DesigningContent = () => {
             </article>
           ))}
 
-          <div className="hidden lg:block mx-7">
+          {/* <div className="hidden lg:block mx-7">
             <hr className="mx-6   " />
             <div className="bg-white  border-2 border-[#00103280] mt-7 h-[94.5%]  rounded-sm  p-3    shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
               <div id="top" className="flex justify-between items-center ">
@@ -417,7 +431,7 @@ const DesigningContent = () => {
                 <div className="bg-[#DBDBDB] w-full h-12 rounded-full mt-20"></div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
     </main>
