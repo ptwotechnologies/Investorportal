@@ -554,7 +554,11 @@ const ReceivedTabSec = ({
               <div
                 key={req._id}
                 onClick={() => handleRequestClick(req, "request")}
-                className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
+                className={`flex items-stretch mb-1 rounded-lg bg-white transition-all h-22 cursor-pointer ${
+                  !req.isSeen
+                    ? "border-2 border-slate-800 shadow-md"
+                    : "shadow-[inset_0_0_12px_#00000040]"
+                }`}
               >
                 <div className="flex items-center justify-center p-3 shrink-0">
                   <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
@@ -637,7 +641,11 @@ const ReceivedTabSec = ({
                           "request",
                         );
                       }}
-                      className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
+                      className={`flex items-stretch mb-1 rounded-lg bg-white transition-all h-22 cursor-pointer ${
+                        !req.isSeen
+                          ? "border-2 border-slate-800 shadow-md"
+                          : "shadow-[inset_0_0_12px_#00000040]"
+                      }`}
                     >
                       <div className="flex items-center justify-center p-3 shrink-0">
                         <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
@@ -710,7 +718,11 @@ const ReceivedTabSec = ({
           <div
             key={req._id}
             onClick={() => handleRequestClick(req, "request")}
-            className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
+            className={`flex items-stretch mb-1 rounded-lg bg-white transition-all h-22 cursor-pointer ${
+              !req.isSeen
+                ? "border-2 border-slate-800 shadow-md"
+                : "shadow-[inset_0_0_12px_#00000040]"
+            }`}
           >
             <div className="flex items-center justify-center p-3 shrink-0">
               <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
@@ -792,7 +804,11 @@ const ReceivedTabSec = ({
                       "request",
                     );
                   }}
-                  className="flex items-stretch mb-1 rounded-lg bg-white shadow-[inset_0_0_12px_#00000040] transition-all h-22 cursor-pointer"
+                  className={`flex items-stretch mb-1 rounded-lg bg-white transition-all h-22 cursor-pointer ${
+                    !req.isSeen
+                      ? "border-2 border-slate-800 shadow-md"
+                      : "shadow-[inset_0_0_12px_#00000040]"
+                  }`}
                 >
                   <div className="flex items-center justify-center p-3 shrink-0">
                     <div className="w-16 h-16 rounded-full border-2 border-gray-300 flex items-center justify-center overflow-hidden bg-gray-200">
