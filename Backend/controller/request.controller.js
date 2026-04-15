@@ -182,6 +182,14 @@ export const markInterested = async (req, res) => {
       !request.interestedBy.some((id) => id.toString() === userId.toString())
     ) {
       request.interestedBy.push(userId);
+      
+      // Save interest answers
+      const { startTime, relevance } = req.body;
+      request.interestDetails.push({
+        user: userId,
+        startTime: startTime || "N/A",
+        relevance: relevance || "N/A"
+      });
 
       // Update status to interested when FIRST person shows interest
       if (request.status === "forwarded") {

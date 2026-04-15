@@ -57,6 +57,13 @@ const requestSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    interestDetails: [
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        startTime: { type: String },
+        relevance: { type: String },
+      },
+    ],
     budget: {
       type: String,
       required: true,

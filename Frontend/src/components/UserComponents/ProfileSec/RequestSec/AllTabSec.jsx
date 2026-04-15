@@ -546,24 +546,6 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col items-center justify-center gap-2 pr-4 shrink-0">
-                  <button onClick={(e) => { e.stopPropagation(); handleInterest(req._id); }} disabled={req.hasShownInterest || req.isIgnored}
-                    className={`bg-[#F8DEDE] text-[#B94444] text-center px-2 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${(req.hasShownInterest || req.isIgnored) && "opacity-50 cursor-not-allowed"}`}>
-                    {req.hasShownInterest ? "Interested" : "Interest"}
-                  </button>
-                  <button onClick={(e) => { e.stopPropagation(); setShowConfirm({ requestId: req._id, providerId: null, origin: 'list' }); }} disabled={req.hasShownInterest || req.isIgnored}
-                    className={`text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${req.hasShownInterest || req.isIgnored ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#D8D6F8] text-[#59549F]"}`}>
-                    {req.isIgnored ? "Ignored" : "Ignore"}
-                  </button>
-                  {showConfirm.requestId === req._id && showConfirm.providerId === null && showConfirm.origin === 'list' && !req.hasShownInterest && !req.isIgnored && (
-                    <div className="absolute bg-white shadow-lg rounded-lg mt-17 border w-24 z-50">
-                      <div className="flex flex-col items-center gap-1">
-                        <button onClick={(e) => { e.stopPropagation(); handleIgnore(req._id); }} className="bg-[#F8DEDE] text-[#B94444] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]">Yes</button>
-                        <button onClick={(e) => { e.stopPropagation(); setShowConfirm({ requestId: null, providerId: null, origin: null }); }} className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs shadow-[inset_0_0_12px_#00000040]">Cancel</button>
-                      </div>
-                    </div>
-                  )}
-                </div>
               </div>
             );
           })}
@@ -632,24 +614,6 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                         </p>
                       )}
                     </div>
-                    <div className="flex flex-col items-center gap-2 shrink-0">
-                      {isAccepted ? (
-                        <button className="bg-[#D5D5D5] text-[#434343] px-5 py-1 rounded-full text-sm shadow-[inset_0_0_12px_#00000040]" onClick={(e) => { e.stopPropagation(); navigate(`/deal`); }}>Deal</button>
-                      ) : (
-                        <>
-                          <button onClick={(e) => { e.stopPropagation(); handleAccept(req._id, user._id); }} disabled={req.isIgnored || isAccepted} className={`bg-[#D8D6F8] text-[#59549F] text-center px-3 py-1 rounded-full text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${(req.isIgnored || isAccepted) && "opacity-50 cursor-not-allowed"}`}>Accept</button>
-                          <button onClick={(e) => { e.stopPropagation(); setShowConfirm({ requestId: req._id, providerId: user._id, origin: 'list' }); }} disabled={isAccepted} className={`bg-[#F8DEDE] text-[#B94444] text-center px-3 py-1 rounded-full text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${isAccepted && "opacity-50 cursor-not-allowed"}`}>Ignore</button>
-                          {showConfirm.requestId === req._id && showConfirm.providerId === user._id && showConfirm.origin === 'list' && (
-                            <div className="absolute bg-white shadow-lg rounded-lg mt-17 border w-24 z-50">
-                              <div className="flex flex-col items-center gap-1">
-                                <button onClick={(e) => { e.stopPropagation(); handleIgnore(req._id, user._id); }} className="bg-[#F8DEDE] text-[#B94444] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]">Yes</button>
-                                <button onClick={(e) => { e.stopPropagation(); setShowConfirm({ requestId: null, providerId: null, origin: null }); }} className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs shadow-[inset_0_0_12px_#00000040]">Cancel</button>
-                              </div>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
                   </div>
                 </div>
               );
@@ -689,62 +653,6 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                   </p>
                 )}
               </div>
-            </div>
-            <div className="flex flex-col items-center justify-center gap-2 pr-4 shrink-0">
-              <button onClick={(e) => { e.stopPropagation(); handleInterest(req._id); }} disabled={req.hasShownInterest || req.isIgnored}
-                className={`bg-[#F8DEDE] text-[#B94444] text-center px-2 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${(req.hasShownInterest || req.isIgnored) && "opacity-50 cursor-not-allowed"}`}>
-                {req.hasShownInterest ? "Interested" : "Interest"}
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowConfirm({
-                    requestId: req._id,
-                    providerId: null,
-                    origin: 'list',
-                  });
-                }}
-                disabled={req.hasShownInterest || req.isIgnored}
-                className={`text-center px-3 py-1 rounded-full flex items-center justify-center gap-1 text-sm w-20 shadow-[inset_0_0_12px_#00000040] ${
-                  req.hasShownInterest || req.isIgnored
-                    ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    : "bg-[#D8D6F8] text-[#59549F]"
-                }`}
-              >
-                {req.isIgnored ? "Ignored" : "Ignore"}
-              </button>
-              {showConfirm.requestId === req._id &&
-                showConfirm.providerId === null &&
-                showConfirm.origin === 'list' &&
-                !req.hasShownInterest &&
-                !req.isIgnored && (
-                  <div className="absolute bg-white shadow-lg rounded-lg mt-17 border w-24 z-50">
-                    <div className="flex flex-col items-center gap-1">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleIgnore(req._id);
-                        }}
-                        className="bg-[#F8DEDE] text-[#B94444] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
-                      >
-                        Yes
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowConfirm({
-                            requestId: null,
-                            providerId: null,
-                            origin: null,
-                          });
-                        }}
-                        className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
             </div>
           </div>
         );
@@ -812,24 +720,6 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                       {new Date(req.createdAt).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
                       {" • "}{new Date(req.createdAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}
                     </p>
-                  )}
-                </div>
-                <div className="flex flex-col items-center gap-2 shrink-0">
-                  {isAccepted ? (
-                    <button className="bg-[#D5D5D5] text-[#434343] px-5 py-1 rounded-full text-sm shadow-[inset_0_0_12px_#00000040]" onClick={(e) => { e.stopPropagation(); navigate(`/deal`); }}>Deal</button>
-                  ) : (
-                    <>
-                      <button onClick={(e) => { e.stopPropagation(); handleAccept(req._id, user._id); }} disabled={req.isIgnored} className={`bg-[#D8D6F8] text-[#59549F] text-center px-3 py-1 rounded-full text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${req.isIgnored && "opacity-50 cursor-not-allowed"}`}>Accept</button>
-                      <button onClick={(e) => { e.stopPropagation(); setShowConfirm({ requestId: req._id, providerId: user._id, origin: 'list' }); }} disabled={isAccepted} className={`bg-[#F8DEDE] text-[#B94444] text-center px-3 py-1 rounded-full text-sm w-24 shadow-[inset_0_0_12px_#00000040] ${isAccepted && "opacity-50 cursor-not-allowed"}`}>Ignore</button>
-                      {showConfirm.requestId === req._id && showConfirm.providerId === user._id && showConfirm.origin === 'list' && (
-                        <div className="absolute bg-white shadow-lg rounded-lg mt-17 border w-24 z-50">
-                          <div className="flex flex-col items-center gap-1">
-                            <button onClick={(e) => { e.stopPropagation(); handleIgnore(req._id, user._id); }} className="bg-[#F8DEDE] text-[#B94444] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]">Yes</button>
-                            <button onClick={(e) => { e.stopPropagation(); setShowConfirm({ requestId: null, providerId: null, origin: null }); }} className="bg-white text-[#001032] px-3 py-1 rounded-full text-xs w-full shadow-[inset_0_0_12px_#00000040]">Cancel</button>
-                          </div>
-                        </div>
-                      )}
-                    </>
                   )}
                 </div>
               </div>
