@@ -283,6 +283,8 @@ const RequestSec = () => {
              handleAccept={allHandlers.handleAccept}
              showConfirm={allHandlers.showConfirm}
              setShowConfirm={allHandlers.setShowConfirm}
+             interestSurvey={allHandlers.interestSurvey}
+             setInterestSurvey={allHandlers.setInterestSurvey}
              />}
 
             {activeTab === "received" && (
@@ -295,6 +297,8 @@ const RequestSec = () => {
     handleAccept={receivedHandlers.handleAccept}
     showConfirm={receivedHandlers.showConfirm}
     setShowConfirm={receivedHandlers.setShowConfirm}
+    interestSurvey={receivedHandlers.interestSurvey}
+    setInterestSurvey={receivedHandlers.setInterestSurvey}
   />
 )}
 

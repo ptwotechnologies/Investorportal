@@ -18,6 +18,8 @@ const RightAllTab = ({
   handleAccept,
   showConfirm,
   setShowConfirm,
+  interestSurvey,
+  setInterestSurvey,
 }) => {
   const [professionalProfile, setProfessionalProfile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -150,6 +152,11 @@ const RightAllTab = ({
   if (selectedRequest.viewType === 'profile' && selectedRequest.professionalData) {
     const professional = selectedRequest.professionalData;
     const profile = professionalProfile || {};
+
+    const professionalId = professional._id || professional;
+    const interestInfo = selectedRequest.interestDetails?.find(id => 
+      String(id.user?._id || id.user) === String(professionalId)
+    );
 
     // Check if this professional is accepted
     const isAccepted = selectedRequest.acceptedProvider && 
@@ -430,6 +437,20 @@ const RightAllTab = ({
             </div>
           </div>
 
+          {/* Application Details (Survey Answers) */}
+          {interestInfo && (
+            <div className="grid grid-cols-2 gap-4 my-3">
+              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                <h4 className="text-[11px] font-bold text-gray-500 uppercase mb-2">Availability</h4>
+                <p className="text-sm text-[#001032] font-semibold">{interestInfo.startTime || 'Standard'}</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                <h4 className="text-[11px] font-bold text-gray-500 uppercase mb-2">Relevance</h4>
+                <p className="text-sm text-[#001032] font-semibold">{interestInfo.relevance || 'N/A'}</p>
+              </div>
+            </div>
+          )}
+
           {/* Request Details Section */}
           <div className="border-2 border-[#D9D9D9] rounded-xl bg-gray-50 px-4 py-3 my-3">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Request Details</h4>
@@ -690,7 +711,14 @@ const RightAllTab = ({
         })() : selectedRequest.requestType === "forwarded" ? (
             <div className="flex gap-3 flex-1">
               <button
-                onClick={() => handleInterest && handleInterest(selectedRequest._id)}
+                onClick={() => {
+                  if (selectedRequest.hasShownInterest || selectedRequest.isIgnored) return;
+                  setInterestSurvey && setInterestSurvey({
+                    requestId: selectedRequest._id,
+                    startTime: "Available immediately",
+                    relevance: "Highly relevant"
+                  });
+                }}
                 disabled={
                   selectedRequest.hasShownInterest ||
                   selectedRequest.isIgnored
@@ -792,9 +820,63 @@ const RightAllTab = ({
                 </button>
               </div>
             </div>
-            <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-r border-b rotate-45"></div>
+          <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-r border-b rotate-45"></div>
           </div>
         )}
+
+      {/* ✅ Interest Survey Survey Popover */}
+      {interestSurvey && interestSurvey.requestId === selectedRequest._id && (
+        <div className="absolute bottom-full mb-4 left-1/2 transform -translate-x-1/2 bg-white shadow-[0_-4px_24px_rgba(0,0,0,0.15)] rounded-2xl p-4 border w-72 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="space-y-4">
+            <h4 className="text-sm font-bold text-[#001032] border-b pb-2">Interest Details</h4>
+            
+            <div>
+              <label className="text-[11px] font-bold text-gray-500 uppercase block mb-1">When can you start?</label>
+              <select 
+                value={interestSurvey.startTime}
+                onChange={(e) => setInterestSurvey({...interestSurvey, startTime: e.target.value})}
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-[#59549F]"
+              >
+                <option>Available immediately</option>
+                <option>Available this week</option>
+                <option>Flexible</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="text-[11px] font-bold text-gray-500 uppercase block mb-1">How relevant is your expertise?</label>
+              <select 
+                value={interestSurvey.relevance}
+                onChange={(e) => setInterestSurvey({...interestSurvey, relevance: e.target.value})}
+                className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-[#59549F]"
+              >
+                <option>Highly relevant</option>
+                <option>Somewhat relevant</option>
+                <option>Exploring</option>
+              </select>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => {
+                  handleInterest && handleInterest(selectedRequest._id, interestSurvey.startTime, interestSurvey.relevance);
+                  setInterestSurvey && setInterestSurvey({ requestId: null, startTime: "", relevance: "" });
+                }}
+                className="flex-1 bg-[#59549F] text-white py-2 rounded-full text-xs font-bold shadow-md hover:bg-[#48438a] transition-all active:scale-95"
+              >
+                Confirm Interest
+              </button>
+              <button
+                onClick={() => setInterestSurvey && setInterestSurvey({ requestId: null, startTime: "", relevance: "" })}
+                className="bg-gray-100 text-[#001032] px-4 py-2 rounded-full text-xs font-bold hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+          <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-white border-r border-b rotate-45"></div>
+        </div>
+      )}
       </div>
 
       {/* Custom Confirmation Popup (Cancel) */}

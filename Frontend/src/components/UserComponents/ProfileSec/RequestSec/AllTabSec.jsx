@@ -19,6 +19,11 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
   const [userPlan, setUserPlan] = useState(null);
   const [interestCount, setInterestCount] = useState(0);
   const [ignoreCount, setIgnoreCount] = useState(0);
+  const [interestSurvey, setInterestSurvey] = useState({
+    requestId: null,
+    startTime: "",
+    relevance: "",
+  });
 
   const navigate = useNavigate();
 
@@ -107,7 +112,7 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
     setMobileView("left");
   };
 
-  const handleInterest = useCallback(async (requestId) => {
+  const handleInterest = useCallback(async (requestId, startTime = "N/A", relevance = "N/A") => {
     // Find the request to check its current status
     const targetReq = forwardedRequests.find(r => r._id === requestId);
     if (targetReq?.hasShownInterest || targetReq?.isIgnored) {
@@ -124,7 +129,7 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
       const token = localStorage.getItem("token");
       await axios.put(
         `${serverUrl}/requests/interested/${requestId}`,
-        {},
+        { startTime, relevance },
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
@@ -287,7 +292,8 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
           prev.handleInterest === handleInterest &&
           prev.handleIgnore === handleIgnore &&
           prev.handleAccept === handleAccept &&
-          prev.showConfirm === showConfirm
+          prev.showConfirm === showConfirm &&
+          prev.interestSurvey === interestSurvey
         ) {
           return prev;
         }
@@ -297,16 +303,20 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
           handleAccept,
           showConfirm,
           setShowConfirm,
+          interestSurvey,
+          setInterestSurvey,
         };
       });
     }
   }, [
     showConfirm,
+    setShowConfirm,
     setAllHandlers,
     handleInterest,
     handleIgnore,
     handleAccept,
-    setShowConfirm,
+    interestSurvey,
+    setInterestSurvey,
   ]);
 
   const getImageUrl = (imageUrl) => {
@@ -445,6 +455,29 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                 </div>
               </div>
 
+              {/* Application Details (Survey Answers) - Mobile */}
+              {(() => {
+                const professionalId = selectedRequest.professionalData?._id || selectedRequest.professionalData;
+                const interestInfo = selectedRequest.interestDetails?.find(id => 
+                  String(id.user?._id || id.user) === String(professionalId)
+                );
+                if (interestInfo) {
+                  return (
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                        <h4 className="text-xs font-semibold text-gray-600 mb-1">Availability</h4>
+                        <p className="text-xs text-[#001032] font-semibold">{interestInfo.startTime || 'Standard'}</p>
+                      </div>
+                      <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                        <h4 className="text-xs font-semibold text-gray-600 mb-1">Relevance</h4>
+                        <p className="text-xs text-[#001032] font-semibold">{interestInfo.relevance || 'N/A'}</p>
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
               {/* Action Buttons for Forwarded Requests (Professional View) */}
               {!selectedRequest.professionalData && selectedRequest.requestType === "forwarded" && (
                 <>
@@ -510,6 +543,8 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                         </div>
                       </div>
                     )}
+
+                    
                 </>
               )}
             </div>
