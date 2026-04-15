@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FaUser } from "react-icons/fa";
-import { IoDiamondOutline } from "react-icons/io5";
+import { IoDiamondOutline, IoClose } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import { FaLinkedin } from "react-icons/fa6";
@@ -10,6 +11,7 @@ import { getDomainsForRole } from "./domain.js";
 import toast from "react-hot-toast";
 
 const ConnectSec1 = () => {
+  const navigate = useNavigate();
   const [profiles, setProfiles] = useState([]);
   const [selectedProfile, setSelectedProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -27,30 +29,29 @@ const ConnectSec1 = () => {
   const [viewingRole, setViewingRole] = useState(null);
   const [sentRequests, setSentRequests] = useState([]);
   const [receivedRequests, setReceivedRequests] = useState([]);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [userPlan, setUserPlan] = useState(null);
+
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    
+    // Transform R2 Private API URL to Public URL
+    const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
+    const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
+    
+    if (imageUrl.startsWith(privateBaseUrl)) {
+      return imageUrl.replace(privateBaseUrl, publicBaseUrl);
+    }
+    
+    // If already a full URL (R2), return as-is
+    if (imageUrl.startsWith("http")) return imageUrl;
+    
+    // If local path, add serverUrl
+    return `${serverUrl}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
+  };
 
   const getPortfolioUrl = (fileUrl) => {
-    if (!fileUrl) return "";
-
-    // Already a full URL
-    if (fileUrl.startsWith("http")) return fileUrl;
-
-    // Normalize Windows backslashes to forward slashes
-    let normalized = fileUrl.replace(/\\/g, "/");
-
-    // Remove any leading slashes
-    normalized = normalized.replace(/^\/+/, "");
-
-    // Ensure we have the uploads path
-    if (!normalized.startsWith("uploads/")) {
-      // If it's a full system path, extract from "uploads" onwards
-      const uploadsIndex = normalized.indexOf("uploads/");
-      if (uploadsIndex !== -1) {
-        normalized = normalized.substring(uploadsIndex);
-      }
-    }
-
-    // Return with serverUrl and single leading slash
-    return `${serverUrl}/${normalized}`;
+    return getImageUrl(fileUrl);
   };
 
   const skillsArray = Array.isArray(selectedProfile?.topSkills)
@@ -76,27 +77,42 @@ const ConnectSec1 = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      // ✅ IMPORTANT: Filter out any profiles missing a userId to prevent crashes
+      const backendProfiles = Array.isArray(profilesRes.data) ? profilesRes.data : [];
+      const validProfiles = backendProfiles.filter(p => p && p.userId);
+
       // ✅ Apply role-based filtering
-      let roleFilteredProfiles = profilesRes.data;
+      let roleFilteredProfiles = validProfiles;
 
       if (userRole === "startup") {
-        roleFilteredProfiles = profilesRes.data.filter(
+        roleFilteredProfiles = validProfiles.filter(
           (p) => p.userId?.role === "investor",
         );
       } else if (userRole === "investor") {
-        roleFilteredProfiles = profilesRes.data.filter(
+        roleFilteredProfiles = validProfiles.filter(
           (p) => p.userId?.role === "startup",
         );
       } else if (userRole === "service_professional") {
-        roleFilteredProfiles = profilesRes.data.filter(
+        roleFilteredProfiles = validProfiles.filter(
           (p) => p.userId?.role === "investor",
         );
       }
 
-      // Fetch connections
-      const connectionsRes = await axios.get(`${serverUrl}/connections/my`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      // Fetch connections and user plan
+      const userId = localStorage.getItem("userId");
+      const [connectionsRes, userRes] = await Promise.all([
+        axios.get(`${serverUrl}/connections/my`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        userId && userId !== "null"
+          ? axios.get(`${serverUrl}/user/${userId}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            }).catch(() => ({ data: { plan: null } }))
+          : Promise.resolve({ data: { plan: null } }),
+      ]);
+
+      const planName = userRes.data.plan?.planName || "Explorer Access";
+      setUserPlan(planName);
 
       setSentRequests(connectionsRes.data.sent);
       setReceivedRequests(connectionsRes.data.received);
@@ -170,13 +186,13 @@ const ConnectSec1 = () => {
   };
 
   useEffect(() => {
-    const fetchProfiles = async () => {
+    const loadAllData = async () => {
       setLoading(true);
       setError(null);
       try {
         const token = localStorage.getItem("token");
 
-        // ✅ Get current user's role from localStorage or API
+        // ✅ Get current user's role
         const user = JSON.parse(localStorage.getItem("user"));
         const userRole = user?.role;
         setCurrentUserRole(userRole);
@@ -196,110 +212,90 @@ const ConnectSec1 = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
 
+        // ✅ IMPORTANT: Filter out any corrupted/orphaned profiles missing a userId
+        let validProfiles = res.data.filter(p => p && p.userId);
+
         // ✅ Filter profiles based on current user's role
-        let roleFilteredProfiles = res.data;
+        let roleFilteredProfiles = validProfiles;
 
         if (userRole === "startup") {
-          // Startup sees only Investors
-          roleFilteredProfiles = res.data.filter(
+          roleFilteredProfiles = validProfiles.filter(
             (p) => p.userId?.role === "investor",
           );
         } else if (userRole === "investor") {
-          // Investor sees only Startups
-          roleFilteredProfiles = res.data.filter(
+          roleFilteredProfiles = validProfiles.filter(
             (p) => p.userId?.role === "startup",
           );
         } else if (userRole === "service_professional") {
-          // Service Professional sees only Investors
-          roleFilteredProfiles = res.data.filter(
+          roleFilteredProfiles = validProfiles.filter(
             (p) => p.userId?.role === "investor",
           );
         }
 
-        setProfiles(roleFilteredProfiles);
+        // Fetch connections
+        const connectionsRes = await axios.get(`${serverUrl}/connections/my`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        setSentRequests(connectionsRes.data.sent);
+        setReceivedRequests(connectionsRes.data.received);
 
-        // ✅ Extract unique domains from filtered profiles
-        const domains = [
-          ...new Set(
-            roleFilteredProfiles
-              .map((p) => p.userId?.additionalDetails?.domain)
-              .filter(Boolean), // Remove null/undefined
-          ),
-        ];
+        // Inject connection status using strict ?._id optional chaining to prevent crashes
+        const updatedProfiles = roleFilteredProfiles.map((p) => {
+          const isSent = connectionsRes.data.sent.some(
+            (s) => s.receiverId?._id === p.userId?._id,
+          );
+          const isReceived = connectionsRes.data.received.some(
+            (r) => r.senderId?._id === p.userId?._id,
+          );
+          const isAccepted =
+            connectionsRes.data.accepted &&
+            connectionsRes.data.accepted.some(
+              (a) =>
+                a.senderId?._id === p.userId?._id ||
+                a.receiverId?._id === p.userId?._id,
+            );
+
+          let connectionId = null;
+          if (isReceived) {
+            connectionId = connectionsRes.data.received.find(
+              (r) => r.senderId?._id === p.userId?._id,
+            )?._id;
+          } else if (isSent) {
+            connectionId = connectionsRes.data.sent.find(
+              (s) => s.receiverId?._id === p.userId?._id,
+            )?._id;
+          } else if (isAccepted) {
+            connectionId = connectionsRes.data.accepted.find(
+              (a) =>
+                a.senderId?._id === p.userId?._id ||
+                a.receiverId?._id === p.userId?._id,
+            )?._id;
+          }
+
+          return {
+            ...p,
+            connectionStatus: isAccepted
+              ? "accepted"
+              : isSent
+                ? "sent"
+                : isReceived
+                  ? "received"
+                  : "none",
+            connectionId: connectionId,
+          };
+        });
+
+        setProfiles(updatedProfiles);
       } catch (err) {
-        console.error(err);
+        console.error("Dashboard Load Error:", err);
         setError("Failed to fetch profiles");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProfiles();
-  }, []);
-
-  useEffect(() => {
-    const fetchConnections = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await axios.get(`${serverUrl}/connections/my`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setSentRequests(res.data.sent);
-        setReceivedRequests(res.data.received);
-
-        // 🧠 profiles ke andar status inject karo
-        setProfiles((prev) =>
-          prev.map((p) => {
-            const isSent = res.data.sent.some(
-              (s) => s.receiverId?._id === p.userId._id,
-            );
-            const isReceived = res.data.received.some(
-              (r) => r.senderId?._id === p.userId._id,
-            );
-            const isAccepted =
-              res.data.accepted &&
-              res.data.accepted.some(
-                (a) =>
-                  a.senderId?._id === p.userId._id ||
-                  a.receiverId?._id === p.userId._id,
-              );
-
-            let connectionId = null;
-            if (isReceived) {
-              connectionId = res.data.received.find(
-                (r) => r.senderId?._id === p.userId._id,
-              )?._id;
-            } else if (isSent) {
-              connectionId = res.data.sent.find(
-                (s) => s.receiverId?._id === p.userId._id,
-              )?._id;
-            } else if (isAccepted) {
-              connectionId = res.data.accepted.find(
-                (a) =>
-                  a.senderId?._id === p.userId._id ||
-                  a.receiverId?._id === p.userId._id,
-              )?._id;
-            }
-
-            return {
-              ...p,
-              connectionStatus: isAccepted
-                ? "accepted"
-                : isSent
-                  ? "sent"
-                  : isReceived
-                    ? "received"
-                    : "none",
-              connectionId: connectionId,
-            };
-          }),
-        );
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    fetchConnections();
+    loadAllData();
   }, []);
 
   useEffect(() => {
@@ -397,9 +393,8 @@ const ConnectSec1 = () => {
 
   // ✅ Step 1: Filter by tab (connection status)
   if (activeTab === "all") {
-    filteredProfiles = profiles.filter(
-      (p) => p.connectionStatus !== "received",
-    );
+    // Show only users who have NO existing connection/request/invitation
+    filteredProfiles = profiles.filter((p) => p.connectionStatus === "none");
   }
 
   if (activeTab === "sent") {
@@ -482,6 +477,11 @@ const ConnectSec1 = () => {
       );
     }
   };
+
+  const isFreePlan =
+    (currentUserRole === "startup" ||
+      currentUserRole === "service_professional") &&
+    (userPlan === "Explorer Access" || !userPlan);
 
   return (
     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
@@ -566,100 +566,125 @@ const ConnectSec1 = () => {
 
   {!loading &&
     !error &&
-    filteredProfiles.map((profile) => (
-      <div
-        onClick={() => {
-          setSelectedProfile(profile);
+    filteredProfiles.map((profile, index) => {
+      const isBlurred = isFreePlan && activeTab === "all" && index >= 2;
+      return (
+        <div
+          onClick={() => {
+            if (isBlurred) {
+              setShowUpgradeModal(true);
+              return;
+            }
+            setSelectedProfile(profile);
 
-          if (window.innerWidth < 1024) {
-            setIsMobileProfileOpen(true);
-          }
-        }}
-        key={profile._id}
-        className="flex items-center gap-3 rounded-lg h-22 transition-all shadow-[inset_0_0_12px_#00000040] bg-white"
-      >
-        <div className="w-16 h-16 my-2 ml-2 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200">
-          {profile.profilePhoto && (
-            <img
-              src={`${serverUrl}${profile.profilePhoto}`}
-              alt=""
-              className="w-full h-full object-cover rounded-full"
-            />
+            if (window.innerWidth < 1024) {
+              setIsMobileProfileOpen(true);
+            }
+          }}
+          key={profile._id}
+          className={`flex items-center gap-3 rounded-lg h-22 transition-all shadow-[inset_0_0_12px_#00000040] bg-white cursor-pointer relative overflow-hidden`}
+        >
+          <div className={`flex items-center gap-3 w-full h-full p-2 transition-all ${isBlurred ? "blur-[2px] grayscale-[0.3] select-none" : ""}`}>
+            <div className="w-16 h-16 rounded-full border-2 border-gray-300 shrink-0 flex items-center justify-center overflow-hidden bg-gray-200">
+              {profile.profilePhoto ? (
+                <img
+                  src={getImageUrl(profile.profilePhoto)}
+                  alt=""
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : (
+                <FaUser className="text-gray-400" size={30} />
+              )}
+            </div>
+            <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
+            <div className="flex items-center justify-between gap-x-2 w-full px-2 min-w-0">
+              <div className="flex-1 min-w-0">
+                <h1 className="text-[#001032] font-semibold text-sm truncate uppercase tracking-tight">
+                  {profile.name}
+                </h1>
+                <p className="text-[#001032] text-xs line-clamp-1">
+                  {profile.bio}
+                </p>
+                <p className="text-[#001032] text-[10px] truncate mt-2 font-medium">
+                  {profile.city && profile.state
+                    ? `${profile.city}, ${profile.state}`
+                    : "Location not added"}
+                </p>
+              </div>
+              <div className="flex flex-col gap-2 shrink-0">
+                {!isBlurred && (
+                  <>
+                    {profile.connectionStatus === "received" ? (
+                      <div className="flex flex-col gap-1">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            respondToRequest(profile.connectionId, "accepted");
+                          }}
+                          className="bg-green-600 text-white px-4 py-1 text-xs rounded-full font-bold uppercase"
+                        >
+                          Accept
+                        </button>
+
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            respondToRequest(profile.connectionId, "ignored");
+                          }}
+                          className="bg-red-500 text-white px-4 py-1 text-xs rounded-full font-bold uppercase"
+                        >
+                          Ignore
+                        </button>
+                      </div>
+                    ) : profile.connectionStatus === "sent" ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setWithdrawProfile(profile);
+                            setShowWithdrawConfirm(true);
+                          }}
+                          className="bg-red-500 text-white w-20 py-1 my-1 text-xs rounded-full font-bold uppercase"
+                        >
+                          Withdraw
+                        </button>
+                      </div>
+                    ) : profile.connectionStatus === "none" ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          sendConnectionRequest(profile.userId?._id);
+                        }}
+                        className="bg-[#001032] text-white w-20 py-1 text-xs rounded-full font-bold uppercase"
+                      >
+                        Connect
+                      </button>
+                    ) : null}
+
+                    {profile.connectionStatus === "accepted" && (
+                      <button className="bg-[#B1AAAA] text-white w-20 py-1 text-xs rounded-full font-bold uppercase cursor-default">
+                        Message
+                      </button>
+                    )}
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+          
+          {isBlurred && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white/20 z-10 pointer-events-none">
+              <div className="bg-white/95 px-3 py-1.5 rounded-full shadow-lg border border-[#59549F]/20 flex items-center gap-1.5 transform scale-90">
+                <IoDiamondOutline className="text-[#59549F] text-sm" />
+                <span className="text-[10px] font-extrabold text-[#59549F] uppercase tracking-tighter">
+                  Unlock Profile
+                </span>
+              </div>
+            </div>
           )}
         </div>
-        <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
-        <div className="flex items-center justify-between gap-x-2 w-full px-2 min-w-0">
-          <div className="flex-1 min-w-0">
-            <h1 className="text-[#001032] font-semibold text-sm truncate">
-              {profile.name}
-            </h1>
-            <p className="text-[#001032] text-xs line-clamp-1">
-              {profile.bio}
-            </p>
-            <p className="text-[#001032] text-[10px] truncate mt-2">
-              {profile.city && profile.state
-                ? `${profile.city}, ${profile.state}`
-                : "Location not added"}
-            </p>
-          </div>
-          <div className="flex flex-col gap-2 shrink-0">
-            {profile.connectionStatus === "received" ? (
-              <div className="flex flex-col gap-1">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    respondToRequest(profile.connectionId, "accepted");
-                  }}
-                  className="bg-green-600 text-white px-4 py-1 text-xs rounded-full"
-                >
-                  Accept
-                </button>
-
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    respondToRequest(profile.connectionId, "ignored");
-                  }}
-                  className="bg-red-500 text-white px-4 py-1 text-xs rounded-full"
-                >
-                  Ignore
-                </button>
-              </div>
-            ) : profile.connectionStatus === "sent" ? (
-              <div className="flex gap-2">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setWithdrawProfile(profile);
-                    setShowWithdrawConfirm(true);
-                  }}
-                  className="bg-red-500 text-white w-20 py-1 my-1 text-sm rounded-full"
-                >
-                  Withdraw
-                </button>
-              </div>
-            ) : profile.connectionStatus === "none" ? (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  sendConnectionRequest(profile.userId._id);
-                }}
-                className="bg-[#001032] text-white w-20 py-1 text-sm rounded-full"
-              >
-                Connect
-              </button>
-            ) : null}
-
-            {/* Message button: show only for accepted users */}
-            {profile.connectionStatus === "accepted" && (
-              <button className="bg-[#B1AAAA] text-white w-20 py-1 text-sm rounded-full">
-                Message
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-    ))}
+      );
+    })}
 </div>
 
             {/* Withdraw Confirmation Modal - Inside left div */}
@@ -722,7 +747,7 @@ const ConnectSec1 = () => {
                   style={
                     selectedProfile.coverImage
                       ? {
-                          backgroundImage: `url(${serverUrl}${selectedProfile.coverImage})`,
+                          backgroundImage: `url(${getImageUrl(selectedProfile.coverImage)})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }
@@ -737,12 +762,16 @@ const ConnectSec1 = () => {
                 {/* Profile photo overlap */}
                 <div className="relative px-2 -mt-12">
                   <div className="w-28 h-28  rounded-full  border-gray-300  bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] border-2 shadow-[0px_4px_10px_rgba(0,0,0,0.25)] overflow-hidden">
-                    {selectedProfile.profilePhoto && (
+                    {selectedProfile.profilePhoto ? (
                       <img
-                        src={`${serverUrl}${selectedProfile.profilePhoto}`}
+                        src={getImageUrl(selectedProfile.profilePhoto)}
                         alt=""
                         className="w-full h-full object-cover rounded-full"
                       />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                        <FaUser className="text-gray-400" size={50} />
+                      </div>
                     )}
                   </div>
 
@@ -1066,7 +1095,7 @@ const ConnectSec1 = () => {
                   style={
                     selectedProfile.coverImage
                       ? {
-                          backgroundImage: `url(${serverUrl}${selectedProfile.coverImage})`,
+                          backgroundImage: `url(${getImageUrl(selectedProfile.coverImage)})`,
                           backgroundSize: "cover",
                           backgroundPosition: "center",
                         }
@@ -1080,12 +1109,16 @@ const ConnectSec1 = () => {
                 {/* Profile photo overlap */}
                 <div className="relative px-4 -mt-12">
                   <div className="w-28 h-28 rounded-full border-2 border-gray-300  bg-gray-200 overflow-hidden bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999]  shadow-[0px_4px_10px_rgba(0,0,0,0.25)]">
-                    {selectedProfile.profilePhoto && (
+                    {selectedProfile.profilePhoto ? (
                       <img
-                        src={`${serverUrl}${selectedProfile.profilePhoto}`}
+                        src={getImageUrl(selectedProfile.profilePhoto)}
                         alt=""
                         className="w-full h-full object-cover rounded-full"
                       />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-200">
+                        <FaUser className="text-gray-400" size={50} />
+                      </div>
                     )}
                   </div>
 
@@ -1401,6 +1434,91 @@ const ConnectSec1 = () => {
         </div>
       </div>
 
+      {/* ✅ Centralized Upgrade Modal (from RequestSec design) */}
+      {showUpgradeModal && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center backdrop-blur-sm bg-black/60 p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative">
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+            >
+              <IoClose size={22} />
+            </button>
+
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-3xl">⭐</span>
+              <div>
+                <h2 className="text-lg font-bold text-[#001032] leading-tight">
+                  You Have More <br />
+                  <span className="text-[#59549F]">Opportunities</span> Waiting
+                </h2>
+              </div>
+            </div>
+
+            <p className="text-sm text-gray-500 mb-4">
+              You've already used your free views. <br />
+              More professionals are ready to respond to your needs.
+            </p>
+
+            <div className="bg-[#FFF8E7] border border-[#FFD700] rounded-lg px-4 py-3 flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <span className="text-yellow-500 text-lg">⚡</span>
+                <div>
+                  <p className="text-sm font-semibold text-[#B8860B]">
+                    Unlock more profiles
+                  </p>
+                  <p className="text-xs text-gray-600">to continue getting matched instantly</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-gray-200 rounded-xl p-4 mb-5">
+              <p className="text-sm font-bold text-[#001032] mb-3">With Full Access, you can:</p>
+              <ul className="space-y-2">
+                {[
+                  {
+                    icon: "📋",
+                    color: "bg-blue-100",
+                    text: "View unlimited professional profiles",
+                  },
+                  { icon: "⚡", color: "bg-green-100", text: "Get faster & better matches" },
+                  {
+                    icon: "📈",
+                    color: "bg-purple-100",
+                    text: "Increase visibility to top investors",
+                  },
+                  { icon: "🤝", color: "bg-orange-100", text: "Execute deals without limits" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3">
+                    <div
+                      className={`w-8 h-8 rounded-full ${item.color} flex items-center justify-center text-sm shrink-0`}
+                    >
+                      {item.icon}
+                    </div>
+                    <span className="text-sm text-gray-700">{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <button
+              onClick={() => {
+                navigate("/pricing");
+                setShowUpgradeModal(false);
+              }}
+              className="w-full py-3 bg-[#59549F] text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 mb-2"
+            >
+              🔒 Unlock Full Access
+            </button>
+            <button
+              onClick={() => setShowUpgradeModal(false)}
+              className="w-full py-2 text-gray-500 text-sm font-medium hover:text-gray-700"
+            >
+              Maybe Later
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

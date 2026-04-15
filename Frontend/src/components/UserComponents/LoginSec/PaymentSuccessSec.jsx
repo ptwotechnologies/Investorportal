@@ -54,7 +54,7 @@ const PaymentSuccessSec = () => {
 
   useEffect(() => {
     if (!userId || paymentStatus === "approved") return;
-    if (role === "investor") return; // ⭐ only investor skips
+    // ⭐ Removed investor skip so investors check for admin approval too
 
     checkPaymentStatus();
     const interval = setInterval(() => {

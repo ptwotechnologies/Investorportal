@@ -1,4 +1,5 @@
 import Profile from "../Models/profile.model.js";
+import Request from "../Models/request.model.js";
 import resend, { RESEND_FROM } from "../lib/resend.js";
 import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
 // -------------------- CLOUD MULTER SETUP --------------------
@@ -35,12 +36,11 @@ export const upload = multer({
   },
 });
 
-// GET Profile of logged-in user
 export const getProfile = async (req, res) => {
   try {
     let profile = await Profile.findOne({ userId: req.user._id }).populate(
       "userId",
-      "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName",
+      "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName plan",
     );
 
     if (!profile) {
@@ -59,6 +59,32 @@ export const getProfile = async (req, res) => {
       });
     }
 
+    // Calculate Credits for Free Plan users
+    const userObj = profile.userId;
+    const isFreePlan =
+      userObj.plan?.planName === "Explorer Access" ||
+      !userObj.plan?.planName ||
+      userObj.plan?.amount === 0;
+
+    let credits = null;
+    if (isFreePlan) {
+      if (userObj.role === "startup") {
+        const count = await Request.countDocuments({ raisedBy: req.user._id });
+        credits = Math.max(0, 1 - count);
+      } else if (userObj.role === "service_professional") {
+        const count = await Request.countDocuments({
+          forwardedTo: req.user._id,
+          $or: [
+            { interestedBy: req.user._id },
+            { ignoredBy: req.user._id }
+          ]
+        });
+        credits = Math.max(0, 1 - count);
+      } else if (userObj.role === "investor") {
+        credits = 1; 
+      }
+    }
+
     res.status(200).json({
       ...profile.toObject(),
       name:
@@ -68,6 +94,9 @@ export const getProfile = async (req, res) => {
       email: profile.userId?.email,
       phone: profile.userId?.businessDetails?.number,
       companyName: profile.userId?.businessDetails?.companyName,
+      plan: profile.userId?.plan,
+      credits: credits,
+      isFreePlan: isFreePlan
     });
   } catch (error) {
     console.error(error);

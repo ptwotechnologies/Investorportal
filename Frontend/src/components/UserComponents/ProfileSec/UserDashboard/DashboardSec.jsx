@@ -5,6 +5,7 @@ import {
   FaCalendarCheck,
   FaImage,
   FaRegCalendarCheck,
+  FaStar,
 } from "react-icons/fa";
 import { RiCheckDoubleLine, RiCheckLine } from "react-icons/ri";
 import { IoIosArrowRoundBack } from "react-icons/io";
@@ -67,9 +68,9 @@ const DashboardSec = () => {
           showProfileModal ? "blur-sm pointer-events-none" : ""
         }`}
       >
-        <div
-          id="topbar"
-          className="flex justify-between items-center  border-2 border-[#D9D9D9]  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-xl bg-white lg:px-5 px-3  mx-2 py-2  lg:p-2"
+       <div  id="topbar" className="flex items-center w-full px-2 gap-1 lg:gap-2 ">
+         <div
+          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-xl bg-white lg:px-5 px-3 py-2 lg:p-2 w-[70%] lg:ml-1"
         >
           <div >
             <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">
@@ -92,6 +93,33 @@ const DashboardSec = () => {
             </p>
           </div>
         </div>
+        {profile?.isFreePlan && (
+          <Link
+            to="/pricing"
+            className="border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-xl bg-white lg:px-4 px-2.5 flex items-center justify-between gap-2 py-2 shrink-0 lg:w-[30%] group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1"
+          >
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-gradient-to-tr from-[#59549F] to-[#8a84d6] flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform">
+                <FaStar
+                  size={14}
+                  className={profile.credits > 0 ? "animate-pulse" : ""}
+                />
+              </div>
+              <div className="flex items-center gap-1 lg:gap-2">
+                <p className="text-[10px] flex items-center text-gray-400 font-bold uppercase tracking-wider leading-none">
+                  Credits
+                </p>
+                <p className="text-sm lg:text-md font-bold text-[#001032]">
+                  {profile.credits ?? 0}/1
+                </p>
+              </div>
+            </div>
+            <div className="hidden lg:flex bg-[#59549F]/10 group-hover:bg-[#59549F] text-[#59549F] group-hover:text-white px-2 py-1 rounded-md text-[10px] font-bold transition-all border border-[#59549F]/20 shrink-0">
+              UPGRADE
+            </div>
+          </Link>
+        )}
+      </div>
         <div className="hidden lg:block">
           <div className="bg-gray-200 px-3 pt-3 flex gap-3 ">
             <div id="left" className="w-[70%] ">
