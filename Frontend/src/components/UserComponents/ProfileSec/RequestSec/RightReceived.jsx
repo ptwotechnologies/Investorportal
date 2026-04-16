@@ -399,20 +399,6 @@ const RightReceived = ({
             </div>
           </div>
 
-          {/* Application Details (Survey Answers) */}
-          {interestInfo && (
-            <div className="grid grid-cols-2 gap-4 my-3">
-              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
-                <h4 className="text-[11px] font-bold text-gray-500 uppercase mb-2">Availability</h4>
-                <p className="text-sm text-[#001032] font-semibold">{interestInfo.startTime || 'Standard'}</p>
-              </div>
-              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
-                <h4 className="text-[11px] font-bold text-gray-500 uppercase mb-2">Relevance</h4>
-                <p className="text-sm text-[#001032] font-semibold">{interestInfo.relevance || 'N/A'}</p>
-              </div>
-            </div>
-          )}
-
           {/* Request Details Section */}
           <div className="border-2 border-[#D9D9D9] rounded-xl bg-gray-50 px-4 py-3 my-3">
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Request Details</h4>
@@ -512,6 +498,11 @@ const RightReceived = ({
     );
   }
 
+  const professional = selectedRequest.professionalData;
+  const interestInfo = professional ? selectedRequest.interestDetails?.find(id => 
+    String(id.user?._id || id.user) === String(professional._id || professional)
+  ) : null;
+
   // Show Request Details View (for professionals) - rest remains same
   return (
     <div className="w-full h-full flex flex-col lg:p-4 p-2 bg-white rounded-md relative overflow-hidden">
@@ -572,6 +563,20 @@ const RightReceived = ({
               {selectedRequest.description}
             </p>
           </div>
+
+          {/* Application Details (Survey Answers) - Primary View */}
+          {interestInfo && (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                <h4 className="text-[11px] font-bold text-gray-500 uppercase mb-2">Availability</h4>
+                <p className="text-sm text-[#001032] font-semibold">{interestInfo.startTime || 'Standard'}</p>
+              </div>
+              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                <h4 className="text-[11px] font-bold text-gray-500 uppercase mb-2">Relevance</h4>
+                <p className="text-sm text-[#001032] font-semibold">{interestInfo.relevance || 'N/A'}</p>
+              </div>
+            </div>
+          )}
 
           {/* Status */}
           <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">

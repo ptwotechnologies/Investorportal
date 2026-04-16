@@ -69,7 +69,7 @@ const RightNewRequest = ({raisedRequests, setRaisedRequests, setMobileView , sel
 
         {/* Expanded Card Content */}
         <div className="flex-1 overflow-y-auto scrollbar-hide p-4 pb-20">
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Avatar Section */}
             <div className="flex items-center gap-4">
               <div className="w-20 h-20 rounded-full border-2 border-gray-300 bg-gray-200"></div>
@@ -92,31 +92,55 @@ const RightNewRequest = ({raisedRequests, setRaisedRequests, setMobileView , sel
             </div>
 
             {/* Service Type */}
-            <div className="bg-gray-50 rounded-lg px-4 py-2 border border-gray-200">
-              <h4 className="text-sm font-semibold text-gray-600 mb-1">Service Type</h4>
-              <p className="text-xs text-[#001032]">{expandedRequest.service}</p>
+            <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+              <h4 className="text-sm font-semibold text-gray-600 mb-2">Service Type</h4>
+              <p className="text-sm text-[#001032]">{expandedRequest.service}</p>
             </div>
 
             {/* Description */}
-            <div className="bg-gray-50 rounded-lg px-4 py-2 border border-gray-200">
-              <h4 className="text-sm font-semibold text-gray-600 mb-1">Description</h4>
-              <p className="text-xs text-[#001032] leading-relaxed">
+            <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+              <h4 className="text-sm font-semibold text-gray-600 mb-2">Description</h4>
+              <p className="text-sm text-[#001032] leading-relaxed">
                 {expandedRequest.description}
               </p>
             </div>
 
             {/* Status */}
-            <div className="bg-gray-50 rounded-lg px-4 py-2 border border-gray-200">
-              <h4 className="text-sm font-semibold text-gray-600 mb-1">Status</h4>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+            <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+              <h4 className="text-sm font-semibold text-gray-600 mb-2">Status</h4>
+              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
                 Pending
               </span>
             </div>
 
+            {/* Budget & Priority */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                  Budget
+                </h4>
+                <p className="text-sm text-[#001032]">
+                  {expandedRequest.budget || "N/A"}
+                </p>
+              </div>
+              <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+                <h4 className="text-sm font-semibold text-gray-600 mb-2">
+                  Priority
+                </h4>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase ${
+                  expandedRequest.priority === 'High' ? 'bg-red-100 text-red-700' :
+                  expandedRequest.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                  'bg-green-100 text-green-700'
+                }`}>
+                  {expandedRequest.priority || "Low"}
+                </span>
+              </div>
+            </div>
+
             {/* Additional Info */}
-            <div className="bg-gray-50 rounded-lg px-4 py-2 border border-gray-200">
-              <h4 className="text-sm font-semibold text-gray-600 mb-1">Request ID</h4>
-              <p className="text-sm text-gray-700 font-mono">
+            <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
+              <h4 className="text-sm font-semibold text-gray-600 mb-2">Request ID</h4>
+              <p className="text-[10px] text-gray-700 font-mono break-all">
                 {expandedRequest._id || expandedRequest.id || "N/A"}
               </p>
             </div>
