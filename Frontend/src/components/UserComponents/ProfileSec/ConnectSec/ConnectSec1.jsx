@@ -666,7 +666,8 @@ const ConnectSec1 = () => {
               </div>
               <div className="flex flex-col gap-2 shrink-0">
                 {!isBlurred && (
-                  <>
+                  <div className="flex flex-col gap-1">
+                    {/* Primary Action Button */}
                     {profile.connectionStatus === "received" ? (
                       <div className="flex flex-col gap-1">
                         <button
@@ -674,52 +675,64 @@ const ConnectSec1 = () => {
                             e.stopPropagation();
                             respondToRequest(profile.connectionId, "accepted");
                           }}
-                          className="bg-green-600 text-white px-4 py-1 text-xs rounded-full font-bold uppercase"
+                          className="bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] px-4 py-1 text-[10px] rounded-full transition-all hover:brightness-95"
                         >
                           Accept
                         </button>
-
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             respondToRequest(profile.connectionId, "ignored");
                           }}
-                          className="bg-red-500 text-white px-4 py-1 text-xs rounded-full font-bold uppercase"
+                          className="bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] px-4 py-1 text-[10px] rounded-full transition-all hover:brightness-95"
                         >
                           Ignore
                         </button>
                       </div>
                     ) : profile.connectionStatus === "sent" ? (
-                      <div className="flex gap-2">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setWithdrawProfile(profile);
-                            setShowWithdrawConfirm(true);
-                          }}
-                          className="bg-red-500 text-white w-20 py-1 my-1 text-xs rounded-full font-bold uppercase"
-                        >
-                          Withdraw
-                        </button>
-                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setWithdrawProfile(profile);
+                          setShowWithdrawConfirm(true);
+                        }}
+                        className="bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] w-20 py-1 text-[10px] rounded-full transition-all hover:brightness-95"
+                      >
+                        Withdraw
+                      </button>
                     ) : profile.connectionStatus === "none" ? (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           sendConnectionRequest(profile.userId?._id);
                         }}
-                        className="bg-[#001032] text-white w-20 py-1 text-xs rounded-full font-bold "
+                        className="bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] w-20 py-1 text-[10px] rounded-full transition-all hover:brightness-95"
                       >
                         Connect
                       </button>
-                    ) : null}
+                    ) : (
+                      <button 
+                        disabled 
+                        className="bg-[#D8D6F8] text-[#59549f] opacity-70 shadow-[inset_0_0_12px_#00000040] w-20 py-1 text-[10px] rounded-full cursor-default"
+                      >
+                        Connected
+                      </button>
+                    )}
 
-                    {profile.connectionStatus === "accepted" && (
-                      <button className="bg-[#B1AAAA] text-white w-20 py-1 text-xs rounded-full font-bold  cursor-default">
+                    {/* Message Button (Visible except during received request) */}
+                    {profile.connectionStatus !== "received" && (
+                      <button
+                        disabled={profile.connectionStatus !== "accepted"}
+                        className={`w-20 py-1 text-[10px] rounded-full transition-all ${
+                          profile.connectionStatus === "accepted"
+                            ? "bg-[#B1AAAA] text-white"
+                            : "bg-gray-200 text-gray-400 cursor-not-allowed opacity-50"
+                        }`}
+                      >
                         Message
                       </button>
                     )}
-                  </>
+                  </div>
                 )}
               </div>
             </div>
