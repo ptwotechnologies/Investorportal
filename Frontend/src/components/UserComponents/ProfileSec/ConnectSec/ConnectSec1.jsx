@@ -9,6 +9,7 @@ import instaIcon from "/instagram.jpeg";
 import { FaArrowLeft } from "react-icons/fa";
 import { getDomainsForRole } from "./domain.js";
 import toast from "react-hot-toast";
+import ConnectUpgradeModal from "./ConnectUpgradeModal";
 
 const ConnectSec1 = () => {
   const navigate = useNavigate();
@@ -421,7 +422,7 @@ const ConnectSec1 = () => {
   }
   const tabClass = (tab) =>
     activeTab === tab
-      ? "bg-[#001032] text-white"
+      ? "bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040]"
       : "border border-[#D9D9D9] text-[#001032]";
 
   const withdrawRequest = async (connectionId) => {
@@ -599,7 +600,7 @@ const ConnectSec1 = () => {
             <div className="w-0.5 h-full p-0 bg-[#0010324D]"></div>
             <div className="flex items-center justify-between gap-x-2 w-full px-2 min-w-0">
               <div className="flex-1 min-w-0">
-                <h1 className="text-[#001032] font-semibold text-sm truncate uppercase tracking-tight">
+                <h1 className="text-[#001032] font-semibold text-sm truncate  tracking-tight">
                   {profile.name}
                 </h1>
                 <p className="text-[#001032] text-xs line-clamp-1">
@@ -655,14 +656,14 @@ const ConnectSec1 = () => {
                           e.stopPropagation();
                           sendConnectionRequest(profile.userId?._id);
                         }}
-                        className="bg-[#001032] text-white w-20 py-1 text-xs rounded-full font-bold uppercase"
+                        className="bg-[#001032] text-white w-20 py-1 text-xs rounded-full font-bold "
                       >
                         Connect
                       </button>
                     ) : null}
 
                     {profile.connectionStatus === "accepted" && (
-                      <button className="bg-[#B1AAAA] text-white w-20 py-1 text-xs rounded-full font-bold uppercase cursor-default">
+                      <button className="bg-[#B1AAAA] text-white w-20 py-1 text-xs rounded-full font-bold  cursor-default">
                         Message
                       </button>
                     )}
@@ -1434,90 +1435,9 @@ const ConnectSec1 = () => {
         </div>
       </div>
 
-      {/* ✅ Centralized Upgrade Modal (from RequestSec design) */}
+      {/* ✅ Premium Upgrade Modal */}
       {showUpgradeModal && (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center backdrop-blur-sm bg-black/60 p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 relative">
-            <button
-              onClick={() => setShowUpgradeModal(false)}
-              className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-            >
-              <IoClose size={22} />
-            </button>
-
-            <div className="flex items-start gap-3 mb-3">
-              <span className="text-3xl">⭐</span>
-              <div>
-                <h2 className="text-lg font-bold text-[#001032] leading-tight">
-                  You Have More <br />
-                  <span className="text-[#59549F]">Opportunities</span> Waiting
-                </h2>
-              </div>
-            </div>
-
-            <p className="text-sm text-gray-500 mb-4">
-              You've already used your free views. <br />
-              More professionals are ready to respond to your needs.
-            </p>
-
-            <div className="bg-[#FFF8E7] border border-[#FFD700] rounded-lg px-4 py-3 flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <span className="text-yellow-500 text-lg">⚡</span>
-                <div>
-                  <p className="text-sm font-semibold text-[#B8860B]">
-                    Unlock more profiles
-                  </p>
-                  <p className="text-xs text-gray-600">to continue getting matched instantly</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="border border-gray-200 rounded-xl p-4 mb-5">
-              <p className="text-sm font-bold text-[#001032] mb-3">With Full Access, you can:</p>
-              <ul className="space-y-2">
-                {[
-                  {
-                    icon: "📋",
-                    color: "bg-blue-100",
-                    text: "View unlimited professional profiles",
-                  },
-                  { icon: "⚡", color: "bg-green-100", text: "Get faster & better matches" },
-                  {
-                    icon: "📈",
-                    color: "bg-purple-100",
-                    text: "Increase visibility to top investors",
-                  },
-                  { icon: "🤝", color: "bg-orange-100", text: "Execute deals without limits" },
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <div
-                      className={`w-8 h-8 rounded-full ${item.color} flex items-center justify-center text-sm shrink-0`}
-                    >
-                      {item.icon}
-                    </div>
-                    <span className="text-sm text-gray-700">{item.text}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <button
-              onClick={() => {
-                navigate("/pricing");
-                setShowUpgradeModal(false);
-              }}
-              className="w-full py-3 bg-[#59549F] text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:opacity-90 mb-2"
-            >
-              🔒 Unlock Full Access
-            </button>
-            <button
-              onClick={() => setShowUpgradeModal(false)}
-              className="w-full py-2 text-gray-500 text-sm font-medium hover:text-gray-700"
-            >
-              Maybe Later
-            </button>
-          </div>
-        </div>
+        <ConnectUpgradeModal onClose={() => setShowUpgradeModal(false)} />
       )}
     </div>
   );

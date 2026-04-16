@@ -105,42 +105,42 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   }, [location.pathname, hasRaisedRequests]); // ⭐ add hasRaisedRequests to deps
 
   return (
-    <div className="fixed top-0 left-0 h-full bg-[#001032] p-4 flex flex-col justify-between z-50">
+    <div className="fixed top-0 left-0 h-full bg-[#D8D6F8]  p-4 flex flex-col justify-between z-50">
       {/* Top Icons */}
       <div>
-        <div className="py-6">
-          <IoMdMenu className="text-white" size={27} onClick={handleToggle} />
+        <div className=" text-[#59549f] py-6">
+          <IoMdMenu  size={27} onClick={handleToggle} />
         </div>
         <div>
           <MdOutlineDashboardCustomize
-            className="text-white my-4"
+            className="text-[#59549f] my-4"
             size={25}
             onClick={handleToggle}
           />
 
           <CgProfile
-            className="text-white my-3"
+            className=" text-[#59549f] my-3"
             size={25}
             onClick={handleToggle}
           />
           <HiOutlineTicket
-            className="text-white my-3"
+            className="text-[#59549f] my-3"
             size={25}
             onClick={handleToggle}
           />
           <HiOutlineUserGroup
-            className="text-white my-3"
+            className="text-[#59549f] my-3"
             size={25}
             onClick={handleToggle}
           />
           <IoNotificationsOutline
-            className="text-white my-3"
+            className=" text-[#59549f] my-3"
             size={25}
             onClick={handleNotificationClick} // Show/hide notifications
           />
 
           <FaHandshake
-            className="text-white my-3"
+            className=" text-[#59549f] my-3"
             size={25}
             onClick={handleToggle}
           />
@@ -203,17 +203,17 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
       <div className="text-gray-300 relative pb-3">
         <IoSettingsOutline
           size={25}
-          className="my-2 text-white"
+          className="my-2 text-[#59549f]"
           onClick={handleToggle}
         />
         <BiHelpCircle
           size={25}
-          className="my-3 text-white"
+          className="my-3 text-[#59549f]"
           onClick={handleToggle}
         />
         <PiSignOut
           size={25}
-          className="my-3 text-white"
+          className="my-3 text-[#59549f]"
           onClick={handleSignOutClick}
         />
 
@@ -249,7 +249,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 to="/dashboard"
                 className={({ isActive }) =>
                   `block my-3 text-[17px]  px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
               >
@@ -260,7 +260,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 to="/profile"
                 className={({ isActive }) =>
                   `block my-3  text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
               >
@@ -271,7 +271,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 to="/request"
                 className={({ isActive }) =>
                   `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
               >
@@ -282,7 +282,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 to="/connect"
                 className={({ isActive }) =>
                   `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
               >
@@ -409,7 +409,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 to="/settings"
                 className={({ isActive }) =>
                   `block my-3  text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
               >
@@ -420,7 +420,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 to="/help"
                 className={({ isActive }) =>
                   `block my-3  text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#001032] text-white" : "text-[#001426]"
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
               >
