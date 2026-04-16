@@ -7,7 +7,7 @@ import axios from "axios";
 import { FaLinkedin } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
 import { FaArrowLeft } from "react-icons/fa";
-import { getDomainsForRole } from "./domain.js";
+import { getDomainsForRole, INVESTOR_TYPES } from "./domain.js";
 import toast from "react-hot-toast";
 import ConnectUpgradeModal from "./ConnectUpgradeModal";
 
@@ -414,11 +414,54 @@ const ConnectSec1 = () => {
     );
   }
 
-  // ✅ Step 2: Filter by domain (if not "all")
+  // ✅ Step 2: Filter by domain or investor type (if not "all")
   if (selectedDomain !== "all") {
-    filteredProfiles = filteredProfiles.filter(
-      (p) => p.userId?.additionalDetails?.domain === selectedDomain,
-    );
+    // Robust role check (fall back to localStorage to avoid timing/null state issues)
+    const storedUser = JSON.parse(localStorage.getItem("user") || "{}");
+    const roleForFilter = currentUserRole || storedUser.role || localStorage.getItem("role");
+    const isSearchingInvestors = roleForFilter === "startup" || roleForFilter === "service_professional";
+    
+    filteredProfiles = filteredProfiles.filter((p) => {
+      if (isSearchingInvestors) {
+        // Exhaustive search for the investor type across all possible DB paths
+        const rawType = 
+          p.investorType || 
+          p.userId?.businessDetails?.investorType || 
+          p.userId?.businessDetails?.businessType ||
+          p.userId?.additionalDetails?.investorType || 
+          p.userId?.investorType ||
+          p.businessType ||
+          p.userId?.businessType ||
+          p.userId?.additionalDetails?.businessType;
+          
+        if (!rawType) return false;
+        
+        const type = String(rawType).toLowerCase().trim();
+        const selected = String(selectedDomain).toLowerCase().trim();
+        
+        // Mapping plurals/aliases to DB singulars
+        const mapping = {
+          "venture capitalists": "venture capitalist",
+          "angel investors": "angel investor",
+          "vc firms": "venture firm"
+        };
+        
+        const targetType = mapping[selected] || selected;
+        
+        // Match if exact, mapped, keyword-based, or partial
+        if (type === targetType || type === selected) return true;
+        if (selected.includes("venture") && type.includes("venture")) return true;
+        if (selected.includes("angel") && type.includes("angel")) return true;
+        if ((selected.includes("vc") || selected.includes("firm")) && 
+            (type.includes("vc") || type.includes("firm"))) return true;
+
+        return type.includes(targetType.replace(/s$/, "")) || targetType.includes(type);
+      } else {
+        // Startups/Pros viewed by Investors are filtered by Domain
+        const rawDomain = p.userId?.additionalDetails?.domain || p.domain;
+        return String(rawDomain).toLowerCase().trim() === String(selectedDomain).toLowerCase().trim();
+      }
+    });
   }
   const tabClass = (tab) =>
     activeTab === tab
@@ -511,15 +554,24 @@ const ConnectSec1 = () => {
               <select
                 value={selectedDomain}
                 onChange={(e) => setSelectedDomain(e.target.value)}
-                className="border border-[#D9D9D9] p-2 rounded-sm w-full bg-white"
+                className="border border-[#D9D9D9] p-2 rounded-sm w-full bg-white text-sm outline-none font-medium"
               >
-                <option value="all" >All Domains</option>
-                {viewingRole &&
-                  getDomainsForRole(viewingRole).map((domain) => (
+                <option value="all">
+                  {currentUserRole === "investor" ? "All Domains" : "All Investor Types"}
+                </option>
+                {currentUserRole === "investor" ? (
+                  viewingRole && getDomainsForRole(viewingRole).map((domain) => (
                     <option key={domain} value={domain}>
                       {domain}
                     </option>
-                  ))}
+                  ))
+                ) : (
+                  INVESTOR_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
             <div className="flex items-center justify-between gap-2">
@@ -1088,7 +1140,7 @@ const ConnectSec1 = () => {
               <div className="bg-white border border-gray-300 shadow-md rounded-2xl  flex flex-col justify-between w-full h-full">
                 {/* Header image section */}
                 <div
-                  className={`relative h-40 border border-gray-300 pt-40 ${
+                  className={`relative h-40 border border-gray-300 pt-40 rounded-2xl ${
                     !selectedProfile.coverImage
                       ? "bg-linear-to-b from-[#D8D6F8] to-[#F8DEDE]"
                       : ""

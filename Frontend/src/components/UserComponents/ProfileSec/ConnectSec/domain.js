@@ -9,6 +9,13 @@ export const INVESTOR_DOMAINS = [
   // Add more investor domains
 ];
 
+// Investor Types
+export const INVESTOR_TYPES = [
+  "Venture Capitalists",
+  "Angel Investors",
+  "VC Firms",
+];
+
 // Domains for STARTUPS
 export const STARTUP_DOMAINS = [
   "Technology",
