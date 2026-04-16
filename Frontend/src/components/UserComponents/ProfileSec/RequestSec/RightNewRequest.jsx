@@ -117,7 +117,7 @@ const RightNewRequest = ({raisedRequests, setRaisedRequests, setMobileView , sel
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
                 <h4 className="text-sm font-semibold text-gray-600 mb-2">
-                  Budget
+                  Expected Budget
                 </h4>
                 <p className="text-sm text-[#001032]">
                   {expandedRequest.budget || "N/A"}
@@ -125,14 +125,14 @@ const RightNewRequest = ({raisedRequests, setRaisedRequests, setMobileView , sel
               </div>
               <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
                 <h4 className="text-sm font-semibold text-gray-600 mb-2">
-                  Priority
+                  Timeline
                 </h4>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase ${
-                  expandedRequest.priority === 'High' ? 'bg-red-100 text-red-700' :
-                  expandedRequest.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
+                  expandedRequest.priority?.includes('Urgent') ? 'bg-red-100 text-red-700' :
+                  expandedRequest.priority?.includes('Short term') ? 'bg-yellow-100 text-yellow-700' :
                   'bg-green-100 text-green-700'
                 }`}>
-                  {expandedRequest.priority || "Low"}
+                  {expandedRequest.priority || "Flexible"}
                 </span>
               </div>
             </div>

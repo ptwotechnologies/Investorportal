@@ -472,7 +472,8 @@ const RightAllTab = ({
             <>
               <button
                 onClick={() => handleAccept && handleAccept(selectedRequest._id, professional._id)}
-                className="flex-1 bg-[#D8D6F8] text-[#59549F] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
+                disabled={professional?.isIgnored || selectedRequest.isIgnored}
+                className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${(professional?.isIgnored || selectedRequest.isIgnored) ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#D8D6F8] text-[#59549F]"}`}
               >
                 <FaCheckCircle /> Accept
               </button>
@@ -485,9 +486,10 @@ const RightAllTab = ({
                     origin: 'detail',
                   })
                 }
-                className="flex-1 bg-[#F8DEDE] text-[#B94444] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
+                disabled={professional?.isIgnored || selectedRequest.isIgnored}
+                className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${(professional?.isIgnored || selectedRequest.isIgnored) ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#F8DEDE] text-[#B94444]"}`}
               >
-                <FaTimesCircle /> Ignore
+                <FaTimesCircle /> {(professional?.isIgnored || selectedRequest.isIgnored) ? "Ignored" : "Ignore"}
               </button>
             </>
           )}
@@ -615,12 +617,13 @@ const RightAllTab = ({
             <h4 className="text-sm font-semibold text-gray-600 mb-2">Status</h4>
             <span
               className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                (professional?.isIgnored || selectedRequest.isIgnored) ? "bg-gray-100 text-gray-500" :
                 selectedRequest.hasShownInterest
                   ? "bg-green-100 text-green-800"
                   : "bg-yellow-100 text-yellow-800"
               }`}
             >
-              {selectedRequest.hasShownInterest ? "Interested" : "Pending"}
+              {(professional?.isIgnored || selectedRequest.isIgnored) ? "Ignored" : selectedRequest.hasShownInterest ? "Interested" : "Pending"}
             </span>
           </div>
 
@@ -628,7 +631,7 @@ const RightAllTab = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
               <h4 className="text-sm font-semibold text-gray-600 mb-2">
-                Budget
+                Expected Budget
               </h4>
               <p className="text-sm text-[#001032]">
                 {selectedRequest.budget || "N/A"}
@@ -636,14 +639,14 @@ const RightAllTab = ({
             </div>
             <div className="bg-gray-50 rounded-lg px-4 py-3 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
               <h4 className="text-sm font-semibold text-gray-600 mb-2">
-                Priority
+                Timeline
               </h4>
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase ${
-                selectedRequest.priority === 'High' ? 'bg-red-100 text-red-700' :
-                selectedRequest.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${
+                selectedRequest.priority?.includes('Urgent') ? 'bg-red-100 text-red-700' :
+                selectedRequest.priority?.includes('Short term') ? 'bg-yellow-100 text-yellow-700' :
                 'bg-green-100 text-green-700'
               }`}>
-                {selectedRequest.priority || "Low"}
+                {selectedRequest.priority || "Flexible"}
               </span>
             </div>
           </div>
@@ -688,14 +691,14 @@ const RightAllTab = ({
                   <>
                     <button
                       onClick={() => handleAccept && handleAccept(selectedRequest._id, professional._id)}
-                      disabled={selectedRequest.isIgnored}
-                      className={`flex-1 text-center py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${selectedRequest.isIgnored ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#D8D6F8] text-[#59549F]"}`}
+                      disabled={professional?.isIgnored || selectedRequest.isIgnored}
+                      className={`flex-1 text-center py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${(professional?.isIgnored || selectedRequest.isIgnored) ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#D8D6F8] text-[#59549F]"}`}
                     >
                       <FaCheckCircle /> Accept
                     </button>
                     <button
                       onClick={() => {
-                        if (isAccepted) return;
+                        if (isAccepted || professional?.isIgnored || selectedRequest.isIgnored) return;
                         setShowConfirm &&
                         setShowConfirm({
                           requestId: selectedRequest._id,
@@ -703,10 +706,10 @@ const RightAllTab = ({
                           origin: 'detail',
                         });
                       }}
-                      disabled={isAccepted}
-                      className={`flex-1 text-center py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${isAccepted ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#F8DEDE] text-[#B94444]"}`}
+                      disabled={isAccepted || professional?.isIgnored || selectedRequest.isIgnored}
+                      className={`flex-1 text-center py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040] ${isAccepted || professional?.isIgnored || selectedRequest.isIgnored ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#F8DEDE] text-[#B94444]"}`}
                     >
-                      <FaTimesCircle /> Ignore
+                      <FaTimesCircle /> {(professional?.isIgnored || selectedRequest.isIgnored) ? "Ignored" : "Ignore"}
                     </button>
                   </>
                 )}

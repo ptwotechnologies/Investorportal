@@ -37,6 +37,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
   const [budget, setBudget] = useState("");
   const [priority, setPriority] = useState(null);
   const [isPriorityOpen, setIsPriorityOpen] = useState(false);
+  const [isBudgetOpen, setIsBudgetOpen] = useState(false);
 
   const userId = localStorage.getItem("userId");
 
@@ -91,12 +92,12 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
       toast.error("Please select a service option first");
       return;
     }
-    if (!budget.trim()) {
-      toast.error("Please enter an estimated budget");
+    if (!budget) {
+      toast.error("Please select an expected budget");
       return;
     }
     if (!priority) {
-      toast.error("Please select a priority level");
+      toast.error("Please select a timeline for your request");
       return;
     }
     if (!description.trim()) {
@@ -174,29 +175,61 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
             {/* Absolute Overlay Dropdowns when selected */}
             {selectedRequest === option.id && (
               <div className="absolute z-50 left-15 right-0 top-[90%] mt-2 p-4 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-wrap gap-4">
-                <div className="flex-1 min-w-[140px]">
-                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">Estimated Budget <span className="text-red-500">*</span></label>
-                  <input 
-                    type="text"
-                    placeholder="e.g. 50k - 1 Lac"
-                    value={budget}
-                    onChange={(e) => setBudget(e.target.value)}
-                    className="w-full p-2.5 bg-white border border-gray-200 rounded-full text-xs outline-none focus:ring-2 focus:ring-[#59549F]/20 focus:border-[#59549F] transition-all shadow-sm px-4"
-                  />
+                <div className="flex-1 min-w-[140px] relative">
+                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">Expected Budget <span className="text-red-500">*</span></label>
+                  <div className="relative">
+                    <button 
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsBudgetOpen(!isBudgetOpen);
+                        setIsPriorityOpen(false);
+                      }}
+                      className="w-full p-2.5 bg-white border border-gray-200 rounded-lg text-xs outline-none focus:ring-2 focus:ring-[#59549F]/20 focus:border-[#59549F] transition-all shadow-sm cursor-pointer flex items-center justify-between px-4 group hover:border-[#59549F]/50"
+                    >
+                      <span className={`${budget ? "text-gray-700" : "text-gray-400"}`}>
+                        {budget || "Select Expected Budget"}
+                      </span>
+                      <IoChevronDown 
+                        className={`transition-transform duration-200 text-gray-400 group-hover:text-[#59549F] ${isBudgetOpen ? "rotate-180" : ""}`} 
+                        size={14} 
+                      />
+                    </button>
+
+                    {isBudgetOpen && (
+                      <div className="absolute z-[60] left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                        {["Flexible", "Under ₹25K", "₹25K–₹1L", "₹1L+"].map((b) => (
+                          <div
+                            key={b}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setBudget(b);
+                              setIsBudgetOpen(false);
+                            }}
+                            className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center justify-between hover:bg-gray-50 ${budget === b ? "text-[#59549F] font-semibold bg-[#59549F]/5" : "text-gray-600"}`}
+                          >
+                            <span>{b}</span>
+                            {budget === b && <IoMdCheckmark size={12} />}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
                 <div className="flex-1 min-w-[140px] relative">
-                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">Priority Level <span className="text-red-500">*</span></label>
+                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">How soon do you want to get started? <span className="text-red-500">*</span></label>
                   <div className="relative">
                     <button 
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         setIsPriorityOpen(!isPriorityOpen);
+                        setIsBudgetOpen(false);
                       }}
-                      className="w-full p-2.5 bg-white border border-gray-200 rounded-full text-xs outline-none focus:ring-2 focus:ring-[#59549F]/20 focus:border-[#59549F] transition-all shadow-sm cursor-pointer flex items-center justify-between px-4 group hover:border-[#59549F]/50"
+                      className="w-full p-2.5 bg-white border border-gray-200 rounded-lg text-xs outline-none focus:ring-2 focus:ring-[#59549F]/20 focus:border-[#59549F] transition-all shadow-sm cursor-pointer flex items-center justify-between px-4 group hover:border-[#59549F]/50"
                     >
                       <span className={`${priority ? "text-gray-700" : "text-gray-400"}`}>
-                        {priority ? `${priority} Priority` : "Select Priority Level"}
+                        {priority || "Select Timeline"}
                       </span>
                       <IoChevronDown 
                         className={`transition-transform duration-200 text-gray-400 group-hover:text-[#59549F] ${isPriorityOpen ? "rotate-180" : ""}`} 
@@ -206,7 +239,12 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
 
                     {isPriorityOpen && (
                       <div className="absolute z-[60] left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                        {["Low", "Medium", "High"].map((p) => (
+                        {[
+                          "Urgent (within 1 week)",
+                          "Short term (1–3 weeks)",
+                          "Planned (1–2 months)",
+                          "Flexible"
+                        ].map((p) => (
                           <div
                             key={p}
                             onClick={(e) => {
@@ -216,7 +254,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
                             }}
                             className={`px-4 py-2.5 text-xs cursor-pointer transition-colors flex items-center justify-between hover:bg-gray-50 ${priority === p ? "text-[#59549F] font-semibold bg-[#59549F]/5" : "text-gray-600"}`}
                           >
-                            <span>{p} Priority</span>
+                            <span>{p}</span>
                             {priority === p && <IoMdCheckmark size={12} />}
                           </div>
                         ))}

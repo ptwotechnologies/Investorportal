@@ -183,8 +183,8 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
             req._id === requestId
               ? {
                   ...req,
-                  interestedBy: req.interestedBy.filter(
-                    (user) => user._id !== providerId
+                  interestedBy: req.interestedBy.map((user) =>
+                    String(user._id || user) === String(providerId) ? { ...user, isIgnored: true } : user
                   ),
                 }
               : req
@@ -195,8 +195,11 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
           prev && prev._id === requestId
             ? {
                 ...prev,
-                interestedBy: prev.interestedBy.filter(
-                  (user) => user._id !== providerId,
+                professionalData: prev.professionalData && String(prev.professionalData._id || prev.professionalData) === String(providerId) 
+                  ? { ...prev.professionalData, isIgnored: true } 
+                  : prev.professionalData,
+                interestedBy: prev.interestedBy.map((user) =>
+                  String(user._id || user) === String(providerId) ? { ...user, isIgnored: true } : user
                 ),
               }
             : prev,
@@ -423,19 +426,20 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
               <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
                 <h4 className="text-xs font-semibold text-gray-600 mb-1">Status</h4>
                 <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                  (selectedRequest.professionalData?.isIgnored || selectedRequest.isIgnored) ? "bg-gray-100 text-gray-500" :
                   selectedRequest.hasShownInterest
                     ? "bg-green-100 text-green-800"
                     : "bg-yellow-100 text-yellow-800"
                 }`}>
-                  {selectedRequest.hasShownInterest ? "Interested" : "Pending"}
+                  {(selectedRequest.professionalData?.isIgnored || selectedRequest.isIgnored) ? "Ignored" : selectedRequest.hasShownInterest ? "Interested" : "Pending"}
                 </span>
               </div>
 
-              {/* Budget & Priority */}
+              {/* Budget & Timeline */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
                   <h4 className="text-xs font-semibold text-gray-600 mb-1">
-                    Budget
+                    Expected Budget
                   </h4>
                   <p className="text-xs text-[#001032]">
                     {selectedRequest.budget || "N/A"}
@@ -443,14 +447,14 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                 </div>
                 <div className="bg-gray-50 rounded-lg px-3 py-2 border border-gray-200 shadow-[inset_0_0_12px_#00000040]">
                   <h4 className="text-xs font-semibold text-gray-600 mb-1">
-                    Priority
+                    Timeline
                   </h4>
-                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                    selectedRequest.priority === 'High' ? 'bg-red-100 text-red-700' :
-                    selectedRequest.priority === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                  <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                    selectedRequest.priority?.includes('Urgent') ? 'bg-red-100 text-red-700' :
+                    selectedRequest.priority?.includes('Short term') ? 'bg-yellow-100 text-yellow-700' :
                     'bg-green-100 text-green-700'
                   }`}>
-                    {selectedRequest.priority || "Low"}
+                    {selectedRequest.priority || "Flexible"}
                   </span>
                 </div>
               </div>
@@ -484,10 +488,11 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                   <div className="flex gap-2 pt-2">
                     <button
                       onClick={() => handleInterest(selectedRequest._id)}
-                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
+                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored}
                       className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
                         selectedRequest.hasShownInterest ||
-                        selectedRequest.isIgnored
+                        selectedRequest.isIgnored ||
+                        selectedRequest.professionalData?.isIgnored
                           ? "bg-[#F8DEDE] text-[#B94444] cursor-not-allowed rounded-full opacity-50"
                           : "bg-[#F8DEDE] text-[#B94444] rounded-full"
                       }`}
@@ -498,19 +503,20 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                       onClick={() =>
                         setShowConfirm({
                           requestId: selectedRequest._id,
-                          providerId: null,
+                          providerId: selectedRequest.professionalData?._id || selectedRequest.professionalData || null,
                           origin: 'detail',
                         })
                       }
-                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored}
+                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored}
                       className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
                         selectedRequest.hasShownInterest ||
-                        selectedRequest.isIgnored
+                        selectedRequest.isIgnored ||
+                        selectedRequest.professionalData?.isIgnored
                           ? "bg-gray-300 text-gray-500 cursor-not-allowed rounded-full"
                           : "bg-[#D8D6F8] text-[#59549F] rounded-full"
                       }`}
                     >
-                      {selectedRequest.isIgnored ? "Ignored" : "Ignore"}
+                      {(selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored) ? "Ignored" : "Ignore"}
                     </button>
                   </div>
 
