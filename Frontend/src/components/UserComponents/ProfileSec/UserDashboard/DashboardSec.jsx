@@ -69,9 +69,9 @@ const DashboardSec = () => {
           showProfileModal ? "blur-sm pointer-events-none" : ""
         }`}
       >
-       <div  id="topbar" className="flex items-center w-[100%] px-2 gap-1 lg:gap-2 ">
+       <div  id="topbar" className="flex items-stretch w-[100%] px-2 gap-1 lg:gap-2 ">
         <div
-          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl  lg:px-4 px-3 py-2 lg:p-2 lg:mr-1 ml-1 bg-white"
+          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-3 py-2 lg:mr-1 ml-1 bg-white"
         >
           <div >
             <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">
@@ -113,18 +113,25 @@ const DashboardSec = () => {
         {profile?.isFreePlan && (
           <Link
             to="/pricing"
-            className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-2 shrink-0  group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%]"
+            className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%]"
           >
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full border-2 border-[#59549F] flex items-center justify-center bg-[#59549F] text-white text-sm font-bold shadow-sm">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
                 {profile.credits ?? 0}
               </div>
-              <p className="text-[13px] font-medium text-[#59549F]">
-                Opportunities Available
-              </p>
+              <div className="flex flex-col items-end">
+                <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
+                  Opportunities Available
+                </p>
+                <div className="-mt-0.5">
+                  <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
+                    More connections are waiting
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="flex bg-[#D8D6F8] text-[#59549F] px-4 py-1 rounded-md text-xs transition-all border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)]">
-              Unlock Free Access
+            <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+              Unlock More Opportunities
             </div>
           </Link>
         )}
@@ -720,8 +727,12 @@ const DashboardSec = () => {
                 
                 <p className="text-[#59549F] text-[11px] leading-snug w-full pt-2 border-t border-[#59549F]/10">
                   {profile?.credits > 0 
-                    ? "Use this to connect with premium leads. Each credit allows you to unlock one direct connection or contact request." 
-                    : "You have reached your free credits limit. Upgrade your plan now to unlock more connections and stay connected with the best opportunities!"}
+                    ? profile?.role === "startup"
+                      ? "Use this to connect with premium leads. More investors and professionals are ready to connect with you"
+                      : "Use this to connect with premium leads. More investors and businesses are raising requests and looking for professionals like you"
+                    : profile?.role === "startup" 
+                      ? "You’ve used your free access. More investors and professionals are ready to connect with you."
+                      : "You’ve used your free access. More investors and businesses are raising requests and looking for professionals like you."}
                 </p>
               </div>
 
@@ -735,13 +746,13 @@ const DashboardSec = () => {
               </Link>
 
               {/* Switch to Professional (Startups Only) */}
-              {profile?.role === "startup" && (
+              {/* {profile?.role === "startup" && (
                 <button
                   className="w-full bg-[#59549F] text-white py-2 rounded-lg font-bold hover:bg-[#4a458a] transition-all text-sm  tracking-wider shadow-lg"
                 >
                   Switch to Professional
                 </button>
-              )}
+              )} */}
             </div>
           </div>
         </div>

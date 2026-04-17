@@ -4,15 +4,19 @@ import User from "../Models/User.model.js";
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
   try {
+    console.log("DEBUG: createRequest body:", req.body);
+    console.log("DEBUG: req.user._id:", req.user?._id);
+
     const { service, description, budget, priority } = req.body;
 
     if (!service || !description || !budget) {
+      console.log("DEBUG: Missing required fields");
       return res.status(400).json({ message: "Service, description and budget are required" });
     }
 
-    // ⭐ Import User model at top of file
-    const user = await User.findById(req.user._id);
+    const user = req.user; // Use the user already attached by middleware
     if (!user) {
+      console.log("DEBUG: User not found in request object");
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -22,10 +26,13 @@ export const createRequest = async (req, res) => {
       !user.plan?.planName ||
       user.plan?.amount === 0;
 
+    console.log("DEBUG: isFreePlan:", isFreePlan);
+
     if (isFreePlan) {
       const existingCount = await Request.countDocuments({
-        raisedBy: req.user._id,
+        raisedBy: user._id,
       });
+      console.log("DEBUG: existingCount for free plan:", existingCount);
 
       if (existingCount >= 1) {
         return res.status(403).json({
@@ -35,18 +42,33 @@ export const createRequest = async (req, res) => {
       }
     }
 
+    const priorityValue = priority || "Flexible";
+    console.log("DEBUG: Creating request with priority:", priorityValue);
+
     const newRequest = await Request.create({
       service,
       description,
       budget,
-      priority: priority || "Low",
-      raisedBy: req.user._id,
+      priority: priorityValue,
+      raisedBy: user._id,
       status: "raised",
     });
 
+    console.log("DEBUG: Request created successfully:", newRequest._id);
     res.status(201).json(newRequest);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("--- CREATE REQUEST ERROR ---");
+    console.error("Message:", error.message);
+    console.error("Stack:", error.stack);
+    if (error.errors) {
+      console.error("Validation Errors:", JSON.stringify(error.errors, null, 2));
+    }
+    console.error("-----------------------------");
+    res.status(500).json({ 
+      message: error.message, 
+      stack: error.stack,
+      validationErrors: error.errors 
+    });
   }
 };
 

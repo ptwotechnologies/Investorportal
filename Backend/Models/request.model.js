@@ -70,8 +70,8 @@ const requestSchema = new mongoose.Schema(
     },
     priority: {
       type: String,
-      enum: ["Low", "Medium", "High"],
-      default: "Low",
+      enum: ["Urgent (within 1 week)", "Short term (1–3 weeks)", "Planned (1–2 months)", "Flexible"],
+      default: "Flexible",
     },
   },
   { timestamps: true }
