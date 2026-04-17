@@ -48,14 +48,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
       try {
         const token = localStorage.getItem("token");
 
-        if (!userId || userId === "null" || userId === "undefined") {
-          console.warn("NewRequest: No valid userId found in localStorage");
-          setUserPlan("Explorer Access");
-          setIsLoadingUserData(false);
-          return;
-        }
-
-        const userRes = await axios.get(`${serverUrl}/user/${userId}`, {
+        const userRes = await axios.get(`${serverUrl}/user/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

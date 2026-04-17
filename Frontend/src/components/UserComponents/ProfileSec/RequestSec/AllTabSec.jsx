@@ -41,16 +41,11 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
       try {
         const token = localStorage.getItem("token");
         
-        const userId = localStorage.getItem("userId");
-        const isValidUserId = userId && userId !== "null" && userId !== "undefined" && userId.length === 24;
-        
         const [receivedRes, raisedRes, profileRes, userRes] = await Promise.all([
           axios.get(`${serverUrl}/requests/received`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${serverUrl}/requests`, { headers: { Authorization: `Bearer ${token}` } }),
           axios.get(`${serverUrl}/profile/all`, { headers: { Authorization: `Bearer ${token}` } }),
-          isValidUserId 
-            ? axios.get(`${serverUrl}/user/${userId}`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => ({ data: { plan: null } }))
-            : Promise.resolve({ data: { plan: null } }),
+          axios.get(`${serverUrl}/user/me`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => ({ data: { plan: null } })),
         ]);
 
         const forwarded = receivedRes.data.forwardedRequests;

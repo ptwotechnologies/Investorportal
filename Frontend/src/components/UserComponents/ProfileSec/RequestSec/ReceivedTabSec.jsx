@@ -51,8 +51,6 @@ const ReceivedTabSec = ({
       setLoading(true);
       try {
         const token = localStorage.getItem("token");
-        const userId = localStorage.getItem("userId");
-
         const [res, profileRes, userRes] = await Promise.all([
           axios.get(`${serverUrl}/requests/received`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -60,13 +58,9 @@ const ReceivedTabSec = ({
           axios.get(`${serverUrl}/profile/all`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          userId
-            ? axios
-                .get(`${serverUrl}/user/${userId}`, {
-                  headers: { Authorization: `Bearer ${token}` },
-                })
-                .catch(() => ({ data: { plan: null } }))
-            : Promise.resolve({ data: { plan: null } }),
+          axios.get(`${serverUrl}/user/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }).catch(() => ({ data: { plan: null } })),
         ]);
 
         setProfiles(profileRes.data);

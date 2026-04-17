@@ -632,3 +632,25 @@ export const getUserById = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const getCurrentUser = async (req, res) => {
+  try {
+    // req.user is already populated by authenticateUser middleware
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+    
+    // We can just return the user document, excluding sensitive fields
+    const user = req.user;
+    user.password = undefined;
+    user.resetOtp = undefined;
+    user.otpExpire = undefined;
+    user.verificationOtp = undefined;
+    user.verificationOtpExpire = undefined;
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Get Current User Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
