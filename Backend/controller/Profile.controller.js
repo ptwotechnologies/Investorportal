@@ -1,5 +1,6 @@
 import Profile from "../Models/profile.model.js";
 import Request from "../Models/request.model.js";
+import Connection from "../Models/connect.model.js";
 import resend, { RESEND_FROM } from "../lib/resend.js";
 import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
 // -------------------- CLOUD MULTER SETUP --------------------
@@ -326,15 +327,29 @@ export const uploadCoverImage = async (req, res) => {
 
 export const getAllProfiles = async (req, res) => {
   try {
-    const profiles = await Profile.find({
+    const rawProfiles = await Profile.find({
       userId: { $ne: req.user._id },
     }).populate(
       "userId",
       "businessDetails.firstName businessDetails.lastName businessDetails.investorType role additionalDetails.domain"
     );
 
-   
-    res.json(profiles); // phir bhejo response
+    // Calculate accepted connections count for each profile
+    const profiles = await Promise.all(rawProfiles.map(async (profile) => {
+      const uId = profile.userId?._id || profile.userId;
+      
+      const connectionsCount = await Connection.countDocuments({
+        $or: [{ senderId: uId }, { receiverId: uId }],
+        status: "accepted"
+      });
+
+      return {
+        ...profile.toObject(),
+        totalConnections: connectionsCount
+      };
+    }));
+
+    res.json(profiles);
   } catch (error) {
     console.error("Error in getAllProfiles:", error);
     res.status(500).json({ error: "Server error" });

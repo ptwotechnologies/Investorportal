@@ -24,6 +24,7 @@ const DashboardSec = () => {
   const percentage2 = 25;
 
   const [showProfileModal, setShowProfileModal] = useState(true);
+  const [showMobileCredits, setShowMobileCredits] = useState(false);
   const [profile, setProfile] = useState(null);
 
   useEffect(() => {
@@ -68,9 +69,9 @@ const DashboardSec = () => {
           showProfileModal ? "blur-sm pointer-events-none" : ""
         }`}
       >
-       <div  id="topbar" className="flex items-center w-full px-2 gap-1 lg:gap-2 ">
-         <div
-          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-xl bg-white lg:px-5 px-3 py-2 lg:p-2 w-[70%] lg:ml-1"
+       <div  id="topbar" className="flex items-center w-[100%] px-2 gap-1 lg:gap-2 ">
+        <div
+          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl  lg:px-4 px-3 py-2 lg:p-2 lg:mr-1 ml-1 bg-white"
         >
           <div >
             <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">
@@ -78,7 +79,7 @@ const DashboardSec = () => {
             </p>
           </div>
           <div className="flex items-center gap-1 lg:gap-x-3">
-            {profile?.profilePhoto ? (
+            {/* {profile?.profilePhoto ? (
               <img
                 src={`${serverUrl}${profile.profilePhoto}`}
                 alt="profile"
@@ -88,34 +89,42 @@ const DashboardSec = () => {
             ) : (
               <CgProfile className="text-gray-500" size={25} />
             )}
-            <p className="text-[#001426] font-semibold  text-[10px] lg:text-[16px] hidden lg:block">
-              Switch to professional
-            </p>
+            {profile?.role === "startup" && (
+              <p className="bg-[#D8D6F8] text-[#59549F] rounded-md text-[10px] lg:text-xs hidden lg:block px-2 py-1 transition-all border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)]">
+                Switch to professional
+              </p>
+            )} */}
+
+            {/* Mobile Star Button (Inside Welcome Box) */}
+            {profile?.isFreePlan && (
+              <button
+                onClick={() => setShowMobileCredits(true)}
+                className="lg:hidden flex items-center justify-center w-8 h-8 bg-[#D8D6F8] rounded-md border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)] shrink-0"
+              >
+                <div className="w-5 h-5 rounded-full bg-white border-2 border-[#59549F] flex items-center justify-center">
+                  <FaStar size={12} className="text-[#59549F]" />
+                </div>
+              </button>
+            )}
           </div>
         </div>
+
+        {/* Desktop Credits Widget */}
         {profile?.isFreePlan && (
           <Link
             to="/pricing"
-            className="border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-xl bg-white lg:px-4 px-2.5 flex items-center justify-between gap-2 py-2 shrink-0 lg:w-[30%] group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1"
+            className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-2 shrink-0  group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%]"
           >
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 lg:w-6 lg:h-6 rounded-full bg-gradient-to-tr from-[#59549F] to-[#8a84d6] flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform">
-                <FaStar
-                  size={14}
-                  className={profile.credits > 0 ? "animate-pulse" : ""}
-                />
+              <div className="w-6 h-6 rounded-full border-2 border-[#59549F] flex items-center justify-center bg-[#59549F] text-white text-sm font-bold shadow-sm">
+                {profile.credits ?? 0}
               </div>
-              <div className="flex items-center gap-1 lg:gap-2">
-                <p className="text-[10px] flex items-center text-gray-400 font-bold uppercase tracking-wider leading-none">
-                  Credits
-                </p>
-                <p className="text-sm lg:text-md font-bold text-[#001032]">
-                  {profile.credits ?? 0}/1
-                </p>
-              </div>
+              <p className="text-[13px] font-medium text-[#59549F]">
+                Opportunities Available
+              </p>
             </div>
-            <div className="hidden lg:flex bg-[#59549F]/10 group-hover:bg-[#59549F] text-[#59549F] group-hover:text-white px-2 py-1 rounded-md text-[10px] font-bold transition-all border border-[#59549F]/20 shrink-0">
-              UPGRADE
+            <div className="flex bg-[#D8D6F8] text-[#59549F] px-4 py-1 rounded-md text-xs transition-all border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)]">
+              Unlock Free Access
             </div>
           </Link>
         )}
@@ -126,7 +135,7 @@ const DashboardSec = () => {
               <div id="top" className="flex items-center gap-3">
                 <div
                   id="left"
-                  className="rounded-2xl bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] p-5 h-[47vh]  w-[50%]"
+                  className="rounded-2xl bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 h-[47vh]  w-[50%]"
                 >
                   <h1 className="text-3xl font-semibold text-[#202020] my-3">
                     Progress Statistics
@@ -189,7 +198,7 @@ const DashboardSec = () => {
 
                 <div
                   id="right"
-                  className="rounded-2xl bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] p-3 py-4 h-[47vh]  w-[50%]"
+                  className="rounded-2xl bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-3 py-4 h-[47vh]  w-[50%]"
                 >
                   <div className="flex  items-center justify-between ">
                     <h1 className="text-3xl font-semibold text-[#202020] my-2">
@@ -260,7 +269,7 @@ const DashboardSec = () => {
                 </div>
               </div>
 
-              <div id="bottom" className="bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-2xl mt-3 h-[41vh]">
+              <div id="bottom" className="bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl mt-3 h-[41vh]">
                 <div className="flex items-center justify-between px-5 py-4">
                   <h1 className="text-3xl text-[#202020] font-semibold">
                     Requests
@@ -333,7 +342,7 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="w-[30%] h-[89.5vh] bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-2xl p-4 text-[#202020]"
+              className="w-[30%] h-[89.5vh] bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020]"
             >
               <div className="flex items-center justify-between">
                 <p className="text-3xl font-semibold my-4">Activity</p>
@@ -395,7 +404,7 @@ const DashboardSec = () => {
 
         <div className="lg:hidden bg-gray-100 h-auto">
           <div>
-            <div id="right" className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] p-3 py-4 mt-2 m-2">
+            <div id="right" className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-3 py-4 mt-2 m-2">
               <div className="flex  items-center justify-between ">
                 <h1 className="text-xl font-semibold text-[#202020] my-1">
                   Profile
@@ -465,7 +474,7 @@ const DashboardSec = () => {
               </div>
             </div>
 
-            <div id="left" className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] p-5 mt-3 m-2 ">
+            <div id="left" className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 mt-3 m-2 ">
               <h1 className="text-xl font-semibold text-[#202020] my-4">
                 Progress Statistics
               </h1>
@@ -519,7 +528,7 @@ const DashboardSec = () => {
               </div>
             </div>
 
-            <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-2xl p-5 mt-3 m-2">
+            <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-5 mt-3 m-2">
               <div className="flex items-center justify-between  py-2">
                 <h1 className="text-xl text-[#202020] font-semibold">
                   Requests
@@ -591,7 +600,7 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="mt-2 m-2 h-[96vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] rounded-2xl p-4 text-[#202020]"
+              className="mt-2 m-2 h-[96vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020]"
             >
               <div className="flex items-center justify-between">
                 <p className="text-3xl font-semibold my-4">Activity</p>
@@ -681,6 +690,59 @@ const DashboardSec = () => {
                 Complete Profile Now
               </button>
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Credits & Switch Popup */}
+      {showMobileCredits && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white w-full max-w-[320px] rounded-3xl p-6 relative shadow-2xl animate-fadeIn border border-[#D8D6F8]">
+            <button
+              onClick={() => setShowMobileCredits(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-black transition-colors"
+            >
+              <RxCross2 size={24} />
+            </button>
+
+            <div className="flex flex-col items-center gap-3 mt-4">
+              {/* Credits Section */}
+              <div className="flex flex-col gap-3 bg-gray-50 px-5 py-4 rounded-2xl w-full border border-gray-100">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-full border-2 bg-[#59549F] flex items-center justify-center text-white text-xl font-bold  shadow-sm shrink-0">
+                    {profile?.credits ?? 0}
+                  </div>
+                  <div className="flex flex-col">
+                    <p className="text-[#59549F] font-bold text-[15px] leading-tight tracking-tight">Opportunities Available</p>
+                    <p className="text-gray-400 text-xs mt-0.5 whitespace-nowrap">Available for use</p>
+                  </div>
+                </div>
+                
+                <p className="text-[#59549F] text-[11px] leading-snug w-full pt-2 border-t border-[#59549F]/10">
+                  {profile?.credits > 0 
+                    ? "Use this to connect with premium leads. Each credit allows you to unlock one direct connection or contact request." 
+                    : "You have reached your free credits limit. Upgrade your plan now to unlock more connections and stay connected with the best opportunities!"}
+                </p>
+              </div>
+
+              {/* Upgrade Button */}
+              <Link
+                to="/pricing"
+                onClick={() => setShowMobileCredits(false)}
+                className="w-full bg-[#D8D6F8] text-[#59549F] py-2 rounded-lg font-bold text-center shadow-[inset_0_0_12px_rgba(0,0,0,0.1)] border border-[#59549F]/10 hover:brightness-95 transition-all text-sm  tracking-wider"
+              >
+                Unlock Free Access
+              </Link>
+
+              {/* Switch to Professional (Startups Only) */}
+              {profile?.role === "startup" && (
+                <button
+                  className="w-full bg-[#59549F] text-white py-2 rounded-lg font-bold hover:bg-[#4a458a] transition-all text-sm  tracking-wider shadow-lg"
+                >
+                  Switch to Professional
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}

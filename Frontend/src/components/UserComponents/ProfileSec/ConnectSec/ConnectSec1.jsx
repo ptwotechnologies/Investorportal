@@ -6,7 +6,7 @@ import { serverUrl } from "@/App";
 import axios from "axios";
 import { FaLinkedin } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaLock, FaUnlock } from "react-icons/fa";
 import { getDomainsForRole, INVESTOR_TYPES } from "./domain.js";
 import toast from "react-hot-toast";
 import ConnectUpgradeModal from "./ConnectUpgradeModal";
@@ -351,6 +351,15 @@ const ConnectSec1 = () => {
             : p,
         ),
       );
+
+      // Sync selectedProfile
+      if (selectedProfile && selectedProfile.userId?._id === receiverId) {
+        setSelectedProfile((prev) => ({
+          ...prev,
+          connectionStatus: "sent",
+          connectionId: newConnectionId,
+        }));
+      }
     } catch (err) {
       console.error(err);
       toast.error("Failed to send connection request");
@@ -373,10 +382,23 @@ const ConnectSec1 = () => {
       setProfiles((prev) =>
         prev.map((p) =>
           p.connectionId === connectionId
-            ? { ...p, connectionStatus: status }
+            ? { 
+                ...p, 
+                connectionStatus: status,
+                totalConnections: status === "accepted" ? (p.totalConnections || 0) + 1 : p.totalConnections
+              }
             : p,
         ),
       );
+
+      // Sync selectedProfile
+      if (selectedProfile && selectedProfile.connectionId === connectionId) {
+        setSelectedProfile((prev) => ({
+          ...prev,
+          connectionStatus: status,
+          totalConnections: status === "accepted" ? (prev.totalConnections || 0) + 1 : prev.totalConnections
+        }));
+      }
 
       // Show success message
       if (status === "accepted") {
@@ -723,10 +745,10 @@ const ConnectSec1 = () => {
                     {profile.connectionStatus !== "received" && (
                       <button
                         disabled={profile.connectionStatus !== "accepted"}
-                        className={`w-20 py-1 text-[10px] rounded-full transition-all ${
+                        className={`w-20 py-1 text-[10px] rounded-full transition-all shadow-[inset_0_0_12px_#00000040] ${
                           profile.connectionStatus === "accepted"
-                            ? "bg-[#B1AAAA] text-white"
-                            : "bg-gray-200 text-gray-400 cursor-not-allowed opacity-50"
+                            ? "bg-[#B1AAAA] text-white hover:brightness-95"
+                            : "bg-[#D1D1D1] text-white cursor-not-allowed"
                         }`}
                       >
                         Message
@@ -752,37 +774,6 @@ const ConnectSec1 = () => {
       );
     })}
 </div>
-
-            {/* Withdraw Confirmation Modal - Inside left div */}
-            {showWithdrawConfirm && withdrawProfile && (
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-50 rounded-md">
-                <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col gap-4 w-80">
-                  <p className="text-center">
-                    Are you sure you want to withdraw the connection request to{" "}
-                    <strong>{withdrawProfile.name}</strong>?
-                  </p>
-                  <div className="flex justify-around gap-4">
-                    <button
-                      onClick={() =>
-                        withdrawRequest(withdrawProfile?.connectionId)
-                      }
-                      className="bg-red-600 text-white px-4 py-1 rounded-lg"
-                    >
-                      Yes
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowWithdrawConfirm(false);
-                        setWithdrawProfile(null);
-                      }}
-                      className="bg-gray-400 text-white px-4 py-1 rounded-lg"
-                    >
-                      No
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* 📱 MOBILE FULL PROFILE VIEW */}
@@ -845,15 +836,59 @@ const ConnectSec1 = () => {
                     <h2 className="text-gray-900 text-lg font-semibold">
                       {selectedProfile.name}
                     </h2>
-                    <p className="text-sm text-gray-800 mt-1 leading-tight w-[80%]">
+                    <p className="text-sm text-gray-800  w-[80%]">
                       {selectedProfile.bio || "No bio available"}
                     </p>
 
-                    <p className="text-sm text-gray-700 font-medium mt-2 ">
+                    <p className="text-sm text-gray-700 font-medium mt-1 ">
                       {selectedProfile.city && selectedProfile.state
                         ? `${selectedProfile.city}, ${selectedProfile.state}`
                         : "Location not added"}
                     </p>
+
+                    {/* ✅ Action Buttons Mobile */}
+                    <div className="flex items-center gap-3 mt-2 mb-2">
+                       {selectedProfile.connectionStatus === "accepted" ? (
+                         <button disabled className="w-25 bg-[#D8D6F8] text-[#59549f] opacity-70 shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium cursor-default text-center">
+                           Connected
+                         </button>
+                       ) : selectedProfile.connectionStatus === "received" ? (
+                         <div className="flex gap-2">
+                           <button onClick={() => respondToRequest(selectedProfile.connectionId, "accepted")} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                             Accept
+                           </button>
+                           <button onClick={() => respondToRequest(selectedProfile.connectionId, "ignored")} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                             Ignore
+                           </button>
+                         </div>
+                       ) : selectedProfile.connectionStatus === "sent" ? (
+                         <button onClick={() => { setWithdrawProfile(selectedProfile); setShowWithdrawConfirm(true); }} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                           Withdraw
+                         </button>
+                       ) : (
+                         <button onClick={() => sendConnectionRequest(selectedProfile.userId?._id)} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                           Connect
+                         </button>
+                       )}
+
+                       <button 
+                         disabled={selectedProfile.connectionStatus !== "accepted"}
+                         className={`w-25 flex items-center justify-center gap-2 py-1  rounded-full text-sm font-medium shadow-[inset_0_0_12px_#00000040] transition-all ${
+                           selectedProfile.connectionStatus === "accepted"
+                           ? "bg-[#B1AAAA] text-white hover:brightness-95"
+                           : "bg-[#D1D1D1] text-white cursor-not-allowed"
+                         }`}
+                       >
+                         {selectedProfile.connectionStatus !== "accepted" && <FaLock size={12} />}
+                         Message
+                       </button>
+                    </div>
+                    {/* Connection Count */}
+                    <div className="flex items-center gap-1 mt-1 ml-1">
+                      <p className="text-sm font-medium text-gray-600">
+                        {selectedProfile?.totalConnections || selectedProfile?.userId?.connections?.length || selectedProfile?.connections?.length || 0} connections
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -1192,7 +1227,7 @@ const ConnectSec1 = () => {
                     <h2 className="text-gray-900 text-lg font-semibold">
                       {selectedProfile.name}
                     </h2>
-                    <p className="text-sm text-gray-800 mt-1 leading-tight w-[70%]">
+                    <p className="text-sm text-gray-800 leading-tight w-[70%]">
                       {selectedProfile.bio || "No bio available"}
                     </p>
 
@@ -1201,6 +1236,50 @@ const ConnectSec1 = () => {
                         ? `${selectedProfile.city}, ${selectedProfile.state}`
                         : "Location not added"}
                     </p>
+
+                    {/* ✅ Action Buttons Desktop */}
+                    <div className="flex items-center gap-3 mt-2">
+                       {selectedProfile.connectionStatus === "accepted" ? (
+                         <button disabled className="w-25 bg-[#D8D6F8] text-[#59549f] opacity-70 shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium cursor-default text-center">
+                           Connected
+                         </button>
+                       ) : selectedProfile.connectionStatus === "received" ? (
+                         <div className="flex gap-2">
+                           <button onClick={() => respondToRequest(selectedProfile.connectionId, "accepted")} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                             Accept
+                           </button>
+                           <button onClick={() => respondToRequest(selectedProfile.connectionId, "ignored")} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                             Ignore
+                           </button>
+                         </div>
+                       ) : selectedProfile.connectionStatus === "sent" ? (
+                         <button onClick={() => { setWithdrawProfile(selectedProfile); setShowWithdrawConfirm(true); }} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                           Withdraw
+                         </button>
+                       ) : (
+                         <button onClick={() => sendConnectionRequest(selectedProfile.userId?._id)} className="w-25 bg-[#D8D6F8] text-[#59549f] shadow-[inset_0_0_12px_#00000040] py-1 rounded-full text-sm font-medium hover:brightness-95 text-center">
+                           Connect
+                         </button>
+                       )}
+
+                       <button 
+                         disabled={selectedProfile.connectionStatus !== "accepted"}
+                         className={`w-25 flex items-center justify-center gap-2 py-1 rounded-full text-sm font-medium shadow-[inset_0_0_12px_#00000040] transition-all ${
+                           selectedProfile.connectionStatus === "accepted"
+                           ? "bg-[#B1AAAA] text-white hover:brightness-95"
+                           : "bg-[#D1D1D1] text-white cursor-not-allowed"
+                         }`}
+                       >
+                         {selectedProfile.connectionStatus !== "accepted" && <FaLock size={12} />}
+                         Message
+                       </button>
+                    </div>
+                    {/* Connection Count */}
+                    <div className="flex items-center gap-1 mt-1 ml-1">
+                      <p className="text-sm font-medium text-gray-600">
+                        {selectedProfile?.totalConnections || selectedProfile?.userId?.connections?.length || selectedProfile?.connections?.length || 0} connections
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -1503,6 +1582,38 @@ const ConnectSec1 = () => {
       {/* ✅ Premium Upgrade Modal */}
       {showUpgradeModal && (
         <ConnectUpgradeModal onClose={() => setShowUpgradeModal(false)} />
+      )}
+
+      {/* ✅ Global Withdraw Confirmation Modal */}
+      {showWithdrawConfirm && withdrawProfile && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-[1000]">
+          <div className="bg-white p-6 rounded-2xl shadow-2xl flex flex-col gap-6 w-[90%] max-w-sm animate-fadeIn border border-[#D8D6F8]">
+            <p className="text-center text-[#001032] text-lg font-medium">
+              Withdraw Request?
+            </p>
+            <p className="text-center text-gray-600 text-sm -mt-4">
+              Are you sure you want to withdraw the connection request sent to{" "}
+              <span className="font-bold text-[#59549f]">{withdrawProfile.name}</span>?
+            </p>
+            <div className="flex gap-3 mt-2">
+              <button
+                onClick={() => {
+                  setShowWithdrawConfirm(false);
+                  setWithdrawProfile(null);
+                }}
+                className="flex-1 py-3 rounded-xl border border-gray-200 text-gray-600 font-semibold hover:bg-gray-50 transition-all"
+              >
+                No, Keep
+              </button>
+              <button
+                onClick={() => withdrawRequest(withdrawProfile?.connectionId)}
+                className="flex-1 py-3 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100 transition-all border border-red-200"
+              >
+                Yes, Withdraw
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

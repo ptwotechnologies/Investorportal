@@ -176,7 +176,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
             {selectedRequest === option.id && (
               <div className="absolute z-50 left-15 right-0 top-[90%] mt-2 p-4 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-wrap gap-4">
                 <div className="flex-1 min-w-[140px] relative">
-                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">Expected Budget <span className="text-red-500">*</span></label>
+                  <label className="text-[11px]  text-[#59549F]  ml-1 block mb-1.5 tracking-wider">Expected Budget <span className="text-red-500">*</span></label>
                   <div className="relative">
                     <button 
                       type="button"
@@ -217,7 +217,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
                   </div>
                 </div>
                 <div className="flex-1 min-w-[140px] relative">
-                  <label className="text-[10px] font-bold text-[#59549F] uppercase ml-1 block mb-1.5 tracking-wider">How soon do you want to get started? <span className="text-red-500">*</span></label>
+                  <label className="text-[11px]  text-[#59549F]  ml-1 block mb-1.5 tracking-wider">How soon do you want to get started? <span className="text-red-500">*</span></label>
                   <div className="relative">
                     <button 
                       type="button"

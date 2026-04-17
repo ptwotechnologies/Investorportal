@@ -834,12 +834,12 @@ const RightAllTab = ({
 
       {/* ✅ Interest Survey Survey Popover */}
       {interestSurvey && interestSurvey.requestId === selectedRequest._id && (
-        <div className="absolute bottom-full mb-4 left-1/2 transform -translate-x-1/2 bg-white shadow-[0_-4px_24px_rgba(0,0,0,0.15)] rounded-2xl p-4 border w-72 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="absolute bottom-full mb-4  bg-white shadow-[0_-4px_24px_rgba(0,0,0,0.15)] rounded-2xl p-4 border w-82 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="space-y-4">
             <h4 className="text-sm font-bold text-[#001032] border-b pb-2">Interest Details</h4>
             
             <div>
-              <label className="text-[11px] font-bold text-gray-500 uppercase block mb-1">When can you start?</label>
+              <label className="text-[11px] text-gray-500  block mb-1">When can you start?</label>
               <select 
                 value={interestSurvey.startTime}
                 onChange={(e) => setInterestSurvey({...interestSurvey, startTime: e.target.value})}
@@ -852,7 +852,7 @@ const RightAllTab = ({
             </div>
 
             <div>
-              <label className="text-[11px] font-bold text-gray-500 uppercase block mb-1">How relevant is your expertise?</label>
+              <label className="text-[11px]  text-gray-500  block mb-1">How relevant is your expertise?</label>
               <select 
                 value={interestSurvey.relevance}
                 onChange={(e) => setInterestSurvey({...interestSurvey, relevance: e.target.value})}
