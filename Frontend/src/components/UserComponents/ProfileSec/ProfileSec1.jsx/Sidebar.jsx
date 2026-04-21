@@ -326,13 +326,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                 {isDealsOpen && (
                   <div className="ml-7 mt-2 flex flex-col text-[13px] text-gray-600">
-                    <NavLink
-                      to="/deal/dealdraft"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
-                    >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Deal Draft
-                    </NavLink>
+                   
 
                     <NavLink
                       to="/deal/activedeals"

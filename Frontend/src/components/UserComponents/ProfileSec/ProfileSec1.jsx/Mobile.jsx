@@ -208,9 +208,7 @@ const Mobile = () => {
 
                         {isDealsOpen && (
                           <ul className="ml-15 mt-2 flex flex-col gap-2  text-[15px] text-gray-600 ">
-                            <Link to="/deal/dealdraft">
-                              <li type="disc">Deal Draft</li>
-                            </Link>
+                           
                             <Link to="/deal/activedeals">
                               <li type="disc"> Active Deals</li>
                             </Link>

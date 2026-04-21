@@ -1,100 +1,53 @@
-import React from 'react'
-import { CiSearch } from "react-icons/ci";
+import React from "react";
+import { IoSearchOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
-import { MdOutlinePrivateConnectivity } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 const DealTopBar = () => {
   return (
-    <div className='bg-white px-3 lg:px-6 py-6' >
-        <div id='top' className='flex flex-col lg:flex-row items-start justify-between w-full '>
-            <div className='lg:w-[40%] w-full' > 
-                <h1 className='lg:text-xl  text-2xl font-semibold'>Active Deals</h1>
-                <p className='lg:text-sm text-xs'>Manage all ongoing partnerships and work progress</p>
-
-            </div>
-            <div className='lg:flex items-center gap-4 hidden  '>
-                 <div className='flex items-center border border-[#D9D9D9] gap-2  rounded-md h-11 px-2'>
-                    <CiSearch size={25}  />
-                 <input type="text" name="" id="" placeholder='Search by startup or professional ' className=' outline-none lg:w-80 ' />
-                 <button className='px-4 border-l border-[#D9D9D9] h-full'>All Status</button>
-                 </div>
-              <div className='flex items-center gap-2 bg-[#7F6DD4] text-white p-2 px-3 rounded-md'>
-                <FaPlus />
-                <button>Create Deal</button>
-
-              </div>
-
-            </div>
-
-             <div className='flex items-center gap-2 lg:hidden mt-4 w-full'>
-                 <div className='flex items-center border border-[#D9D9D9] gap-2  rounded-md  px-1 w-full'>
-                    <CiSearch size={25}  />
-                 <input type="text" name="" id="" placeholder='Search  ' className=' outline-none w-full ' />
-                 <button className='p-2 px-1 text-xs border-l border-[#D9D9D9] w-25 '>All Status</button>
-                 </div>
-              <div className='flex items-center gap-1 bg-[#7F6DD4] text-white p-2 rounded-md w-35'>
-                <FaPlus />
-                <button className='text-xs'>Create Deal</button>
-
-              </div>
-
-            </div>
-
+    <div className="bg-white px-4 lg:px-6 lg:pt-6 pt-4 pb-3 border-b border-gray-100 shadow-sm">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
+        
+        {/* Title Section */}
+        <div className="flex-shrink-0 text-left w-full lg:w-auto">
+          <h1 className="text-2xl font-medium text-[#001032] leading-tight">Active Deals</h1>
+          <p className="text-[12px] lg:text-sm text-[#000000] mt-1">
+            Manage all ongoing projects and work progress
+          </p>
         </div>
 
-
-        <div id='bottom' className=' grid grid-cols-2 lg:flex items-center justify-around gap-4 mt-4 lg:mt-10 '>
-            <div className='bg-[#EDF0FE] shadow-md p-2 rounded-md w-full py-3 px-2 lg:px-3'>
-                <div className='flex items-center gap-2'>
-                   <MdOutlinePrivateConnectivity size={25}/>
-                   <h1 className='lg:text-md text-xs '>Active Deals</h1>
-                </div>
-                <p className='mt-2 text-2xl lg:text-3xl font-bold'>16</p>
-                <div>
-
-                </div>
-
+        {/* Search and Action Row */}
+        <div className="flex items-center gap-2 lg:gap-6 w-full lg:flex-1 lg:justify-end">
+          {/* Search Bar */}
+          <div className="relative flex-1 lg:max-w-[670px] flex items-center rounded-lg lg:rounded-xl justify-between gap-2 lg:gap-6 border pl-2 lg:pl-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] bg-white h-8 lg:h-12 overflow-hidden">
+            <div className="flex items-center gap-2 w-full overflow-hidden">
+              <div className="text-gray-400 shrink-0">
+                <IoSearchOutline size={18} className="lg:hidden" />
+                <IoSearchOutline size={22} className="hidden lg:block" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search by projects, milestones or startups"
+                className="outline-none transition-all placeholder:text-gray-400 w-full text-xs lg:text-base border-none ring-0 focus:ring-0 h-8 lg:h-12"
+              />
             </div>
+            <button className="flex items-center justify-center shrink-0 w-[80px] lg:w-[120px] lg:rounded-xl rounded-lg h-full hover:bg-gray-50 transition-all text-[#313131] font-medium text-[10px] lg:text-[15px] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] border-l">
+              All Status
+            </button>
+          </div>
 
-
-           <div className='bg-[#F2E7FC] shadow-md p-2 rounded-md w-full py-3 px-2 lg:px-3'>
-                <div className='flex items-center gap-2'>
-                   <MdOutlinePrivateConnectivity size={25} />
-                   <h1 className='lg:text-md text-xs'>Total Ongoing Value</h1>
-                </div>
-                <p className='mt-2 text-2xl lg:text-3xl font-bold'>4</p>
-                <div>
-
-                </div>
-
-            </div>
-            <div className='bg-[#FDF4E3] shadow-md p-2 rounded-md w-full py-3 px-2 lg:px-3'>
-                <div className='flex items-center gap-2'>
-                   <MdOutlinePrivateConnectivity size={25} />
-                   <h1 className='lg:text-md text-xs'>Pending Payments</h1>
-                </div>
-                <p className='mt-2 text-2xl lg:text-3xl font-bold'>3</p>
-                <div>
-
-                </div>
-
-            </div>
-            <div className='bg-[#FBEFFB] shadow-md p-2 rounded-md w-full py-3 px-2 lg:px-3'>
-                <div className='flex items-center gap-2 '>
-                   <MdOutlinePrivateConnectivity size={25}/>
-                   <h1 className='lg:text-md text-xs'>Due this week</h1>
-                </div>
-                <p className='mt-2 text-2xl lg:text-3xl font-bold'>325k</p>
-                <div>
-
-                </div>
-
-            </div>
-
+          {/* Create Button */}
+          <Link to="/deal/dealdraft" className="shrink-0">
+            <button className="flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+              <FaPlus size={15} className="lg:hidden" />
+              <FaPlus size={18} className="hidden lg:block" />
+              <span className="text-[10px] lg:text-sm whitespace-nowrap">Create Deal</span>
+            </button>
+          </Link>
         </div>
-      
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default DealTopBar
+export default DealTopBar;
