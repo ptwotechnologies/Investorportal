@@ -1,288 +1,331 @@
-import React, { useState, useEffect } from "react";
-import { Check, Upload, AlertTriangle, MessageSquare, ChevronDown, X, ArrowLeft } from "lucide-react";
-import { IoGrid } from "react-icons/io5";
-import { AiOutlineBars } from "react-icons/ai";
+import React, { useState } from "react";
+import { FiPlus, FiArrowLeft, FiPlusCircle, FiChevronDown } from "react-icons/fi";
+import { MdOutlinePrivateConnectivity, MdSecurity, MdOutlineFactCheck, MdOutlineHandshake } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io";
 
-// ── Data ──────────────────────────────────────────────────────────────────────
-const cases = [
-  { id: "DSP-2026-0045", company: "Stellar", sub: "× Akshay Dogra", project: "UI Screens", filedBy: "Startup", tags: ["HD", "Adher Review"], tagColors: ["bg-blue-100 text-blue-600", "bg-green-100 text-green-600"], avatarBg: "bg-orange-400", initial: "S", status: null },
-  { id: "DSP-2026-0045", company: "Dispute Sxy", sub: "", project: "Milestone ₹11 ,eay Dogra", filedBy: "Startup", tags: ["Under Review"], tagColors: ["bg-purple-100 text-purple-600"], avatarBg: "bg-purple-300", initial: "D", status: null },
-  { id: null, company: "NomadX", sub: "", project: "F1ad -end API", filedBy: "Startup", tags: ["Open"], tagColors: ["bg-green-100 text-green-600"], avatarBg: "bg-blue-400", initial: "N", status: null },
-  { id: null, company: "PQ Solutions", sub: "", project: "UI Files", filedBy: "Professional", tags: ["Resolved"], tagColors: ["bg-emerald-100 text-emerald-600"], avatarBg: "bg-sky-400", initial: "P", status: "Resolved" },
-  { id: null, company: "Munify", sub: "", project: "Backend API", amount: "₹6500", filedBy: "Munity", tags: ["Resolved"], tagColors: ["bg-emerald-100 text-emerald-600"], avatarBg: "bg-teal-400", initial: "M", status: "Resolved" },
-];
+const Bottom = ({ isCreateMode, setIsCreateMode }) => {
+  const [selectedDeal, setSelectedDeal] = useState(null);
+  const [selectedDispute, setSelectedDispute] = useState(null);
 
-const evidenceFiles = [
-  { name: "Screenshot_01.png", size: "₹ 3.5 KB", icon: "img", color: "bg-blue-50 border-blue-100" },
-  { name: "esjera0", size: "2.5 MB", icon: "img", color: "bg-orange-50 border-orange-100" },
-  { name: "chat_log.pdf", size: "1.2 MB", icon: "pdf", color: "bg-pink-50 border-pink-100" },
-  { name: "Feedback.docx", size: "1.1 MB", icon: "doc", color: "bg-blue-50 border-blue-100" },
-];
-
-const messages = [
-  { sender: "Stellar", sub: "(Akshay Dogra)", time: "April 5, 2026 at 10:32 AM", text: "The initial design does not follow the specifications we agreed upon. I see several UI components missing or misaligned. Please review the wireframes as and make the necessary corrections.", avatarBg: "bg-orange-400", initial: "S" },
-  { sender: "PQ Solutions", sub: "(Amit Verma)", time: "April 5, 2026 at 11:00 AM", text: "Hello Akshay, I understand your concerns. I'll review the wireframes and ensure that all components are adjusted according to the specifications. I'll get back to you with the revised design.", avatarBg: "bg-sky-400", initial: "P" },
-];
-
-const timelineSteps = [
-  { label: "Case Timeline", date: "Apr 5, 2026", done: true },
-  { label: "Evidence Submitted", date: "Apr 5, 2026", done: true },
-  { label: "Platform Review", date: "In Progress", done: false, inProgress: true },
-];
-
-const resolutionOptions = [
-  { label: "Approve Payment", icon: <Check size={14} />, style: "bg-gradient-to-b from-[#5BB9AE] to-[#379C8C] text-white border-0" },
-  { label: "Refund Payment", icon: <span className="text-orange-400">↺</span>, style: "bg-orange-50 text-orange-500 border border-orange-100" },
-  { label: "Split Payment", icon: <span className="text-purple-500">⊞</span>, style: "bg-purple-50 text-purple-600 border border-purple-100" },
-  { label: "Request Revision", icon: <MessageSquare size={13} className="text-blue-500" />, style: "bg-blue-50 text-blue-600 border border-blue-100" },
-  { label: "Escalate", icon: <AlertTriangle size={13} className="text-red-400" />, style: "bg-red-50 text-red-500 border border-red-100" },
-];
-
-const FileIcon = ({ type }) => {
-  if (type === "pdf") return <div className="w-8 h-8 bg-pink-200 rounded flex items-center justify-center text-[9px] font-bold text-pink-700">PDF</div>;
-  if (type === "doc") return <div className="w-8 h-8 bg-blue-200 rounded flex items-center justify-center text-[9px] font-bold text-blue-700">DOC</div>;
-  return <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center text-[9px] font-bold text-blue-500">IMG</div>;
-};
-
-// ── Shared case detail content ────────────────────────────────────────────────
-const CaseDetail = ({ selectedCase }) => (
-  <div className="flex flex-col gap-3">
-    {/* Dispute ID header */}
-    <div className="flex items-center justify-between px-1 flex-wrap gap-2 shrink-0">
-      <p className="text-sm text-gray-600">
-        Dispute ID: <span className="font-bold text-gray-800">DSP-2026-0045</span>
-      </p>
-      <div className="flex items-center gap-1.5 bg-red-50 border border-red-100 px-3 py-1 rounded-lg">
-        <AlertTriangle size={12} className="text-red-400" />
-        <span className="text-xs text-red-500 font-medium">Case escalated to compliance</span>
-      </div>
-    </div>
-
-    {/* Case info */}
-    <div className="bg-white rounded-2xl shadow-sm px-5 py-4">
-      <div className="flex items-start justify-between mb-3">
-        <div>
-          <h2 className="font-bold text-gray-800 text-base">Stellar × Akshay Dogra</h2>
-          <p className="text-xs text-gray-500 mt-0.5">Milestone: UI Screens</p>
-        </div>
-        <p className="font-bold text-gray-800 text-base">₹ 30,000</p>
-      </div>
-      <div className="flex items-center gap-3 mb-3">
-        <span className="text-xs text-gray-500">Amount:</span>
-        <span className="font-bold text-gray-800 text-sm">₹ 35,000</span>
-        <div className="flex items-center gap-1 bg-gray-100 px-2 py-0.5 rounded text-xs text-gray-600">
-          High <ChevronDown size={11} />
-        </div>
-      </div>
-      <p className="text-xs text-gray-600">
-        <span className="font-semibold text-gray-800">Dispute Reason:</span> Work delivered does not match agreed specifications.
-      </p>
-    </div>
-
-    {/* Evidence Upload */}
-    <div className="bg-white rounded-2xl shadow-sm px-5 py-4">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="font-semibold text-gray-800 text-sm">Evidence Upload</h3>
-        <button className="flex items-center gap-1.5 border border-gray-200 text-gray-600 text-xs px-3 py-1.5 rounded-lg hover:bg-gray-50 transition-colors">
-          <Upload size={12} /> Upload More
-        </button>
-      </div>
-      <div className="grid grid-cols-4 gap-2">
-        {evidenceFiles.map((file, i) => (
-          <div key={i} className={`border rounded-xl p-2.5 flex flex-col gap-1.5 ${file.color}`}>
-            <div className="w-full h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-              <FileIcon type={file.icon} />
-            </div>
-            <p className="text-[9px] font-medium text-gray-700 truncate">{file.name}</p>
-            <p className="text-[9px] text-gray-400">{file.size}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-
-    {/* Conversation Thread */}
-    <div className="bg-white rounded-2xl shadow-sm px-5 py-4">
-      <h3 className="font-semibold text-gray-800 text-sm mb-3">Conversation Thread</h3>
-      <div className="flex flex-col gap-4">
-        {messages.map((msg, i) => (
-          <div key={i} className="flex items-start gap-3">
-            <div className={`w-8 h-8 rounded-full ${msg.avatarBg} flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5`}>
-              {msg.initial}
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between mb-1 gap-2">
-                <p className="text-sm">
-                  <span className="font-bold text-gray-800">{msg.sender}</span>{" "}
-                  <span className="text-gray-400 text-xs">{msg.sub}</span>
-                </p>
-                <span className="text-[10px] text-gray-400 shrink-0">{msg.time}</span>
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed">{msg.text}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-);
-
-// ── Main ──────────────────────────────────────────────────────────────────────
-const Bottom = () => {
-  const [selectedCase, setSelectedCase] = useState(cases[0]);
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Lock body scroll when overlay is open
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+  const deals = [
+    {
+      id: 1,
+      name: "Parikalpna",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "1,50,000",
+      disputes: [
+        {
+          id: "DSP-2026-C0003921",
+          duration: "20 Days",
+          milestone: "Milestone 1",
+          reason: "Work is not delivered as expected and there are a lot of problems with the UI design",
+          amount: "Rs 10,000"
+        },
+        {
+          id: "DSP-2026-C0003922",
+          duration: "20 Days",
+          milestone: "Milestone 1",
+          reason: "Work is not delivered as expected and there are a lot of problems with the UI design",
+          amount: "Rs 10,000"
+        },
+        {
+          id: "DSP-2026-C0003923",
+          duration: "20 Days",
+          milestone: "Milestone 1",
+          reason: "Work is not delivered as expected and there are a lot of problems with the UI design",
+          amount: "Rs 10,000"
+        }
+      ]
+    },
+    {
+      id: 2,
+      name: "Aetherweb",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "1,50,000",
+      disputes: []
+    },
+    {
+      id: 3,
+      name: "Lawkase",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "1,50,000",
+      disputes: []
     }
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
+  ];
 
-  const handleSelect = (c) => {
-    setSelectedCase(c);
-    setMobileOpen(true);
-  };
+  const StatCard = ({ label, value, bgColor }) => (
+    <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+      <div className="flex items-center gap-2">
+        <MdOutlineFactCheck size={20} className="text-[#001032]" />
+        <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032] leading-tight">{label}</h3>
+      </div>
+      <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
+    </div>
+  );
+
+  const DealCard = ({ deal }) => (
+    <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${selectedDeal?.id === deal.id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start">
+        <div className="flex flex-col">
+          <h3 className="lg:text-xl lg:text-[16px] font-medium text-[#000000] leading-tight">{deal.name}</h3>
+        </div>
+        <div className="flex flex-col lg:items-center">
+          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Due Date</p>
+        </div>
+        <div className="flex flex-col lg:items-end">
+          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+        </div>
+
+        <div className="flex flex-col -mt-1">
+          <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F] underline-offset-4 w-fit">{deal.subtitle}</p>
+        </div>
+        <div className="flex flex-col lg:items-center -mt-1">
+          <p className="text-[10px] lg:text-sm text-[#000000] ">{deal.dueDate}</p>
+        </div>
+        <div className="flex flex-col lg:items-end -mt-1">
+          <p className="text-[10px] lg:text-sm text-[#000000] ">Rs {deal.price}</p>
+        </div>
+
+        <div className="col-span-3">
+          <p className="text-[10px] lg:text-sm text-[#000000] ">{deal.owner}</p>
+        </div>
+      </div>
+      <button 
+        onClick={() => {
+          setSelectedDeal(deal);
+          setSelectedDispute(null);
+          setIsCreateMode(false);
+        }}
+        className="w-full mt-2 py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-medium text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all"
+      >
+        View Details
+      </button>
+    </div>
+  );
+
+  const DisputeItem = ({ dispute }) => (
+    <div className="space-y-3 mb-8 last:mb-0 rounded-2xl p-3 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+      <div className="flex items-center justify-between px-2">
+        <h4 className="text-sm lg:text-base font-medium text-[#001032]">Dispute ID – {dispute.id}</h4>
+        <span className="bg-[#B91C1C] text-white text-[6px] lg:text-[10px] px-1 lg:px-3 py-1 rounded-full lg:font-semibold">
+          Duration - {dispute.duration}
+        </span>
+      </div>
+      <div className="bg-white rounded-xl border border-gray-100 p-4 lg:p-2 lg:px-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2">
+        <h5 className="text-sm lg:text-base font-semibold text-[#001032]">{dispute.milestone}</h5>
+        <p className="text-[12px] lg:text-xs text-[#001032]/70 lg:font-medium leading-relaxed">
+          <span className="text-[#59549F] lg:font-semibold">Reason</span> – {dispute.reason}
+        </p>
+        <p className="text-[12px] lg:text-xs text-[#001032]/70 ">
+          <span className="text-[#59549F] lg:font-semibold">Amount</span> – {dispute.amount}
+        </p>
+        <div className="flex justify-end mt-2">
+          <button 
+            onClick={() => {
+              setSelectedDispute(dispute);
+              setIsCreateMode(false);
+            }}
+            className="px-6 py-2 bg-[#D8D6F8] text-[#59549F] rounded-lg text-[10px] lg:text-xs font-semibold shadow-sm hover:opacity-90"
+          >
+            View Details
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="flex lg:flex-row flex-col items-start gap-3 w-full px-3 lg:px-6 py-4">
-
-      {/* ══ LEFT: Case List ═══════════════════════════════════════════════════ */}
-      <div className="lg:w-[22%] w-full flex flex-col">
-        <div className="flex items-center justify-between mb-3">
-          <h1 className="font-semibold text-[#5C5D78] text-base">Case List</h1>
-          <div className="flex items-center gap-1">
-            <button className="p-1 bg-white border border-gray-200 rounded text-gray-400 hover:bg-gray-50"><IoGrid size={12} /></button>
-            <button className="p-1 bg-white border border-gray-200 rounded text-gray-400 hover:bg-gray-50 flex items-center gap-0.5 text-xs px-1.5">
-              <AiOutlineBars size={12} /> 1
-            </button>
-          </div>
+    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[660px] h-screen overflow-hidden">
+      
+      {/* ── Left Column ── */}
+      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${ (selectedDeal || isCreateMode) ? 'hidden lg:block' : 'block'}`}>
+        <div className="grid grid-cols-2 gap-4">
+          <StatCard label="Total Disputes" value="9" bgColor="bg-[#D8E1F0]" />
+          <StatCard label="Active Disputes" value="4" bgColor="bg-[#D8D6F8]" />
+          <StatCard label="Resolved" value="3" bgColor="bg-[#EFDBD9]" />
+          <StatCard label="Escalated" value="4" bgColor="bg-[#D7EBE4]" />
         </div>
 
-        <div className="flex flex-col gap-2 overflow-y-auto scrollbar-hide" style={{ maxHeight: "60vh" }}>
-          {cases.map((c, i) => (
-            <div
-              key={i}
-              onClick={() => handleSelect(c)}
-              className={`bg-white rounded-xl p-3 cursor-pointer border transition-all ${
-                selectedCase === c ? "border-purple-200 shadow-md" : "border-transparent shadow-sm hover:shadow-md"
-              }`}
-            >
-              <div className="flex items-center gap-2 mb-1">
-                <div className={`w-8 h-8 rounded-full ${c.avatarBg} flex items-center justify-center text-white text-xs font-bold shrink-0`}>
-                  {c.initial}
-                </div>
-                <div>
-                  <p className="font-bold text-gray-800 text-sm leading-tight">{c.company}</p>
-                  {c.sub && <p className="text-gray-500 text-[10px]">{c.sub}</p>}
-                </div>
-              </div>
-              {c.id && <p className="text-gray-400 text-[10px] mb-1">{c.id}</p>}
-              <p className="text-[11px] font-medium text-purple-500 truncate mb-1">{c.project}</p>
-              <p className="text-[10px] text-gray-400 mb-1.5">Filed by {c.filedBy}</p>
-              {c.amount && <p className="text-[10px] text-gray-600 font-semibold mb-1">Filed by {c.filedBy} {c.amount}</p>}
-              <div className="flex flex-wrap gap-1">
-                {c.tags.map((tag, j) => (
-                  <span key={j} className={`text-[9px] px-2 py-0.5 rounded-full font-medium ${c.tagColors[j] || "bg-gray-100 text-gray-500"}`}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+        <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Case List</h2>
+        <div className="space-y-6 pb-20">
+          {deals.map(deal => (
+            <DealCard key={deal.id} deal={deal} />
           ))}
         </div>
       </div>
 
-      {/* ══ MIDDLE: Desktop only ══════════════════════════════════════════════ */}
-      <div className="hidden lg:flex lg:w-[50%] flex-col" style={{ maxHeight: "65vh" }}>
-        <div className="flex flex-col gap-3 overflow-y-auto scrollbar-hide flex-1">
-          <CaseDetail selectedCase={selectedCase} />
-        </div>
-      </div>
+      {/* ── Divider ── */}
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
-      {/* ══ MOBILE: Slide-up overlay ══════════════════════════════════════════ */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-50 lg:hidden"
-          style={{ backgroundColor: "rgba(0,0,0,0.35)" }}
-          onClick={() => setMobileOpen(false)}
-        >
-          <div
-            className="absolute bottom-0 left-0 right-0 rounded-t-2xl flex flex-col bg-gray-100"
-            style={{ maxHeight: "88vh" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 bg-white rounded-t-2xl border-b border-gray-100 shrink-0">
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-1.5 text-sm font-medium text-gray-600 active:text-gray-900"
-              >
-                <ArrowLeft size={16} /> Back
-              </button>
-
-              <div className="flex items-center gap-2">
-                <div className={`w-6 h-6 rounded-full ${selectedCase.avatarBg} flex items-center justify-center text-white text-[10px] font-bold`}>
-                  {selectedCase.initial}
-                </div>
-                <p className="font-semibold text-gray-800 text-sm">{selectedCase.company}</p>
-              </div>
-
-              <button
-                onClick={() => setMobileOpen(false)}
-                className="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 active:bg-gray-200"
-              >
-                <X size={15} />
-              </button>
-            </div>
-
-            {/* Scrollable content */}
-            <div className="overflow-y-auto scrollbar-hide flex-1 p-3">
-              <CaseDetail selectedCase={selectedCase} />
-            </div>
+      {/* ── Right Column ── */}
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col gap-4 overflow-hidden ${(!selectedDeal && !isCreateMode) ? 'hidden lg:flex' : 'flex'}`}>
+        
+        {/* Back Header (Mobile & Detail View) */}
+        {(selectedDeal || isCreateMode) && (
+          <div className="flex items-center gap-3 py-1 mt-1 mx-2">
+            <button 
+              onClick={() => {
+                if (isCreateMode) {
+                  setIsCreateMode(false);
+                } else if (selectedDispute) {
+                  setSelectedDispute(null);
+                } else {
+                  setSelectedDeal(null);
+                }
+              }} 
+              className="lg:p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm "
+            >
+              <FiArrowLeft size={20} />
+            </button>
+            <span className="font-semibold text-lg text-[#001032] ">
+              {isCreateMode ? 'Create Dispute' : (selectedDispute ? 'Dispute Details' : 'Back to Case List')}
+            </span>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ══ RIGHT: Resolution ════════════════════════════════════════════════ */}
-      <div className="lg:w-[28%] w-full flex flex-col gap-3">
-        <h1 className="font-semibold text-[#5C5D78] text-base">Resolution</h1>
+        {(selectedDeal || isCreateMode) ? (
+          <div className={`flex-1 bg-white flex flex-col overflow-hidden ${(selectedDispute || isCreateMode) ? 'shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 rounded-2xl lg:mx-4 mx-1 ' : ''}`}>
+            <div className={`flex-1 overflow-y-auto scrollbar-hide space-y-6 ${(selectedDispute || isCreateMode) ? 'p-2 lg:p-5 ' : 'p-2 lg:p-4'}`}>
+              
+              {isCreateMode ? (
+                /* ── Create Dispute View ── */
+                <div className="space-y-6 ">
+                   <h4 className="text-base font-semibold text-[#001032] px-2">Dispute ID – DSP-2026-CO003921</h4>
 
-        <div className="bg-white rounded-2xl shadow-sm px-4 py-3">
-          <div className="flex flex-col">
-            {timelineSteps.map((step, i) => (
-              <div key={i} className="flex items-start gap-3">
-                <div className="flex flex-col items-center">
-                  <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${
-                    step.inProgress ? "bg-orange-100 border-2 border-orange-400" : step.done ? "bg-purple-100" : "bg-gray-100"
-                  }`}>
-                    {step.done && !step.inProgress && <div className="w-2 h-2 rounded-full bg-purple-400" />}
-                    {step.inProgress && <div className="w-2 h-2 rounded-full bg-orange-400" />}
+                   {/* Milestones Input */}
+                   <div className="bg-white rounded-2xl border border-gray-100 p-6 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
+                      <h5 className="text-sm font-semibold text-[#001032]">Milestones</h5>
+                      <input 
+                        type="text"
+                        placeholder="Enter the digit - 1 or 2, etc."
+                        className="w-full px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs outline-none shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.1)] placeholder:text-gray-300"
+                      />
+                   </div>
+
+                   {/* Amount Input */}
+                   <div className="bg-white rounded-2xl border border-gray-100 p-6 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
+                      <h5 className="text-sm font-semibold text-[#001032]">Amount</h5>
+                      <input 
+                        type="text"
+                        placeholder="INR - Indian Rupees"
+                        className="w-full px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs outline-none shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.1)] placeholder:text-gray-300"
+                      />
+                   </div>
+
+                   {/* Reason Card */}
+                   <div className="space-y-3">
+                      <h5 className="text-sm font-semibold text-[#001032] px-2">Reason</h5>
+                      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+                         <p className="text-[10px] lg:text-[11px] text-gray-400 leading-relaxed text-justify">
+                            These Terms and Conditions ("Terms") govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com ("Portal") operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions ("Terms") govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com ("Portal") operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].
+                         </p>
+                      </div>
+                   </div>
+
+                   {/* Evidence Upload */}
+                   <div className="bg-white rounded-2xl border border-gray-100 p-6 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
+                      <div>
+                        <h4 className="text-sm font-semibold text-[#001032]">Evidence Upload</h4>
+                        <p className="text-[10px] text-gray-400 mt-1">Upload the evidence in jpg, pdf and docx format</p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        {[1, 2, 3, 4].map(i => (
+                          <div key={i} className="aspect-[4/3] bg-white border border-gray-100 rounded-2xl shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-all">
+                            <FiPlus size={32} className="text-[#59549F]" />
+                          </div>
+                        ))}
+                      </div>
+                   </div>
+
+                   {/* Action Buttons */}
+                   <div className="space-y-4 pt-4 px-2">
+                      <button className="w-full py-2 bg-[#FBD5D5] hover:bg-[#F9C1C1] rounded-xl text-[#B91C1C] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.15)] transition-all">
+                        Escalate
+                      </button>
+                      <button className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all">
+                        Proceed for Communication
+                      </button>
+                   </div>
+                </div>
+              ) : selectedDispute ? (
+                /* ── Dispute Detail View ── */
+                <div className="space-y-6 ">
+                  {/* Header (Same as card) */}
+                  <div className="flex items-center justify-between lg:px-2">
+                    <h4 className="text-sm lg:text-base font-medium text-[#001032] ">Dispute ID – {selectedDispute.id}</h4>
+                    <span className="bg-[#B91C1C] text-white text-[6px] lg:text-[10px] px-3 py-1 rounded-full lg:font-semibold">
+                      Duration - {selectedDispute.duration}
+                    </span>
                   </div>
-                  {i < timelineSteps.length - 1 && <div className="w-px h-6 bg-gray-200 mt-1" />}
-                </div>
-                <div>
-                  <p className={`text-sm font-semibold ${step.inProgress ? "text-orange-500" : "text-gray-800"}`}>{step.label}</p>
-                  <p className="text-[10px] text-gray-400">{step.date}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
-        <div className="bg-white rounded-2xl shadow-sm px-4 py-3">
-          <h3 className="font-semibold text-gray-800 text-sm mb-2">Resolution Options</h3>
-          <div className="flex flex-col gap-2">
-            {resolutionOptions.map((opt, i) => (
-              <button key={i} className={`w-full flex items-center gap-2.5 px-4 py-2 rounded-xl text-sm font-semibold transition-opacity hover:opacity-90 ${opt.style}`}>
-                {opt.icon}
-                {opt.label}
-              </button>
-            ))}
+                  {/* Section 1: Milestone Info */}
+                  <div className="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-4">
+                    <h5 className="text-sm lg:text-lg font-semibold text-[#001032]">{selectedDispute.milestone}</h5>
+                    <p className="text-[12px] lg:text-sm text-gray-500 lg:font-medium leading-relaxed">
+                      <span className="text-[#59549F] lg:font-bold">Reason</span> – {selectedDispute.reason}
+                    </p>
+                    <p className="text-[12px] lg:text-sm text-gray-500 ">
+                      <span className="text-[#59549F] lg:font-bold">Amount</span> – {selectedDispute.amount}
+                    </p>
+                  </div>
+
+                  {/* Section 2: Evidence Upload */}
+                  <div className="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
+                    <div>
+                      <h4 className="text-sm lg:text-base font-semibold text-[#001032]">Evidence Upload</h4>
+                      <p className="text-[12px] lg:text-xs text-gray-400 mt-1">Upload the evidence in jpg, pdf and docx format</p>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      {[1, 2, 3, 4].map(i => (
+                        <div key={i} className="aspect-[4/3] bg-white border border-gray-100 rounded-2xl shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-all">
+                          <FiPlus size={32} className="text-[#59549F]" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Proceed Button */}
+                  <div className="pt-4 px-2">
+                    <button className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all">
+                      Proceed for Communication
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                /* ── Disputes List View ── */
+                selectedDeal.disputes.length > 0 ? (
+                  selectedDeal.disputes.map((dispute, index) => (
+                    <DisputeItem key={index} dispute={dispute} />
+                  ))
+                ) : (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <IoMdCheckmark size={40} className="text-gray-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-400">No Disputes Found</h3>
+                    <p className="text-sm text-gray-400 mt-1 italic">There are no ongoing disputes for this project.</p>
+                  </div>
+                )
+              )}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className=" mx-2 my-2 flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white rounded-3xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 ">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <IoMdCheckmark size={40} className="text-gray-300" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-400">No Case Selected</h3>
+            <p className="text-sm text-gray-400 mt-1 italic">Select a case from the list to view active disputes.</p>
+          </div>
+        )}
       </div>
 
     </div>

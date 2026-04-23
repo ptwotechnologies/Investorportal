@@ -1,4 +1,5 @@
-import CompletedSec from '@/components/UserComponents/ProfileSec/DealSec/Completed/CompletedSec';
+
+import CompletedDealsSec from '@/components/UserComponents/ProfileSec/DealSec/CompletedDeals/CompletedDealsSec';
 import Mobile from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Mobile';
 import Sidebar from '@/components/UserComponents/ProfileSec/ProfileSec1.jsx/Sidebar';
 import React, { useState } from 'react'
@@ -15,7 +16,7 @@ const Completed = () => {
         <Mobile/>
       </div>
      <div className={`lg:w-[80%]  ${isOpen ? 'lg:w-[80%]' : 'lg:w-[350%]' } transition-all duration-300 mt-13 lg:mt-0`}>
-      <CompletedSec/>
+      <CompletedDealsSec/>
      </div>
     </div>
   </div>

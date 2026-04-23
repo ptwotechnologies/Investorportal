@@ -1,387 +1,192 @@
 import React from "react";
-import { Check, Upload, IndianRupee } from "lucide-react";
-import { AiOutlineBars } from "react-icons/ai";
-import { RiArrowDownSLine } from "react-icons/ri";
-import { Button } from "@/components/ui/button";
-import {
-  ButtonGroup,
-  ButtonGroupSeparator,
-} from "@/components/ui/button-group";
-import { IoGrid } from "react-icons/io5";
-import { BiObjectsHorizontalLeft } from "react-icons/bi";
+import { FiArrowRight, FiCheckCircle, FiClock, FiAlertCircle, FiClipboard, FiPlus, FiArrowLeft } from "react-icons/fi";
+import { LuLayoutGrid } from "react-icons/lu";
+import { MdOutlinePrivateConnectivity } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io";
 
-const BottomSec = () => {
+const BottomSec = ({ selectedMilestone, setSelectedMilestone }) => {
+  // ── Dummy Data ──
+  const milestones = [
+    {
+      id: 1,
+      name: "Milestone 1",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "1,50,000",
+      duration: "20 Days",
+      budget: { currency: "INR - Indian Rupees", min: "1,20,000", max: "1,80,000" },
+      timeline: { label: "Total Days", from: "1 March, 2026", to: "1 April, 2026" },
+      scope: `These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].`
+    },
+    {
+      id: 2,
+      name: "Milestone 2",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "1,50,000",
+      duration: "30 Days",
+      budget: { currency: "INR - Indian Rupees", min: "1,50,000", max: "2,00,000" },
+      timeline: { label: "Total Days", from: "1 May, 2026", to: "1 June, 2026" },
+      scope: "Full stack development for the primary web interface..."
+    },
+    {
+      id: 3,
+      name: "Milestone 3",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "1,50,000",
+      duration: "15 Days",
+      budget: { currency: "INR - Indian Rupees", min: "50,000", max: "80,000" },
+      timeline: { label: "Total Days", from: "1 July, 2026", to: "15 July, 2026" },
+      scope: "Final testing and deployment phase..."
+    }
+  ];
+
+  // ── Sub-Components ──
+  const StatCard = ({ label, value, bgColor }) => (
+    <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+      <div className="flex items-center gap-2">
+        <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
+        <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">{label}</h3>
+      </div>
+      <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
+    </div>
+  );
+
+  const MilestoneCard = ({ m }) => (
+    <div className={`bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${selectedMilestone?.id === m.id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className="space-y-3">
+          <h3 className="text-base font-semibold text-[#000000]">{m.name}</h3>
+          <p className="text-xs text-gray-500 font-medium">{m.subtitle}</p>
+          <p className="text-xs text-[#000000] font-medium">{m.owner}</p>
+        </div>
+        <div className="space-y-3 text-center">
+          <h3 className="text-base font-semibold text-[#000000]">Due Date</h3>
+          <p className="text-xs text-gray-500 font-medium">{m.dueDate}</p>
+        </div>
+        <div className="space-y-3 text-right">
+          <h3 className="text-base font-semibold text-[#000000]">Price</h3>
+          <p className="text-xs text-gray-500 font-medium ">Rs {m.price}</p>
+        </div>
+      </div>
+      <button 
+        onClick={() => setSelectedMilestone(m)}
+        className="w-full mt-2 py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all"
+      >
+        View Details
+      </button>
+    </div>
+  );
+
   return (
-    <div className="flex flex-col lg:flex-row items-start gap-4 w-full lg:px-6 px-3 py-4">
-      <div className="lg:w-[70%] w-full">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="font-semibold text-[#5C5D78]">Milestones</h1>
-          </div>
-
-          <div className="flex items-center gap-2 text-[#837DA1]">
-            <div className="bg-white border px-2 lg:px-3 py-1 rounded-md text-xs lg:text-sm flex items-center gap-1 lg:gap-2">
-              <AiOutlineBars />
-              <button>All Status</button>
-            </div>
-            <div className="bg-white border px-2 lg:px-3 py-1 rounded-md text-xs lg:text-sm flex items-center gap-1">
-              <button>Due Date</button>
-              <RiArrowDownSLine size={18} />
-            </div>
-          </div>
+    <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] h-[640px] overflow-hidden">
+      
+      {/* ── Left Column: Milestone List ── */}
+      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${selectedMilestone ? 'hidden lg:block' : 'block'}`}>
+        
+        {/* Stats Grid inside left column */}
+        <div className="grid grid-cols-2 gap-4">
+          <StatCard label="Total Milestones" value="16" bgColor="bg-[#D8E1F0]" />
+          <StatCard label="Due this week" value="4" bgColor="bg-[#D8D6F8]" />
+          <StatCard label="Overdue" value="3" bgColor="bg-[#EFDBD9]" />
+          <StatCard label="Pending Approval" value="5" bgColor="bg-[#D7EBE4]" />
         </div>
 
-        <div className="mt-2 grid grid-cols-1 gap-2 h-[60vh] overflow-y-auto scrollbar-hide">
-
-          {/* ── Card 1: Stellar ── */}
-          <div className="bg-white w-full rounded-2xl shadow-md p-3">
-
-            {/* Top Section */}
-            <div className="flex items-start gap-2">
-              <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-orange-400 flex items-center justify-center shrink-0">
-                <p className="text-white font-bold text-base lg:text-lg">S</p>
-              </div>
-              <div className="w-full min-w-0">
-                <h1 className="text-sm lg:text-lg font-semibold text-gray-800 leading-tight">
-                  Stellar{" "}
-                  <span className="text-xs lg:text-sm text-gray-500 font-normal">
-                    - Mobile App Development
-                  </span>
-                </h1>
-                <div className="w-full flex items-center justify-between mt-0.5">
-                  <div className="flex items-center gap-1">
-                    <p className="text-xs text-gray-500">Project:</p>
-                    <p className="font-semibold text-gray-800 text-xs">Arjun Patel</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <p className="text-[10px] lg:text-xs text-gray-400">Total Value</p>
-                    <p className="font-semibold text-gray-800 text-xs">₹ 25,00,000</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <hr className="my-4" />
-
-            {/* Milestone 1 */}
-            <div>
-              <div className="flex items-start gap-2">
-                <div className="w-6 h-6 rounded-sm bg-[#71BEB6] flex items-center justify-center shrink-0 mt-0.5">
-                  <p className="text-white font-bold text-xs">1</p>
-                </div>
-                <div className="w-full min-w-0">
-                  {/* Title row — stacks on mobile */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
-                    <h1 className="text-sm font-semibold text-gray-800 whitespace-nowrap">
-                      Milestone 1
-                      <span className="text-xs text-gray-500 font-normal ml-1">- Wireframes</span>
-                    </h1>
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="bg-[#EEE8FB] rounded-full py-0.5 px-3 text-[10px] lg:text-xs whitespace-nowrap">
-                        Due 02 Feb 2026
-                      </div>
-                      <p className="text-xs text-gray-700 font-medium whitespace-nowrap">₹ 25,00,000</p>
-                    </div>
-                  </div>
-
-                  {/* Progress bar */}
-                  <div className="my-3 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full w-3/4 bg-linear-to-r from-[#71BEB6] to-[#85C3BF] rounded-full" />
-                  </div>
-
-                  {/* Action row — wraps on mobile */}
-                  <div className="flex  items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#8076A3] text-xs">Status</span>
-                      <button className="bg-linear-to-b from-[#A8A0E8] to-[#958FD9] py-1 px-2 lg:px-3 rounded-sm text-white text-[10px] lg:text-xs whitespace-nowrap">
-                        View Summary
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-1.5 lg:gap-2">
-                      <div className="bg-linear-to-b from-[#5BB9AE] to-[#379C8C] text-white font-semibold py-1 px-2 lg:px-4 rounded-sm flex items-center gap-1.5 lg:gap-5 text-[10px] lg:text-xs">
-                        <button className="whitespace-nowrap">Approve</button>
-                        <div className="w-px h-4 lg:h-6 bg-[#2B877B]" />
-                        <button className="whitespace-nowrap">Request Changes</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <hr className="my-4" />
-
-            {/* Milestone 2 */}
-            <div>
-              <div className="flex items-start gap-2">
-                <div className="w-6 h-6 rounded-sm bg-[#F5959F] flex items-center justify-center shrink-0 mt-0.5">
-                  <p className="text-white font-bold text-xs">2</p>
-                </div>
-                <div className="w-full min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
-                    <h1 className="text-sm font-semibold text-gray-800 whitespace-nowrap">
-                      Milestone 2
-                      <span className="text-xs text-gray-500 font-normal ml-1">- UI Screens</span>
-                    </h1>
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="bg-[#EEE8FB] rounded-full py-0.5 px-3 text-[10px] lg:text-xs whitespace-nowrap">
-                        Due 02 Feb 2026
-                      </div>
-                      <p className="text-xs text-gray-700 font-medium whitespace-nowrap">₹ 25,00,000</p>
-                    </div>
-                  </div>
-
-                  <div className="my-3 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full w-3/4 bg-linear-to-r from-[#F68F9D] to-[#F38A97] rounded-full" />
-                  </div>
-
-                  <div className="flex  items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#8076A3] text-xs">Status</span>
-                      <button className="bg-linear-to-b from-[#A8A0E8] to-[#958FD9] py-1 px-2 lg:px-3 rounded-sm text-white text-[10px] lg:text-xs whitespace-nowrap">
-                        View Summary
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-1.5 lg:gap-2">
-                      <div className="bg-linear-to-b from-[#5BB9AE] to-[#379C8C] text-white font-semibold py-1 px-2 lg:px-4 rounded-sm flex items-center gap-1.5 lg:gap-5 text-[10px] lg:text-xs">
-                        <button className="whitespace-nowrap">Approve</button>
-                        <div className="w-px h-4 lg:h-6 bg-[#2B877B]" />
-                        <button className="whitespace-nowrap">Request Changes</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          {/* ── Card 2: NomadX ── */}
-          <div className="bg-white w-full rounded-2xl shadow-md p-3">
-
-            {/* Top Section */}
-            <div className="flex items-start gap-2">
-              <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-blue-400 flex items-center justify-center shrink-0">
-                <p className="text-white font-bold text-base lg:text-lg">A</p>
-              </div>
-              <div className="w-full min-w-0">
-                <h1 className="text-sm lg:text-lg font-semibold text-gray-800 leading-tight">
-                  NomadX{" "}
-                  <span className="text-xs lg:text-sm text-gray-500 font-normal">
-                    - Mobile App Development
-                  </span>
-                </h1>
-                <div className="w-full flex items-center justify-between mt-0.5">
-                  <div className="flex items-center gap-1">
-                    <p className="text-xs text-gray-500">Project:</p>
-                    <p className="font-semibold text-gray-800 text-xs">Arjun Patel</p>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <p className="text-[10px] lg:text-xs text-gray-400">Total Value</p>
-                    <p className="font-semibold text-gray-800 text-xs">₹ 25,00,000</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <hr className="my-4" />
-
-            {/* Milestone 1 */}
-            <div>
-              <div className="flex items-start gap-2">
-                <div className="w-6 h-6 rounded-sm bg-[#71BEB6] flex items-center justify-center shrink-0 mt-0.5">
-                  <p className="text-white font-bold text-xs">1</p>
-                </div>
-                <div className="w-full min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
-                    <h1 className="text-sm font-semibold text-gray-800 whitespace-nowrap">
-                      Milestone 1
-                      <span className="text-xs text-gray-500 font-normal ml-1">- Wireframes</span>
-                    </h1>
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="bg-[#EEE8FB] rounded-full py-0.5 px-3 text-[10px] lg:text-xs whitespace-nowrap">
-                        Due 02 Feb 2026
-                      </div>
-                      <p className="text-xs text-gray-700 font-medium whitespace-nowrap">₹ 25,00,000</p>
-                    </div>
-                  </div>
-
-                  <div className="my-3 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full w-3/4 bg-linear-to-r from-[#71BEB6] to-[#85C3BF] rounded-full" />
-                  </div>
-
-                  <div className="flex  items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#8076A3] text-xs">Status</span>
-                      <button className="bg-linear-to-b from-[#A8A0E8] to-[#958FD9] py-1 px-2 lg:px-3 rounded-sm text-white text-[10px] lg:text-xs whitespace-nowrap">
-                        View Summary
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-1.5 lg:gap-2">
-                      <div className="bg-linear-to-b from-[#5BB9AE] to-[#379C8C] text-white font-semibold py-1 px-2 lg:px-4 rounded-sm flex items-center gap-1.5 lg:gap-5 text-[10px] lg:text-xs">
-                        <button className="whitespace-nowrap">Approve</button>
-                        <div className="w-px h-4 lg:h-6 bg-[#2B877B]" />
-                        <button className="whitespace-nowrap">Request Changes</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <hr className="my-4" />
-
-            {/* Milestone 2 */}
-            <div>
-              <div className="flex items-start gap-2">
-                <div className="w-6 h-6 rounded-sm bg-[#F5959F] flex items-center justify-center shrink-0 mt-0.5">
-                  <p className="text-white font-bold text-xs">2</p>
-                </div>
-                <div className="w-full min-w-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-2">
-                    <h1 className="text-sm font-semibold text-gray-800 whitespace-nowrap">
-                      Milestone 2
-                      <span className="text-xs text-gray-500 font-normal ml-1">- UI Screens</span>
-                    </h1>
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="bg-[#EEE8FB] rounded-full py-0.5 px-3 text-[10px] lg:text-xs whitespace-nowrap">
-                        Due 02 Feb 2026
-                      </div>
-                      <p className="text-xs text-gray-700 font-medium whitespace-nowrap">₹ 25,00,000</p>
-                    </div>
-                  </div>
-
-                  <div className="my-3 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                    <div className="h-full w-3/4 bg-linear-to-r from-[#F68F9D] to-[#F38A97] rounded-full" />
-                  </div>
-
-                  <div className="flex  items-center justify-between gap-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[#8076A3] text-xs">Status</span>
-                      <button className="bg-linear-to-b from-[#A8A0E8] to-[#958FD9] py-1 px-2 lg:px-3 rounded-sm text-white text-[10px] lg:text-xs whitespace-nowrap">
-                        View Summary
-                      </button>
-                    </div>
-                    <div className="flex items-center gap-1.5 lg:gap-2">
-                      <div className="bg-linear-to-b from-[#5BB9AE] to-[#379C8C] text-white font-semibold py-1 px-2 lg:px-4 rounded-sm flex items-center gap-1.5 lg:gap-5 text-[10px] lg:text-xs">
-                        <button className="whitespace-nowrap">Approve</button>
-                        <div className="w-px h-4 lg:h-6 bg-[#2B877B]" />
-                        <button className="whitespace-nowrap">Request Changes</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
+        <h2 className="text-xl font-medium text-[#000000] mt-2 px-1">Deal Drafts</h2>
+        <div className="space-y-4 ">
+          {milestones.map(m => (
+            <MilestoneCard key={m.id} m={m} />
+          ))}
         </div>
       </div>
 
-      {/* ── RIGHT: Execution Insights ── */}
-      <div className="lg:w-[30%] w-full">
-        <div className="flex items-center justify-between mb-2">
-          <h1 className="font-semibold text-[#5C5D78]">Execution Insights</h1>
-          <ButtonGroup className="h-7">
-            <Button variant="secondary" size="sm" className="h-full bg-[#EBE0FB] text-[#5D46B7] rounded-sm">
-              <IoGrid />
-            </Button>
-            <ButtonGroupSeparator />
-            <Button variant="secondary" size="sm" className="h-full bg-white rounded-sm">
-              <BiObjectsHorizontalLeft />
-            </Button>
-          </ButtonGroup>
-        </div>
+      {/* ── Vertical Divider (Desktop Only) ── */}
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
-        <div className="w-full bg-white rounded-2xl">
-          {/* Upcoming Deadlines */}
-          <div className="lg:px-5 px-3 py-3">
-            <h3 className="text-gray-700 font-semibold mb-4 text-sm">Upcoming Deadlines</h3>
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">1</div>
-                  <span className="text-gray-700 text-xs lg:text-sm">UI Screens</span>
-                </div>
-                <span className="text-gray-500 text-xs">10 days</span>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-2">
-                  <div className="w-5 h-5 rounded bg-indigo-100 text-indigo-600 flex items-center justify-center text-xs font-bold">2</div>
-                  <span className="text-gray-700 text-xs lg:text-sm">Backend API</span>
-                </div>
-                <span className="text-gray-500 text-xs">12 days</span>
-              </div>
-            </div>
+      {/* ── Right Column: Detail Panel ── */}
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full overflow-y-auto scrollbar-hide p-2 flex flex-col ${!selectedMilestone ? 'hidden lg:flex' : 'flex'}`}>
+        
+        {/* Mobile Back Header */}
+        {selectedMilestone && (
+          <div className="lg:hidden flex items-center gap-3 mb-4">
+            <button 
+              onClick={() => setSelectedMilestone(null)} 
+              className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm"
+            >
+              <FiArrowLeft size={20} />
+            </button>
+            <span className="font-bold text-lg text-[#000000]">Back to List</span>
           </div>
+        )}
 
-          <hr className="mx-5 my-2" />
-
-          {/* Approval Pending */}
-          <div className="lg:px-5 px-3">
-            <h3 className="text-gray-700 font-semibold mb-2 text-sm">Approval Pending</h3>
-            <div className="bg-[#FDF5EE] rounded-xl p-3 flex justify-between items-center">
-              <div>
-                <div className="flex items-center gap-2">
-                  <IndianRupee size={15} className="text-gray-600" />
-                  <span className="text-sm lg:text-lg font-semibold text-gray-800">
-                    30,000 <span className="text-xs text-gray-400">Ceccal</span>
-                  </span>
-                </div>
-                <p className="text-xs text-gray-500 mt-1">Escrow ↓ 2 days</p>
-              </div>
-              <span className="text-xs bg-yellow-100 text-[#877A68] px-2 lg:px-3 py-1 rounded-full font-medium whitespace-nowrap">
-                In 2 Days <span className="text-[#EDB778] font-bold">10</span>
+        {selectedMilestone ? (
+          <div className="bg-white rounded-2xl p-3 lg:p-6 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-4 ">
+            
+            {/* Header */}
+            <div className="flex items-center justify-between pb-2">
+              <h3 className="text-xl font-semibold text-[#000000]">{selectedMilestone.name}</h3>
+              <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-semibold">
+                Duration - {selectedMilestone.duration}
               </span>
             </div>
-          </div>
 
-          <hr className="mx-5 my-3" />
-
-          {/* Recent Activities */}
-          <div className="lg:px-5 px-3 pb-3">
-            <h3 className="text-gray-700 font-semibold mb-3 text-sm">Recent Activities</h3>
-            <div className="space-y-4 text-sm">
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
-                    <Check size={14} className="text-green-600" />
+            {/* Budget Section */}
+            <div className="space-y-4">
+               <h4 className="text-base font-semibold text-[#000000]">Budget - {selectedMilestone.name}</h4>
+               <div className="flex flex-col lg:flex-row gap-3">
+                  <div className="lg:w-[150px] w-full bg-[#FDFDFF] border border-gray-100 rounded-lg py-2.5 px-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-[10px] items-center flex justify-center text-gray-400 font-medium whitespace-nowrap">
+                     {selectedMilestone.budget.currency}
                   </div>
-                  <div>
-                    <p className="text-gray-800 font-medium text-xs lg:text-sm">Wireframes</p>
-                    <p className="text-xs text-gray-500">Submitted Stellar</p>
+                  <div className="flex-1 bg-white border border-gray-100 rounded-lg py-2.5 px-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-[10px] items-center flex justify-center text-gray-400 font-medium">
+                     Enter Budget
                   </div>
-                </div>
-                <span className="text-xs text-gray-400 shrink-0 ml-2">5 hours ago</span>
-              </div>
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                    <IndianRupee size={14} className="text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-800 font-medium text-xs lg:text-sm">₹25,000 released</p>
-                    <p className="text-xs text-gray-500">PQ Solutions</p>
-                  </div>
-                </div>
-                <span className="text-xs text-gray-400 shrink-0 ml-2">5 hours ago</span>
-              </div>
-              <div className="flex items-start justify-between">
-                <div className="flex items-start gap-3">
-                  <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-indigo-100 flex items-center justify-center shrink-0">
-                    <Upload size={14} className="text-indigo-600" />
-                  </div>
-                  <div>
-                    <p className="text-gray-800 font-medium text-xs lg:text-sm">Revision Requested</p>
-                    <p className="text-xs text-gray-500">PQ Solutions</p>
-                  </div>
-                </div>
-                <span className="text-xs text-gray-400 shrink-0 ml-2">1 day ago</span>
-              </div>
+               </div>
             </div>
+
+            {/* Timeline Section */}
+            <div className="space-y-4">
+               <h4 className="text-base font-semibold text-[#000000]">Timeline - {selectedMilestone.name}</h4>
+               <div className="flex flex-col lg:flex-row gap-3">
+                  <div className="lg:w-[150px] w-full bg-[#FDFDFF] border border-gray-100 rounded-lg py-2.5 px-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-[10px] items-center flex justify-center text-gray-400 font-medium">
+                     {selectedMilestone.timeline.label}
+                  </div>
+                  <div className="flex-1 bg-white border border-gray-100 rounded-lg py-2.5 px-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-[10px] items-center flex justify-center text-gray-400 font-medium">
+                     Enter Days
+                  </div>
+               </div>
+            </div>
+
+            {/* Scope Section */}
+            <div className="space-y-4">
+               <h4 className="text-base font-semibold text-[#000000]">Scope of work in {selectedMilestone.name.toLowerCase()}</h4>
+               <div className="w-full bg-white border border-gray-100 rounded-3xl p-6 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] min-h-[300px] overflow-y-auto scrollbar-hide">
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                     {selectedMilestone.scope}
+                  </p>
+               </div>
+            </div>
+
+            {/* Footer Action */}
+            <div className="pt-4">
+               <button className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all">
+                  Proceed for Negotiation
+               </button>
+            </div>
+
           </div>
-        </div>
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 mx-2">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <IoMdCheckmark size={40} className="text-gray-300" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-400">No Milestone Selected</h3>
+            <p className="text-sm text-gray-400 mt-1 italic">Select a milestone from the left to view progress details.</p>
+          </div>
+        )}
       </div>
 
     </div>

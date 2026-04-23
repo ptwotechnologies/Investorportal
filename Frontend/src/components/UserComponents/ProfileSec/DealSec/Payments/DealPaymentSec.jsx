@@ -4,15 +4,9 @@ import Bottom from './Bottom'
 
 const DealPaymentSec = () => {
   return (
-    <div>
-      <div id='top'>
-         <TopBar/>
-      </div>
-
-      <div id='bottom'>
-        <Bottom/>
-
-      </div>
+    <div className="flex flex-col h-full bg-[#FDFDFF]">
+       <TopBar/>
+       <Bottom/>
     </div>
   )
 }

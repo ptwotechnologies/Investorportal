@@ -4,15 +4,16 @@ import Bottom from './Bottom'
 
 
 const DisputesSec = () => {
+  const [isCreateMode, setIsCreateMode] = React.useState(false);
+
   return (
    <div>
       <div id='top'>
-         <TopBar/>
+         <TopBar onCreateClick={() => setIsCreateMode(true)} />
       </div>
 
       <div id='bottom'>
-        <Bottom/>
-
+        <Bottom isCreateMode={isCreateMode} setIsCreateMode={setIsCreateMode} />
       </div>
     </div>
   )
