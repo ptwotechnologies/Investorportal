@@ -150,7 +150,7 @@ const DealBottomSec = ({
           <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Active Deals</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Active Deals</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">16</p>
           </div>
@@ -159,7 +159,7 @@ const DealBottomSec = ({
           <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Total Ongoing Value</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Total Ongoing Value</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">32L</p>
           </div>
@@ -168,7 +168,7 @@ const DealBottomSec = ({
           <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Pending Payments</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Pending Payments</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">3.5L</p>
           </div>
@@ -177,7 +177,7 @@ const DealBottomSec = ({
           <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Due this week</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Due this week</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">5L</p>
           </div>

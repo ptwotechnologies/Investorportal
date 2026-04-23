@@ -139,31 +139,87 @@ const Bottom = ({
     },
   ];
 
+  const [tempScopeItems, setTempScopeItems] = React.useState([
+    "Develop a mobile app with core features and user registration",
+    "Implement payment gateway integration",
+  ]);
+  const [newScopeInput, setNewScopeInput] = React.useState("");
+  const [prevPanelState, setPrevPanelState] = React.useState(null);
+
   // ── Handlers ──
   const handleViewProject = (proj) => {
     setSelectedProject(proj);
     setRightPanelState('overview');
   };
 
+  const handleCreateNew = () => {
+    setSelectedProject(null);
+    setRightPanelState('create');
+  };
+
   const handleViewScope = () => {
+    setPrevPanelState(rightPanelState);
+    if (selectedProject) {
+      setTempScopeItems(selectedProject.scopeSummary || []);
+    }
     setRightPanelState('scopeDetails');
   };
 
   const handleViewMilestone = (m) => {
+    setPrevPanelState(rightPanelState);
     setSelectedMilestone(m);
+    setRightPanelState('milestoneDetails');
+  };
+
+  const handleCreateMilestone = () => {
+    setPrevPanelState(rightPanelState);
+    setSelectedMilestone({
+      id: Date.now(),
+      name: "New Milestone",
+      description: "",
+      dueDate: "",
+      status: "Draft",
+      duration: "",
+      budget: "",
+    });
     setRightPanelState('milestoneDetails');
   };
 
   const handleBack = () => {
     if (rightPanelState === 'scopeDetails' || rightPanelState === 'milestoneDetails') {
-      setRightPanelState('overview');
+      setRightPanelState(prevPanelState || 'overview');
     } else {
       setRightPanelState('none');
       setSelectedProject(null);
     }
   };
 
-  const backLabel = (rightPanelState === 'scopeDetails' || rightPanelState === 'milestoneDetails') ? 'Back to Overview' : 'Back to List';
+  const handleAddScopeItem = () => {
+    if (newScopeInput.trim()) {
+      setTempScopeItems([...tempScopeItems, newScopeInput.trim()]);
+      setNewScopeInput("");
+    }
+  };
+
+  const handleRemoveScopeItem = (index) => {
+    setTempScopeItems(tempScopeItems.filter((_, i) => i !== index));
+  };
+
+  const handleScopeItemChange = (index, value) => {
+    const updated = [...tempScopeItems];
+    updated[index] = value;
+    setTempScopeItems(updated);
+  };
+
+  const handleSaveScope = () => {
+    // In a real app, we'd update the project state here.
+    // For the dummy, we just return.
+    setRightPanelState(prevPanelState || 'overview');
+  };
+
+  const backLabel = (rightPanelState === 'scopeDetails' || rightPanelState === 'milestoneDetails') 
+    ? 'Back to Overview' 
+    : (rightPanelState === 'create' ? 'Cancel Proposal' : 'Back to List');
 
   // ── Sub-Components ──
 
@@ -209,17 +265,18 @@ const Bottom = ({
     </div>
   );
 
-  const SectionCard = ({ title, children, showPlus = false, showDot = false, underlined = false }) => (
+  const SectionCard = ({ title, children, showPlus = false, onPlusClick, showDot = false }) => (
     <div className="bg-white rounded-2xl lg:p-6 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 relative">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           {showDot && <div className="w-2 h-2 rounded-full bg-[#3CC033]" />}
-          <h4 className={`text-sm lg:text-[16px] font-medium text-[#000000] `}>
-            {title}
-          </h4>
+          <h4 className="text-sm lg:text-[16px] font-medium text-[#000000]">{title}</h4>
         </div>
         {showPlus && (
-          <div className="text-[#59549F] transition-transform cursor-pointer">
+          <div 
+            onClick={onPlusClick}
+            className="text-[#59549F] transition-transform cursor-pointer"
+          >
             <FiPlus size={24} className="border-2 border-[#59549F] rounded-full p-0.5" />
           </div>
         )}
@@ -239,7 +296,7 @@ const Bottom = ({
           <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <HiOutlineArrowsRightLeft size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Open Proposals</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Open Proposals</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">7</p>
           </div>
@@ -247,7 +304,7 @@ const Bottom = ({
           <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <HiOutlineUserGroup size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Awaiting Response</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Awaiting Response</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">4</p>
           </div>
@@ -255,7 +312,7 @@ const Bottom = ({
           <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <LuArrowLeftRight size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Counter Offers</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Counter Offers</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">3</p>
           </div>
@@ -263,7 +320,7 @@ const Bottom = ({
           <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <LuClock size={20} className="text-[#001032]" />
-              <h3 className="text-[12px] lg:text-sm lg:font-medium text-[#001032]">Expiring Soon</h3>
+              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Expiring Soon</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">2</p>
           </div>
@@ -285,7 +342,15 @@ const Bottom = ({
            </div>
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] mt-2 mb-4 px-1">Proposals</h2>
+        <div className="flex items-center justify-between mt-2 mb-4 pr-2">
+          <h2 className="text-xl font-medium text-[#000000] px-1">Proposals</h2>
+          <div 
+             onClick={handleCreateNew}
+             className="text-[#59549F] transition-transform cursor-pointer"
+          >
+            <FiPlus size={26} className="border-2 border-[#59549F] rounded-full p-1" />
+          </div>
+        </div>
         {proposals.map(proj => (
           <ProposalCard key={proj.id} proj={proj} />
         ))}
@@ -295,14 +360,17 @@ const Bottom = ({
       <div className={`lg:w-[450px] xl:w-[550px] mt-5 lg:mt-auto flex flex-col ${rightPanelState === 'none' ? 'hidden lg:block' : 'block'}`}>
         
         <div className={`rounded-2xl p-2 transition-all duration-300 h-[610px] overflow-y-auto scrollbar-hide flex flex-col 
-          ${(rightPanelState !== 'overview' && rightPanelState !== 'none') 
-            ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 lg:p-6 p-3 ' 
+          ${(rightPanelState !== 'overview' && rightPanelState !== 'none' && rightPanelState !== 'create') 
+            ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 lg:p-6 p-3' 
             : 'bg-transparent'}`}>
           
           {/* Mobile Back Header */}
           {rightPanelState !== 'none' && (
             <div className="lg:hidden flex items-center gap-3 mb-3">
-              <button onClick={handleBack} className=" bg-gray-50 rounded-full text-[#59549F]">
+              <button 
+                onClick={handleBack} 
+                className=" bg-gray-50 rounded-full text-[#59549F]"
+              >
                 <FiArrowLeft size={20} />
               </button>
               <span className="font-bold text-lg">{backLabel}</span>
@@ -317,6 +385,87 @@ const Bottom = ({
               </div>
               <h3 className="text-lg font-bold text-gray-400">No Proposal Selected</h3>
               <p className="text-sm text-gray-400 mt-1 italic">Select a proposal from the left to view negotiation details.</p>
+            </div>
+          )}
+
+          {/* CREATE PROPOSAL STATE */}
+          {rightPanelState === 'create' && (
+            <div className="space-y-4">
+              <div className="bg-white rounded-2xl lg:p-6 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
+                <h4 className="text-[16px] font-medium text-[#000000] mb-2">Scope of Work</h4>
+                <p className="text-[10px] lg:text-xs text-[#000000] mb-4 leading-relaxed">
+                  Develop a mobile app with core features and user registration 
+                  Implement payment gateway integration
+                </p>
+                <button 
+                  onClick={handleViewScope}
+                  className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                >
+                  Add Details
+                </button>
+              </div>
+
+              <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
+                <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Budget</h4>
+                <div className="flex flex-col lg:flex-row gap-3">
+                  <div className="lg:w-[150px] w-full px-3 py-2 bg-white rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">INR - Indian Rupees</div>
+                  <div className="flex-1 px-3 py-2 bg-white rounded-lg text-xs text-gray-400 text-center lg:text-start  border border-gray-100 flex items-center justify-center lg:justify-start shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Budget Amount</div>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
+                <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Timeline</h4>
+                <div className="flex flex-col lg:flex-row gap-3">
+                  <div className="lg:w-[150px] w-full px-3 py-2 bg-white rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">Total Days</div>
+                  <div className="flex-1 px-3 py-2 bg-white rounded-lg text-xs text-gray-400   border border-gray-100 flex items-center justify-center lg:justify-start shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Timeline Duration</div>
+                </div>
+              </div>
+
+              <SectionCard title="Milestone" showPlus onPlusClick={handleCreateMilestone}>
+                <div className="space-y-3 mt-4">
+                  {[1, 2, 3].map(m => (
+                    <div key={m} className="bg-[#F2F2F2] rounded-xl p-3 lg:p-4 relative flex items-center justify-between pr-4">
+                      <div className="flex gap-3 items-start flex-1">
+                        <div className="w-4 h-4 rounded-full bg-[#D8D6F8] shrink-0" />
+                        <div className="flex-1">
+                          <h5 className="text-[10px] lg:text-xs text-[#000000]">Milestone {m} - Wireframe Designing</h5>
+                          <p className="text-[8px] lg:text-[10px] text-gray-400 mt-1">Develop a mobile app with core features</p>
+                          <p className="text-[8px] lg:text-[10px] text-gray-400 font-medium whitespace-nowrap lg:mt-1">Due Date - 15th April, 2026</p>
+                        </div>
+                      </div>
+                      <div className="absolute  right-2 top-1 lg:right-4">
+                        <span className="bg-[#EAB308] text-white text-[8px] lg:text-[10px] px-2 py-0.5 rounded-md">Awaiting Response</span>
+                      </div>
+                      <button 
+                        onClick={() => handleViewMilestone({ id: m, name: `Milestone ${m}`, description: 'Develop a mobile app with core features', dueDate: '15th April, 2026', status: 'Awaiting Response', duration: '20 Days', budget: '1,20,000' })}
+                        className="bg-white px-4 py-1 rounded-md text-[#59549F] text-[10px] lg:text-xs font-bold shadow-sm whitespace-nowrap mt-8 lg:mt-6"
+                      >
+                        View Details
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </SectionCard>
+
+              <div className="space-y-3 pt-3 ">
+                 <div className="flex gap-3">
+                    <button 
+                      onClick={() => setRightPanelState('none')} 
+                      className="flex-1 py-2 bg-[#D8D6F8] rounded-lg text-[#59549F] font-medium text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                    >
+                      Create Proposal
+                    </button>
+                    <button 
+                      onClick={() => setRightPanelState('none')}
+                      className="flex-1 py-2 bg-white border-2 border-gray-100 rounded-lg text-[#000000] font-medium text-sm shadow-sm"
+                    >
+                      Cancel Proposal
+                    </button>
+                 </div>
+                 <button className="w-full py-2 bg-[#D8D6F8] rounded-lg text-[#59549F] font-medium text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+                    Proceed for Documentation
+                 </button>
+              </div>
             </div>
           )}
 
@@ -368,7 +517,7 @@ const Bottom = ({
               </div>
 
               {/* Scope summary */}
-              <SectionCard title="Scope of Work" underlined>
+              <SectionCard title="Scope of Work">
                 <p className="text-sm text-[#000000] mt-2 mb-4 leading-relaxed line-clamp-2">
                   {selectedProject.fullDescription}
                 </p>
@@ -462,37 +611,73 @@ const Bottom = ({
             </div>
           )}
 
-          {/* SCOPE DETAILS VIEW */}
-          {rightPanelState === 'scopeDetails' && selectedProject && (
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-6 lg:mb-6">
+          {rightPanelState === 'scopeDetails' && (
+            <div className="flex-1 flex flex-col">
+              <div className="flex items-center gap-3 mb-6">
                 <button onClick={handleBack} className="hidden lg:flex p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
                   <FiArrowLeft size={18} />
                 </button>
                 <h3 className="text-lg font-medium text-[#000000]">Scope of Work</h3>
               </div>
-              <div className="space-y-2 lg:p-3 lg:px-3 py-3 lg:-m-3 flex-1">
-                <div className="space-y-3">
-                   {selectedProject.scopeSummary.map((item, i) => (
-                     <div key={i} className="relative group">
-                       <input 
-                         type="text" 
-                         value={item} 
-                         readOnly
-                         className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-xs focus:border-[#59549F] outline-none transition-all pr-12 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
-                       />
-                       <button className="absolute right-4 top-1/2 -translate-y-1/2 text-xl font-light text-gray-400 hover:text-red-500 transition-colors">
-                         ×
-                       </button>
-                     </div>
-                   ))}
+              
+              <div className="space-y-2 lg:p-3 px-3 py-3 -m-3 flex-1">
+                {tempScopeItems.map((item, index) => (
+                  <div key={index} className="relative group">
+                    <input 
+                      type="text" 
+                      value={item} 
+                      onChange={(e) => handleScopeItemChange(index, e.target.value)}
+                      placeholder="Define scope item..."
+                      className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-xs focus:border-[#59549F] outline-none transition-all pr-12 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
+                    />
+                    <button 
+                      onClick={() => handleRemoveScopeItem(index)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-xl font-light text-gray-400 hover:text-red-500 transition-colors"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+                
+                <div className="relative group">
+                  <input 
+                    type="text" 
+                    placeholder="Add more..." 
+                    value={newScopeInput}
+                    onChange={(e) => setNewScopeInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddScopeItem()}
+                    className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-xs focus:border-[#59549F] outline-none transition-all pr-12 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
+                  />
+                  <button 
+                    onClick={handleAddScopeItem}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-2xl font-light text-gray-400 hover:text-[#59549F] transition-colors"
+                  >
+                    +
+                  </button>
                 </div>
+
                 <div className="mt-8">
-                   <h4 className="text-lg font-medium text-[#000000] mb-4">Description</h4>
-                   <div className="min-h-[220px] p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed whitespace-pre-line shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                     {selectedProject.fullDescription}
-                   </div>
+                  <h4 className="text-lg font-medium text-[#000000] mb-4">Description</h4>
+                  <textarea 
+                    placeholder="Add the Description"
+                    className="w-full min-h-[220px] p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none focus:border-[#59549F]"
+                  />
                 </div>
+              </div>
+
+              <div className="flex gap-4 mt-8 ">
+                <button 
+                  onClick={handleSaveScope}
+                  className="flex-1 py-1 bg-[#D8D6F8] text-[#59549F] font-semibold rounded-lg hover:opacity-90 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                >
+                  Save
+                </button>
+                <button 
+                  onClick={handleBack}
+                  className="flex-1 py-1 bg-white border-2 border-gray-100 text-gray-600 font-semibold rounded-lg hover:bg-gray-50 shadow-sm"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           )}
@@ -505,46 +690,68 @@ const Bottom = ({
                   <button onClick={handleBack} className="hidden lg:flex p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
                     <FiArrowLeft size={18} />
                   </button>
-                  <h3 className="text-lg font-medium text-[#000000]">{selectedMilestone.name.split(' - ')[0]}</h3>
+                  <input 
+                    type="text"
+                    defaultValue={selectedMilestone.name}
+                    placeholder="Milestone Name"
+                    className="text-lg font-medium text-[#000000] bg-transparent outline-none focus:border-b border-[#59549F]/20"
+                  />
                 </div>
-                <div className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-bold">
-                  Duration - {selectedMilestone.duration}
+                <div className="bg-[#B91C1C] text-white text-[7px] lg:text-[10px] px-2 py-1.5 rounded-full ">
+                  {selectedMilestone.duration ? `Duration - ${selectedMilestone.duration}` : "Add Duration"}
                 </div>
               </div>
               
-              <div className="space-y-6">
+              <div className="space-y-6 flex-1">
                 <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                   <h4 className="text-sm font-medium text-[#000000] mb-4">Budget - {selectedMilestone.name.split(' - ')[0]}</h4>
+                   <h4 className="text-sm font-medium text-[#000000] mb-4">Budget - {selectedMilestone.name || "Milestone"}</h4>
                    <div className="flex flex-col lg:flex-row gap-3 mb-2">
                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR - Indian Rupees</div>
                      <input 
                        type="text" 
-                       readOnly
-                       value={`Rs ${selectedMilestone.budget}`}
+                       placeholder="Enter Budget"
+                       defaultValue={selectedMilestone.budget ? `Rs ${selectedMilestone.budget}` : ""}
                        className="flex-1 px-3 py-2 bg-[#FDFDFF] text-center lg:text-start border border-gray-100 rounded-lg text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
                      />
                    </div>
                 </div>
 
                 <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                   <h4 className="text-sm font-medium text-[#000000] mb-4">Timeline - {selectedMilestone.name.split(' - ')[0]}</h4>
+                   <h4 className="text-sm font-medium text-[#000000] mb-4">Timeline - {selectedMilestone.name || "Milestone"}</h4>
                    <div className="flex flex-col lg:flex-row gap-3 mb-2">
                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Total Days</div>
                      <input 
                        type="text" 
-                       readOnly
-                       value={selectedMilestone.duration}
+                       placeholder="Enter Days"
+                       defaultValue={selectedMilestone.duration}
                        className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center lg:text-start " 
                      />
                    </div>
                 </div>
 
                 <div className="pt-2">
-                   <h4 className="text-base font-medium text-[#000000] mb-4 ">Scope of work in milestone 1</h4>
-                   <div className="p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm text-gray-500 leading-relaxed whitespace-pre-line placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                     {selectedProject?.fullDescription}
-                   </div>
+                   <h4 className="text-base font-medium text-[#000000] mb-4 ">Scope of work in {selectedMilestone.name || "milestone"}</h4>
+                   <textarea 
+                     placeholder="Add the Description"
+                     defaultValue={selectedMilestone.description}
+                     className="w-full min-h-[180px] p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none focus:border-[#59549F]"
+                   />
                 </div>
+              </div>
+
+              <div className="flex gap-4 mt-8 ">
+                <button 
+                  onClick={handleBack}
+                  className="flex-1 py-1 bg-[#D8D6F8] text-[#59549F] font-semibold rounded-lg hover:opacity-90 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                >
+                  Save
+                </button>
+                <button 
+                  onClick={handleBack}
+                  className="flex-1 py-1 bg-white border-2 border-gray-100 text-gray-600 font-semibold rounded-lg hover:bg-gray-50 shadow-sm"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           )}

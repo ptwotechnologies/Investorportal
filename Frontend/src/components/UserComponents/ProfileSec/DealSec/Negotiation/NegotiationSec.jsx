@@ -10,7 +10,7 @@ const NegotiationSec = () => {
   return (
     <div>
       <div id='top'>
-         <TopBar/>
+         <TopBar setRightPanelState={setRightPanelState}/>
       </div>
 
       <div id='bottom'>

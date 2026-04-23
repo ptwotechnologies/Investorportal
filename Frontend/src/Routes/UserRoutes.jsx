@@ -42,6 +42,7 @@ import Completed from '@/Pages/UserPages/ProfilePages/Completed'
 import Disputes from '@/Pages/UserPages/ProfilePages/Disputes'
 import DealDraft from '@/Pages/UserPages/ProfilePages/DealDraft'
 import Communication from '@/Pages/UserPages/ProfilePages/Communication'
+import Revenue from '@/Pages/UserPages/ProfilePages/Revenue'
 
 
 
@@ -124,6 +125,7 @@ const UserRoutes = () => {
              <Route path="/deal/documentation" element={<ProtectedRoute><Documentation/></ProtectedRoute>} />
              <Route path="/deal/completed" element={<ProtectedRoute><Completed/></ProtectedRoute>} />
              <Route path="/deal/disputes" element={<ProtectedRoute><Disputes/></ProtectedRoute>} />
+             <Route path="/deal/revenue" element={<ProtectedRoute><Revenue/></ProtectedRoute>} />
       </Routes>
 
     </div>

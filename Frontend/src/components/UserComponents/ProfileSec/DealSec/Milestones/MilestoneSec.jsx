@@ -1,17 +1,21 @@
-import React from 'react'
+import React, { useState } from 'react'
 import BottomSec from './BottomSec'
 import TopBar from './TopBar'
 
 const MilestoneSec = () => {
+  const [selectedMilestone, setSelectedMilestone] = useState(null);
+
   return (
-    <div>
+    <div className="flex flex-col min-h-screen bg-[#FDFDFF]">
       <div id='top'>
-         <TopBar/>
+         <TopBar />
       </div>
 
-      <div id='bottom'>
-        {/* <BottomSec/> */}
-
+      <div id='bottom' className="flex-1 overflow-hidden">
+        <BottomSec 
+          selectedMilestone={selectedMilestone} 
+          setSelectedMilestone={setSelectedMilestone} 
+        />
       </div>
     </div>
   )

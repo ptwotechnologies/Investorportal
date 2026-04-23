@@ -1,276 +1,246 @@
 import React, { useState } from "react";
-import { IndianRupee, AlignJustify, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
-import { IoGrid } from "react-icons/io5";
-import { BiObjectsHorizontalLeft } from "react-icons/bi";
-import Graph from "./Graph";
-
-const payments = [
-  { id: 1, company: "Stellar", person: "Akshitay Dogra", milestone: "UI Screens", amount: "₹ 30,000", status: "Escrowed", dueDate: "Due 10 Feb", released: "—", overdueDays: null },
-  { id: 2, company: "NomadX", person: "Arjun Patel", milestone: "Backend API", amount: "₹ 45,000", status: "Escrowed", dueDate: "Due 12 Feb", released: "—", overdueDays: null },
-  { id: 3, company: "DQ Solutions", person: "Stellar", milestone: "Final Delivery", amount: "₹ 60,000", status: "Overdue", dueDate: "Due 07 Feb", released: "—", overdueDays: 3 },
-  { id: 4, company: "Stellar", person: "PQ Solutions", milestone: "Wireframes", amount: "₹ 35,000", status: "Released", dueDate: "Released 02 Feb", released: "—", overdueDays: null },
-  { id: 5, company: "PQ Solutions", person: "Stellar", milestone: "UI Files", amount: "₹ 25,000", status: "Released", dueDate: "Released 01 Feb", released: "—", overdueDays: null },
-  { id: 6, company: "NomadX", person: "Arjun Patel", milestone: "UI Design", amount: "₹ 30,000", status: "Released", dueDate: "Released 01 Feb", released: "—", overdueDays: null },
-  { id: 7, company: "Stellar", person: "PQ Solutions", milestone: "Wireframes", amount: "₹ 35,000", status: "Released", dueDate: "Released 02 Feb", released: "—", overdueDays: null },
-  { id: 8, company: "PQ Solutions", person: "Stellar", milestone: "UI Files", amount: "₹ 25,000", status: "Released", dueDate: "Released 01 Feb", released: "—", overdueDays: null },
-];
-
-const statusStyles = {
-  Escrowed: "bg-blue-100 text-blue-600",
-  Released: "bg-emerald-100 text-emerald-600",
-  Overdue: "bg-red-100 text-red-500",
-  Pending: "bg-yellow-100 text-yellow-600",
-};
-
-const tabDotColors = {
-  all: "bg-purple-400",
-  escrowed: "bg-blue-400",
-  released: "bg-emerald-400",
-  pending: "bg-yellow-400",
-  overdue: "bg-red-400",
-};
-
-const avatarColors = {
-  Stellar: "bg-orange-100 text-orange-500",
-  NomadX: "bg-blue-100 text-blue-600",
-  "DQ Solutions": "bg-indigo-100 text-indigo-500",
-  "PQ Solutions": "bg-sky-100 text-sky-600",
-};
-
-const TABS = ["all", "escrowed", "released", "pending", "overdue"];
-
-const filterByStatus = (data, status) =>
-  status === "all" ? data : data.filter((d) => d.status.toLowerCase() === status);
-
-const CompanyAvatar = ({ company }) => {
-  const initials = company.split(" ").map((w) => w[0]).join("").slice(0, 2).toUpperCase();
-  return (
-    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold shrink-0 ${avatarColors[company] || "bg-gray-100 text-gray-500"}`}>
-      {initials}
-    </div>
-  );
-};
-
-const StatusBadge = ({ status, overdueDays }) => (
-  <div className="flex flex-col items-start gap-0.5">
-    <span className={`px-3 py-0.5 text-xs rounded-full font-medium ${statusStyles[status] || "bg-gray-100 text-gray-500"}`}>
-      {status === "Overdue" && <span className="mr-1">⚠</span>}
-      {status}
-    </span>
-    {overdueDays && <span className="text-xs text-red-400 pl-1">{overdueDays} days</span>}
-  </div>
-);
-
-// Desktop table
-const TableHeader = () => (
-  <>
-    <div className="flex items-center justify-between px-6 py-3 text-sm font-semibold text-gray-500 bg-white sticky top-0 z-10">
-      <div className="w-[22%]">Deal</div>
-      <div className="w-[18%]">Milestone</div>
-      <div className="w-[15%]">Amount</div>
-      <div className="w-[17%]">Status</div>
-      <div className="w-[16%]">Due Date</div>
-      <div className="w-[8%]">Released</div>
-    </div>
-    <hr />
-  </>
-);
-
-const PaymentRow = ({ item }) => (
-  <div className="flex items-center justify-between px-6 py-3 border-b text-sm hover:bg-gray-50 transition-colors">
-    <div className="flex items-center gap-2 w-[22%]">
-      <CompanyAvatar company={item.company} />
-      <div>
-        <div className="font-semibold text-gray-800 text-sm">{item.company}</div>
-        <div className="text-gray-400 text-xs">{item.person}</div>
-      </div>
-    </div>
-    <div className="text-gray-600 w-[18%]">{item.milestone}</div>
-    <div className="font-semibold text-gray-800 w-[15%]">{item.amount}</div>
-    <div className="w-[17%]"><StatusBadge status={item.status} overdueDays={item.overdueDays} /></div>
-    <div className="text-gray-500 text-xs w-[16%]">{item.dueDate}</div>
-    <div className="text-gray-400 w-[8%]">{item.released}</div>
-  </div>
-);
-
-// Mobile compact card
-const MobilePaymentCard = ({ item }) => (
-  <div className="flex items-center justify-between px-4 py-3 border-b last:border-0 hover:bg-gray-50 transition-colors">
-    <div className="flex items-center gap-3">
-      <CompanyAvatar company={item.company} />
-      <div>
-        <p className="font-semibold text-gray-800 text-sm leading-tight">{item.company}</p>
-        <p className="text-gray-400 text-xs">{item.person}</p>
-        <p className="text-gray-500 text-xs mt-0.5">{item.milestone}</p>
-      </div>
-    </div>
-    <div className="flex flex-col items-end gap-1 shrink-0 ml-2">
-      <p className="font-bold text-gray-800 text-sm">{item.amount}</p>
-      <StatusBadge status={item.status} overdueDays={item.overdueDays} />
-      <p className="text-gray-400 text-[10px]">{item.dueDate}</p>
-    </div>
-  </div>
-);
-
-// Mobile dropdown + cards
-const MobilePaymentSection = () => {
-  const [activeTab, setActiveTab] = useState("all");
-  const [open, setOpen] = useState(false);
-  const filtered = filterByStatus(payments, activeTab);
-
-  return (
-    <div className="flex flex-col">
-      <div className="flex items-center justify-between mb-2">
-        <h1 className="font-semibold text-[#5C5D78] text-base leading-none">Payment Records</h1>
-
-        <div className="relative">
-          <button
-            onClick={() => setOpen(!open)}
-            className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg px-3 py-1.5 text-sm font-medium text-[#5C5D78] shadow-sm"
-          >
-            <span className={`w-2 h-2 rounded-full ${tabDotColors[activeTab]}`} />
-            {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-            <ChevronDown size={14} className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`} />
-          </button>
-
-          {open && (
-            <>
-              <div className="fixed inset-0 z-10" onClick={() => setOpen(false)} />
-              <div className="absolute right-0 top-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-20 min-w-[140px] overflow-hidden">
-                {TABS.map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => { setActiveTab(tab); setOpen(false); }}
-                    className={`w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-left transition-colors ${
-                      activeTab === tab ? "bg-[#F4ECFD] text-[#6B3FA0] font-semibold" : "text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    <span className={`w-2 h-2 rounded-full shrink-0 ${tabDotColors[tab]}`} />
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div className="h-[60vh] overflow-y-auto scrollbar-hide">
-          {filtered.length === 0 ? (
-            <div className="text-center py-10 text-gray-400 text-sm">No {activeTab} payments found.</div>
-          ) : (
-            filtered.map((item) => <MobilePaymentCard key={`mob-${item.id}`} item={item} />)
-          )}
-        </div>
-      </div>
-    </div>
-  );
-};
+import { FiPlus, FiArrowLeft, FiPlusCircle, FiChevronDown } from "react-icons/fi";
+import { MdOutlinePrivateConnectivity, MdSecurity, MdOutlineFactCheck, MdOutlineHandshake } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io";
 
 const Bottom = () => {
+  const [selectedDeal, setSelectedDeal] = useState(null);
+  const [selectedMilestoneId, setSelectedMilestoneId] = useState(1);
+
+  const deals = [
+    {
+      id: 1,
+      name: "Parikalpna",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "Rs 1,50,000",
+    },
+    {
+      id: 2,
+      name: "Aetherweb",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "Rs 1,50,000",
+    },
+    {
+      id: 3,
+      name: "Lawkase",
+      subtitle: "Mobile App Development",
+      owner: "Akshay Dogra",
+      dueDate: "1 March, 2026",
+      price: "Rs 1,50,000",
+    }
+  ];
+
+  const milestones = [
+    {
+      id: 1,
+      name: "Milestone 1 - Wireframe Designing",
+      description: "Develop a mobile app with core features",
+      dueDate: "15th April, 2026",
+      status: "Awaiting Response",
+      amount: "50,000",
+      fee: "10,000",
+      payable: "40,000"
+    },
+    {
+      id: 2,
+      name: "Milestone 1 - Wireframe Designing",
+      description: "Develop a mobile app with core features",
+      dueDate: "15th April, 2026",
+      status: "Awaiting Response",
+      amount: "50,000",
+      fee: "10,000",
+      payable: "40,000"
+    },
+    {
+      id: 3,
+      name: "Milestone 1 - Wireframe Designing",
+      description: "Develop a mobile app with core features",
+      dueDate: "15th April, 2026",
+      status: "Awaiting Response",
+      amount: "50,000",
+      fee: "10,000",
+      payable: "40,000"
+    }
+  ];
+
+  const StatCard = ({ label, value, bgColor }) => (
+    <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+      <div className="flex items-center gap-2">
+        <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
+        <h3 className="text-[11px] lg:text-sm lg:font-medium text-[#001032] leading-tight">{label}</h3>
+      </div>
+      <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
+    </div>
+  );
+
+  const DealCard = ({ deal }) => (
+    <div className={`bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${selectedDeal?.id === deal.id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+      <div className="grid grid-cols-3 gap-4 mb-4">
+        <div className="space-y-3">
+          <h3 className="text-base font-semibold text-[#000000]">{deal.name}</h3>
+          <p className="text-xs text-gray-500 font-medium">{deal.subtitle}</p>
+          <p className="text-xs text-[#000000] font-medium">{deal.owner}</p>
+        </div>
+        <div className="space-y-3 text-center">
+          <h3 className="text-base font-semibold text-[#000000]">Due Date</h3>
+          <p className="text-xs text-gray-500 font-medium">{deal.dueDate}</p>
+        </div>
+        <div className="space-y-3 text-right">
+          <h3 className="text-base font-semibold text-[#000000]">Price</h3>
+          <p className="border-b border-[#D8D6F8] inline-block text-xs text-[#000000] font-semibold">{deal.price}</p>
+        </div>
+      </div>
+      <button 
+        onClick={() => setSelectedDeal(deal)}
+        className="w-full mt-2 py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all"
+      >
+        View Details
+      </button>
+    </div>
+  );
+
+  const activeMilestone = milestones.find(m => m.id === selectedMilestoneId) || milestones[0];
+
   return (
-    <div className="flex flex-col lg:flex-row items-start gap-4 w-full px-3 lg:px-6 py-4">
-
-      {/* LEFT */}
-      <div className="lg:w-[70%] w-full flex flex-col">
-
-        {/* Desktop tabs — hidden on mobile */}
-        <div className="hidden lg:block">
-          <Tabs defaultValue="all">
-            <div className="flex items-center justify-between h-8 ">
-              <h1 className="font-semibold text-[#5C5D78] text-base leading-none">Payment Records</h1>
-              <TabsList className="h-8 bg-white border border-gray-200 p-0.5 rounded-lg gap-0">
-                <TabsTrigger value="all" className="text-sm px-3 h-7 data-[state=active]:bg-[#F4ECFD] data-[state=active]:text-[#6B3FA0] data-[state=active]:shadow-none rounded-md flex items-center gap-1">
-                  <AlignJustify size={12} /> All
-                </TabsTrigger>
-                {["escrowed", "released", "pending", "overdue"].map((t) => (
-                  <TabsTrigger key={t} value={t} className="text-sm px-3 h-7 capitalize data-[state=active]:bg-[#F4ECFD] data-[state=active]:text-[#6B3FA0] data-[state=active]:shadow-none rounded-md">
-                    {t.charAt(0).toUpperCase() + t.slice(1)}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </div>
-            <div className="bg-white shadow-sm rounded-xl overflow-hidden">
-              {TABS.map((tab) => (
-                <TabsContent key={tab} value={tab} className="m-0 p-0">
-                  <TableHeader />
-                  <div className="h-[390px] overflow-y-auto scrollbar-hide">
-                    {filterByStatus(payments, tab).length === 0 ? (
-                      <div className="text-center py-10 text-gray-400 text-sm">No {tab} payments found.</div>
-                    ) : (
-                      filterByStatus(payments, tab).map((item) => <PaymentRow key={`${tab}-${item.id}`} item={item} />)
-                    )}
-                  </div>
-                </TabsContent>
-              ))}
-            </div>
-          </Tabs>
+    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[650px] h-screen overflow-hidden">
+      
+      {/* ── Left Column ── */}
+      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
+        <div className="grid grid-cols-2 gap-4">
+          <StatCard label="Active Deals" value="16" bgColor="bg-[#D8E1F0]" />
+          <StatCard label="Due This Month" value="4" bgColor="bg-[#D8D6F8]" />
+          <StatCard label="Overdue Payments" value="3" bgColor="bg-[#EFDBD9]" />
+          <StatCard label="Total Payments" value="325k" bgColor="bg-[#D7EBE4]" />
         </div>
 
-        {/* Mobile dropdown — hidden on desktop */}
-        <div className="block lg:hidden">
-          <MobilePaymentSection />
+        <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Deals</h2>
+        <div className="space-y-4 pb-20">
+          {deals.map(deal => (
+            <DealCard key={deal.id} deal={deal} />
+          ))}
         </div>
       </div>
 
-      {/* RIGHT: Financial Insights */}
-      <div className="lg:w-[30%] w-full flex flex-col">
-        <div className="flex items-center justify-between h-8 mb-2">
-          <h1 className="font-semibold text-[#5C5D78] text-base leading-none">Financial Insights</h1>
-          <ButtonGroup className="h-8">
-            <Button variant="secondary" size="sm" className="h-full bg-[#EBE0FB] text-[#5D46B7] rounded-sm px-2"><IoGrid /></Button>
-            <ButtonGroupSeparator />
-            <Button variant="secondary" size="sm" className="h-full bg-white rounded-sm px-2"><BiObjectsHorizontalLeft /></Button>
-          </ButtonGroup>
-        </div>
+      {/* ── Divider ── */}
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
-        <div className="flex flex-col gap-2">
-          <div className="bg-white rounded-2xl">
-            <div className="px-5 lg:py-1.5 py-3">
-              <h3 className="text-gray-700 font-semibold mb-4 lg:mb-2 text-sm">Upcoming Payment Deadlines</h3>
-              <div className="space-y-2 text-sm">
-                {[
-                  { label: "UI Screens", days: "10 days", color: "bg-blue-100 text-blue-600" },
-                  { label: "Backend API", days: "12 days", color: "bg-indigo-100 text-indigo-600" },
-                ].map((item, i) => (
-                  <div key={i} className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <div className={`w-5 h-5 rounded flex items-center justify-center text-xs font-bold ${item.color}`}>{i + 1}</div>
-                      <span className="text-gray-700">{item.label}</span>
-                    </div>
-                    <span className="text-gray-500 text-xs">{item.days}</span>
+      {/* ── Right Column ── */}
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col gap-4 ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
+
+        
+        {/* Header (Back button on mobile) */}
+        {selectedDeal && (
+          <div className="lg:hidden flex items-center gap-3">
+            <button onClick={() => setSelectedDeal(null)} className="p-2 bg-gray-50 rounded-full text-[#59549F]">
+              <FiArrowLeft size={20} />
+            </button>
+            <span className="font-bold text-lg text-[#001032]">Back to Deals</span>
+          </div>
+        )}
+
+        {selectedDeal ? (
+          <div className="flex-1 flex flex-col h-full min-h-0">
+            {/* Scrollable White Card Area */}
+            <div className="flex-1 bg-white rounded-2xl m-2 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col overflow-hidden min-h-0">
+              <div className="flex-1 overflow-y-auto scrollbar-hide p-4 lg:p-6 space-y-4">
+                
+                {/* Payment for Milestones Panel */} 
+                <div className="bg-white ">
+                  <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-base font-semibold text-[#000000]">Payment for Milestones</h3>
+                      <FiPlusCircle size={22} className="text-[#59549F] cursor-pointer" />
                   </div>
-                ))}
-              </div>
-            </div>
-            <hr className="mx-5 lg:my-1 my-3" />
-            <div className="px-5 pb-4 pt-2">
-              <h3 className="text-gray-700 font-semibold mb-1 text-sm">Escrow Summary</h3>
-              <div className="bg-[#FDF5EE] rounded-xl p-3 flex justify-between items-center">
-                <div>
-                  <div className="flex items-center gap-1">
-                    <IndianRupee size={15} className="text-gray-600" />
-                    <span className="text-base font-semibold text-gray-800">30,000</span>
-                    <span className="text-xs text-gray-400 ml-1">Ceccal</span>
+
+                  <div className="space-y-4">
+                      {milestones.map(m => (
+                        <div key={m.id} className="relative bg-[#F9F9FF] rounded-xl p-2 lg:p-4 border border-gray-100 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.05)]">
+                          <div className="flex gap-3">
+                              <div className={`w-3 h-3 rounded-full mt-1 shrink-0 ${m.id === selectedMilestoneId ? 'bg-[#D8D6F8]' : 'bg-gray-200'}`} />
+                              <div className="flex-1">
+                                <h4 className="text-sm font-semibold text-[#000000]">{m.name}</h4>
+                                <p className="text-[10px] text-gray-400 mt-1">{m.description}</p>
+                                <p className="text-[10px] text-gray-400 mt-1">Due Date - {m.dueDate}</p>
+                              </div>
+                              <div className="flex flex-col items-end gap-3 shrink-0">
+                                <div className="bg-orange-50 text-[#D97706] text-[8px] px-2 py-0.5 rounded-full font-bold border border-orange-100">
+                                    {m.status}
+                                </div>
+                                <button 
+                                    onClick={() => setSelectedMilestoneId(m.id)}
+                                    className={`px-4 py-1.5 rounded-md text-[10px] font-bold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.25)] transition-all ${m.id === selectedMilestoneId ? 'bg-[#D8D6F8] text-[#59549F]' : 'bg-gray-100 text-gray-400'}`}
+                                >
+                                    {m.id === selectedMilestoneId ? 'Pay Now' : 'Select'}
+                                </button>
+                              </div>
+                          </div>
+                        </div>
+                      ))}
                   </div>
-                  <p className="text-xs text-gray-500 mt-2 lg:mt-0">Escrow ↓ 2 days</p>
                 </div>
-                <span className="text-xs bg-yellow-100 text-[#877A68] px-3 py-1 rounded-full font-medium whitespace-nowrap">
-                  In 2 Days <span className="text-[#EDB778] font-bold">10</span>
-                </span>
+
+                {/* Breakdown Panel */}
+                <div className="bg-white mt-6 rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden">
+                  <div className="flex items-center justify-between px-6 lg:px-8 py-2 bg-[#F0EDFD] rounded-2xl">
+                      <h3 className="text-base font-semibold text-[#000000]">Milestone 1 Breakdown</h3>
+                      <FiChevronDown size={22} className="text-[#000000] cursor-pointer" />
+                  </div>
+
+                  <div className="p-2 lg:p-8">
+                    <div className="grid grid-cols-3 gap-1 lg:gap-3 lg:mb-6 my-3">
+                        <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 py-5 lg:p-4 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                          <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Milestone Amount</p>
+                          <p className="text-[9px] lg:text-lg text-[#000000] font-bold">Rs 50,000</p>
+                        </div>
+                        <div className="bg-[#F5F5F5] rounded-xl lg:rounded-2xl p-1 lg:p-4 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                          <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Platform Fee (20% + GST)</p>
+                          <p className="text-[9px] lg:text-lg text-gray-400 font-bold">Rs 10,000</p>
+                        </div>
+                        <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 lg:p-4 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                          <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Total Payable</p>
+                          <p className="text-[9px] lg:text-lg text-[#59549F] font-bold">Rs 40,000</p>
+                        </div>
+                    </div>
+
+                    <p className="text-xs text-black font-semibold mb-6">20% platform fees ensures</p>
+
+                    <div className="grid grid-cols-3 gap-2 lg:gap-4">
+                        <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
+                          <img src="/paymentsec1.png" alt="Secure payment" className="w-full h-full object-contain" />
+                        </div>
+                        <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
+                          <img src="/paymentsec2.png" alt="Verified execution" className="w-full h-full object-contain" />
+                        </div>
+                        <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
+                          <img src="/paymentsec3.png" alt="Dispute protection" className="w-full h-full object-contain" />
+                        </div>
+                    </div>
+
+
+                  </div>
+                </div>
               </div>
             </div>
+
+            {/* Pay Button - Outside the main white card */}
+            <button className="w-[98%] mt-3 mx-2 py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all">
+              Pay for Milestone One
+            </button>
           </div>
-          <div className="bg-white rounded-2xl px-5 pt-2 pb-3">
-            <h3 className="text-gray-700 font-semibold text-sm lg:mb-1 mb-4">Monthly Flow</h3>
-            <Graph />
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white rounded-[2rem] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 mx-2">
+            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+              <IoMdCheckmark size={40} className="text-gray-300" />
+            </div>
+            <h3 className="text-lg font-bold text-gray-400">No Deal Selected</h3>
+            <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view payment status.</p>
           </div>
-        </div>
+        )}
       </div>
+
 
     </div>
   );

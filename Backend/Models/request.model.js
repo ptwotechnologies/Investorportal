@@ -23,7 +23,7 @@ const requestSchema = new mongoose.Schema(
       ref: "User",
     },
 
-    // Admin kisko forward karega
+   
     forwardedTo: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -31,7 +31,7 @@ const requestSchema = new mongoose.Schema(
       },
     ],
 
-    // Service providers jinhone interest dikhaya
+    
     interestedBy: [
       {
         type: mongoose.Schema.Types.ObjectId,
