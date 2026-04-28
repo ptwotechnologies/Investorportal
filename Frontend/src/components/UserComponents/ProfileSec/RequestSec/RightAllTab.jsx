@@ -29,6 +29,8 @@ const RightAllTab = ({
   const [expandedExp, setExpandedExp] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showDealModal, setShowDealModal] = useState(false);
+  const [dealId, setDealId] = useState(null);
   const navigate = useNavigate();
 
   const handleClose = () => {
@@ -83,6 +85,25 @@ const RightAllTab = ({
     };
 
     fetchProfessionalProfile();
+  }, [selectedRequest]);
+
+  // Check if deal exists for the selected request
+  useEffect(() => {
+    const checkDeal = async () => {
+      if (selectedRequest?._id) {
+        try {
+          const token = localStorage.getItem("token");
+          const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const existingDeal = res.data.find(d => d.requestId?._id === selectedRequest._id || d.requestId === selectedRequest._id);
+          setDealId(existingDeal ? existingDeal._id : null);
+        } catch (err) {
+          console.error("Error checking deal existence:", err);
+        }
+      }
+    };
+    checkDeal();
   }, [selectedRequest]);
 
   const handleCancelClick = () => {
@@ -463,10 +484,10 @@ const RightAllTab = ({
         <div className="flex flex-col gap-3 pt-4 border-t shrink-0 relative bg-white">
           {isAccepted ? (
             <button
-              onClick={() => navigate('/deal')}
+              onClick={() => dealId ? navigate(`/deal/activedeals`) : navigate(`/deal/dealdraft`, { state: { requestId: selectedRequest._id, professionalId: professional._id } })}
               className="w-full bg-[#D5D5D5] text-[#434343] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
             >
-              Deal
+              {dealId ? "View Deal" : "Create Deal"}
             </button>
           ) : (
             <>
@@ -682,10 +703,10 @@ const RightAllTab = ({
               <div className="flex gap-3 w-full">
                 {isAccepted ? (
                   <button
-                    onClick={() => navigate('/deal')}
+                    onClick={() => dealId ? navigate(`/deal/activedeals`) : navigate(`/deal/dealdraft`, { state: { requestId: selectedRequest._id, professionalId: professional._id } })}
                     className="w-full bg-[#D5D5D5] text-[#434343] py-2.5 rounded-full text-sm font-medium transition-colors flex items-center justify-center gap-2 shadow-[inset_0_0_12px_#00000040]"
                   >
-                    Deal
+                    {dealId ? "View Deal" : "Create Deal"}
                   </button>
                 ) : (
                   <>

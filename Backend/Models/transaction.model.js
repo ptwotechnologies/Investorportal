@@ -4,6 +4,10 @@ const transactionSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     
+    // Optional: for project milestone payments
+    dealId: { type: mongoose.Schema.Types.ObjectId, ref: "Deal" },
+    milestoneId: { type: String }, 
+
     // Internal Reference
     receipt_id: { type: String, required: true }, 
 

@@ -2,7 +2,7 @@ import { serverUrl } from "@/App";
 import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose, IoMdCheckmark } from "react-icons/io";
 
 const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllHandlers, triggerUpgradeModal }) => {
   const [forwardedRequests, setForwardedRequests] = useState([]);
@@ -476,6 +476,19 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                 }
                 return null;
               })()}
+
+              <div className="flex gap-2 pt-2">
+                {selectedRequest.status === "deal_created" ? (
+                  <button
+                    onClick={() => navigate("/deal/activedeals")}
+                    className="w-full py-2 rounded-full text-xs font-medium bg-green-100 text-green-700 flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] hover:bg-green-200 transition-colors"
+                  >
+                    <IoMdCheckmark /> View Deal
+                  </button>
+                ) : (
+                  <></>
+                )}
+              </div>
 
               {/* Action Buttons for Forwarded Requests (Professional View) */}
               {!selectedRequest.professionalData && selectedRequest.requestType === "forwarded" && (

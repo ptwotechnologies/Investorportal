@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { FaTimesCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { IoMdClose } from "react-icons/io";
+import { IoMdClose, IoMdCheckmark } from "react-icons/io";
 
 const ReceivedTabSec = ({
   setSelectedRequest,
@@ -511,38 +511,49 @@ const ReceivedTabSec = ({
               </div>
 
               <div className="flex gap-2 pt-2">
-                <button
-                  onClick={() => handleInterest(selectedRequest._id)}
-                  disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored}
-                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
-                    selectedRequest.hasShownInterest ||
-                    selectedRequest.isIgnored ||
-                    selectedRequest.professionalData?.isIgnored
-                      ? "bg-[#F8DEDE] text-[#B94444] cursor-not-allowed rounded-full opacity-50"
-                      : "bg-[#F8DEDE] text-[#B94444] rounded-full"
-                  }`}
-                >
-                  {selectedRequest.hasShownInterest ? "Interested" : "Interest"}
-                </button>
-                <button
-                  onClick={() =>
-                    setShowConfirm({
-                      requestId: selectedRequest._id,
-                      providerId: selectedRequest.professionalData?._id || selectedRequest.professionalData || null,
-                      origin: 'detail',
-                    })
-                  }
-                  disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored}
-                  className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
-                    selectedRequest.hasShownInterest ||
-                    selectedRequest.isIgnored ||
-                    selectedRequest.professionalData?.isIgnored
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed rounded-full"
-                      : "bg-[#D8D6F8] text-[#59549F] rounded-full"
-                  }`}
-                >
-                  {(selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored) ? "Ignored" : "Ignore"}
-                </button>
+                {selectedRequest.status === "deal_created" ? (
+                  <button
+                    onClick={() => navigate("/deal/activedeals")}
+                    className="w-full py-2 rounded-full text-xs font-medium bg-green-100 text-green-700 flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] hover:bg-green-200 transition-colors"
+                  >
+                    <IoMdCheckmark /> View Deal
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleInterest(selectedRequest._id)}
+                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored}
+                      className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
+                        selectedRequest.hasShownInterest ||
+                        selectedRequest.isIgnored ||
+                        selectedRequest.professionalData?.isIgnored
+                          ? "bg-[#F8DEDE] text-[#B94444] cursor-not-allowed rounded-full opacity-50"
+                          : "bg-[#F8DEDE] text-[#B94444] rounded-full"
+                      }`}
+                    >
+                      {selectedRequest.hasShownInterest ? "Interested" : "Interest"}
+                    </button>
+                    <button
+                      onClick={() =>
+                        setShowConfirm({
+                          requestId: selectedRequest._id,
+                          providerId: selectedRequest.professionalData?._id || selectedRequest.professionalData || null,
+                          origin: 'detail',
+                        })
+                      }
+                      disabled={selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored}
+                      className={`flex-1 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-center gap-1 shadow-[inset_0_0_12px_#00000040] ${
+                        selectedRequest.hasShownInterest ||
+                        selectedRequest.isIgnored ||
+                        selectedRequest.professionalData?.isIgnored
+                          ? "bg-gray-300 text-gray-500 cursor-not-allowed rounded-full"
+                          : "bg-[#D8D6F8] text-[#59549F] rounded-full"
+                      }`}
+                    >
+                      {(selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored) ? "Ignored" : "Ignore"}
+                    </button>
+                  </>
+                )}
               </div>
 
               {showConfirm.requestId === selectedRequest._id &&

@@ -2,7 +2,7 @@ import React from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 
-const TopBar = () => {
+const TopBar = ({ onAddClick }) => {
   return (
     <div className="bg-white px-4 lg:px-6 lg:pt-6 pt-4 pb-3 border-b border-gray-100 shadow-sm">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
@@ -37,7 +37,10 @@ const TopBar = () => {
 
           {/* Action Button */}
           <div className="shrink-0">
-            <button className="flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+            <button 
+              onClick={onAddClick}
+              className="flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+            >
               <FaPlus size={15} className="lg:hidden" />
               <FaPlus size={18} className="hidden lg:block" />
               <span className="text-[10px] lg:text-sm whitespace-nowrap">Milestones</span>

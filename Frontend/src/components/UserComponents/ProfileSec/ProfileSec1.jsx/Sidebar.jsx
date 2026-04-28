@@ -29,26 +29,54 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const isDealRoute = location.pathname.startsWith("/deal");
   const [isDealsOpen, setIsDealsOpen] = useState(false);
-  const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
-  const [requestsLoading, setRequestsLoading] = useState(true);
+  const [hasCreatedDeals, setHasCreatedDeals] = useState(false);
+  const [deals, setDeals] = useState([]);
+  const [dealsLoading, setDealsLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
+  const [userRole, setUserRole] = useState(localStorage.getItem("role"));
 
   useEffect(() => {
-    const checkRequests = async () => {
-      setRequestsLoading(true); // ⭐ start loading
+    const fetchData = async () => {
       try {
-        const res = await axios.get(`${serverUrl}/requests`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setHasRaisedRequests(res.data.length > 0);
+        const token = localStorage.getItem("token");
+        const [res, userRes] = await Promise.all([
+          axios.get(`${serverUrl}/api/deals/my-deals`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${serverUrl}/user/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+        ]);
+        setDeals(res.data);
+        setHasCreatedDeals(res.data.length > 0);
+        setUserId(userRes.data._id);
+        setUserRole(userRes.data.role);
       } catch (err) {
-        console.error("Error fetching raised requests count", err);
-        setHasRaisedRequests(false);
+        console.error("Error fetching deals count", err);
+        setDeals([]);
+        setHasCreatedDeals(false);
       } finally {
-        setRequestsLoading(false); // ⭐ done loading
+        setDealsLoading(false);
       }
     };
-    if (token) checkRequests();
+    if (token) fetchData();
   }, [token, location.pathname]);
+
+  const isAtActiveDeals = location.pathname === "/deal/activedeals";
+  const isAtNegotiations = location.pathname === "/deal/negotiations";
+
+  const hasActiveDealDot = !isAtActiveDeals && deals.some(d => 
+    String(userRole).toLowerCase().includes("professional") && d.status === "Draft"
+  );
+
+  const hasNegotiationDot = !isAtNegotiations && deals.some(d => {
+    if (d.status === "Negotiating") {
+      return d.negotiation?.lastSender && String(d.negotiation.lastSender) !== String(userId);
+    }
+    return false;
+  });
+
+  const hasAnyDealDot = hasActiveDealDot || hasNegotiationDot;
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -97,12 +125,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
-  // ✅ Only open if user has raised requests
+  // ✅ Only open if user has created deals
   useEffect(() => {
-    if (isDealRoute && hasRaisedRequests) {
+    if (isDealRoute && hasCreatedDeals) {
       setIsDealsOpen(true);
     }
-  }, [location.pathname, hasRaisedRequests]); // ⭐ add hasRaisedRequests to deps
+  }, [location.pathname, hasCreatedDeals]);
 
   return (
     <div className="fixed top-0 left-0 h-full bg-[#D8D6F8]  p-4 flex flex-col justify-between z-50">
@@ -300,28 +328,33 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <div className="my-3">
                 <div
                   onClick={() => {
-                    if (requestsLoading) {
-                      toast("Checking your requests..."); // ⭐ wait for check
+                    if (dealsLoading) {
+                      toast("Checking your deals...");
                       return;
                     }
-                    if (!hasRaisedRequests) {
-                      toast.error("You have to raise a request to open deals");
+                    if (!hasCreatedDeals) {
+                      toast.error("You have to create a deal to open this section");
                       return;
                     }
                     setIsDealsOpen(!isDealsOpen);
                   }}
-                  className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100"
+                  className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
                   <span>Deals</span>
 
-                  {isDealsOpen ? (
-                    <FaChevronUp className="text-gray-500 text-sm" size={12} />
-                  ) : (
-                    <FaChevronDown
-                      className="text-gray-500 text-sm"
-                      size={12}
-                    />
-                  )}
+                  <div className="flex items-center gap-2">
+                    {hasAnyDealDot && (
+                      <div className="w-2 h-2 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
+                    )}
+                    {isDealsOpen ? (
+                      <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                    ) : (
+                      <FaChevronDown
+                        className="text-gray-500 text-sm"
+                        size={12}
+                      />
+                    )}
+                  </div>
                 </div>
 
                 {isDealsOpen && (
@@ -330,50 +363,95 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                     <NavLink
                       to="/deal/activedeals"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Active Deals
-                    </NavLink>
-
-                    <NavLink
-                      to="/deal/communication"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
-                    >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Communication
-                    </NavLink>
-
-                    <NavLink
-                      to="/deal/milestones"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
-                    >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Milestones
-                    </NavLink>
-
-                    <NavLink
-                      to="/deal/payments"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
-                    >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Payments
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Active Deals
+                      </div>
+                      {hasActiveDealDot && location.pathname !== "/deal/activedeals" && (
+                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
+                      )}
                     </NavLink>
 
                     <NavLink
                       to="/deal/negotiations"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Negotiations
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Negotiations
+                      </div>
+                      {hasNegotiationDot && location.pathname !== "/deal/negotiations" && (
+                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
+                      )}
                     </NavLink>
 
-                    <NavLink
+                     <NavLink
                       to="/deal/documentation"
                       className="flex items-center gap-2 py-1 hover:text-[#001032]"
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Documentation
+                    </NavLink>
+
+                      <NavLink
+                        to="/deal/payments"
+                        className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                          Payments
+                        </div>
+                        {location.pathname === "/deal/payments" && (
+                          <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
+                        )}
+                      </NavLink>
+                      <NavLink
+                        to="/deal/revenue"
+                        className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                          Revenue
+                        </div>
+                        {location.pathname === "/deal/revenue" && (
+                          <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
+                        )}
+                      </NavLink>
+
+                    <NavLink
+                      to="/deal/milestones"
+                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Milestones
+                      </div>
+                      {location.pathname === "/deal/milestones" && (
+                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
+                      )}
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/disputes"
+                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Disputes
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/communication"
+                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Communication
+                      </div>
+                      {location.pathname === "/deal/communication" && (
+                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
+                      )}
                     </NavLink>
 
                     <NavLink
@@ -384,13 +462,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       Completed
                     </NavLink>
 
-                    <NavLink
-                      to="/deal/disputes"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
-                    >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Disputes
-                    </NavLink>
+                    
                   </div>
                 )}
               </div>

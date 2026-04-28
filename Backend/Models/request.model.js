@@ -14,7 +14,7 @@ const requestSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["raised", "forwarded","interested", "accepted", "completed"],
+      enum: ["raised", "forwarded", "interested", "accepted", "deal_created", "completed"],
       default: "raised",
     },
 
