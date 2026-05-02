@@ -1,5 +1,5 @@
-import Dispute from '../Models/Dispute.model.js';
-import Deal from '../Models/Deal.model.js';
+import Dispute from '../Models/dispute.model.js';
+import Deal from '../Models/deal.model.js';
 
 export const createDispute = async (req, res) => {
   try {
