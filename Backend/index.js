@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 import userRoutes from './Routes/User.Routes.js';
 import profileRoutes from './Routes/Profile.Routes.js';
 import connectionsRoutes from './Routes/connection.Routes.js';
-import cors from "cors";
 import requestRoutes from './Routes/request.Routes.js';
 import connectDB from './lib/db.js';
 import helpRoutes from './Routes/help.Routes.js';
@@ -28,18 +27,27 @@ const allowedOrigins = [
   "https://www.copteno.com"
 ];
 
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true,
-  optionsSuccessStatus: 200
-}));
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  console.log(`DEBUG: Incoming request from origin: ${origin}, method: ${req.method}`);
+  
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else if (!origin) {
+    // Allow non-CORS requests
+  } else {
+    console.log(`DEBUG: Origin ${origin} not in allowedOrigins`);
+  }
+
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+  next();
+});
 
 app.use(express.json());
 app.use(cookieParser());
