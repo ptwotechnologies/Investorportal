@@ -1,5 +1,5 @@
-import Request from "../models/request.model.js";
-import User from "../models/User.model.js";
+import Request from "../Models/request.model.js";
+import User from "../Models/User.model.js";
 
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
