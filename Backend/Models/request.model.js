@@ -14,8 +14,13 @@ const requestSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["raised", "forwarded", "interested", "accepted", "deal_created", "completed"],
+      enum: ["raised", "forwarded", "interested", "accepted", "deal_created", "completed", "redeemed"],
       default: "raised",
+    },
+
+    acceptedAt: {
+      type: Date,
+      default: null,
     },
 
     raisedBy: {
@@ -77,4 +82,4 @@ const requestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Request", requestSchema);
+export default mongoose.models.Request || mongoose.model("Request", requestSchema);

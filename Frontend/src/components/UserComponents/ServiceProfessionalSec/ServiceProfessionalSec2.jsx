@@ -5,12 +5,12 @@ const ServiceProfessionalSec2 = () => {
      <>
     <div className="mt-15  hidden  lg:block">
       <hr />
-      <div className=" m-16">
+      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0 py-16">
         <div className="flex justify-evenly items-center gap-20">
           <div className="flex justify-center items-center gap-10">
             <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto"></div>
-              <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Verified Startup  <br/> Leads</p>
+              <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Verified Startup  <br /> Leads</p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
@@ -18,24 +18,24 @@ const ServiceProfessionalSec2 = () => {
             <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto"></div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Fair & Transparent
-            Pricing</p>
+                Pricing</p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
             </div>
-             <div className="w-[18%]  ">
+            <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto"></div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Expert-Led
- <br/>
-  Guidance </p>
+                <br />
+                Guidance </p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
             </div>
-             <div className="w-[18%]  ">
+            <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto"></div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Smart Work
-  Matching</p>
+                Matching</p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
@@ -43,7 +43,7 @@ const ServiceProfessionalSec2 = () => {
             <div className="w-[18%]  ">
               <div className="w-15 h-15 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto"></div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Post-Delivery
-     Support</p>
+                Support</p>
             </div>
             <div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>

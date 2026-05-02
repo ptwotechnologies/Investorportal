@@ -10,8 +10,8 @@ import Footer from '@/components/UserComponents/Footer'
 
 const About = () => {
   return (
-    <div>
-      <div >
+    <div className="overflow-x-hidden">
+      <div>
      <AboutSec1/>
     </div>
     <div >

@@ -19,6 +19,7 @@ const Bottom = () => {
   const [selectedDispute, setSelectedDispute] = useState(null);
   const [isThreadOpen, setIsThreadOpen] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  const [showResolutions, setShowResolutions] = useState(false);
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user") || "{}");
@@ -104,14 +105,35 @@ const Bottom = () => {
     </div>
   );
 
+  const role = localStorage.getItem("role")?.toLowerCase();
+  const isStartup = role === "startup";
+
+  const handleMarkAsRead = async (disputeId) => {
+    try {
+      await axios.put(`${serverUrl}/api/disputes/mark-read/${disputeId}`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // Update local state
+      setDisputes(prev => prev.map(d => 
+        d._id === disputeId 
+        ? { ...d, [isStartup ? 'isReadByStartup' : 'isReadByProfessional']: true } 
+        : d
+      ));
+    } catch (error) {
+      console.error("Error marking as read:", error);
+    }
+  };
+
   const DisputeSummaryCard = ({ dispute }) => {
     const deal = dispute.dealId;
     const startupName = deal.startupId?.businessDetails?.companyName || "N/A";
+    const hasUnread = isStartup ? !dispute.isReadByStartup : !dispute.isReadByProfessional;
 
     return (
-      <div className={`bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border-2 transition-all ${selectedDispute?._id === dispute._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+      <div className={`bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border-2 transition-all relative ${selectedDispute?._id === dispute._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+        {hasUnread && <div className="absolute top-4 left-4 w-2.5 h-2.5 bg-[#3CC033] rounded-full border border-white z-10" />}
         <div className="flex items-center justify-between">
-          <h4 className="text-sm font-semibold text-[#001032]">Dispute ID – {getDisplayId(dispute._id)}</h4>
+          <h4 className="text-sm font-semibold text-[#001032] ml-4">Dispute ID – {getDisplayId(dispute._id)}</h4>
           <span className="bg-[#B91C1C] text-white text-[8px] lg:text-[10px] px-3 py-1 rounded-full font-semibold">Duration - 20 Days</span>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2">
@@ -128,6 +150,7 @@ const Bottom = () => {
                 setSelectedDispute(dispute);
                 setSelectedDeal(dispute.dealId);
                 setIsThreadOpen(false);
+                if (hasUnread) handleMarkAsRead(dispute._id);
               }}
               className="px-4 py-1.5 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-lg shadow-sm hover:opacity-90"
              >
@@ -148,17 +171,17 @@ const Bottom = () => {
       <div className={`bg-white rounded-2xl px-4 lg:px-6 py-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${isSelected ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
         <div className="grid grid-cols-3 gap-2 mb-4 items-start">
           <div className="flex flex-col">
-            <h3 className="text-sm font-bold text-[#001032] truncate">{startup}</h3>
-            <p className="text-[10px] text-gray-400">Mobile App Development</p>
-            <p className="text-[10px] text-[#001032] mt-2 opacity-70">{owner}</p>
+            <h3 className="text-sm lg:text-[16px] font-semibold text-[#001032] truncate">{startup}</h3>
+            <p className="text-[10px] lg:text-sm text-gray-400 truncate">Mobile App Development</p>
+            <p className="text-[10px] lg:text-sm text-[#001032] mt-2 opacity-70 truncate">{owner}</p>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[10px] font-bold text-[#001032]">Due Date</span>
-            <p className="text-[10px] text-gray-400">1 March, 2026</p>
+            <span className="text-[10px] lg:text-[16px] font-bold text-[#001032]">Timeline</span>
+            <p className="text-[10px] lg:text-sm text-gray-400">{deal.totalTimeline || "N/A"}</p>
           </div>
           <div className="flex flex-col items-end">
-             <span className="text-[10px] font-bold text-[#001032]">Price</span>
-             <p className="text-[10px] text-gray-400">Rs {deal.totalAmount || 0}</p>
+             <span className="text-[10px] lg:text-[16px] font-bold text-[#001032]">Price</span>
+             <p className="text-[10px] lg:text-sm text-gray-400">Rs {deal.totalAmount || 0}</p>
           </div>
         </div>
         <button 
@@ -172,13 +195,15 @@ const Bottom = () => {
   };
 
   const MilestoneDisputeCard = ({ milestone, project, dispute }) => {
+    const hasUnread = isStartup ? !dispute?.isReadByStartup : !dispute?.isReadByProfessional;
     return (
-      <div className="bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border border-gray-100">
+      <div className="bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border border-gray-100 relative">
+        {hasUnread && <div className="absolute top-4 left-4 w-2.5 h-2.5 bg-[#3CC033] rounded-full border border-white z-10" />}
         <div className="flex items-center justify-between px-1">
-          <h4 className="text-sm font-semibold text-[#001032]">Com - MS-2026-CO{milestone._id?.slice(-7).toUpperCase()}</h4>
+          <h4 className={`text-sm font-semibold text-[#001032] ${hasUnread ? 'ml-4' : ''}`}>Com - MS-2026-CO{milestone._id?.slice(-7).toUpperCase()}</h4>
           <span className="bg-[#B91C1C] text-white text-[8px] lg:text-[10px] px-3 py-1 rounded-full font-bold">Duration - 20 Days</span>
         </div>
-        <div className={`bg-white rounded-xl border p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2 transition-all ${dispute ? 'border-blue-400 border-2' : 'border-gray-100'}`}>
+        <div className={`bg-white rounded-xl border p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2 transition-all ${dispute ? 'border-gray-200 border-2' : 'border-gray-100'}`}>
            <h5 className="text-sm font-bold text-[#001032]">{milestone.title}</h5>
            <p className="text-[11px] text-gray-500 leading-relaxed">
              <span className="text-[#59549F] font-bold">Reason</span> – {dispute?.reason || "No issues reported."}
@@ -193,6 +218,7 @@ const Bottom = () => {
                 setSelectedDispute(dispute);
                 setSelectedDeal(project);
                 setIsThreadOpen(true);
+                if (hasUnread) handleMarkAsRead(dispute._id);
               }}
               className={`px-4 py-1.5 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-lg shadow-sm ${!dispute ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`}
              >
@@ -207,59 +233,68 @@ const Bottom = () => {
   if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   const renderThreadView = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h4 className="text-sm font-bold text-[#001032] underline decoration-blue-500 underline-offset-4">
-          Dispute ID – {getDisplayId(selectedDispute?._id)}
-        </h4>
-        <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-lg font-bold">Duration - 20 Days</span>
-      </div>
-      
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
-         <h5 className="text-sm font-bold text-[#001032]">
-           {selectedDeal?.milestones?.find(m => String(m._id) === String(selectedDispute?.milestoneId))?.title || "Milestone 1"}
-         </h5>
-         <p className="text-[12px] text-gray-500 leading-relaxed"><span className="text-[#59549F] font-bold">Reason</span> – {selectedDispute?.reason}</p>
-         <p className="text-[12px] text-gray-500 font-bold"><span className="text-[#59549F]">Amount</span> – Rs {selectedDispute?.amount}</p>
+    <div className="h-full flex flex-col">
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto scrollbar-hide space-y-6 p-2">
+        <div className="flex items-center justify-between mt-2">
+          <h4 className="text-sm font-bold text-[#001032] ">
+            Dispute ID – {getDisplayId(selectedDispute?._id)}
+          </h4>
+          <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-lg font-bold">Duration - 20 Days</span>
+        </div>
+        
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
+           <h5 className="text-sm font-bold text-[#001032]">
+             {selectedDeal?.milestones?.find(m => String(m._id) === String(selectedDispute?.milestoneId))?.title || "Milestone 1"}
+           </h5>
+           <p className="text-[12px] text-gray-500 leading-relaxed"><span className="text-[#59549F] font-bold">Reason</span> – {selectedDispute?.reason}</p>
+           <p className="text-[12px] text-gray-500 font-bold"><span className="text-[#59549F]">Amount</span> – Rs {selectedDispute?.amount}</p>
+        </div>
+  
+        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
+           <h5 className="text-sm font-bold text-[#001032]">Evidence Upload</h5>
+           <div className="grid grid-cols-2 gap-4">
+             {selectedDispute?.evidence?.split(',').filter(u => u).map((url, i) => (
+               <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden border border-gray-100">
+                  <img src={getImageUrl(url)} className="w-full h-full object-cover" alt="evidence" />
+               </div>
+             ))}
+           </div>
+        </div>
+  
+        <div className="space-y-6 pt-6">
+           <h3 className="text-base font-bold text-[#001032]">Communication Thread</h3>
+           <div className="space-y-4 pb-4">
+              {selectedDispute?.messages?.map((msg, i) => (
+                <div key={i} className="flex flex-col gap-1">
+                   <div className="bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-50 relative">
+                      <div className="flex gap-3">
+                         <div className="w-10 h-10 bg-gray-200 rounded-full shrink-0" />
+                         <div className="flex-1">
+                            <div className="flex items-center justify-between mb-1">
+                               <span className="font-bold text-sm text-[#001032]">
+                                 {String(msg.senderId._id || msg.senderId) === String(user._id) 
+                                   ? "You" 
+                                   : (msg.senderId.businessDetails?.companyName || (msg.senderId.businessDetails ? `${msg.senderId.businessDetails.firstName} ${msg.senderId.businessDetails.lastName}` : "User"))
+                                 }
+                               </span>
+                               <span className="text-[10px] text-gray-400">{msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Recently"}</span>
+                            </div>
+                            <p className="text-[11px] text-gray-500 leading-relaxed text-left">{msg.message}</p>
+                         </div>
+                      </div>
+                      <div className="flex justify-end mt-2">
+                         <button className="px-4 py-1 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-md shadow-sm">Reply</button>
+                      </div>
+                   </div>
+                </div>
+              ))}
+           </div>
+        </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
-         <h5 className="text-sm font-bold text-[#001032]">Evidence Upload</h5>
-         <div className="grid grid-cols-2 gap-4">
-           {selectedDispute?.evidence?.split(',').filter(u => u).map((url, i) => (
-             <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden border border-gray-100">
-                <img src={getImageUrl(url)} className="w-full h-full object-cover" alt="evidence" />
-             </div>
-           ))}
-         </div>
-      </div>
-
-      <div className="space-y-6 pt-6">
-         <h3 className="text-base font-bold text-[#001032]">Communication Thread</h3>
-         <div className="space-y-4">
-            {selectedDispute?.messages?.map((msg, i) => (
-              <div key={i} className="flex flex-col gap-1">
-                 <div className="bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-50 relative">
-                    <div className="flex items-center gap-3 mb-3">
-                       <div className="w-8 h-8 bg-gray-200 rounded-full shrink-0" />
-                       <div className="flex-1 flex items-center justify-between">
-                          <span className="font-bold text-sm text-[#001032]">
-                            {msg.senderId.businessDetails?.companyName || (msg.senderId.businessDetails ? `${msg.senderId.businessDetails.firstName} ${msg.senderId.businessDetails.lastName}` : "User")}
-                          </span>
-                          <span className="text-[9px] text-gray-400">{new Date(msg.createdAt).toLocaleTimeString()}</span>
-                       </div>
-                    </div>
-                    <p className="text-[11px] text-gray-500 leading-relaxed text-justify">{msg.message}</p>
-                    <div className="flex justify-end mt-2">
-                       <button className="px-4 py-1 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-md">Reply</button>
-                    </div>
-                 </div>
-              </div>
-            ))}
-         </div>
-      </div>
-
-      <div className="pt-4 space-y-4">
+      {/* Static Footer Section */}
+      <div className="pt-4 pb-8 space-y-4 bg-[#FDFDFF] border-t border-gray-100 mt-auto">
         <div className="relative">
            <input 
              type="text" 
@@ -274,15 +309,28 @@ const Bottom = () => {
               <button onClick={handleSendMessage} className="hover:opacity-70"><FiSend size={18} /></button>
            </div>
         </div>
-        <div className="space-y-3 pb-10">
-           <button className="w-full py-2 bg-white border border-gray-300 rounded-xl text-sm font-semibold text-[#313131] hover:bg-gray-50 shadow-sm transition-all">Resolution Options</button>
-           <button className="w-full py-2 bg-[#004F5B] text-white rounded-xl text-sm font-bold shadow-md hover:opacity-90 transition-all">Approve Payment</button>
-           <div className="grid grid-cols-2 gap-4">
-              <button className="py-2 bg-[#FFEDCF] text-[#FF9D00] rounded-xl text-sm font-bold shadow-sm">Refund Payment</button>
-              <button className="py-2 bg-white border border-[#D8D6F8] text-[#59549F] rounded-xl text-sm font-bold shadow-sm">Split Payment</button>
-              <button className="py-2 bg-[#CDCDCD] text-[#404040] rounded-xl text-sm font-bold shadow-sm">Request Revision</button>
-              <button className="py-2 bg-[#FFD0D0] text-[#BA1E1E] rounded-xl text-sm font-bold shadow-sm">Escalate</button>
-           </div>
+
+        <div className="space-y-3 pb-4">
+           <button 
+             onClick={() => setShowResolutions(!showResolutions)}
+             className="w-full py-2 bg-white border border-gray-300 rounded-xl text-sm font-semibold text-[#313131] hover:bg-gray-50 shadow-sm transition-all"
+           >
+             Resolution Options
+           </button>
+           
+           {showResolutions && (
+             <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                <button className="w-full py-2 bg-[#004F5B] text-white rounded-xl text-sm font-bold shadow-md hover:opacity-90 transition-all">
+                  Approve Payment
+                </button>
+                <div className="grid grid-cols-2 gap-4">
+                   <button className="py-2 bg-[#FFEDCF] text-[#FF9D00] rounded-xl text-sm font-bold shadow-sm">Refund Payment</button>
+                   <button className="py-2 bg-white border border-[#D8D6F8] text-[#59549F] rounded-xl text-sm font-bold shadow-sm">Split Payment</button>
+                   <button className="py-2 bg-[#CDCDCD] text-[#404040] rounded-xl text-sm font-bold shadow-sm">Request Revision</button>
+                   <button className="py-2 bg-[#FFD0D0] text-[#BA1E1E] rounded-xl text-sm font-bold shadow-sm">Escalate</button>
+                </div>
+             </div>
+           )}
         </div>
       </div>
     </div>
@@ -294,10 +342,10 @@ const Bottom = () => {
       {/* ── Left Column ── */}
       <div className={`flex-1 flex py-2 flex-col gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) && isThreadOpen ? 'hidden lg:flex' : 'flex'}`}>
         <div className="grid grid-cols-2 gap-4 px-1 shrink-0">
-          <StatCard label="Active Conversations" value="16" bgColor="bg-[#D8E1F0]" />
-          <StatCard label="Awaiting Response" value="4" bgColor="bg-[#D8D6F8]" />
-          <StatCard label="In Discussion" value="3" bgColor="bg-[#EFDBD9]" />
-          <StatCard label="Closed Conversations" value="12" bgColor="bg-[#D7EBE4]" />
+          <StatCard label="Active Conversations" value={disputes.filter(d => d.status !== 'Resolved').length} bgColor="bg-[#D8E1F0]" />
+          <StatCard label="Awaiting Response" value={disputes.filter(d => d.messages?.length === 0).length} bgColor="bg-[#D8D6F8]" />
+          <StatCard label="In Discussion" value={disputes.filter(d => d.messages?.length > 0 && d.status !== 'Resolved').length} bgColor="bg-[#EFDBD9]" />
+          <StatCard label="Closed Conversations" value={disputes.filter(d => d.status === 'Resolved').length} bgColor="bg-[#D7EBE4]" />
         </div>
 
         <div className="flex items-center gap-2 px-1 shrink-0">
@@ -322,8 +370,15 @@ const Bottom = () => {
         </div>
 
         <div className="flex-1 overflow-y-auto scrollbar-hide p-2 space-y-6">
-          {(activeTab === "Milestones" || activeTab === "Files") ? (
-             deals.filter(deal => disputes.some(d => d.dealId?._id === deal._id)).map(deal => (
+          {deals.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-60">
+              <MdOutlineFactCheck size={50} className="text-gray-300 mb-4" />
+              <p className="text-sm font-medium text-gray-500 leading-relaxed">
+                Raise a request and make a deal to communicate with professional.
+              </p>
+            </div>
+          ) : (activeTab === "Milestones" || activeTab === "Files") ? (
+             deals.map(deal => (
                <ProjectCard 
                  key={deal._id} 
                  deal={deal} 
@@ -362,18 +417,18 @@ const Bottom = () => {
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto scrollbar-hide p-2">
+        <div className={`flex-1 p-2 ${isThreadOpen ? 'h-full flex flex-col' : 'overflow-y-auto scrollbar-hide'}`}>
           {isThreadOpen ? (
             renderThreadView()
           ) : (activeTab === "Milestones" || activeTab === "Files") && selectedDeal && !isThreadOpen ? (
             /* ═══ Milestone List for selected Project (Right Side) ═══ */
             <div className="space-y-6">
-               {selectedDeal.milestones?.filter(ms => disputes.some(d => String(d.milestoneId) === String(ms._id) && String(d.dealId?._id) === String(selectedDeal._id))).map(ms => {
+               {selectedDeal.milestones?.map(ms => {
                  const msDispute = disputes.find(d => String(d.milestoneId) === String(ms._id) && String(d.dealId?._id) === String(selectedDeal._id));
                  return <MilestoneDisputeCard key={ms._id} milestone={ms} project={selectedDeal} dispute={msDispute} />;
                })}
-               {(!selectedDeal.milestones || selectedDeal.milestones.filter(ms => disputes.some(d => String(d.milestoneId) === String(ms._id) && String(d.dealId?._id) === String(selectedDeal._id))).length === 0) && (
-                 <div className="text-center py-20 text-gray-400 italic">No disputed {activeTab === "Files" ? "files" : "milestones"} found for this project.</div>
+               {(!selectedDeal.milestones || selectedDeal.milestones.length === 0) && (
+                 <div className="text-center py-20 text-gray-400 italic">No {activeTab === "Files" ? "files" : "milestones"} found for this project.</div>
                )}
             </div>
           ) : activeTab === "Disputes" && selectedDispute ? (
@@ -396,7 +451,16 @@ const Bottom = () => {
                       <p className="text-[10px] text-gray-400">Rs {selectedDispute.dealId?.totalAmount}</p>
                     </div>
                   </div>
-                  <button onClick={() => setIsThreadOpen(true)} className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-xs shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">Open Thread</button>
+                  <button 
+                    onClick={() => {
+                      setIsThreadOpen(true);
+                      const hasUnread = isStartup ? !selectedDispute.isReadByStartup : !selectedDispute.isReadByProfessional;
+                      if (hasUnread) handleMarkAsRead(selectedDispute._id);
+                    }} 
+                    className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-xs shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                  >
+                    Open Thread
+                  </button>
                </div>
             </div>
           ) : (

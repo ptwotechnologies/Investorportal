@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { serverUrl } from "@/App";
 import { useNavigate } from "react-router-dom";
+import { invalidateSidebarCache } from "../../ProfileSec1.jsx/Sidebar";
 
 // ── UI Components (Defined outside to prevent losing focus on re-renders) ──
 
@@ -62,6 +63,13 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
   const [tempScopeItems, setTempScopeItems] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // ── Selection State (for when requestId is missing) ──
+  const [selectionRequestId, setSelectionRequestId] = useState(requestId || null);
+  const [selectionProfessionalId, setSelectionProfessionalId] = useState(professionalId || null);
+  const [eligibleRequests, setEligibleRequests] = useState([]);
+  const [isFetchingRequests, setIsFetchingRequests] = useState(!requestId);
+  const [currentUser, setCurrentUser] = useState(null);
+
   // Sync temp state when activeView changes
   useEffect(() => {
     if (activeView === 'editMilestone' && selectedMilestone) {
@@ -81,6 +89,44 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
       setTempDescription(description);
     }
   }, [activeView, selectedMilestone]);
+
+  // Fetch eligible requests if requestId is missing
+  useEffect(() => {
+    const fetchEligibleRequests = async () => {
+      if (requestId) return;
+      
+      setIsFetchingRequests(true);
+      try {
+        const token = localStorage.getItem("token");
+        const [userRes, raisedRes, receivedRes] = await Promise.all([
+          axios.get(`${serverUrl}/user/me`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${serverUrl}/requests`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${serverUrl}/requests/received`, { headers: { Authorization: `Bearer ${token}` } })
+        ]);
+
+        setCurrentUser(userRes.data);
+
+        // Find requests raised by me with accepted professionals
+        const eligible = raisedRes.data.filter(r => r.acceptedProvider);
+
+        setEligibleRequests(eligible);
+        
+        // If only one eligible request, auto-select it
+        if (eligible.length === 1) {
+          const req = eligible[0];
+          setSelectionRequestId(req._id);
+          setSelectionProfessionalId(req.acceptedProvider?._id || req.acceptedProvider || req.userId?._id || req.userId);
+        }
+      } catch (err) {
+        console.error("Error fetching eligible requests:", err);
+        toast.error("Failed to fetch eligible requests");
+      } finally {
+        setIsFetchingRequests(false);
+      }
+    };
+
+    fetchEligibleRequests();
+  }, [requestId]);
 
   // ── Handlers ──
   const handleEditMilestone = (m) => {
@@ -165,52 +211,114 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
       currentMilestones = saved;
     }
 
-    if (!requestId) {
-        return toast.error("Missing Request ID. Please try again from the request page.");
+    if (!selectionRequestId || !selectionProfessionalId) {
+      toast.error("Please select a request first");
+      return;
     }
+
     if (currentScopeItems.length === 0) {
-        return toast.error("Please add at least one item to the Scope of Work");
+      return toast.error("Please add at least one item to the Scope of Work");
     }
-    if (!currentDescription.trim()) {
-        return toast.error("Please add a description to the Scope of Work");
-    }
-    if (!totalBudget || !totalTimeline) {
-        return toast.error("Please fill in total budget and timeline");
-    }
+
     if (currentMilestones.length === 0) {
-        return toast.error("Please add at least one milestone");
+      toast.error("Please add at least one milestone");
+      return;
     }
 
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.post(`${serverUrl}/api/deals/create-draft`, {
-        requestId,
-        professionalId,
+      const dealData = {
+        requestId: selectionRequestId,
+        professionalId: selectionProfessionalId,
         scopeDescription: currentDescription,
         scopeItems: currentScopeItems,
-        milestones: currentMilestones.map(m => ({
-            title: m.name,
-            amount: Number(m.budget) || 0,
-            description: m.description,
-            duration: m.duration
-        })),
-        totalAmount: Number(totalBudget),
+        totalAmount: totalBudget || currentMilestones.reduce((sum, m) => sum + Number(m.budget || 0), 0),
         totalTimeline: totalTimeline,
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
+        milestones: currentMilestones.map(m => ({
+          title: m.name,
+          description: m.description,
+          amount: Number(m.budget),
+          duration: m.duration,
+          status: "Pending"
+        })),
+        status: "Draft"
+      };
+
+      await axios.post(`${serverUrl}/api/deals/create-draft`, dealData, {
+        headers: { Authorization: `Bearer ${token}` }
       });
 
-      toast.success("Deal draft submitted successfully!");
-      // Stay on the same page as requested
-    } catch (error) {
-      console.error("Error submitting deal:", error);
-      toast.error(error.response?.data?.message || "Failed to submit deal draft");
+      invalidateSidebarCache();
+      toast.success("Deal Draft submitted successfully!");
+      navigate("/deal/activedeals");
+    } catch (err) {
+      console.error("Error submitting draft:", err);
+      toast.error(err.response?.data?.message || "Failed to submit draft");
     } finally {
       setLoading(false);
     }
   };
 
+  if (!requestId && !selectionRequestId) {
+    return (
+      <div className="flex-1 p-6 flex flex-col items-center justify-center min-h-[400px]">
+        <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-[0px_0px_24px_rgba(0,0,0,0.1)] border border-gray-100">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-[#001032]">Select a Request</h2>
+            <p className="text-gray-500 mt-2">Which project would you like to create a deal for?</p>
+          </div>
+
+          {isFetchingRequests ? (
+            <div className="flex justify-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#59549F]"></div>
+            </div>
+          ) : eligibleRequests.length > 0 ? (
+            <div className="grid gap-4">
+              {eligibleRequests.map((req) => {
+                const partner = req.acceptedProvider?._id || req.acceptedProvider;
+                const partnerName = req.acceptedProvider?.name || "Professional";
+                return (
+                  <div 
+                    key={req._id}
+                    onClick={() => {
+                      setSelectionRequestId(req._id);
+                      setSelectionProfessionalId(partner);
+                    }}
+                    className="flex items-center justify-between p-5 rounded-2xl border-2 border-gray-50 hover:border-[#D8D6F8] hover:bg-[#FDFDFF] cursor-pointer transition-all group"
+                  >
+                    <div>
+                      <h4 className="font-bold text-[#001032] group-hover:text-[#59549F]">{req.service}</h4>
+                      <p className="text-xs text-gray-400 mt-1">Working with: {partnerName}</p>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-[#59549F] group-hover:bg-[#D8D6F8] transition-all">
+                      →
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <FiTrash2 className="text-red-400 text-2xl" />
+              </div>
+              <h4 className="text-lg font-medium text-gray-700">No Eligible Requests</h4>
+              <p className="text-sm text-gray-500 mt-2 max-w-sm mx-auto">
+                You need to have an accepted professional on a request before you can create a deal draft.
+              </p>
+              <button 
+                onClick={() => navigate("/profile/request")}
+                className="mt-6 px-8 py-2.5 bg-[#59549F] text-white rounded-full font-bold hover:bg-[#48438a] transition-all"
+              >
+                Go to Requests
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 py-4 bg-[#FDFDFF]">

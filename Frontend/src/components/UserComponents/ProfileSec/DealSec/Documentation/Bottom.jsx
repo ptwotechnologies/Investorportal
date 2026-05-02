@@ -6,6 +6,7 @@ import { auth } from "@/lib/firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import axios from "axios";
 import { serverUrl } from "@/App";
+import { invalidateSidebarCache } from "../../ProfileSec1.jsx/Sidebar";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -202,6 +203,7 @@ const Bottom = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
         
+        invalidateSidebarCache();
         toast.success("Identity verified and deal documented!");
         if (isStartupUser) {
           navigate("/deal/payments", { state: { dealId: selectedDeal._id } });
@@ -245,6 +247,7 @@ const Bottom = () => {
       }, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      invalidateSidebarCache();
       toast.success("Agreement signed and documented!");
       
       const userStr = localStorage.getItem("user");

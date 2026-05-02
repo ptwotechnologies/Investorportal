@@ -77,65 +77,65 @@ const HomeSec5 = () => {
 
   return (
     <div className="mt-15">
-      <div className="relative">
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex overflow-x-scroll scrollbar-hide"
-        > 
-          {data.map((item, index) => ( 
-            <div
-              key={index}
-              className="w-full lg:w-[42%] shrink-0 p-4 mx-2"
-            >
-              <div className="flex flex-col lg:flex-row justify-center items-start w-full h-full gap-15 lg:gap-8 px-7 lg:p-7 border border-[#00103280] rounded-sm shadow-lg">
-                <p className="text-[#001032B2] text-md leading-8 tracking-wider lg:hidden py-2">
-                  {item.paragraph}
-                </p>
-                <p className="text-[#001032B2] text-md leading-9 tracking-wider hidden lg:block">
-                  {item.lgPara}
-                </p>
+      <div className="max-w-[1500px] mx-auto w-full px-5">
+        <div className="relative">
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-scroll scrollbar-hide"
+          >
+            {data.map((item, index) => (
+              <div
+                key={index}
+                className="w-full lg:w-[42%] shrink-0 p-4 mx-2"
+              >
+                <div className="flex flex-col lg:flex-row justify-center items-start w-full h-full gap-15 lg:gap-8 px-7 lg:p-7 border border-[#00103280] rounded-sm shadow-lg">
+                  <p className="text-[#001032B2] text-md leading-8 tracking-wider lg:hidden py-2">
+                    {item.paragraph}
+                  </p>
+                  <p className="text-[#001032B2] text-md leading-9 tracking-wider hidden lg:block">
+                    {item.lgPara}
+                  </p>
 
-                <div className="lg:hidden flex justify-between items-center gap-5 w-full py-3">
-                  <div>
-                    <p className="text-sm pt-2 text-[#001032B2]">
-                      {item.name}
-                    </p>
-                    <p className="text-sm text-[#001032B5]">
-                      {item.company2}
-                    </p>
-                    <p className="text-sm text-[#001032B5]">
-                      Early-stage product team
-                    </p>
-                  </div>
-                  <div className="flex justify-center items-center gap-5">
-                    <div className="border-l h-20 border-[#00000033]"></div>
-                    <div className="w-[60px] h-[100px]  rounded-4xl">
-                      {/* <img src={item.image} alt="" className='w-full h-full object-cover rounded-4xl'/> */}
+                  <div className="lg:hidden flex justify-between items-center gap-5 w-full py-3">
+                    <div>
+                      <p className="text-sm pt-2 text-[#001032B2]">
+                        {item.name}
+                      </p>
+                      <p className="text-sm text-[#001032B5]">
+                        {item.company2}
+                      </p>
+                      <p className="text-sm text-[#001032B5]">
+                        Early-stage product team
+                      </p>
+                    </div>
+                    <div className="flex justify-center items-center gap-5">
+                      <div className="border-l h-20 border-[#00000033]"></div>
+                      <div className="w-[60px] h-[100px]  rounded-4xl">
+                        {/* <img src={item.image} alt="" className='w-full h-full object-cover rounded-4xl'/> */}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="hidden lg:block mt-3"> 
-                  <div className="w-[180px] h-[200px] bg-[#D9D9D9] rounded-sm">
-                    {/* <img src={item.image} alt="" className='w-full h-full object-cover rounded-sm'/> */}
+                  <div className="hidden lg:block mt-3">
+                    <div className="w-[180px] h-[200px] bg-[#D9D9D9] rounded-sm">
+                      {/* <img src={item.image} alt="" className='w-full h-full object-cover rounded-sm'/> */}
+                    </div>
+                    <p className="text-sm pt-2 text-[#001032B5]">
+                      {item.lgname}
+                    </p>
+                    <p className="text-sm text-[#001032B5]">
+                      {item.company}
+                    </p>
+                    <p className="text-sm text-[#001032B5]">
+                      {item.companyName}
+                    </p>
                   </div>
-                  <p className="text-sm pt-2 text-[#001032B5]">
-                    {item.lgname}
-                  </p>
-                  <p className="text-sm text-[#001032B5]">
-                    {item.company}
-                  </p>
-                  <p className="text-sm text-[#001032B5]">
-                    {item.companyName}
-                  </p>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-
-       
       </div>
     </div>
   )

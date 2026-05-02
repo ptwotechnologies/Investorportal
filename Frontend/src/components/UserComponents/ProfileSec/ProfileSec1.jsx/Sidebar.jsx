@@ -3,7 +3,7 @@ import { IoMdMenu } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import requestLogo from "/requestlogo.png";
 import connectLogo from "/connectlogo.png";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { IoNotificationsOutline, IoChatbubblesOutline } from "react-icons/io5";
 import { PiSignOut } from "react-icons/pi";
 import loginLogo from "/coptenologo2.png";
 import { NavLink, useNavigate, useLocation, Link } from "react-router-dom";
@@ -19,6 +19,18 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { BiHelpCircle } from "react-icons/bi";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
+let globalDealsCache = null;
+let globalUserCache = null;
+let lastFetchTime = 0;
+const CACHE_DURATION = 15000; // 15 seconds
+
+export const invalidateSidebarCache = () => {
+  globalDealsCache = null;
+  globalUserCache = null;
+  lastFetchTime = 0;
+  window.dispatchEvent(new Event("sidebar-refresh"));
+};
+
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
@@ -30,15 +42,26 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const isDealRoute = location.pathname.startsWith("/deal");
   const [isDealsOpen, setIsDealsOpen] = useState(false);
   const [hasCreatedDeals, setHasCreatedDeals] = useState(false);
-  const [deals, setDeals] = useState([]);
-  const [dealsLoading, setDealsLoading] = useState(true);
-  const [userId, setUserId] = useState(null);
-  const [userRole, setUserRole] = useState(localStorage.getItem("role"));
+  const [deals, setDeals] = useState(globalDealsCache || []);
+  const [dealsLoading, setDealsLoading] = useState(!globalDealsCache);
+  const [userId, setUserId] = useState(globalUserCache?._id || null);
+  const [userRole, setUserRole] = useState(globalUserCache?.role || localStorage.getItem("role"));
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
+        
+        // Use cache if valid
+        if (globalDealsCache && globalUserCache && (Date.now() - lastFetchTime < CACHE_DURATION)) {
+          setDeals(globalDealsCache);
+          setHasCreatedDeals(globalDealsCache.length > 0);
+          setUserId(globalUserCache._id);
+          setUserRole(globalUserCache.role);
+          setDealsLoading(false);
+          return;
+        }
+
         const [res, userRes] = await Promise.all([
           axios.get(`${serverUrl}/api/deals/my-deals`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -47,6 +70,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             headers: { Authorization: `Bearer ${token}` },
           })
         ]);
+
+        // Update cache
+        globalDealsCache = res.data;
+        globalUserCache = userRes.data;
+        lastFetchTime = Date.now();
+
         setDeals(res.data);
         setHasCreatedDeals(res.data.length > 0);
         setUserId(userRes.data._id);
@@ -59,7 +88,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         setDealsLoading(false);
       }
     };
+
     if (token) fetchData();
+
+    // Listen for manual refreshes
+    window.addEventListener("sidebar-refresh", fetchData);
+    return () => window.removeEventListener("sidebar-refresh", fetchData);
   }, [token, location.pathname]);
 
   const isAtActiveDeals = location.pathname === "/deal/activedeals";
@@ -125,12 +159,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
-  // ✅ Only open if user has created deals
+  // ✅ Open deal route when navigating (Exclude Communication)
   useEffect(() => {
-    if (isDealRoute && hasCreatedDeals) {
+    const isCommunicationRoute = location.pathname === "/deal/communication";
+    if (isDealRoute && !isCommunicationRoute) {
       setIsDealsOpen(true);
     }
-  }, [location.pathname, hasCreatedDeals]);
+  }, [location.pathname, isDealRoute]);
 
   return (
     <div className="fixed top-0 left-0 h-full bg-[#D8D6F8]  p-4 flex flex-col justify-between z-50">
@@ -166,6 +201,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             size={25}
             onClick={handleNotificationClick} // Show/hide notifications
           />
+
+          <Link to="/deal/communication">
+            <IoChatbubblesOutline
+              className=" text-[#59549f] my-3"
+              size={25}
+            />
+          </Link>
 
           <FaHandshake
             className=" text-[#59549f] my-3"
@@ -324,18 +366,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 Notification
               </li>
 
+              <NavLink
+                to="/deal/communication"
+                className={({ isActive }) =>
+                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                  }`
+                }
+              >
+                Communication
+              </NavLink>
+
               {/* Deals Dropdown */}
               <div className="my-3">
                 <div
                   onClick={() => {
-                    if (dealsLoading) {
-                      toast("Checking your deals...");
-                      return;
-                    }
-                    if (!hasCreatedDeals) {
-                      toast.error("You have to create a deal to open this section");
-                      return;
-                    }
                     setIsDealsOpen(!isDealsOpen);
                   }}
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
@@ -441,18 +486,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       Disputes
                     </NavLink>
 
-                    <NavLink
-                      to="/deal/communication"
-                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                        Communication
-                      </div>
-                      {location.pathname === "/deal/communication" && (
-                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
-                      )}
-                    </NavLink>
 
                     <NavLink
                       to="/deal/completed"

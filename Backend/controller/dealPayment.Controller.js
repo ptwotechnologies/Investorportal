@@ -2,7 +2,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import Transaction from "../Models/transaction.model.js";
-import Deal from "../Models/deal.model.js";
+import Deal from "../Models/Deal.model.js";
 
 dotenv.config();
 
@@ -76,21 +76,26 @@ export const verifyDealPayment = async (req, res) => {
       // 2. Update Deal Milestone
       const deal = await Deal.findById(dealId);
       if (deal) {
-        const milestoneIndex = deal.milestones.findIndex(m => 
-          (m._id && m._id.toString() === milestoneId) || (m.id && m.id.toString() === milestoneId)
-        );
-
-        if (milestoneIndex !== -1) {
-          deal.milestones[milestoneIndex].status = "Paid";
-          deal.milestones[milestoneIndex].paidAt = new Date();
+        // Use Mongoose subdocument helper to find the specific milestone
+        const milestone = deal.milestones.id(milestoneId);
+        
+        if (milestone) {
+          console.log(`Updating milestone ${milestoneId} to Paid`);
+          milestone.status = "Paid";
+          milestone.paidAt = new Date();
+          
+          // If the deal was 'Documented', move it to 'Active' upon first payment
+          if (deal.status === "Documented") {
+            deal.status = "Active";
+          }
+          
+          // Explicitly mark the milestones array as modified to ensure Mongoose saves it
+          deal.markModified('milestones');
+          await deal.save();
+          console.log("Deal saved successfully with Paid milestone");
+        } else {
+          console.error(`Milestone ${milestoneId} not found in deal ${dealId}`);
         }
-
-        // If the deal was 'Documented', move it to 'Active' upon first payment
-        if (deal.status === "Documented") {
-          deal.status = "Active";
-        }
-
-        await deal.save();
       }
 
       res.status(200).json({ success: true, message: "Payment verified and deal updated" });

@@ -1,9 +1,12 @@
 import React from "react";
 import { IoSearchOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { serverUrl } from "@/App";
 
 const TopBar = ({ setRightPanelState }) => {
+  const navigate = useNavigate();
   return (
     <div className="bg-white px-4 lg:px-6 lg:pt-6 pt-4 pb-3 border-b border-gray-100 shadow-sm">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
@@ -39,7 +42,26 @@ const TopBar = ({ setRightPanelState }) => {
           {/* Proposal Button */}
           <div className="shrink-0">
             <button 
-              onClick={() => setRightPanelState('create')}
+              onClick={async () => {
+                try {
+                  const token = localStorage.getItem("token");
+                  const res = await axios.get(`${serverUrl}/requests`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                  });
+                  if (res.data && res.data.length > 0) {
+                    setRightPanelState('create');
+                  } else {
+                    import("react-hot-toast").then((module) => {
+                      module.toast.error("First you have to raise a request");
+                    });
+                  }
+                } catch (err) {
+                  console.error(err);
+                  import("react-hot-toast").then((module) => {
+                    module.toast.error("Error checking requests");
+                  });
+                }
+              }}
               className="flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
             >
               <FaPlus size={15} className="lg:hidden" />

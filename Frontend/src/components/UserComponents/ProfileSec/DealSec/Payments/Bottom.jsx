@@ -220,31 +220,6 @@ const Bottom = () => {
     }
   };
 
-  const handleSimulateSuccess = async () => {
-    if (!selectedMilestone) return;
-    setIsProcessingPayment(true);
-    try {
-      const token = localStorage.getItem("token");
-      await axios.post(`${serverUrl}/api/payment/verify-payment`, {
-        simulateSuccess: true,
-        razorpay_order_id: "simulated_order_" + Date.now(),
-        razorpay_payment_id: "simulated_pay_" + Date.now(),
-        razorpay_signature: "simulated_sig",
-        dealId: selectedDeal._id,
-        milestoneId: selectedMilestone._id || selectedMilestone.id
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      toast.success("Payment Simulated Successfully!");
-      fetchDeals();
-    } catch (error) {
-      console.error("Simulation failed:", error);
-      toast.error("Simulation failed");
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
 
   const milestoneBreakdown = selectedMilestone ? {
     amount: Number(selectedMilestone.amount),
@@ -383,21 +358,13 @@ const Bottom = () => {
             </div>
 
             {selectedMilestone && selectedMilestone.status !== 'Paid' && (
-              <div className="flex gap-2 mx-2 mt-3">
+              <div className="mx-2 mt-3">
                 <button 
                   onClick={handlePayment}
                   disabled={isProcessingPayment}
-                  className="flex-[2] py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
+                  className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
                 >
                   {isProcessingPayment ? "Processing..." : `Pay Rs ${selectedMilestone.amount}`}
-                </button>
-                <button 
-                  onClick={handleSimulateSuccess}
-                  disabled={isProcessingPayment}
-                  className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-500 font-medium text-xs transition-all border border-gray-200"
-                  title="Test success without Razorpay"
-                >
-                  Simulate Success
                 </button>
               </div>
             )}

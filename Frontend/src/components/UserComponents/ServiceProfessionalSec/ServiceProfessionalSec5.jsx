@@ -85,55 +85,56 @@ const ServiceProfessionalSec5 = () => {
 
   return ( 
    <>
-    <div className='bg-linear-to-t from-[#002A30] to-[#001032] from-40% text-white lg:mt-25 mt-5 py-7  rounded-sm lg:rounded-none p-5 shadow-2xl lg:shadow-none' >
-         
+    <div className='bg-linear-to-t from-[#002A30] to-[#001032] from-40% text-white lg:mt-25 mt-5 py-7  rounded-sm lg:rounded-none shadow-2xl lg:shadow-none' >
+      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0">
         <h1 className="text-5xl px-8 py-15  hidden lg:block">
           Consultations that move you forward
         </h1>
-        <h1 className='lg:hidden text-3xl font-medium pb-7'>
+        <h1 className='lg:hidden text-3xl font-medium pb-7 px-5'>
           Why service providers choose Copteno?
         </h1>
-       <div className='hidden lg:block'>
-            <div className="grid lg:grid-cols-3 lg:gap-x-30 gap-5 lg:gap-y-30 lg:m-10 lg:mx-25">
-          {
-            divElements.map((item , index)=>(
+        <div className='hidden lg:block'>
+          <div className="grid lg:grid-cols-3 lg:gap-x-30 gap-5 lg:gap-y-30 lg:m-10 lg:mx-25">
+            {
+              divElements.map((item, index) => (
                 <div key={index} className="flex">
-            <div className="border-l h-20 border-[#FFFFFF4D] p-2"></div>
-            <div>
-              <h1 className="text-6xl">{item.number}</h1>
-              <p className=" tracking-wide text-xl ">
-              {item.phoneScreenHeading}
-              </p>
-              <p className="text-lg font-light tracking-wide ">
-              {item.phoneScreenPara}
-              </p>
-            </div>
-          </div>
-            ))}
-       
-        </div>
-       </div>
+                  <div className="border-l h-20 border-[#FFFFFF4D] p-2"></div>
+                  <div>
+                    <h1 className="text-6xl">{item.number}</h1>
+                    <p className=" tracking-wide text-xl ">
+                      {item.phoneScreenHeading}
+                    </p>
+                    <p className="text-lg font-light tracking-wide ">
+                      {item.phoneScreenPara}
+                    </p>
+                  </div>
+                </div>
+              ))}
 
-       <div className=' lg:hidden'>
- <div className="grid lg:grid-cols-3 lg:gap-x-70 gap-5 lg:gap-y-30 lg:m-10 lg:mx-32">
-          {
-            phoneElements.map((item , index)=>(
-                <div key={index} className="flex my-2">
-            <div className="border-l h-23 border-[#FFFFFF4D] p-2"></div>
-            <div>
-              <h1 className="text-5xl">{item.number}</h1>
-              <p className="text-md  tracking-wide   ">
-              {item.phoneScreenHeading}
-              </p>
-              <p className="text-sm tracking-wide font-light">
-              {item.phoneScreenPara}
-              </p>
-            </div>
           </div>
-            ))}
-       
         </div>
-       </div>
+
+        <div className=' lg:hidden px-5'>
+          <div className="grid lg:grid-cols-3 lg:gap-x-70 gap-5 lg:gap-y-30 lg:m-10 lg:mx-32">
+            {
+              phoneElements.map((item, index) => (
+                <div key={index} className="flex my-2">
+                  <div className="border-l h-23 border-[#FFFFFF4D] p-2"></div>
+                  <div>
+                    <h1 className="text-5xl">{item.number}</h1>
+                    <p className="text-md  tracking-wide   ">
+                      {item.phoneScreenHeading}
+                    </p>
+                    <p className="text-sm tracking-wide font-light">
+                      {item.phoneScreenPara}
+                    </p>
+                  </div>
+                </div>
+              ))}
+
+          </div>
+        </div>
+      </div>
     </div>
     <div className='shadow-2xl p-7 pt-8 m-2 lg:hidden text-center '>
       <h1 className='text-xl font-medium text-[#001032]'>Feels like a dream?</h1>

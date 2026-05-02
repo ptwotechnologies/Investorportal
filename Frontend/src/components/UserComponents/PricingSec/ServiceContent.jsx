@@ -3,12 +3,32 @@ import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import axios from "axios";
+import { serverUrl } from "@/App";
 
-const DevelopmentContent = () => {
+const DevelopmentContent = ({ isUpgradeFlow }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const scrollRef = React.useRef(null);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
+  const [userPlanAmount, setUserPlanAmount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (isUpgradeFlow) {
+      const fetchPlan = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          const res = await axios.get(`${serverUrl}/user/me`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          setUserPlanAmount(res.data.plan?.amount || 0);
+        } catch (err) {
+          console.error("Error fetching plan:", err);
+        }
+      };
+      fetchPlan();
+    }
+  }, [isUpgradeFlow]);
 
   const handlePlanSelect = (amount, planName) => {
     // ✅ Agar user login nahi hai
@@ -35,7 +55,7 @@ const DevelopmentContent = () => {
       title: "Entry Access",
       titleBg: "#BA1E1E",
       titleBg2: "#B77070",
-      // amount: 9999,
+      amount: 0,
       amountduration: "Free",
       amountDesc: "Create your presence and discover client opportunities",
       planName: "Explorer Access",
@@ -263,11 +283,21 @@ const DevelopmentContent = () => {
     },
   ];
 
+  const cardsToDisplay = React.useMemo(() => {
+    if (!isUpgradeFlow) return cards;
+    
+    const currentAmount = Number(userPlanAmount) || 0;
+    const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
+    
+    if (currentIdx === -1) return [cards[0], cards[1]];
+    return cards.slice(currentIdx, currentIdx + 2);
+  }, [isUpgradeFlow, userPlanAmount]);
+
   const handleScroll = () => {
     const container = scrollRef.current;
     if (!container) return;
 
-    const cardWidth = container.scrollWidth / cards.length;
+    const cardWidth = container.scrollWidth / cardsToDisplay.length;
     const index = Math.round(container.scrollLeft / cardWidth);
     setCurrentIndex(index);
   };
@@ -279,12 +309,16 @@ const DevelopmentContent = () => {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="grid gap-2 lg:gap-2  grid-cols-1 md:grid-cols-2 lg:grid-cols-3  w-full"
+          className={`grid gap-4 lg:gap-8 w-full justify-center mx-auto ${
+            cardsToDisplay.length === 1 ? 'grid-cols-1 max-w-md' : 
+            cardsToDisplay.length === 2 ? 'grid-cols-1 md:grid-cols-2 max-w-6xl' : 
+            'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl'
+          }`}
         >
-          {cards.map((card, idx) => (
+          {cardsToDisplay.map((card, idx) => (
             <article
               key={idx}
-              className="lg:w-auto w-screen shrink-0 snap-center  lg:mr-0 lg:p-6 text-card-foreground"
+              className="lg:w-full w-screen shrink-0 snap-center lg:mr-0 lg:p-6 text-card-foreground"
             >
               <hr className="mx-4 lg:relative lg:bottom-5" />
               <div className="bg-white py-5 lg:py-6 lg:pb-8 border-2 border-[#00103280] my-4 mx-2 lg:m-1 rounded-sm px-4 lg:px-6 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
@@ -318,11 +352,11 @@ const DevelopmentContent = () => {
                 </div>
 
                 <div className="bg-[#0000001A] flex items-center text-xs lg:gap-4 pl-6 gap-2 px-2 py-1 rounded-sm mt-6 lg:mt-4">
-                 <p className="">Deal Flow Access</p>
-                      <div className="h-6 w-0.5 bg-[#8282825C]"></div>
-                      <p>Annual Plan</p>
-                      <div className="h-6 w-0.5 bg-[#8282825C]"></div>
-                      <p>Priority Support</p>
+                  <p className="">Deal Flow Access</p>
+                  <div className="h-6 w-0.5 bg-[#8282825C]"></div>
+                  <p>Annual Plan</p>
+                  <div className="h-6 w-0.5 bg-[#8282825C]"></div>
+                  <p>Priority Support</p>
                 </div>
 
                 <hr className="mt-4" />
@@ -372,7 +406,7 @@ const DevelopmentContent = () => {
                   {card.bottomSection && card.bottomSection.length > 0 && (
                     <div className="lg:mt-auto mt-4">
                       {card.bottomSection.map((bottom, index) => (
-                        <>
+                        <div key={index}>
                           {card.middleButton1 && (
                             <div className="flex flex-col items-start border border-[#000000] rounded-sm mb-2 lg:gap-5 gap-4 p-3 px-4">
                               <button className="bg-[#FDFDFD] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] lg:w-56 w-46 p-1 text-xs lg:text-sm rounded-sm">
@@ -387,7 +421,6 @@ const DevelopmentContent = () => {
                             </div>
                           )}
                           <div
-                            key={index}
                             className="bg-[#FFF7D6] h-40 lg:h-50 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-sm p-2 px-2"
                           >
                             <button className="w-fit text-start lg:text-[20px] text-sm rounded-sm bg-[#FFE4E6] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] px-4 py-1 mb-5 text-[#B42318] font-medium">
@@ -397,7 +430,7 @@ const DevelopmentContent = () => {
                               {bottom.bottomPara}
                             </p>
                           </div>
-                        </>
+                        </div>
                       ))}
                     </div>
                   )}
@@ -418,26 +451,14 @@ const DevelopmentContent = () => {
                        hover:opacity-90
                      "
                   >
-                    {card.buttonText}
+                    {isUpgradeFlow && (Number(card.amount) || 0) === Number(userPlanAmount)
+                      ? (Number(userPlanAmount) === 0 ? "Current Plan (Free)" : "Current Plan")
+                      : card.buttonText}
                   </button>
                 </div>
               </div>
             </article>
           ))}
-
-          {/* <div className="hidden lg:block col-span-2 mx-6">
-            <hr className="mx-6   " />
-            <div className="bg-white  border-2 border-[#00103280] mt-7 h-[95.5%]  rounded-sm  p-3   px-20 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
-              <div id="top" className="flex justify-between items-center ">
-                <div className="bg-[#5DD2E3] w-47 h-140 rounded-3xl"></div>
-                <div className="bg-[#C2D3D5]  w-47 h-160 rounded-3xl"></div>
-                <div className="bg-[#4A66A3]  w-47 h-150 rounded-3xl mt-20"></div>
-              </div>
-              <div id="bottom">
-                <div className="bg-[#DBDBDB] w-full h-12 rounded-full mt-40"></div>
-              </div>
-            </div>
-          </div> */}
         </div>
       </section>
     </main>

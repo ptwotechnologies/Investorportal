@@ -4,7 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import handshakeImg from "../../../../assets/modal/handshake.png";
 
-const ConnectUpgradeModal = ({ onClose }) => {
+const ConnectUpgradeModal = ({ onClose, userRole }) => {
   const navigate = useNavigate();
 
   return (
@@ -79,7 +79,12 @@ const ConnectUpgradeModal = ({ onClose }) => {
             {/* 4. Buttons Section */}
             <div className="w-full flex flex-col items-center gap-3">
               <button 
-                onClick={() => navigate("/pricing")}
+                onClick={() => navigate("/pricing", { 
+                  state: { 
+                    isUpgradeFlow: true, 
+                    role: userRole || "startup"
+                  } 
+                })}
                 className="w-full py-2 bg-[#59549F] text-white rounded-2xl font-bold text-sm shadow-lg shadow-[#59549F]/30 hover:bg-[#48438A] transform active:scale-[0.98] transition-all tracking-wide"
               >
                 Unlock Investor Access

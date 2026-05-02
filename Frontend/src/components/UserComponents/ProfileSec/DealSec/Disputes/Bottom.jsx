@@ -171,7 +171,7 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
             <h3 className="lg:text-xl lg:text-[16px] font-medium text-[#000000] leading-tight truncate">{companyName}</h3>
           </div>
           <div className="flex flex-col lg:items-center">
-            <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Due Date</p>
+            <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
           </div>
           <div className="flex flex-col lg:items-end">
             <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
@@ -179,11 +179,11 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
 
           <div className="flex flex-col -mt-1">
             <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F] underline-offset-4 w-fit truncate">
-              {proj.scopeItems?.[0] || "Mobile App Development"}
+              {proj.requestId?.service || "Project Deal"}
             </p>
           </div>
           <div className="flex flex-col lg:items-center -mt-1">
-            <p className="text-[10px] lg:text-sm text-[#000000]">1 March, 2026</p>
+            <p className="text-[10px] lg:text-sm text-[#000000]">{proj.totalTimeline || "N/A"}</p>
           </div>
           <div className="flex flex-col lg:items-end -mt-1">
             <p className="text-[10px] lg:text-sm text-[#000000]">Rs {proj.totalAmount || 0}</p>
@@ -242,10 +242,10 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
       {/* ── Left Column ── */}
       <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${ (selectedDeal || selectedDispute) ? 'hidden lg:block' : 'block'}`}>
         <div className="grid grid-cols-2 gap-4">
-          <StatCard label="Total Disputes" value="9" bgColor="bg-[#D8E1F0]" />
-          <StatCard label="Active Disputes" value="4" bgColor="bg-[#D8D6F8]" />
-          <StatCard label="Resolved" value="3" bgColor="bg-[#EFDBD9]" />
-          <StatCard label="Escalated" value="4" bgColor="bg-[#D7EBE4]" />
+          <StatCard label="Total Disputes" value={disputes.length} bgColor="bg-[#D8E1F0]" />
+          <StatCard label="Active Disputes" value={disputes.filter(d => d.status === 'Open' || d.status === 'In-Progress' || !d.status).length} bgColor="bg-[#D8D6F8]" />
+          <StatCard label="Resolved" value={disputes.filter(d => d.status === 'Resolved').length} bgColor="bg-[#EFDBD9]" />
+          <StatCard label="Escalated" value={disputes.length} bgColor="bg-[#D7EBE4]" />
         </div>
 
         <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">{isCreateMode ? "Select Project to Dispute" : "Case List"}</h2>
@@ -418,10 +418,10 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
                   </div>
 
                   {/* Wide Button at Bottom */}
-                  <div className="pt-6">
+                  <div className="pt-2">
                     <button 
                       onClick={() => navigate('/deal/communication', { state: { dealId: selectedDeal._id, disputeId: selectedDispute._id } })}
-                      className="w-full py-3 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-bold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all"
+                      className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-bold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all"
                     >
                       Proceed for Communication
                     </button>

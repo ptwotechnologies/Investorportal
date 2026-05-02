@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import loginLogo from "/coptenologo2.png";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { IoNotificationsOutline, IoChatbubblesOutline } from "react-icons/io5";
 import { RxCross2 } from "react-icons/rx";
 import {
   Sheet,
@@ -169,6 +169,16 @@ const Mobile = () => {
                             <li>Connect</li>
                           </Link>
                         </div>
+
+                        <div className="flex items-center gap-4">
+                          <IoChatbubblesOutline
+                            className="text-gray-500 my-1"
+                            size={25}
+                          />
+                          <Link to="/deal/communication">
+                            <li>Communication</li>
+                          </Link>
+                        </div>
                         {/* Deals Dropdown */}
 
                         <div
@@ -211,9 +221,6 @@ const Mobile = () => {
                            
                             <Link to="/deal/activedeals">
                               <li type="disc"> Active Deals</li>
-                            </Link>
-                            <Link to="/deal/communication">
-                              <li type="disc"> Communication</li>
                             </Link>
                             <Link to="/deal/milestones">
                               <li type="disc">Milestones</li>

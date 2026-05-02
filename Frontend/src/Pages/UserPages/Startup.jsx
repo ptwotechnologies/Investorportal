@@ -14,7 +14,7 @@ import Footer from '@/components/UserComponents/Footer'
 
 const Startup = () => {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <div>
         <StartupSec1/>
       </div>

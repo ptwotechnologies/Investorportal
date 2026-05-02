@@ -9,57 +9,59 @@ const HomeSec2 = () => {
   return (
     <div className=" mt-5 lg:mt-25 bg-[#001032] lg:bg-[white] rounded-md">
       <div className="hidden lg:block">
-        <div
-        id="top"
-        className="flex flex-col lg:flex-row lg:justify-center lg:bg-white bg-[#001032] rounded-2xl
-  lg:items-center gap-20  p-5  leading-6 tracking-wider text-white lg:text-[#001032]
-  overflow-x-hidden px-4 sm:px-6 md:px-10 "
-      >
-        <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
-  <img src="/homepage10.png" alt="" className="h-full w-full object-contain scale-120" />
-</div>
-          <p className="text-sm text-center  w-[80%] text-[#001032] ">
-            Free Expert Guidance
-          </p>
-        </div>
+        <div className="max-w-[1500px] mx-auto w-full">
+          <div
+            id="top"
+            className="flex flex-col lg:flex-row lg:justify-center lg:bg-white bg-[#001032] rounded-2xl
+      lg:items-center gap-20  p-5  leading-6 tracking-wider text-white lg:text-[#001032]
+      overflow-x-hidden px-4 sm:px-6 md:px-10 "
+          >
+            <div className=" flex lg:flex-col gap-3 justify-center items-center">
+              <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
+                <img src="/homepage10.png" alt="" className="h-full w-full object-contain scale-120" />
+              </div>
+              <p className="text-sm text-center  w-[80%] text-[#001032] ">
+                Free Expert Guidance
+              </p>
+            </div>
 
-        <div className=" flex lg:flex-col gap-3 justify-center items-center">
-         <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
-  <img src="/homepage11.png" alt="" className="h-full w-full object-contain " />
-</div>
-          <p className="text-sm text-center  w-[80%] text-[#001032] ">
-            Connected Startup Community
-          </p>
-        </div>
+            <div className=" flex lg:flex-col gap-3 justify-center items-center">
+              <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
+                <img src="/homepage11.png" alt="" className="h-full w-full object-contain " />
+              </div>
+              <p className="text-sm text-center  w-[80%] text-[#001032] ">
+                Connected Startup Community
+              </p>
+            </div>
 
-        <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-25 lg:h-25 overflow-hidden rounded-full  ">
-              <img src="/homepage12.png" alt="" className="object-cover h-full w-full"/>
+            <div className=" flex lg:flex-col gap-3 justify-center items-center">
+              <div className="w-45 h-40 lg:w-25 lg:h-25 overflow-hidden rounded-full  ">
+                <img src="/homepage12.png" alt="" className="object-cover h-full w-full" />
+              </div>
+              <p className="text-sm text-center  w-[80%] text-[#001032] ">
+                Access to Real Audiences
+              </p>
+            </div>
+
+            <div className=" flex lg:flex-col gap-3 justify-center items-center">
+              <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center ">
+                <img src="/homepage13.png" alt="" className="h-full w-full object-cover scale-150 " />
+              </div>
+              <p className="text-sm text-center  w-[80%] text-[#001032] ">
+                Cross-Domain Collaboration
+              </p>
+            </div>
+
+            <div className=" flex lg:flex-col gap-3 justify-center items-center">
+              <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
+                <img src="/homepage14.png" alt="" className="h-full w-full object-contain scale-130" />
+              </div>
+              <p className="text-sm text-center  w-[80%] text-[#001032] ">
+                100% Transparent Pricing
+              </p>
+            </div>
           </div>
-          <p className="text-sm text-center  w-[80%] text-[#001032] ">
-            Access to Real Audiences
-          </p>
         </div>
-
-        <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center ">
-  <img src="/homepage13.png" alt="" className="h-full w-full object-cover scale-150 " />
-</div>
-          <p className="text-sm text-center  w-[80%] text-[#001032] ">
-            Cross-Domain Collaboration
-          </p>
-        </div>
-
-        <div className=" flex lg:flex-col gap-3 justify-center items-center">
-          <div className="w-45 h-40 lg:w-24 lg:h-24 rounded-full  flex items-center justify-center overflow-hidden">
-  <img src="/homepage14.png" alt="" className="h-full w-full object-contain scale-130" />
-</div>
-          <p className="text-sm text-center  w-[80%] text-[#001032] ">
-            100% Transparent Pricing
-          </p>
-        </div>
-      </div>
       </div>
 
       <div>
@@ -131,46 +133,46 @@ const HomeSec2 = () => {
         id="bottom"
         className="bg-[#001032] w-full text-white rounded-4xl lg:rounded-none mt-13 px-4"
       >
-        <div className="">
+        <div className="max-w-[1500px] mx-auto w-full">
           <h1 className="text-5xl font-normal p-10  hidden lg:block ">Who is this portal for?</h1>
-           <h1 className="text-[44px] font-normal px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-11.5 ">Who is this  portal  for?</h1>
+          <h1 className="text-[44px] font-normal px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-11.5 ">Who is this  portal  for?</h1>
           <div className="hidden lg:block">
             <div className="flex justify-center items-center  mx-20  ">
-            <div className=" w-[30%]">
-              <hr className="border-t border-gray-500 pb-8 w-[90%] " />
-              <h3 className="text-2xl pb-5">Startups</h3>
-             <Link to="/startup"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
-                
-                <img src="/homepage8.png" alt="" className="w-full h-full rounded-xl" />
-              </div></Link>
-              <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                You’re building something real and ready to scale{" "}
-              </p>
-            </div>
-            <div className=" w-[30%]">
-              <hr className="border-t border-gray-500 pb-8 w-[90%] " />
-              <h3 className="text-2xl pb-5">Investors</h3>
-              <Link to="/investor"><div  className="rounded-xl w-[90%] h-[400px] bg-gray-200">
-                <img src="/homepage6.png" alt="" className="w-full h-full rounded-xl" />
-               
-              </div></Link>
-              <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                You seek refined, investment-ready startup in your space{" "}
-              </p>
-            </div>
-            <div className=" w-[30%]">
-              <hr className="border-t border-gray-500 pb-8 w-[90%] " />
-              <h3 className="text-2xl pb-5">Service Professionals</h3>
-             <Link to="/serviceprofessional"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
-                <img src="/homepage7.png" alt="" className="w-full h-full rounded-xl" />
-                
-              </div></Link>
-              <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                You want genuine startup leads without paid ads
-              </p>
-            </div>
+              <div className=" w-[30%]">
+                <hr className="border-t border-gray-500 pb-8 w-[90%] " />
+                <h3 className="text-2xl pb-5">Startups</h3>
+                <Link to="/startup"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
 
-            {/* <div className=" w-[30%] ">
+                  <img src="/homepage8.png" alt="" className="w-full h-full rounded-xl" />
+                </div></Link>
+                <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                  You’re building something real and ready to scale{" "}
+                </p>
+              </div>
+              <div className=" w-[30%]">
+                <hr className="border-t border-gray-500 pb-8 w-[90%] " />
+                <h3 className="text-2xl pb-5">Investors</h3>
+                <Link to="/investor"><div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
+                  <img src="/homepage6.png" alt="" className="w-full h-full rounded-xl" />
+
+                </div></Link>
+                <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                  You seek refined, investment-ready startup in your space{" "}
+                </p>
+              </div>
+              <div className=" w-[30%]">
+                <hr className="border-t border-gray-500 pb-8 w-[90%] " />
+                <h3 className="text-2xl pb-5">Service Professionals</h3>
+                <Link to="/serviceprofessional"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
+                  <img src="/homepage7.png" alt="" className="w-full h-full rounded-xl" />
+
+                </div></Link>
+                <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                  You want genuine startup leads without paid ads
+                </p>
+              </div>
+
+              {/* <div className=" w-[30%] ">
               <hr className="border-t border-gray-500 pb-8 w-[90%] " />
               <h3 className="text-2xl pb-5">Channel Partners</h3>
              <Link to="/channelpartners"> <div className="rounded-xl w-[90%] h-[400px] bg-gray-200">
@@ -181,7 +183,7 @@ const HomeSec2 = () => {
                 You want genuine startup leads without paid ads
               </p>
             </div> */}
-          </div>
+            </div>
           </div>
         </div>
 

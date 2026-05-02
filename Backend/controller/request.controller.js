@@ -1,5 +1,5 @@
-import Request from "../Models/request.model.js";
-import User from "../Models/User.model.js";
+import Request from "../models/request.model.js";
+import User from "../models/User.model.js";
 
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
@@ -31,6 +31,7 @@ export const createRequest = async (req, res) => {
     if (isFreePlan) {
       const existingCount = await Request.countDocuments({
         raisedBy: user._id,
+        status: { $ne: "redeemed" } // ⭐ Redeemed requests don't count towards limit
       });
       console.log("DEBUG: existingCount for free plan:", existingCount);
 
@@ -75,6 +76,19 @@ export const createRequest = async (req, res) => {
 // GET ALL REQUESTS
 export const getAllRequests = async (req, res) => {
   try {
+    // ⭐ Scenario A: Check for 24h expired accepted requests and redeem them
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+    await Request.updateMany(
+      {
+        raisedBy: req.user._id,
+        status: "accepted",
+        acceptedAt: { $lt: twentyFourHoursAgo }
+      },
+      { status: "redeemed" }
+    );
+
     const requests = await Request.find({ raisedBy: req.user._id })
       .populate("interestedBy", "businessDetails role")
       .sort({ createdAt: -1 });
@@ -276,6 +290,7 @@ export const acceptProvider = async (req, res) => {
 
     request.acceptedProvider = providerId;
     request.status = "accepted";
+    request.acceptedAt = new Date(); // ⭐ Record acceptance time for 24h check
 
     await request.save();
 
@@ -374,7 +389,7 @@ export const ignoreRequest = async (req, res) => {
       return res.status(200).json({ message: "Request ignored successfully" });
     }
 
-    // ⭐ Buyer ignoring an interested professional — no limit needed
+    // ⭐ Scenario B: Buyer ignoring an interested professional — NO limit needed
     if (providerId) {
       // Check raiser is the one doing this
       if (request.raisedBy.toString() !== userId.toString()) {
@@ -386,8 +401,11 @@ export const ignoreRequest = async (req, res) => {
         id => id.toString() !== providerId.toString()
       );
 
+      // ⭐ If Buyer ignores, we "redeem" the request immediately so they get slot back
+      request.status = "redeemed";
+
       await request.save();
-      return res.status(200).json({ message: "Provider ignored successfully" });
+      return res.status(200).json({ message: "Request redeemed successfully" });
     }
 
   } catch (error) {

@@ -744,8 +744,8 @@ const RightAllTab = ({
                   if (selectedRequest.hasShownInterest || selectedRequest.isIgnored) return;
                   setInterestSurvey && setInterestSurvey({
                     requestId: selectedRequest._id,
-                    startTime: "Available immediately",
-                    relevance: "Highly relevant"
+                    startTime: "",
+                    relevance: ""
                   });
                 }}
                 disabled={
@@ -862,36 +862,39 @@ const RightAllTab = ({
             <div>
               <label className="text-[11px] text-gray-500  block mb-1">When can you start?</label>
               <select 
-                value={interestSurvey.startTime}
+                value={interestSurvey.startTime || ""}
                 onChange={(e) => setInterestSurvey({...interestSurvey, startTime: e.target.value})}
                 className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-[#59549F]"
               >
-                <option>Available immediately</option>
-                <option>Available this week</option>
-                <option>Flexible</option>
+                <option value="" disabled>Select an option</option>
+                <option value="Available immediately">Available immediately</option>
+                <option value="Available this week">Available this week</option>
+                <option value="Flexible">Flexible</option>
               </select>
             </div>
 
             <div>
               <label className="text-[11px]  text-gray-500  block mb-1">How relevant is your expertise?</label>
               <select 
-                value={interestSurvey.relevance}
+                value={interestSurvey.relevance || ""}
                 onChange={(e) => setInterestSurvey({...interestSurvey, relevance: e.target.value})}
                 className="w-full bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-xs outline-none focus:ring-1 focus:ring-[#59549F]"
               >
-                <option>Highly relevant</option>
-                <option>Somewhat relevant</option>
-                <option>Exploring</option>
+                <option value="" disabled>Select an option</option>
+                <option value="Highly relevant">Highly relevant</option>
+                <option value="Somewhat relevant">Somewhat relevant</option>
+                <option value="Exploring">Exploring</option>
               </select>
             </div>
 
             <div className="flex gap-2 pt-2">
               <button
+                disabled={!interestSurvey.startTime || !interestSurvey.relevance}
                 onClick={() => {
                   handleInterest && handleInterest(selectedRequest._id, interestSurvey.startTime, interestSurvey.relevance);
                   setInterestSurvey && setInterestSurvey({ requestId: null, startTime: "", relevance: "" });
                 }}
-                className="flex-1 bg-[#59549F] text-white py-2 rounded-full text-xs font-bold shadow-md hover:bg-[#48438a] transition-all active:scale-95"
+                className={`flex-1 text-white py-2 rounded-full text-xs font-bold shadow-md transition-all active:scale-95 ${!interestSurvey.startTime || !interestSurvey.relevance ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#59549F] hover:bg-[#48438a]'}`}
               >
                 Confirm Interest
               </button>

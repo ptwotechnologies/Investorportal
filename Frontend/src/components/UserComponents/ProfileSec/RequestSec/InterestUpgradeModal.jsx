@@ -3,7 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-const InterestUpgradeModal = ({ onClose }) => {
+const InterestUpgradeModal = ({ onClose, userRole, userAmount }) => {
   const navigate = useNavigate();
 
   return (
@@ -40,14 +40,26 @@ const InterestUpgradeModal = ({ onClose }) => {
         {/* Actions */}
         <div className="flex flex-col gap-2">
           <button 
-            onClick={() => navigate("/pricing")}
+            onClick={() => navigate("/pricing", { 
+              state: { 
+                isUpgradeFlow: true, 
+                role: userRole, 
+                currentPlanAmount: userAmount 
+              } 
+            })}
             className="w-full py-2 bg-[#59549F] text-white rounded-md font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#48438a] transition-all shadow-md active:scale-95"
           >
             🔒 Upgrade Now
           </button>
           
           <button 
-            onClick={() => navigate("/pricing")}
+            onClick={() => navigate("/pricing", { 
+              state: { 
+                isUpgradeFlow: true, 
+                role: userRole, 
+                currentPlanAmount: userAmount 
+              } 
+            })}
             className="py-1 text-[10px] font-bold text-gray-400 hover:text-gray-600 transition-colors tracking-widest uppercase"
           >
             Unlock Full Access

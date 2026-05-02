@@ -9,137 +9,141 @@ const HomeSec6 = () => {
         id="top"
         className="text-center lg:p-5 lg:pt-10 text-[#001032] lg:bg-[#F9972A1A] lg:mt-10 mt-6"
       >
-        <div className="hidden lg:block">
-          <h1 className="text-3xl lg:text-5xl font-normal p-3 lg:p-5 lg:pb-10 ">
-            Great! <br />
-            How do I get started then?
-          </h1>
-          <p className="text-sm lg:text-lg w-[350px] mx-auto ">
-            Simple, just choose which profile fits you, and we’ll show you what
-            to do next.
-          </p>
-        </div>
+        <div className="max-w-[1500px] mx-auto w-full">
+          <div className="hidden lg:block">
+            <h1 className="text-3xl lg:text-5xl font-normal p-3 lg:p-5 lg:pb-10 ">
+              Great! <br />
+              How do I get started then?
+            </h1>
+            <p className="text-sm lg:text-lg w-[350px] mx-auto ">
+              Simple, just choose which profile fits you, and we’ll show you what
+              to do next.
+            </p>
+          </div>
 
-        <div className="lg:hidden font-normal text-[#001032]">
-          <h1 className="text-3xl lg:text-5xl  p-3 lg:p-5 lg:pb-10 ">
-            Awesome! <br />
-            How do I start building?
-          </h1>
-          <p className="text-sm lg:text-lg w-[320px] mx-auto pt-3 ">
-            Easy — pick your profile and Copteno will guide your next step.
-          </p>
+          <div className="lg:hidden font-normal text-[#001032]">
+            <h1 className="text-3xl lg:text-5xl  p-3 lg:p-5 lg:pb-10 ">
+              Awesome! <br />
+              How do I start building?
+            </h1>
+            <p className="text-sm lg:text-lg w-[320px] mx-auto pt-3 ">
+              Easy — pick your profile and Copteno will guide your next step.
+            </p>
+          </div>
         </div>
       </div>
 
       <div className="hidden lg:block">
-        <div
-          id="bottom"
-          className="lg:bg-[#F9972A1A] grid  grid-cols-3 gap-10 w-full gap-x-6 p-20 py-12 text-white "
-        >
-          <div className="bg-[#001032] rounded-sm p-6 w-full">
-            <div className="flex justify-start items-center py-4 gap-4 ">
-              <div className="bg-[#FFFFFF] w-15 h-15"></div>
-              <h1 className="text-2xl  ">Startup</h1>
-            </div>
-            <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
-              Pick your onboarding plan
-            </h1>
-            <p className="text-lg leading-6 tracking-wide font-light ">
-              Learn how to use your founder credit and start building with
-              expert guidance
-            </p>
-            <div className="flex justify-end items-center gap-3 relative group w-full">
-         
-              <div className="flex items-center gap-3 group-hover:hidden transition-all">
-                <div className="mt-5">
-                  <button className="text-2xl   mt-5">
-                    Startups
-                  </button>
-                </div>
-                <IoIosArrowRoundForward size={25} className="mt-10" />
+        <div className="lg:bg-[#F9972A1A]">
+          <div
+            id="bottom"
+            className="max-w-[1500px] mx-auto grid grid-cols-3 gap-10 w-full gap-x-6 p-20 py-12 text-white"
+          >
+            <div className="bg-[#001032] rounded-sm p-6 w-full">
+              <div className="flex justify-start items-center py-4 gap-4 ">
+                <div className="bg-[#FFFFFF] w-15 h-15"></div>
+                <h1 className="text-2xl  ">Startup</h1>
               </div>
+              <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
+                Pick your onboarding plan
+              </h1>
+              <p className="text-lg leading-6 tracking-wide font-light ">
+                Learn how to use your founder credit and start building with
+                expert guidance
+              </p>
+              <div className="flex justify-end items-center gap-3 relative group w-full">
 
-             
-              <Link to="/startup">
-                <button
-                  className="
-        hidden group-hover:block 
-        text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
-      "
-                >
-                  Get Started
-                </button>
-              </Link>
-            </div>
-          </div>
-          <div className="bg-[#616B80] rounded-sm p-6">
-            <div className="flex justify-start items-center py-4 gap-4 ">
-              <div className="bg-[#FFFFFF] w-15 h-15"></div>
-              <h1 className="text-2xl ">Investor</h1>
-            </div>
-            <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
-              Create your investor account
-            </h1>
-            <p className="text-lg leading-6 tracking-wide  font-light">
-              Share your focus areas, deal sizes, and investment interests.
-            </p>
-            <div className="flex justify-end items-center gap-3 relative group w-full">
-          
-              <div className="flex items-center gap-3 group-hover:hidden transition-all">
-                <div className="mt-5">
-                  <button className="text-2xl  mb-2 mt-5">
-                    Investors
-                  </button>
+                <div className="flex items-center gap-3 group-hover:hidden transition-all">
+                  <div className="mt-5">
+                    <button className="text-2xl   mt-5">
+                      Startups
+                    </button>
+                  </div>
+                  <IoIosArrowRoundForward size={25} className="mt-10" />
                 </div>
-                <IoIosArrowRoundForward size={25} className="mt-10" />
-              </div>
 
-             
-              <Link to="/investor">
-                <button
-                  className="
-        hidden group-hover:block 
-        text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
-      "
-                >
-                  Get Started
-                </button>
-              </Link>
-            </div>
-          </div>
-          <div className="bg-[#002A30CC] rounded-sm p-6">
-            <div className="flex justify-start items-center py-4 gap-4 ">
-              <div className="bg-[#FFFFFF] w-15 h-15"></div>
-              <h1 className="text-2xl ">Service Professionals</h1>
-            </div>
-            <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
-              Choose your onboarding plan
-            </h1>
-            <p className="text-lg leading-6 tracking-wide font-light">
-              Connect with verified startups and convert leads directly.
-            </p>
-               <div className="flex justify-end items-center gap-3 relative group w-full">
-            
-              <div className="flex items-center gap-3 group-hover:hidden transition-all">
-                <div className="mt-5">
-                  <button className="text-2xl   mt-5">
-                   Service Professionals
+
+                <Link to="/startup">
+                  <button
+                    className="
+          hidden group-hover:block 
+          text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
+        "
+                  >
+                    Get Started
                   </button>
-                </div>
-                <IoIosArrowRoundForward size={25} className="mt-10" />
+                </Link>
               </div>
+            </div>
+            <div className="bg-[#616B80] rounded-sm p-6">
+              <div className="flex justify-start items-center py-4 gap-4 ">
+                <div className="bg-[#FFFFFF] w-15 h-15"></div>
+                <h1 className="text-2xl ">Investor</h1>
+              </div>
+              <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
+                Create your investor account
+              </h1>
+              <p className="text-lg leading-6 tracking-wide  font-light">
+                Share your focus areas, deal sizes, and investment interests.
+              </p>
+              <div className="flex justify-end items-center gap-3 relative group w-full">
 
-             
-              <Link to="/serviceprofessional">
-                <button
-                  className="
-        hidden group-hover:block 
-        text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
-      "
-                >
-                  Get Started
-                </button>
-              </Link>
+                <div className="flex items-center gap-3 group-hover:hidden transition-all">
+                  <div className="mt-5">
+                    <button className="text-2xl  mb-2 mt-5">
+                      Investors
+                    </button>
+                  </div>
+                  <IoIosArrowRoundForward size={25} className="mt-10" />
+                </div>
+
+
+                <Link to="/investor">
+                  <button
+                    className="
+          hidden group-hover:block 
+          text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
+        "
+                  >
+                    Get Started
+                  </button>
+                </Link>
+              </div>
+            </div>
+            <div className="bg-[#002A30CC] rounded-sm p-6">
+              <div className="flex justify-start items-center py-4 gap-4 ">
+                <div className="bg-[#FFFFFF] w-15 h-15"></div>
+                <h1 className="text-2xl ">Service Professionals</h1>
+              </div>
+              <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
+                Choose your onboarding plan
+              </h1>
+              <p className="text-lg leading-6 tracking-wide font-light">
+                Connect with verified startups and convert leads directly.
+              </p>
+              <div className="flex justify-end items-center gap-3 relative group w-full">
+
+                <div className="flex items-center gap-3 group-hover:hidden transition-all">
+                  <div className="mt-5">
+                    <button className="text-2xl   mt-5">
+                      Service Professionals
+                    </button>
+                  </div>
+                  <IoIosArrowRoundForward size={25} className="mt-10" />
+                </div>
+
+
+                <Link to="/serviceprofessional">
+                  <button
+                    className="
+          hidden group-hover:block 
+          text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
+        "
+                  >
+                    Get Started
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

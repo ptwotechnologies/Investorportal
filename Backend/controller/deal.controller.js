@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Deal from "../Models/deal.model.js";
+import Deal from "../Models/Deal.model.js";
 import Request from "../Models/request.model.js";
 
 // CREATE DEAL DRAFT

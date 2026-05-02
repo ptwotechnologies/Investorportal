@@ -127,30 +127,32 @@ const Navbar = () => {
   return (
     <div
       className={`
-        w-full h-[10%] lg:h-[15%] flex justify-between items-center px-4 lg:px-6 
+        w-full h-[10%] lg:h-[15%] px-4 lg:px-6 
         fixed top-0 z-50 transition-transform duration-300
         ${showNavbar ? 'translate-y-0' : '-translate-y-full'}
         ${bgMobile} lg:${bgDesktop}
       `}
     >
-      {/* Logo */}
-      <div>
-        <Link to="/">
-          <img src={logoDesktop} alt="Logo" className="w-45 hidden lg:block" />
-        </Link>
-        <Link to="/">
-          <img src={logoMobile} alt="Logo" className="w-30 lg:hidden" />
-        </Link>
-      </div>
+      <div className="max-w-[1500px] mx-auto w-full h-full flex justify-between items-center">
+        {/* Logo */}
+        <div>
+          <Link to="/">
+            <img src={logoDesktop} alt="Logo" className="w-45 hidden lg:block" />
+          </Link>
+          <Link to="/">
+            <img src={logoMobile} alt="Logo" className="w-30 lg:hidden" />
+          </Link>
+        </div>
 
-      {/* Desktop Navigation */}
-      <div className={`hidden lg:flex items-center gap-5 ${textDesktop}`}>
-        <NavigationDesk textColor={textDesktop} />
-      </div>
+        {/* Desktop Navigation */}
+        <div className={`hidden lg:flex items-center gap-5 ${textDesktop}`}>
+          <NavigationDesk textColor={textDesktop} />
+        </div>
 
-      {/* Mobile Navigation */}
-      <div className={textMobile}>
-        <NavbarSheet textColor={textMobile} />
+        {/* Mobile Navigation */}
+        <div className={textMobile}>
+          <NavbarSheet textColor={textMobile} />
+        </div>
       </div>
     </div>
   );

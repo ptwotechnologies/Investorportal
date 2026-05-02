@@ -6,6 +6,7 @@ import axios from "axios";
 import { serverUrl } from "@/App";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { invalidateSidebarCache } from "../../ProfileSec1.jsx/Sidebar";
 import React from "react";
 
 const Bottom = ({ 
@@ -23,6 +24,19 @@ const Bottom = ({
   const [userId, setUserId] = React.useState(null);
   const [userRole, setUserRole] = React.useState(localStorage.getItem("role"));
   const navigate = useNavigate();
+
+  // ── New Proposal Creation State ──
+  const [eligibleRequests, setEligibleRequests] = React.useState([]);
+  const [isFetchingRequests, setIsFetchingRequests] = React.useState(false);
+  const [newDealData, setNewDealData] = React.useState({
+    requestId: null,
+    professionalId: null,
+    scopeDescription: "",
+    scopeItems: [],
+    milestones: [],
+    totalAmount: 0,
+    totalTimeline: "",
+  });
 
   // Robust Role Detection: Compare current user ID with deal participants to ensure accurate labels
   const amIStartup = userId && (selectedProject?.startupId?._id === userId || selectedProject?.startupId === userId);
@@ -73,10 +87,9 @@ const Bottom = ({
       const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // Show Negotiating AND Approved deals ONLY if they have been countered (negotiation history exists)
+      // Show Negotiating, Approved, Draft, and Active deals
       const negotiatingDeals = res.data.filter(d => 
-        (d.status === "Negotiating" || d.status === "Approved") && 
-        (d.negotiation?.history?.length > 0)
+        ["Negotiating", "Approved", "Draft", "Active"].includes(d.status)
       );
       setDeals(negotiatingDeals);
 
@@ -111,6 +124,7 @@ const Bottom = ({
       await axios.put(`${serverUrl}/api/deals/${selectedProject._id}`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      invalidateSidebarCache();
       toast.success(payload.isCounter ? "Counter offer submitted" : "Approval submitted");
       setIsEditing(false);
       // Update local state for selected project to reflect changes immediately
@@ -139,6 +153,73 @@ const Bottom = ({
   const [newScopeInput, setNewScopeInput] = React.useState("");
   const [prevPanelState, setPrevPanelState] = React.useState(null);
 
+  // Fetch eligible requests when entering 'create' state
+  React.useEffect(() => {
+    const fetchEligible = async () => {
+      if (rightPanelState !== 'create' || eligibleRequests.length > 0) return;
+      
+      setIsFetchingRequests(true);
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get(`${serverUrl}/requests`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const eligible = res.data.filter(r => r.acceptedProvider);
+        setEligibleRequests(eligible);
+        
+        // Auto-select if only one
+        if (eligible.length === 1) {
+          const req = eligible[0];
+          setNewDealData(prev => ({
+            ...prev,
+            requestId: req._id,
+            professionalId: req.acceptedProvider?._id || req.acceptedProvider
+          }));
+        }
+      } catch (err) {
+        console.error("Error fetching eligible requests:", err);
+      } finally {
+        setIsFetchingRequests(false);
+      }
+    };
+    fetchEligible();
+  }, [rightPanelState]);
+
+  const handleCreateProposal = async () => {
+    if (!newDealData.requestId) return toast.error("Please select a request");
+    if (newDealData.milestones.length === 0) return toast.error("Please add at least one milestone");
+
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const payload = {
+        ...newDealData,
+        status: "Draft"
+      };
+      await axios.post(`${serverUrl}/api/deals/create-draft`, payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      invalidateSidebarCache();
+      toast.success("Proposal created successfully!");
+      setRightPanelState('none');
+      setNewDealData({
+        requestId: null,
+        professionalId: null,
+        scopeDescription: "",
+        scopeItems: [],
+        milestones: [],
+        totalAmount: 0,
+        totalTimeline: "",
+      });
+      fetchDeals();
+    } catch (err) {
+      console.error("Error creating proposal:", err);
+      toast.error(err.response?.data?.message || "Failed to create proposal");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // ── Handlers ──
   const handleViewProject = (proj) => {
     setSelectedProject(proj);
@@ -152,7 +233,9 @@ const Bottom = ({
 
   const handleViewScope = () => {
     setPrevPanelState(rightPanelState);
-    if (selectedProject) {
+    if (rightPanelState === 'create') {
+      setTempScopeItems(newDealData.scopeItems || []);
+    } else if (selectedProject) {
       setTempScopeItems(selectedProject.scopeItems || []);
     }
     setRightPanelState('scopeDetails');
@@ -180,7 +263,8 @@ const Bottom = ({
 
   const handleBack = () => {
     if (rightPanelState === 'scopeDetails' || rightPanelState === 'milestoneDetails') {
-      setRightPanelState('overview');
+      setRightPanelState(prevPanelState || 'overview');
+      setPrevPanelState(null);
     } else {
       setRightPanelState('none');
       setSelectedProject(null);
@@ -206,11 +290,17 @@ const Bottom = ({
   };
 
   const handleSaveScope = () => {
-    if (isEditing) {
-      setEditedDeal({ ...editedDeal, scopeItems: tempScopeItems, scopeDescription: editedDeal.scopeDescription });
+    if (rightPanelState === 'create') {
+      setNewDealData({ ...newDealData, scopeItems: tempScopeItems });
+      toast.success("Scope updated");
+      setRightPanelState('create');
+    } else if (isEditing) {
+      setEditedDeal({ ...editedDeal, scopeItems: tempScopeItems });
       toast.success("Scope updated locally");
+      setRightPanelState('overview');
+    } else {
+      setRightPanelState('overview');
     }
-    setRightPanelState('overview');
   };
 
   const backLabel = (rightPanelState === 'scopeDetails' || rightPanelState === 'milestoneDetails') 
@@ -230,7 +320,7 @@ const Bottom = ({
               <HiOutlineArrowsRightLeft size={20} className="text-[#001032]" />
               <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Open Proposals</h3>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">7</p>
+            <p className="text-xl lg:text-2xl font-bold text-[#001032]">{deals.length}</p>
           </div>
 
           <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
@@ -238,7 +328,13 @@ const Bottom = ({
               <HiOutlineUserGroup size={20} className="text-[#001032]" />
               <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Awaiting Response</h3>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">4</p>
+            <p className="text-xl lg:text-2xl font-bold text-[#001032]">
+              {deals.filter(d => {
+                const uAgreed = isStartup ? d.documentation?.startupAgreed : d.documentation?.professionalAgreed;
+                const oAgreed = isStartup ? d.documentation?.professionalAgreed : d.documentation?.startupAgreed;
+                return uAgreed && !oAgreed;
+              }).length}
+            </p>
           </div>
 
           <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
@@ -246,7 +342,9 @@ const Bottom = ({
               <LuArrowLeftRight size={20} className="text-[#001032]" />
               <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Counter Offers</h3>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">3</p>
+            <p className="text-xl lg:text-2xl font-bold text-[#001032]">
+              {deals.reduce((acc, d) => acc + (d.negotiation?.history?.length || 0), 0)}
+            </p>
           </div>
 
           <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
@@ -254,7 +352,7 @@ const Bottom = ({
               <LuClock size={20} className="text-[#001032]" />
               <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Expiring Soon</h3>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">2</p>
+            <p className="text-xl lg:text-2xl font-bold text-[#001032]">0</p>
           </div>
         </div>
 
@@ -323,82 +421,173 @@ const Bottom = ({
 
           {/* CREATE PROPOSAL STATE */}
           {rightPanelState === 'create' && (
-            <div className="space-y-4">
-              <div className="bg-white rounded-2xl lg:p-6 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
-                <h4 className="text-[16px] font-medium text-[#000000] mb-2">Scope of Work</h4>
-                <p className="text-[10px] lg:text-xs text-[#000000] mb-4 leading-relaxed">
-                  Develop a mobile app with core features and user registration 
-                  Implement payment gateway integration
-                </p>
-                <button 
-                  onClick={handleViewScope}
-                  className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
-                >
-                  Add Details
-                </button>
-              </div>
-
-              <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
-                <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Budget</h4>
-                <div className="flex flex-col lg:flex-row gap-3">
-                  <div className="lg:w-[150px] w-full px-3 py-2 bg-white rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">INR - Indian Rupees</div>
-                  <div className="flex-1 px-3 py-2 bg-white rounded-lg text-xs text-gray-400 text-center lg:text-start  border border-gray-100 flex items-center justify-center lg:justify-start shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Budget Amount</div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
-                <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Timeline</h4>
-                <div className="flex flex-col lg:flex-row gap-3">
-                  <div className="lg:w-[150px] w-full px-3 py-2 bg-white rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">Total Days</div>
-                  <div className="flex-1 px-3 py-2 bg-white rounded-lg text-xs text-gray-400   border border-gray-100 flex items-center justify-center lg:justify-start shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Timeline Duration</div>
-                </div>
-              </div>
-
-              <SectionCard title="Milestone" showPlus onPlusClick={handleCreateMilestone}>
-                <div className="space-y-3 mt-4">
-                  {[1, 2, 3].map(m => (
-                    <div key={m} className="bg-[#F2F2F2] rounded-xl p-3 lg:p-4 relative flex items-center justify-between pr-4">
-                      <div className="flex gap-3 items-start flex-1">
-                        <div className="w-4 h-4 rounded-full bg-[#D8D6F8] shrink-0" />
-                        <div className="flex-1">
-                          <h5 className="text-[10px] lg:text-xs text-[#000000]">Milestone {m} - Wireframe Designing</h5>
-                          <p className="text-[8px] lg:text-[10px] text-gray-400 mt-1">Develop a mobile app with core features</p>
-                          <p className="text-[8px] lg:text-[10px] text-gray-400 font-medium whitespace-nowrap lg:mt-1">Due Date - 15th April, 2026</p>
-                        </div>
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
+              <div className="flex-1 overflow-y-auto scrollbar-hide p-2 space-y-4">
+                {!newDealData.requestId ? (
+                  <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
+                    <h4 className="text-lg font-bold text-[#001032] mb-4">Select a Request</h4>
+                    {isFetchingRequests ? (
+                      <div className="py-10 text-center animate-pulse text-gray-400 italic">Fetching your requests...</div>
+                    ) : eligibleRequests.length > 0 ? (
+                      <div className="grid gap-3">
+                        {eligibleRequests.map(req => (
+                          <div 
+                            key={req._id}
+                            onClick={() => setNewDealData({
+                              ...newDealData,
+                              requestId: req._id,
+                              professionalId: req.acceptedProvider?._id || req.acceptedProvider
+                            })}
+                            className="p-4 rounded-xl border border-gray-100 hover:border-[#D8D6F8] hover:bg-[#FDFDFF] cursor-pointer transition-all group"
+                          >
+                            <h5 className="font-bold text-[#001032] group-hover:text-[#59549F]">{req.service}</h5>
+                            <p className="text-[10px] text-gray-400 mt-1">Provider: {req.acceptedProvider?.name || "Accepted Professional"}</p>
+                          </div>
+                        ))}
                       </div>
-                      <div className="absolute  right-2 top-1 lg:right-4">
-                        <span className="bg-[#EAB308] text-white text-[8px] lg:text-[10px] px-2 py-0.5 rounded-md">Awaiting Response</span>
+                    ) : (
+                      <div className="text-center py-6">
+                        <p className="text-sm text-gray-400 italic">No requests with accepted professionals found.</p>
+                        <button 
+                          onClick={() => navigate("/profile/request")}
+                          className="mt-4 px-6 py-2 bg-[#D8D6F8] text-[#59549F] rounded-lg font-bold text-xs"
+                        >
+                          Go to Requests
+                        </button>
                       </div>
+                    )}
+                    <button 
+                      onClick={() => setRightPanelState('none')}
+                      className="w-full mt-6 py-2 border-2 border-gray-100 rounded-lg text-gray-500 font-bold text-sm"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    {/* Creation Editor */}
+                    <div className="bg-white rounded-2xl lg:p-6 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 relative">
                       <button 
-                        onClick={() => handleViewMilestone({ id: m, name: `Milestone ${m}`, description: 'Develop a mobile app with core features', dueDate: '15th April, 2026', status: 'Awaiting Response', duration: '20 Days', budget: '1,20,000' })}
-                        className="bg-white px-4 py-1 rounded-md text-[#59549F] text-[10px] lg:text-xs font-bold shadow-sm whitespace-nowrap mt-8 lg:mt-6"
+                        onClick={() => setNewDealData(prev => ({ ...prev, requestId: null }))}
+                        className="absolute top-4 right-4 text-gray-400 hover:text-[#59549F]"
                       >
-                        View Details
+                        Change Request
+                      </button>
+                      <h4 className="text-[16px] font-medium text-[#000000] mb-2">Scope of Work</h4>
+                      <textarea 
+                        className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl text-xs min-h-[100px] focus:outline-none focus:border-[#59549F]"
+                        placeholder="Describe the project scope..."
+                        value={newDealData.scopeDescription}
+                        onChange={(e) => setNewDealData({ ...newDealData, scopeDescription: e.target.value })}
+                      />
+                      <button 
+                        onClick={() => {
+                          setTempScopeItems(newDealData.scopeItems);
+                          setRightPanelState('scopeDetails');
+                        }}
+                        className="w-full mt-4 py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                      >
+                        {newDealData.scopeItems.length > 0 ? "Edit Details" : "Add Details"}
                       </button>
                     </div>
-                  ))}
-                </div>
-              </SectionCard>
 
-              <div className="space-y-3 pt-3 ">
-                 <div className="flex gap-3">
+                    <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
+                      <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Budget</h4>
+                      <div className="flex gap-3">
+                        <div className="w-[120px] px-3 py-2 bg-gray-50 rounded-lg text-[10px] text-gray-400 border border-gray-100 flex items-center justify-center shadow-sm">INR</div>
+                        <input 
+                          type="number"
+                          className="flex-1 px-3 py-2 bg-gray-50 rounded-lg text-xs border border-gray-100 outline-none focus:border-[#D8D6F8]"
+                          placeholder="0.00"
+                          value={newDealData.totalAmount}
+                          onChange={(e) => setNewDealData({ ...newDealData, totalAmount: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
+                      <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Timeline</h4>
+                      <div className="flex gap-3">
+                        <div className="w-[120px] px-3 py-2 bg-gray-50 rounded-lg text-[10px] text-gray-400 border border-gray-100 flex items-center justify-center shadow-sm">Days</div>
+                        <input 
+                          type="text"
+                          className="flex-1 px-3 py-2 bg-gray-50 rounded-lg text-xs border border-gray-100 outline-none focus:border-[#D8D6F8]"
+                          placeholder="e.g. 90"
+                          value={newDealData.totalTimeline}
+                          onChange={(e) => setNewDealData({ ...newDealData, totalTimeline: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                  <SectionCard title="Milestone" showPlus onPlusClick={() => {
+                    setPrevPanelState('create');
+                    setSelectedMilestone({
+                      id: Date.now(),
+                      title: "",
+                      description: "",
+                      status: "Pending",
+                      duration: "",
+                      amount: "",
+                    });
+                    setRightPanelState('milestoneDetails');
+                  }}>
+                      <div className="space-y-3 mt-4">
+                        {newDealData.milestones.map((m, idx) => (
+                          <div key={idx} className="bg-[#F8F8F8] rounded-xl p-3 relative flex items-center justify-between">
+                            <div className="flex gap-3 items-start flex-1">
+                              <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1 shrink-0" />
+                              <div>
+                                <h5 className="text-[10px] font-bold text-[#000000]">{m.title || "Untitled Milestone"}</h5>
+                                <p className="text-[9px] text-gray-400">Rs {m.amount || 0}</p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <button 
+                                onClick={() => handleViewMilestone(m)}
+                                className="text-[10px] text-[#59549F] font-bold hover:underline"
+                              >
+                                View
+                              </button>
+                              <button 
+                                onClick={() => {
+                                  const updated = newDealData.milestones.filter((_, i) => i !== idx);
+                                  setNewDealData({ ...newDealData, milestones: updated });
+                                }}
+                                className="text-red-400 hover:text-red-600 p-1 text-lg"
+                              >
+                                ×
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                        {newDealData.milestones.length === 0 && (
+                          <p className="text-[10px] text-gray-400 italic text-center py-2">No milestones added yet</p>
+                        )}
+                      </div>
+                    </SectionCard>
+                  </>
+                )}
+              </div>
+
+              {newDealData.requestId && (
+                <div className="px-2 bg-white border-t border-gray-100 shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] space-y-3">
+                  <div className="flex gap-3">
                     <button 
-                      onClick={() => setRightPanelState('none')} 
-                      className="flex-1 py-2 bg-[#D8D6F8] rounded-lg text-[#59549F] font-medium text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                      onClick={handleCreateProposal}
+                      disabled={loading}
+                      className="flex-1 py-2 bg-[#D8D6F8] rounded-lg text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] disabled:opacity-50"
                     >
-                      Create Proposal
+                      {loading ? "Creating..." : "Create Proposal"}
                     </button>
                     <button 
                       onClick={() => setRightPanelState('none')}
-                      className="flex-1 py-2 bg-white border-2 border-gray-100 rounded-lg text-[#000000] font-medium text-sm shadow-sm"
+                      className="flex-1 py-2 bg-white border-2 border-gray-100 rounded-lg text-gray-500 font-bold text-sm shadow-sm"
                     >
-                      Cancel Proposal
+                      Cancel
                     </button>
-                 </div>
-                 <button className="w-full py-2 bg-[#D8D6F8] rounded-lg text-[#59549F] font-medium text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                    Proceed for Documentation
-                 </button>
-              </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -681,7 +870,7 @@ const Bottom = ({
             )}
 
           {rightPanelState === 'scopeDetails' && (
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
               {!isEditing && (
                 <div className="hidden lg:flex items-center mb-4">
                   <button onClick={handleBack} className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
@@ -690,7 +879,7 @@ const Bottom = ({
                 </div>
               )}
               
-              <div className="space-y-2 lg:p-3 px-3 py-3 -m-3 flex-1">
+              <div className="space-y-2 lg:p-3 px-3 py-3 -m-3 flex-1 overflow-y-auto scrollbar-hide">
                 {tempScopeItems.map((item, index) => (
                   <div key={index} className="relative group">
                     <input 
@@ -764,65 +953,97 @@ const Bottom = ({
 
           {/* MILESTONE DETAILS VIEW */}
           {rightPanelState === 'milestoneDetails' && selectedMilestone && (
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col h-full overflow-hidden">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
                   <button onClick={handleBack} className="hidden lg:flex p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
                     <FiArrowLeft size={18} />
                   </button>
-                  <input 
-                    type="text"
-                    defaultValue={selectedMilestone.title}
-                    placeholder="Milestone Title"
-                    className="text-lg font-medium text-[#000000] bg-transparent outline-none focus:border-b border-[#59549F]/20"
-                  />
                 </div>
                 <div className="bg-[#B91C1C] text-white text-[7px] lg:text-[10px] px-2 py-1.5 rounded-full ">
                   {selectedMilestone.duration ? `Duration - ${selectedMilestone.duration}` : "Add Duration"}
                 </div>
               </div>
               
-              <div className="space-y-6 flex-1">
+              <div className="space-y-6 flex-1 overflow-y-auto scrollbar-hide p-1">
+                <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+                   <h4 className="text-sm font-medium text-[#000000] mb-4">Milestone Title</h4>
+                   <input 
+                     type="text"
+                     value={selectedMilestone.title}
+                     onChange={(e) => setSelectedMilestone({ ...selectedMilestone, title: e.target.value })}
+                     placeholder="Enter milestone title (e.g. Design Phase)"
+                     className="w-full px-4 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-sm"
+                   />
+                </div>
+
                 <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
                    <h4 className="text-sm font-medium text-[#000000] mb-4">Milestone Budget - {selectedMilestone.title || "Milestone"}</h4>
                    <div className="flex flex-col lg:flex-row gap-3 mb-2">
-                     <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR - Indian Rupees</div>
-                     <input 
-                       type="text" 
-                       readOnly
-                       value={`Rs ${selectedMilestone.amount || 0}`}
-                       className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold" 
-                     />
-                   </div>
+                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR - Indian Rupees</div>
+                      <input 
+                        type="number" 
+                        value={selectedMilestone.amount}
+                        onChange={(e) => setSelectedMilestone({ ...selectedMilestone, amount: e.target.value })}
+                        placeholder="0"
+                        className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold" 
+                      />
+                    </div>
                 </div>
 
                 <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                   <h4 className="text-sm font-medium text-[#000000] mb-4">Milestone Timeline - {selectedMilestone.title || "Milestone"}</h4>
-                   <div className="flex flex-col lg:flex-row gap-3 mb-2">
-                     <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Total Days</div>
-                     <input 
-                       type="text" 
-                       placeholder="Enter Days"
-                       defaultValue={selectedMilestone.duration}
-                       className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center lg:text-start " 
-                     />
-                   </div>
-                </div>
-
-                <div className="pt-2">
+                    <h4 className="text-sm font-medium text-[#000000] mb-4">Milestone Timeline - {selectedMilestone.title || "Milestone"}</h4>
+                    <div className="flex flex-col lg:flex-row gap-3 mb-2">
+                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Total Days</div>
+                      <input 
+                        type="text" 
+                        placeholder="Enter Days"
+                        value={selectedMilestone.duration}
+                        onChange={(e) => setSelectedMilestone({ ...selectedMilestone, duration: e.target.value })}
+                        className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center lg:text-start " 
+                      />
+                    </div>
+                 </div>
+                                   <div className="pt-2">
                    <h4 className="text-base font-medium text-[#000000] mb-4 ">Scope of work in {selectedMilestone.title || "milestone"}</h4>
                    <textarea 
                      placeholder="Add the Description"
-                     defaultValue={selectedMilestone.description}
+                     value={selectedMilestone.description}
+                     onChange={(e) => setSelectedMilestone({ ...selectedMilestone, description: e.target.value })}
                      className="w-full min-h-[180px] p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none focus:border-[#59549F]"
                    />
                 </div>
               </div>
 
-              {isEditing && (
+              {(isEditing || prevPanelState === 'create') && (
                 <div className="flex gap-4 mt-8 ">
                   <button 
-                    onClick={handleBack}
+                    onClick={() => {
+                      if (!selectedMilestone.title) return toast.error("Title is required");
+                      if (prevPanelState === 'create') {
+                        const exists = newDealData.milestones.findIndex(m => m.id === selectedMilestone.id);
+                        if (exists > -1) {
+                          const updated = [...newDealData.milestones];
+                          updated[exists] = selectedMilestone;
+                          setNewDealData({ ...newDealData, milestones: updated });
+                        } else {
+                          setNewDealData({ ...newDealData, milestones: [...newDealData.milestones, selectedMilestone] });
+                        }
+                        toast.success("Milestone saved");
+                        setRightPanelState('create');
+                        setPrevPanelState(null);
+                      } else {
+                        // For counter-offer editing
+                        const exists = editedDeal.milestones.findIndex(m => m._id === selectedMilestone._id || m.id === selectedMilestone.id);
+                        if (exists > -1) {
+                          const updated = [...editedDeal.milestones];
+                          updated[exists] = selectedMilestone;
+                          setEditedDeal({ ...editedDeal, milestones: updated });
+                        }
+                        toast.success("Milestone saved");
+                        setRightPanelState('overview');
+                      }
+                    }}
                     className="flex-1 py-1 bg-[#D8D6F8] text-[#59549F] font-semibold rounded-lg hover:opacity-90 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
                   >
                     Save

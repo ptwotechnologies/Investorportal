@@ -12,8 +12,8 @@ import Footer from '@/components/UserComponents/Footer'
 
 const Home = () => {
   return (
-     <div >
-      <div  >
+    <div className="overflow-x-hidden">
+      <div>
         <HomeSec1/>
       </div>
       <div >

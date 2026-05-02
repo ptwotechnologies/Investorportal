@@ -19,7 +19,7 @@ const raisedRequestOptions = [
   { id: 14, label: "Other" },
 ];
 
-const TwinCardModal = ({ onClose, lightbulbImg, lockImg }) => {
+const TwinCardModal = ({ onClose, lightbulbImg, lockImg, userRole, userAmount }) => {
   const navigate = useNavigate();
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -103,7 +103,13 @@ const TwinCardModal = ({ onClose, lightbulbImg, lockImg }) => {
 
           <div className="mt-4 space-y-2">
             <button 
-              onClick={() => navigate("/pricing")}
+              onClick={() => navigate("/pricing", { 
+                state: { 
+                  isUpgradeFlow: true, 
+                  role: userRole, 
+                  currentPlanAmount: userAmount 
+                } 
+              })}
               className="w-full py-2 bg-[#59549F] text-white rounded-md font-bold text-[11px] md:text-xs flex items-center justify-center gap-2 hover:bg-[#48438a] transition-colors shadow-md active:scale-[0.98]"
             >
               🔒 Unlock Full Access

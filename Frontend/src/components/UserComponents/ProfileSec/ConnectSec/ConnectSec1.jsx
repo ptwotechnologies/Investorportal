@@ -6,10 +6,12 @@ import { serverUrl } from "@/App";
 import axios from "axios";
 import { FaLinkedin } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
-import { FaArrowLeft, FaLock, FaUnlock } from "react-icons/fa";
+import { FaArrowLeft, FaLock, FaUnlock, FaStar } from "react-icons/fa";
+import { RxCross2 } from "react-icons/rx";
 import { getDomainsForRole, INVESTOR_TYPES } from "./domain.js";
 import toast from "react-hot-toast";
 import ConnectUpgradeModal from "./ConnectUpgradeModal";
+import { Link } from "react-router-dom";
 
 const ConnectSec1 = () => {
   const navigate = useNavigate();
@@ -32,6 +34,8 @@ const ConnectSec1 = () => {
   const [receivedRequests, setReceivedRequests] = useState([]);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [userPlan, setUserPlan] = useState(null);
+  const [profile, setProfile] = useState({});
+  const [showMobileCredits, setShowMobileCredits] = useState(false);
 
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
@@ -111,6 +115,17 @@ const ConnectSec1 = () => {
             }).catch(() => ({ data: { plan: null } }))
           : Promise.resolve({ data: { plan: null } }),
       ]);
+
+      try {
+        const userProfileRes = await axios.get(`${serverUrl}/profile/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (userProfileRes.data) {
+          setProfile(userProfileRes.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch profile in ConnectSec1:", err);
+      }
 
       const planName = userRes.data.plan?.planName || "Explorer Access";
       setUserPlan(planName);
@@ -551,21 +566,75 @@ const ConnectSec1 = () => {
 
   return (
     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
-      <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto  pt-4">
-        <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
-          <h1 className="text-md font-semibold text-gray-800">
-            Welcome, Startup India Pvt. Ltd.
-          </h1>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-full text-sm hover:bg-gray-50 transition-colors">
-            <FaUser
-              className="text-gray-600 border border-gray-600 p-1 rounded-full"
-              size={24}
-            />
-            <span className="font-semibold text-gray-800">
-              Switch to professional
-            </span>
-          </button>
-        </div>
+      <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto pt-6 lg:pt-2">
+        <div id="topbar" className="flex items-stretch w-[100%]  gap-1 lg:gap-2 mb-2 ">
+                        <div
+                          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-3 py-2 lg:mr-1  bg-white"
+                        >
+                          <div >
+                            <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">
+                              Welcome, {profile?.companyName || profile?.name || "User"}!
+                            </p>
+                            <span className="hidden" id="debug-profile">{JSON.stringify(profile)}</span>
+                          </div>
+                          <div className="flex items-center gap-1 lg:gap-x-3">
+                            {/* {profile?.profilePhoto ? (
+                              <img
+                                src={`${serverUrl}${profile.profilePhoto}`}
+                                alt="profile"
+                                className="w-8 h-8 rounded-full object-cover"
+                                onError={(e) => (e.target.style.display = "none")}
+                              />
+                            ) : (
+                              <CgProfile className="text-gray-500" size={25} />
+                            )}
+                            {profile?.role === "startup" && (
+                              <p className="bg-[#D8D6F8] text-[#59549F] rounded-md text-[10px] lg:text-xs hidden lg:block px-2 py-1 transition-all border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)]">
+                                Switch to professional
+                              </p>
+                            )} */}
+                
+                            {/* Mobile Star Button (Inside Welcome Box) */}
+                            {isFreePlan && (
+                              <button
+                                onClick={() => setShowMobileCredits(true)}
+                                className="lg:hidden flex items-center justify-center w-8 h-8 bg-[#D8D6F8] rounded-md border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)] shrink-0"
+                              >
+                                <div className="w-5 h-5 rounded-full bg-white border-2 border-[#59549F] flex items-center justify-center">
+                                  <FaStar size={12} className="text-[#59549F]" />
+                                </div>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                
+                        {/* Desktop Credits Widget */}
+                        {isFreePlan && (
+                          <div
+                            onClick={() => setShowMobileCredits(true)}
+                            className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer  lg:w-[55.3%] "
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
+                                {profile.credits ?? 0}
+                              </div>
+                              <div className="flex flex-col items-end">
+                                <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
+                                  Opportunities Available
+                                </p>
+                                <div className="-mt-0.5">
+                                  <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
+                                    More connections are waiting
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+                              Unlock More Opportunities
+                            </div>
+                          </div>
+                        )}
+                      </div>
 
         <div className="flex gap-4 items-stretch">
           <div
@@ -1581,7 +1650,10 @@ const ConnectSec1 = () => {
 
       {/* ✅ Premium Upgrade Modal */}
       {showUpgradeModal && (
-        <ConnectUpgradeModal onClose={() => setShowUpgradeModal(false)} />
+        <ConnectUpgradeModal 
+          onClose={() => setShowUpgradeModal(false)} 
+          userRole={currentUserRole}
+        />
       )}
 
       {/* ✅ Global Withdraw Confirmation Modal */}
@@ -1610,6 +1682,117 @@ const ConnectSec1 = () => {
                 className="flex-1 py-3 rounded-xl bg-red-50 text-red-600 font-semibold hover:bg-red-100 transition-all border border-red-200"
               >
                 Yes, Withdraw
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Upgrade & Credits Popup */}
+      {showMobileCredits && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-300">
+          <div className="bg-white w-full max-w-sm rounded-[2rem] p-5 relative shadow-2xl border border-[#D8D6F8] animate-in zoom-in-95 duration-300">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowMobileCredits(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+            >
+              <RxCross2 size={22} />
+            </button>
+
+            {/* Header Section */}
+            <div className="flex items-start gap-3 mb-2 pt-1">
+              <div className="w-12 h-12 bg-[#FFF8E7] rounded-full flex items-center justify-center text-2xl shadow-inner shrink-0">
+                ⭐
+              </div>
+              <div>
+                <h2 className="text-lg font-bold text-[#001032] leading-tight">
+                  {profile?.role === "startup" ? "Unlock More" : "Grow Your"}<br />
+                  <span className="text-[#59549F]">
+                    {profile?.role === "startup" ? "Opportunities" : "Business"}
+                  </span> Waiting
+                </h2>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="text-xs text-gray-500 mb-3 leading-relaxed">
+              {profile?.role === "startup" 
+                ? "You've reached your free access limit. More investors and professionals are ready to connect with you."
+                : "You've reached your free access limit. More high-intent startups are looking for professionals like you."}
+            </p>
+
+            {/* Yellow Highlight Box */}
+            <div className="bg-[#FFF8E7] border border-[#FFD700] rounded-xl px-3 py-2 flex items-center gap-3 mb-3">
+              <span className="text-yellow-500 text-xl">⚡</span>
+              <div>
+                <p className="text-xs font-bold text-[#B8860B]">
+                  Unlock full ecosystem access
+                </p>
+                <p className="text-[10px] text-gray-600">to continue building valuable connections</p>
+              </div>
+            </div>
+
+            {/* Benefits List */}
+            <div className="border border-gray-100 bg-gray-50/50 rounded-2xl p-4 mb-4">
+              <p className="text-[11px] font-bold text-[#001032] mb-3 uppercase tracking-wider opacity-70">
+                WITH FULL ACCESS, YOU CAN:
+              </p>
+              <ul className="space-y-2">
+                {[
+                  {
+                    icon: "🤝",
+                    color: "bg-blue-100",
+                    text: profile?.role === "startup" ? "Connect with multiple investors" : "Connect with high-intent startups",
+                  },
+                  { 
+                    icon: "⚡", 
+                    color: "bg-green-100", 
+                    text: profile?.role === "startup" ? "Get faster responses to requests" : "Get more relevant client matches" 
+                  },
+                  {
+                    icon: "📈",
+                    color: "bg-purple-100",
+                    text: profile?.role === "startup" ? "Increase visibility to top investors" : "Showcase profile to decision makers",
+                  },
+                  { 
+                    icon: "🏆", 
+                    color: "bg-orange-100", 
+                    text: "Execute deals without limits" 
+                  },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-2.5">
+                    <div className={`w-7 h-7 rounded-full ${item.color} flex items-center justify-center text-xs shrink-0 shadow-sm`}>
+                      {item.icon}
+                    </div>
+                    <span className="text-[12px] text-[#4A4E91] font-medium leading-tight">
+                      {item.text}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="space-y-2">
+              <Link
+                to="/pricing"
+                state={{ 
+                  isUpgradeFlow: true, 
+                  role: profile?.role, 
+                  currentPlanAmount: profile?.plan?.amount || 0 
+                }}
+                onClick={() => setShowMobileCredits(false)}
+                className="w-full py-2.5 bg-[#181555] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 shadow-lg shadow-[#181555]/20 transition-all transform active:scale-[0.98] tracking-wide"
+              >
+                🔒 Unlock Full Access
+              </Link>
+              
+              <button
+                onClick={() => setShowMobileCredits(false)}
+                className="w-full py-1.5 text-gray-400 font-bold text-[10px] hover:text-gray-600 transition-colors tracking-widest uppercase"
+              >
+                Maybe Later
               </button>
             </div>
           </div>

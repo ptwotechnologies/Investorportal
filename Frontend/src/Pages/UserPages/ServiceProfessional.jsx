@@ -14,7 +14,7 @@ import Footer from '@/components/UserComponents/Footer';
 
 const ServiceProfessional = () => {
   return (
-    <div >
+    <div className="overflow-x-hidden">
       <div>
         <ServiceProfessionalSec1/>
       </div>

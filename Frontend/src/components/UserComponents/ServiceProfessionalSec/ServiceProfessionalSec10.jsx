@@ -75,87 +75,78 @@ const ServiceProfessionalSec10 = () => {
      setActiveIndex(index === activeIndex ? null : index);
    };
  
-   return (
-    <div className="w-full mx-auto px-4 py-6 pb-10 lg:py-10 lg:px-30 ">
-        <h1 className="text-3xl  mb-4 text-[#001032] lg:hidden ">Here’s what service professionals usually ask</h1>
-      <h1 className="text-3xl  mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
-       <h1 className="text-md mb-6 text-[#001032] hidden lg:block ">Trust & Safety</h1>
-       <div className='hidden lg:block'>
-        <div className=' grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 '>
-      {faqs.map((faq, index) => (
-         <div key={index} className=" border-t border-[#0010321A] py-4 ">
-          <div
-            className="flex justify-between items-center cursor-pointer p-4"
-            onClick={() => toggleFAQ(index)}
-          >
-            <h2 className="text-[13px]  text-[#001032B5]">{faq.question}</h2>
-            <svg
-              className={`w-4 h-4 transform ${
-                activeIndex === index ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"                      
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </div>
-          {activeIndex === index && (
-            <div className="mt-2 px-4">
-              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
-            </div>
-          )}
-        </div>
-      
-      ))}
-       </div>
+  return (
+    <div className="w-full mx-auto py-6 pb-10 lg:py-10">
+      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0">
+        <h1 className="text-3xl mb-4 text-[#001032] lg:hidden">Here’s what service professionals usually ask</h1>
+        <h1 className="text-3xl mb-4 text-[#001032] hidden lg:block">FAQ</h1>
+        <h1 className="text-md mb-6 text-[#001032] hidden lg:block">Trust & Safety</h1>
 
-       </div>
-       <div className='lg:hidden'>
-        <div className=' grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 '>
-      {faqs2.map((faq, index) => (
-         <div key={index} className=" border-t border-[#0010321A] py-4 ">
-          <div
-            className="flex justify-between items-center cursor-pointer p-4"
-            onClick={() => toggleFAQ(index)}
-          >
-            <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
-            <svg
-              className={`w-4 h-4 transform ${
-                activeIndex === index ? "rotate-180" : ""
-              }`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"                      
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
+        {/* DESKTOP FAQ */}
+        <div className="hidden lg:block">
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10">
+            {faqs.map((faq, index) => (
+              <div key={index} className="border-t border-[#0010321A] py-4">
+                <div
+                  className="flex justify-between items-center cursor-pointer p-4"
+                  onClick={() => toggleFAQ(index)}
+                >
+                  <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
+                  <svg
+                    className={`w-4 h-4 transform transition-transform duration-200 ${activeIndex === index ? "rotate-180" : ""
+                      }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                {activeIndex === index && (
+                  <div className="mt-2 px-4">
+                    <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-          {activeIndex === index && (
-            <div className="mt-2 px-4">
-              <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
-            </div>
-          )}
         </div>
-      
-      ))}
-       </div>
-   <hr />
-       </div>
+
+        {/* MOBILE FAQ */}
+        <div className="lg:hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10">
+            {faqs2.map((faq, index) => (
+              <div key={index} className="border-t border-[#0010321A] py-4">
+                <div
+                  className="flex justify-between items-center cursor-pointer p-4"
+                  onClick={() => toggleFAQ(index)}
+                >
+                  <h2 className="text-[13px] text-[#001032B5]">{faq.question}</h2>
+                  <svg
+                    className={`w-4 h-4 transform transition-transform duration-200 ${activeIndex === index ? "rotate-180" : ""
+                      }`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                {activeIndex === index && (
+                  <div className="mt-2 px-4">
+                    <p className="text-gray-600 text-[13px] pr-4">{faq.answer}</p>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+          <hr />
+        </div>
+      </div>
     </div>
-   );
-}
+  );
+};
 
 export default ServiceProfessionalSec10

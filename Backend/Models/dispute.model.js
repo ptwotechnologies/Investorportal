@@ -45,6 +45,14 @@ const disputeSchema = new mongoose.Schema(
         },
       },
     ],
+    isReadByStartup: {
+      type: Boolean,
+      default: true,
+    },
+    isReadByProfessional: {
+      type: Boolean,
+      default: true,
+    },
   },
   { timestamps: true }
 );
