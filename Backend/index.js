@@ -22,10 +22,23 @@ import disputeRoutes from './Routes/dispute.routes.js';
 const app = express();
 
 // Middlewares
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://copteno.com",
+  "https://www.copteno.com"
+];
+
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+  optionsSuccessStatus: 200
 }));
 
 app.use(express.json());
@@ -44,6 +57,11 @@ app.use(
 
 // Database connection middleware
 app.use(async (req, res, next) => {
+  // Skip DB connection for OPTIONS requests
+  if (req.method === "OPTIONS") {
+    return next();
+  }
+
   try {
     await connectDB();
     next();
