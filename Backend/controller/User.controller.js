@@ -27,10 +27,24 @@ export const createUser = async (req, res) => {
       }
     }
 
-    // 2. Check if email already exists in User collection
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    // 2. Check if email or phone already exists in User collection
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      // If onboarding is incomplete, allow them to resume
+      if (existingEmail.registrationStep < 4) {
+        return res.status(200).json({ 
+          message: "Resuming your registration...", 
+          userId: existingEmail._id,
+          registrationStep: existingEmail.registrationStep,
+          isResuming: true 
+        });
+      }
       return res.status(400).json({ message: "Email already registered" });
+    }
+
+    const existingPhone = await User.findOne({ "businessDetails.number": businessDetails.number });
+    if (existingPhone) {
+      return res.status(400).json({ message: "Mobile number already registered" });
     }
 
     // 3. Hash password
@@ -93,14 +107,15 @@ export const createUser = async (req, res) => {
 export const updateAdditionalDetails = async (req, res) => {
   try {
     const { userId, additionalDetails } = req.body;
-
     if (!userId || !additionalDetails) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     // Find user
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     if (user.role === "service_professional") {
       if (user.businessDetails && user.businessDetails.serviceType === "Company") {
@@ -283,7 +298,10 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    if (user.paymentStatus !== "approved") {
+    // Allow login if onboarding is not complete OR if payment is approved
+    if (user.registrationStep < 4) {
+       // Allow them to login to finish onboarding
+    } else if (user.paymentStatus !== "approved") {
       return res.status(403).json({
         message: "Please complete all signup steps and wait for admin approval to login.",
       });

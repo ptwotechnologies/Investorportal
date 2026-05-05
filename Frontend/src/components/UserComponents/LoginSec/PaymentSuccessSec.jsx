@@ -14,10 +14,12 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import { SpinnerButton } from "./StatusSpinner";
+import { useRegistration } from "@/context/RegistrationContext";
 
 const PaymentSuccessSec = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { clearRegistrationData } = useRegistration();
   const isFreePlan = location.state?.isFreePlan === true;
 
   const [paymentStatus, setPaymentStatus] = useState("pending");
@@ -46,6 +48,8 @@ const PaymentSuccessSec = () => {
       console.log("API response:", res.data);
 
       const status = res.data?.paymentStatus?.toLowerCase() || "pending";
+      // Removed security guards to prevent unwanted redirects
+      
       setPaymentStatus(status);
       setLoading(status !== "approved");
     } catch (err) {
@@ -159,10 +163,10 @@ const PaymentSuccessSec = () => {
                     to="/login"
                     className="w-full"
                     onClick={() => {
-                      // ⭐ Clear auth token so login page doesn't auto-redirect
+                      // ⭐ Clear all registration data and drafts
+                      clearRegistrationData();
+                      // Clear auth token so login page doesn't auto-redirect
                       localStorage.removeItem("token");
-                      localStorage.removeItem("userId");
-                      localStorage.removeItem("role");
                     }}
                   >
                     <Button className="w-full bg-[#001032]">

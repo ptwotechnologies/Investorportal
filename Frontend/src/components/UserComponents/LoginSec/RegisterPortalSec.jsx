@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect, useRef } from "react";
 import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
@@ -31,78 +31,106 @@ import {
 
 import { serverUrl } from "@/App";
 import toast from "react-hot-toast";
+import { useRegistration } from "@/context/RegistrationContext";
 
 const RegisterPortalSec = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // Role comes from SelectPortal; default to what was chosen or investor
-  const role = location.state?.role || localStorage.getItem("role") || "investor";
+  const { formData, updateFormData, verificationStatus, updateVerificationStatus } = useRegistration();
+
+  // Role comes from Context or Location state
+  const role = verificationStatus.role || location.state?.role || "investor";
 
   const investorTabs = ["Venture Capitalist", "Angel Investor", "Venture Firm"];
   const serviceTabs = ["Freelancer", "Company"];
 
   const defaultTab = role === "service_professional" ? serviceTabs[0] : investorTabs[0];
-  const [activeTab, setActiveTab] = useState(defaultTab);
+  const [activeTab, setActiveTab] = useState(formData.businessType || defaultTab);
   const isStartup = role === "startup";
 
-  const [email, setEmail] = useState("");
+  // ðŸ”¹ Local state for non-persisted/UI-only data
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [mobile, setMobile] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [website, setWebsite] = useState("");
-  const [optionalWebsite, setOptionalWebsite] = useState("");
-  const [firmName, setFirmName] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [businessType, setBusinessType] = useState(activeTab);
   const [otp, setOtp] = useState("");
   const [otpSent, setOtpSent] = useState(false);
-  const [phoneVerified, setPhoneVerified] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
-  const [pendingUserId, setPendingUserId] = useState(null);
-  const [isVerified, setIsVerified] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // ðŸ”¹ Destructure persisted data from Context
+  const { 
+    email, mobile, firstName, lastName, website, optionalWebsite, 
+    firmName, companyName, businessType 
+  } = formData;
+
+  const { emailVerified, phoneVerified, userId } = verificationStatus;
+  // Derive whether to show the success card
+  const showSuccessCard = userId && !emailVerified;
+
+  // ðŸ”¹ Helper to update context fields easily
+  const handleChange = (field, value) => {
+    updateFormData({ [field]: value });
+  };
+
+  // ðŸ”¹ AUTO-RESUME: Check if user is already verified on mount
+  useEffect(() => {
+    const checkExistingVerification = async () => {
+      const storedUserId = userId || localStorage.getItem("userId");
+      if (!storedUserId) return;
+
+      try {
+        const response = await axios.post(`${serverUrl}/user/check-verification`, {
+          userId: storedUserId
+        });
+
+        if (response.data.verified) {
+          updateVerificationStatus({ 
+            emailVerified: true, 
+            userId: response.data.userId, 
+            role: response.data.role, 
+            serviceType: response.data.serviceType
+          });
+          // If already verified, jump to next step
+          navigate("/portaldetails", { 
+            state: { userId: storedUserId, role: response.data.role, serviceType: response.data.serviceType } 
+          });
+        }
+      } catch (error) {
+        console.error("Auto-resume check failed:", error);
+      }
+    };
+
+    checkExistingVerification();
+  }, []);
+
+
 
   useEffect(() => {
     let interval;
-    if (isSubmitted && pendingUserId && !isVerified) {
+    if (showSuccessCard && userId && !emailVerified) {
       interval = setInterval(async () => {
         try {
           const response = await axios.post(`${serverUrl}/user/check-verification`, {
-            userId: pendingUserId
+            userId: userId
           });
 
           if (response.data.verified) {
-            setIsVerified(true);
             const { token, userId: newUserId, role: newRole, serviceType: newServiceType, paymentStatus } = response.data;
             
-            // Removed auto-login token to prevent Navbar showing "Dashboard" during onboarding
-            // localStorage.setItem("token", token);
+            updateVerificationStatus({ 
+              emailVerified: true,
+              userId: newUserId,
+              role: newRole,
+              serviceType: newServiceType
+            });
+            
             localStorage.setItem("userId", newUserId);
             localStorage.setItem("paymentStatus", paymentStatus || "not_paid");
-            localStorage.setItem(
-              "user",
-              JSON.stringify({
-                userId: newUserId,
-                role: newRole,
-                paymentStatus: paymentStatus || "not_paid",
-              })
-            );
-            if (newRole) localStorage.setItem("role", newRole);
-            if (newServiceType) localStorage.setItem("serviceType", newServiceType);
-
+            
             toast.success("Email verified! Redirecting...");
             
-            // Wait 2 seconds so user sees the success
             setTimeout(() => {
               navigate("/portaldetails", { 
-                state: { 
-                  userId: newUserId, 
-                  role: newRole, 
-                  serviceType: newServiceType 
-                } 
+                state: { userId: newUserId, role: newRole, serviceType: newServiceType } 
               });
             }, 2000);
           }
@@ -112,7 +140,7 @@ const RegisterPortalSec = () => {
       }, 5000);
     }
     return () => clearInterval(interval);
-  }, [isSubmitted, pendingUserId, isVerified, navigate]);
+  }, [showSuccessCard, userId, emailVerified, navigate]);
 
   const tabs = role === "service_professional" ? serviceTabs.map((t)=>({id:t,label:t})) : investorTabs.map((t) => ({ id: t, label: t }));
 
@@ -137,6 +165,12 @@ const RegisterPortalSec = () => {
 
     if (!phoneVerified) {
       toast.error("Please verify your phone number first.");
+      return;
+    }
+
+    // If already verified (went back), just go to next step
+    if (emailVerified && phoneVerified && userId) {
+      navigate("/portaldetails");
       return;
     }
 
@@ -208,18 +242,37 @@ const RegisterPortalSec = () => {
 
       const response = await axios.post(`${serverUrl}/user/signup`, payload);
 
-      if (response.status === 201) {
-        // Save userId to localStorage for later use
+      if (response.status === 201 || (response.status === 200 && response.data.isResuming)) {
         const signupUserId = response.data.userId;
         localStorage.setItem("userId", signupUserId);
-        setPendingUserId(signupUserId);
+        
+        const updateData = { userId: signupUserId };
+        if (response.data.isResuming) {
+          updateData.emailVerified = true;
+          updateData.phoneVerified = true; 
+          toast.success("Welcome back! Continuing your registration...");
+        } else {
+          toast.success("Success! Please check your email for the verification link.");
+        }
+        
+        updateVerificationStatus(updateData);
 
-        setIsSubmitted(true);
-        toast.success("Success! Please check your email for the verification link.");
+        // ⭐ Fix: Auto-navigate immediately on resume so user doesn't have to click twice
+        if (response.data.isResuming) {
+          const step = response.data.registrationStep;
+          if (step === 3) {
+            navigate("/onboardingplans");
+          } else {
+            navigate("/portaldetails");
+          }
+        }
       } else {
-        console.error("Unexpected response:", response);
-        toast.error("Something went wrong. Please try again.");
+        toast.error(response.data.message || "Something went wrong.");
       }
+    } catch (error) {
+      console.error("Signup error:", error);
+      const errorMsg = error.response?.data?.message || "Failed to signup. Please try again.";
+      toast.error(errorMsg);
     } finally {
       setIsSubmitting(false);
     }
@@ -261,12 +314,11 @@ const RegisterPortalSec = () => {
 
 const handleVerifyOtp = async () => {
   try {
-
     const user = await verifyOtp(otp);
 
     console.log(user);
 
-    setPhoneVerified(true);
+    updateVerificationStatus({ phoneVerified: true });
 
     toast.success("Phone number verified");
 
@@ -276,12 +328,12 @@ const handleVerifyOtp = async () => {
   }
 };
 
-  if (isSubmitted) {
+  if (showSuccessCard) {
     return (
       <div className="flex justify-center items-center lg:min-h-screen p-4">
         <Card className="w-full max-w-md p-8 text-center shadow-lg">
-          <div className={`w-20 h-20 ${isVerified ? 'bg-green-50' : 'bg-blue-50'} rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-500`}>
-            {isVerified ? (
+          <div className={`w-20 h-20 ${emailVerified ? 'bg-green-50' : 'bg-blue-50'} rounded-full flex items-center justify-center mx-auto mb-6 transition-colors duration-500`}>
+            {emailVerified ? (
               <svg className="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
               </svg>
@@ -292,21 +344,31 @@ const handleVerifyOtp = async () => {
             )}
           </div>
           <h2 className="text-2xl font-bold text-[#001032] mb-4">
-            {isVerified ? "Email Verified!" : "Check your email"}
+            {emailVerified ? "Email Verified!" : "Check your email"}
           </h2>
           <p className="text-gray-600 mb-8">
-            {isVerified 
+            {emailVerified 
               ? "Your email has been successfully verified. We're redirecting you now..." 
               : <>We've sent a verification link to <span className="font-semibold">{email}</span>. Please click the link in the email to activate your account.</>}
           </p>
           <div className="space-y-4">
-            {!isVerified && (
-              <Button 
-                className="w-full bg-[#001032]"
-                onClick={() => window.location.reload()}
-              >
-                Back to Registration
-              </Button>
+            <Button 
+              className="w-full bg-[#001032]"
+              onClick={() => {
+                if (emailVerified) {
+                  navigate("/portaldetails");
+                } else {
+                  toast.error("Please verify your email first.");
+                }
+              }}
+            >
+              Continue
+            </Button>
+            
+            {!emailVerified && (
+              <p className="text-xs text-gray-400 mt-4">
+                Didn't get the email? Check your spam folder or try signing up again.
+              </p>
             )}
           </div>
         </Card>
@@ -330,7 +392,7 @@ const handleVerifyOtp = async () => {
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.
+                Terms, Privacy Disclosures Cookie Settings Â© Copteno Technologies Pvt. Ltd.
               </p>
             </div>
           </div>
@@ -358,7 +420,7 @@ const handleVerifyOtp = async () => {
                       type="text"
                       placeholder="First Name"
                       value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
+                      onChange={(e) => handleChange("firstName", e.target.value)}
                       required
                       className="p-5  text-[#00103280]"
                     />
@@ -367,7 +429,7 @@ const handleVerifyOtp = async () => {
                       type="text"
                       placeholder="Last Name (Optional)"
                       value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
+                      onChange={(e) => handleChange("lastName", e.target.value)}
                       className="p-5  text-[#00103280]"
                     />
                     </div>
@@ -376,7 +438,7 @@ const handleVerifyOtp = async () => {
                       type="email"
                       placeholder="Email "
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => handleChange("email", e.target.value)}
                       required
                       className="p-5  text-[#00103280]"
                     />
@@ -404,7 +466,7 @@ const handleVerifyOtp = async () => {
                         type="text"
                         placeholder="Mobile Number"
                         value={mobile}
-                        onChange={(e) => setMobile(e.target.value)}
+                        onChange={(e) => handleChange("mobile", e.target.value)}
                         required
                         disabled={phoneVerified}
                         className="p-5  text-[#00103280] flex-1"
@@ -424,7 +486,7 @@ const handleVerifyOtp = async () => {
 
                     {otpSent && !phoneVerified && (
                       <div className="flex flex-col items-center gap-3 p-2 border border-[#0010321A] rounded-md">
-                        <p className="text-sm  text-[#001032]">Enter OTP</p>
+                        <p className="text-sm  text-[#001032]">Enter OTP</p> 
                         <InputOTP maxLength={6} value={otp} onChange={(value) => setOtp(value)}>
                           <InputOTPGroup>
                             <InputOTPSlot index={0} />
@@ -449,7 +511,7 @@ const handleVerifyOtp = async () => {
                     )}
 
                     {phoneVerified && (
-                      <p className="text-green-600 text-sm  text-left">✓ Phone number verified</p>
+                      <p className="text-green-600 text-sm  text-left"> Phone number verified</p>
                     )}
 
                     {/* Role-specific field: for startup show Company Name input, otherwise show dropdown */}
@@ -460,7 +522,7 @@ const handleVerifyOtp = async () => {
                           type="text"
                           placeholder="Company Name"
                           value={companyName}
-                          onChange={(e) => setCompanyName(e.target.value)}
+                          onChange={(e) => handleChange("companyName", e.target.value)}
                           required
                           className="p-5  text-[#00103280]"
                         />
@@ -469,7 +531,7 @@ const handleVerifyOtp = async () => {
                           type="text"
                           placeholder="Website"
                           value={website}
-                          onChange={(e) => setWebsite(e.target.value)}
+                          onChange={(e) => handleChange("website", e.target.value)}
                           required
                           className="p-5  text-[#00103280]"
                         />
@@ -500,7 +562,7 @@ const handleVerifyOtp = async () => {
                               key={tab.id}
                               onClick={() => {
                                 setActiveTab(tab.label);
-                                setBusinessType(tab.label);
+                                handleChange("businessType", tab.label);
                               }}
                               className="text-[#00103280] text-md px-5 py-2"
                             >
@@ -521,7 +583,7 @@ const handleVerifyOtp = async () => {
                               type="text"
                               placeholder="Firm Name"
                               value={firmName}
-                              onChange={(e) => setFirmName(e.target.value)}
+                              onChange={(e) => handleChange("firmName", e.target.value)}
                               required
                               className="p-5  text-[#00103280]"
                             />
@@ -530,7 +592,7 @@ const handleVerifyOtp = async () => {
                               type="text"
                               placeholder="Website"
                               value={website}
-                              onChange={(e) => setWebsite(e.target.value)}
+                              onChange={(e) => handleChange("website", e.target.value)}
                               required
                               className="p-5  text-[#00103280]"
                             />
@@ -541,7 +603,7 @@ const handleVerifyOtp = async () => {
                             type="text"
                             placeholder="Website (if any)"
                             value={optionalWebsite}
-                            onChange={(e) => setOptionalWebsite(e.target.value)}
+                            onChange={(e) => handleChange("optionalWebsite", e.target.value)}
                             className="p-5  text-[#00103280]"
                           />
                         )}
@@ -557,7 +619,7 @@ const handleVerifyOtp = async () => {
                               type="text"
                               placeholder="Company Name"
                               value={companyName}
-                              onChange={(e) => setCompanyName(e.target.value)}
+                              onChange={(e) => handleChange("companyName", e.target.value)}
                               required
                               className="p-5  text-[#00103280]"
                             />
@@ -566,7 +628,7 @@ const handleVerifyOtp = async () => {
                               type="text"
                               placeholder="Website"
                               value={website}
-                              onChange={(e) => setWebsite(e.target.value)}
+                              onChange={(e) => handleChange("website", e.target.value)}
                               required
                               className="p-5  text-[#00103280]"
                             />
@@ -577,7 +639,7 @@ const handleVerifyOtp = async () => {
                             type="text"
                             placeholder="Website (if any)"
                             value={optionalWebsite}
-                            onChange={(e) => setOptionalWebsite(e.target.value)}
+                            onChange={(e) => handleChange("optionalWebsite", e.target.value)}
                             className="p-5  text-[#00103280]"
                           />
                         )}

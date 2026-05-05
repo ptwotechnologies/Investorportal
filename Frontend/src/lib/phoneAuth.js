@@ -46,7 +46,6 @@ export const sendOtp = async (phone) => {
 
 // verify OTP
 export const verifyOtp = async (otp) => {
-
   const result = await window.confirmationResult.confirm(otp);
 
   return result.user;

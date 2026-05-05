@@ -25,35 +25,32 @@ import {
 import Calendar2 from "./Calendar2";
 import { serverUrl } from "@/App";
 import toast from "react-hot-toast";
+import { useRegistration } from "@/context/RegistrationContext";
 
 const PortalDetailsSec = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [userId, setUserId] = useState(location.state?.userId || null);
-  // Role from registration (can be investor or service_professional)
-  const role = location.state?.role || localStorage.getItem("role");
-  // service type passed from registration: "Freelancer" or "Company"
-  const serviceType = location.state?.serviceType || localStorage.getItem("serviceType");
-  
+  const { formData, updateFormData, verificationStatus } = useRegistration();
 
-  // Form values
-  const [linkedin, setLinkedin] = useState("");
-  const [foundedOn, setFoundedOn] = useState(null);
-  const [domain, setDomain] = useState(" Domain");
-  const [domainDescription, setDomainDescription] = useState("");
-  const [referralCode, setReferralCode] = useState("");
+  const userId = verificationStatus.userId;
+  const role = verificationStatus.role || localStorage.getItem("role");
+  const serviceType = verificationStatus.serviceType || localStorage.getItem("serviceType");
+
+  // ðŸ”¹ Destructure persisted data from Context
+  const { 
+    linkedin, foundedOn, domain, domainDescription, referralCode,
+    startupBusinessType, serviceBusinessType, uploadedUrl
+  } = formData;
+
   const [logoFile, setLogoFile] = useState(null);
-  // Startup-specific business type selection (shown instead of LinkedIn)
-  const [startupBusinessType, setStartupBusinessType] = useState(" Business Type");
-  const startupBusinessOptions = ["Manufacturing", "Trading", "Service Based","Other"];
-  // Service-professional company business type (replaces LinkedIn for companies)
-  const [serviceBusinessType, setServiceBusinessType] = useState(" Business Type");
-  const serviceBusinessOptions = ["Manufacturing", "Trading", "Service Based","Other"];
-
-  // 🔹 New R2 states
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadedUrl, setUploadedUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+
+  // ðŸ”¹ Helper to update context fields easily
+  const handleChange = (field, value) => {
+    updateFormData({ [field]: value });
+  };
+
 
   // Maximum logo / file size in bytes (10MB)
   const MAX_LOGO_SIZE = 10 * 1024 * 1024;
@@ -69,7 +66,7 @@ const PortalDetailsSec = () => {
     }
 
     setLogoFile(file);
-    setUploadedUrl(""); 
+    handleChange("uploadedUrl", ""); 
     
     // Auto upload
     await uploadFileToCloud(null, file);
@@ -89,7 +86,7 @@ const PortalDetailsSec = () => {
       const res = await axios.post(`${serverUrl}/user/portal-upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setUploadedUrl(res.data.fileUrl);
+      handleChange("uploadedUrl", res.data.fileUrl);
       toast.success("File uploaded successfully");
     } catch (error) {
       console.error("Upload error:", error);
@@ -98,20 +95,15 @@ const PortalDetailsSec = () => {
       setIsUploading(false);
     }
   };
+  
   // control which fields to show (investor, service professionals, startup)
   const showPortalFields = role === "investor" || role === "service_professional" || role === "startup";
 
 
-  // (Non-investor fields removed — this flow is investor-only for now)  
-  const domainOptions = ["Technology", "Legal & Compliance", "Marketing", "Designing", "Development","Advisory ","CXO","HR","Finance","Consultation","Other"];
+  const domainOptions = ["Technology", "Legal & Compliance", "Marketing", "Designing", "Development", "Other"];
+  const serviceBusinessOptions = ["Manufacturing", "Trading", "Service Based"];
+  const startupBusinessOptions = ["Manufacturing", "Trading", "Service Based"];
 
-  // Retrieve userId from localStorage if missing
-  useEffect(() => {
-    if (!userId) {
-      const storedUserId = localStorage.getItem("userId");
-      if (storedUserId) setUserId(storedUserId);
-    }
-  }, [userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -142,11 +134,11 @@ const PortalDetailsSec = () => {
             toast.error("Please select founding date");
             return;
           }
-          if (serviceBusinessType === "Select Business Type") {
+          if (serviceBusinessType === "Select Business Type" || serviceBusinessType === " Business Type") {
             toast.error("Please select a business type");
             return;
           }
-          if (domain === "Select Domain" || domain === " Domain") {
+          if (domain === "Domain") {
            toast.error("Please select a domain");
             return;
           }
@@ -174,7 +166,7 @@ const PortalDetailsSec = () => {
          toast.error("Please select founding date");
           return;
         }
-        if (startupBusinessType === "Select Business Type") {
+        if (startupBusinessType === "Select Business Type" || startupBusinessType === " Business Type") {
          toast.error("Please select a business type");
           return;
         }
@@ -216,24 +208,26 @@ const PortalDetailsSec = () => {
 
       const additionalDetails = {
         linkedinProfile: linkedinProfileArr,
-        foundedon: foundedOn ? foundedOn.toISOString().split("T")[0] : null,
+        foundedon: foundedOn instanceof Date ? foundedOn.toISOString().split("T")[0] : (foundedOn ? foundedOn.split("T")[0] : null),
         domain: (domain === "Select Domain" || domain === " Domain") ? null : domain,
         domainDescription: domain === "Other" ? domainDescription : null,
         referralCode: referralCode || null,
         profileFileName: role === "startup" ? null : (logoFile ? logoFile.name : null),
         pitchDeckFileName: role === "startup" ? (logoFile ? logoFile.name : null) : null,
-        profileUrl: role === "startup" ? "" : uploadedUrl, // 🔹 Added for R2
-        pitchDeckUrl: role === "startup" ? uploadedUrl : "", // 🔹 Added for R2
-        startupBusinessType: role === "startup" ? (startupBusinessType === "Select Business Type" ? null : startupBusinessType) : null,
-        serviceBusinessType: role === "service_professional" && serviceType === "Company" ? (serviceBusinessType === "Select Business Type" ? null : serviceBusinessType) : null,
+        profileUrl: role === "startup" ? "" : uploadedUrl, // ðŸ”¹ Added for R2
+        pitchDeckUrl: role === "startup" ? uploadedUrl : "", // ðŸ”¹ Added for R2
+        startupBusinessType: role === "startup" ? (startupBusinessType === "Select Business Type" || startupBusinessType === " Business Type" ? null : startupBusinessType) : null,
+        serviceBusinessType: role === "service_professional" && serviceType === "Company" ? (serviceBusinessType === "Select Business Type" || serviceBusinessType === " Business Type" ? null : serviceBusinessType) : null,
       };
 
-    const payload = {
+      const payload = {
         userId,
         additionalDetails,
         registrationStep: 2,
       };
 
+      console.log("DEBUG [FRONTEND]: Submitting details for userId:", userId);
+      console.log("DEBUG [FRONTEND]: Full URL:", `${serverUrl}/user/additional-details`);
       const response = await axios.put(`${serverUrl}/user/additional-details`, payload);
 
       if (response.status === 200) {
@@ -268,13 +262,13 @@ const PortalDetailsSec = () => {
               onClick={(e) => { 
                 e.preventDefault(); 
                 setLogoFile(null); 
-                setUploadedUrl(""); 
+                handleChange("uploadedUrl", ""); 
                 document.getElementById(`logoInput_${label.replace(/\s+/g, '')}`).value = ''; 
               }} 
               className="absolute top-2 right-2 text-white bg-red-400 hover:bg-red-600 font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-sm cursor-pointer z-10"
               title="Remove File"
             >
-              ✕
+              X
             </button>
             <img 
               src={logoFile.type.includes("image") ? URL.createObjectURL(logoFile) : logoIcon} 
@@ -310,7 +304,7 @@ const PortalDetailsSec = () => {
             </div>
             <div>
               <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.
+                Terms, Privacy Disclosures Cookie Settings Â© Copteno Technologies Pvt. Ltd.
               </p>
             </div>
           </div>
@@ -351,7 +345,7 @@ const PortalDetailsSec = () => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
                                   {domainOptions.map((item) => (
-                                    <DropdownMenuItem key={item} onClick={() => setDomain(item)}>
+                                    <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                       {item}
                                     </DropdownMenuItem>
                                   ))}
@@ -364,7 +358,7 @@ const PortalDetailsSec = () => {
                                   type="text"
                                   placeholder="Describe your domain"
                                   value={domainDescription}
-                                  onChange={(e) => setDomainDescription(e.target.value)}
+                                  onChange={(e) => handleChange("domainDescription", e.target.value)}
                                   className="p-5  text-[#00103280]"
                                   required
                                 />
@@ -375,7 +369,7 @@ const PortalDetailsSec = () => {
                                 type="text"
                                 placeholder="Referral Code (optional)"
                                 value={referralCode}
-                                onChange={(e) => setReferralCode(e.target.value)}
+                                onChange={(e) => handleChange("referralCode", e.target.value)}
                                 className="p-5  text-[#00103280]"
                               />
 
@@ -386,7 +380,7 @@ const PortalDetailsSec = () => {
                             <>
                               {/* Company: founding date */}
                               <div>
-                                <Calendar2 onChange={(date) => setFoundedOn(date)} />
+                                <Calendar2 initialDate={foundedOn} onChange={(date) => handleChange("foundedOn", date)} />
                               </div>
 
                               {/* Company business type instead of LinkedIn */}
@@ -399,7 +393,7 @@ const PortalDetailsSec = () => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
                                   {serviceBusinessOptions.map((item) => (
-                                    <DropdownMenuItem key={item} onClick={() => setServiceBusinessType(item)}>
+                                    <DropdownMenuItem key={item} onClick={() => handleChange("serviceBusinessType", item)}>
                                       {item}
                                     </DropdownMenuItem>
                                   ))}
@@ -416,7 +410,7 @@ const PortalDetailsSec = () => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
                                   {domainOptions.map((item) => (
-                                    <DropdownMenuItem key={item} onClick={() => setDomain(item)}>
+                                    <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                       {item}
                                     </DropdownMenuItem>
                                   ))}
@@ -429,7 +423,7 @@ const PortalDetailsSec = () => {
                                   type="text"
                                   placeholder="Describe your domain"
                                   value={domainDescription}
-                                  onChange={(e) => setDomainDescription(e.target.value)}
+                                  onChange={(e) => handleChange("domainDescription", e.target.value)}
                                   className="p-5  text-[#00103280]"
                                   required
                                 />
@@ -440,7 +434,7 @@ const PortalDetailsSec = () => {
                                 type="text"
                                 placeholder="Referral Code (optional)"
                                 value={referralCode}
-                                onChange={(e) => setReferralCode(e.target.value)}
+                                onChange={(e) => handleChange("referralCode", e.target.value)}
                                 className="p-5  text-[#00103280]"
                               />
 
@@ -453,7 +447,7 @@ const PortalDetailsSec = () => {
                                 type="text"
                                 placeholder="LinkedIn Profile"
                                 value={linkedin}
-                                onChange={(e) => setLinkedin(e.target.value)}
+                                onChange={(e) => handleChange("linkedin", e.target.value)}
                                 className="p-5  text-[#00103280]"
                                 required
                               />
@@ -466,7 +460,7 @@ const PortalDetailsSec = () => {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
                                   {domainOptions.map((item) => (
-                                    <DropdownMenuItem key={item} onClick={() => setDomain(item)}>
+                                    <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                       {item}
                                     </DropdownMenuItem>
                                   ))}
@@ -477,7 +471,7 @@ const PortalDetailsSec = () => {
                                   type="text"
                                   placeholder="Describe your domain"
                                   value={domainDescription}
-                                  onChange={(e) => setDomainDescription(e.target.value)}
+                                  onChange={(e) => handleChange("domainDescription", e.target.value)}
                                   className="p-5  text-[#00103280]"
                                   required
                                 />
@@ -486,7 +480,7 @@ const PortalDetailsSec = () => {
                                 type="text"
                                 placeholder="Referral Code (optional)"
                                 value={referralCode}
-                                onChange={(e) => setReferralCode(e.target.value)}
+                                onChange={(e) => handleChange("referralCode", e.target.value)}
                                 className="p-5  text-[#00103280]"
                               />
                               {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
@@ -495,7 +489,7 @@ const PortalDetailsSec = () => {
                         ) : role === "startup" ? (
                           <>
                             <div>
-                              <Calendar2 onChange={(date) => setFoundedOn(date)} />
+                              <Calendar2 initialDate={foundedOn} onChange={(date) => handleChange("foundedOn", date)} />
                             </div>
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
@@ -506,7 +500,7 @@ const PortalDetailsSec = () => {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent className="mt-2 w-[87vw] lg:w-[39.5vw] bg-white rounded-md shadow-sm ">
                                 {startupBusinessOptions.map((item) => (
-                                  <DropdownMenuItem key={item} onClick={() => setStartupBusinessType(item)}>
+                                  <DropdownMenuItem key={item} onClick={() => handleChange("startupBusinessType", item)}>
                                     {item}
                                   </DropdownMenuItem>
                                 ))}
@@ -522,7 +516,7 @@ const PortalDetailsSec = () => {
                               </DropdownMenuTrigger>
                               <DropdownMenuContent className="mt-2 w-[87vw] lg:w-[39.5vw] bg-white rounded-md shadow-sm">
                                 {domainOptions.map((item) => (
-                                  <DropdownMenuItem key={item} onClick={() => setDomain(item)}>
+                                  <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                     {item}
                                   </DropdownMenuItem>
                                 ))}
@@ -534,7 +528,7 @@ const PortalDetailsSec = () => {
                                 type="text"
                                 placeholder="Describe your domain"
                                 value={domainDescription}
-                                onChange={(e) => setDomainDescription(e.target.value)}
+                                onChange={(e) => handleChange("domainDescription", e.target.value)}
                                 className="p-5 text-[#00103280]"
                                 required
                               />
@@ -544,7 +538,7 @@ const PortalDetailsSec = () => {
                               type="text"
                               placeholder="Referral Code (optional)"
                               value={referralCode}
-                              onChange={(e) => setReferralCode(e.target.value)}
+                              onChange={(e) => handleChange("referralCode", e.target.value)}
                               className="p-5  text-[#00103280]"
                             />
 
@@ -556,7 +550,7 @@ const PortalDetailsSec = () => {
                               type="text"
                               placeholder="LinkedIn Profile"
                               value={linkedin}
-                              onChange={(e) => setLinkedin(e.target.value)}
+                              onChange={(e) => handleChange("linkedin", e.target.value)}
                               className="p-5  text-[#00103280]"
                               required
                             />
@@ -564,7 +558,7 @@ const PortalDetailsSec = () => {
                               type="text"
                               placeholder="Referral Code (optional)"
                               value={referralCode}
-                              onChange={(e) => setReferralCode(e.target.value)}
+                              onChange={(e) => handleChange("referralCode", e.target.value)}
                               className="p-5  text-[#00103280]"
                             />
                           </>

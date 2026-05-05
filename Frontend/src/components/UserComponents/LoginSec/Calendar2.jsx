@@ -18,11 +18,20 @@ function isValidDate(date) {
   return date instanceof Date && !isNaN(date.getTime());
 }
 
-const Calendar2 = ({ onChange }) => {
+const Calendar2 = ({ initialDate, onChange }) => {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState(null); // default null
-  const [month, setMonth] = React.useState(new Date());
-  const [value, setValue] = React.useState("");
+  const [date, setDate] = React.useState(initialDate ? (initialDate instanceof Date ? initialDate : new Date(initialDate)) : null);
+  const [month, setMonth] = React.useState(initialDate ? (initialDate instanceof Date ? initialDate : new Date(initialDate)) : new Date());
+  const [value, setValue] = React.useState(initialDate ? formatDate(initialDate instanceof Date ? initialDate : new Date(initialDate)) : "");
+
+  React.useEffect(() => {
+    if (initialDate) {
+      const d = initialDate instanceof Date ? initialDate : new Date(initialDate);
+      setDate(d);
+      setMonth(d);
+      setValue(formatDate(d));
+    }
+  }, [initialDate]);
 
   return (
     <div className="flex flex-col gap-3">

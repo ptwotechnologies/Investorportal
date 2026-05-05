@@ -104,7 +104,7 @@ const VerifyEmailLink = () => {
               onClick={() => navigate("/registerportal")}
               className="mt-6 w-full bg-[#001032] text-white py-2 rounded-md hover:bg-opacity-90 transition"
             >
-              Continue 
+              Back to Sign Up
             </button>
           </>
         )}

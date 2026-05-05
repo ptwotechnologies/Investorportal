@@ -42,10 +42,19 @@ const LogicSec1 = () => {
       if (response.data.message === "Login successful") {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("userId", response.data.userId); // Ensure userId is saved
         localStorage.setItem("paymentStatus", response.data.user.paymentStatus || "not_paid");
         toast.success("Login successful!");
-        // Redirect user after login
-        navigate("/dashboard"); // apne project ka route
+        
+        // Redirect user based on registrationStep
+        const step = response.data.registrationStep;
+        if (step === 2) {
+          navigate("/portaldetails");
+        } else if (step === 3) {
+          navigate("/onboardingplans");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
         toast.error(response.data.message);
       }
