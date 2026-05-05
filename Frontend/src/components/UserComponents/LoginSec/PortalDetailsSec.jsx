@@ -58,7 +58,7 @@ const PortalDetailsSec = () => {
   // Maximum logo / file size in bytes (10MB)
   const MAX_LOGO_SIZE = 10 * 1024 * 1024;
   
-  const handleFileSelect = (e) => {
+  const handleFileSelect = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -70,15 +70,19 @@ const PortalDetailsSec = () => {
 
     setLogoFile(file);
     setUploadedUrl(""); 
+    
+    // Auto upload
+    await uploadFileToCloud(null, file);
   };
 
-  const uploadFileToCloud = async (e) => {
+  const uploadFileToCloud = async (e, directFile = null) => {
     if (e) e.preventDefault();
-    if (!logoFile) return;
+    const fileToUpload = directFile || logoFile;
+    if (!fileToUpload) return;
 
     setIsUploading(true);
     const formData = new FormData();
-    formData.append("file", logoFile);
+    formData.append("file", fileToUpload);
     formData.append("type", role === "startup" ? "pitchdeck" : "portal_profile");
 
     try {
@@ -279,22 +283,12 @@ const PortalDetailsSec = () => {
             />
             <p className="text-xs text-center text-[#00103280] break-words w-full px-4">{logoFile.name}</p>
 
-            <div className="absolute bottom-2 right-2">
-              <button
-                type="button"
-                onClick={uploadFileToCloud}
-                disabled={isUploading || !!uploadedUrl}
-                className={`text-xs px-3 py-1.5 rounded text-white font-medium shadow-sm transition-colors ${
-                  uploadedUrl 
-                    ? "bg-[#001032] cursor-default" 
-                    : isUploading 
-                      ? "bg-gray-400 cursor-wait" 
-                      : "bg-[#001032] cursor-pointer"
-                }`}
-              >
-                {uploadedUrl ? "Uploaded ✓" : isUploading ? "Uploading..." : "Upload"}
-              </button>
-            </div>
+            {isUploading && (
+              <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-white/80 px-2 py-1 rounded shadow-sm">
+                <div className="w-3 h-3 border-2 border-[#001032] border-t-transparent rounded-full animate-spin"></div>
+                <span className="text-[10px] font-medium text-[#001032]">Uploading...</span>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -323,10 +317,10 @@ const PortalDetailsSec = () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-2 text-center w-full">
+        <div id="right" className="lg:w-[50%] lg:px-10 lg:py-2 text-center w-full min-h-screen flex flex-col">
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
             
-            <Card className="w-full lg:min-h-[600px] mx-auto rounded-lg flex flex-col">
+            <Card className="w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col relative pb-24 lg:pb-4">
               
               <CardHeader>
                 <CardTitle>
@@ -583,7 +577,7 @@ const PortalDetailsSec = () => {
                   </div>
 
                   {/* SUBMIT BUTTON */}
-                  <CardFooter className="flex-col gap-2 lg:mt-4 w-full px-0 mt-auto ">
+                  <CardFooter className="fixed bottom-0 left-0 w-full p-4 bg-white  lg:relative lg:bg-transparent lg:border-t-0 lg:p-0 lg:mt-auto lg:z-10">
                     <Button 
                       type="submit" 
                       className="w-full bg-[#001032]" 
@@ -591,7 +585,7 @@ const PortalDetailsSec = () => {
                     >
                       {isSubmitting ? (
                         <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-4 h-4   rounded-full animate-spin"></div>
                           Processing...
                         </div>
                       ) : isUploading ? (

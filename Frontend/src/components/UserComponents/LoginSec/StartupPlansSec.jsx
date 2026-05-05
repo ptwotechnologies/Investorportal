@@ -438,7 +438,7 @@ const StartupPlansSec = ({ userId }) => {
                     </div>
 
                     {/* ⭐ ONLY BACKEND CONNECTED — DESIGN SAME */}
-                    <div className=" mt-2  lg:mt-1 lg:pt-1 text-center">
+                    <div className=" mt-auto lg:pt-1 text-center">
                       <button
                         className="
                      w-full

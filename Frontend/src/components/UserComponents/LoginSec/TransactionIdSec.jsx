@@ -87,12 +87,9 @@ const TransactionIdSec = () => {
         </div>
 
         {/* RIGHT SIDE */}
-        <div
-          id="right"
-          className="lg:w-[50%]  lg:px-10 lg:py-5 text-center w-full"
-        >
+        <div id="right" className="lg:w-[50%] lg:px-10 lg:py-5 text-center w-full min-h-screen flex flex-col">
           <div className="lg:bg-[#001032] h-screen lg:h-auto lg:p-3 w-full lg:rounded-lg ">
-            <Card className="w-full lg:h-auto mx-auto rounded-lg">
+            <Card className="w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col relative pb-24 lg:pb-4">
 
               <CardHeader>
                 <CardTitle>
@@ -112,9 +109,9 @@ const TransactionIdSec = () => {
                 <CardAction></CardAction>
               </CardHeader>
 
-              <CardContent>
-                <form onSubmit={handleSubmit}>
-                  <div className="flex flex-col gap-6 lg:px-6 lg:mb-48 mb-60">
+              <CardContent className="flex flex-col flex-grow">
+                <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
+                  <div className="flex flex-col gap-6 lg:px-6">
                     <div className="grid gap-2 ">
                       <Input
                         type="text"
@@ -127,10 +124,10 @@ const TransactionIdSec = () => {
                     </div>
                   </div>
 
-                  <CardFooter className=" w-full px-0">
+                  <CardFooter className="fixed bottom-0 left-0 w-full p-4  lg:relative lg:bg-transparent  lg:p-0 lg:mt-auto lg:z-10">
                     <Button
                       type="submit"
-                      className="w-full bg-[#001032] mt-5 lg:mt-0"
+                      className="w-full bg-[#001032]"
                     >
                       Submit & Continue
                     </Button>

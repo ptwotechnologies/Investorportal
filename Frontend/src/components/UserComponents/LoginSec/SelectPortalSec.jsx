@@ -33,9 +33,9 @@ const SelectPortalSec = () => {
             </div>
           </div>
         </div>
-        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-2   w-full   ">
+        <div id="right" className="lg:w-[50%] lg:px-10 lg:py-2 w-full min-h-screen flex flex-col">
           <div className="lg:bg-[#001032]   lg:p-3 w-full lg:rounded-lg  ">
-            <div className=" lg:h-auto  rounded-md bg-white ">
+            <div className="relative lg:h-auto rounded-md bg-white">
               <div id="top" className="text-center ">
                 <img
                   src={logo}
@@ -169,9 +169,9 @@ const SelectPortalSec = () => {
                     </div>
                   </RadioGroup>
                 </div>
-                <div className="text-center absolute bottom-5 w-full lg:stactic">
+                <div className="fixed bottom-0 left-0 w-full p-4 bg-white  text-center lg:static lg:bg-transparent lg:border-t-0 lg:p-0 lg:mt-auto lg:z-10">
                   <button
-                    className="bg-[#001426] text-white w-[90%] p-2 rounded-md"
+                    className="bg-[#001426] text-white w-[90%] p-2 rounded-md" 
                     onClick={() => {
                       localStorage.setItem("role", role);
                       if (!role) {

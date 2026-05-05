@@ -336,9 +336,9 @@ const handleVerifyOtp = async () => {
           </div>
         </div>
 
-        <div id="right" className="lg:w-[50%]  lg:px-10  text-center w-full">
+        <div id="right" className="lg:w-[50%] lg:px-10 text-center w-full min-h-screen flex flex-col">
           <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
-            <Card className="w-full lg:h-auto mx-auto rounded-lg">
+            <Card className="w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col relative pb-24 lg:pb-4">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55 w-40 mx-auto  my-3" />
@@ -349,8 +349,8 @@ const handleVerifyOtp = async () => {
                 <CardAction></CardAction>
               </CardHeader>
 
-              <CardContent>
-                <form onSubmit={handleSubmit}>
+              <CardContent className="flex flex-col flex-grow">
+                <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
                   <div className="flex flex-col gap-3">
                     <div className="flex gap-3">
                        <Input
@@ -587,12 +587,11 @@ const handleVerifyOtp = async () => {
                    
                    
                   </div>
-
-                  <CardFooter className="flex-col gap-2 lg:mt-5 mb-1 w-full px-0 mt-15">
+                  <CardFooter className="fixed bottom-0 left-0 w-full p-4 bg-white  lg:relative lg:bg-transparent  lg:p-0 lg:mt-auto lg:z-10">
                     <Button type="submit" className="w-full bg-[#001032]" disabled={isSubmitting}>
                       {isSubmitting ? (
                         <div className="flex items-center gap-2">
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                          <div className="w-4 h-4 rounded-full animate-spin"></div>
                           Processing...
                         </div>
                       ) : (

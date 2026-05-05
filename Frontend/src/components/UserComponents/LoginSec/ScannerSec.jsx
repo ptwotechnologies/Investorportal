@@ -158,9 +158,9 @@ const ScannerSec = () => {
             </div>
           </div>
         </div>
-        <div id="right" className="lg:w-[50%]  lg:px-10 lg:py-3 text-center">
+        <div id="right" className="lg:w-[50%] lg:px-10 lg:py-3 text-center w-full min-h-screen flex flex-col">
           <div className="lg:bg-[#001032] lg:p-3 w-full  lg:rounded-lg ">
-            <Card className="w-full  lg:h-auto mx-auto rounded-lg">
+            <Card className="relative w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col pb-24 lg:pb-4">
               <CardHeader>
                 <CardTitle>
                   <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto  my-2" />
@@ -174,13 +174,13 @@ const ScannerSec = () => {
                 </CardDescription>
                 <CardAction></CardAction>
               </CardHeader>
-              <CardContent>
-                <div className="lg:w-[60%] w-[98%] mx-auto my-30 lg:mt-30 lg:mb-40">
+              <CardContent className="flex-grow flex flex-col justify-center">
+                <div className="lg:w-[60%] w-[98%] mx-auto py-10">
                   You’re one step away from getting started with the <span className="font-medium"> [{displayPlanName}] – ₹{displayAmount?.toLocaleString()}/year. </span> Complete your secure payment to continue.
                 </div>
                 
               </CardContent>
-              <CardFooter className="absolute bottom-5 w-full lg:static">
+              <CardFooter className="fixed bottom-0 left-0 w-full p-4 bg-white  lg:static lg:relative lg:bg-transparent  lg:p-0 lg:mt-auto lg:z-10">
                 <Button 
                   className="w-full bg-[#001032]" 
                   onClick={checkoutHandler}
@@ -188,7 +188,7 @@ const ScannerSec = () => {
                 >
                   {loading ? (
                     <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 rounded-full animate-spin"></div>
                       Processing...
                     </div>
                   ) : (
