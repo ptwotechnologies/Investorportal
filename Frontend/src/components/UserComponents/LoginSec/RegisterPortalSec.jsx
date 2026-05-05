@@ -78,8 +78,8 @@ const RegisterPortalSec = () => {
             setIsVerified(true);
             const { token, userId: newUserId, role: newRole, serviceType: newServiceType, paymentStatus } = response.data;
             
-            // Save to localStorage just like verifyEmailLink does
-            localStorage.setItem("token", token);
+            // Removed auto-login token to prevent Navbar showing "Dashboard" during onboarding
+            // localStorage.setItem("token", token);
             localStorage.setItem("userId", newUserId);
             localStorage.setItem("paymentStatus", paymentStatus || "not_paid");
             localStorage.setItem(

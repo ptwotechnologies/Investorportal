@@ -11,12 +11,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import { SpinnerButton } from "./StatusSpinner";
 
 const PaymentSuccessSec = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const isFreePlan = location.state?.isFreePlan === true;
 
   const [paymentStatus, setPaymentStatus] = useState("pending");
@@ -30,8 +31,10 @@ const PaymentSuccessSec = () => {
       setUserId(storedUserId);
     } else {
       console.error("User ID not found in localStorage");
+      // Redirect to registration if no userId is found
+      navigate("/registerportal");
     }
-  }, []);
+  }, [navigate]);
 
   const checkPaymentStatus = async () => {
     if (!userId) return;
@@ -76,11 +79,11 @@ const PaymentSuccessSec = () => {
       ? "Thank you for joining as an investor!"
       : isFreePlan
         ? paymentStatus === "approved"
-          ? "Your free account is now active!" // ⭐ approved free plan
+          ? "Your free account is now active!" 
           : "Your free account is being reviewed!"
         : paymentStatus === "approved"
           ? "Payment has been received successfully!"
-          : "Payment has been received successfully!";
+          : "Payment verification is in progress...";
 
   const statusMessage =
     paymentStatus === "approved"
@@ -88,7 +91,7 @@ const PaymentSuccessSec = () => {
       : role === "investor"
         ? "We are reviewing your details. Your account will be activated within 30 minutes. You'll receive a confirmation via email/WhatsApp once it's live."
         : isFreePlan
-          ? "Your account is under review. You'll be notified via email/WhatsApp once it's activated." // ⭐ no payment language
+          ? "Your account is under review. You'll be notified via email/WhatsApp once it's activated." 
           : "We are reviewing your payment. Your account will be activated within 30 minutes. You'll receive a confirmation via email/WhatsApp once it's live.";
 
   return (

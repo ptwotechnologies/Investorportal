@@ -32,7 +32,8 @@ const VerifyEmailLink = () => {
         console.log("DEBUG: Verification response:", response.status);
 
         if (response.status === 200) {
-          localStorage.setItem("token", response.data.token);
+          // Commented out to prevent auto-login during onboarding
+          // localStorage.setItem("token", response.data.token);
           localStorage.setItem("userId", response.data.userId);
           localStorage.setItem("paymentStatus", response.data.paymentStatus || "not_paid");
           localStorage.setItem(
@@ -103,7 +104,7 @@ const VerifyEmailLink = () => {
               onClick={() => navigate("/registerportal")}
               className="mt-6 w-full bg-[#001032] text-white py-2 rounded-md hover:bg-opacity-90 transition"
             >
-              Back to Sign Up
+              Continue 
             </button>
           </>
         )}
