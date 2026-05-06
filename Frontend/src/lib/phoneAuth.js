@@ -4,20 +4,17 @@ import { auth } from "./firebase.js";
 // send OTP
 export const sendOtp = async (phone) => {
   try {
-    // Reset any existing verifier to ensure a fresh state
-    if (window.recaptchaVerifier) {
-      try {
-        window.recaptchaVerifier.clear();
-      } catch (e) {
-        // ignore errors on clear
-      }
-      window.recaptchaVerifier = null;
+    // ⭐ Optimization: Only initialize if not already present or if it was cleared
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible",
+        callback: (response) => {
+          console.log("Recaptcha resolved");
+        }
+      });
+      // Pre-render to speed up subsequent call
+      await window.recaptchaVerifier.render();
     }
-
-    // Initialize standard RecaptchaVerifier
-    window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-      size: "invisible"
-    });
 
     const confirmationResult = await signInWithPhoneNumber(
       auth,
@@ -29,15 +26,12 @@ export const sendOtp = async (phone) => {
     return confirmationResult;
   } catch (error) {
     console.error("Error in sendOtp:", error);
-    console.warn("Please ensure this domain is authorized in Firebase Console:", window.location.hostname);
-    // Reset verifier on error to allow retry
+    // Reset on serious errors to allow clean retry
     if (window.recaptchaVerifier) {
       try {
         window.recaptchaVerifier.clear();
-        window.recaptchaVerifier = null;
-      } catch (e) {
-        window.recaptchaVerifier = null;
-      }
+      } catch (e) {}
+      window.recaptchaVerifier = null;
     }
     throw error;
   }

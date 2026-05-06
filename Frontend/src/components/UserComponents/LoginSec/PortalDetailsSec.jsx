@@ -343,7 +343,7 @@ const PortalDetailsSec = () => {
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
                                   {domainOptions.map((item) => (
                                     <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                       {item}
@@ -391,7 +391,7 @@ const PortalDetailsSec = () => {
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
                                   {serviceBusinessOptions.map((item) => (
                                     <DropdownMenuItem key={item} onClick={() => handleChange("serviceBusinessType", item)}>
                                       {item}
@@ -408,7 +408,7 @@ const PortalDetailsSec = () => {
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
                                   {domainOptions.map((item) => (
                                     <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                       {item}
@@ -458,7 +458,7 @@ const PortalDetailsSec = () => {
                                     <IoIosArrowDown className="mt-1" />
                                   </button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent className="mt-2 w-full bg-white rounded-md shadow-sm">
+                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
                                   {domainOptions.map((item) => (
                                     <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                       {item}
@@ -498,7 +498,7 @@ const PortalDetailsSec = () => {
                                   <IoIosArrowDown className="mt-1" />
                                 </button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent className="mt-2 w-[87vw] lg:w-[39.5vw] bg-white rounded-md shadow-sm ">
+                              <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm ">
                                 {startupBusinessOptions.map((item) => (
                                   <DropdownMenuItem key={item} onClick={() => handleChange("startupBusinessType", item)}>
                                     {item}
@@ -514,7 +514,7 @@ const PortalDetailsSec = () => {
                                   <IoIosArrowDown className="mt-1" />
                                 </button>
                               </DropdownMenuTrigger>
-                              <DropdownMenuContent className="mt-2 w-[87vw] lg:w-[39.5vw] bg-white rounded-md shadow-sm">
+                              <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
                                 {domainOptions.map((item) => (
                                   <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
                                     {item}

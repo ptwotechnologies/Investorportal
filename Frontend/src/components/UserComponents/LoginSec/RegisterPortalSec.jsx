@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import logo from "/coptenologo2.png";
 import { Button } from "@/components/ui/button";
 import { IoIosArrowDown } from "react-icons/io";
@@ -315,15 +315,13 @@ const RegisterPortalSec = () => {
 const handleVerifyOtp = async () => {
   try {
     const user = await verifyOtp(otp);
+    console.log("OTP Verified User:", user);
 
-    console.log(user);
-
+    // ⭐ Fix: Use updateVerificationStatus instead of any legacy setPhoneVerified call
     updateVerificationStatus({ phoneVerified: true });
-
     toast.success("Phone number verified");
-
   } catch (error) {
-    console.error(error);
+    console.error("OTP Verification Error:", error);
     toast.error("Invalid OTP");
   }
 };
@@ -556,7 +554,7 @@ const handleVerifyOtp = async () => {
                             <IoIosArrowDown className="mt-0" />
                           </button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent className="mt-2 w-full bg-white border border-[#001032] rounded-md shadow-sm">
+                        <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
                           {tabs.map((tab) => (
                             <DropdownMenuItem
                               key={tab.id}
