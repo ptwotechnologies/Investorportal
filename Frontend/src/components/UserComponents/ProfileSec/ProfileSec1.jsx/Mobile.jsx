@@ -28,6 +28,7 @@ import { HiOutlineTicket } from "react-icons/hi";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { FaHandshake, FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
+import { SiSimpleanalytics } from "react-icons/si";
 import { BiHelpCircle } from "react-icons/bi";
 
 const Mobile = () => {
@@ -36,6 +37,7 @@ const Mobile = () => {
   const [notifications, setNotifications] = useState([]);
   const [expandedIds, setExpandedIds] = useState([]);
   const [isDealsOpen, setIsDealsOpen] = useState(false);
+  const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
   const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
   const location = useLocation();
   const [requestsLoading, setRequestsLoading] = useState(true);
@@ -113,13 +115,13 @@ const Mobile = () => {
           <IoNotificationsOutline
             size={18}
             onClick={handleNotificationClick}
-            className="text-gray-500 ml-1"
+            className="text-[#59549F] ml-1"
           />
           <div className="w-0.2 h-6 border mx-1"></div>
           <Sheet>
             <SheetTrigger asChild>
               <div className="flex items-center ">
-                <RxHamburgerMenu size={18} className="text-[#001426] mx-1 " />
+                <RxHamburgerMenu size={18} className="text-[#59549F] mx-1 " />
               </div>
             </SheetTrigger>
 
@@ -132,10 +134,10 @@ const Mobile = () => {
 
                   <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-4">
                     <div id="top">
-                      <ul className="flex flex-col gap-2 text-[16px]">
+                      <ul className="flex flex-col gap-2 text-[16px] text-gray-600">
                         <div className="flex items-center gap-4">
                           <MdOutlineDashboardCustomize
-                            className="text-gray-500 "
+                            className="text-[#59549F] "
                             size={25}
                           />
                           <Link to="/dashboard">
@@ -144,7 +146,7 @@ const Mobile = () => {
                         </div>
 
                         <div className="flex items-center gap-4">
-                          <CgProfile className="text-gray-500 my-1" size={25} />
+                          <CgProfile className="text-[#59549F] my-1" size={25} />
                           <Link to="/profile">
                             <li>Profile</li>
                           </Link>
@@ -152,7 +154,7 @@ const Mobile = () => {
 
                         <div className="flex items-center gap-4">
                           <HiOutlineTicket
-                            className="text-gray-500 "
+                            className="text-[#59549F] "
                             size={25}
                           />
                           <Link to="/request">
@@ -162,7 +164,7 @@ const Mobile = () => {
 
                         <div className="flex items-center gap-4">
                           <HiOutlineUserGroup
-                            className="text-gray-500 my-1"
+                            className="text-[#59549F] my-1"
                             size={25}
                           />
                           <Link to="/connect">
@@ -171,45 +173,72 @@ const Mobile = () => {
                         </div>
 
                         <div className="flex items-center gap-4">
-                          <IoChatbubblesOutline
-                            className="text-gray-500 my-1"
+                          <SiSimpleanalytics
+                            className="text-[#59549F] my-1"
                             size={25}
                           />
-                          <Link to="/deal/communication">
-                            <li>Communication</li>
+                          <Link to="/deal/analytics">
+                            <li>Analytics</li>
                           </Link>
+                        </div>
+
+                        <div className="flex flex-col gap-2">
+                          <div
+                            className="flex items-center gap-4 cursor-pointer w-full"
+                            onClick={() => {
+                              setIsCommunicationOpen(!isCommunicationOpen);
+                              if (!isCommunicationOpen) setIsDealsOpen(false);
+                            }}
+                          >
+                            <IoChatbubblesOutline className="text-[#59549F]" size={25} />
+                            <li className="flex justify-between items-center w-full">
+                              <span>Communication</span>
+                              {isCommunicationOpen ? (
+                                <FaChevronUp className="text-[#59549F]" size={15} />
+                              ) : (
+                                <FaChevronDown className="text-[#59549F]" size={15} />
+                              )}
+                            </li>
+                          </div>
+                          {isCommunicationOpen && (
+                              <ul className="ml-11 mt-1 flex flex-col gap-2 text-[15px] text-gray-600">
+                                <Link to="/communication/message" className="flex items-center gap-2">
+                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                  <li>Message</li>
+                                </Link>
+                                <Link to="/communication/meet" className="flex items-center gap-2">
+                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                  <li>Meet</li>
+                                </Link>
+                                <Link to="/communication/call" className="flex items-center gap-2">
+                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                  <li>Call</li>
+                                </Link>
+                              </ul>
+                          )}
                         </div>
                         {/* Deals Dropdown */}
 
                         <div
                           className="flex items-center gap-4.5 cursor-pointer w-full"
                           onClick={() => {
-                            if (requestsLoading) {
-                              toast("Checking your requests..."); // ⭐ wait for check
-                              return;
-                            }
-                            if (!hasRaisedRequests) {
-                              toast.error(
-                                "You have to raise a request to open deals",
-                              );
-                              return;
-                            }
                             setIsDealsOpen(!isDealsOpen);
+                            if (!isDealsOpen) setIsCommunicationOpen(false);
                           }}
                         >
-                          <FaHandshake className="text-gray-500" size={28} />
+                          <FaHandshake className="text-[#59549F]" size={28} />
 
                           <li className="flex justify-between items-center w-full">
-                            <span>Deals</span>
+                            <span>Deal Workspace</span>
 
                             {isDealsOpen ? (
                               <FaChevronUp
-                                className="text-gray-500"
+                                className="text-[#59549F]"
                                 size={15}
                               />
                             ) : (
                               <FaChevronDown
-                                className="text-gray-500"
+                                className="text-[#59549F]"
                                 size={15}
                               />
                             )}
@@ -217,28 +246,34 @@ const Mobile = () => {
                         </div>
 
                         {isDealsOpen && (
-                          <ul className="ml-15 mt-2 flex flex-col gap-2  text-[15px] text-gray-600 ">
-                           
-                            <Link to="/deal/activedeals">
-                              <li type="disc"> Active Deals</li>
+                          <ul className="ml-11 mt-2 flex flex-col gap-2 text-[15px] text-gray-600">
+                            <Link to="/deal/activedeals" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Active Deals</li>
                             </Link>
-                            <Link to="/deal/milestones">
-                              <li type="disc">Milestones</li>
+                            <Link to="/deal/milestones" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Milestones</li>
                             </Link>
-                            <Link to="/deal/payments">
-                              <li type="disc">Payments</li>
+                            <Link to="/deal/payments" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Payments</li>
                             </Link>
-                            <Link to="/deal/negotiations">
-                              <li type="disc">Negotiations</li>
+                            <Link to="/deal/negotiations" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Negotiations</li>
                             </Link>
-                            <Link to="/deal/documentation">
-                              <li type="disc"> Documentation</li>
+                            <Link to="/deal/documentation" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Documentation</li>
                             </Link>
-                            <Link to="/deal/completed">
-                              <li type="disc">Completed</li>
+                            <Link to="/deal/completed" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Completed</li>
                             </Link>
-                            <Link to="/deal/disputes">
-                              <li type="disc">Disputes</li>
+                            <Link to="/deal/disputes" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Disputes</li>
                             </Link>
                           </ul>
                         )}
@@ -246,10 +281,10 @@ const Mobile = () => {
                     </div>
 
                     <div id="bottom" className="mt-10 mb-6">
-                      <ul className="flex flex-col gap-2 text-[16px]">
+                      <ul className="flex flex-col gap-2 text-[16px] text-gray-600">
                         <div className="flex items-center gap-4">
                           <IoSettingsOutline
-                            className=" text-gray-500 my-1"
+                            className=" text-[#59549F] my-1"
                             size={25}
                           />
                           <Link to="/settings">
@@ -258,7 +293,7 @@ const Mobile = () => {
                         </div>
 
                         <div className="flex items-center gap-4">
-                          <BiHelpCircle className=" text-gray-500" size={25} />
+                          <BiHelpCircle className="text-[#59549F]" size={25} />
                           <Link to="/help">
                             <li>Help</li>
                           </Link>
@@ -270,7 +305,7 @@ const Mobile = () => {
                   <SheetFooter>
                     <Button
                       type="button"
-                      className="bg-[#001032]"
+                      className="bg-[#D8D6F8] text-[#001032] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
                       onClick={handleSignOutClick}
                     >
                       Sign out
@@ -286,13 +321,13 @@ const Mobile = () => {
                   <div className="absolute bottom-30  left-1/2 -translate-x-1/2 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-[88%] flex flex-col items-center text-sm  p-2">
                     <button
                       onClick={handleConfirmSignOut}
-                      className="w-full py-2 border-b border-gray-200 active:bg-[#001032] active:text-white rounded-md"
+                      className="w-full py-2 border-b border-gray-200 active:bg-[#D8D6F8] active:text-[#001032] rounded-md"
                     >
                       Yes
                     </button>
                     <button
                       onClick={() => setShowSignoutDialog(false)}
-                      className="w-full py-2 active:bg-[#001032] bg-[#001032] active:text-white  text-white rounded-md"
+                      className="w-full py-2 active:bg-[#D8D6F8] bg-[#D8D6F8] active:text-[#001032]  text-[#001032] rounded-md shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
                     >
                       No
                     </button>

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
-import profileLogo from "/profile.png";
 import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { LuDot } from "react-icons/lu";
@@ -471,8 +470,29 @@ const getImageUrl = (imageUrl) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-[80vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#001032]"></div>
+      <div className="lg:border-2 border-[#D9D9D9] lg:rounded-xl bg-white lg:m-2 animate-pulse">
+        {/* Cover Skeleton */}
+        <div className="lg:h-50 h-30 bg-gray-200 relative"></div>
+        
+        {/* Profile Header Skeleton */}
+        <div className="px-4 lg:px-9 pb-6">
+          <div className="flex justify-start gap-12 items-center">
+            <div className="lg:w-28 lg:h-28 w-22 h-22 rounded-full bg-gray-300 border-4 border-white shadow-lg relative -top-12 lg:-top-16"></div>
+            <div className="flex-1 -mt-8">
+              <div className="h-8 bg-gray-200 rounded w-1/3 mb-2"></div>
+              <div className="h-4 bg-gray-100 rounded w-1/4"></div>
+            </div>
+          </div>
+          
+          {/* Content Skeletons */}
+          <div className="space-y-4 mt-4">
+            <div className="h-20 bg-gray-50 rounded-xl w-full"></div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="h-24 bg-gray-50 rounded-xl"></div>
+              <div className="h-24 bg-gray-50 rounded-xl"></div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

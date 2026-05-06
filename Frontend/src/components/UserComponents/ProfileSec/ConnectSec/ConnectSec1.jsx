@@ -567,7 +567,7 @@ const ConnectSec1 = () => {
   return (
     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
       <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto pt-6 lg:pt-2">
-        <div id="topbar" className="flex items-stretch w-[100%]  gap-1 lg:gap-2 mb-2 ">
+        <div id="topbar" className="flex items-stretch w-[100%]  gap-1 lg:gap-2 mb-2 hidden lg:flex">
                         <div
                           className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-3 py-2 lg:mr-1  bg-white"
                         >
@@ -648,7 +648,7 @@ const ConnectSec1 = () => {
                 className="border border-[#D9D9D9] p-2 rounded-sm w-full bg-white text-sm outline-none font-medium"
               >
                 <option value="all">
-                  {currentUserRole === "investor" ? "All Domains" : "All Investor Types"}
+                  {currentUserRole === "investor" ? "All Domains" : "All Investors"}
                 </option>
                 {currentUserRole === "investor" ? (
                   viewingRole && getDomainsForRole(viewingRole).map((domain) => (
@@ -665,31 +665,31 @@ const ConnectSec1 = () => {
                 )}
               </select>
             </div>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-medium overflow-x-auto scrollbar-hide whitespace-nowrap font-medium">
   <button
     onClick={() => handleTabClick("all")}
-    className={`${tabClass("all")} flex-1 py-1 rounded-sm text-sm lg:text-[16px]`}
+    className={`${tabClass("all")} flex-1 min-w-[90px] py-1 rounded-sm text-sm lg:text-[16px] flex-shrink-0`}
   >
     All
   </button>
 
   <button
     onClick={() => handleTabClick("received")}
-    className={`${tabClass("received")} flex-1 py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px]`}
+    className={`${tabClass("received")} flex-1 min-w-[90px] py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px] flex-shrink-0`}
   >
     Received
   </button>
 
   <button
     onClick={() => handleTabClick("sent")}
-    className={`${tabClass("sent")} flex-1 py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px]`}
+    className={`${tabClass("sent")} flex-1 min-w-[90px] py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px] flex-shrink-0`}
   >
     Sent
   </button>
 
   <button
     onClick={() => handleTabClick("connections")}
-    className={`${tabClass("connections")} flex-1 py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px]`}
+    className={`${tabClass("connections")} flex-1 min-w-[90px] py-1 rounded-sm border border-[#D9D9D9] text-sm lg:text-[16px] flex-shrink-0`}
   >
     Connections
   </button>

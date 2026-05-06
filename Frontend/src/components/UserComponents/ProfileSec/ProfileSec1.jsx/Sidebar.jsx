@@ -18,6 +18,7 @@ import { FaHandshake } from "react-icons/fa";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiHelpCircle } from "react-icons/bi";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { SiSimpleanalytics } from "react-icons/si";
 
 let globalDealsCache = null;
 let globalUserCache = null;
@@ -41,6 +42,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const isDealRoute = location.pathname.startsWith("/deal");
   const [isDealsOpen, setIsDealsOpen] = useState(false);
+  const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
   const [hasCreatedDeals, setHasCreatedDeals] = useState(false);
   const [deals, setDeals] = useState(globalDealsCache || []);
   const [dealsLoading, setDealsLoading] = useState(!globalDealsCache);
@@ -201,6 +203,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             size={25}
             onClick={handleNotificationClick} // Show/hide notifications
           />
+
+           <Link to="/deal/analytics">
+            <SiSimpleanalytics
+              className=" text-[#59549f] my-3"
+              size={22}
+            />
+          </Link>
 
           <Link to="/deal/communication">
             <IoChatbubblesOutline
@@ -365,27 +374,76 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               >
                 Notification
               </li>
-
               <NavLink
-                to="/deal/communication"
+                to="/deal/analytics"
                 className={({ isActive }) =>
                   `block my-3 text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
               >
-                Communication
+                Analytics
               </NavLink>
 
-              {/* Deals Dropdown */}
-              <div className="my-3">
+              <div className="my-3 relative">
                 <div
                   onClick={() => {
-                    setIsDealsOpen(!isDealsOpen);
+                    setIsCommunicationOpen(!isCommunicationOpen);
+                    if (!isCommunicationOpen) setIsDealsOpen(false);
                   }}
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
-                  <span>Deals</span>
+                  <span>Communication</span>
+                  {isCommunicationOpen ? (
+                    <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                  ) : (
+                    <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                  )}
+                </div>
+
+                {isCommunicationOpen && (
+                  <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100">
+                    <NavLink
+                      to="/communication/message"
+                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                    >
+                      <div className="flex items-center gap-2 ml-3">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Message
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      to="/communication/meet"
+                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                    >
+                      <div className="flex items-center gap-2 ml-3">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Meet
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      to="/communication/call"
+                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                    >
+                      <div className="flex items-center gap-2 ml-3">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Call
+                      </div>
+                    </NavLink>
+                  </div>
+                )}
+              </div>
+
+              {/* Deals Dropdown */}
+              <div className="my-3 relative">
+                <div
+                  onClick={() => {
+                    setIsDealsOpen(!isDealsOpen);
+                    if (!isDealsOpen) setIsCommunicationOpen(false);
+                  }}
+                  className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
+                >
+                  <span>Deal Workspace</span>
 
                   <div className="flex items-center gap-2">
                     {hasAnyDealDot && (
@@ -403,14 +461,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </div>
 
                 {isDealsOpen && (
-                  <div className="ml-7 mt-2 flex flex-col text-[13px] text-gray-600">
-                   
-
+                  <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100 max-h-80 overflow-y-auto scrollbar-hide">
                     <NavLink
                       to="/deal/activedeals"
-                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 ml-3">
                         <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                         Active Deals
                       </div>
@@ -421,9 +477,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                     <NavLink
                       to="/deal/negotiations"
-                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 ml-3">
                         <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                         Negotiations
                       </div>
@@ -434,68 +490,43 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                      <NavLink
                       to="/deal/documentation"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
                       Documentation
                     </NavLink>
 
-                      <NavLink
-                        to="/deal/payments"
-                        className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                          Payments
-                        </div>
-                        {location.pathname === "/deal/payments" && (
-                          <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
-                        )}
-                      </NavLink>
-                      <NavLink
-                        to="/deal/revenue"
-                        className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                          Revenue
-                        </div>
-                        {location.pathname === "/deal/revenue" && (
-                          <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
-                        )}
-                      </NavLink>
+                    <NavLink
+                      to="/deal/payments"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      Payments
+                    </NavLink>
 
                     <NavLink
                       to="/deal/milestones"
-                      className={({ isActive }) => `flex items-center justify-between py-1 pr-4 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                        Milestones
-                      </div>
-                      {location.pathname === "/deal/milestones" && (
-                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
-                      )}
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      Milestones
+                    </NavLink>
+
+                    <NavLink
+                      to="/deal/completed"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      Completed
                     </NavLink>
 
                     <NavLink
                       to="/deal/disputes"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
                       Disputes
                     </NavLink>
-
-
-                    <NavLink
-                      to="/deal/completed"
-                      className="flex items-center gap-2 py-1 hover:text-[#001032]"
-                    >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Completed
-                    </NavLink>
-
-                    
                   </div>
                 )}
               </div>

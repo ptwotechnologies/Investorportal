@@ -431,29 +431,38 @@ function NavbarSheet({ textColor }) {
                       </p>
                      
                     </div>
-                     <h1 className="text-sm relative left-43 top-11">Join us!</h1>
+                     
 
                     <div className="flex items-center justify-between mt-4">
-                      <div className="grid grid-cols-2 place-items-center gap-1 gap-x-6">
+                      <div className="grid grid-cols-3 place-items-center gap-1 gap-x-6">
                         <div className=" w-15 h-12 flex items-center justify-center">
                           <img src={img1} alt="" className=" " />
                         </div>
                         <div className="  w-15 h-12 flex items-center justify-center">
                           <img src={img2} alt="" className="" />
                         </div>
+                          <div>
+                          <h1 className="text-sm ">Join us!</h1>
+                        </div>
                         <div className="  w-15 h-12 flex items-center justify-center ">
                           <img src={img3} alt="" className="" />
                         </div>
                         <div className="    w-15 h-12 flex items-center justify-center ">
-                          <img src={img4} alt="" className="w-20 " />
+                          <img src={img4} alt="" className="w-20 " /> 
                         </div>
-                      </div>
 
-                      <Link to="/joinus" onClick={() => setOpenSheet(false)}>
-                        <button className="bg-[#001032] text-white rounded-md px-3 py-1 text-xs mt-13 mr-1">
+                      
+                        <div>
+                           <Link to="/joinus" onClick={() => setOpenSheet(false)}>
+                        <button className="bg-[#001032] text-white rounded-md px-3 py-1 text-xs ">
                           Explore
                         </button>
                       </Link>
+
+                        </div>
+                      </div>
+
+                     
                     </div>
                   </div>
                 </div>

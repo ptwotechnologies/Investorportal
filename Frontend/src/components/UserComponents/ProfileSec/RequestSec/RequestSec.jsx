@@ -190,7 +190,7 @@ const RequestSec = () => {
   return (
     <div className="lg:bg-gray-100 lg:mx-4"> 
       <div className="bg-gray-100 w-full mx-auto pt-7 lg:pt-2">
-         <div  id="topbar" className="flex items-stretch  gap-1 lg:gap-2 mb-2">
+         <div  id="topbar" className="flex items-stretch  gap-1 lg:gap-2 mb-2 hidden lg:flex">
                 <div
                   className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-3 py-2 lg:mr-2  bg-white"
                 >
@@ -279,7 +279,7 @@ const RequestSec = () => {
                       setActiveTab("newRequest");
                       setMobileView("left");
                     }}
-                    className="bg-[#D8D6F8] text-[#59549F] lg:py-1 p-1.5 rounded-sm lg:w-[28%] w-[30%] text-sm lg:text-[16px]  transition-colors shadow-[inset_0_0_12px_#00000040]"
+                    className="bg-[#D8D6F8] text-[#59549F] lg:py-1 p-1.5 rounded-sm lg:w-[28%] w-[30%] text-sm lg:text-[16px]  font-medium shadow-[inset_0_0_12px_#00000040]"
                   >
                     New Request
                   </button>
@@ -300,7 +300,7 @@ const RequestSec = () => {
                 <TabsList className="w-full bg-transparent gap-2 h-7 p-0 flex ">
                   <TabsTrigger
                     value="all"
-                    className="px-6 py-1 h-7.5 border border-[#D9D9D9] rounded-sm flex-1 text-sm lg:text-[16px] data-[state=active]:text-[#59549F] data-[state=active]:bg-[#D8D6F8] data-[state=active]:shadow-[inset_0_0_12px_#00000040]!"
+                    className="px-6 py-1 h-7.5 border border-[#D9D9D9] rounded-sm flex-1 text-sm lg:text-[16px]  data-[state=active]:text-[#59549F] data-[state=active]:bg-[#D8D6F8] data-[state=active]:shadow-[inset_0_0_12px_#00000040]!"
                   >
                     All
                   </TabsTrigger>

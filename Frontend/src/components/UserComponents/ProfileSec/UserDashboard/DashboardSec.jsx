@@ -26,6 +26,7 @@ const DashboardSec = () => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showMobileCredits, setShowMobileCredits] = useState(false);
   const [profile, setProfile] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (showProfileModal) {
@@ -159,11 +160,36 @@ const DashboardSec = () => {
 
       } catch (err) {
         console.error("Dashboard fetching error:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="lg:bg-gray-200 h-screen pt-2 px-2 pb-2 lg:pb-0 animate-pulse">
+        {/* Topbar Skeleton */}
+        <div className="flex items-stretch w-full px-2 gap-2 mb-2">
+          <div className="flex-1 h-14 bg-white border-2 border-gray-200 rounded-xl shadow-inner"></div>
+          <div className="hidden lg:block w-[64%] h-14 bg-white border-2 border-gray-200 rounded-xl shadow-inner"></div>
+        </div>
+
+        <div className="flex gap-3 px-3">
+          <div className="w-[70%] space-y-3">
+            <div className="flex gap-3">
+              <div className="flex-1 h-[47vh] bg-white rounded-2xl shadow-inner"></div>
+              <div className="flex-1 h-[47vh] bg-white rounded-2xl shadow-inner"></div>
+            </div>
+            <div className="h-[41vh] bg-white rounded-2xl shadow-inner"></div>
+          </div>
+          <div className="w-[30%] h-[89.5vh] bg-white rounded-2xl shadow-inner"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative">

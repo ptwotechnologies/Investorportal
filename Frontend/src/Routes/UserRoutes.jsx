@@ -43,6 +43,10 @@ import Disputes from '@/Pages/UserPages/ProfilePages/Disputes'
 import DealDraft from '@/Pages/UserPages/ProfilePages/DealDraft'
 import Communication from '@/Pages/UserPages/ProfilePages/Communication'
 import Revenue from '@/Pages/UserPages/ProfilePages/Revenue'
+import Message from '@/Pages/UserPages/ProfilePages/Message'
+import Meet from '@/Pages/UserPages/ProfilePages/Meet'
+import Call from '@/Pages/UserPages/ProfilePages/Call'
+import Analytics from '@/Pages/UserPages/ProfilePages/Analytics'
 
 
 
@@ -75,7 +79,7 @@ const UserRoutes = () => {
   '/payments',
   '/dashboard',
   '/deal',
-  
+  '/communication'
    ]
 
    
@@ -126,6 +130,10 @@ const UserRoutes = () => {
              <Route path="/deal/completed" element={<ProtectedRoute><Completed/></ProtectedRoute>} />
              <Route path="/deal/disputes" element={<ProtectedRoute><Disputes/></ProtectedRoute>} />
              <Route path="/deal/revenue" element={<ProtectedRoute><Revenue/></ProtectedRoute>} />
+             <Route path="/communication/message" element={<ProtectedRoute><Message/></ProtectedRoute>} />
+             <Route path="/communication/meet" element={<ProtectedRoute><Meet/></ProtectedRoute>} />
+             <Route path="/communication/call" element={<ProtectedRoute><Call/></ProtectedRoute>} />
+             <Route path="/deal/analytics" element={<ProtectedRoute><Analytics/></ProtectedRoute>} />
       </Routes>
 
     </div>
