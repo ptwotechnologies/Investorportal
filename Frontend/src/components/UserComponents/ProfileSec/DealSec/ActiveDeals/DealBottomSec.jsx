@@ -194,31 +194,31 @@ const DealBottomSec = ({
         
         {/* Summary Cards Grid */} 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Active Deals</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Active Deals</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">{deals.length}</p>
           </div>
-          <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Total Ongoing Value</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Total Ongoing Value</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">₹{deals.reduce((acc, d) => acc + (d.totalAmount || 0), 0).toLocaleString()}</p>
           </div>
-          <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Pending Payments</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Pending Payments</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">0</p>
           </div>
-          <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Due this week</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Due this week</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">0</p>
           </div>
@@ -228,7 +228,27 @@ const DealBottomSec = ({
         {loading ? (
            <div className="text-center py-10">Loading deals...</div>
         ) : deals.length === 0 ? (
-           <div className="text-center py-10 text-gray-400 italic">No deal drafts found</div>
+           <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-10">
+            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">No active deals found</h3>
+              <p className="text-sm text-gray-500">Your current deals and projects will appear here.</p>
+            </div>
+          </div>
         ) : (
           deals.map(proj => (
             <ProjectCard 
@@ -347,6 +367,11 @@ const DealBottomSec = ({
                         <div className="flex-1 px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold">Rs {selectedProject.totalAmount}</div>
                       )}
                     </div>
+                    {selectedProject.milestones?.length > 0 && Number(selectedProject.totalAmount) !== selectedProject.milestones.reduce((acc, m) => acc + (Number(m.amount) || 0), 0) && (
+                      <p className="text-[10px] text-red-500 mt-2 text-center italic">
+                        Note: Total budget (Rs {selectedProject.totalAmount}) does not match the sum of milestones (Rs {selectedProject.milestones.reduce((acc, m) => acc + (Number(m.amount) || 0), 0)}).
+                      </p>
+                    )}
                   </div>
                   <div className="bg-white rounded-2xl p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
                     <h4 className="text-[16px] font-medium text-[#000000] mb-3">Total Timeline</h4>

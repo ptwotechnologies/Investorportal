@@ -599,7 +599,7 @@ onClick={() => {
   src={
     profile?.profilePhoto
       ? getImageUrl(profile.profilePhoto)
-      : "/profile.png"
+      : ""
   }
   className="lg:w-28 lg:h-28 w-22 h-22 bg-linear-to-b from-[#FFFFFF] from-3% to-[#999999] border-2 shadow-[0px_4px_10px_rgba(0,0,0,0.25)] rounded-full object-cover cursor-pointer"
   onClick={() => {

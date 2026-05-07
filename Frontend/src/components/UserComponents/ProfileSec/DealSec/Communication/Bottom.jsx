@@ -96,10 +96,10 @@ const Bottom = () => {
   };
 
   const StatCard = ({ label, value, bgColor }) => (
-    <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+    <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
       <div className="flex items-center gap-2">
         <FiFileText size={20} className="text-[#001032]" />
-        <h3 className="text-[10px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
+        <h3 className="text-[13px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
       </div>
       <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
     </div>
@@ -337,11 +337,11 @@ const Bottom = () => {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-2 lg:py-2 bg-[#FDFDFF] lg:h-[650px] h-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column ── */}
-      <div className={`flex-1 flex py-2 flex-col gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) && isThreadOpen ? 'hidden lg:flex' : 'flex'}`}>
-        <div className="grid grid-cols-2 gap-4 px-1 shrink-0">
+      <div className={`flex-1 flex flex-col gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) && isThreadOpen ? 'hidden lg:flex' : 'flex'}`}>
+        <div className="grid grid-cols-2 gap-4 shrink-0">
           <StatCard label="Active Conversations" value={disputes.filter(d => d.status !== 'Resolved').length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Awaiting Response" value={disputes.filter(d => d.messages?.length === 0).length} bgColor="bg-[#D8D6F8]" />
           <StatCard label="In Discussion" value={disputes.filter(d => d.messages?.length > 0 && d.status !== 'Resolved').length} bgColor="bg-[#EFDBD9]" />
@@ -369,13 +369,28 @@ const Bottom = () => {
           ))}
         </div>
 
-        <div className="flex-1 overflow-y-auto scrollbar-hide p-2 space-y-6">
+        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
           {deals.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-60">
-              <MdOutlineFactCheck size={50} className="text-gray-300 mb-4" />
-              <p className="text-sm font-medium text-gray-500 leading-relaxed">
-                Raise a request and make a deal to communicate with professional.
-              </p>
+            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-5 lg:my-10">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No conversations found</h3>
+                <p className="text-sm text-gray-500">Raise a request and make a deal to communicate with professionals.</p>
+              </div>
             </div>
           ) : (activeTab === "Milestones" || activeTab === "Files") ? (
              deals.map(deal => (
@@ -399,8 +414,9 @@ const Bottom = () => {
       {/* ── Right Column ── */}
       <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${(selectedDeal || selectedDispute) ? 'flex' : 'hidden lg:flex'}`}>
         
+        {/* Header */}
         {(selectedDeal || selectedDispute) && (
-          <div className="flex items-center gap-3 py-2 px-2 shrink-0">
+          <div className="flex items-center gap-3 py-2 px-4 shrink-0">
             <button 
                 onClick={() => {
                     if (isThreadOpen) setIsThreadOpen(false);
@@ -411,64 +427,78 @@ const Bottom = () => {
             >
               <FiArrowLeft size={18} />
             </button>
-            <h2 className="text-lg font-bold text-[#001032]">
+            <h2 className="text-lg font-semibold text-[#001032]">
               {isThreadOpen ? "Communication Thread" : (activeTab === "Milestones" ? "Milestones" : (activeTab === "Files" ? "Files" : "Disputes"))}
             </h2>
           </div>
         )}
 
-        <div className={`flex-1 p-2 ${isThreadOpen ? 'h-full flex flex-col' : 'overflow-y-auto scrollbar-hide'}`}>
-          {isThreadOpen ? (
-            renderThreadView()
-          ) : (activeTab === "Milestones" || activeTab === "Files") && selectedDeal && !isThreadOpen ? (
-            /* ═══ Milestone List for selected Project (Right Side) ═══ */
-            <div className="space-y-6">
-               {selectedDeal.milestones?.map(ms => {
-                 const msDispute = disputes.find(d => String(d.milestoneId) === String(ms._id) && String(d.dealId?._id) === String(selectedDeal._id));
-                 return <MilestoneDisputeCard key={ms._id} milestone={ms} project={selectedDeal} dispute={msDispute} />;
-               })}
-               {(!selectedDeal.milestones || selectedDeal.milestones.length === 0) && (
-                 <div className="text-center py-20 text-gray-400 italic">No {activeTab === "Files" ? "files" : "milestones"} found for this project.</div>
-               )}
-            </div>
-          ) : activeTab === "Disputes" && selectedDispute ? (
-             <div className="space-y-6">
-               <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col gap-6">
-                  <div className="grid grid-cols-3 gap-4 items-start">
-                    <div className="flex flex-col">
-                      <h3 className="text-sm font-bold text-[#001032] truncate">{selectedDispute.dealId?.startupId?.businessDetails?.companyName || "N/A"}</h3>
-                      <p className="text-[10px] text-gray-400">Mobile App Development</p>
-                      <p className="text-[10px] text-[#001032] mt-2 opacity-70">
-                        {selectedDispute.dealId?.professionalId?.businessDetails ? `${selectedDispute.dealId.professionalId.businessDetails.firstName} ${selectedDispute.dealId.professionalId.businessDetails.lastName}` : "N/A"}
-                      </p>
+        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+            {!selectedDeal && !selectedDispute ? (
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                  <IoMdCheckmark size={40} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a {activeTab === "Milestones" ? "project" : "dispute"} from the left to view details.</p>
+              </div>
+            ) : isThreadOpen ? (
+              <div className="p-4 lg:p-6 h-full flex flex-col">
+                {renderThreadView()}
+              </div>
+            ) : (activeTab === "Milestones" || activeTab === "Files") && selectedDeal ? (
+              /* ═══ Milestone List ═══ */
+              <div className="p-4 lg:p-6 space-y-6">
+                 {selectedDeal.milestones?.map(ms => {
+                   const msDispute = disputes.find(d => String(d.milestoneId) === String(ms._id) && String(d.dealId?._id) === String(selectedDeal._id));
+                   return <MilestoneDisputeCard key={ms._id} milestone={ms} project={selectedDeal} dispute={msDispute} />;
+                 })}
+                 {(!selectedDeal.milestones || selectedDeal.milestones.length === 0) && (
+                   <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-40">
+                      <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                        <IoMdCheckmark size={30} className="text-gray-300" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-700">No {activeTab === "Files" ? "files" : "milestones"} found</h3>
+                      <p className="text-sm text-gray-500">There is nothing to show for this project yet.</p>
+                   </div>
+                 )}
+              </div>
+            ) : activeTab === "Disputes" && selectedDispute ? (
+              /* ═══ Dispute Overview ═══ */
+              <div className="p-4 lg:p-6 space-y-6">
+                 <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col gap-6">
+                    <div className="grid grid-cols-3 gap-4 items-start">
+                      <div className="flex flex-col">
+                        <h3 className="text-sm font-bold text-[#001032] truncate">{selectedDispute.dealId?.startupId?.businessDetails?.companyName || "N/A"}</h3>
+                        <p className="text-[10px] text-gray-400">Mobile App Development</p>
+                        <p className="text-[10px] text-[#001032] mt-2 opacity-70">
+                          {selectedDispute.dealId?.professionalId?.businessDetails ? `${selectedDispute.dealId.professionalId.businessDetails.firstName} ${selectedDispute.dealId.professionalId.businessDetails.lastName}` : "N/A"}
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-[10px] font-bold text-[#001032]">Due Date</span>
+                        <p className="text-[10px] text-gray-400">1 March, 2026</p>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <span className="text-[10px] font-bold text-[#001032]">Price</span>
+                        <p className="text-[10px] text-gray-400">Rs {selectedDispute.dealId?.totalAmount}</p>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-center">
-                      <span className="text-[10px] font-bold text-[#001032]">Due Date</span>
-                      <p className="text-[10px] text-gray-400">1 March, 2026</p>
-                    </div>
-                    <div className="flex flex-col items-end">
-                      <span className="text-[10px] font-bold text-[#001032]">Price</span>
-                      <p className="text-[10px] text-gray-400">Rs {selectedDispute.dealId?.totalAmount}</p>
-                    </div>
-                  </div>
-                  <button 
-                    onClick={() => {
-                      setIsThreadOpen(true);
-                      const hasUnread = isStartup ? !selectedDispute.isReadByStartup : !selectedDispute.isReadByProfessional;
-                      if (hasUnread) handleMarkAsRead(selectedDispute._id);
-                    }} 
-                    className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-xs shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
-                  >
-                    Open Thread
-                  </button>
-               </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center h-full opacity-40 text-center gap-4">
-               <MdOutlineFactCheck size={32} className="text-gray-300" />
-               <p className="text-sm font-medium italic">Select a {activeTab === "Milestones" ? "project" : "dispute"} to view details</p>
-            </div>
-          )}
+                    <button 
+                      onClick={() => {
+                        setIsThreadOpen(true);
+                        const hasUnread = isStartup ? !selectedDispute.isReadByStartup : !selectedDispute.isReadByProfessional;
+                        if (hasUnread) handleMarkAsRead(selectedDispute._id);
+                      }} 
+                      className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-xs shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                    >
+                      Open Thread
+                    </button>
+                 </div>
+              </div>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

@@ -149,10 +149,10 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
   };
 
   const StatCard = ({ label, value, bgColor }) => (
-    <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+    <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
       <div className="flex items-center gap-2">
         <MdOutlineFactCheck size={20} className="text-[#001032]" />
-        <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032] leading-tight">{label}</h3>
+        <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032] leading-tight">{label}</h3>
       </div>
       <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
     </div>
@@ -237,20 +237,20 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
   if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[660px] h-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column ── */}
-      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${ (selectedDeal || selectedDispute) ? 'hidden lg:block' : 'block'}`}>
-        <div className="grid grid-cols-2 gap-4">
+      <div className={`flex-1 flex flex-col gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) ? 'hidden lg:block' : 'flex'}`}>
+        <div className="grid grid-cols-2 gap-4 shrink-0">
           <StatCard label="Total Disputes" value={disputes.length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Active Disputes" value={disputes.filter(d => d.status === 'Open' || d.status === 'In-Progress' || !d.status).length} bgColor="bg-[#D8D6F8]" />
           <StatCard label="Resolved" value={disputes.filter(d => d.status === 'Resolved').length} bgColor="bg-[#EFDBD9]" />
           <StatCard label="Escalated" value={disputes.length} bgColor="bg-[#D7EBE4]" />
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">{isCreateMode ? "Select Project to Dispute" : "Case List"}</h2>
+        <h2 className="text-xl font-medium text-[#000000] px-1 shrink-0">{isCreateMode ? "Select Project to Dispute" : "Case List"}</h2>
         
-        <div className="space-y-6 pb-20">
+        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
           {displayDeals.length > 0 ? (
             displayDeals.map(deal => (
               <ProjectCard 
@@ -265,7 +265,27 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
               />
             ))
           ) : (
-            <div className="text-center py-20 text-gray-400 italic">No case list found</div>
+            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto lg:my-10">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No cases found</h3>
+                <p className="text-sm text-gray-500">Your project disputes and case history will appear here.</p>
+              </div>
+            </div>
           )}
         </div>
       </div>
@@ -274,26 +294,39 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col gap-4 overflow-hidden ${(!selectedDeal && !selectedDispute) ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${(selectedDeal || selectedDispute) ? 'flex' : 'hidden lg:flex'}`}>
         
-        {/* Main Content Area (Right) */}
-        {selectedDeal || selectedDispute ? (
-          <div className="flex-1 overflow-hidden flex flex-col">
-            <div className={`flex-1 overflow-y-auto scrollbar-hide space-y-6 p-2 lg:p-4`}>
-              
-              {isCreateMode && selectedDeal && !selectedDispute ? (
-                /* ── Create View ── */
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 px-2">
-                    <button 
-                      onClick={() => setSelectedDeal(null)} 
-                      className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
-                    >
-                      <FiArrowLeft size={18} />
-                    </button>
-                    <h4 className="text-base font-semibold text-[#001032]">Dispute ID – DSP-2026-CO003921</h4>
-                  </div>
+        {/* Header */}
+        {(selectedDeal || selectedDispute) && (
+          <div className="flex items-center gap-3 py-2 px-4 shrink-0">
+            <button 
+                onClick={() => {
+                  if (selectedDispute) setSelectedDispute(null);
+                  else setSelectedDeal(null);
+                }} 
+                className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
+            >
+              <FiArrowLeft size={18} />
+            </button>
+            <h2 className="text-lg font-semibold text-[#001032]">
+              {selectedDispute ? "Dispute Details" : isCreateMode ? "Raise Dispute" : "Project Disputes"}
+            </h2>
+          </div>
+        )}
 
+        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+            {!selectedDeal && !selectedDispute ? (
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                  <IoMdCheckmark size={40} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-400">No Case Selected</h3>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a case from the list to view active disputes.</p>
+              </div>
+            ) : isCreateMode && selectedDeal && !selectedDispute ? (
+              /* ── Create View ── */
+              <div className="p-4 lg:p-6 space-y-6">
                   <div className="bg-white rounded-2xl border border-gray-100 p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
                     <h5 className="text-sm font-semibold text-[#001032]">Milestones</h5>
                     <select 
@@ -366,26 +399,10 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
                       Proceed for Communication
                     </button>
                   </div>
-                </div>
-              ) : selectedDispute ? (
-                /* ── Detail View (Second Figma Screen) ── */
-                <div className="space-y-6">
-                  <div className="flex items-center gap-3 px-2">
-                    <button 
-                      onClick={() => setSelectedDispute(null)} 
-                      className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
-                    >
-                      <FiArrowLeft size={18} />
-                    </button>
-                    <h4 className="text-sm lg:text-base font-bold text-[#001032] underline decoration-blue-500 underline-offset-4 decoration-2">
-                      Dispute ID – {getDisplayId(selectedDispute._id)}
-                    </h4>
-                    <div className="flex-1" />
-                    <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-lg font-bold shadow-sm">
-                      Duration - 20 Days
-                    </span>
-                  </div>
-
+              </div>
+            ) : selectedDispute ? (
+              /* ── Detail View ── */
+              <div className="p-4 lg:p-6 space-y-6">
                   {/* Info Card */}
                   <div className="bg-white rounded-2xl border border-gray-100 p-6 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
                     <h5 className="text-sm lg:text-base font-bold text-[#001032]">
@@ -426,30 +443,26 @@ const Bottom = ({ isCreateMode, setIsCreateMode, initialDealId, initialMilestone
                       Proceed for Communication
                     </button>
                   </div>
-                </div>
-              ) : (
-                /* ── Disputes List View (First Figma Screen, Right Side) ── */
-                <div className="space-y-4 mt-2">
-                  {disputes.filter(d => d.dealId._id === selectedDeal._id).map((dispute) => (
-                    <DisputeItem key={dispute._id} dispute={dispute} deal={selectedDeal} />
-                  ))}
-                  {disputes.filter(d => d.dealId._id === selectedDeal._id).length === 0 && (
-                     <div className="text-center py-20 text-gray-400 italic">No disputes raised for this project yet.</div>
-                  )}
-                </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              /* ── Disputes List View (Project specific) ── */
+              <div className="p-4 lg:p-6 space-y-4">
+                {disputes.filter(d => d.dealId._id === selectedDeal._id).map((dispute) => (
+                  <DisputeItem key={dispute._id} dispute={dispute} deal={selectedDeal} />
+                ))}
+                {disputes.filter(d => d.dealId._id === selectedDeal._id).length === 0 && (
+                   <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-40">
+                      <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                        <IoMdCheckmark size={30} className="text-gray-300" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-700">No disputes raised</h3>
+                      <p className="text-sm text-gray-500">There are no active disputes for this project.</p>
+                   </div>
+                )}
+              </div>
+            )}
           </div>
-        ) : (
-          /* Empty Selection State */
-          <div className="mx-2 my-2 flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white rounded-3xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 ">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <MdOutlineFactCheck size={40} className="text-gray-300" />
-            </div>
-            <h3 className="text-lg font-bold text-gray-400">No Case Selected</h3>
-            <p className="text-sm text-gray-400 mt-1 italic">Select a case from the list to view active disputes.</p>
-          </div>
-        )}
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiFileText, FiPlus, FiArrowLeft, FiClipboard } from "react-icons/fi";
 import { MdOutlineFactCheck } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io";
 import axios from "axios";
 import { serverUrl } from "@/App";
 
@@ -38,10 +39,10 @@ const Bottom = () => {
   };
 
   const StatCard = ({ label, value, bgColor }) => (
-    <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+    <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
       <div className="flex items-center gap-2">
         <FiFileText size={20} className="text-[#001032]" />
-        <h3 className="text-[10px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
+        <h3 className="text-[13px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
       </div>
       <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
     </div>
@@ -123,7 +124,7 @@ const Bottom = () => {
   if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column: Project List ── */}
       <div className={`flex-1 flex flex-col gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
@@ -138,13 +139,30 @@ const Bottom = () => {
           />
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] px-1 shrink-0">Finished Projects</h2>
+        <h2 className="text-xl font-medium text-[#000000] px-1 shrink-0">All Deals</h2>
         
         <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
           {deals.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full opacity-40 text-center gap-4">
-               <FiClipboard size={32} />
-               <p className="text-sm font-medium italic">No completed projects found yet.</p>
+            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto lg:my-10">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No completed deals</h3>
+                <p className="text-sm text-gray-500">Your successfully finished projects will appear here.</p>
+              </div>
             </div>
           ) : (
             deals.map(deal => (
@@ -162,99 +180,103 @@ const Bottom = () => {
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column: Details ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-y-auto scrollbar-hide p-2 gap-6 ${selectedDeal ? 'flex' : 'hidden lg:flex'}`}>
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
         
-        {/* Mobile Back Button */}
+        {/* Header */}
         {selectedDeal && (
-          <button 
-            onClick={() => setSelectedDeal(null)}
-            className="lg:hidden flex items-center gap-2 text-[#59549F] font-semibold mb-2"
-          >
-            <FiArrowLeft size={18} />
-            Back to List
-          </button>
-        )}
-
-        {/* Content Area */}
-        {!selectedDeal ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 rounded-2xl h-full min-h-[500px]">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <MdOutlineFactCheck size={40} className="text-gray-400" />
-            </div>
-            <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
-            <p className="text-sm text-gray-400 mt-1 italic">Select a completed project from the left to view details.</p>
+          <div className="flex items-center gap-3 py-2 px-4 shrink-0">
+            <button 
+                onClick={() => setSelectedDeal(null)} 
+                className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
+            >
+              <FiArrowLeft size={18} />
+            </button>
+            <h2 className="text-lg font-semibold text-[#001032]">Deal Details</h2>
           </div>
-        ) : (
-          <>
-            {/* Success Rate Card */}
-            <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-4">
-               <h3 className="text-lg font-semibold text-[#001032]">Success Rate</h3>
-               <p className="text-sm text-[#001032]/70 leading-relaxed">
-                 90% as per analysis about work flow, disputes and timely delivery
-               </p>
-               <button className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] text-[#59549F] rounded-xl font-bold shadow-sm transition-all">
-                 View Details
-               </button>
-            </div>
-
-            {/* Total Value Section */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
-               <h3 className="text-lg font-semibold text-[#001032]">Total Value</h3>
-               <div className="flex flex-col lg:flex-row gap-3">
-                  <div className="bg-[#FDFDFF] px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                    INR - Indian Rupees
-                  </div>
-                  <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                    {`Rs ${selectedDeal.milestones?.length ? Math.min(...selectedDeal.milestones.map(m => m.amount || 0)) : 0}`}
-                  </div>
-                  <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                    {`Rs ${selectedDeal.milestones?.length ? Math.max(...selectedDeal.milestones.map(m => m.amount || 0)) : 0}`}
-                  </div>
-               </div>
-            </div>
-
-            {/* Completed Date Section */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
-               <h3 className="text-lg font-semibold text-[#001032]">Completed Date</h3>
-               <div className="flex flex-col lg:flex-row gap-3">
-                  <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                    {selectedDeal.updatedAt ? new Date(selectedDeal.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : "N/A"}
-                  </div>
-                  <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                    From
-                  </div>
-                  <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                    To
-                  </div>
-               </div>
-            </div>
-
-            {/* Released Funds Section */}
-            <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-6">
-               <h3 className="text-lg font-semibold text-[#001032]">Released Funds</h3>
-               <div className="space-y-4">
-                  {selectedDeal.milestones?.length > 0 ? selectedDeal.milestones.map((ms) => (
-                    <div key={ms._id} className="bg-[#F3F3F3] rounded-2xl p-4 flex items-center justify-between gap-4">
-                       <div className="flex items-start gap-3">
-                          <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1.5 shrink-0" />
-                          <div>
-                             <h4 className="text-sm font-semibold text-[#001032]">{ms.title}</h4>
-                             <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-1">{ms.description || "Milestone successfully released"}</p>
-                             <p className="text-[9px] text-gray-400">Due Date - {ms.duration || "N/A"}</p>
-                          </div>
-                       </div>
-                       <div className="bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold px-4 py-1.5 rounded-md shadow-sm whitespace-nowrap">
-                         Completed
-                       </div>
-                    </div>
-                  )) : (
-                    <div className="text-center py-10 opacity-30 italic text-sm">No released funds found.</div>
-                  )}
-               </div>
-            </div>
-          </>
         )}
 
+        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+            {!selectedDeal ? (
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                   <IoMdCheckmark size={40} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a completed project from the left to view details.</p>
+              </div>
+            ) : (
+              <div className="p-4 lg:p-6 space-y-6">
+                {/* Success Rate Card */}
+                <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-4">
+                   <h3 className="text-lg font-semibold text-[#001032]">Success Rate</h3>
+                   <p className="text-sm text-[#001032]/70 leading-relaxed">
+                     90% as per analysis about work flow, disputes and timely delivery
+                   </p>
+                   <button className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] text-[#59549F] rounded-xl font-bold shadow-sm transition-all">
+                     View Details
+                   </button>
+                </div>
+
+                {/* Total Value Section */}
+                <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
+                   <h3 className="text-lg font-semibold text-[#001032]">Total Value</h3>
+                   <div className="flex flex-col lg:flex-row gap-3">
+                      <div className="bg-[#FDFDFF] px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                        INR - Indian Rupees
+                      </div>
+                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                        {`Rs ${selectedDeal.milestones?.length ? Math.min(...selectedDeal.milestones.map(m => m.amount || 0)) : 0}`}
+                      </div>
+                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                        {`Rs ${selectedDeal.milestones?.length ? Math.max(...selectedDeal.milestones.map(m => m.amount || 0)) : 0}`}
+                      </div>
+                   </div>
+                </div>
+
+                {/* Completed Date Section */}
+                <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
+                   <h3 className="text-lg font-semibold text-[#001032]">Completed Date</h3>
+                   <div className="flex flex-col lg:flex-row gap-3">
+                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                        {selectedDeal.updatedAt ? new Date(selectedDeal.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : "N/A"}
+                      </div>
+                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                        From
+                      </div>
+                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                        To
+                      </div>
+                   </div>
+                </div>
+
+                {/* Released Funds Section */}
+                <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-6">
+                   <h3 className="text-lg font-semibold text-[#001032]">Released Funds</h3>
+                   <div className="space-y-4">
+                      {selectedDeal.milestones?.length > 0 ? selectedDeal.milestones.map((ms) => (
+                        <div key={ms._id} className="bg-[#F3F3F3] rounded-2xl p-4 flex items-center justify-between gap-4">
+                           <div className="flex items-start gap-3">
+                              <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1.5 shrink-0" />
+                              <div>
+                                 <h4 className="text-sm font-semibold text-[#001032]">{ms.title}</h4>
+                                 <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-1">{ms.description || "Milestone successfully released"}</p>
+                                 <p className="text-[9px] text-gray-400">Due Date - {ms.duration || "N/A"}</p>
+                              </div>
+                           </div>
+                           <div className="bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold px-4 py-1.5 rounded-md shadow-sm whitespace-nowrap">
+                             Completed
+                           </div>
+                        </div>
+                      )) : (
+                        <div className="text-center py-10 opacity-30 italic text-sm">No released funds found.</div>
+                      )}
+                   </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

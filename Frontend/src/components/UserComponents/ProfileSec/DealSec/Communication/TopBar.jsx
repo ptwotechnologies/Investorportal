@@ -8,7 +8,7 @@ const TopBar = ({ onCreateClick }) => {
         {/* Left Section: Title and Subtitle */}
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl  font-medium text-[#001032] leading-tight">Communication</h1>
-          <p className="text-[10px] lg:text-sm text-[#000000]  ">
+          <p className="text-[13px] lg:text-sm text-[#000000]  ">
             Manage all ongoing projects and work progress 
           </p>
         </div>
@@ -22,12 +22,12 @@ const TopBar = ({ onCreateClick }) => {
               <input
                 type="text"
                 placeholder="Search by projects, milestones or startups"
-                className="outline-none transition-all placeholder:text-gray-400 w-full text-xs lg:text-base border-none ring-0 focus:ring-0 h-8 lg:h-12"
+                className="pr-2 outline-none transition-all placeholder:text-gray-400 w-full text-xs lg:text-base border-none ring-0 focus:ring-0 h-8 lg:h-12"
               />
             </div>
-            <button className="flex items-center justify-center shrink-0 w-[80px] lg:w-[120px] lg:rounded-xl rounded-lg h-full hover:bg-gray-50 transition-all text-[#313131] font-medium text-[10px] lg:text-[15px] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] border-l">
+            {/* <button className="flex items-center justify-center shrink-0 w-[80px] lg:w-[120px] lg:rounded-xl rounded-lg h-full hover:bg-gray-50 transition-all text-[#313131] font-medium text-[10px] lg:text-[15px] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] border-l">
               All Status
-            </button>
+            </button> */}
           </div>
 
           {/* Communication Button */}
@@ -37,7 +37,7 @@ const TopBar = ({ onCreateClick }) => {
           >
             <FiPlus size={15} className="lg:hidden" />
             <FiPlus size={18} className="hidden lg:block" />
-            <span className="text-[10px] lg:text-sm whitespace-nowrap">Communication</span>
+            <span className="text-[13px] lg:text-sm whitespace-nowrap">Communication</span>
           </button>
         </div>
       </div>

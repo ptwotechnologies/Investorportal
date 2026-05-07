@@ -251,15 +251,7 @@ const Mobile = () => {
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Active Deals</li>
                             </Link>
-                            <Link to="/deal/milestones" className="flex items-center gap-2">
-                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                              <li>Milestones</li>
-                            </Link>
-                            <Link to="/deal/payments" className="flex items-center gap-2">
-                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                              <li>Payments</li>
-                            </Link>
-                            <Link to="/deal/negotiations" className="flex items-center gap-2">
+                             <Link to="/deal/negotiations" className="flex items-center gap-2">
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Negotiations</li>
                             </Link>
@@ -267,7 +259,15 @@ const Mobile = () => {
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Documentation</li>
                             </Link>
-                            <Link to="/deal/completed" className="flex items-center gap-2">
+                             <Link to="/deal/payments" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Payments</li>
+                            </Link>
+                            <Link to="/deal/milestones" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Milestones</li>
+                            </Link>
+                             <Link to="/deal/completed" className="flex items-center gap-2">
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Completed</li>
                             </Link>
@@ -275,6 +275,9 @@ const Mobile = () => {
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Disputes</li>
                             </Link>
+                           
+                           
+                           
                           </ul>
                         )}
                       </ul>
@@ -305,7 +308,7 @@ const Mobile = () => {
                   <SheetFooter>
                     <Button
                       type="button"
-                      className="bg-[#D8D6F8] text-[#001032] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                      className="bg-[#D8D6F8] text-[#001032] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
                       onClick={handleSignOutClick}
                     >
                       Sign out

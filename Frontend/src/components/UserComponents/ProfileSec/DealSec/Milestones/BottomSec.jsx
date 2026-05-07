@@ -55,10 +55,7 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
       const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      // Only show deals that have at least ONE PAID milestone
-      const activeDeals = res.data.filter(d => 
-        d.milestones?.some(m => m.status === 'Paid' || m.status === 'Completed')
-      );
+      const activeDeals = res.data;
       setDeals(activeDeals);
     } catch (error) {
       console.error("Error fetching deals:", error);
@@ -184,10 +181,10 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
   };
 
   const StatCard = ({ label, value, bgColor }) => (
-    <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+    <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
       <div className="flex items-center gap-2">
         <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-        <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">{label}</h3>
+        <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">{label}</h3>
       </div>
       <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
     </div>
@@ -292,7 +289,7 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
   if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column: Project List ── */}
       <div className={`flex-1 flex flex-col gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
@@ -306,25 +303,48 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
         <h2 className="text-xl font-medium text-[#000000] px-1 shrink-0">Active Deals</h2>
         
         <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
-          {deals.map(deal => (
-            <ProjectCard 
-              key={deal._id} 
-              deal={deal} 
-              isSelected={selectedDeal?._id === deal._id}
-              onSelect={(d) => { setSelectedDeal(d); setSelectedMilestone(null); }}
-            />
-          ))}
+          {deals.length === 0 ? (
+            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto lg:my-10">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No active deals found</h3>
+                <p className="text-sm text-gray-500">Your current deals and projects will appear here.</p>
+              </div>
+            </div>
+          ) : (
+            deals.map(deal => (
+              <ProjectCard 
+                key={deal._id} 
+                deal={deal} 
+                isSelected={selectedDeal?._id === deal._id}
+                onSelect={(d) => { setSelectedDeal(d); setSelectedMilestone(null); }}
+              />
+            ))
+          )}
         </div>
       </div>
 
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
-      {/* ── Right Column: Milestones or Detail ── */}
       <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
         
         {/* Header */}
         {selectedDeal && (
-          <div className="flex items-center gap-3 py-2 px-2 shrink-0">
+          <div className="flex items-center gap-3 py-2 px-4 shrink-0">
             <button 
                 onClick={() => {
                     if (selectedMilestone) setSelectedMilestone(null);
@@ -341,129 +361,135 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
           </div>
         )}
 
-        <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Scrollable Content Area */}
-          <div className="flex-1 overflow-y-auto scrollbar-hide p-2">
+        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
             {!selectedDeal ? (
-              <div className="flex flex-col items-center justify-center h-full opacity-40 text-center gap-4">
-                 <FiClipboard size={32} className="text-gray-300" />
-                 <p className="text-sm font-medium italic">Select a project to view its milestones</p>
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                  <IoMdCheckmark size={40} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a project from the left to view its milestones.</p>
               </div>
-            ) : selectedMilestone ? (
-              /* ═══ Milestone Detail View ═══ */
-              <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-6">
-                <div className="flex items-center justify-between">
-                   <h3 className="text-xl font-semibold text-[#001032]">{selectedMilestone.title}</h3>
-                   <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-bold">
-                     Duration - {selectedMilestone.duration || "20 Days"}
-                   </span>
-                </div>
-
-                <div className="space-y-4">
-                   <h4 className="text-base font-semibold text-[#001032]">Budget - {selectedMilestone.title}</h4>
-                   <div className="flex gap-3">
-                      <div className="w-[150px] bg-[#FDFDFF] border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
-                         INR - Indian Rupees
-                      </div>
-                      <div className="flex-1 bg-white border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
-                         Rs {selectedMilestone.amount}
-                      </div>
-                   </div>
-                </div>
-
-                <div className="space-y-4">
-                   <h4 className="text-base font-semibold text-[#001032]">Timeline - {selectedMilestone.title}</h4>
-                   <div className="flex gap-3">
-                      <div className="w-[150px] bg-[#FDFDFF] border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
-                         Total Days
-                      </div>
-                      <div className="flex-1 bg-white border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
-                         {selectedMilestone.duration || "20 Days"}
-                      </div>
-                   </div>
-                </div>
-
-                <div className="space-y-4">
-                   <h4 className="text-base font-semibold text-[#001032]">Scope of work in {selectedMilestone.title.toLowerCase()}</h4>
-                   <div className="w-full bg-white border border-gray-100 rounded-3xl p-6 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] min-h-[250px] overflow-y-auto scrollbar-hide">
-                      <p className="text-xs text-gray-500 leading-relaxed text-justify">
-                         {selectedMilestone.description || "No specific scope provided for this milestone yet. These Terms and Conditions govern the access to and use of the website and collaboration portal."}
-                      </p>
-                   </div>
-                </div>
-              </div>
-            ) : activeView === 'addMilestone' ? (
-              /* ═══ Add Milestone Form (Buyer Only) ═══ */
-              String(selectedDeal.startupId?._id || selectedDeal.startupId) !== String(currentUserId) ? (
-                <div className="flex flex-col items-center justify-center h-full text-center p-10 opacity-60">
-                   <FiClipboard size={32} className="text-gray-300 mb-4" />
-                   <p className="text-sm font-medium italic">Only the project creator (Buyer) can add new milestones.</p>
-                   <button onClick={() => setActiveView('none')} className="mt-4 text-[#59549F] text-xs font-bold underline">Go Back</button>
-                </div>
-              ) : (
-                <div className="bg-white rounded-2xl p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-6">
-                  <div className="space-y-6">
-                     <div className="space-y-2">
-                       <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Milestone Name</label>
-                       <input 
-                         type="text"
-                         value={tempMilestone.title}
-                         onChange={(e) => setTempMilestone({...tempMilestone, title: e.target.value})}
-                         className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-sm focus:border-[#59549F] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]"
-                         placeholder="e.g. Design Completion"
-                       />
-                     </div>
-
-                     <div className="space-y-4">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Budget</label>
-                        <div className="flex gap-3">
-                          <div className="w-[150px] px-3 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-xs text-gray-400 text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex items-center justify-center">
-                            INR - Indian Rupees
-                          </div>
-                          <input 
-                            type="number" 
-                            placeholder="Amount"
-                            value={tempMilestone.amount}
-                            onChange={(e) => setTempMilestone({...tempMilestone, amount: e.target.value})}
-                            className="flex-1 px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold" 
-                          />
-                        </div>
-                     </div>
-
-                     <div className="space-y-4">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Timeline</label>
-                        <div className="flex gap-3">
-                          <div className="w-[150px] px-3 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-xs text-gray-400 text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex items-center justify-center">
-                            Total Days
-                          </div>
-                          <input 
-                            type="text" 
-                            placeholder="e.g. 15 Days" 
-                            value={tempMilestone.duration}
-                            onChange={(e) => setTempMilestone({...tempMilestone, duration: e.target.value})}
-                            className="flex-1 px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold" 
-                          />
-                        </div>
-                     </div>
-
-                     <div className="space-y-4">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Scope of work</label>
-                        <textarea 
-                          placeholder="Describe the deliverables for this milestone..."
-                          value={tempMilestone.description}
-                          onChange={(e) => setTempMilestone({...tempMilestone, description: e.target.value})}
-                          className="w-full h-40 lg:p-6 p-3 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm focus:border-[#59549F] outline-none resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] leading-relaxed"
-                        />
-                     </div>
-                  </div>
-                </div>
-              )
             ) : (
-              /* ═══ Milestone List for Project ═══ */
-              <div className="space-y-4">
-                 {selectedDeal.milestones?.filter(m => m.status === 'Paid' || m.status === 'Completed').map(ms => (
-                   <MilestoneCard key={ms._id} ms={ms} onSelect={(m) => setSelectedMilestone(m)} />
-                 ))}
+              <div className="p-4 lg:p-6">
+                {selectedMilestone ? (
+                  /* ═══ Milestone Detail View ═══ */
+                  <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-6">
+                    <div className="flex items-center justify-between">
+                       <h3 className="text-xl font-semibold text-[#001032]">{selectedMilestone.title}</h3>
+                       <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-bold">
+                         Duration - {selectedMilestone.duration || "20 Days"}
+                       </span>
+                    </div>
+
+                    <div className="space-y-4">
+                       <h4 className="text-base font-semibold text-[#001032]">Budget - {selectedMilestone.title}</h4>
+                       <div className="flex gap-3">
+                          <div className="w-[150px] bg-[#FDFDFF] border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
+                             INR - Indian Rupees
+                          </div>
+                          <div className="flex-1 bg-white border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
+                             Rs {selectedMilestone.amount}
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="space-y-4">
+                       <h4 className="text-base font-semibold text-[#001032]">Timeline - {selectedMilestone.title}</h4>
+                       <div className="flex gap-3">
+                          <div className="w-[150px] bg-[#FDFDFF] border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
+                             Total Days
+                          </div>
+                          <div className="flex-1 bg-white border border-gray-100 rounded-lg py-3 px-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-xs text-gray-400 font-bold flex justify-center items-center">
+                             {selectedMilestone.duration || "20 Days"}
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="space-y-4">
+                       <h4 className="text-base font-semibold text-[#001032]">Scope of work in {selectedMilestone.title.toLowerCase()}</h4>
+                       <div className="w-full bg-white border border-gray-100 rounded-3xl p-6 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] min-h-[250px] overflow-y-auto scrollbar-hide">
+                          <p className="text-xs text-gray-500 leading-relaxed text-justify">
+                             {selectedMilestone.description || "No specific scope provided for this milestone yet. These Terms and Conditions govern the access to and use of the website and collaboration portal."}
+                          </p>
+                       </div>
+                    </div>
+                  </div>
+                ) : activeView === 'addMilestone' ? (
+                  /* ═══ Add Milestone Form (Buyer Only) ═══ */
+                  String(selectedDeal.startupId?._id || selectedDeal.startupId) !== String(currentUserId) ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center p-10 opacity-60">
+                       <FiClipboard size={32} className="text-gray-300 mb-4" />
+                       <p className="text-sm font-medium italic">Only the project creator (Buyer) can add new milestones.</p>
+                       <button onClick={() => setActiveView('none')} className="mt-4 text-[#59549F] text-xs font-bold underline">Go Back</button>
+                    </div>
+                  ) : (
+                    <div className="bg-white rounded-2xl p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-6">
+                      <div className="space-y-6">
+                         <div className="space-y-2">
+                           <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Milestone Name</label>
+                           <input 
+                             type="text"
+                             value={tempMilestone.title}
+                             onChange={(e) => setTempMilestone({...tempMilestone, title: e.target.value})}
+                             className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-sm focus:border-[#59549F] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                             placeholder="e.g. Design Completion"
+                           />
+                         </div>
+
+                         <div className="space-y-4">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Budget</label>
+                            <div className="flex gap-3">
+                              <div className="w-[150px] px-3 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-xs text-gray-400 text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex items-center justify-center">
+                                INR - Indian Rupees
+                              </div>
+                              <input 
+                                type="number" 
+                                placeholder="Amount"
+                                value={tempMilestone.amount}
+                                onChange={(e) => setTempMilestone({...tempMilestone, amount: e.target.value})}
+                                className="flex-1 px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold" 
+                              />
+                            </div>
+                         </div>
+
+                         <div className="space-y-4">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Timeline</label>
+                            <div className="flex gap-3">
+                              <div className="w-[150px] px-3 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-xs text-gray-400 text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex items-center justify-center">
+                                Total Days
+                              </div>
+                              <input 
+                                type="text" 
+                                placeholder="e.g. 15 Days" 
+                                value={tempMilestone.duration}
+                                onChange={(e) => setTempMilestone({...tempMilestone, duration: e.target.value})}
+                                className="flex-1 px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold" 
+                              />
+                            </div>
+                         </div>
+
+                         <div className="space-y-4">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block">Scope of work</label>
+                            <textarea 
+                              placeholder="Describe the deliverables for this milestone..."
+                              value={tempMilestone.description}
+                              onChange={(e) => setTempMilestone({...tempMilestone, description: e.target.value})}
+                              className="w-full h-40 lg:p-6 p-3 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm focus:border-[#59549F] outline-none resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] leading-relaxed"
+                            />
+                         </div>
+                      </div>
+                    </div>
+                  )
+                ) : (
+                  /* ═══ Milestone List for Project ═══ */
+                  <div className="space-y-4">
+                     {selectedDeal.milestones?.filter(m => m.status === 'Paid' || m.status === 'Completed').map(ms => (
+                       <MilestoneCard key={ms._id} ms={ms} onSelect={(m) => setSelectedMilestone(m)} />
+                     ))}
+                  </div>
+                )}
               </div>
             )}
           </div>

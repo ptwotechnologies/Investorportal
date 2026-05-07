@@ -9,7 +9,7 @@ const AnalyticsTopBar = () => {
         {/* Title Section */}
         <div className="flex-shrink-0 text-left w-full lg:w-auto">
           <h1 className="text-2xl font-medium text-[#001032] leading-tight">Analytics</h1>
-          <p className="text-[12px] lg:text-sm text-[#000000] mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] mt-1">
             Track your performance and deal statistics
           </p>
         </div>

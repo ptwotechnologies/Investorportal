@@ -51,10 +51,17 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
   const [scopeItems, setScopeItems] = useState([]);
   const [description, setDescription] = useState("");
   
+  const [milestones, setMilestones] = useState([]);
   const [totalBudget, setTotalBudget] = useState("");
   const [totalTimeline, setTotalTimeline] = useState("");
 
-  const [milestones, setMilestones] = useState([]);
+  // Auto-calculate total budget from milestones
+  useEffect(() => {
+    const sum = milestones.reduce((acc, m) => acc + (Number(m.budget) || 0), 0);
+    if (sum > 0 || milestones.length > 0) {
+      setTotalBudget(sum.toString());
+    }
+  }, [milestones]);
 
   // ── Temp State for Editors ──
   const [tempMilestone, setTempMilestone] = useState(null);
@@ -370,6 +377,9 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
               className="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs flex-1 outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold"
             />
           </div>
+          {milestones.length > 0 && totalBudget !== milestones.reduce((acc, m) => acc + (Number(m.budget) || 0), 0).toString() && (
+            <p className="text-[10px] text-red-500 mt-1 text-center">Note: Total doesn't match sum of milestones ({milestones.reduce((acc, m) => acc + (Number(m.budget) || 0), 0)})</p>
+          )}
         </Card>
 
         {/* Total Timeline card */}
@@ -400,7 +410,22 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
             {milestones.length > 0 ? (
               milestones.map(m => <MilestoneItem key={m.id} milestone={m} onEdit={handleEditMilestone} />)
             ) : (
-              <p className="text-center text-gray-400 py-10 text-sm italic">No milestones added yet</p>
+              <div className="flex flex-col items-center gap-2 py-6 text-center border border-gray-100 rounded-xl bg-gray-50 shadow-inner">
+                <svg
+                  className="w-8 h-8 text-gray-300"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                  />
+                </svg>
+                <p className="text-xs text-gray-400 italic">No milestones added yet</p>
+              </div>
             )}
           </div>
         </Card>
@@ -421,12 +446,28 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
           </div>
 
           {activeView === 'none' && (
-            <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50">
-              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
-                <IoMdCheckmark size={40} />
-              </div>
-              <h3 className="text-lg font-bold text-gray-400">No Details Selected</h3>
-              <p className="text-sm text-gray-400 mt-1 italic">Click "Add Details" on any section to start editing your draft.</p>
+            <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
+               <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm">
+                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">No Details Selected</h3>
+                    <p className="text-sm text-gray-500 italic">Click "Add Details" on any section to start editing your draft.</p>
+                  </div>
+               </div>
             </div>
           )}
 

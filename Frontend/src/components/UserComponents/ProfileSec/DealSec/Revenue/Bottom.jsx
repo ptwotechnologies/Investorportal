@@ -142,7 +142,27 @@ const Bottom = () => {
           {loading ? (
             <div className="text-center py-10 text-gray-400">Loading...</div>
           ) : deals.length === 0 ? (
-            <div className="text-center py-10 text-gray-400 italic">No revenue data available</div>
+            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-10">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No revenue data</h3>
+                <p className="text-sm text-gray-500">Your earnings and payment releases will appear here.</p>
+              </div>
+            </div>
           ) : (
             deals.map(deal => (
               <ProposalCard 
@@ -240,11 +260,28 @@ const Bottom = () => {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full opacity-40 text-center gap-4">
-               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                  <MdOutlineFactCheck size={32} className="text-gray-300" />
+            <div className="flex flex-col items-center justify-center h-full p-10 text-center">
+               <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm">
+                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                    <svg
+                      className="w-8 h-8 text-gray-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+                      />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-700 mb-2">Select to view</h3>
+                    <p className="text-sm text-gray-500 italic">Select a deal to view revenue details</p>
+                  </div>
                </div>
-               <p className="text-sm font-medium italic">Select a deal to view revenue details</p>
             </div>
           )}
         </div>

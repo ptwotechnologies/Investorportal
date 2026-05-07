@@ -161,10 +161,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     );
   };
 
-  // ✅ Open deal route when navigating (Exclude Communication)
+  // ✅ Open deal route when navigating (Exclude Communication & Analytics)
   useEffect(() => {
     const isCommunicationRoute = location.pathname === "/deal/communication";
-    if (isDealRoute && !isCommunicationRoute) {
+    const isAnalyticsRoute = location.pathname === "/deal/analytics";
+    if (isDealRoute && !isCommunicationRoute && !isAnalyticsRoute) {
       setIsDealsOpen(true);
     }
   }, [location.pathname, isDealRoute]);

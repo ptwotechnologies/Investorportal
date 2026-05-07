@@ -708,6 +708,41 @@ const ConnectSec1 = () => {
   
   {error && <p className="text-red-500">{error}</p>}
 
+  {!loading && !error && filteredProfiles.length === 0 && (
+    <div className="flex flex-col items-center justify-center py-20 px-4">
+      <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm">
+        <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+          <svg
+            className="w-8 h-8 text-gray-400"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+            />
+          </svg>
+        </div>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">
+            {activeTab === "all" ? "No new profiles found" :
+             activeTab === "received" ? "No received requests" :
+             activeTab === "sent" ? "No sent requests" :
+             "No connections yet"}
+          </h3>
+          <p className="text-sm text-gray-500">
+            {activeTab === "all" ? "We couldn't find any profiles at the moment. Check back later as new members join our community daily." :
+             activeTab === "connections" ? "Start reaching out to build your network" :
+             "Your connection requests will appear here"}
+          </p>
+        </div>
+      </div>
+    </div>
+  )}
+
   {!loading &&
     !error &&
     filteredProfiles.map((profile, index) => {

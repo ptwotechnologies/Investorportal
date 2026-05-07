@@ -69,10 +69,10 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
 };
 
 const StatCard = ({ label, value, bgColor }) => (
-  <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+  <div className={`${bgColor} rounded-2xl px-2 py-4  lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
     <div className="flex items-center gap-2">
       <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-      <h3 className="text-[11px] lg:text-sm lg:font-medium text-[#001032] leading-tight">{label}</h3>
+      <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032] leading-tight">{label}</h3>
     </div>
     <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
   </div>
@@ -229,7 +229,7 @@ const Bottom = () => {
   } : null;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[650px] h-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column ── */}
       <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
@@ -240,12 +240,32 @@ const Bottom = () => {
           <StatCard label="Total Payments" value="0" bgColor="bg-[#D7EBE4]" />
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Deals for Payment</h2>
-        <div className="space-y-4 pb-20">
+        <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Deals</h2>
+        <div className="space-y-4 lg:pb-20">
           {loading ? (
             <div className="text-center py-10 text-gray-400">Loading...</div>
           ) : deals.length === 0 ? (
-            <div className="text-center py-10 text-gray-400 italic">No deals awaiting payment</div>
+            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-10">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No payments pending</h3>
+                <p className="text-sm text-gray-500">Deals requiring payment will appear here after documentation.</p>
+              </div>
+            </div>
           ) : (
             deals.map(deal => (
               <ProposalCard 
@@ -268,18 +288,19 @@ const Bottom = () => {
       <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col gap-4 ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
         
         {selectedDeal && (
-          <div className="lg:hidden flex items-center gap-3">
-            <button onClick={() => setSelectedDeal(null)} className="p-2 bg-gray-50 rounded-full text-[#59549F]">
+          <div className="lg:hidden flex items-center gap-3 mb-2 px-2">
+            <button onClick={() => setSelectedDeal(null)} className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
               <FiArrowLeft size={20} />
             </button>
-            <span className="font-bold text-lg text-[#001032]">Back to Deals</span>
+            <span className="font-bold text-lg text-[#000000]">Back to Deals</span>
           </div>
         )}
 
-        {selectedDeal ? (
-          <div className="flex-1 flex flex-col h-full min-h-0">
-            <div className="flex-1 bg-white rounded-2xl m-2 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col overflow-hidden min-h-0">
-              <div className="flex-1 overflow-y-auto scrollbar-hide p-4 lg:p-6 space-y-4">
+        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+            {selectedDeal ? (
+              <>
+                <div className="flex-1 flex flex-col h-full p-4 lg:p-6 space-y-4">
                 
                 <div className="bg-white ">
                   <div className="flex items-center justify-between mb-4">
@@ -355,29 +376,30 @@ const Bottom = () => {
                   </div>
                 )}
               </div>
-            </div>
 
-            {selectedMilestone && selectedMilestone.status !== 'Paid' && (
-              <div className="mx-2 mt-3">
-                <button 
-                  onClick={handlePayment}
-                  disabled={isProcessingPayment}
-                  className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
-                >
-                  {isProcessingPayment ? "Processing..." : `Pay Rs ${selectedMilestone.amount}`}
-                </button>
+              {selectedMilestone && selectedMilestone.status !== 'Paid' && (
+                <div className="p-4 bg-white border-t border-gray-100">
+                  <button 
+                    onClick={handlePayment}
+                    disabled={isProcessingPayment}
+                    className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
+                  >
+                    {isProcessingPayment ? "Processing..." : `Pay Rs ${selectedMilestone.amount}`}
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                  <IoMdCheckmark size={40} />
+                </div>
+                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view payment status.</p>
               </div>
             )}
           </div>
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white rounded-[2rem] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 mx-2">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <IoMdCheckmark size={40} className="text-gray-300" />
-            </div>
-            <h3 className="text-lg font-bold text-gray-400">No Deal Selected</h3>
-            <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view payment status.</p>
-          </div>
-        )}
+        </div>
       </div>
 
     </div>

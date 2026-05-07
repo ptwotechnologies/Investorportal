@@ -315,18 +315,18 @@ const Bottom = ({
         
         {/* Summary Cards Grid */} 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <HiOutlineArrowsRightLeft size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Open Proposals</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Open Proposals</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">{deals.length}</p>
           </div>
 
-          <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <HiOutlineUserGroup size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Awaiting Response</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Awaiting Response</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">
               {deals.filter(d => {
@@ -337,20 +337,20 @@ const Bottom = ({
             </p>
           </div>
 
-          <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] py-2 px-2 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <LuArrowLeftRight size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Counter Offers</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Counter Offers</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">
               {deals.reduce((acc, d) => acc + (d.negotiation?.history?.length || 0), 0)}
             </p>
           </div>
 
-          <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] p-4 rounded-2xl flex flex-col gap-2">
+          <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] py-4 px-2 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <LuClock size={20} className="text-[#001032]" />
-              <h3 className="text-[10px] lg:text-sm lg:font-medium text-[#001032]">Expiring Soon</h3>
+              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Expiring Soon</h3>
             </div>
             <p className="text-xl lg:text-2xl font-bold text-[#001032]">0</p>
           </div>
@@ -362,7 +362,27 @@ const Bottom = ({
         {loading ? (
           <div className="text-center py-10 text-gray-400">Loading proposals...</div>
         ) : deals.length === 0 ? (
-          <div className="text-center py-10 text-gray-400 italic">No active negotiations</div>
+          <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-10">
+            <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+              <svg
+                className="w-8 h-8 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
+                />
+              </svg>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">No negotiations found</h3>
+              <p className="text-sm text-gray-500">Your active negotiations and counter-offers will appear here.</p>
+            </div>
+          </div>
         ) : (
           deals.map(proj => (
             <ProposalCard 

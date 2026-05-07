@@ -81,10 +81,10 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
 };
 
 const StatCard = ({ label, value, bgColor }) => (
-  <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+  <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
     <div className="flex items-center gap-2">
       <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-      <h3 className="text-[9px] lg:text-sm lg:font-medium text-[#001032]">{label}</h3>
+      <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">{label}</h3>
     </div>
     <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
   </div>
@@ -278,11 +278,11 @@ const Bottom = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2  lg:py-4 bg-[#FDFDFF] h-[630px] overflow-hidden relative">
+    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto  overflow-hidden relative">
       <div id="recaptcha-container"></div>
 
       {/* ── Left Column: Stats & Deals ── */}
-      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 h-[600px] ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
+      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 max-h-[610px] ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
         <div className="grid grid-cols-2 gap-4">
           <StatCard label="Total Documents" value={deals.length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Pending Signatures" value={deals.filter(d => d.status === 'Approved').length} bgColor="bg-[#D8D6F8]" />
@@ -290,12 +290,32 @@ const Bottom = () => {
           <StatCard label="Completed Documents" value="0" bgColor="bg-[#D7EBE4]" />
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Approved Deals</h2>
+        <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Deals</h2>
         <div className="space-y-4">
           {loading ? (
             <div className="text-center py-10 text-gray-400">Loading deals...</div>
           ) : deals.length === 0 ? (
-            <div className="text-center py-10 text-gray-400 italic">No approved deals found</div>
+            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto lg:my-10">
+              <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">No documents found</h3>
+                <p className="text-sm text-gray-500">Approved deals awaiting documentation will appear here.</p>
+              </div>
+            </div>
           ) : (
             deals.map(deal => (
               <ProposalCard 
@@ -316,10 +336,10 @@ const Bottom = () => {
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column: Interactive Content ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[600px] h-[600px] overflow-y-auto scrollbar-hide p-2 flex flex-col ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
         
         {selectedDeal && (
-          <div className="lg:hidden flex items-center gap-3 mb-4">
+          <div className="lg:hidden flex items-center gap-3 mb-2 px-2">
              <button 
                onClick={() => setSelectedDeal(null)} 
                className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm"
@@ -330,153 +350,157 @@ const Bottom = () => {
           </div>
         )}
 
-        {selectedDeal ? (
-          <div className="flex-1 flex flex-col">
-            
-            {/* ══ STEP 1: AGREEMENT OVERVIEW ══ */}
-            {step === 'overview' && (
-              <div className="bg-white rounded-2xl p-3 lg:p-8 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-4 ">
-                <div className="flex items-center justify-between">
-                  <h3 className="lg:text-xl text-lg font-semibold text-[#000000]">Agreement & Contract</h3>
-                  <span className="bg-[#B91C1C] text-white text-[10px] px-2 lg:px-3 lg:py-1.5 py-1 rounded-full lg:font-semibold shrink-0">
-                    Duration - {selectedDeal.totalTimeline}
-                  </span>
-                </div>
-
-                {/* Agreement Scroll Box */}
-                <div className="w-full bg-white border border-gray-100 rounded-2xl p-4 lg:p-8 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] h-[400px] overflow-y-auto scrollbar-hide">
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="text-base font-semibold  text-[#000000] mb-2">Scope of work in milestone 1</h4>
-                      <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
+        <div className={`flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative`}>
+          <div className="flex-1 overflow-y-auto scrollbar-hide p-2 relative">
+            {selectedDeal ? (
+              <div className="flex-1 flex flex-col">
+                
+                {/* ══ STEP 1: AGREEMENT OVERVIEW ══ */}
+                {step === 'overview' && (
+                  <div className="p-3 lg:p-6 flex flex-col space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="lg:text-xl text-lg font-semibold text-[#000000]">Agreement & Contract</h3>
+                      <span className="bg-[#B91C1C] text-white text-[10px] px-2 lg:px-3 lg:py-1.5 py-1 rounded-full lg:font-semibold shrink-0">
+                        Duration - {selectedDeal.totalTimeline}
+                      </span>
                     </div>
-                    <div>
-                      <h4 className="text-base font-semibold text-[#000000] mb-2">Term and conditions</h4>
-                      <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
-                    </div>
-                    <div>
-                      <h4 className="text-base font-semibold text-[#000000] mb-2">Confidentiality</h4>
-                      <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Checkbox */}
-                <div className="flex items-start gap-3 ">
-                  <input 
-                    type="checkbox" 
-                    id="agreement" 
-                    checked={agreementAccepted}
-                    onChange={(e) => setAgreementAccepted(e.target.checked)}
-                    className="mt-1 w-4 h-4 rounded border-gray-300 accent-[#59549F]"
-                  />
-                  <label htmlFor="agreement" className="text-xs text-[#000000]  leading-relaxed cursor-pointer">
-                    I have read all the policies, terms and conditions and ready to sign up the agreement
-                  </label>
-                </div>
-
-                <button 
-                  disabled={!agreementAccepted}
-                  onClick={() => setStep('verification')}
-                  className={`w-full py-2 rounded-xl font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all ${agreementAccepted ? 'bg-[#D8D6F8] text-[#59549F] hover:bg-[#C9C7F0]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
-                >
-                  Proceed for Verification
-                </button>
-              </div>
-            )}
-
-            {/* ══ STEP 2: VERIFICATION (OTP) ══ */}
-            {step === 'verification' && (
-              <div className="space-y-4">
-                <div className="bg-white rounded-2xl p-3 lg:p-8 lg:h-[540px] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 relative">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-3">
-                      <button onClick={() => setStep('overview')} className="p-1 bg-gray-50 rounded-full text-[#59549F] hover:bg-gray-100">
-                        <FiArrowLeft size={20} />
-                      </button>
-                      <h3 className="text-xl font-semibold text-[#000000]">Confirmation</h3>
-                    </div>
-                    <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-semibold">
-                      Duration - {selectedDeal.totalTimeline}
-                    </span>
-                  </div>
-
-                  <div className="space-y-4">
-                    {/* Step 1 Identity Verification */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-3 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                      <h4 className="text-sm font-semibold text-[#000000] mb-2 ">Step 1 - Identity Verification</h4>
-                      <p className="text-[10px] text-gray-500 mb-4 font-medium ">To confirm this agreement, please verify your identity by entering your registered contact number</p>
-                      
-                      <div className="flex gap-2">
-                        <div className="px-2 w-[60px] h-10 bg-white border border-gray-100 rounded-lg flex items-center justify-center text-[#000000] text-sm shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] font-semibold">
-                          +91
+                    {/* Agreement Scroll Box */}
+                    <div className="w-full bg-white border border-gray-100 rounded-2xl p-4 lg:p-8 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] h-[400px] overflow-y-auto scrollbar-hide">
+                      <div className="space-y-6">
+                        <div>
+                          <h4 className="text-base font-semibold  text-[#000000] mb-2">Scope of work in milestone 1</h4>
+                          <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
                         </div>
-                        <input 
-                          type="text" 
-                          placeholder="Contact Number"
-                          value={phoneNumber}
-                          onChange={(e) => setPhoneNumber(e.target.value)}
-                          className="flex-1 h-10 bg-white border border-gray-100 rounded-lg px-2 lg:px-4 text-[#000000] text-sm font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]" 
-                        />
-                        <button 
-                          onClick={handleSendOtp}
-                          disabled={isSendingOtp}
-                          className="px-4 lg:px-8 bg-[#D8D6F8] text-[#59549F] rounded-lg text-xs lg:text-sm font-bold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] disabled:opacity-50"
-                        >
-                          {isSendingOtp ? "..." : "Send"}
-                        </button>
+                        <div>
+                          <h4 className="text-base font-semibold text-[#000000] mb-2">Term and conditions</h4>
+                          <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
+                        </div>
+                        <div>
+                          <h4 className="text-base font-semibold text-[#000000] mb-2">Confidentiality</h4>
+                          <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
+                        </div>
                       </div>
                     </div>
 
-                    {/* Step 2 - Enter OTP */}
-                    <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                      <h4 className="text-sm font-semibold text-[#000000] mb-4 ">Step 2 - Enter 6 digit OTP</h4>
-                      <div className="flex justify-between gap-2 mb-4">
-                        {otp.map((digit, index) => (
-                          <input
-                            key={index}
-                            id={`otp-${index}`}
-                            type="text"
-                            maxLength={1}
-                            value={digit}
-                            onChange={(e) => handleOtpChange(e.target.value, index)}
-                            className="w-full aspect-square max-w-[50px] bg-white border border-gray-200 rounded-xl text-center text-lg font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]"
-                          />
-                        ))}
+                    {/* Checkbox */}
+                    <div className="flex items-start gap-3 ">
+                      <input 
+                        type="checkbox" 
+                        id="agreement" 
+                        checked={agreementAccepted}
+                        onChange={(e) => setAgreementAccepted(e.target.checked)}
+                        className="mt-1 w-4 h-4 rounded border-gray-300 accent-[#59549F]"
+                      />
+                      <label htmlFor="agreement" className="text-xs text-[#000000]  leading-relaxed cursor-pointer">
+                        I have read all the policies, terms and conditions and ready to sign up the agreement
+                      </label>
+                    </div>
+
+                    <button 
+                      disabled={!agreementAccepted}
+                      onClick={() => setStep('verification')}
+                      className={`w-full py-2 rounded-xl font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all ${agreementAccepted ? 'bg-[#D8D6F8] text-[#59549F] hover:bg-[#C9C7F0]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                    >
+                      Proceed for Verification
+                    </button>
+                  </div>
+                )}
+
+                {/* ══ STEP 2: VERIFICATION (OTP) ══ */}
+                {step === 'verification' && (
+                  <div className="space-y-4 p-3 lg:p-6">
+                    <div className="relative">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex items-center gap-3">
+                          <button onClick={() => setStep('overview')} className="p-1 bg-gray-50 rounded-full text-[#59549F] hover:bg-gray-100">
+                            <FiArrowLeft size={20} />
+                          </button>
+                          <h3 className="text-xl font-semibold text-[#000000]">Confirmation</h3>
+                        </div>
+                        <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-semibold">
+                          Duration - {selectedDeal.totalTimeline}
+                        </span>
                       </div>
-                      <p className="text-[10px] text-gray-400 font-medium ">
-                        Didn't receive it yet? <span className="text-[#59549F] cursor-pointer font-bold" onClick={handleSendOtp}>Resend</span>
-                      </p>
+
+                      <div className="space-y-4">
+                        {/* Step 1 Identity Verification */}
+                        <div className="bg-white border border-gray-100 rounded-2xl p-3 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+                          <h4 className="text-sm font-semibold text-[#000000] mb-2 ">Step 1 - Identity Verification</h4>
+                          <p className="text-[10px] text-gray-500 mb-4 font-medium ">To confirm this agreement, please verify your identity by entering your registered contact number</p>
+                          
+                          <div className="flex gap-2">
+                            <div className="px-2 w-[60px] h-10 bg-white border border-gray-100 rounded-lg flex items-center justify-center text-[#000000] text-sm shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] font-semibold">
+                              +91
+                            </div>
+                            <input 
+                              type="text" 
+                              placeholder="Contact Number"
+                              value={phoneNumber}
+                              onChange={(e) => setPhoneNumber(e.target.value)}
+                              className="flex-1 h-10 bg-white border border-gray-100 rounded-lg px-2 lg:px-4 text-[#000000] text-sm font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]" 
+                            />
+                            <button 
+                              onClick={handleSendOtp}
+                              disabled={isSendingOtp}
+                              className="px-4 lg:px-8 bg-[#D8D6F8] text-[#59549F] rounded-lg text-xs lg:text-sm font-bold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] disabled:opacity-50"
+                            >
+                              {isSendingOtp ? "..." : "Send"}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Step 2 - Enter OTP */}
+                        <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+                          <h4 className="text-sm font-semibold text-[#000000] mb-4 ">Step 2 - Enter 6 digit OTP</h4>
+                          <div className="flex justify-between gap-2 mb-4">
+                            {otp.map((digit, index) => (
+                              <input
+                                key={index}
+                                id={`otp-${index}`}
+                                type="text"
+                                maxLength={1}
+                                value={digit}
+                                onChange={(e) => handleOtpChange(e.target.value, index)}
+                                className="w-full aspect-square max-w-[50px] bg-white border border-gray-200 rounded-xl text-center text-lg font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]"
+                              />
+                            ))}
+                          </div>
+                          <p className="text-[10px] text-gray-400 font-medium ">
+                            Didn't receive it yet? <span className="text-[#59549F] cursor-pointer font-bold" onClick={handleSendOtp}>Resend</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-6">
+                       <button 
+                         onClick={handleVerifyOtp}
+                         disabled={isVerifying}
+                         className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
+                       >
+                          {isVerifying ? "Verifying..." : (
+                            isOtpVerified 
+                              ? (isStartupUser ? "Confirm & Proceed for Payment" : "Confirm & Proceed to Revenue")
+                              : "Confirm & Wait for Deal Activation"
+                          )}
+                       </button>
                     </div>
                   </div>
-                </div>
+                )}
 
-                <div className="mt-auto">
-                   <button 
-                     onClick={handleVerifyOtp}
-                     disabled={isVerifying}
-                     className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
-                   >
-                      {isVerifying ? "Verifying..." : (
-                        isOtpVerified 
-                          ? (isStartupUser ? "Confirm & Proceed for Payment" : "Confirm & Proceed to Revenue")
-                          : "Confirm & Wait for Deal Activation"
-                      )}
-                   </button>
+              </div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                  <IoMdCheckmark size={40} />
                 </div>
+                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view agreement details.</p>
               </div>
             )}
-
           </div>
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 mx-2">
-            <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <IoMdCheckmark size={40} className="text-gray-300" />
-            </div>
-            <h3 className="text-lg font-bold text-gray-400">No Document Selected</h3>
-            <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view agreement details.</p>
-          </div>
-        )}
+        </div>
       </div>
 
     </div>
