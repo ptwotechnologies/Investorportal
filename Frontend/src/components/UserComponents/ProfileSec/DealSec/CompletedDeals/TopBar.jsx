@@ -3,7 +3,7 @@ import { FiPlus } from "react-icons/fi";
 
 const TopBar = ({ onCreateClick }) => {
   return (
-    <div className="bg-white px-3 lg:px-6 lg:pt-6 pt-4 pb-3 border-b border-gray-100 shadow-sm">
+    <div className="bg-white px-2.5 lg:px-6 lg:pt-6 pt-4 pb-3 ">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         {/* Left Section: Title and Subtitle */}
         <div className="flex flex-col gap-1">

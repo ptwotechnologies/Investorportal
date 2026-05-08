@@ -1,10 +1,10 @@
 import React from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa";
 
 const TopBar = ({ onAddClick }) => {
   return (
-    <div className="bg-white px-3 lg:px-6 lg:pt-6 pt-4 pb-3 border-b border-gray-100 shadow-sm">
+    <div className="bg-white px-2.5 lg:px-6 lg:pt-6 pt-4 pb-3 ">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         
         {/* Title Section */}
@@ -43,7 +43,7 @@ const TopBar = ({ onAddClick }) => {
             >
               <FaPlus size={15} className="lg:hidden" />
               <FaPlus size={18} className="hidden lg:block" />
-              <span className="text-[13px] lg:text-sm whitespace-nowrap">Milestones</span>
+              <span className="text-[13px] lg:text-lg whitespace-nowrap">Milestones</span>
             </button>
           </div>
         </div>

@@ -289,10 +289,10 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
   if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-1 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column: Project List ── */}
-      <div className={`flex-1 flex flex-col gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`flex-1 flex flex-col py-2 gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
         <div className="grid grid-cols-2 gap-4 shrink-0">
           <StatCard label="Active Projects" value={deals.length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Paid Milestones" value={deals.reduce((acc, d) => acc + (d.milestones?.filter(m => m.status === 'Paid').length || 0), 0)} bgColor="bg-[#D8D6F8]" />
@@ -304,7 +304,7 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
         
         <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
           {deals.length === 0 ? (
-            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto lg:my-10">
+            <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-[90%] lg:w-auto max-w-sm mx-auto lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-gray-400"
@@ -338,7 +338,7 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
         </div>
       </div>
 
-      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2 ml-1" />
 
       <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
         
@@ -369,7 +369,7 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
                   <IoMdCheckmark size={40} />
                 </div>
                 <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
-                <p className="text-sm text-gray-400 mt-1 italic">Select a project from the left to view its milestones.</p>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a project from the left to view milestones.</p>
               </div>
             ) : (
               <div className="p-4 lg:p-6">

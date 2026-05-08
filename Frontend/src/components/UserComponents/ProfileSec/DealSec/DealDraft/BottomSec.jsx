@@ -328,10 +328,10 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 px-2 lg:px-4 py-4 bg-[#FDFDFF]">
+    <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-1 bg-[#FDFDFF]">
       
       {/* ── LEFT COLUMN (Project Overview) ── */}
-      <div className={`flex-1 space-y-4 max-h-[610px] overflow-y-auto p-2 scrollbar-hide mb-4 ${activeView !== 'none' ? 'hidden lg:block' : 'block'}`}>
+      <div className={`flex-1 space-y-4 max-h-[680px] overflow-y-auto p-2 scrollbar-hide mb-2 ${activeView !== 'none' ? 'hidden lg:block' : 'block'}`}>
         
         {/* Scope of Work summary */}
         <Card title="Scope of Work">
@@ -374,7 +374,7 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
               placeholder="Total Budget"
               value={totalBudget}
               onChange={(e) => setTotalBudget(e.target.value)}
-              className="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs flex-1 outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold"
+              className="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs flex-1 outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center "
             />
           </div>
           {milestones.length > 0 && totalBudget !== milestones.reduce((acc, m) => acc + (Number(m.budget) || 0), 0).toString() && (
@@ -393,13 +393,13 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
               placeholder="Total Days"
               value={totalTimeline}
               onChange={(e) => setTotalTimeline(e.target.value)}
-              className="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs flex-1 outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold"
+              className="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-xs flex-1 outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center "
             />
           </div>
         </Card>
 
         {/* Milestones Card */}
-        <Card title="Milestone" className="relative min-h-[190px]"> 
+        <Card title="Milestone" className="relative min-h-[200px]"> 
           <button 
             onClick={handleAddMilestoneView}
             className="absolute top-3 right-6 text-[#59549F] hover:scale-110 transition-transform"
@@ -431,8 +431,10 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
         </Card>
       </div>
 
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2 mr-1" />
+
       {/* ── RIGHT COLUMN (Editor View) ── */}
-      <div className={`lg:w-[450px] xl:w-[550px] flex flex-col gap-4 ${activeView === 'none' ? 'hidden lg:block' : 'block'}`}>
+      <div className={`lg:w-[450px] xl:w-[550px] flex flex-col px-2 lgpx-0 ${activeView === 'none' ? 'hidden lg:block' : 'block'}`}>
         
         {/* Editor Wrapper */}
         <div className={`bg-white  rounded-2xl lg:px-6 px-3 pt-4 mt-2 pb-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col relative transition-all duration-300 ${activeView === 'none' ? 'h-[610px]' : 'h-[550px]'} overflow-y-auto scrollbar-hide`}>
@@ -622,7 +624,7 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
         <button 
           onClick={handleSubmitDraft}
           disabled={loading}
-          className="w-full py-1.5 bg-[#D8D6F8] text-[#59549F] rounded-lg hover:bg-[#D8D6F8]/90 transition-all text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-semibold tracking-wider shadow-[inset_0px_0_12px_#00000040] disabled:opacity-50"
+          className="w-full py-1.5 mt-4 bg-[#D8D6F8] text-[#59549F] rounded-lg hover:bg-[#D8D6F8]/90 transition-all text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-semibold tracking-wider shadow-[inset_0px_0_12px_#00000040] disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit Deal Draft"}
         </button>

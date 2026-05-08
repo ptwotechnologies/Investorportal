@@ -7,14 +7,14 @@ const MilestoneSec = () => {
   const [activeView, setActiveView] = useState('none'); // 'none', 'addMilestone'
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#FDFDFF]">
+    <div >
       <div id='top'>
          <TopBar 
             onAddClick={() => setActiveView('addMilestone')} 
           />
       </div>
 
-      <div id='bottom' className="flex-1 overflow-hidden">
+      <div id='bottom' >
         <BottomSec 
           selectedMilestone={selectedMilestone} 
           setSelectedMilestone={setSelectedMilestone} 

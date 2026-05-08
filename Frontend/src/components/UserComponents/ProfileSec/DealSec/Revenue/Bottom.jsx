@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FiFileText, FiPlus, FiArrowLeft, FiChevronDown } from "react-icons/fi";
 import { MdOutlineFactCheck, MdOutlinePrivateConnectivity } from "react-icons/md";
+import { IoMdCheckmark } from "react-icons/io";
 import axios from "axios";
 import { serverUrl } from "@/App";
 import { toast } from "react-hot-toast";
@@ -67,10 +68,10 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
 };
 
 const StatCard = ({ label, value, bgColor }) => (
-  <div className={`${bgColor} rounded-2xl p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+  <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
     <div className="flex items-center gap-2">
       <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-      <h3 className="text-[10px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
+      <h3 className="text-[13px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
     </div>
     <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
   </div>
@@ -125,7 +126,7 @@ const Bottom = () => {
   } : null;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-2 lg:py-2 bg-[#FDFDFF] lg:h-[650px] h-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column ── */}
       <div className={`flex-1 flex py-2 flex-col gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
@@ -142,7 +143,7 @@ const Bottom = () => {
           {loading ? (
             <div className="text-center py-10 text-gray-400">Loading...</div>
           ) : deals.length === 0 ? (
-            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-10">
+            <div className="flex flex-col items-center gap-4 p-5 lg:p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-[90%] lg:w-auto  max-w-sm mx-auto lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-gray-400"
@@ -182,9 +183,9 @@ const Bottom = () => {
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col gap-6 overflow-hidden ${selectedDeal ? 'flex' : 'hidden lg:flex'}`}>
+      <div className={`flex-1 h-full flex flex-col overflow-hidden ${selectedDeal ? 'flex' : 'hidden lg:flex'}`}>
         
-        <div className="flex-1 overflow-y-auto scrollbar-hide p-1 space-y-6">
+        <div className={`flex-1 overflow-y-auto scrollbar-hide p-1 space-y-6 m-2 rounded-2xl transition-all duration-300 ${!selectedDeal ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100' : ''}`}>
           {selectedDeal ? (
             <>
               <button 
@@ -260,28 +261,12 @@ const Bottom = () => {
               )}
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-full p-10 text-center">
-               <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm">
-                  <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
-                    <svg
-                      className="w-8 h-8 text-gray-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
-                      />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-700 mb-2">Select to view</h3>
-                    <p className="text-sm text-gray-500 italic">Select a deal to view revenue details</p>
-                  </div>
+            <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+               <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                  <IoMdCheckmark size={40} />
                </div>
+               <h3 className="text-lg font-bold text-gray-400">Select to view</h3>
+               <p className="text-sm text-gray-400 mt-1 italic">Select a deal to view revenue details</p>
             </div>
           )}
         </div>

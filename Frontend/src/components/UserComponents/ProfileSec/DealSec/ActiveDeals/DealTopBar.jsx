@@ -1,6 +1,6 @@
 import React from "react";
 import { IoSearchOutline } from "react-icons/io5";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "@/App";
@@ -61,11 +61,11 @@ const DealTopBar = () => {
                 });
               }
             }}
-            className="shrink-0 flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-semibold lg:font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+            className="shrink-0 flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold  shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
           >
             <FaPlus size={15} className="lg:hidden" />
             <FaPlus size={18} className="hidden lg:block" />
-            <span className="text-[13px] lg:text-sm whitespace-nowrap">Create Deal</span>
+            <span className="text-[13px] lg:text-lg whitespace-nowrap">Create Deal</span>
           </button>
         </div>
       </div>

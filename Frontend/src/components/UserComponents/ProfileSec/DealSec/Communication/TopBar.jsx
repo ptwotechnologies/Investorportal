@@ -1,5 +1,5 @@
 import React from "react";
-import { FiPlus } from "react-icons/fi";
+import { FaPlus } from "react-icons/fa";
 
 const TopBar = ({ onCreateClick }) => {
   return (
@@ -35,10 +35,10 @@ const TopBar = ({ onCreateClick }) => {
             onClick={onCreateClick}
             className="flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
           >
-            <FiPlus size={15} className="lg:hidden" />
-            <FiPlus size={18} className="hidden lg:block" />
-            <span className="text-[13px] lg:text-sm whitespace-nowrap">Communication</span>
-          </button>
+            <FaPlus size={15} className="lg:hidden " />
+            <FaPlus size={18} className="hidden lg:block" />
+            <span className="text-[13px] lg:text-lg whitespace-nowrap">Communication</span>
+          </button> 
         </div>
       </div>
     </div>
