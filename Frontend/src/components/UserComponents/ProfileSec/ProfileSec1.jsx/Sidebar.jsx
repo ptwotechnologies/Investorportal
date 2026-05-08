@@ -506,6 +506,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     </NavLink>
 
                     <NavLink
+                      to="/deal/revenue"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                    >
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      Revenue
+                    </NavLink>
+
+                    <NavLink
                       to="/deal/milestones"
                       className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
                     >

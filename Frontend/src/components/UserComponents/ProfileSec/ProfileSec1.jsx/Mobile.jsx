@@ -104,7 +104,7 @@ const Mobile = () => {
 
   return (
     <div className="">
-      <div className="flex items-center justify-between bg-white p-2 py-3">
+      <div className="flex items-center justify-between bg-white lg:px-2  py-3">
         <div>
           <Link to="/dashboard">
             <img src={loginLogo} alt="logo" className="w-30 ml-1" />
@@ -263,6 +263,12 @@ const Mobile = () => {
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Payments</li>
                             </Link>
+
+                            <Link to="/deal/revenue" className="flex items-center gap-2">
+                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                              <li>Revenue</li>
+                            </Link>
+
                             <Link to="/deal/milestones" className="flex items-center gap-2">
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Milestones</li>

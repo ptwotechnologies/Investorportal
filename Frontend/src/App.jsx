@@ -7,10 +7,10 @@ import ScrollToTop from './ScrollToTop'
 import axios from "axios";
 
 //  export const serverUrl = "https://investorportal-sigma.vercel.app"
- export const serverUrl = "http://localhost:3000"
+   export const serverUrl = "http://localhost:3000"
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0) 
   useEffect(() => {
   const interceptor = axios.interceptors.response.use(
     (response) => response,

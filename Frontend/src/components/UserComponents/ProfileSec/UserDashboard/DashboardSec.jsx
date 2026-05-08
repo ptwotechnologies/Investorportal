@@ -194,13 +194,13 @@ const DashboardSec = () => {
   return (
     <div className="relative">
       <div
-        className={`lg:bg-gray-200 h-auto lg:h-screen pt-2 px-2 pb-2 lg:pb-0 transition-all duration-300 ${
+        className={`lg:bg-gray-200 h-auto lg:h-screen pt-2 lg:px-2 pb-2 lg:pb-0 transition-all duration-300 ${
           showProfileModal ? "blur-sm pointer-events-none" : ""
         }`}
       >
        <div  id="topbar" className="flex items-stretch w-[100%] px-2 gap-1 lg:gap-2 ">
         <div
-          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-3 py-2 lg:mr-1 ml-1 bg-white"
+          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-2 py-2 lg:mr-1 lg:ml-1 bg-white"
         >
           <div >
             <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">

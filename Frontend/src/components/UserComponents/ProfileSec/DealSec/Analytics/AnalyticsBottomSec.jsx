@@ -4,13 +4,13 @@ import { IoMdCheckmark } from "react-icons/io";
 
 const AnalyticsBottomSec = () => {
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── LEFT COLUMN ── */}
-      <div className="flex-1 flex flex-col gap-6 overflow-hidden">
+      <div className="flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden">
         
         {/* Summary Cards Grid */} 
-        <div className="grid grid-cols-2 gap-4 shrink-0">
+        <div className="grid grid-cols-2 px-2 gap-4 shrink-0">
           <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
             <div className="flex items-center gap-2">
               <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
@@ -41,10 +41,10 @@ const AnalyticsBottomSec = () => {
           </div>
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] px-1 shrink-0">Detailed Reports</h2>
+        <h2 className="text-xl font-medium text-[#000000] px-1 shrink-0 px-2">Detailed Reports</h2>
         
-        <div className="flex-1 overflow-y-auto scrollbar-hide p-2">
-          <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto lg:my-10">
+        <div className="flex-1 overflow-y-auto scrollbar-hide p-2 w-[90%] lg:w-auto mx-auto">
+          <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto lg:my-10">
             <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
               <svg
                 className="w-8 h-8 text-gray-400"
@@ -68,7 +68,7 @@ const AnalyticsBottomSec = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch  my-2" />
 
       {/* ── RIGHT COLUMN ── */}
       <div className="w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden hidden lg:flex">

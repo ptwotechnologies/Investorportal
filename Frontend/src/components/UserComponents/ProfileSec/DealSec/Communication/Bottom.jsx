@@ -337,18 +337,18 @@ const Bottom = () => {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-4 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column ── */}
-      <div className={`flex-1 flex flex-col gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) && isThreadOpen ? 'hidden lg:flex' : 'flex'}`}>
-        <div className="grid grid-cols-2 gap-4 shrink-0">
+      <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) && isThreadOpen ? 'hidden lg:flex' : 'flex'}`}>
+        <div className="grid grid-cols-2 gap-4 px-2 shrink-0">
           <StatCard label="Active Conversations" value={disputes.filter(d => d.status !== 'Resolved').length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Awaiting Response" value={disputes.filter(d => d.messages?.length === 0).length} bgColor="bg-[#D8D6F8]" />
           <StatCard label="In Discussion" value={disputes.filter(d => d.messages?.length > 0 && d.status !== 'Resolved').length} bgColor="bg-[#EFDBD9]" />
           <StatCard label="Closed Conversations" value={disputes.filter(d => d.status === 'Resolved').length} bgColor="bg-[#D7EBE4]" />
         </div>
 
-        <div className="flex items-center gap-2 px-1 shrink-0">
+        <div className="flex items-center gap-2 px-2.5 shrink-0">
           {["Milestones", "Disputes", "Files"].map((tab) => (
             <button
               key={tab}
@@ -358,10 +358,10 @@ const Bottom = () => {
                 setSelectedDispute(null);
                 setIsThreadOpen(false);
               }}
-              className={`flex-1 py-1 text-[10px] lg:text-sm font-bold rounded-lg transition-all shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border ${
+              className={`flex-1 py-1 text-[13px] lg:text-sm font-semibold rounded-sm transition-all shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border ${
                 activeTab === tab 
-                ? "bg-[#D8D6F8] text-[#59549F] border-[#D8D6F8]" 
-                : "bg-white text-gray-400 border-gray-100 hover:bg-gray-50"
+                ? "bg-[#D8D6F8] text-[#000000] border-[#D8D6F8]" 
+                : "bg-white text-[#000000] border-gray-100 hover:bg-gray-50"
               }`}
             >
               {tab}
@@ -369,9 +369,9 @@ const Bottom = () => {
           ))}
         </div>
 
-        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
+        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2 w-[90%] lg:w-auto mx-auto">
           {deals.length === 0 ? (
-            <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-5 lg:my-10">
+            <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-3 lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-gray-400"
@@ -409,7 +409,7 @@ const Bottom = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch  my-2" />
 
       {/* ── Right Column ── */}
       <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${(selectedDeal || selectedDispute) ? 'flex' : 'hidden lg:flex'}`}>
