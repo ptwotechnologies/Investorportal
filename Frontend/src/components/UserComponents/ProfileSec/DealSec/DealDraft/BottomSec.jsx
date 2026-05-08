@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FiPlus, FiArrowLeft, FiTrash2 } from "react-icons/fi";
+import { FiPlus, FiArrowLeft, FiTrash2, FiX } from "react-icons/fi";
 import { IoMdCheckmark } from "react-icons/io";
 import { toast } from "react-hot-toast";
 import axios from "axios";
@@ -30,12 +30,12 @@ const MilestoneItem = ({ milestone, onEdit }) => (
         </div>
       </div>
       <div className="flex flex-col items-end gap-3">
-        <span className="bg-[#EAB308] text-white lg:text-[9px] text-[6px] w-[70px] lg:w-auto px-2 py-0.5 rounded-md font-medium">
+        <span className="bg-[#EAB308] text-white lg:text-[9px] text-[8px] w-[70px] lg:w-auto px-2 py-0.5 rounded-md font-medium text-center">
           {milestone.status}
         </span>
         <button 
           onClick={() => onEdit(milestone)}
-          className="lg:px-6 px-2 py-1 bg-white border border-gray-200 lg:rounded-md rounded-sm lg:text-xs text-[8px] font-semibold text-[#59549F] hover:bg-gray-50 transition-all shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+          className="lg:px-6 px-3 py-1.5 bg-white border border-gray-200 lg:rounded-md rounded-lg lg:text-xs text-[10px] font-semibold text-[#59549F] hover:bg-gray-50 transition-all shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] whitespace-nowrap"
         >
           View Details
         </button>
@@ -92,8 +92,8 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
         budget: "",
       });
     } else if (activeView === 'scope') {
-      setTempScopeItems([...scopeItems]);
-      setTempDescription(description);
+      // Sync temp description only, items are handled in the open handler
+      setTempDescription(description || "");
     }
   }, [activeView, selectedMilestone]);
 
@@ -172,7 +172,7 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
   };
 
   const handleSaveScope = (silent = false) => {
-    let finalItems = [...tempScopeItems];
+    let finalItems = tempScopeItems.filter(item => item.trim() !== "");
     if (newScopeInput.trim()) {
       finalItems.push(newScopeInput.trim());
       setNewScopeInput("");
@@ -337,7 +337,7 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
         <Card title="Scope of Work">
           <ul className="flex flex-col gap-3 mb-2">
             {[
-              ...(activeView === 'scope' ? tempScopeItems : scopeItems),
+              ...(activeView === 'scope' ? tempScopeItems.filter(it => it.trim() !== "") : scopeItems),
               ...(activeView === 'scope' && newScopeInput.trim() ? [newScopeInput.trim()] : [])
             ].map((item, i) => {
               if (i >= 2) return null;
@@ -356,7 +356,15 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
             )}
           </ul>
           <button 
-            onClick={() => setActiveView('scope')}
+            onClick={() => {
+              const initial = [...scopeItems];
+              while (initial.length < 2) {
+                initial.push("");
+              }
+              setTempScopeItems(initial);
+              setTempDescription(description);
+              setActiveView('scope');
+            }}
             className="w-full mt-7 py-2 bg-[#D8D6F8] rounded-xl text-[#000000] font-medium text-sm hover:opacity-90 transition-all shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
           >
             Add Details
@@ -434,18 +442,12 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2 mr-1" />
 
       {/* ── RIGHT COLUMN (Editor View) ── */}
-      <div className={`lg:w-[450px] xl:w-[550px] flex flex-col px-2 lgpx-0 ${activeView === 'none' ? 'hidden lg:block' : 'block'}`}>
+      <div className={`lg:w-[450px] xl:w-[550px] flex flex-col px-2 lg:px-0 ${activeView === 'none' ? 'hidden lg:block' : 'block'}`}>
         
         {/* Editor Wrapper */}
-        <div className={`bg-white  rounded-2xl lg:px-6 px-3 pt-4 mt-2 pb-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col relative transition-all duration-300 ${activeView === 'none' ? 'h-[610px]' : 'h-[550px]'} overflow-y-auto scrollbar-hide`}>
+        <div className={`bg-white rounded-2xl lg:px-4 px-3 pt-4 mt-2 pb-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col relative transition-all duration-300 ${activeView === 'none' ? 'h-[610px]' : 'h-[558px]'} overflow-y-auto scrollbar-hide`}>
           
-          {/* Mobile Back Header */}
-          <div className="lg:hidden flex items-center gap-3 mb-3">
-            <button onClick={() => setActiveView('none')} className="p-1 bg-gray-50 rounded-full text-[#59549F]">
-              <FiArrowLeft size={20} />
-            </button>
-            <span className="font-bold text-lg">Back to List</span>
-          </div>
+          {/* Mobile Back Header removed and integrated into headings */}
 
           {activeView === 'none' && (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
@@ -475,58 +477,66 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
 
           {activeView === 'scope' && (
             <div className="flex-1 flex flex-col h-full">
-               <h3 className="text-lg font-semibold text-[#001032] mb-4">Edit Scope of Work</h3>
+               <div className="flex items-center gap-3 mb-4">
+                 <button 
+                   onClick={() => setActiveView('none')} 
+                   className="lg:hidden p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm active:scale-95 transition-transform"
+                 >
+                   <FiArrowLeft size={20} />
+                 </button>
+                 <h3 className="text-lg font-semibold text-[#001032]">Scope of Work</h3>
+               </div>
                
-               <div className="space-y-3 mb-6">
-                  
-                  <div className="space-y-2">
+               <div className="space-y-3 mb-4">
+                  <div className="space-y-3">
                     {tempScopeItems.map((item, index) => (
-                      <div key={index} className="relative flex items-center gap-2">
+                      <div key={index} className="flex items-center gap-3">
                         <input 
                           type="text" 
                           value={item} 
+                          placeholder={index === 0 ? "Develop a mobile app with core features" : index === 1 ? "Create UI/UX designs for all screens" : "Add scope item detail"}
                           onChange={(e) => {
                             const updated = [...tempScopeItems];
                             updated[index] = e.target.value;
                             setTempScopeItems(updated);
                           }}
-                          className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-xs focus:border-[#59549F] outline-none transition-all pr-12 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
+                          className="flex-1 px-5 py-2.5 bg-white border border-gray-100 rounded-lg text-xs focus:border-[#59549F] outline-none transition-all shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
                         />
                         <button 
                           onClick={() => handleRemoveScopeItem(index)}
-                          className="absolute right-4 top-1/2 -translate-y-1/2 text-xl font-light text-gray-400 hover:text-red-500 transition-colors"
+                          className="text-gray-400 hover:text-red-500 transition-colors shrink-0"
                         >
-                          ×
+                          <FiX size={20} />
                         </button>
                       </div>
                     ))}
                   </div>
                   
-                  <div className="relative mt-2">
+                  <div className="flex items-center gap-3">
                     <input 
                       type="text" 
                       placeholder="Add more..." 
                       value={newScopeInput}
                       onChange={(e) => setNewScopeInput(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleAddTempScope()}
-                      className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-xs focus:border-[#59549F] outline-none transition-all pr-12 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
+                      className="flex-1 px-5 py-2.5 bg-white border border-gray-100 rounded-lg text-xs focus:border-[#59549F] outline-none transition-all shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
                     />
                     <button 
                       onClick={handleAddTempScope}
-                      className="absolute right-4 top-1/2 -translate-y-1/2 text-2xl font-light text-gray-400 hover:text-[#59549F] transition-colors"
+                      className="text-gray-400 hover:text-[#59549F] transition-colors shrink-0"
                     >
-                      +
+                      <FiPlus size={20} />
                     </button>
                   </div>
                </div>
 
-               <div className="flex-1 flex flex-col mt-4">
+               <div className="flex-1 flex flex-col mt-2 ">
                   <h4 className="text-lg font-medium text-[#000000] mb-2 px-1">Description</h4>
                   <textarea 
                     value={tempDescription}
                     onChange={(e) => setTempDescription(e.target.value)}
                     placeholder="Add the Description"
-                    className="flex-1 w-full min-h-[150px] lg:p-6 p-3 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm focus:border-[#59549F] outline-none resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]"
+                    className="flex-1 w-full min-h-[100px] lg:p-6 p-3 bg-white border border-gray-100 rounded-xl text-sm focus:border-[#59549F] outline-none resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]"
                   />
                </div>
 
@@ -543,9 +553,17 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
           )}
 
           {(activeView === 'editMilestone' || activeView === 'addMilestone') && tempMilestone && (
-            <div className="flex-1 flex flex-col h-full">
+            <div className="flex-1 flex flex-col h-full ">
                 <div className="flex items-center justify-between mb-4">
-                   <h3 className="lg:text-lg text-sm font-medium text-[#1A1A1A]">{tempMilestone.name || "New Milestone"}</h3>
+                   <div className="flex items-center gap-3">
+                     <button 
+                       onClick={() => setActiveView('none')} 
+                       className="lg:hidden p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm active:scale-95 transition-transform"
+                     >
+                       <FiArrowLeft size={20} />
+                     </button>
+                     <h3 className="text-lg  font-medium text-[#1A1A1A]">{tempMilestone.name || "New Milestone"}</h3>
+                   </div>
                    {activeView === 'editMilestone' && (
                      <button onClick={() => handleRemoveMilestone(tempMilestone.id)} className="text-red-500 hover:bg-red-50 p-2 rounded-full transition-colors">
                        <FiTrash2 size={20} />
@@ -553,10 +571,10 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
                    )}
                 </div>
 
-                <div className="space-y-4 flex-1 overflow-y-auto scrollbar-hide p-2">
+                <div className="space-y-4 flex-1 pr-2">
                    {/* Name */}
                    <div>
-                     <label className="text-xs font-bold text-gray-500  block mb-2">Milestone Name</label>
+                     <label className="text-sm  font-medium text-[#000000] block mb-2">Milestone Name</label>
                      <input 
                        type="text"
                        value={tempMilestone.name}
@@ -607,26 +625,25 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
                         className="w-full lg:h-37 h-30 lg:p-6 p-3 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm focus:border-[#59549F] outline-none resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]"
                       />
                    </div>
-                </div>
 
-                <div className="flex gap-4 mt-6">
-                  <button onClick={handleSaveMilestone} className="flex-1 lg:py-1 py-1 bg-[#D8D6F8] text-[#59549F] font-semibold rounded-lg hover:opacity-90 shadow-[inset_0px_0_12px_#00000040]">
-                    {activeView === 'addMilestone' ? 'Add Milestone' : 'Save Changes'}
-                  </button>
-                  <button onClick={() => setActiveView('none')} className="flex-1 lg:py-1 py-1 bg-white border border-[#59549F]/20 text-gray-600 font-semibold rounded-lg hover:bg-gray-50 shadow-[inset_0px_0_12px_#00000040]">Cancel</button>
-               </div>
+                   <div className="flex gap-4 mt-4 mb-4">
+                     <button onClick={handleSaveMilestone} className="flex-1 lg:py-1 py-1 bg-[#D8D6F8] text-[#59549F] font-semibold rounded-lg hover:opacity-90 shadow-[inset_0px_0_12px_#00000040]">
+                       {activeView === 'addMilestone' ? 'Add Milestone' : 'Save Changes'}
+                     </button>
+                     <button onClick={() => setActiveView('none')} className="flex-1 lg:py-1 py-1 bg-white border border-[#59549F]/20 text-gray-600 font-semibold rounded-lg hover:bg-gray-50 shadow-[inset_0px_0_12px_#00000040]">Cancel</button>
+                  </div>
+                </div>
             </div>
           )}
-          
         </div>
 
         {/* Global Submit Button */}
         <button 
           onClick={handleSubmitDraft}
           disabled={loading}
-          className="w-full py-1.5 mt-4 bg-[#D8D6F8] text-[#59549F] rounded-lg hover:bg-[#D8D6F8]/90 transition-all text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-semibold tracking-wider shadow-[inset_0px_0_12px_#00000040] disabled:opacity-50"
+          className=" py-1.5 mt-3 lg:mt-4 w-[94%] mx-auto bg-[#D8D6F8] text-[#59549F] rounded-lg hover:bg-[#D8D6F8]/90 transition-all text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-semibold tracking-wider shadow-[inset_0px_0_12px_#00000040] disabled:opacity-50"
         >
-          {loading ? "Submitting..." : "Submit Deal Draft"}
+          {loading ? "Submitting..." : "Submit Draft"}
         </button>
 
       </div>
