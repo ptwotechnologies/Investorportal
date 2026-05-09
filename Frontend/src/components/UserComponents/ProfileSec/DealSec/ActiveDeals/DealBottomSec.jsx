@@ -264,33 +264,33 @@ const DealBottomSec = ({
        <div className="hidden lg:block w-px bg-gray-200 self-stretch  my-2" />
 
       {/* ── RIGHT COLUMN (Dynamic Panel) ── */}
-      <div className={`lg:w-[450px] xl:w-[550px] mt-5 lg:mt-auto flex flex-col ${rightPanelState === 'none' ? 'hidden lg:block' : 'block'}`}>
+      <div className={`lg:w-[450px] xl:w-[550px] mt-5 px-1 lg:px-0 lg:mt-auto flex flex-col ${rightPanelState === 'none' ? 'hidden lg:block' : 'block'}`}>
         
-        <div className={`transition-all duration-300 h-[610px] flex flex-col relative overflow-hidden
+        <div className={`transition-all duration-300  lg:h-[610px] h-[520px] flex flex-col relative overflow-hidden
           ${(rightPanelState === 'scopeDetails' || rightPanelState === 'milestoneDetails' || rightPanelState === 'none') 
-            ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl' 
+            ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 lg:m-2 m-1 rounded-2xl' 
             : 'bg-transparent'}`}>
           
           <div className="flex-1 overflow-y-auto scrollbar-hide p-2 relative space-y-4">
             {/* Desktop Close Button */}
-            {rightPanelState !== 'none' && !isEditing && (
-              <button 
-                onClick={() => {
-                  setRightPanelState('none');
-                  setSelectedProject(null);
-                }} 
-                className="hidden lg:flex absolute top-2 right-2 z-10 p-1.5 bg-gray-50 rounded-full text-gray-400 hover:text-red-500 shadow-sm transition-all"
-              >
-                <FiX size={18} />
-              </button>
-            )}
+            {/* {rightPanelState !== 'none' && !isEditing && (
+              // <button 
+              //   onClick={() => {
+              //     setRightPanelState('none');
+              //     setSelectedProject(null);
+              //   }} 
+              //   className="hidden lg:flex absolute top-2 right-2 z-10 p-1.5 bg-gray-50 rounded-full text-gray-400 hover:text-red-500 shadow-sm transition-all"
+              // >
+              //   <FiX size={18} />
+              // </button>
+            )} */}
             {/* Mobile Back Header */}
             {rightPanelState !== 'none' && (
               <div className="lg:hidden flex items-center gap-3 mb-3">
                 <button onClick={handleBack} className="p-1 bg-gray-50 rounded-full text-[#59549F]">
                   <FiArrowLeft size={20} />
                 </button>
-                <span className="font-bold text-lg">{backLabel}</span>
+                <span className=" text-lg">{backLabel}</span>
               </div>
             )}
 
@@ -310,11 +310,11 @@ const DealBottomSec = ({
               <div className="space-y-4 ">
                 {!isEditing && (
                   <SectionCard title="Deal Strength" showDot>
-                    <p className="text-xs text-gray-500 mb-4">{selectedProject.strength || "Deal initialized and ready for review."}</p>
+                    <p className="text-xs text-[#585858] mb-4 tracking-wide">{selectedProject.strength || "High likelihood of successful closure"}</p>
                     <ul className="space-y-2">
-                      {(selectedProject.strengthPoints || ["Draft submitted", "Awaiting professional review"]).map((pt, i) => (
+                      {(selectedProject.strengthPoints || ["Fast response time", "Clear milestone breakdown", "Competitive pricing"]).map((pt, i) => (
                         <li key={i} className="flex items-center gap-2 text-xs text-[#000000]">
-                          <IoMdCheckmark className="text-[#000000]" size={16} />
+                          <IoMdCheckmark className="text-green-800" size={16} />
                           {pt}
                         </li>
                       ))}
@@ -325,9 +325,11 @@ const DealBottomSec = ({
                 <SectionCard title="Scope of Work">
                   {isEditing ? (
                     <textarea 
-                      className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#59549F] min-h-[100px]"
+                      readOnly={true}
+                      disabled={true}
+                      className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:outline-none bg-gray-50 min-h-[100px] opacity-75 cursor-not-allowed"
                       value={editedDeal.scopeDescription}
-                      onChange={(e) => setEditedDeal({ ...editedDeal, scopeDescription: e.target.value })}
+                      onChange={() => {}}
                       placeholder="Enter deal description..."
                     />
                   ) : (
@@ -356,11 +358,11 @@ const DealBottomSec = ({
                     <div className="flex flex-wrap gap-3">
                       <div className="lg:w-[150px] w-full px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center">INR - Indian Rupees</div>
                       {isEditing ? (
-                         <div className="flex-1 relative">
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rs</span>
+                         <div className="flex-1 relative text-center">
+                            <span className="absolute left-30 top-1/2 -translate-y-1/2 text-gray-400 text-xs ">Rs</span>
                             <input 
                               type="number"
-                              className="w-full pl-8 pr-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm font-bold focus:outline-none"
+                              className="w-full pl-8 pr-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm text-center focus:outline-none"
                               value={editedDeal.totalAmount}
                               onChange={(e) => setEditedDeal({ ...editedDeal, totalAmount: e.target.value })}
                             />
@@ -387,14 +389,14 @@ const DealBottomSec = ({
                         ) : (
                           <input 
                             type="text"
-                            className="flex-1 px-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm font-bold focus:outline-none"
+                            className="flex-1 px-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm text-center focus:outline-none"
                             value={editedDeal.totalTimeline}
                             onChange={(e) => setEditedDeal({ ...editedDeal, totalTimeline: e.target.value })}
                             placeholder="e.g. 90 Days"
                           />
                         )
                       ) : (
-                        <div className="flex-1 px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold">{selectedProject.totalTimeline || "N/A"}</div>
+                        <div className="flex-1 px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center ">{selectedProject.totalTimeline || "N/A"}</div>
                       )}
                     </div>
                   </div>
@@ -422,23 +424,19 @@ const DealBottomSec = ({
                               <div className="space-y-2">
                                 <input 
                                   type="text"
-                                  className="w-full p-2 text-xs border border-gray-200 rounded-lg focus:outline-none focus:border-[#59549F]"
+                                  readOnly={true}
+                                  disabled={true}
+                                  className="w-full p-2 text-xs border border-gray-200 rounded-lg focus:outline-none bg-gray-50 opacity-75 cursor-not-allowed"
                                   value={m.title}
-                                  onChange={(e) => {
-                                    const newMilestones = [...editedDeal.milestones];
-                                    newMilestones[idx].title = e.target.value;
-                                    setEditedDeal({ ...editedDeal, milestones: newMilestones });
-                                  }}
+                                  onChange={() => {}}
                                   placeholder="Milestone Title"
                                 />
                                 <textarea 
-                                  className="w-full p-2 text-[10px] border border-gray-200 rounded-lg focus:outline-none focus:border-[#59549F]"
+                                  readOnly={true}
+                                  disabled={true}
+                                  className="w-full p-2 text-[10px] border border-gray-200 rounded-lg focus:outline-none bg-gray-50 opacity-75 cursor-not-allowed"
                                   value={m.description}
-                                  onChange={(e) => {
-                                    const newMilestones = [...editedDeal.milestones];
-                                    newMilestones[idx].description = e.target.value;
-                                    setEditedDeal({ ...editedDeal, milestones: newMilestones });
-                                  }}
+                                  onChange={() => {}}
                                   placeholder="Milestone Description"
                                 />
                                 <div className="flex gap-2 items-center">
@@ -500,7 +498,7 @@ const DealBottomSec = ({
                   </button>
                   <h3 className="text-lg font-medium text-[#000000]">Scope of Work</h3>
                 </div>
-                <div className="space-y-2 lg:p-3 px-0 py-0 lg:-m-3 flex-1">
+                <div className="space-y-2 lg:p-3 px-0 py-0 lg:m- flex-1">
                   <div className="space-y-3">
                      {tempScopeItems.map((item, index) => (
                        <div key={index} className="relative group">
@@ -509,7 +507,7 @@ const DealBottomSec = ({
                            <input 
                              type="text" 
                              value={item} 
-                             readOnly={!isEditing}
+                             readOnly={true}
                              onChange={(e) => handleScopeItemChange(index, e.target.value)}
                              className="flex-1 bg-transparent outline-none break-words leading-tight"
                            />
@@ -547,9 +545,10 @@ const DealBottomSec = ({
                      <h4 className="text-lg font-medium text-[#000000] mb-4">Description</h4>
                      <textarea 
                        value={isEditing ? editedDeal.scopeDescription : selectedProject.scopeDescription}
-                       readOnly={!isEditing}
-                       onChange={(e) => isEditing && setEditedDeal({ ...editedDeal, scopeDescription: e.target.value })}
-                       className="w-full min-h-[220px] p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed whitespace-pre-line shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none focus:border-[#59549F]"
+                       readOnly={true}
+                       disabled={true}
+                       onChange={() => {}}
+                       className="w-full min-h-[280px] p-6 bg-gray-50 border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed whitespace-pre-line shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none opacity-75 cursor-not-allowed"
                        placeholder="Add the Description"
                      />
                   </div>
@@ -580,7 +579,7 @@ const DealBottomSec = ({
                       {selectedMilestone.title || "Milestone Details"}
                     </h3>
                   </div>
-                  <div className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-bold">
+                  <div className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full ">
                     Budget - Rs {selectedMilestone.amount}
                   </div>
                 </div>
@@ -594,7 +593,7 @@ const DealBottomSec = ({
                          type="text" 
                          readOnly
                          value={`Rs ${selectedMilestone.amount}`}
-                         className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold" 
+                         className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center " 
                        />
                      </div>
                   </div>
@@ -607,7 +606,7 @@ const DealBottomSec = ({
                          type="text" 
                          readOnly
                          value={selectedMilestone.duration || "N/A"}
-                         className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold" 
+                         className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center " 
                        />
                      </div>
                   </div>
@@ -625,7 +624,7 @@ const DealBottomSec = ({
 
           {/* STATIC FOOTER BUTTONS */}
           {selectedProject && (rightPanelState === 'overview' || rightPanelState === 'create') && (
-            <div className="p-4 lg:p-2 bg-white border-t border-gray-100 rounded-b-2xl"> 
+            <div className="px-2 pt-2 bg-white lg:p-2  border-t border-gray-100 rounded-b-2xl"> 
               <div className="flex gap-4">
                  {isEditing ? (
                    <>
@@ -743,35 +742,35 @@ const ProjectCard = ({ proj, selectedProject, handleViewProject }) => {
 
   return (
     <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
-      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start">
+      <div className="grid grid-cols-3 gap-2 mb-4 items-start "> 
         <div className="flex flex-col">
-          <h3 className="lg:text-xl lg:text-[16px] font-medium text-[#000000] leading-tight">
+          <h3 className="text-[16px] lg:text-[16px] font-medium text-[#000000] leading-tight ">
             {companyName}
           </h3>
         </div>
-        <div className="flex flex-col lg:items-center">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+        <div className="flex flex-col items-center">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
         </div>
-        <div className="flex flex-col lg:items-end">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+        <div className="flex flex-col items-end">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
         </div>
 
-        <div className="flex flex-col -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F]  w-fit  ">
+        <div className="flex flex-col -mt-1 min-w-0">
+          <p className="text-[13px] lg:text-sm text-[#000000] decoration-[#59549F] w-full truncate whitespace-nowrap">
             {proj.requestId?.service || "Project Deal"}
           </p>
         </div>
-        <div className="flex flex-col lg:items-center -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">
+        <div className="flex flex-col items-center -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000]">
             {proj.totalTimeline || "N/A"}
           </p>
         </div>
-        <div className="flex flex-col lg:items-end -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">Rs {proj.totalAmount || 0}</p>
+        <div className="flex flex-col items-end -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000]">Rs {proj.totalAmount || 0}</p>
         </div>
 
         <div className="col-span-3 mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] font-medium opacity-70">
+          <p className="text-[13px] lg:text-sm text-[#000000] font-medium opacity-70">
             {userName}
           </p>
         </div>
@@ -791,7 +790,7 @@ const SectionCard = ({ title, children, showPlus = false, onPlusClick, showDot =
   <div className="bg-white rounded-2xl p-4 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 relative">
     <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-2">
-        {showDot && <div className="w-2 h-2 rounded-full bg-[#3CC033]" />}
+        {showDot && <div className="w-3 h-3 rounded-full bg-[#007832]" />}
         <h3 className="text-base font-semibold text-[#000000] tracking-wider">{title}</h3>
       </div>
       {showPlus && (

@@ -104,6 +104,11 @@ const Bottom = () => {
   const [isSendingOtp, setIsSendingOtp] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [agreementContent, setAgreementContent] = useState({
+    scope: "",
+    terms: "",
+    confidentiality: ""
+  });
   const navigate = useNavigate();
   const userRole = localStorage.getItem("role");
 
@@ -117,6 +122,36 @@ const Bottom = () => {
     fetchDeals();
     fetchUserPhone();
   }, []);
+
+  useEffect(() => {
+    if (selectedDeal) {
+      generateAgreement(selectedDeal);
+    }
+  }, [selectedDeal]);
+
+  const generateAgreement = (deal) => {
+    const startupName = deal.startupId?.businessDetails?.companyName || "the Startup";
+    const professionalName = deal.professionalId?.businessDetails?.firstName 
+      ? `${deal.professionalId.businessDetails.firstName} ${deal.professionalId.businessDetails.lastName}` 
+      : "the Professional";
+    
+    const scopeText = `This project involves ${deal.requestId?.service || "the agreed services"}. The project will be completed in ${deal.totalTimeline || "the specified timeline"} for a total consideration of Rs ${deal.totalAmount || 0}.
+
+Milestones Breakdown:
+${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.duration})\n   - ${m.description}`).join('\n\n')}`;
+
+    const termsText = `1. Payment Schedule: Payments will be released upon completion and approval of each milestone.
+2. Timeline: Both parties agree to adhere to the total timeline of ${deal.totalTimeline}.
+3. Revisions: Any changes to the scope defined above must be agreed upon in writing by both ${startupName} and ${professionalName}.`;
+
+    const confidentialityText = `The parties agree to keep all project-related data and proprietary information strictly confidential. This agreement is facilitated by Copteno Technologies Private Limited.`;
+
+    setAgreementContent({
+      scope: scopeText,
+      terms: termsText,
+      confidentiality: confidentialityText
+    });
+  };
 
   const fetchDeals = async () => {
     setLoading(true);
@@ -278,7 +313,7 @@ const Bottom = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto  overflow-hidden relative">
+    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-[540px]  overflow-hidden relative">
       <div id="recaptcha-container"></div>
 
       {/* ── Left Column: Stats & Deals ── */}
@@ -346,7 +381,7 @@ const Bottom = () => {
              >
                <FiArrowLeft size={20} />
              </button>
-             <span className="font-bold text-lg text-[#000000] ">Back to List</span>
+             <span className=" text-lg text-[#000000] ">Back to List</span>
           </div>
         )}
 
@@ -357,7 +392,7 @@ const Bottom = () => {
                 
                 {/* ══ STEP 1: AGREEMENT OVERVIEW ══ */}
                 {step === 'overview' && (
-                  <div className="p-3 lg:p-6 flex flex-col space-y-4">
+                  <div className="p-2 lg:p-3 flex flex-col space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="lg:text-xl text-lg font-semibold text-[#000000]">Agreement & Contract</h3>
                       <span className="bg-[#B91C1C] text-white text-[10px] px-2 lg:px-3 lg:py-1.5 py-1 rounded-full lg:font-semibold shrink-0">
@@ -366,19 +401,31 @@ const Bottom = () => {
                     </div>
 
                     {/* Agreement Scroll Box */}
-                    <div className="w-full bg-white border border-gray-100 rounded-2xl p-4 lg:p-8 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] h-[400px] overflow-y-auto scrollbar-hide">
+                    <div className="w-full bg-white border border-gray-100 rounded-2xl p-4 lg:p-6 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] h-[400px] overflow-y-auto scrollbar-hide">
                       <div className="space-y-6">
                         <div>
-                          <h4 className="text-base font-semibold  text-[#000000] mb-2">Scope of work in milestone 1</h4>
-                          <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
+                          <h4 className="text-base font-semibold  text-[#000000] mb-2">Scope of Work & Milestones</h4>
+                          <textarea 
+                            value={agreementContent.scope}
+                            onChange={(e) => setAgreementContent({...agreementContent, scope: e.target.value})}
+                            className="w-full min-h-[150px] text-xs text-gray-500 leading-relaxed bg-transparent border-none focus:ring-0 resize-none scrollbar-hide"
+                          />
                         </div>
                         <div>
-                          <h4 className="text-base font-semibold text-[#000000] mb-2">Term and conditions</h4>
-                          <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
+                          <h4 className="text-base font-semibold text-[#000000] mb-2">Terms and Conditions</h4>
+                          <textarea 
+                            value={agreementContent.terms}
+                            onChange={(e) => setAgreementContent({...agreementContent, terms: e.target.value})}
+                            className="w-full min-h-[100px] text-xs text-gray-500 leading-relaxed bg-transparent border-none focus:ring-0 resize-none scrollbar-hide"
+                          />
                         </div>
                         <div>
                           <h4 className="text-base font-semibold text-[#000000] mb-2">Confidentiality</h4>
-                          <p className="text-xs text-gray-500 leading-relaxed">These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].</p>
+                          <textarea 
+                            value={agreementContent.confidentiality}
+                            onChange={(e) => setAgreementContent({...agreementContent, confidentiality: e.target.value})}
+                            className="w-full min-h-[100px] text-xs text-gray-500 leading-relaxed bg-transparent border-none focus:ring-0 resize-none scrollbar-hide"
+                          />
                         </div>
                       </div>
                     </div>
@@ -396,14 +443,6 @@ const Bottom = () => {
                         I have read all the policies, terms and conditions and ready to sign up the agreement
                       </label>
                     </div>
-
-                    <button 
-                      disabled={!agreementAccepted}
-                      onClick={() => setStep('verification')}
-                      className={`w-full py-2 rounded-xl font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all ${agreementAccepted ? 'bg-[#D8D6F8] text-[#59549F] hover:bg-[#C9C7F0]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
-                    >
-                      Proceed for Verification
-                    </button>
                   </div>
                 )}
 
@@ -472,20 +511,6 @@ const Bottom = () => {
                         </div>
                       </div>
                     </div>
-
-                    <div className="mt-6">
-                       <button 
-                         onClick={handleVerifyOtp}
-                         disabled={isVerifying}
-                         className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
-                       >
-                          {isVerifying ? "Verifying..." : (
-                            isOtpVerified 
-                              ? (isStartupUser ? "Confirm & Proceed for Payment" : "Confirm & Proceed to Revenue")
-                              : "Confirm & Wait for Deal Activation"
-                          )}
-                       </button>
-                    </div>
                   </div>
                 )}
 
@@ -501,6 +526,33 @@ const Bottom = () => {
             )}
           </div>
         </div>
+
+        {/* STATIC FOOTER BUTTONS - OUTSIDE THE SCROLLABLE CARD AREA */}
+        {selectedDeal && (
+          <div className="sticky bottom-0 z-20 px-4 py-4 lg:py-2 mx-2 bg-[#FDFDFF] lg:bg-transparent shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] lg:shadow-none">
+            {step === 'overview' ? (
+              <button 
+                disabled={!agreementAccepted}
+                onClick={() => setStep('verification')}
+                className={`w-full py-2 lg:py-2.5 rounded-xl font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all ${agreementAccepted ? 'bg-[#D8D6F8] text-[#59549F] hover:bg-[#C9C7F0]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+              >
+                Proceed for Verification
+              </button>
+            ) : (
+              <button 
+                onClick={handleVerifyOtp}
+                disabled={isVerifying}
+                className="w-full py-2.5 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
+              >
+                {isVerifying ? "Verifying..." : (
+                  isOtpVerified 
+                    ? (isStartupUser ? "Confirm & Proceed for Payment" : "Confirm & Proceed to Revenue")
+                    : "Confirm & Wait for Deal Activation"
+                )}
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
     </div>

@@ -400,13 +400,13 @@ const Bottom = ({
       {/* ── RIGHT COLUMN ── */}
       <div className={`lg:w-[450px] xl:w-[550px] mt-5 lg:mt-auto flex flex-col ${rightPanelState === 'none' ? 'hidden lg:block' : 'block'}`}>
         
-        <div className={`transition-all duration-300 h-[630px] flex flex-col relative overflow-hidden p-2
+        <div className={`transition-all duration-300 lg:h-[630px]  h-[540px] flex flex-col relative overflow-hidden lg:px-2 p-1
           ${(rightPanelState !== 'overview' && rightPanelState !== 'none' && rightPanelState !== 'create') 
-            ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 lg:p-6 p-3 rounded-2xl' 
+            ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 lg:m-2 m-1 lg:p-3 p-2 rounded-2xl' 
             : 'bg-transparent'}`}>
           
           {/* Desktop Close Button */}
-          {rightPanelState !== 'none' && !isEditing && (
+          {/* {rightPanelState !== 'none' && !isEditing && (
             <button 
               onClick={() => {
                 setRightPanelState('none');
@@ -416,17 +416,25 @@ const Bottom = ({
             >
               <FiX size={18} />
             </button>
-          )}
+          )} */}
           {/* Mobile Back Header */}
           {rightPanelState !== 'none' && (
-            <div className="lg:hidden flex items-center gap-3 mb-3">
-              <button 
-                onClick={handleBack} 
-                className=" bg-gray-50 rounded-full text-[#59549F]"
-              >
-                <FiArrowLeft size={20} />
-              </button>
-              <span className="font-bold text-lg">{backLabel}</span>
+            <div className="lg:hidden flex items-center justify-between mb-4 px-1 w-full">
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={handleBack} 
+                  className="p-1 bg-gray-50 rounded-full text-[#59549F] shadow-sm"
+                >
+                  <FiArrowLeft size={20} />
+                </button>
+                <span className="text-[16px]  text-[#000000]">{backLabel}</span>
+              </div>
+              
+              {rightPanelState === 'milestoneDetails' && selectedMilestone && (
+                <div className="bg-[#B91C1C] text-white text-[10px] px-3 py-1 rounded-full font-medium shadow-sm">
+                  {selectedMilestone.duration ? `Timeline: ${selectedMilestone.duration}` : "No Timeline"}
+                </div>
+              )}
             </div>
           )}
 
@@ -443,7 +451,7 @@ const Bottom = ({
 
           {/* CREATE PROPOSAL STATE */}
           {rightPanelState === 'create' && (
-            <div className="flex-1 flex flex-col h-full overflow-hidden">
+            <div className="flex-1 flex flex-col h-full overflow-hidden ">
               <div className="flex-1 overflow-y-auto scrollbar-hide p-2 space-y-4">
                 {!newDealData.requestId ? (
                   <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
@@ -615,7 +623,7 @@ const Bottom = ({
 
           {rightPanelState === 'overview' && selectedProject && (
             <div className="flex flex-col h-full overflow-hidden">
-              <button 
+              {/* <button 
                 onClick={() => {
                   setRightPanelState('none');
                   setSelectedProject(null);
@@ -623,7 +631,7 @@ const Bottom = ({
                 className="absolute top-4 right-4 z-10 p-1.5 bg-gray-50 rounded-full text-gray-400 hover:text-red-500 shadow-sm transition-all"
               >
                 <FiX size={18} />
-              </button>
+              </button> */}
 
               {/* Scrollable Content Area */}
               <div className="flex-1 overflow-y-auto scrollbar-hide p-2 relative space-y-4">
@@ -631,9 +639,11 @@ const Bottom = ({
                 <SectionCard title="Scope of Work">
                   {isEditing ? (
                     <textarea 
-                      className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:border-[#59549F] min-h-[100px]"
+                      readOnly={true}
+                      disabled={true}
+                      className="w-full p-2 text-sm border border-gray-200 rounded-lg focus:outline-none bg-gray-50 min-h-[100px] opacity-75 cursor-not-allowed"
                       value={editedDeal.scopeDescription}
-                      onChange={(e) => setEditedDeal({ ...editedDeal, scopeDescription: e.target.value })}
+                      onChange={() => {}}
                       placeholder="Enter deal description..."
                     />
                   ) : (
@@ -664,17 +674,17 @@ const Bottom = ({
                       <div className="lg:w-[150px] w-full px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR - Indian Rupees</div>
                       {isEditing ? (
                         <div className="flex-1 relative">
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rs</span>
+                          <span className="absolute left-35 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rs</span>
                           <input 
                             type="number"
-                            className="w-full pl-8 pr-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm font-bold focus:outline-none"
+                            className="w-full pl-8 pr-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm text-center focus:outline-none"
                             value={editedDeal.totalAmount}
                             onWheel={(e) => e.target.blur()}
                             onChange={(e) => setEditedDeal({ ...editedDeal, totalAmount: e.target.value })}
                           />
                         </div>
                       ) : (
-                        <div className="flex-1 px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold">Rs {selectedProject.totalAmount}</div>
+                        <div className="flex-1 px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] ">Rs {selectedProject.totalAmount}</div>
                       )}
                     </div>
                   </div>
@@ -683,19 +693,13 @@ const Bottom = ({
                     <div className="flex flex-col lg:flex-row gap-3 mb-4">
                       <div className="lg:w-[150px] w-full px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Total Timeline</div>
                       {isEditing ? (
-                        userRole?.toLowerCase().trim() === "service_professional" ? (
-                          <div className="flex-1 px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold">
-                            {editedDeal.totalTimeline || "N/A"}
-                          </div>
-                        ) : (
-                          <input 
-                            type="text"
-                            className="flex-1 px-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm font-bold focus:outline-none"
-                            value={editedDeal.totalTimeline}
-                            onChange={(e) => setEditedDeal({ ...editedDeal, totalTimeline: e.target.value })}
-                            placeholder="e.g. 90 Days"
-                          />
-                        )
+                        <input 
+                          type="text"
+                          className="flex-1 px-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm  focus:outline-none text-center"
+                          value={editedDeal.totalTimeline}
+                          onChange={(e) => setEditedDeal({ ...editedDeal, totalTimeline: e.target.value })}
+                          placeholder="e.g. 90 Days"
+                        />
                       ) : (
                         <div className="flex-1 px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold">{selectedProject.totalTimeline || "N/A"}</div>
                       )}
@@ -727,14 +731,11 @@ const Bottom = ({
                                <div className="space-y-2">
                                  <input 
                                    type="text"
-                                   className="w-full p-2 text-xs border border-gray-200 rounded-lg focus:outline-none focus:border-[#59549F]"
+                                   readOnly={true}
+                                   disabled={true}
+                                   className="w-full p-2 text-xs border border-gray-200 rounded-lg focus:outline-none bg-gray-50 opacity-75 cursor-not-allowed"
                                    value={m.title}
-                                   onChange={(e) => {
-                                     const newMilestones = editedDeal.milestones.map((milestone, i) => 
-                                       i === idx ? { ...milestone, title: e.target.value } : milestone
-                                     );
-                                     setEditedDeal({ ...editedDeal, milestones: newMilestones });
-                                   }}
+                                   onChange={() => {}}
                                    placeholder="Milestone Title"
                                  />
                                  <div className="flex gap-2 items-center">
@@ -752,23 +753,21 @@ const Bottom = ({
                                      }}
                                    />
                                  </div>
-                                 {userRole?.toLowerCase().trim() !== "service_professional" && (
-                                   <div className="flex gap-2 items-center">
-                                     <span className="text-[10px] text-gray-400">Timeline:</span>
-                                     <input 
-                                       type="text"
-                                       className="flex-1 p-2 text-[10px] border border-gray-200 rounded-lg focus:outline-none focus:border-[#59549F]"
-                                       value={m.duration}
-                                       onChange={(e) => {
-                                         const newMilestones = editedDeal.milestones.map((milestone, i) => 
-                                           i === idx ? { ...milestone, duration: e.target.value } : milestone
-                                         );
-                                         setEditedDeal({ ...editedDeal, milestones: newMilestones });
-                                       }}
-                                       placeholder="e.g. 10 Days"
-                                     />
-                                   </div>
-                                 )}
+                                 <div className="flex gap-2 items-center">
+                                   <span className="text-[10px] text-gray-400">Timeline:</span>
+                                   <input 
+                                     type="text"
+                                     className="flex-1 p-2 text-[10px] border border-gray-200 rounded-lg focus:outline-none focus:border-[#59549F]"
+                                     value={m.duration}
+                                     onChange={(e) => {
+                                       const newMilestones = editedDeal.milestones.map((milestone, i) => 
+                                         i === idx ? { ...milestone, duration: e.target.value } : milestone
+                                       );
+                                       setEditedDeal({ ...editedDeal, milestones: newMilestones });
+                                     }}
+                                     placeholder="e.g. 10 Days"
+                                   />
+                                 </div>
                                </div>
                              ) : (
                                <>
@@ -789,7 +788,7 @@ const Bottom = ({
               </div>
 
               {/* Static Action Buttons Footer */}
-              <div className="pt-1 border-t border-gray-100 bg-white space-y-3 rounded-b-2xl shadow-[0px_-4px_12px_rgba(0,0,0,0.05)]">
+              <div className="sticky bottom-0 z-20 pt-1 pb-3 border-t border-gray-100 bg-white space-y-3 rounded-b-2xl shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] px-2">
                  <div className="flex gap-3">
                     {isEditing ? (
                       <>
@@ -821,7 +820,7 @@ const Bottom = ({
                             </button>
                             <button 
                               onClick={() => navigate('/deal/documentation')}
-                              className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all flex items-center justify-center gap-2"
+                              className="w-full py-2 bg-[#D8D6F8] rounded-lg text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all flex items-center justify-center gap-2"
                             >
                               <IoMdCheckmark /> Proceed for Documentation
                             </button>
@@ -892,12 +891,13 @@ const Bottom = ({
             )}
 
           {rightPanelState === 'scopeDetails' && (
-            <div className="flex-1 flex flex-col h-full overflow-hidden">
+            <div className="flex-1 flex flex-col h-full overflow-hidden p-2">
               {!isEditing && (
-                <div className="hidden lg:flex items-center mb-4">
+                <div className="hidden lg:flex items-center mb-4 gap-3">
                   <button onClick={handleBack} className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
                     <FiArrowLeft size={18} />
                   </button>
+                  <h1 className="text-lg font-medium text-[#000000]">Scope of work </h1>
                 </div>
               )}
               
@@ -945,11 +945,11 @@ const Bottom = ({
                 <div className="mt-8">
                   <h4 className="text-lg font-medium text-[#000000] mb-4">Description</h4>
                   <textarea 
-                    placeholder="Add the Description"
                     value={isEditing ? editedDeal.scopeDescription : selectedProject.scopeDescription}
-                    onChange={(e) => isEditing && setEditedDeal({ ...editedDeal, scopeDescription: e.target.value })}
-                    readOnly={!isEditing}
-                    className="w-full min-h-[220px] p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none focus:border-[#59549F]"
+                    onChange={() => {}}
+                    readOnly={true}
+                    disabled={true}
+                    className="w-full min-h-[300px] p-6 bg-gray-50 border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none opacity-75 cursor-not-allowed"
                   />
                 </div>
               </div>
@@ -976,9 +976,9 @@ const Bottom = ({
           {/* MILESTONE DETAILS VIEW */}
           {rightPanelState === 'milestoneDetails' && selectedMilestone && (
             <div className="flex-1 flex flex-col h-full overflow-hidden">
-              <div className="flex items-center justify-between mb-8">
+              <div className="hidden lg:flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                  <button onClick={handleBack} className="hidden lg:flex p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
+                  <button onClick={handleBack} className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
                     <FiArrowLeft size={18} />
                   </button>
                 </div>
@@ -987,15 +987,17 @@ const Bottom = ({
                 </div>
               </div>
               
-              <div className="space-y-6 flex-1 overflow-y-auto scrollbar-hide p-1">
+              <div className="space-y-6 flex-1 overflow-y-auto scrollbar-hide p-2">
                 <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
                    <h4 className="text-sm font-medium text-[#000000] mb-4">Milestone Title</h4>
                    <input 
-                     type="text"
-                     value={selectedMilestone.title}
-                     onChange={(e) => setSelectedMilestone({ ...selectedMilestone, title: e.target.value })}
-                     placeholder="Enter milestone title (e.g. Design Phase)"
-                     className="w-full px-4 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-sm"
+                      type="text"
+                      value={selectedMilestone.title}
+                      readOnly={true}
+                      disabled={true}
+                      onChange={() => {}}
+                      placeholder="Milestone Title"
+                      className="w-full px-4 py-2 bg-gray-50 border border-gray-100 rounded-lg text-sm outline-none shadow-sm opacity-75 cursor-not-allowed"
                    />
                 </div>
 
@@ -1006,9 +1008,11 @@ const Bottom = ({
                       <input 
                         type="number" 
                         value={selectedMilestone.amount}
+                        readOnly={!(isEditing || prevPanelState === 'create')}
+                        disabled={!(isEditing || prevPanelState === 'create')}
                         onChange={(e) => setSelectedMilestone({ ...selectedMilestone, amount: e.target.value })}
                         placeholder="0"
-                        className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center font-bold" 
+                        className={`flex-1 px-3 py-2 border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`} 
                       />
                     </div>
                 </div>
@@ -1021,18 +1025,22 @@ const Bottom = ({
                         type="text" 
                         placeholder="Enter Days"
                         value={selectedMilestone.duration}
+                        readOnly={!(isEditing || prevPanelState === 'create')}
+                        disabled={!(isEditing || prevPanelState === 'create')}
                         onChange={(e) => setSelectedMilestone({ ...selectedMilestone, duration: e.target.value })}
-                        className="flex-1 px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center lg:text-start " 
+                        className={`flex-1 px-3 py-2 text-center border border-gray-100 rounded-lg text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`} 
                       />
                     </div>
                  </div>
                                    <div className="pt-2">
                    <h4 className="text-base font-medium text-[#000000] mb-4 ">Scope of work in {selectedMilestone.title || "milestone"}</h4>
                    <textarea 
-                     placeholder="Add the Description"
+                     placeholder="Milestone Description"
                      value={selectedMilestone.description}
-                     onChange={(e) => setSelectedMilestone({ ...selectedMilestone, description: e.target.value })}
-                     className="w-full min-h-[180px] p-6 bg-[#FDFDFF] border border-gray-100 rounded-2xl text-sm text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none focus:border-[#59549F]"
+                     readOnly={true}
+                     disabled={true}
+                     onChange={() => {}}
+                     className="w-full min-h-[180px] p-6 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none opacity-75 cursor-not-allowed"
                    />
                 </div>
               </div>
@@ -1109,40 +1117,40 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
     <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
       <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start">
         {/* Row 1, Col 1: Real Company Name */}
-        <div className="flex flex-col">
-          <h3 className="lg:text-xl lg:text-[16px] font-medium text-[#000000] leading-tight">
+        <div className="flex flex-col min-w-0">
+          <h3 className="text-[16px] lg:text-[16px] font-medium text-[#000000] leading-tight truncate">
             {companyName}
           </h3>
         </div>
         {/* Row 1, Col 2: Timeline Label */}
-        <div className="flex flex-col lg:items-center">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+        <div className="flex flex-col items-center">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
         </div>
         {/* Row 1, Col 3: Price Label */}
-        <div className="flex flex-col lg:items-end">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+        <div className="flex flex-col items-end">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
         </div>
 
         {/* Row 2, Col 1: Project Title */}
-        <div className="flex flex-col -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F] w-fit">
+        <div className="flex flex-col -mt-1 min-w-0">
+          <p className="text-[13px] lg:text-sm text-[#000000] decoration-[#59549F] truncate whitespace-nowrap w-full">
             {proj.requestId?.service || "Project Deal"}
           </p>
         </div>
         {/* Row 2, Col 2: Timeline Value */}
-        <div className="flex flex-col lg:items-center -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">
+        <div className="flex flex-col items-center -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] whitespace-nowrap">
             {proj.totalTimeline || "N/A"}
           </p>
         </div>
         {/* Row 2, Col 3: Price Value */}
-        <div className="flex flex-col lg:items-end -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">Rs {proj.totalAmount || 0}</p>
+        <div className="flex flex-col items-end -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] whitespace-nowrap">Rs {proj.totalAmount || 0}</p>
         </div>
 
         {/* Row 3, Col 1: Real User Name */}
         <div className="col-span-3 mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] font-medium opacity-70">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
             {userName}
           </p>
         </div>
