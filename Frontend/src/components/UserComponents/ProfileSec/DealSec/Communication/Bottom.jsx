@@ -138,11 +138,11 @@ const Bottom = () => {
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2">
            <h5 className="text-sm font-bold text-[#001032]">{startupName}</h5>
-           <p className="text-[11px] text-gray-500 leading-relaxed">
-             <span className="text-[#59549F] font-bold italic">Reason</span> – {dispute.reason}
+           <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
+             <span className="text-[#59549F] font-bold ">Reason</span> – {dispute.reason}
            </p>
            <p className="text-[11px] text-gray-500">
-             <span className="text-[#59549F] font-bold italic">Amount</span> – Rs {dispute.amount}
+             <span className="text-[#59549F] font-bold ">Amount</span> – Rs {dispute.amount}
            </p>
            <div className="flex justify-end pt-2">
              <button 
@@ -416,7 +416,7 @@ const Bottom = () => {
         
         {/* Header */}
         {(selectedDeal || selectedDispute) && (
-          <div className="flex items-center gap-3 py-2 px-4 shrink-0">
+          <div className="flex lg:hidden items-center gap-3 py-2 px-4 shrink-0">
             <button 
                 onClick={() => {
                     if (isThreadOpen) setIsThreadOpen(false);

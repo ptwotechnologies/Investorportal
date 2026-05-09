@@ -14,10 +14,24 @@ import { RxCross2 } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { HiOutlineTicket } from "react-icons/hi";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import { FaHandshake } from "react-icons/fa";
+import { AiOutlineFund } from "react-icons/ai";
 import { IoSettingsOutline } from "react-icons/io5";
 import { BiHelpCircle } from "react-icons/bi";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { MdMoneyOffCsred } from "react-icons/md";
+import { FaRegClosedCaptioning } from "react-icons/fa6";
+import { RiDeviceRecoverLine } from "react-icons/ri";
+import { SiJfrogpipelines } from "react-icons/si";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { MdOutlineAppRegistration } from "react-icons/md";
+import { BsPersonWorkspace } from "react-icons/bs";
+import {
+  FaChevronDown,
+  FaChevronUp,
+  FaPlus,
+  FaStar,
+  FaHandshake,
+} from "react-icons/fa";
+import ComingSoonModal from "./ComingSoonModal";
 import { SiSimpleanalytics } from "react-icons/si";
 
 let globalDealsCache = null;
@@ -43,6 +57,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const isDealRoute = location.pathname.startsWith("/deal");
   const [isDealsOpen, setIsDealsOpen] = useState(false);
   const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
+  const [isOperateOpen, setIsOperateOpen] = useState(false);
+  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonTitle, setComingSoonTitle] = useState("");
   const [hasCreatedDeals, setHasCreatedDeals] = useState(false);
   const [deals, setDeals] = useState(globalDealsCache || []);
   const [dealsLoading, setDealsLoading] = useState(!globalDealsCache);
@@ -113,6 +131,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   });
 
   const hasAnyDealDot = hasActiveDealDot || hasNegotiationDot;
+  const isStartup = String(userRole).toLowerCase().includes("startup");
+  const isServiceProfessional = String(userRole).toLowerCase().includes("professional");
+  const isInvestor = String(userRole).toLowerCase().includes("investor");
+
+  const triggerComingSoon = (title) => {
+    setComingSoonTitle(title);
+    setShowComingSoon(true);
+  };
 
   const handleToggle = () => {
     setIsOpen(!isOpen);
@@ -211,6 +237,72 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               size={22}
             />
           </Link>
+
+          {isStartup && (
+            <>
+              <Link to="">
+                <AiOutlineFund
+                  className=" text-[#59549f] my-3 mt-4"
+                  size={25}
+                />
+              </Link>
+
+              <Link to="">
+                <MdMoneyOffCsred
+                  className=" text-[#59549f] my-3"
+                  size={25}
+                />
+              </Link>
+
+              <Link to="">
+                <FaRegClosedCaptioning
+                  className=" text-[#59549f] my-3"
+                  size={25}
+                />
+              </Link>
+            </>
+          )}
+
+          {isInvestor && (
+            <>
+              <Link to="">
+                <RiDeviceRecoverLine
+                  className=" text-[#59549f] my-3 mt-4"
+                  size={25}
+                />
+              </Link>
+
+              <Link to="">
+                <SiJfrogpipelines 
+                  className=" text-[#59549f] my-3"
+                  size={25}
+                />
+              </Link>
+
+              <Link to="">
+                <RiMoneyDollarCircleLine 
+                  className=" text-[#59549f] my-3"
+                  size={25}
+                />
+              </Link>
+
+              <Link to="">
+                <MdOutlineAppRegistration 
+                  className=" text-[#59549f] my-3"
+                  size={25}
+                />
+              </Link>
+
+              <Link to="">
+                <BsPersonWorkspace 
+                  className=" text-[#59549f] my-3"
+                  size={25}
+                />
+              </Link>
+            </>
+          )}
+
+
 
           <Link to="/deal/communication">
             <IoChatbubblesOutline
@@ -317,7 +409,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
       {/* Right Panel Toggle */}
       {isOpen && (
-        <div className="absolute top-0 left-full ml- w-60 bg-white h-full rounded-tr-2xl rounded-br-2xl shadow-lg transition-all duration-300 z-40">
+        <div className="absolute top-0 left-full ml- w-60 bg-white h-full rounded-tr-2xl rounded-br-2xl shadow-lg transition-all duration-300 z-40 overflow-y-auto scrollbar-hide">
           <div className="my-6 flex justify-center">
             <Link to="/dashboard">
               <img src={loginLogo} alt="logo" className="w-40" />
@@ -369,6 +461,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 Connect
               </NavLink>
 
+
+
               <li
                 className="block my-3  text-[17px] px-4 mx-3 rounded-md cursor-pointer"
                 onClick={handleNotificationClick} // open same notification box
@@ -386,11 +480,181 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 Analytics
               </NavLink>
 
+              {isInvestor && (
+                <>
+                  <div
+                    onClick={() => triggerComingSoon("Discover")}
+                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
+                  >
+                    <span>Discover</span>
+                    <FaStar className="text-yellow-400" size={14} />
+                  </div>
+
+                  <div
+                    onClick={() => triggerComingSoon("Deal pipeline")}
+                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
+                  >
+                    <span>Deal pipeline</span>
+                    <FaStar className="text-yellow-400" size={14} />
+                  </div>
+
+                  <div
+                    onClick={() => triggerComingSoon("My investment")}
+                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
+                  >
+                    <span>My investment</span>
+                    <FaStar className="text-yellow-400" size={14} />
+                  </div>
+
+                  <div
+                    onClick={() => triggerComingSoon("Portfolio strategy")}
+                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
+                  >
+                    <span>Portfolio strategy</span>
+                    <FaStar className="text-yellow-400" size={14} />
+                  </div>
+
+                  <div className="my-3 relative">
+                    <div
+                      onClick={() => {
+                        setIsWorkspaceOpen(!isWorkspaceOpen);
+                        if (!isWorkspaceOpen) {
+                          setIsCommunicationOpen(false);
+                          setIsDealsOpen(false);
+                          setIsOperateOpen(false);
+                        }
+                      }}
+                      className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>Workspace</span>
+                        <FaStar className="text-yellow-400" size={14} />
+                      </div>
+                      {isWorkspaceOpen ? (
+                        <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                      ) : (
+                        <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                      )}
+                    </div>
+
+                    {isWorkspaceOpen && (
+                      <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100">
+                        <div
+                          onClick={() => triggerComingSoon("Documents")}
+                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2 ml-3">
+                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                            Documents
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => triggerComingSoon("Meetings")}
+                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2 ml-3">
+                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                            Meetings
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => triggerComingSoon("Alerts & risk")}
+                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2 ml-3">
+                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                            Alerts & risk
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {isStartup && (
+                <>
+                  <div
+                    onClick={() => triggerComingSoon("Fundraising")}
+                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
+                  >
+                    <span>Fundraising</span>
+                    <FaStar className="text-yellow-400" size={14} />
+                  </div>
+
+                  <div
+                    onClick={() => triggerComingSoon("Investors")}
+                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
+                  >
+                    <span>Investors</span>
+                    <FaStar className="text-yellow-400" size={14} />
+                  </div>
+
+                  <div className="my-3 relative">
+                    <div
+                      onClick={() => {
+                        setIsOperateOpen(!isOperateOpen);
+                        if (!isOperateOpen) {
+                          setIsCommunicationOpen(false);
+                          setIsDealsOpen(false);
+                        }
+                      }}
+                      className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span>Operate</span>
+                        <FaStar className="text-yellow-400" size={14} />
+                      </div>
+                      {isOperateOpen ? (
+                        <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                      ) : (
+                        <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                      )}
+                    </div>
+
+                    {isOperateOpen && (
+                      <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100">
+                        <div
+                          onClick={() => triggerComingSoon("Metrics")}
+                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2 ml-3">
+                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                            Metrics
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => triggerComingSoon("Documents")}
+                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2 ml-3">
+                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                            Documents
+                          </div>
+                        </div>
+                        <div
+                          onClick={() => triggerComingSoon("Cap Table")}
+                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
+                        >
+                          <div className="flex items-center gap-2 ml-3">
+                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                            Cap Table
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
+
               <div className="my-3 relative">
                 <div
                   onClick={() => {
                     setIsCommunicationOpen(!isCommunicationOpen);
-                    if (!isCommunicationOpen) setIsDealsOpen(false);
+                    if (!isCommunicationOpen) {
+                      setIsDealsOpen(false);
+                      setIsOperateOpen(false);
+                    }
                   }}
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
@@ -435,16 +699,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 )}
               </div>
 
+
+
               {/* Deals Dropdown */}
               <div className="my-3 relative">
                 <div
                   onClick={() => {
                     setIsDealsOpen(!isDealsOpen);
-                    if (!isDealsOpen) setIsCommunicationOpen(false);
+                    if (!isDealsOpen) {
+                      setIsCommunicationOpen(false);
+                      setIsOperateOpen(false);
+                    }
                   }}
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
-                  <span>Deal Workspace</span>
+                  <span>Service Deal</span> 
 
                   <div className="flex items-center gap-2">
                     {hasAnyDealDot && (
@@ -539,6 +808,38 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   </div>
                 )}
               </div>
+
+              {isStartup && (
+                <div
+                  onClick={() => triggerComingSoon("Role Switching")}
+                  className="px-4 mx-3 my-2 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                >
+                  <div className="flex flex-col">
+                    <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
+                    <span className="text-[10px] text-gray-500 ">Explore professional tools</span>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer">
+                    <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors group-hover:bg-gray-300"></div>
+                    <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+                  </div>
+                </div>
+              )}
+
+              {isServiceProfessional && (
+                <div
+                  onClick={() => triggerComingSoon("Role Switching")}
+                  className="px-4 mx-3 my-2 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                >
+                  <div className="flex flex-col">
+                    <span className="text-[12px] font-semibold text-[#59549f]">Switch to Buyer</span>
+                    <span className="text-[10px] text-gray-500 ">Experience buyer portal</span>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer">
+                    <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors group-hover:bg-gray-300"></div>
+                    <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+                  </div>
+                </div>
+              )}
             </ul>
           </div>
 
@@ -575,6 +876,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </ul>
           </div>
         </div>
+      )}
+      {showComingSoon && (
+        <ComingSoonModal
+          onClose={() => setShowComingSoon(false)}
+          title={comingSoonTitle}
+        />
       )}
     </div>
   );

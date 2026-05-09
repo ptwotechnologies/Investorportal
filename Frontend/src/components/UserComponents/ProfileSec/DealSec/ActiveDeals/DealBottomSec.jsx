@@ -91,6 +91,39 @@ const DealBottomSec = ({
     }
   };
 
+  const handleApproveMilestone = async (mId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const updatedMilestones = selectedProject.milestones.map(m => 
+        (m._id === mId || m.id === mId) ? { ...m, status: "Approved" } : m
+      );
+      
+      await axios.put(`${serverUrl}/api/deals/${selectedProject._id}`, {
+        milestones: updatedMilestones
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      toast.success("Milestone approved");
+      fetchDeals(false);
+    } catch (error) {
+      console.error("Error approving milestone:", error);
+      toast.error("Failed to approve milestone");
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Pending':
+      case 'Awaiting Response':
+        return <span className="bg-[#FFD324] text-[#000000] text-[8px]  px-3 py-1 rounded-full shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">Awaiting Response</span>;
+      case 'Approved':
+        return <span className="bg-[#D7EBE4] text-[#2D6A4F] text-[8px] px-3 py-1 rounded-full shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">Approved</span>;
+      default:
+        return <span className="bg-[#D8D6F8] text-[#59549F] text-[8px]  px-3 py-1 rounded-full shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">{status}</span>;
+    }
+  };
+
   const fetchUserInfo = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -406,17 +439,25 @@ const DealBottomSec = ({
                   <div className="space-y-3 mt-2">
                     {(isEditing ? editedDeal.milestones : selectedProject.milestones)?.map((m, idx) => (
                       <div key={m._id || m.id || idx} className="bg-[#F8F8F8] rounded-xl p-4 relative">
-                        {!isEditing && (
-                          <div className="absolute top-4 right-4 items-end flex flex-col gap-2">
-                            <span className="bg-[#EAB308] text-white text-[10px] px-2 py-0.5 rounded-md font-medium">Pending</span>
-                            <button 
-                              onClick={() => handleViewMilestone(m)}
-                              className="px-4 py-1.5 bg-white border border-gray-200 rounded-lg text-[10px] font-bold text-[#59549F] shadow-sm hover:bg-gray-50"
-                            >
-                              View Details
-                            </button>
-                          </div>
-                        )}
+                        <div className="absolute top-4 right-4 flex flex-col items-end gap-3">
+                          {getStatusBadge(m.status)}
+                          {!isEditing && (
+                            <div className="flex bg-[#D8D6F8] rounded-sm overflow-hidden border border-[#D8D6F8] shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)]">
+                              <button 
+                                onClick={() => handleApproveMilestone(m._id || m.id)}
+                                className="px-2  py-1 text-[10px]   text-[#59549F] hover:bg-[#C9C7F0] transition-all border-r border-[#59549F]/20"
+                              >
+                                Approve
+                              </button>
+                              <button 
+                                onClick={() => handleViewMilestone(m)}
+                                className="px-2 py-1 text-[10px]  text-[#59549F] hover:bg-[#C9C7F0] transition-all"
+                              >
+                                Edit
+                              </button>
+                            </div>
+                          )}
+                        </div>
                         <div className={`flex gap-3 ${!isEditing ? 'pr-28' : ''}`}>
                           <div className="w-4 h-4 rounded-full bg-[#D8D6F8] mt-1 shrink-0" />
                           <div className="flex-1">

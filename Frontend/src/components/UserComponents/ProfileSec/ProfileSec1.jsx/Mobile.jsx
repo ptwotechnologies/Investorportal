@@ -5,6 +5,8 @@ import { Label } from "@/components/ui/label";
 import loginLogo from "/coptenologo2.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoNotificationsOutline, IoChatbubblesOutline } from "react-icons/io5";
+import { FaHandshake, FaStar, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import ComingSoonModal from "./ComingSoonModal";
 import { RxCross2 } from "react-icons/rx";
 import {
   Sheet,
@@ -26,10 +28,18 @@ import { MdOutlineDashboardCustomize } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { HiOutlineTicket } from "react-icons/hi";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import { FaHandshake, FaChevronDown, FaChevronUp } from "react-icons/fa";
+
 import { IoSettingsOutline } from "react-icons/io5";
 import { SiSimpleanalytics } from "react-icons/si";
 import { BiHelpCircle } from "react-icons/bi";
+import { AiOutlineFund } from "react-icons/ai";
+import { MdMoneyOffCsred } from "react-icons/md";
+import { FaRegClosedCaptioning } from "react-icons/fa6";
+import { RiDeviceRecoverLine } from "react-icons/ri";
+import { SiJfrogpipelines } from "react-icons/si";
+import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { MdOutlineAppRegistration } from "react-icons/md";
+import { BsPersonWorkspace } from "react-icons/bs";
 
 const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
@@ -38,30 +48,50 @@ const Mobile = () => {
   const [expandedIds, setExpandedIds] = useState([]);
   const [isDealsOpen, setIsDealsOpen] = useState(false);
   const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
+  const [isOperateOpen, setIsOperateOpen] = useState(false);
+  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonTitle, setComingSoonTitle] = useState("");
   const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
+  const [userRole, setUserRole] = useState(localStorage.getItem("role") || "");
   const location = useLocation();
   const [requestsLoading, setRequestsLoading] = useState(true);
 
   useEffect(() => {
-  const checkRequests = async () => {
-    const token = localStorage.getItem("token"); // ⭐ define token here
-    if (!token) return; // ⭐ guard if no token
-    
-    setRequestsLoading(true);
-    try {
-      const res = await axios.get(`${serverUrl}/requests`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setHasRaisedRequests(res.data.length > 0);
-    } catch (err) {
-      console.error("Error fetching raised requests count", err);
-      setHasRaisedRequests(false);
-    } finally {
-      setRequestsLoading(false);
-    }
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      
+      setRequestsLoading(true);
+      try {
+        const [reqRes, userRes] = await Promise.all([
+          axios.get(`${serverUrl}/requests`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${serverUrl}/user/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+        ]);
+        setHasRaisedRequests(reqRes.data.length > 0);
+        setUserRole(userRes.data.role);
+      } catch (err) {
+        console.error("Error fetching mobile data", err);
+        setHasRaisedRequests(false);
+      } finally {
+        setRequestsLoading(false);
+      }
+    };
+    fetchData();
+  }, [location.pathname]);
+
+  const isStartup = String(userRole).toLowerCase().includes("startup");
+  const isServiceProfessional = String(userRole).toLowerCase().includes("professional");
+  const isInvestor = String(userRole).toLowerCase().includes("investor");
+
+  const triggerComingSoon = (title) => {
+    setComingSoonTitle(title);
+    setShowComingSoon(true);
   };
-  checkRequests();
-}, [location.pathname]); // ⭐ remove token from deps since it's read inside
 
   const navigate = useNavigate();
 
@@ -126,7 +156,7 @@ const Mobile = () => {
             </SheetTrigger>
 
             <div>
-              <SheetContent className="w-screen h-fit p-3 bg-[#D5D5D5] rounded-2xl mt-17">
+              <SheetContent className="w-screen h-[85vh] p-3 bg-[#D5D5D5] rounded-2xl mt-17 overflow-y-auto scrollbar-hide">
                 <div className="border border-[#D9D9D9] bg-white ">
                   <SheetHeader>
                     <SheetTitle></SheetTitle>
@@ -172,6 +202,8 @@ const Mobile = () => {
                           </Link>
                         </div>
 
+
+
                         <div className="flex items-center gap-4">
                           <SiSimpleanalytics
                             className="text-[#59549F] my-1"
@@ -182,12 +214,216 @@ const Mobile = () => {
                           </Link>
                         </div>
 
+                        {isInvestor && (
+                          <>
+                            <SheetClose asChild>
+                              <div
+                                onClick={() => triggerComingSoon("Discover")}
+                                className="flex items-center justify-between pr-4 cursor-pointer"
+                              >
+                                <div className="flex items-center gap-4">
+                                  <RiDeviceRecoverLine className="text-[#59549F] my-1" size={25} />
+                                  <li>Discover</li>
+                                </div>
+                                <FaStar className="text-yellow-400" size={14} />
+                              </div>
+                            </SheetClose>
+
+                            <SheetClose asChild>
+                              <div
+                                onClick={() => triggerComingSoon("Deal pipeline")}
+                                className="flex items-center justify-between pr-4 cursor-pointer"
+                              >
+                                <div className="flex items-center gap-4">
+                                  <SiJfrogpipelines className="text-[#59549F] my-1" size={25} />
+                                  <li>Deal pipeline</li>
+                                </div>
+                                <FaStar className="text-yellow-400" size={14} />
+                              </div>
+                            </SheetClose>
+
+                            <SheetClose asChild>
+                              <div
+                                onClick={() => triggerComingSoon("My investment")}
+                                className="flex items-center justify-between pr-4 cursor-pointer"
+                              >
+                                <div className="flex items-center gap-4">
+                                  <RiMoneyDollarCircleLine className="text-[#59549F] my-1" size={25} />
+                                  <li>My investment</li>
+                                </div>
+                                <FaStar className="text-yellow-400" size={14} />
+                              </div>
+                            </SheetClose>
+
+                            <SheetClose asChild>
+                              <div
+                                onClick={() => triggerComingSoon("Portfolio strategy")}
+                                className="flex items-center justify-between pr-4 cursor-pointer"
+                              >
+                                <div className="flex items-center gap-4">
+                                  <MdOutlineAppRegistration className="text-[#59549F] my-1" size={25} />
+                                  <li>Portfolio strategy</li>
+                                </div>
+                                <FaStar className="text-yellow-400" size={14} />
+                              </div>
+                            </SheetClose>
+
+                            <div className="flex flex-col gap-2">
+                              <div
+                                className="flex items-center gap-4 cursor-pointer w-full"
+                                onClick={() => {
+                                  setIsWorkspaceOpen(!isWorkspaceOpen);
+                                  if (!isWorkspaceOpen) {
+                                    setIsCommunicationOpen(false);
+                                    setIsDealsOpen(false);
+                                    setIsOperateOpen(false);
+                                  }
+                                }}
+                              >
+                                <BsPersonWorkspace className="text-[#59549F]" size={25} />
+                                <li className="flex justify-between items-center w-full pr-4">
+                                  <div className="flex items-center gap-2">
+                                    <span>Workspace</span>
+                                    <FaStar className="text-yellow-400" size={14} />
+                                  </div>
+                                  {isWorkspaceOpen ? (
+                                    <FaChevronUp className="text-[#59549F]" size={15} />
+                                  ) : (
+                                    <FaChevronDown className="text-[#59549F]" size={15} />
+                                  )}
+                                </li>
+                              </div>
+                              {isWorkspaceOpen && (
+                                <ul className="ml-11 mt-1 flex flex-col gap-2 text-[15px] text-gray-600">
+                                  <SheetClose asChild>
+                                    <div
+                                      onClick={() => triggerComingSoon("Documents")}
+                                      className="flex items-center gap-2 cursor-pointer"
+                                    >
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Documents</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div
+                                      onClick={() => triggerComingSoon("Meetings")}
+                                      className="flex items-center gap-2 cursor-pointer"
+                                    >
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Meetings</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div
+                                      onClick={() => triggerComingSoon("Alerts & risk")}
+                                      className="flex items-center gap-2 cursor-pointer"
+                                    >
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Alerts & risk</li>
+                                    </div>
+                                  </SheetClose>
+                                </ul>
+                              )}
+                            </div>
+                          </>
+                        )}
+
+                        {isStartup && (
+                          <>
+                            <SheetClose asChild>
+                              <div
+                                onClick={() => triggerComingSoon("Fundraising")}
+                                className="flex items-center justify-between pr-4 cursor-pointer"
+                              >
+                                <div className="flex items-center gap-4">
+                                  <AiOutlineFund className="text-[#59549F] my-1" size={25} />
+                                  <li>Fundraising</li>
+                                </div>
+                                <FaStar className="text-yellow-400" size={14} />
+                              </div>
+                            </SheetClose>
+
+                            <SheetClose asChild>
+                              <div
+                                onClick={() => triggerComingSoon("Investors")}
+                                className="flex items-center justify-between pr-4 cursor-pointer"
+                              >
+                                <div className="flex items-center gap-4">
+                                  <MdMoneyOffCsred className="text-[#59549F] my-1" size={25} />
+                                  <li>Investors</li>
+                                </div>
+                                <FaStar className="text-yellow-400" size={14} />
+                              </div>
+                            </SheetClose>
+
+                            <div className="flex flex-col gap-2">
+                              <div
+                                className="flex items-center gap-4 cursor-pointer w-full"
+                                onClick={() => {
+                                  setIsOperateOpen(!isOperateOpen);
+                                  if (!isOperateOpen) {
+                                    setIsCommunicationOpen(false);
+                                    setIsDealsOpen(false);
+                                  }
+                                }}
+                              >
+                                <FaRegClosedCaptioning className="text-[#59549F]" size={25} />
+                                <li className="flex justify-between items-center w-full pr-4">
+                                  <div className="flex items-center gap-2">
+                                    <span>Operate</span>
+                                    <FaStar className="text-yellow-400" size={14} />
+                                  </div>
+                                  {isOperateOpen ? (
+                                    <FaChevronUp className="text-[#59549F]" size={15} />
+                                  ) : (
+                                    <FaChevronDown className="text-[#59549F]" size={15} />
+                                  )}
+                                </li>
+                              </div>
+                              {isOperateOpen && (
+                                <ul className="ml-11 mt-1 flex flex-col gap-2 text-[15px] text-gray-600">
+                                  <SheetClose asChild>
+                                    <div
+                                      onClick={() => triggerComingSoon("Metrics")}
+                                      className="flex items-center gap-2 cursor-pointer"
+                                    >
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Metrics</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div
+                                      onClick={() => triggerComingSoon("Documents")}
+                                      className="flex items-center gap-2 cursor-pointer"
+                                    >
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Documents</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div
+                                      onClick={() => triggerComingSoon("Cap Table")}
+                                      className="flex items-center gap-2 cursor-pointer"
+                                    >
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Cap Table</li>
+                                    </div>
+                                  </SheetClose>
+                                </ul>
+                              )}
+                            </div>
+                          </>
+                        )}
+
                         <div className="flex flex-col gap-2">
                           <div
                             className="flex items-center gap-4 cursor-pointer w-full"
                             onClick={() => {
                               setIsCommunicationOpen(!isCommunicationOpen);
-                              if (!isCommunicationOpen) setIsDealsOpen(false);
+                              if (!isCommunicationOpen) {
+                                setIsDealsOpen(false);
+                                setIsOperateOpen(false);
+                              }
                             }}
                           >
                             <IoChatbubblesOutline className="text-[#59549F]" size={25} />
@@ -223,13 +459,16 @@ const Mobile = () => {
                           className="flex items-center gap-4.5 cursor-pointer w-full"
                           onClick={() => {
                             setIsDealsOpen(!isDealsOpen);
-                            if (!isDealsOpen) setIsCommunicationOpen(false);
+                            if (!isDealsOpen) {
+                              setIsCommunicationOpen(false);
+                              setIsOperateOpen(false);
+                            }
                           }}
                         >
                           <FaHandshake className="text-[#59549F]" size={28} />
 
                           <li className="flex justify-between items-center w-full">
-                            <span>Deal Workspace</span>
+                            <span>Service Deal</span>
 
                             {isDealsOpen ? (
                               <FaChevronUp
@@ -281,13 +520,46 @@ const Mobile = () => {
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Disputes</li>
                             </Link>
-                           
-                           
-                           
-                          </ul>
-                        )}
-                      </ul>
-                    </div>
+                        </ul>
+                      )}
+
+                    {isStartup && (
+                      <SheetClose asChild>
+                        <div
+                          onClick={() => triggerComingSoon("Role Switching")}
+                          className="ml-11 mr-6 mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
+                        >
+                          <div className="flex flex-col">
+                            <span className="text-[14px] font-bold text-[#59549f]">Switch to Professional</span>
+                            <span className="text-[10px] text-gray-500 font-medium">Explore professional tools</span>
+                          </div>
+                          <div className="relative inline-flex items-center cursor-pointer">
+                            <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors"></div>
+                            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+                          </div>
+                        </div>
+                      </SheetClose>
+                    )}
+
+                    {isServiceProfessional && (
+                      <SheetClose asChild>
+                        <div
+                          onClick={() => triggerComingSoon("Role Switching")}
+                          className="ml-11 mr-6 mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
+                        >
+                          <div className="flex flex-col">
+                            <span className="text-[14px] font-bold text-[#59549f]">Switch to Buyer</span>
+                            <span className="text-[10px] text-gray-500 font-medium">View as a buyer</span>
+                          </div>
+                          <div className="relative inline-flex items-center cursor-pointer">
+                            <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors"></div>
+                            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+                          </div>
+                        </div>
+                      </SheetClose>
+                    )}
+                  </ul>
+                </div>
 
                     <div id="bottom" className="mt-10 mb-6">
                       <ul className="flex flex-col gap-2 text-[16px] text-gray-600">
@@ -314,7 +586,7 @@ const Mobile = () => {
                   <SheetFooter>
                     <Button
                       type="button"
-                      className="bg-[#D8D6F8] text-[#001032] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
+                      className="bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
                       onClick={handleSignOutClick}
                     >
                       Sign out
@@ -391,6 +663,12 @@ const Mobile = () => {
             )}
           </div>
         </div>
+      )}
+      {showComingSoon && (
+        <ComingSoonModal
+          onClose={() => setShowComingSoon(false)}
+          title={comingSoonTitle}
+        />
       )}
     </div>
   );

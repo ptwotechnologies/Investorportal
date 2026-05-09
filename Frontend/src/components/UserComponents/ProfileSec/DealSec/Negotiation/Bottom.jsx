@@ -1,4 +1,4 @@
-import { FiPlus, FiArrowLeft, FiAlertTriangle, FiEdit3, FiX } from "react-icons/fi";
+import { FiPlus, FiArrowLeft, FiAlertTriangle, FiEdit3, FiX, FiEye, FiZap } from "react-icons/fi";
 import { IoMdCheckmark } from "react-icons/io";
 import { HiOutlineArrowsRightLeft, HiOutlineUserGroup } from "react-icons/hi2";
 import { LuArrowLeftRight, LuClock } from "react-icons/lu";
@@ -103,6 +103,39 @@ const Bottom = ({
       toast.error("Failed to fetch deals");
     } finally {
       if (showLoading) setLoading(false);
+    }
+  };
+
+  const handleApproveMilestone = async (mId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const updatedMilestones = selectedProject.milestones.map(m => 
+        (m._id === mId || m.id === mId) ? { ...m, status: "Approved" } : m
+      );
+      
+      await axios.put(`${serverUrl}/api/deals/${selectedProject._id}`, {
+        milestones: updatedMilestones
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      toast.success("Milestone approved");
+      fetchDeals(false);
+    } catch (error) {
+      console.error("Error approving milestone:", error);
+      toast.error("Failed to approve milestone");
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    switch (status) {
+      case 'Pending':
+      case 'Awaiting Response':
+        return <span className="bg-[#FFD324] text-[#000000] text-[8px]  px-3 py-1 rounded-full shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">Awaiting Response</span>;
+      case 'Approved':
+        return <span className="bg-[#D7EBE4] text-[#2D6A4F] text-[8px] px-3 py-1 rounded-full shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">Approved</span>;
+      default:
+        return <span className="bg-[#D8D6F8] text-[#59549F] text-[8px]  px-3 py-1 rounded-full shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">{status}</span>;
     }
   };
 
@@ -359,6 +392,30 @@ const Bottom = ({
         <div className="flex items-center justify-between mt-2 mb-4 pr-2">
           <h2 className="text-xl font-medium text-[#000000] px-1">Proposals</h2>
         </div>
+
+        {/* Professional Insight Card - Shows after 8 hours of negotiation and only if not approved */}
+        {!isStartup && deals.some(d => {
+          if (["Approved", "Active"].includes(d.status)) return false;
+          const createdDate = new Date(d.createdAt);
+          const now = new Date();
+          const hoursElapsed = (now - createdDate) / (1000 * 60 * 60);
+          return hoursElapsed >= 8;
+        }) && (
+          <div className="bg-[#FFF9F1] rounded-2xl p-4 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] border border-[#FFE0B2] space-y-3 mb-4 mx-1">
+            <div className="flex items-center gap-3">
+              <div className="text-[#1E88E5]">
+                <FiEye size={20} />
+              </div>
+              <p className="text-sm font-medium text-[#455A64]">3 professionals are interested</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="text-[#FBC02D]">
+                <FiZap size={20} />
+              </div>
+              <p className="text-sm font-medium text-[#455A64]">Limited selection slots</p>
+            </div>
+          </div>
+        )}
         {loading ? (
           <div className="text-center py-10 text-gray-400">Loading proposals...</div>
         ) : deals.length === 0 ? (
@@ -635,6 +692,19 @@ const Bottom = ({
 
               {/* Scrollable Content Area */}
               <div className="flex-1 overflow-y-auto scrollbar-hide p-2 relative space-y-4">
+                {!isEditing && (
+                  <SectionCard title="Deal Strength" showDot>
+                    <p className="text-xs text-[#585858] mb-4 tracking-wide">{selectedProject.strength || "High likelihood of successful closure"}</p>
+                    <ul className="space-y-2">
+                      {(selectedProject.strengthPoints || ["Fast response time", "Clear milestone breakdown", "Competitive pricing"]).map((pt, i) => (
+                        <li key={i} className="flex items-center gap-2 text-xs text-[#000000]">
+                          <IoMdCheckmark className="text-green-800" size={16} />
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
+                  </SectionCard>
+                )}
                 {/* Scope summary */}
                 <SectionCard title="Scope of Work">
                   {isEditing ? (
@@ -712,15 +782,23 @@ const Bottom = ({
                   <div className="space-y-3 mt-4">
                     {(isEditing ? editedDeal.milestones : selectedProject.milestones)?.map((m, idx) => (
                       <div key={m._id || m.id || idx} className="bg-[#F8F8F8] rounded-xl p-2 lg:p-4 relative">
-                        <div className="absolute top-2 right-2 lg:top-4 lg:right-4 flex flex-col items-end gap-2">
-                          <span className="bg-[#EAB308] text-white text-[8px] lg:text-[10px] px-2 py-0.5 rounded-md lg:font-medium">{m.status}</span>
+                        <div className="absolute top-2 right-2 lg:top-4 lg:right-4 flex flex-col items-end gap-3">
+                          {getStatusBadge(m.status)}
                           {!isEditing && (
-                            <button 
-                              onClick={() => handleViewMilestone(m)}
-                              className="px-3 lg:px-4 py-1 bg-white border border-gray-200 rounded-lg text-[8px] lg:text-[10px] font-bold text-[#59549F] shadow-sm hover:bg-gray-50"
-                            >
-                              View Details
-                            </button>
+                            <div className="flex bg-[#D8D6F8] rounded-sm overflow-hidden border border-[#D8D6F8] shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)]">
+                              <button 
+                                onClick={() => handleApproveMilestone(m._id || m.id)}
+                                className="px-2 py-1 text-[10px]   text-[#59549F] hover:bg-[#C9C7F0] transition-all border-r border-[#59549F]/20"
+                              >
+                                Approve
+                              </button>
+                              <button 
+                                onClick={() => handleViewMilestone(m)}
+                                className="px-2 py-1 text-[10px]   text-[#59549F] hover:bg-[#C9C7F0] transition-all"
+                              >
+                                Edit
+                              </button>
+                            </div>
                           )}
                         </div>
                         
@@ -1112,6 +1190,10 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
   const lastName = party.businessDetails?.lastName || "";
   const fullName = `${firstName} ${lastName}`.trim();
   const userName = fullName || "N/A";
+  const createdDate = new Date(proj.createdAt);
+  const now = new Date();
+  const hoursElapsed = (now - createdDate) / (1000 * 60 * 60);
+  const showNudge = hoursElapsed >= 24 && !["Approved", "Active"].includes(proj.status);
 
   return (
     <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
@@ -1155,6 +1237,17 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
           </p>
         </div>
       </div>
+      
+      {!isStartup && showNudge && (
+        <div className="bg-[#FFF9F1] rounded-2xl p-4 mb-1 flex items-start gap-3 border border-[#FFE0B2] shadow-sm">
+          <FiZap className="text-[#FBC02D] mt-1 shrink-0" size={20} />
+          <div className="flex flex-col">
+            <h4 className="text-sm font-semibold text-[#000000] mb-1 lg:mb-2">This deal is close to finalization</h4>
+            <p className="text-[10px] text-gray-500 leading-tight">Finalize now to secure the professional</p>
+          </div>
+        </div>
+      )}
+
       <button 
         onClick={() => handleViewProject(proj)}
         className="w-full mt-4 py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all"
