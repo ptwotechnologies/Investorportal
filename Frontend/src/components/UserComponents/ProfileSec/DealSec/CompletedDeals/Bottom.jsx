@@ -63,36 +63,39 @@ const Bottom = () => {
     const userName = fullName || "N/A";
 
     return (
-      <div className={`bg-white rounded-2xl p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${isSelected ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="flex flex-col">
-            <h3 className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap leading-tight">
+      <div className={`bg-white rounded-2xl p-4 lg:px-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${isSelected ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+        <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
+          {/* Row 1: Labels */}
+          <div className="flex flex-col overflow-hidden">
+            <h3 className="text-[16px] lg:text-[16px] font-medium text-[#000000] leading-tight truncate">
               {companyName}
             </h3>
           </div>
-          <div className="flex flex-col lg:items-center">
-            <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+          <div className="flex flex-col items-center">
+            <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
           </div>
-          <div className="flex flex-col lg:items-end">
-            <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+          <div className="flex flex-col items-end">
+            <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
           </div>
 
-          <div className="flex flex-col -mt-1">
-            <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F] w-fit">
+          {/* Row 2: Values */}
+          <div className="flex flex-col -mt-1 overflow-hidden">
+            <p className="text-[13px] lg:text-sm text-[#000000] truncate">
               {deal.requestId?.service || "Project Deal"}
             </p>
           </div>
-          <div className="flex flex-col lg:items-center -mt-1">
-            <p className="text-[10px] lg:text-sm text-[#000000]">
+          <div className="flex flex-col items-center -mt-1">
+            <p className="text-[13px] lg:text-sm text-[#000000]">
               {deal.totalTimeline || "N/A"}
             </p>
           </div>
-          <div className="flex flex-col lg:items-end -mt-1">
-            <p className="text-[10px] lg:text-sm text-[#000000]">Rs {deal.totalAmount || 0}</p>
+          <div className="flex flex-col items-end -mt-1">
+            <p className="text-[13px] lg:text-sm text-[#000000]">Rs {deal.totalAmount || 0}</p>
           </div>
 
+          {/* Row 3: User Name */}
           <div className="col-span-3 mt-1">
-            <p className="text-[10px] lg:text-sm text-[#000000] font-medium opacity-70">
+            <p className="text-[13px] lg:text-sm text-[#000000]">
               {userName}
             </p>
           </div>
@@ -124,11 +127,11 @@ const Bottom = () => {
   if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-2 lg:px-4 lg:py-1 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 lg:px-4 lg:py-1 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column: Project List ── */}
       <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
-        <div className="grid grid-cols-2 gap-4 shrink-0">
+        <div className="grid grid-cols-2 gap-4 shrink-0  px-2 lg:px-0">
           <StatCard label="Total Completed" value={deals.length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Total Value" value={`Rs ${deals.reduce((acc, d) => acc + (d.totalAmount || 0), 0)}`} bgColor="bg-[#D8D6F8]" />
           <StatCard label="Success Rate" value={deals.length > 0 ? "100%" : "0%"} bgColor="bg-[#D7EBE4]" />
@@ -139,7 +142,7 @@ const Bottom = () => {
           />
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] px-1 shrink-0">All Deals</h2>
+        <h2 className="text-xl font-medium text-[#000000] px-3 shrink-0">All Deals</h2>
         
         <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
           {deals.length === 0 ? (
@@ -184,7 +187,7 @@ const Bottom = () => {
         
         {/* Header */}
         {selectedDeal && (
-          <div className="flex items-center gap-3 py-2 px-4 shrink-0">
+          <div className="lg:hidden flex items-center gap-3 py-2 px-4 shrink-0">
             <button 
                 onClick={() => setSelectedDeal(null)} 
                 className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
@@ -195,7 +198,7 @@ const Bottom = () => {
           </div>
         )}
 
-        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+        <div className="flex-1 flex flex-col overflow-hidden bg-white   rounded-2xl relative">
           <div className="flex-1 overflow-y-auto scrollbar-hide relative">
             {!selectedDeal ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
@@ -206,14 +209,14 @@ const Bottom = () => {
                 <p className="text-sm text-gray-400 mt-1 italic">Select a completed project from the left to view details.</p>
               </div>
             ) : (
-              <div className="p-4 lg:p-6 space-y-6">
+              <div className="p-2 space-y-5">
                 {/* Success Rate Card */}
                 <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-4">
                    <h3 className="text-lg font-semibold text-[#001032]">Success Rate</h3>
                    <p className="text-sm text-[#001032]/70 leading-relaxed">
                      90% as per analysis about work flow, disputes and timely delivery
                    </p>
-                   <button className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] text-[#59549F] rounded-xl font-bold shadow-sm transition-all">
+                   <button className="w-full py-1 bg-[#D8D6F8] hover:bg-[#C9C7F0] text-[#59549F] rounded-xl font-bold shadow-sm transition-all">
                      View Details
                    </button>
                 </div>
@@ -221,15 +224,12 @@ const Bottom = () => {
                 {/* Total Value Section */}
                 <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
                    <h3 className="text-lg font-semibold text-[#001032]">Total Value</h3>
-                   <div className="flex flex-col lg:flex-row gap-3">
-                      <div className="bg-[#FDFDFF] px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                   <div className="flex gap-3">
+                      <div className="bg-[#FDFDFF] px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-[0.8] text-center flex items-center justify-center">
                         INR - Indian Rupees
                       </div>
-                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                        {`Rs ${selectedDeal.milestones?.length ? Math.min(...selectedDeal.milestones.map(m => m.amount || 0)) : 0}`}
-                      </div>
-                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                        {`Rs ${selectedDeal.milestones?.length ? Math.max(...selectedDeal.milestones.map(m => m.amount || 0)) : 0}`}
+                      <div className="bg-white px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-1 text-center flex items-center justify-center">
+                        {`Total: Rs ${selectedDeal.totalAmount || 0}`}
                       </div>
                    </div>
                 </div>
@@ -237,15 +237,12 @@ const Bottom = () => {
                 {/* Completed Date Section */}
                 <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
                    <h3 className="text-lg font-semibold text-[#001032]">Completed Date</h3>
-                   <div className="flex flex-col lg:flex-row gap-3">
-                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
+                   <div className="flex gap-3">
+                      <div className="bg-[#FDFDFF] px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-[0.8] text-center flex items-center justify-center">
+                        Completed On
+                      </div>
+                      <div className="bg-white px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-1 text-center flex items-center justify-center">
                         {selectedDeal.updatedAt ? new Date(selectedDeal.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : "N/A"}
-                      </div>
-                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                        From
-                      </div>
-                      <div className="bg-white px-4 py-3 rounded-lg border border-gray-100 text-[10px] text-gray-400 font-bold shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex-1 text-center">
-                        To
                       </div>
                    </div>
                 </div>
@@ -255,16 +252,16 @@ const Bottom = () => {
                    <h3 className="text-lg font-semibold text-[#001032]">Released Funds</h3>
                    <div className="space-y-4">
                       {selectedDeal.milestones?.length > 0 ? selectedDeal.milestones.map((ms) => (
-                        <div key={ms._id} className="bg-[#F3F3F3] rounded-2xl p-4 flex items-center justify-between gap-4">
-                           <div className="flex items-start gap-3">
+                        <div key={ms._id} className="bg-[#F3F3F3] rounded-2xl p-3 lg:p-4 flex items-center justify-between gap-2 lg:gap-4 overflow-hidden">
+                           <div className="flex items-start gap-3 min-w-0">
                               <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1.5 shrink-0" />
-                              <div>
-                                 <h4 className="text-sm font-semibold text-[#001032]">{ms.title}</h4>
-                                 <p className="text-[10px] text-gray-400 mt-0.5 line-clamp-1">{ms.description || "Milestone successfully released"}</p>
-                                 <p className="text-[9px] text-gray-400">Due Date - {ms.duration || "N/A"}</p>
+                              <div className="min-w-0">
+                                 <h4 className="text-sm font-semibold text-[#001032] truncate">{ms.title}</h4>
+                                 <p className="text-[11px] text-gray-400 mt-0.5 truncate">{ms.description || "Milestone successfully released"}</p>
+                                 <p className="text-[11px] text-gray-400">Due Date - {ms.duration || "N/A"}</p>
                               </div>
                            </div>
-                           <div className="bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold px-4 py-1.5 rounded-md shadow-sm whitespace-nowrap">
+                           <div className="bg-[#D8D6F8] text-[#59549F] text-[10px] lg:text-[13px] font-bold px-3 lg:px-4 py-1.5 rounded-md shadow-sm whitespace-nowrap shrink-0">
                              Completed
                            </div>
                         </div>

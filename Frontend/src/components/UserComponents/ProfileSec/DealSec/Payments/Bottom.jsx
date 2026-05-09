@@ -25,35 +25,42 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
 
   return (
     <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
-      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start">
-        <div className="flex flex-col">
-          <h3 className="lg:text-xl lg:text-[16px] font-medium text-[#000000] leading-tight">
+      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
+        {/* Row 1, Col 1: Real Company Name */}
+        <div className="flex flex-col overflow-hidden">
+          <h3 className="text-[16px] lg:text-[16px] font-medium text-[#000000] leading-tight truncate">
             {companyName}
           </h3>
         </div>
-        <div className="flex flex-col lg:items-center">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+        {/* Row 1, Col 2: Timeline Label */}
+        <div className="flex flex-col items-center">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
         </div>
-        <div className="flex flex-col lg:items-end">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+        {/* Row 1, Col 3: Price Label */}
+        <div className="flex flex-col items-end">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
         </div>
 
-        <div className="flex flex-col -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F]  w-fit ">
+        {/* Row 2, Col 1: Project Title */}
+        <div className="flex flex-col -mt-1 overflow-hidden">
+          <p className="text-[13px] lg:text-sm text-[#000000] truncate">
             {proj.requestId?.service || "Project Deal"}
           </p>
         </div>
-        <div className="flex flex-col lg:items-center -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">
+        {/* Row 2, Col 2: Timeline Value */}
+        <div className="flex flex-col items-center -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
             {proj.totalTimeline || "N/A"}
           </p>
         </div>
-        <div className="flex flex-col lg:items-end -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">Rs {proj.totalAmount || 0}</p>
+        {/* Row 2, Col 3: Price Value */}
+        <div className="flex flex-col items-end -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">Rs {proj.totalAmount || 0}</p>
         </div>
 
+        {/* Row 3, Col 1: Real User Name */}
         <div className="col-span-3 mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] font-medium opacity-70">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
             {userName}
           </p>
         </div>
@@ -90,15 +97,7 @@ const Bottom = () => {
     fetchDeals();
   }, []);
 
-  useEffect(() => {
-    if (deals.length > 0 && location.state?.dealId) {
-      const deal = deals.find(d => d._id === location.state.dealId);
-      if (deal) {
-        setSelectedDeal(deal);
-        setSelectedMilestone(deal.milestones?.[0] || null);
-      }
-    }
-  }, [deals, location.state]);
+  // Removed automatic deal selection from location state to ensure mobile users land on the list first, matching other pages' flow
 
   const fetchDeals = async () => {
     setLoading(true);
@@ -221,6 +220,46 @@ const Bottom = () => {
   };
 
 
+  const handleSimulatePayment = async () => {
+    if (!selectedDeal || !selectedMilestone) return;
+    setIsProcessingPayment(true);
+    try {
+      const token = localStorage.getItem("token");
+      
+      // 1. Create a real order in the backend first
+      const orderRes = await axios.post(`${serverUrl}/api/payment/create-order`, {
+        amount: milestoneBreakdown.total,
+        dealId: selectedDeal._id,
+        milestoneId: selectedMilestone._id
+      }, { headers: { Authorization: `Bearer ${token}` } });
+
+      if (!orderRes.data.success) throw new Error("Order creation failed");
+
+      // 2. Immediately verify it with the simulate flag
+      const verifyRes = await axios.post(`${serverUrl}/api/payment/verify-payment`, {
+        razorpay_order_id: orderRes.data.order.id,
+        razorpay_payment_id: "SIMULATED_PAY_" + Date.now(),
+        razorpay_signature: "SIMULATED_SIG",
+        dealId: selectedDeal._id,
+        milestoneId: selectedMilestone._id,
+        simulateSuccess: true // Backend check for non-production simulation
+      }, { headers: { Authorization: `Bearer ${token}` } });
+
+      if (verifyRes.data.success) {
+        toast.success("Payment Simulated Successfully!");
+        fetchDeals();
+      } else {
+        throw new Error(verifyRes.data.message);
+      }
+    } catch (error) {
+      console.error("Simulation failed:", error);
+      toast.error(error.message || "Simulation failed");
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+
   const milestoneBreakdown = selectedMilestone ? {
     amount: Number(selectedMilestone.amount),
     fee: Math.round(Number(selectedMilestone.amount) * 0.2), // 20% Platform Fee
@@ -229,7 +268,7 @@ const Bottom = () => {
   } : null;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-[540px] overflow-hidden">
       
       {/* ── Left Column ── */}
       <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
@@ -285,14 +324,14 @@ const Bottom = () => {
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col gap-4 ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col  ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
         
         {selectedDeal && (
-          <div className="lg:hidden flex items-center gap-3 mb-2 px-2">
+          <div className="lg:hidden flex items-center gap-3 my-2  px-2">
             <button onClick={() => setSelectedDeal(null)} className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
               <FiArrowLeft size={20} />
             </button>
-            <span className="font-bold text-lg text-[#000000]">Back to Deals</span>
+            <span className=" text-lg text-[#000000] ">Back to Deals</span>
           </div>
         )}
 
@@ -300,12 +339,12 @@ const Bottom = () => {
           <div className="flex-1 overflow-y-auto scrollbar-hide relative">
             {selectedDeal ? (
               <>
-                <div className="flex-1 flex flex-col h-full p-4 lg:p-6 space-y-4">
+                <div className="flex-1 flex flex-col p-4 lg:p-3 space-y-4">
                 
                 <div className="bg-white ">
                   <div className="flex items-center justify-between mb-4">
                       <h3 className="text-base font-semibold text-[#000000]">Payment for Milestones</h3>
-                      <FiPlusCircle size={22} className="text-[#59549F] cursor-pointer" />
+                     
                   </div>
 
                   <div className="space-y-4">
@@ -337,69 +376,77 @@ const Bottom = () => {
                 </div>
 
                 {selectedMilestone && (
-                  <div className="bg-white mt-6 rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden">
+                  <div className="bg-white mt-3  rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden">
                     <div className="flex items-center justify-between px-6 lg:px-8 py-2 bg-[#F0EDFD] rounded-2xl">
                         <h3 className="text-base font-semibold text-[#000000]">Breakdown</h3>
                         <FiChevronDown size={22} className="text-[#000000] cursor-pointer" />
                     </div>
 
-                    <div className="p-2 lg:p-8">
-                      <div className="grid grid-cols-3 gap-1 lg:gap-3 lg:mb-6 my-3">
-                          <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 py-5 lg:p-4 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
-                            <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Milestone Amount</p>
-                            <p className="text-[9px] lg:text-lg text-[#000000] font-bold">Rs {milestoneBreakdown.amount}</p>
+                    <div className="p-2 lg:p-4">
+                      <div className="grid grid-cols-3 gap-1 lg:gap-3 lg:mb-3 my-3">
+                          <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 py-3 lg:p-3 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                            <p className="text-[9px] lg:text-[10px] text-[#000000]  leading-tight">Milestone Amount</p>
+                            <p className="text-[13px] lg:text-lg text-[#000000] font-bold">Rs {milestoneBreakdown.amount}</p>
                           </div>
-                          <div className="bg-[#F5F5F5] rounded-xl lg:rounded-2xl p-1 lg:p-4 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
-                            <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Platform Fee + GST</p>
-                            <p className="text-[9px] lg:text-lg text-gray-400 font-bold">Rs {milestoneBreakdown.fee + milestoneBreakdown.gst}</p>
+                          <div className="bg-[#F5F5F5] rounded-xl lg:rounded-2xl p-1 py-3 lg:p-3 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                            <p className="text-[9px] lg:text-[10px] text-[#000000]  leading-tight">Platform Fee (20% + GST)</p>
+                            <p className="text-[13px] lg:text-lg text-gray-400 font-bold">Rs {milestoneBreakdown.fee + milestoneBreakdown.gst}</p>
                           </div>
-                          <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 lg:p-4 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
-                            <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Total Payable</p>
-                            <p className="text-[9px] lg:text-lg text-[#59549F] font-bold">Rs {milestoneBreakdown.total}</p>
+                          <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 py-3 lg:p-3 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                            <p className="text-[9px] lg:text-[10px] text-[#000000]  leading-tight">Total Payable</p>
+                            <p className="text-[13px] lg:text-lg text-[#59549F] font-bold">Rs {milestoneBreakdown.total}</p>
                           </div>
-                      </div>
+                      </div> 
 
                       <p className="text-xs text-black font-semibold mb-6">20% platform fees ensures</p>
 
                       <div className="grid grid-cols-3 gap-2 lg:gap-4">
                           <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
-                            <img src="/paymentsec1.png" alt="Secure payment" className="w-full h-full object-contain" />
+                            <img src="/paymentsec1.png" alt="Secure payment" className="w-full h-full object-contain scale-140" />
                           </div>
                           <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
-                            <img src="/paymentsec2.png" alt="Verified execution" className="w-full h-full object-contain" />
+                            <img src="/paymentsec2.png" alt="Verified execution" className="w-full h-full object-contain scale-140" />
                           </div>
                           <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
-                            <img src="/paymentsec3.png" alt="Dispute protection" className="w-full h-full object-contain" />
+                            <img src="/paymentsec3.png" alt="Dispute protection" className="w-full h-full object-contain scale-140" />
                           </div>
                       </div>
                     </div>
                   </div>
                 )}
               </div>
-
-              {selectedMilestone && selectedMilestone.status !== 'Paid' && (
-                <div className="p-4 bg-white border-t border-gray-100">
-                  <button 
-                    onClick={handlePayment}
-                    disabled={isProcessingPayment}
-                    className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
-                  >
-                    {isProcessingPayment ? "Processing..." : `Pay Rs ${selectedMilestone.amount}`}
-                  </button>
-                </div>
-              )}
             </>
           ) : (
-              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
-                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
-                  <IoMdCheckmark size={40} />
-                </div>
-                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
-                <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view payment status.</p>
+            <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                <IoMdCheckmark size={40} />
               </div>
-            )}
-          </div>
+              <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
+              <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view payment status.</p>
+            </div>
+          )}
         </div>
+      </div>
+
+        {/* STATIC FOOTER BUTTONS - OUTSIDE THE SCROLLABLE CARD AREA */}
+        {selectedDeal && selectedMilestone && selectedMilestone.status !== 'Paid' && (
+          <div className="sticky bottom-0 z-20 px-4 py-2 lg:py-2 mx-2 bg-[#FDFDFF] lg:bg-transparent shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] lg:shadow-none flex gap-2">
+            <button 
+              onClick={handlePayment}
+              disabled={isProcessingPayment}
+              className="flex-[2] py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-semibold text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
+            >
+              {isProcessingPayment ? "Processing..." : `Pay for ${selectedMilestone.title}`}
+            </button>
+            <button 
+              onClick={handleSimulatePayment}
+              disabled={isProcessingPayment}
+              className="flex-1 py-2 bg-white border-2 border-dashed border-[#D8D6F8] rounded-xl text-[#59549F] font-medium text-xs hover:bg-gray-50 transition-all opacity-80"
+            >
+              Simulate (Test)
+            </button>
+          </div>
+        )}
       </div>
 
     </div>

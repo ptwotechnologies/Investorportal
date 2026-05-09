@@ -30,42 +30,42 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
 
   return (
     <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
-      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start">
+      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
         {/* Row 1, Col 1: Real Company Name */}
-        <div className="flex flex-col">
-          <h3 className="lg:text-xl lg:text-[16px] font-medium text-[#000000] leading-tight">
+        <div className="flex flex-col overflow-hidden">
+          <h3 className="text-[16px] lg:text-[16px] font-medium text-[#000000] leading-tight truncate">
             {companyName}
           </h3>
         </div>
         {/* Row 1, Col 2: Timeline Label */}
-        <div className="flex flex-col lg:items-center">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+        <div className="flex flex-col items-center">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
         </div>
         {/* Row 1, Col 3: Price Label */}
-        <div className="flex flex-col lg:items-end">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+        <div className="flex flex-col items-end">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
         </div>
 
         {/* Row 2, Col 1: Project Title */}
-        <div className="flex flex-col -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F]  w-fit  ">
+        <div className="flex flex-col -mt-1 overflow-hidden">
+          <p className="text-[13px] lg:text-sm text-[#000000] truncate">
             {proj.requestId?.service || "Project Deal"}
           </p>
         </div>
         {/* Row 2, Col 2: Timeline Value */}
-        <div className="flex flex-col lg:items-center -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">
+        <div className="flex flex-col items-center -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
             {proj.totalTimeline || "N/A"}
           </p>
         </div>
         {/* Row 2, Col 3: Price Value */}
-        <div className="flex flex-col lg:items-end -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">Rs {proj.totalAmount || 0}</p>
+        <div className="flex flex-col items-end -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">Rs {proj.totalAmount || 0}</p>
         </div>
 
         {/* Row 3, Col 1: Real User Name */}
         <div className="col-span-3 mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] font-medium opacity-70">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
             {userName}
           </p>
         </div>
@@ -164,12 +164,9 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
       const userData = userStr ? JSON.parse(userStr) : null;
       const currentId = userData?._id || userData?.id;
 
-      // Show Approved deals only if the current user hasn't verified yet
+      // Show Approved and Documented deals
       const approvedDeals = res.data.filter(d => {
-        if (d.status !== "Approved") return false;
-        const isStartup = String(d.startupId?._id || d.startupId) === String(currentId);
-        const alreadyVerified = isStartup ? d.documentation?.startupVerified : d.documentation?.professionalVerified;
-        return !alreadyVerified;
+        return d.status === "Approved" || d.status === "Documented";
       });
       setDeals(approvedDeals);
     } catch (error) {
@@ -227,7 +224,7 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
   const handleVerifyOtp = async () => {
     if (!selectedDeal) return;
 
-    if (isOtpVerified) {
+    const performFinalUpdate = async () => {
       setIsVerifying(true);
       try {
         const token = localStorage.getItem("token");
@@ -239,18 +236,44 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
         });
         
         invalidateSidebarCache();
-        toast.success("Identity verified and deal documented!");
-        if (isStartupUser) {
-          navigate("/deal/payments", { state: { dealId: selectedDeal._id } });
-        } else {
-          navigate("/deal/revenue", { state: { dealId: selectedDeal._id } });
-        }
+        toast.success("Identity verified successfully!");
+        
+        // Show success and refresh (stay on page for both roles)
+        const roleMsg = isStartupUser 
+          ? "Agreement documented. You can now proceed to payment." 
+          : "Agreement documented. Waiting for Startup payment to activate the deal.";
+          
+        toast(roleMsg, {
+          icon: isStartupUser ? '✅' : '⏳',
+          duration: 4000
+        });
+
+        // Update local list state to show verified UI immediately
+        const updatedDeals = deals.map(d => {
+          if (d._id === selectedDeal._id) {
+            return {
+              ...d,
+              documentation: {
+                ...d.documentation,
+                ...(isStartupUser ? { startupVerified: true } : { professionalVerified: true })
+              }
+            };
+          }
+          return d;
+        });
+        setDeals(updatedDeals);
+        setSelectedDeal(updatedDeals.find(d => d._id === selectedDeal._id));
+        setStep('overview');
       } catch (error) {
         console.error("Failed to update deal status:", error);
         toast.error("Failed to proceed. Please try again.");
       } finally {
         setIsVerifying(false);
       }
+    };
+
+    if (isOtpVerified) {
+      await performFinalUpdate();
       return;
     }
 
@@ -261,12 +284,12 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
     setIsVerifying(true);
     try {
       await confirmationResult.confirm(code);
-      toast.success("Identity verified successfully!");
       setIsOtpVerified(true);
+      // Proceed immediately after verification
+      await performFinalUpdate();
     } catch (error) {
       console.error("Error verifying OTP:", error);
       toast.error("Invalid OTP or verification failed.");
-    } finally {
       setIsVerifying(false);
     }
   };
@@ -448,7 +471,7 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
 
                 {/* ══ STEP 2: VERIFICATION (OTP) ══ */}
                 {step === 'verification' && (
-                  <div className="space-y-4 p-3 lg:p-6">
+                  <div className="space-y-4 p-2 lg:p-4">
                     <div className="relative">
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
@@ -468,21 +491,23 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
                           <h4 className="text-sm font-semibold text-[#000000] mb-2 ">Step 1 - Identity Verification</h4>
                           <p className="text-[10px] text-gray-500 mb-4 font-medium ">To confirm this agreement, please verify your identity by entering your registered contact number</p>
                           
-                          <div className="flex gap-2">
-                            <div className="px-2 w-[60px] h-10 bg-white border border-gray-100 rounded-lg flex items-center justify-center text-[#000000] text-sm shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] font-semibold">
-                              +91
+                          <div className="flex flex-col sm:flex-row gap-3">
+                            <div className="flex gap-2 flex-1">
+                              <div className="px-2 w-[55px] h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center text-[#000000] text-sm shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] font-semibold shrink-0">
+                                +91
+                              </div>
+                              <input 
+                                type="text" 
+                                placeholder="Contact Number"
+                                value={phoneNumber}
+                                onChange={(e) => setPhoneNumber(e.target.value)}
+                                className="flex-1 h-11 bg-white border border-gray-100 rounded-xl px-4 text-[#000000] text-sm font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]" 
+                              />
                             </div>
-                            <input 
-                              type="text" 
-                              placeholder="Contact Number"
-                              value={phoneNumber}
-                              onChange={(e) => setPhoneNumber(e.target.value)}
-                              className="flex-1 h-10 bg-white border border-gray-100 rounded-lg px-2 lg:px-4 text-[#000000] text-sm font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]" 
-                            />
                             <button 
                               onClick={handleSendOtp}
                               disabled={isSendingOtp}
-                              className="px-4 lg:px-8 bg-[#D8D6F8] text-[#59549F] rounded-lg text-xs lg:text-sm font-bold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] disabled:opacity-50"
+                              className="w-full sm:w-auto px-9 lg:h-11  h-7 bg-[#D8D6F8] text-[#59549F] rounded-lg lg:rounded-xl text-sm font-bold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] disabled:opacity-50 transition-all active:scale-95"
                             >
                               {isSendingOtp ? "..." : "Send"}
                             </button>
@@ -530,7 +555,21 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
         {/* STATIC FOOTER BUTTONS - OUTSIDE THE SCROLLABLE CARD AREA */}
         {selectedDeal && (
           <div className="sticky bottom-0 z-20 px-4 py-4 lg:py-2 mx-2 bg-[#FDFDFF] lg:bg-transparent shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] lg:shadow-none">
-            {step === 'overview' ? (
+            {((isStartupUser && selectedDeal.documentation?.startupVerified) || (!isStartupUser && selectedDeal.documentation?.professionalVerified)) ? (
+              <div className="flex flex-col gap-2">
+                <div className="w-full py-2.5 bg-green-50 text-green-600 rounded-xl font-bold text-sm border border-green-100 flex items-center justify-center gap-2">
+                  <IoMdCheckmark size={18} /> Identity Verified
+                </div>
+                {isStartupUser && (
+                  <button 
+                    onClick={() => navigate("/deal/payments", { state: { dealId: selectedDeal._id } })}
+                    className="w-full py-2 bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] rounded-xl font-semibold text-sm hover:bg-[#48438a] hover:text-white transition-all flex items-center justify-center gap-2"
+                  >
+                    Proceed to Payment <FiArrowLeft className="rotate-180 mt-1" />
+                  </button>
+                )}
+              </div>
+            ) : step === 'overview' ? (
               <button 
                 disabled={!agreementAccepted}
                 onClick={() => setStep('verification')}
@@ -545,8 +584,8 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
                 className="w-full py-2.5 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
               >
                 {isVerifying ? "Verifying..." : (
-                  isOtpVerified 
-                    ? (isStartupUser ? "Confirm & Proceed for Payment" : "Confirm & Proceed to Revenue")
+                  isStartupUser 
+                    ? "Confirm & Proceed for Payment" 
                     : "Confirm & Wait for Deal Activation"
                 )}
               </button>

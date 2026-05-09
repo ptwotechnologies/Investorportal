@@ -24,35 +24,42 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
 
   return (
     <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
-      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start">
-        <div className="flex flex-col">
-          <h3 className="lg:text-xl lg:text-[16px] font-medium text-[#000000] leading-tight">
+      <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
+        {/* Row 1, Col 1: Real Company Name */}
+        <div className="flex flex-col overflow-hidden">
+          <h3 className="text-[16px] lg:text-[16px] font-medium text-[#000000] leading-tight truncate">
             {companyName}
           </h3>
         </div>
-        <div className="flex flex-col lg:items-center">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+        {/* Row 1, Col 2: Timeline Label */}
+        <div className="flex flex-col items-center">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
         </div>
-        <div className="flex flex-col lg:items-end">
-          <p className="text-[10px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+        {/* Row 1, Col 3: Price Label */}
+        <div className="flex flex-col items-end">
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
         </div>
 
-        <div className="flex flex-col -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] decoration-[#59549F] underline-offset-4 w-fit truncate max-w-[100px]">
-            {proj.scopeItems?.[0] || "Project Deal"}
+        {/* Row 2, Col 1: Project Title */}
+        <div className="flex flex-col -mt-1 overflow-hidden">
+          <p className="text-[13px] lg:text-sm text-[#000000] truncate">
+            {proj.requestId?.service || "Project Deal"}
           </p>
         </div>
-        <div className="flex flex-col lg:items-center -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">
+        {/* Row 2, Col 2: Timeline Value */}
+        <div className="flex flex-col items-center -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
             {proj.totalTimeline || "N/A"}
           </p>
         </div>
-        <div className="flex flex-col lg:items-end -mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000]">Rs {proj.totalAmount || 0}</p>
+        {/* Row 2, Col 3: Price Value */}
+        <div className="flex flex-col items-end -mt-1">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">Rs {proj.totalAmount || 0}</p>
         </div>
 
+        {/* Row 3, Col 1: Real User Name */}
         <div className="col-span-3 mt-1">
-          <p className="text-[10px] lg:text-sm text-[#000000] font-medium opacity-70">
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
             {userName}
           </p>
         </div>
@@ -126,7 +133,7 @@ const Bottom = () => {
   } : null;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-[540px] overflow-hidden">
       
       {/* ── Left Column ── */}
       <div className={`flex-1 flex py-2 flex-col gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
@@ -183,92 +190,94 @@ const Bottom = () => {
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column ── */}
-      <div className={`flex-1 h-full flex flex-col overflow-hidden ${selectedDeal ? 'flex' : 'hidden lg:flex'}`}>
+      <div className={`flex-1 h-full flex flex-col gap-4 ${selectedDeal ? 'flex' : 'hidden lg:flex'}`}>
         
-        <div className={`flex-1 overflow-y-auto scrollbar-hide p-1 space-y-6 m-2 rounded-2xl transition-all duration-300 ${!selectedDeal ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100' : ''}`}>
-          {selectedDeal ? (
-            <>
-              <button 
-                onClick={() => setSelectedDeal(null)}
-                className="lg:hidden flex items-center gap-2 text-[#59549F] font-semibold mb-4"
-              >
-                <div className="p-2 bg-gray-50 rounded-full shadow-sm">
-                    <FiArrowLeft size={18} />
-                </div>
-                Back to List
-              </button>
+        {selectedDeal && (
+          <div className="lg:hidden flex items-center gap-3 mt-2 px-2">
+            <button onClick={() => setSelectedDeal(null)} className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm">
+              <FiArrowLeft size={20} />
+            </button>
+            <span className="text-lg text-[#000000]">Back to List</span>
+          </div>
+        )}
 
-              <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-6">
-                 <h3 className="text-lg font-semibold text-[#001032]">Revenue for Milestones</h3>
+        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+            {selectedDeal ? (
+              <div className="flex-1 flex flex-col p-4 lg:p-6 space-y-6">
+                
+                <div className="bg-white">
+                  <h3 className="text-base font-semibold text-[#000000] mb-4">Revenue for Milestones</h3>
 
-                 <div className="space-y-4">
+                  <div className="space-y-4">
                     {selectedDeal.milestones?.map((m, idx) => (
-                      <div key={m._id || idx} onClick={() => setSelectedMilestone(m)} className={`bg-[#F3F3F3] rounded-2xl p-3 lg:p-4 flex items-end justify-between gap-2 cursor-pointer transition-all ${selectedMilestone?._id === m._id ? 'border-[#D8D6F8] border-2 shadow-md' : 'border-transparent border-2'}`}>
-                        <div className="flex items-start gap-2 lg:gap-3 overflow-hidden">
-                           <div className={`w-3 h-3 rounded-full mt-1.5 shrink-0 ${m.status === 'Paid' ? 'bg-green-400' : 'bg-[#D8D6F8]'}`} />
-                           <div className="overflow-hidden">
-                              <h4 className="text-[12px] lg:text-sm font-semibold text-[#001032] truncate">{m.title}</h4>
-                              <p className="text-[10px] text-gray-400 mt-1 truncate">{m.description}</p>
-                              <p className="text-[9px] text-gray-400 truncate">{m.status === 'Paid' ? 'Payment Received' : 'Payment Pending'}</p>
-                           </div>
+                      <div key={m._id || idx} onClick={() => setSelectedMilestone(m)} className={`bg-[#F9F9FF] rounded-xl p-2 lg:p-4 border transition-all ${selectedMilestone?._id === m._id ? 'border-[#D8D6F8] shadow-md' : 'border-gray-100 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.05)]'} flex items-center justify-between cursor-pointer`}>
+                        <div className="flex gap-3 overflow-hidden">
+                          <div className={`w-3 h-3 rounded-full mt-1 shrink-0 ${m.status === 'Paid' ? 'bg-green-400' : 'bg-gray-200'}`} />
+                          <div className="overflow-hidden">
+                            <h4 className="text-sm font-semibold text-[#000000] truncate">{m.title}</h4>
+                            <p className="text-[10px] text-gray-400 mt-1 line-clamp-1">{m.description}</p>
+                            <p className="text-[10px] text-gray-400 mt-1">{m.status === 'Paid' ? 'Payment Received' : 'Payment Pending'}</p>
+                          </div>
                         </div>
-                        <div className={`text-[10px] font-bold px-3 py-1.5 rounded-md shadow-sm whitespace-nowrap ${m.status === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-400'}`}>
-                           {m.status === 'Paid' ? 'Received' : 'Pending'}
+                        <div className={`text-[10px] font-bold px-3 py-1.5 rounded-md shadow-sm whitespace-nowrap ml-2 ${m.status === 'Paid' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-gray-100 text-gray-400'}`}>
+                          {m.status === 'Paid' ? 'Received' : 'Pending'}
                         </div>
                       </div>
                     ))}
-                 </div>
-              </div>
+                  </div>
+                </div>
 
-              {selectedMilestone && (
-                <div className="bg-white mt-6 rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden">
-                   <div className="flex items-center justify-between px-6 lg:px-8 py-2 bg-[#F0EDFD] rounded-2xl">
+                {selectedMilestone && (
+                  <div className="bg-white mt-3 rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden">
+                    <div className="flex items-center justify-between px-6 lg:px-8 py-2 bg-[#F0EDFD] rounded-2xl">
                       <h3 className="text-base font-semibold text-[#000000]">Breakdown</h3>
                       <FiChevronDown size={22} className="text-[#000000] cursor-pointer" />
-                   </div>
-                   
-                   <div className="p-4 lg:p-8">
-                      <div className="grid grid-cols-3 gap-1 lg:gap-3 lg:mb-6 my-3">
-                         <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-2 py-4 flex flex-col items-center justify-center shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
-                            <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Milestone Amount</p>
-                            <p className="text-[10px] lg:text-lg text-[#000000] font-bold">Rs {milestoneBreakdown.amount}</p>
-                         </div>
-                         <div className="bg-[#F5F5F5] rounded-xl lg:rounded-2xl p-2 flex flex-col items-center justify-center shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
-                            <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Fees + GST</p>
-                            <p className="text-[10px] lg:text-lg text-gray-400 font-bold">Rs {milestoneBreakdown.fee + milestoneBreakdown.gst}</p>
-                         </div>
-                         <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-2 flex flex-col items-center justify-center shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
-                            <p className="text-[9px] lg:text-[10px] text-gray-500 font-medium leading-tight">Net Earning</p>
-                            <p className="text-[10px] lg:text-lg text-[#59549F] font-bold">Rs {milestoneBreakdown.received}</p>
-                         </div>
+                    </div>
+                    
+                    <div className="p-2 lg:p-4">
+                      <div className="grid grid-cols-3 gap-1 lg:gap-3 lg:mb-3 my-3">
+                        <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 py-3 lg:p-3 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                          <p className="text-[9px] lg:text-[10px] text-[#000000] leading-tight">Milestone Amount</p>
+                          <p className="text-[13px] lg:text-lg text-[#000000] font-bold">Rs {milestoneBreakdown.amount}</p>
+                        </div>
+                        <div className="bg-[#F5F5F5] rounded-xl lg:rounded-2xl p-1 py-3 lg:p-3 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                          <p className="text-[9px] lg:text-[10px] text-[#000000] leading-tight">Platform Fee(20% + GST)</p>
+                          <p className="text-[13px] lg:text-lg text-gray-400 font-bold">Rs {milestoneBreakdown.fee + milestoneBreakdown.gst}</p>
+                        </div>
+                        <div className="bg-[#EEECFD] rounded-xl lg:rounded-2xl p-1 py-3 lg:p-3 flex flex-col items-center justify-center space-y-1 lg:space-y-2 shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] text-center">
+                          <p className="text-[9px] lg:text-[10px] text-[#000000] leading-tight">Received</p>
+                          <p className="text-[13px] lg:text-lg text-[#59549F] font-bold">Rs {milestoneBreakdown.received}</p>
+                        </div>
                       </div>
 
                       <p className="text-xs text-black font-semibold mb-6">20% platform fees ensures</p>
 
                       <div className="grid grid-cols-3 gap-2 lg:gap-4">
-                          <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
-                            <img src="/paymentsec1.png" alt="Secure payment" className="w-full h-full object-contain" />
-                          </div>
-                          <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
-                            <img src="/paymentsec2.png" alt="Verified execution" className="w-full h-full object-contain" />
-                          </div>
-                          <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
-                            <img src="/paymentsec3.png" alt="Dispute protection" className="w-full h-full object-contain" />
-                          </div>
+                        <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
+                          <img src="/paymentsec1.png" alt="Secure payment" className="w-full h-full object-contain scale-125" />
+                        </div>
+                        <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
+                          <img src="/paymentsec2.png" alt="Verified execution" className="w-full h-full object-contain scale-125" />
+                        </div>
+                        <div className="border border-[#D8D6F8] rounded-xl lg:rounded-2xl p-1 lg:p-2 flex flex-col items-center justify-center shadow-sm bg-white aspect-square lg:aspect-auto">
+                          <img src="/paymentsec3.png" alt="Dispute protection" className="w-full h-full object-contain scale-125" />
+                        </div>
                       </div>
-                   </div>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
-               <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
                   <IoMdCheckmark size={40} />
-               </div>
-               <h3 className="text-lg font-bold text-gray-400">Select to view</h3>
-               <p className="text-sm text-gray-400 mt-1 italic">Select a deal to view revenue details</p>
-            </div>
-          )}
+                </div>
+                <h3 className="text-lg font-bold text-gray-400">Select to view</h3>
+                <p className="text-sm text-gray-400 mt-1 italic">Select a deal to view revenue details</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
