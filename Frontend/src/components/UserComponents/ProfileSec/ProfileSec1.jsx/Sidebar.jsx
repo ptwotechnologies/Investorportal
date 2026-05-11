@@ -30,9 +30,12 @@ import {
   FaPlus,
   FaStar,
   FaHandshake,
+  FaCrown,
+  FaArrowRight,
 } from "react-icons/fa";
 import ComingSoonModal from "./ComingSoonModal";
 import { SiSimpleanalytics } from "react-icons/si";
+import { LuLock } from "react-icons/lu";
 
 let globalDealsCache = null;
 let globalUserCache = null;
@@ -197,43 +200,47 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   }, [location.pathname, isDealRoute]);
 
   return (
-    <div className="fixed top-0 left-0 h-full bg-[#D8D6F8]  p-4 flex flex-col justify-between z-50">
-      {/* Top Icons */}
-      <div>
-        <div className=" text-[#59549f] py-6">
-          <IoMdMenu  size={27} onClick={handleToggle} />
+    <div className="fixed top-0 left-0 h-full z-50 overflow-y-auto scrollbar-hide">
+      <div className="flex min-h-full w-fit">
+        {/* Purple Bar */}
+        <div className="w-16 bg-[#D8D6F8] flex flex-col items-center py-4 shrink-0 min-h-full">
+        {/* Top Icon */}
+        <div className="text-[#59549f] py-6">
+          <IoMdMenu size={27} onClick={handleToggle} className="cursor-pointer" />
         </div>
-        <div>
+
+        {/* Module Icons */}
+        <div className="flex flex-col items-center flex-1">
           <MdOutlineDashboardCustomize
-            className="text-[#59549f] my-4"
+            className="text-[#59549f] my-4 cursor-pointer"
             size={25}
             onClick={handleToggle}
           />
 
           <CgProfile
-            className=" text-[#59549f] my-3"
+            className="text-[#59549f]  cursor-pointer"
             size={25}
             onClick={handleToggle}
           />
           <HiOutlineTicket
-            className="text-[#59549f] my-3"
+            className="text-[#59549f] my-3 cursor-pointer"
             size={25}
             onClick={handleToggle}
           />
           <HiOutlineUserGroup
-            className="text-[#59549f] my-3"
+            className="text-[#59549f]  cursor-pointer"
             size={25}
             onClick={handleToggle}
           />
           <IoNotificationsOutline
-            className=" text-[#59549f] my-3"
+            className="text-[#59549f] my-3 cursor-pointer"
             size={25}
-            onClick={handleNotificationClick} // Show/hide notifications
+            onClick={handleNotificationClick}
           />
 
-           <Link to="/deal/analytics">
+          <Link to="/deal/analytics">
             <SiSimpleanalytics
-              className=" text-[#59549f] my-3"
+              className="text-[#59549f] my-3 mt-10 cursor-pointer"
               size={22}
             />
           </Link>
@@ -242,22 +249,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <>
               <Link to="">
                 <AiOutlineFund
-                  className=" text-[#59549f] my-3 mt-4"
-                  size={25}
+                  className="text-[#59549f] my-3 mt-14 cursor-pointer"
+                  size={26}
                 />
               </Link>
-
               <Link to="">
                 <MdMoneyOffCsred
-                  className=" text-[#59549f] my-3"
-                  size={25}
+                  className="text-[#59549f] my-3 mt-3 cursor-pointer"
+                  size={28}
                 />
               </Link>
-
               <Link to="">
                 <FaRegClosedCaptioning
-                  className=" text-[#59549f] my-3"
-                  size={25}
+                  className="text-[#59549f] my-3 mt-3 cursor-pointer"
+                  size={26}
                 />
               </Link>
             </>
@@ -267,150 +272,75 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <>
               <Link to="">
                 <RiDeviceRecoverLine
-                  className=" text-[#59549f] my-3 mt-4"
-                  size={25}
+                  className="text-[#59549f] my-3 mt-13 cursor-pointer"
+                  size={28}
                 />
               </Link>
-
               <Link to="">
                 <SiJfrogpipelines 
-                  className=" text-[#59549f] my-3"
-                  size={25}
+                  className="text-[#59549f] my-3 cursor-pointer"
+                  size={28}
                 />
               </Link>
-
               <Link to="">
                 <RiMoneyDollarCircleLine 
-                  className=" text-[#59549f] my-3"
-                  size={25}
+                  className="text-[#59549f] my-3 cursor-pointer"
+                  size={28}
                 />
               </Link>
-
               <Link to="">
                 <MdOutlineAppRegistration 
-                  className=" text-[#59549f] my-3"
-                  size={25}
+                  className="text-[#59549f] my-3 cursor-pointer"
+                  size={28}
                 />
               </Link>
-
               <Link to="">
                 <BsPersonWorkspace 
-                  className=" text-[#59549f] my-3"
-                  size={25}
+                  className="text-[#59549f] my-3 cursor-pointer"
+                  size={28}
                 />
               </Link>
             </>
           )}
 
-
-
           <Link to="/deal/communication">
             <IoChatbubblesOutline
-              className=" text-[#59549f] my-3"
+              className="text-[#59549f] my-3 mt-13 cursor-pointer"
               size={25}
             />
           </Link>
 
           <FaHandshake
-            className=" text-[#59549f] my-3"
+            className="text-[#59549f] my-4 cursor-pointer"
             size={25}
             onClick={handleToggle}
           />
         </div>
-      </div>
 
-      {/* Notification Box */}
-
-      {showNotifications && (
-        <div className="absolute top-14 left-74 ml-4 w-100 h-[90vh] bg-white border border-gray-300 shadow-lg rounded-md z-50 p-4">
-          <div className="flex items-center justify-between mb-3">
-            <h1 className="text-lg">Notifications </h1>
-            <RxCross2 size={25} onClick={handleNotificationClick} />
-          </div>
-          <hr />
-          <div className="flex flex-col gap-2 max-h-[90vh] overflow-y-auto scrollbar-hide px-2 py-3">
-            {notifications.length === 0 ? (
-              <p>No notifications</p>
-            ) : (
-              notifications.map((n) => {
-                const isExpanded = expandedIds.includes(n._id); // check if this notification is expanded
-                return (
-                  <div
-                    key={n._id}
-                    className="border p-2 flex items-start gap-4 rounded-lg w-full"
-                  >
-                    <div className="w-12 h-12 rounded-full border flex items-center justify-center shrink-0"></div>
-
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold">{n.title}</p>
-
-                      <p
-                        className={`text-sm text-gray-600 transition-all duration-300 overflow-y-auto scrollbar-hide ${
-                          !expandedIds.includes(n._id) ? "line-clamp-2" : ""
-                        }`}
-                      >
-                        {n.message}
-                      </p>
-
-                      {n.message.length > 100 && (
-                        <button
-                          className="text-blue-600 text-sm mt-1"
-                          onClick={() => toggleExpanded(n._id)}
-                        >
-                          {expandedIds.includes(n._id)
-                            ? "Show Less"
-                            : "See More"}
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
+        {/* Bottom Icons (Visual placeholders for icons scrolling together) */}
+        <div className="mt-auto  pb-4 text-gray-300 flex flex-col gap-3 mb-6 items-center">
+          <IoSettingsOutline
+            size={25}
+            className=" text-[#59549f] cursor-pointer"
+            onClick={handleToggle}
+          />
+          <BiHelpCircle
+            size={25}
+            className=" text-[#59549f] cursor-pointer"
+            onClick={handleToggle}
+          />
+          <PiSignOut
+            size={25}
+            className=" text-[#59549f] cursor-pointer"
+            onClick={handleSignOutClick}
+          />
         </div>
-      )}
-
-      {/* Bottom Icons */}
-      <div className="text-gray-300 relative pb-3">
-        <IoSettingsOutline
-          size={25}
-          className="my-2 text-[#59549f]"
-          onClick={handleToggle}
-        />
-        <BiHelpCircle
-          size={25}
-          className="my-3 text-[#59549f]"
-          onClick={handleToggle}
-        />
-        <PiSignOut
-          size={25}
-          className="my-3 text-[#59549f]"
-          onClick={handleSignOutClick}
-        />
-
-        {showSignoutDialog && (
-          <div className="absolute bottom-15 left-12 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-57 flex flex-col items-center text-sm text-[#001426] p-0.5">
-            <button
-              onClick={handleConfirmSignOut}
-              className="w-full py-2 border-b border-gray-200 hover:bg-gray-100 text-[#001032]"
-            >
-              Yes
-            </button>
-            <button
-              onClick={() => setShowSignoutDialog(false)}
-              className="w-full py-2 hover:bg-gray-100 text-[#001032]"
-            >
-              No
-            </button>
-          </div>
-        )}
       </div>
 
-      {/* Right Panel Toggle */}
+      {/* White Panel */}
       {isOpen && (
-        <div className="absolute top-0 left-full ml- w-60 bg-white h-full rounded-tr-2xl rounded-br-2xl shadow-lg transition-all duration-300 z-40 overflow-y-auto scrollbar-hide">
-          <div className="my-6 flex justify-center">
+        <div className="w-58 bg-white min-h-full rounded-tr-2xl rounded-br-2xl shadow-lg transition-all duration-300 z-40 py-4 pt-6">
+          <div className="mb-6 flex justify-center">
             <Link to="/dashboard">
               <img src={loginLogo} alt="logo" className="w-40" />
             </Link>
@@ -420,7 +350,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  `block my-3 text-[17px]  px-4 mx-3 rounded-md ${
+                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
@@ -431,7 +361,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/profile"
                 className={({ isActive }) =>
-                  `block my-3  text-[17px] px-4 mx-3 rounded-md ${
+                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
                     isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
                   }`
                 }
@@ -461,14 +391,19 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 Connect
               </NavLink>
 
-
-
-              <li
-                className="block my-3  text-[17px] px-4 mx-3 rounded-md cursor-pointer"
-                onClick={handleNotificationClick} // open same notification box
+              <NavLink
+                to="/notification"
+                className={({ isActive }) =>
+                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                  }`
+                }
               >
                 Notification
-              </li>
+              </NavLink>
+              <hr />
+              <h1 className="text-gray-500 text-[10px] m-3 font-semibold uppercase tracking-wider">INSIGHTS</h1>
+
               <NavLink
                 to="/deal/analytics"
                 className={({ isActive }) =>
@@ -479,175 +414,201 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               >
                 Analytics
               </NavLink>
+              <hr />
 
               {isInvestor && (
                 <>
-                  <div
-                    onClick={() => triggerComingSoon("Discover")}
-                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
-                  >
-                    <span>Discover</span>
-                    <FaStar className="text-yellow-400" size={14} />
+                  <div className="flex justify-start items-center">
+                    <h1 className="text-gray-500 text-[10px] mx-3 font-semibold uppercase tracking-wider">Growth</h1>
+                    <h1 className="bg-[#F8F7FF] rounded-sm text-[9px] px-2 py-0.5 text-[#59549F] my-3 font-bold">PREMIUM</h1>
                   </div>
-
-                  <div
-                    onClick={() => triggerComingSoon("Deal pipeline")}
-                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
-                  >
-                    <span>Deal pipeline</span>
-                    <FaStar className="text-yellow-400" size={14} />
-                  </div>
-
-                  <div
-                    onClick={() => triggerComingSoon("My investment")}
-                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
-                  >
-                    <span>My investment</span>
-                    <FaStar className="text-yellow-400" size={14} />
-                  </div>
-
-                  <div
-                    onClick={() => triggerComingSoon("Portfolio strategy")}
-                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
-                  >
-                    <span>Portfolio strategy</span>
-                    <FaStar className="text-yellow-400" size={14} />
-                  </div>
-
-                  <div className="my-3 relative">
+                  <div className="mx-3 mb-4 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl p-1">
                     <div
-                      onClick={() => {
-                        setIsWorkspaceOpen(!isWorkspaceOpen);
-                        if (!isWorkspaceOpen) {
-                          setIsCommunicationOpen(false);
-                          setIsDealsOpen(false);
-                          setIsOperateOpen(false);
-                        }
-                      }}
-                      className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
+                      onClick={() => triggerComingSoon("Discover")}
+                      className="block my-2 text-[17px] px-4 rounded-md text-[#001426] cursor-pointer hover:bg-white/50 transition-colors flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-2">
-                        <span>Workspace</span>
-                        <FaStar className="text-yellow-400" size={14} />
+                      <div className="flex flex-col">
+                        <span>Discover</span>
+                        <p className="text-[10px] text-gray-400 font-normal">Find potential deals</p>
                       </div>
-                      {isWorkspaceOpen ? (
-                        <FaChevronUp className="text-gray-500 text-sm" size={12} />
-                      ) : (
-                        <FaChevronDown className="text-gray-500 text-sm" size={12} />
-                      )}
+                      <LuLock className="text-gray-300" size={14} />
                     </div>
 
-                    {isWorkspaceOpen && (
-                      <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100">
-                        <div
-                          onClick={() => triggerComingSoon("Documents")}
-                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
-                        >
-                          <div className="flex items-center gap-2 ml-3">
+                    <div
+                      onClick={() => triggerComingSoon("Deal pipeline")}
+                      className="block my-2 text-[17px] px-4 rounded-md text-[#001426] cursor-pointer hover:bg-white/50 transition-colors flex items-center justify-between"
+                    >
+                      <div className="flex flex-col">
+                        <span>Deal pipeline</span>
+                        <p className="text-[10px] text-gray-400 font-normal">Track investment flow</p>
+                      </div>
+                      <LuLock className="text-gray-300" size={14} />
+                    </div>
+
+                    <div
+                      onClick={() => triggerComingSoon("My investment")}
+                      className="block my-2 text-[17px] px-4 rounded-md text-[#001426] cursor-pointer hover:bg-white/50 transition-colors flex items-center justify-between"
+                    >
+                      <div className="flex flex-col">
+                        <span>My investment</span>
+                        <p className="text-[10px] text-gray-400 font-normal">Portfolio performance</p>
+                      </div>
+                      <LuLock className="text-gray-300" size={14} />
+                    </div>
+
+                    <div
+                      onClick={() => triggerComingSoon("Portfolio strategy")}
+                      className="block my-2 text-[17px] px-4 rounded-md text-[#001426] cursor-pointer hover:bg-white/50 transition-colors flex items-center justify-between"
+                    >
+                      <div className="flex flex-col">
+                        <span>Portfolio strategy</span>
+                        <p className="text-[10px] text-gray-400 font-normal">Optimize returns</p>
+                      </div>
+                      <LuLock className="text-gray-300" size={14} />
+                    </div>
+
+                    <div className="my-2 relative">
+                      <div
+                        onClick={() => {
+                          setIsWorkspaceOpen(!isWorkspaceOpen);
+                          if (!isWorkspaceOpen) {
+                            setIsCommunicationOpen(false);
+                            setIsDealsOpen(false);
+                            setIsOperateOpen(false);
+                          }
+                        }}
+                        className="text-[17px] px-4 rounded-md cursor-pointer flex justify-between items-center hover:bg-white/50 relative"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="flex flex-col">
+                            <span>Workspace</span>
+                            <p className="text-[10px] text-gray-400 font-normal">Collaboration tools</p>
+                          </div>
+                          <LuLock className="text-gray-300" size={14} />
+                        </div>
+                        {isWorkspaceOpen ? (
+                          <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                        ) : (
+                          <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                        )}
+                      </div>
+
+                      {isWorkspaceOpen && (
+                        <div className="mt-1 w-full bg-white rounded-xl flex flex-col text-[13px] text-gray-600 p-2 pl-4 border-l-2 border-gray-100">
+                          <div
+                            onClick={() => triggerComingSoon("Documents")}
+                            className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
+                          >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Documents
                           </div>
-                        </div>
-                        <div
-                          onClick={() => triggerComingSoon("Meetings")}
-                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
-                        >
-                          <div className="flex items-center gap-2 ml-3">
+                          <div
+                            onClick={() => triggerComingSoon("Meetings")}
+                            className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
+                          >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Meetings
                           </div>
-                        </div>
-                        <div
-                          onClick={() => triggerComingSoon("Alerts & risk")}
-                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
-                        >
-                          <div className="flex items-center gap-2 ml-3">
+                          <div
+                            onClick={() => triggerComingSoon("Alerts & risk")}
+                            className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
+                          >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Alerts & risk
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </>
               )}
 
               {isStartup && (
                 <>
-                  <div
-                    onClick={() => triggerComingSoon("Fundraising")}
-                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
-                  >
-                    <span>Fundraising</span>
-                    <FaStar className="text-yellow-400" size={14} />
+                  <div className="flex justify-start items-center">
+                    <h1 className="text-gray-500 text-[10px] mx-3 font-semibold uppercase tracking-wider">Growth</h1>
+                    <h1 className="bg-[#F8F7FF] rounded-sm text-[9px] px-2 py-0.5 text-[#59549F] my-3 font-bold">PREMIUM</h1>
                   </div>
-
-                  <div
-                    onClick={() => triggerComingSoon("Investors")}
-                    className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] cursor-pointer hover:bg-gray-100 transition-colors flex items-center justify-between"
-                  >
-                    <span>Investors</span>
-                    <FaStar className="text-yellow-400" size={14} />
-                  </div>
-
-                  <div className="my-3 relative">
+                  <div className="mx-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl p-1 mb-4">
                     <div
-                      onClick={() => {
-                        setIsOperateOpen(!isOperateOpen);
-                        if (!isOperateOpen) {
-                          setIsCommunicationOpen(false);
-                          setIsDealsOpen(false);
-                        }
-                      }}
-                      className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
+                      onClick={() => triggerComingSoon("Fundraising")}
+                      className="block my-1 text-[17px] px-4 rounded-md text-[#001426] cursor-pointer hover:bg-white/50 transition-colors flex items-center justify-between"
                     >
-                      <div className="flex items-center gap-2">
-                        <span>Operate</span>
-                        <FaStar className="text-yellow-400" size={14} />
+                      <div className="flex flex-col">
+                        <span>Fundraising</span>
+                        <p className="text-[10px] text-gray-400 font-normal">Unlock investor pipeline</p>
                       </div>
-                      {isOperateOpen ? (
-                        <FaChevronUp className="text-gray-500 text-sm" size={12} />
-                      ) : (
-                        <FaChevronDown className="text-gray-500 text-sm" size={12} />
-                      )}
+                      <LuLock className="text-gray-300" size={14} />
                     </div>
 
-                    {isOperateOpen && (
-                      <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100">
-                        <div
-                          onClick={() => triggerComingSoon("Metrics")}
-                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
-                        >
-                          <div className="flex items-center gap-2 ml-3">
+                    <div
+                      onClick={() => triggerComingSoon("Investors")}
+                      className="block my-2 text-[17px] px-4 rounded-md text-[#001426] cursor-pointer hover:bg-white/50 transition-colors flex items-center justify-between"
+                    >
+                      <div className="flex flex-col">
+                        <span>Investors</span>
+                        <p className="text-[10px] text-gray-400 font-normal">Manage investors relations</p>
+                      </div>
+                      <LuLock className="text-gray-300" size={14} />
+                    </div>
+
+                    <div className="my-2 relative">
+                      <div
+                        onClick={() => {
+                          setIsOperateOpen(!isOperateOpen);
+                          if (!isOperateOpen) {
+                            setIsCommunicationOpen(false);
+                            setIsDealsOpen(false);
+                          }
+                        }}
+                        className="text-[17px] px-4 rounded-md cursor-pointer flex justify-between items-center hover:bg-white/50 relative"
+                      >
+                        <div className="flex items-center gap-2">
+                          <div className="flex flex-col">
+                            <span>Operate</span>
+                            <p className="text-[10px] text-gray-400 font-normal">Startup operations hub</p>
+                          </div>
+                          <LuLock className="text-gray-300" size={14} />
+                        </div>
+                        {isOperateOpen ? (
+                          <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                        ) : (
+                          <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                        )}
+                      </div>
+
+                      {isOperateOpen && (
+                        <div className="mt-1 w-full bg-white rounded-xl flex flex-col text-[13px] text-gray-600 p-2 pl-4 border-l-2 border-gray-100">
+                          <div
+                            onClick={() => triggerComingSoon("Metrics")}
+                            className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
+                          >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Metrics
                           </div>
-                        </div>
-                        <div
-                          onClick={() => triggerComingSoon("Documents")}
-                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
-                        >
-                          <div className="flex items-center gap-2 ml-3">
+                          <div
+                            onClick={() => triggerComingSoon("Documents")}
+                            className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
+                          >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Documents
                           </div>
-                        </div>
-                        <div
-                          onClick={() => triggerComingSoon("Cap Table")}
-                          className="flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] cursor-pointer"
-                        >
-                          <div className="flex items-center gap-2 ml-3">
+                          <div
+                            onClick={() => triggerComingSoon("Cap Table")}
+                            className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
+                          >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Cap Table
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </>
               )}
 
               <div className="my-3 relative">
+                <h1 className="text-gray-500 text-[10px] m-3 font-semibold uppercase tracking-wider">MANAGAE</h1>
                 <div
                   onClick={() => {
                     setIsCommunicationOpen(!isCommunicationOpen);
@@ -658,7 +619,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   }}
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
-                  <span>Communication</span>
+                  <div className="flex flex-col">
+                    <span>Communication</span>
+                    <p className="text-[10px] text-gray-400 font-normal">Messages, notifications</p>
+                  </div>
                   {isCommunicationOpen ? (
                     <FaChevronUp className="text-gray-500 text-sm" size={12} />
                   ) : (
@@ -667,39 +631,31 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </div>
 
                 {isCommunicationOpen && (
-                  <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100">
+                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
                     <NavLink
                       to="/communication/message"
-                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-bold" : ""}`}
                     >
-                      <div className="flex items-center gap-2 ml-3">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                        Message
-                      </div>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Message
                     </NavLink>
                     <NavLink
                       to="/communication/meet"
-                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-bold" : ""}`}
                     >
-                      <div className="flex items-center gap-2 ml-3">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                        Meet
-                      </div>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Meet
                     </NavLink>
                     <NavLink
                       to="/communication/call"
-                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-bold" : ""}`}
                     >
-                      <div className="flex items-center gap-2 ml-3">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                        Call
-                      </div>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Call
                     </NavLink>
                   </div>
                 )}
               </div>
-
-
 
               {/* Deals Dropdown */}
               <div className="my-3 relative">
@@ -713,52 +669,36 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   }}
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
-                  <span>Service Deal</span> 
-
-                  <div className="flex items-center gap-2">
-                    {hasAnyDealDot && (
-                      <div className="w-2 h-2 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
-                    )}
-                    {isDealsOpen ? (
-                      <FaChevronUp className="text-gray-500 text-sm" size={12} />
-                    ) : (
-                      <FaChevronDown
-                        className="text-gray-500 text-sm"
-                        size={12}
-                      />
-                    )}
+                  <div className="flex flex-col">
+                    <span>Service Deal</span>
+                    <p className="text-[10px] text-gray-400 font-normal">Agreements & services</p>
                   </div>
+                  {isDealsOpen ? (
+                    <FaChevronUp className="text-gray-500 text-sm" size={12} />
+                  ) : (
+                    <FaChevronDown className="text-gray-500 text-sm" size={12} />
+                  )}
                 </div>
 
                 {isDealsOpen && (
-                  <div className="absolute left-3 top-full mt-1 w-54 bg-white shadow-xl rounded-xl z-50 flex flex-col text-[13px] text-gray-600 p-3 border border-gray-100 max-h-80 overflow-y-auto scrollbar-hide">
+                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
                     <NavLink
                       to="/deal/activedeals"
-                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
                     >
-                      <div className="flex items-center gap-2 ml-3">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                        Active Deals
-                      </div>
-                      {hasActiveDealDot && location.pathname !== "/deal/activedeals" && (
-                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
-                      )}
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      Active Deals
                     </NavLink>
 
                     <NavLink
                       to="/deal/negotiations"
-                      className={({ isActive }) => `flex items-center justify-between py-1.5 pr-2 hover:text-[#001032] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
                     >
-                      <div className="flex items-center gap-2 ml-3">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                        Negotiations
-                      </div>
-                      {hasNegotiationDot && location.pathname !== "/deal/negotiations" && (
-                        <div className="w-1.5 h-1.5 bg-[#3CC033] rounded-full shadow-[0px_0px_4px_#3CC033]" />
-                      )}
+                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      Negotiations
                     </NavLink>
 
-                     <NavLink
+                    <NavLink
                       to="/deal/documentation"
                       className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
                     >
@@ -810,19 +750,42 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </div>
 
               {isStartup && (
-                <div
-                  onClick={() => triggerComingSoon("Role Switching")}
-                  className="px-4 mx-3 my-2 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
-                >
-                  <div className="flex flex-col">
-                    <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
-                    <span className="text-[10px] text-gray-500 ">Explore professional tools</span>
+                <>
+                  <div
+                    onClick={() => triggerComingSoon("Role Switching")}
+                    className="px-4 mx-3 my-2 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
+                      <span className="text-[10px] text-gray-500 ">Explore professional tools</span>
+                    </div>
+                    <div className="relative inline-flex items-center cursor-pointer">
+                      <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-300"></div>
+                      <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+                    </div>
                   </div>
-                  <div className="relative inline-flex items-center cursor-pointer">
-                    <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors group-hover:bg-gray-300"></div>
-                    <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+
+                  {/* Premium Upgrade Card */}
+                  <div className="mx-3 mt-4 p-4 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" >
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-8 h-8 bg-[#59549F] rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
+                        <FaCrown size={18} />
+                      </div>
+                      <div className="text-left">
+                        <h2 className="text-[12px] font-semibold text-[#59549f]">Upgrade to Premium</h2>
+                        <p className="text-[10px] text-gray-500 leading-tight">Unlock powerful tools to grow your startup faster.</p>
+                      </div>
+                    </div>
+                    <button className="w-full py-1 bg-[#59549F] text-white rounded-lg text-[12px] font-semibold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
+                      View Plans
+                      <FaArrowRight size={12} />
+                    </button>
+                    {/* Decorative background element */}
+                    <div className="absolute bottom-[-10px] right-[-10px] opacity-10 pointer-events-none transform rotate-[-12deg]">
+                       <SiSimpleanalytics size={80} />
+                    </div>
                   </div>
-                </div>
+                </>
               )}
 
               {isServiceProfessional && (
@@ -835,7 +798,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     <span className="text-[10px] text-gray-500 ">Experience buyer portal</span>
                   </div>
                   <div className="relative inline-flex items-center cursor-pointer">
-                    <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors group-hover:bg-gray-300"></div>
+                    <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-300"></div>
                     <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
                   </div>
                 </div>
@@ -843,7 +806,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             </ul>
           </div>
 
-          <div className="absolute bottom-10 w-full">
+          <div className="mt-8 mb-10">
             <ul>
               <NavLink
                 to="/settings"
@@ -877,6 +840,55 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           </div>
         </div>
       )}
+      </div>
+
+      {/* Notification Box (Overlay) */}
+      {showNotifications && (
+        <div className="fixed top-14 left-20 ml-4 w-100 h-[90vh] bg-white border border-gray-300 shadow-lg rounded-md z-[60] p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h1 className="text-lg font-semibold text-[#001426]">Notifications</h1>
+            <RxCross2 size={25} className="cursor-pointer text-gray-500 hover:text-black" onClick={handleNotificationClick} />
+          </div>
+          <hr />
+          <div className="flex flex-col gap-2 max-h-[80vh] overflow-y-auto scrollbar-hide px-2 py-3">
+            {notifications.length === 0 ? (
+              <p className="text-center text-gray-500 mt-10">No notifications</p>
+            ) : (
+              notifications.map((n) => (
+                <div key={n._id} className="border p-3 flex items-start gap-4 rounded-lg bg-gray-50 hover:bg-white transition-colors">
+                  <div className="w-10 h-10 rounded-full bg-[#D8D6F8] flex items-center justify-center shrink-0"></div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold text-sm text-[#001426]">{n.title}</p>
+                    <p className="text-xs text-gray-600 line-clamp-2">{n.message}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Sign Out Dialog Overlay */}
+      {showSignoutDialog && (
+        <div className="fixed inset-0 bg-black/20 z-[70] flex items-center justify-center" onClick={() => setShowSignoutDialog(false)}>
+          <div className="bg-white border border-gray-300 shadow-xl rounded-md w-60 flex flex-col items-center p-2" onClick={e => e.stopPropagation()}>
+            <p className="py-2 text-sm text-[#001426]">Are you sure you want to sign out?</p>
+            <button
+              onClick={handleConfirmSignOut}
+              className="w-full py-2 border-b border-gray-200 hover:bg-gray-100 text-[#001032] font-semibold"
+            >
+              Yes, Sign out
+            </button>
+            <button
+              onClick={() => setShowSignoutDialog(false)}
+              className="w-full py-2 hover:bg-gray-100 text-[#001032]"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
       {showComingSoon && (
         <ComingSoonModal
           onClose={() => setShowComingSoon(false)}

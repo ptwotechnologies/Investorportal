@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import loginLogo from "/coptenologo2.png";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoNotificationsOutline, IoChatbubblesOutline } from "react-icons/io5";
-import { FaHandshake, FaStar, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaHandshake, FaStar, FaChevronDown, FaChevronUp, FaCrown, FaArrowRight } from "react-icons/fa";
 import ComingSoonModal from "./ComingSoonModal";
 import { RxCross2 } from "react-icons/rx";
 import {
@@ -40,6 +40,7 @@ import { SiJfrogpipelines } from "react-icons/si";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
 import { MdOutlineAppRegistration } from "react-icons/md";
 import { BsPersonWorkspace } from "react-icons/bs";
+import { LuLock } from "react-icons/lu";
 
 const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
@@ -203,68 +204,86 @@ const Mobile = () => {
                         </div>
 
 
-
+                           <hr />
+                           <h1 className="text-gray-500 text-[12px] my-1 font-bold uppercase tracking-wider">INSIGHTS</h1>
                         <div className="flex items-center gap-4">
                           <SiSimpleanalytics
                             className="text-[#59549F] my-1"
-                            size={25}
+                            size={22}
                           />
                           <Link to="/deal/analytics">
                             <li>Analytics</li>
                           </Link>
                         </div>
+                        <hr />
+                         <div className="flex justify-start items-center gap-2 my-2">
+                    <h1 className="text-gray-500 text-[12px]   font-bold uppercase tracking-wider">Growth</h1>
+                    <h1 className="bg-[#F8F7FF] rounded-sm text-[12px] px-2 py-0.5 text-[#59549F]   font-bold">PREMIUM</h1>
+                  </div>
 
                         {isInvestor && (
-                          <>
+                          <div className=" py-2 px-1 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl flex flex-col gap-4">
                             <SheetClose asChild>
                               <div
                                 onClick={() => triggerComingSoon("Discover")}
-                                className="flex items-center justify-between pr-4 cursor-pointer"
+                                className="flex items-center justify-between cursor-pointer"
                               >
                                 <div className="flex items-center gap-4">
-                                  <RiDeviceRecoverLine className="text-[#59549F] my-1" size={25} />
-                                  <li>Discover</li>
+                                  <RiDeviceRecoverLine className="text-[#59549F]" size={28} />
+                                  <div className="flex flex-col">
+                                    <li className="list-none text-[15px] font-medium leading-tight text-gray-700">Discover</li>
+                                    <p className="text-[11px] text-gray-400">Find potential deals</p>
+                                  </div>
                                 </div>
-                                <FaStar className="text-yellow-400" size={14} />
+                                <LuLock className="text-gray-400" size={16} />
                               </div>
                             </SheetClose>
 
                             <SheetClose asChild>
                               <div
                                 onClick={() => triggerComingSoon("Deal pipeline")}
-                                className="flex items-center justify-between pr-4 cursor-pointer"
+                                className="flex items-center justify-between cursor-pointer"
                               >
                                 <div className="flex items-center gap-4">
-                                  <SiJfrogpipelines className="text-[#59549F] my-1" size={25} />
-                                  <li>Deal pipeline</li>
+                                  <SiJfrogpipelines className="text-[#59549F]" size={28} />
+                                  <div className="flex flex-col">
+                                    <li className="list-none text-[15px] font-medium leading-tight text-gray-700">Deal pipeline</li>
+                                    <p className="text-[11px] text-gray-400">Track investment flow</p>
+                                  </div>
                                 </div>
-                                <FaStar className="text-yellow-400" size={14} />
+                                <LuLock className="text-gray-400" size={16} />
                               </div>
                             </SheetClose>
 
                             <SheetClose asChild>
                               <div
                                 onClick={() => triggerComingSoon("My investment")}
-                                className="flex items-center justify-between pr-4 cursor-pointer"
+                                className="flex items-center justify-between cursor-pointer"
                               >
                                 <div className="flex items-center gap-4">
-                                  <RiMoneyDollarCircleLine className="text-[#59549F] my-1" size={25} />
-                                  <li>My investment</li>
+                                  <RiMoneyDollarCircleLine className="text-[#59549F]" size={28} />
+                                  <div className="flex flex-col">
+                                    <li className="list-none text-[15px] font-medium leading-tight text-gray-700">My investment</li>
+                                    <p className="text-[11px] text-gray-400">Portfolio performance</p>
+                                  </div>
                                 </div>
-                                <FaStar className="text-yellow-400" size={14} />
+                                <LuLock className="text-gray-400" size={16} />
                               </div>
                             </SheetClose>
 
                             <SheetClose asChild>
                               <div
                                 onClick={() => triggerComingSoon("Portfolio strategy")}
-                                className="flex items-center justify-between pr-4 cursor-pointer"
+                                className="flex items-center justify-between cursor-pointer"
                               >
                                 <div className="flex items-center gap-4">
-                                  <MdOutlineAppRegistration className="text-[#59549F] my-1" size={25} />
-                                  <li>Portfolio strategy</li>
+                                  <MdOutlineAppRegistration className="text-[#59549F]" size={28} />
+                                  <div className="flex flex-col">
+                                    <li className="list-none text-[15px] font-medium leading-tight text-gray-700">Portfolio strategy</li>
+                                    <p className="text-[11px] text-gray-400">Optimize returns</p>
+                                  </div>
                                 </div>
-                                <FaStar className="text-yellow-400" size={14} />
+                                <LuLock className="text-gray-400" size={16} />
                               </div>
                             </SheetClose>
 
@@ -280,11 +299,14 @@ const Mobile = () => {
                                   }
                                 }}
                               >
-                                <BsPersonWorkspace className="text-[#59549F]" size={25} />
-                                <li className="flex justify-between items-center w-full pr-4">
+                                <BsPersonWorkspace className="text-[#59549F]" size={28} />
+                                <li className="flex justify-between items-center w-full">
                                   <div className="flex items-center gap-2">
-                                    <span>Workspace</span>
-                                    <FaStar className="text-yellow-400" size={14} />
+                                    <div className="flex flex-col">
+                                      <span className="text-[15px] font-medium leading-tight text-gray-700">Workspace</span>
+                                      <p className="text-[11px] text-gray-400">Collaboration tools</p>
+                                    </div>
+                                    <LuLock className="text-gray-400" size={16} />
                                   </div>
                                   {isWorkspaceOpen ? (
                                     <FaChevronUp className="text-[#59549F]" size={15} />
@@ -294,7 +316,7 @@ const Mobile = () => {
                                 </li>
                               </div>
                               {isWorkspaceOpen && (
-                                <ul className="ml-11 mt-1 flex flex-col gap-2 text-[15px] text-gray-600">
+                                <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
                                   <SheetClose asChild>
                                     <div
                                       onClick={() => triggerComingSoon("Documents")}
@@ -325,34 +347,41 @@ const Mobile = () => {
                                 </ul>
                               )}
                             </div>
-                          </>
+                          </div>
                         )}
 
+
                         {isStartup && (
-                          <>
+                          <div className=" py-2 px-1 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl flex flex-col gap-4">
                             <SheetClose asChild>
                               <div
                                 onClick={() => triggerComingSoon("Fundraising")}
-                                className="flex items-center justify-between pr-4 cursor-pointer"
+                                className="flex items-center justify-between cursor-pointer"
                               >
                                 <div className="flex items-center gap-4">
-                                  <AiOutlineFund className="text-[#59549F] my-1" size={25} />
-                                  <li>Fundraising</li>
+                                  <AiOutlineFund className="text-[#59549F]" size={28} />
+                                  <div className="flex flex-col">
+                                    <li className="list-none text-[15px] font-medium text-gray-700 leading-tight">Fundraising</li>
+                                    <p className="text-[11px] text-gray-400">Unlock investor pipeline</p>
+                                  </div>
                                 </div>
-                                <FaStar className="text-yellow-400" size={14} />
+                                <LuLock className="text-gray-400" size={16} />
                               </div>
                             </SheetClose>
 
                             <SheetClose asChild>
                               <div
                                 onClick={() => triggerComingSoon("Investors")}
-                                className="flex items-center justify-between pr-4 cursor-pointer"
+                                className="flex items-center justify-between cursor-pointer"
                               >
                                 <div className="flex items-center gap-4">
-                                  <MdMoneyOffCsred className="text-[#59549F] my-1" size={25} />
-                                  <li>Investors</li>
+                                  <MdMoneyOffCsred className="text-[#59549F]" size={28} />
+                                  <div className="flex flex-col">
+                                    <li className="list-none text-[15px] font-medium text-gray-700 leading-tight">Investors</li>
+                                    <p className="text-[11px] text-gray-400">Manage investors relations</p>
+                                  </div>
                                 </div>
-                                <FaStar className="text-yellow-400" size={14} />
+                                <LuLock className="text-gray-400" size={16} />
                               </div>
                             </SheetClose>
 
@@ -367,11 +396,14 @@ const Mobile = () => {
                                   }
                                 }}
                               >
-                                <FaRegClosedCaptioning className="text-[#59549F]" size={25} />
-                                <li className="flex justify-between items-center w-full pr-4">
+                                <FaRegClosedCaptioning className="text-[#59549F]" size={28} />
+                                <li className="flex justify-between items-center w-full">
                                   <div className="flex items-center gap-2">
-                                    <span>Operate</span>
-                                    <FaStar className="text-yellow-400" size={14} />
+                                    <div className="flex flex-col">
+                                      <span className="text-[15px] font-medium text-gray-700 leading-tight">Operate</span>
+                                      <p className="text-[11px] text-gray-400">Startup operations hub</p>
+                                    </div>
+                                    <LuLock className="text-gray-400" size={16} />
                                   </div>
                                   {isOperateOpen ? (
                                     <FaChevronUp className="text-[#59549F]" size={15} />
@@ -381,7 +413,7 @@ const Mobile = () => {
                                 </li>
                               </div>
                               {isOperateOpen && (
-                                <ul className="ml-11 mt-1 flex flex-col gap-2 text-[15px] text-gray-600">
+                                <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
                                   <SheetClose asChild>
                                     <div
                                       onClick={() => triggerComingSoon("Metrics")}
@@ -412,9 +444,10 @@ const Mobile = () => {
                                 </ul>
                               )}
                             </div>
-                          </>
+                          </div>
                         )}
 
+<h1 className="text-gray-500 text-[12px]  font-bold uppercase tracking-wider my-2">Manage</h1>
                         <div className="flex flex-col gap-2">
                           <div
                             className="flex items-center gap-4 cursor-pointer w-full"
@@ -426,9 +459,12 @@ const Mobile = () => {
                               }
                             }}
                           >
-                            <IoChatbubblesOutline className="text-[#59549F]" size={25} />
+                            <IoChatbubblesOutline className="text-[#59549F]" size={28} />
                             <li className="flex justify-between items-center w-full">
-                              <span>Communication</span>
+                              <div className="flex flex-col">
+                                <span className="text-[15px] font-medium leading-tight text-gray-700">Communication</span>
+                                <p className="text-[11px] text-gray-400">Messages, notifications</p>
+                              </div>
                               {isCommunicationOpen ? (
                                 <FaChevronUp className="text-[#59549F]" size={15} />
                               ) : (
@@ -467,8 +503,11 @@ const Mobile = () => {
                         >
                           <FaHandshake className="text-[#59549F]" size={28} />
 
-                          <li className="flex justify-between items-center w-full">
-                            <span>Service Deal</span>
+                          <li className="flex justify-between items-center w-full mt-2">
+                            <div className="flex flex-col">
+                              <span className="text-[15px] font-medium leading-tight text-gray-700">Service Deal</span>
+                              <p className="text-[11px] text-gray-400">Agreements & services</p>
+                            </div>
 
                             {isDealsOpen ? (
                               <FaChevronUp
@@ -527,14 +566,14 @@ const Mobile = () => {
                       <SheetClose asChild>
                         <div
                           onClick={() => triggerComingSoon("Role Switching")}
-                          className="ml-11 mr-6 mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
+                          className=" mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
                         >
                           <div className="flex flex-col">
                             <span className="text-[14px] font-bold text-[#59549f]">Switch to Professional</span>
                             <span className="text-[10px] text-gray-500 font-medium">Explore professional tools</span>
                           </div>
                           <div className="relative inline-flex items-center cursor-pointer">
-                            <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors"></div>
+                            <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors"></div>
                             <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
                           </div>
                         </div>
@@ -545,19 +584,40 @@ const Mobile = () => {
                       <SheetClose asChild>
                         <div
                           onClick={() => triggerComingSoon("Role Switching")}
-                          className="ml-11 mr-6 mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
+                          className=" mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
                         >
                           <div className="flex flex-col">
                             <span className="text-[14px] font-bold text-[#59549f]">Switch to Buyer</span>
                             <span className="text-[10px] text-gray-500 font-medium">View as a buyer</span>
                           </div>
                           <div className="relative inline-flex items-center cursor-pointer">
-                            <div className="w-11 h-6 bg-gray-200 rounded-full transition-colors"></div>
+                            <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors"></div>
                             <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
                           </div>
                         </div>
                       </SheetClose>
                     )}
+
+                    {/* Premium Upgrade Card */}
+                    <div className="  mb-6 p-2 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" onClick={() => navigate("/scanner")}>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-8 h-8 bg-[#59549F] rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
+                          <FaCrown size={18} />
+                        </div>
+                        <div className="text-left">
+                          <h2 className="text-[12px] font-bold text-[#59549f]">Upgrade to Premium</h2>
+                          <p className="text-[10px] text-gray-500 leading-tight">Unlock powerful tools to grow your startup faster.</p>
+                        </div>
+                      </div>
+                      <button className="w-full py-1 bg-[#59549F] text-white rounded-sm text-[11px] font-bold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
+                        View Plans
+                        <FaArrowRight size={12} />
+                      </button>
+                      {/* Decorative background element */}
+                      <div className="absolute bottom-[-10px] right-[-10px] opacity-10 pointer-events-none transform rotate-[-12deg]">
+                         <SiSimpleanalytics size={80} />
+                      </div>
+                    </div>
                   </ul>
                 </div>
 
