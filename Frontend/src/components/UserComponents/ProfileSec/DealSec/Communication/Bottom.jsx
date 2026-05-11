@@ -130,14 +130,15 @@ const Bottom = () => {
     const hasUnread = isStartup ? !dispute.isReadByStartup : !dispute.isReadByProfessional;
 
     return (
-      <div className={`bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border-2 transition-all relative ${selectedDispute?._id === dispute._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+      <div className={`bg-white rounded-2xl p-3 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border-2 transition-all relative ${selectedDispute?._id === dispute._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
         {hasUnread && <div className="absolute top-4 left-4 w-2.5 h-2.5 bg-[#3CC033] rounded-full border border-white z-10" />}
         <div className="flex items-center justify-between">
-          <h4 className="text-sm font-semibold text-[#001032] ml-4">Dispute ID – {getDisplayId(dispute._id)}</h4>
-          <span className="bg-[#B91C1C] text-white text-[8px] lg:text-[10px] px-3 py-1 rounded-full font-semibold">Duration - 20 Days</span>
+          <h4 className="text-sm font-semibold text-[#001032] ml-2 lg:ml-4">Dispute ID – {getDisplayId(dispute._id)}</h4>
+          <span className="bg-[#B91C1C] text-white text-[7px] lg:text-[10px] lg:px-3 p-2 py-1 rounded-full font-semibold">Duration - 20 Days</span>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2">
            <h5 className="text-sm font-bold text-[#001032]">{startupName}</h5>
+           <p className="text-[10px] text-gray-400 -mt-1 truncate">{deal.requestId?.service || "Project Deal"}</p>
            <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
              <span className="text-[#59549F] font-bold ">Reason</span> – {dispute.reason}
            </p>
@@ -168,25 +169,41 @@ const Bottom = () => {
     const owner = prof ? `${prof.firstName} ${prof.lastName}` : "N/A";
 
     return (
-      <div className={`bg-white rounded-2xl px-4 lg:px-6 py-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${isSelected ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
-        <div className="grid grid-cols-3 gap-2 mb-4 items-start">
-          <div className="flex flex-col">
-            <h3 className="text-sm lg:text-[16px] font-semibold text-[#001032] truncate">{startup}</h3>
-            <p className="text-[10px] lg:text-sm text-gray-400 truncate">Mobile App Development</p>
-            <p className="text-[10px] lg:text-sm text-[#001032] mt-2 opacity-70 truncate">{owner}</p>
+      <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${isSelected ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+        <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
+          {/* Row 1 */}
+          <div className="flex flex-col overflow-hidden">
+            <h3 className="text-[16px] font-medium text-[#000000] leading-tight truncate">{startup}</h3>
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[10px] lg:text-[16px] font-bold text-[#001032]">Timeline</span>
-            <p className="text-[10px] lg:text-sm text-gray-400">{deal.totalTimeline || "N/A"}</p>
+            <p className="text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
           </div>
           <div className="flex flex-col items-end">
-             <span className="text-[10px] lg:text-[16px] font-bold text-[#001032]">Price</span>
-             <p className="text-[10px] lg:text-sm text-gray-400">Rs {deal.totalAmount || 0}</p>
+            <p className="text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+          </div>
+
+          {/* Row 2 */}
+          <div className="flex flex-col -mt-1 overflow-hidden">
+            <p className="text-[13px] lg:text-sm text-[#000000] truncate">
+              {deal.requestId?.service || "Project Deal"}
+            </p>
+          </div>
+          <div className="flex flex-col items-center -mt-1">
+            <p className="text-[13px] lg:text-sm text-[#000000]">{deal.totalTimeline || "N/A"}</p>
+          </div>
+          <div className="flex flex-col items-end -mt-1">
+            <p className="text-[13px] lg:text-sm text-[#000000]">Rs {deal.totalAmount || 0}</p>
+          </div>
+
+          {/* Row 3 */}
+          <div className="col-span-3 mt-1">
+            <p className="text-[13px] lg:text-sm text-[#000000] ">{owner}</p>
           </div>
         </div>
+
         <button 
           onClick={() => onSelect(deal)}
-          className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-bold text-xs shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all"
+          className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all"
         >
           View Details
         </button>
@@ -205,7 +222,7 @@ const Bottom = () => {
         </div>
         <div className={`bg-white rounded-xl border p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2 transition-all ${dispute ? 'border-gray-200 border-2' : 'border-gray-100'}`}>
            <h5 className="text-sm font-bold text-[#001032]">{milestone.title}</h5>
-           <p className="text-[11px] text-gray-500 leading-relaxed">
+           <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
              <span className="text-[#59549F] font-bold">Reason</span> – {dispute?.reason || "No issues reported."}
            </p>
            <p className="text-[11px] text-gray-500">
@@ -235,12 +252,12 @@ const Bottom = () => {
   const renderThreadView = () => (
     <div className="h-full flex flex-col">
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide space-y-6 p-2">
+      <div className="flex-1 overflow-y-auto scrollbar-hide space-y-6 px-2">
         <div className="flex items-center justify-between mt-2">
           <h4 className="text-sm font-bold text-[#001032] ">
             Dispute ID – {getDisplayId(selectedDispute?._id)}
           </h4>
-          <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-lg font-bold">Duration - 20 Days</span>
+          <span className="bg-[#B91C1C] text-white lg:text-[10px] text-[8px] px-2 lg:px-3 py-1 lg:py-1.5 rounded-lg font-bold">Duration - 20 Days</span>
         </div>
         
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
@@ -294,12 +311,12 @@ const Bottom = () => {
       </div>
 
       {/* Static Footer Section */}
-      <div className="pt-4 pb-8 space-y-4 bg-[#FDFDFF] border-t border-gray-100 mt-auto">
+      <div className="pt-4  space-y-4 bg-[#FDFDFF] border-t border-gray-100 mt-auto px-2">
         <div className="relative">
            <input 
              type="text" 
              placeholder="Enter the text" 
-             className="w-full pl-4 pr-16 py-4 bg-white border border-gray-200 rounded-xl shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] text-xs outline-none"
+             className="w-full pl-4 pr-16 py-4 bg-white border border-gray-200 rounded-lg shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] text-xs outline-none"
              value={newMessage}
              onChange={(e) => setNewMessage(e.target.value)}
              onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
@@ -310,24 +327,24 @@ const Bottom = () => {
            </div>
         </div>
 
-        <div className="space-y-3 pb-4">
+        <div className="space-y-3 pb-2">
            <button 
              onClick={() => setShowResolutions(!showResolutions)}
-             className="w-full py-2 bg-white border border-gray-300 rounded-xl text-sm font-semibold text-[#313131] hover:bg-gray-50 shadow-sm transition-all"
+             className="w-full py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-[#313131] hover:bg-gray-50 shadow-sm transition-all"
            >
              Resolution Options
            </button>
            
            {showResolutions && (
              <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
-                <button className="w-full py-2 bg-[#004F5B] text-white rounded-xl text-sm font-bold shadow-md hover:opacity-90 transition-all">
+                <button className="w-full py-2 bg-[#004F5B] text-white rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-all">
                   Approve Payment
                 </button>
                 <div className="grid grid-cols-2 gap-4">
-                   <button className="py-2 bg-[#FFEDCF] text-[#FF9D00] rounded-xl text-sm font-bold shadow-sm">Refund Payment</button>
-                   <button className="py-2 bg-white border border-[#D8D6F8] text-[#59549F] rounded-xl text-sm font-bold shadow-sm">Split Payment</button>
-                   <button className="py-2 bg-[#CDCDCD] text-[#404040] rounded-xl text-sm font-bold shadow-sm">Request Revision</button>
-                   <button className="py-2 bg-[#FFD0D0] text-[#BA1E1E] rounded-xl text-sm font-bold shadow-sm">Escalate</button>
+                   <button className="py-1.5 bg-[#FFEDCF] text-[#FF9D00] rounded-lg text-sm font-bold shadow-sm">Refund Payment</button>
+                   <button className="py-1.5 bg-white border border-[#D8D6F8] text-[#59549F] rounded-lg text-sm font-bold shadow-sm">Split Payment</button>
+                   <button className="py-1.5 bg-[#CDCDCD] text-[#404040] rounded-lg text-sm font-bold shadow-sm">Request Revision</button>
+                   <button className="py-1.5 bg-[#FFD0D0] text-[#BA1E1E] rounded-lg text-sm font-bold shadow-sm">Escalate</button>
                 </div>
              </div>
            )}
@@ -340,7 +357,7 @@ const Bottom = () => {
     <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
       
       {/* ── Left Column ── */}
-      <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) && isThreadOpen ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) ? 'hidden lg:flex' : 'flex'}`}>
         <div className="grid grid-cols-2 gap-4 px-2 shrink-0">
           <StatCard label="Active Conversations" value={disputes.filter(d => d.status !== 'Resolved').length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Awaiting Response" value={disputes.filter(d => d.messages?.length === 0).length} bgColor="bg-[#D8D6F8]" />
@@ -369,7 +386,7 @@ const Bottom = () => {
           ))}
         </div>
 
-        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2 w-[90%] lg:w-auto mx-auto">
+        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2 w-full lg:w-auto"> 
           {deals.length === 0 ? (
             <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-3 lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
@@ -412,16 +429,19 @@ const Bottom = () => {
       <div className="hidden lg:block w-px bg-gray-200 self-stretch  my-2" />
 
       {/* ── Right Column ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${(selectedDeal || selectedDispute) ? 'flex' : 'hidden lg:flex'}`}>
+      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full  flex flex-col overflow-hidden ${(selectedDeal || selectedDispute) ? 'flex' : 'hidden lg:flex'}`}>
         
         {/* Header */}
         {(selectedDeal || selectedDispute) && (
-          <div className="flex lg:hidden items-center gap-3 py-2 px-4 shrink-0">
+          <div className="flex lg:hidden items-center gap-3 py-2 px-2 shrink-0">
             <button 
                 onClick={() => {
-                    if (isThreadOpen) setIsThreadOpen(false);
-                    else if (activeTab === "Milestones") setSelectedDeal(null);
-                    else setSelectedDispute(null);
+                    if (isThreadOpen) {
+                        setIsThreadOpen(false);
+                    } else {
+                        setSelectedDeal(null);
+                        setSelectedDispute(null);
+                    }
                 }} 
                 className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
             >
@@ -433,7 +453,7 @@ const Bottom = () => {
           </div>
         )}
 
-        <div className="flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative">
+        <div className={`flex-1 flex flex-col overflow-hidden  rounded-2xl relative ${(!selectedDeal && !selectedDispute) ? 'shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] m-2' : ''}`}>
           <div className="flex-1 overflow-y-auto scrollbar-hide relative">
             {!selectedDeal && !selectedDispute ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
@@ -444,12 +464,12 @@ const Bottom = () => {
                 <p className="text-sm text-gray-400 mt-1 italic">Select a {activeTab === "Milestones" ? "project" : "dispute"} from the left to view details.</p>
               </div>
             ) : isThreadOpen ? (
-              <div className="p-4 lg:p-6 h-full flex flex-col">
+              <div className=" h-full flex flex-col">
                 {renderThreadView()}
               </div>
             ) : (activeTab === "Milestones" || activeTab === "Files") && selectedDeal ? (
               /* ═══ Milestone List ═══ */
-              <div className="p-4 lg:p-6 space-y-6">
+              <div className=" p-2 space-y-6">
                  {selectedDeal.milestones?.map(ms => {
                    const msDispute = disputes.find(d => String(d.milestoneId) === String(ms._id) && String(d.dealId?._id) === String(selectedDeal._id));
                    return <MilestoneDisputeCard key={ms._id} milestone={ms} project={selectedDeal} dispute={msDispute} />;
@@ -464,37 +484,49 @@ const Bottom = () => {
                    </div>
                  )}
               </div>
-            ) : activeTab === "Disputes" && selectedDispute ? (
-              /* ═══ Dispute Overview ═══ */
-              <div className="p-4 lg:p-6 space-y-6">
-                 <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col gap-6">
-                    <div className="grid grid-cols-3 gap-4 items-start">
-                      <div className="flex flex-col">
-                        <h3 className="text-sm font-bold text-[#001032] truncate">{selectedDispute.dealId?.startupId?.businessDetails?.companyName || "N/A"}</h3>
-                        <p className="text-[10px] text-gray-400">Mobile App Development</p>
-                        <p className="text-[10px] text-[#001032] mt-2 opacity-70">
-                          {selectedDispute.dealId?.professionalId?.businessDetails ? `${selectedDispute.dealId.professionalId.businessDetails.firstName} ${selectedDispute.dealId.professionalId.businessDetails.lastName}` : "N/A"}
-                        </p>
-                      </div>
-                      <div className="flex flex-col items-center">
-                        <span className="text-[10px] font-bold text-[#001032]">Due Date</span>
-                        <p className="text-[10px] text-gray-400">1 March, 2026</p>
-                      </div>
-                      <div className="flex flex-col items-end">
-                        <span className="text-[10px] font-bold text-[#001032]">Price</span>
-                        <p className="text-[10px] text-gray-400">Rs {selectedDispute.dealId?.totalAmount}</p>
-                      </div>
+            ) : activeTab === "Disputes" && (selectedDeal || selectedDispute) ? (
+              /* ═══ Disputes List (Right Panel) ═══ */
+              <div className="p-3 lg:p-2 h-full overflow-y-auto scrollbar-hide">
+                 <div className="bg-white rounded-2xl p-3 lg:p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]  min-h-full">
+                    <h3 className="text-base lg:text-lg font-bold text-[#000000] mb-4">Disputes</h3>
+                    <div className="space-y-6">
+                       {disputes.filter(d => 
+                         String(d.dealId?._id || d.dealId) === String(selectedDeal?._id || selectedDispute?.dealId?._id || selectedDispute?.dealId)
+                       ).map(disp => {
+                         const fullDeal = deals.find(d => d._id === (disp.dealId?._id || disp.dealId)) || disp.dealId;
+                         return (
+                         <div key={disp._id} className={`bg-white rounded-2xl p-5 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${selectedDispute?._id === disp._id ? 'border-[#D8D6F8]' : 'border-gray-50'}`}>
+                            <div className="grid grid-cols-3 gap-3 lg:gap-4 items-start mb-6">
+                               <div className="flex flex-col overflow-hidden">
+                                  <h4 className="text-[16px] font-semibold text-[#000000] truncate">{fullDeal?.startupId?.businessDetails?.companyName || "N/A"}</h4>
+                                  <p className="text-[13px] lg:text-[12px] text-gray-400 truncate">{fullDeal?.requestId?.service || "Project Deal"}</p>
+                                  <p className="text-[13px] lg:text-[12px] text-[#000000] mt-2 opacity-70 truncate">
+                                    {fullDeal?.professionalId?.businessDetails ? `${fullDeal.professionalId.businessDetails.firstName} ${fullDeal.professionalId.businessDetails.lastName}` : "N/A"}
+                                  </p>
+                               </div>
+                               <div className="flex flex-col items-center">
+                                  <span className="text-[16px] font-semibold text-[#000000]">Due Date</span>
+                                  <p className="text-[13px] lg:text-[12px] text-gray-400 whitespace-nowrap">1 March, 2026</p>
+                               </div>
+                               <div className="flex flex-col items-end">
+                                  <span className="text-[16px] font-semibold text-[#000000]">Price</span>
+                                  <p className="text-[13px] lg:text-[12px] text-gray-400 whitespace-nowrap">Rs {disp.dealId?.totalAmount?.toLocaleString()}</p>
+                               </div>
+                            </div>
+                            <button 
+                              onClick={() => {
+                                setSelectedDispute(disp);
+                                setIsThreadOpen(true);
+                                const hasUnread = isStartup ? !disp.isReadByStartup : !disp.isReadByProfessional;
+                                if (hasUnread) handleMarkAsRead(disp._id);
+                              }}
+                              className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_10px_rgba(0,0,0,0.15)] transition-all"
+                            >
+                              Open Thread
+                            </button>
+                         </div>
+                       )})}
                     </div>
-                    <button 
-                      onClick={() => {
-                        setIsThreadOpen(true);
-                        const hasUnread = isStartup ? !selectedDispute.isReadByStartup : !selectedDispute.isReadByProfessional;
-                        if (hasUnread) handleMarkAsRead(selectedDispute._id);
-                      }} 
-                      className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-xs shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
-                    >
-                      Open Thread
-                    </button>
                  </div>
               </div>
             ) : null}

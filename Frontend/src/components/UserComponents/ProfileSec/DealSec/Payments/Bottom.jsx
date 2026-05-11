@@ -85,10 +85,8 @@ const StatCard = ({ label, value, bgColor }) => (
   </div>
 );
 
-const Bottom = () => {
-  const [deals, setDeals] = useState([]);
+const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
   const [loading, setLoading] = useState(true);
-  const [selectedDeal, setSelectedDeal] = useState(null);
   const [selectedMilestone, setSelectedMilestone] = useState(null);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const location = useLocation();
@@ -96,6 +94,12 @@ const Bottom = () => {
   useEffect(() => {
     fetchDeals();
   }, []);
+
+  useEffect(() => {
+    if (selectedDeal && !selectedMilestone) {
+      setSelectedMilestone(selectedDeal.milestones?.[0] || null);
+    }
+  }, [selectedDeal]);
 
   // Removed automatic deal selection from location state to ensure mobile users land on the list first, matching other pages' flow
 

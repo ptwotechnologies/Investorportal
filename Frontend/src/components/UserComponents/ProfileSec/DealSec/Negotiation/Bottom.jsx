@@ -1,4 +1,5 @@
-import { FiPlus, FiArrowLeft, FiAlertTriangle, FiEdit3, FiX, FiEye, FiZap } from "react-icons/fi";
+import { FaPlus } from "react-icons/fa";
+import { FiPlus, FiArrowLeft, FiAlertTriangle, FiEdit3, FiX, FiEye, FiZap, FiChevronDown } from "react-icons/fi";
 import { IoMdCheckmark } from "react-icons/io";
 import { HiOutlineArrowsRightLeft, HiOutlineUserGroup } from "react-icons/hi2";
 import { LuArrowLeftRight, LuClock } from "react-icons/lu";
@@ -15,7 +16,9 @@ const Bottom = ({
   rightPanelState, 
   setRightPanelState, 
   selectedMilestone, 
-  setSelectedMilestone 
+  setSelectedMilestone,
+  preselectedRequest,
+  setPreselectedRequest
 }) => {
   const [deals, setDeals] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
@@ -217,6 +220,18 @@ const Bottom = ({
     };
     fetchEligible();
   }, [rightPanelState]);
+
+  // Handle preselected request from TopBar
+  React.useEffect(() => {
+    if (preselectedRequest) {
+      setNewDealData(prev => ({
+        ...prev,
+        requestId: preselectedRequest._id,
+        professionalId: preselectedRequest.acceptedProvider?._id || preselectedRequest.acceptedProvider
+      }));
+      // setPreselectedRequest(null); // We keep it for the label but clear if needed
+    }
+  }, [preselectedRequest]);
 
   const handleCreateProposal = async () => {
     if (!newDealData.requestId) return toast.error("Please select a request");
@@ -511,55 +526,17 @@ const Bottom = ({
             <div className="flex-1 flex flex-col h-full overflow-hidden ">
               <div className="flex-1 overflow-y-auto scrollbar-hide p-2 space-y-4">
                 {!newDealData.requestId ? (
-                  <div className="bg-white rounded-2xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
-                    <h4 className="text-lg font-bold text-[#001032] mb-4">Select a Request</h4>
-                    {isFetchingRequests ? (
-                      <div className="py-10 text-center animate-pulse text-gray-400 italic">Fetching your requests...</div>
-                    ) : eligibleRequests.length > 0 ? (
-                      <div className="grid gap-3">
-                        {eligibleRequests.map(req => (
-                          <div 
-                            key={req._id}
-                            onClick={() => setNewDealData({
-                              ...newDealData,
-                              requestId: req._id,
-                              professionalId: req.acceptedProvider?._id || req.acceptedProvider
-                            })}
-                            className="p-4 rounded-xl border border-gray-100 hover:border-[#D8D6F8] hover:bg-[#FDFDFF] cursor-pointer transition-all group"
-                          >
-                            <h5 className="font-bold text-[#001032] group-hover:text-[#59549F]">{req.service}</h5>
-                            <p className="text-[10px] text-gray-400 mt-1">Provider: {req.acceptedProvider?.name || "Accepted Professional"}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-6">
-                        <p className="text-sm text-gray-400 italic">No requests with accepted professionals found.</p>
-                        <button 
-                          onClick={() => navigate("/profile/request")}
-                          className="mt-4 px-6 py-2 bg-[#D8D6F8] text-[#59549F] rounded-lg font-bold text-xs"
-                        >
-                          Go to Requests
-                        </button>
-                      </div>
-                    )}
-                    <button 
-                      onClick={() => setRightPanelState('none')}
-                      className="w-full mt-6 py-2 border-2 border-gray-100 rounded-lg text-gray-500 font-bold text-sm"
-                    >
-                      Cancel
-                    </button>
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-10 opacity-50 bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100  rounded-2xl h-full">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <FaPlus size={40} className="text-gray-300" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-400">Select a Request</h3>
+                    <p className="text-sm text-gray-400 mt-1 italic">Click the "Proposal" button in the Top Bar and select a project to start.</p>
                   </div>
                 ) : (
                   <>
                     {/* Creation Editor */}
                     <div className="bg-white rounded-2xl lg:p-6 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 relative">
-                      <button 
-                        onClick={() => setNewDealData(prev => ({ ...prev, requestId: null }))}
-                        className="absolute top-4 right-4 text-gray-400 hover:text-[#59549F]"
-                      >
-                        Change Request
-                      </button>
                       <h4 className="text-[16px] font-medium text-[#000000] mb-2">Scope of Work</h4>
                       <textarea 
                         className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl text-xs min-h-[100px] focus:outline-none focus:border-[#59549F]"
@@ -570,6 +547,7 @@ const Bottom = ({
                       <button 
                         onClick={() => {
                           setTempScopeItems(newDealData.scopeItems);
+                          setPrevPanelState('create');
                           setRightPanelState('scopeDetails');
                         }}
                         className="w-full mt-4 py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
@@ -579,12 +557,12 @@ const Bottom = ({
                     </div>
 
                     <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
-                      <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Budget</h4>
+                      <h4 className="text-[16px] font-medium text-[#000000] mb-4 ">Total Budget</h4>
                       <div className="flex gap-3">
-                        <div className="w-[120px] px-3 py-2 bg-gray-50 rounded-lg text-[10px] text-gray-400 border border-gray-100 flex items-center justify-center shadow-sm">INR</div>
+                        <div className="w-[120px] px-3 py-2 bg-gray-50 rounded-lg text-[13px] lg:text-[10px] text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR</div>
                         <input 
                           type="number"
-                          className="flex-1 px-3 py-2 bg-gray-50 rounded-lg text-xs border border-gray-100 outline-none focus:border-[#D8D6F8]"
+                          className="flex-1 px-3 py-2 bg-gray-50 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] rounded-lg text-[13px] lg:text-[10px] border border-gray-100 outline-none focus:border-[#D8D6F8]"
                           placeholder="0.00"
                           value={newDealData.totalAmount}
                           onChange={(e) => setNewDealData({ ...newDealData, totalAmount: e.target.value })}
@@ -595,10 +573,10 @@ const Bottom = ({
                     <div className="bg-white rounded-2xl lg:p-4 p-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100">
                       <h4 className="text-[16px] font-medium text-[#000000] mb-4">Total Timeline</h4>
                       <div className="flex gap-3">
-                        <div className="w-[120px] px-3 py-2 bg-gray-50 rounded-lg text-[10px] text-gray-400 border border-gray-100 flex items-center justify-center shadow-sm">Days</div>
+                        <div className="w-[120px] px-3 py-2 bg-gray-50 rounded-lg text-[13px] lg:text-[10px] text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Days</div>
                         <input 
                           type="text"
-                          className="flex-1 px-3 py-2 bg-gray-50 rounded-lg text-xs border border-gray-100 outline-none focus:border-[#D8D6F8]"
+                          className="flex-1 px-3 py-2 bg-gray-50 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] rounded-lg text-[13px] lg:text-[10px] border border-gray-100 outline-none focus:border-[#D8D6F8]"
                           placeholder="e.g. 90"
                           value={newDealData.totalTimeline}
                           onChange={(e) => setNewDealData({ ...newDealData, totalTimeline: e.target.value })}
@@ -648,7 +626,7 @@ const Bottom = ({
                           </div>
                         ))}
                         {newDealData.milestones.length === 0 && (
-                          <p className="text-[10px] text-gray-400 italic text-center py-2">No milestones added yet</p>
+                          <p className="text-[13px] text-gray-400 italic text-center py-2">No milestones added yet</p>
                         )}
                       </div>
                     </SectionCard>
@@ -667,7 +645,10 @@ const Bottom = ({
                       {loading ? "Creating..." : "Create Proposal"}
                     </button>
                     <button 
-                      onClick={() => setRightPanelState('none')}
+                      onClick={() => {
+                        setRightPanelState('none');
+                        setPreselectedRequest(null);
+                      }}
                       className="flex-1 py-2 bg-white border-2 border-gray-100 rounded-lg text-gray-500 font-bold text-sm shadow-sm"
                     >
                       Cancel
@@ -986,11 +967,11 @@ const Bottom = ({
                       type="text" 
                       value={item} 
                       onChange={(e) => handleScopeItemChange(index, e.target.value)}
-                      readOnly={!isEditing}
+                      readOnly={!(isEditing || prevPanelState === 'create')}
                       placeholder="Define scope item..."
                       className="w-full px-5 py-3 bg-[#FDFDFF] border border-gray-100 rounded-xl text-xs focus:border-[#59549F] outline-none transition-all pr-12 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
                     />
-                    {isEditing && (
+                    {(isEditing || prevPanelState === 'create') && (
                       <button 
                         onClick={() => handleRemoveScopeItem(index)}
                         className="absolute right-4 top-1/2 -translate-y-1/2 text-xl font-light text-gray-400 hover:text-red-500 transition-colors"
@@ -1001,7 +982,7 @@ const Bottom = ({
                   </div>
                 ))}
                 
-                {isEditing && (
+                {(isEditing || prevPanelState === 'create') && (
                   <div className="relative group">
                     <input 
                       type="text" 
@@ -1023,16 +1004,22 @@ const Bottom = ({
                 <div className="mt-8">
                   <h4 className="text-lg font-medium text-[#000000] mb-4">Description</h4>
                   <textarea 
-                    value={isEditing ? editedDeal.scopeDescription : selectedProject.scopeDescription}
-                    onChange={() => {}}
-                    readOnly={true}
-                    disabled={true}
-                    className="w-full min-h-[300px] p-6 bg-gray-50 border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none opacity-75 cursor-not-allowed"
+                    value={isEditing ? editedDeal?.scopeDescription : (rightPanelState === 'scopeDetails' && !selectedProject ? newDealData.scopeDescription : selectedProject?.scopeDescription)}
+                    onChange={(e) => {
+                      if (isEditing) {
+                        setEditedDeal({ ...editedDeal, scopeDescription: e.target.value });
+                      } else {
+                        setNewDealData({ ...newDealData, scopeDescription: e.target.value });
+                      }
+                    }}
+                    readOnly={!(isEditing || prevPanelState === 'create')}
+                    disabled={!(isEditing || prevPanelState === 'create')}
+                    className={`w-full min-h-[300px] p-6 border border-gray-100 rounded-2xl text-xs text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`}
                   />
                 </div>
               </div>
 
-              {isEditing && (
+              {(isEditing || prevPanelState === 'create') && (
                 <div className="flex gap-4 mt-8">
                   <button 
                     onClick={handleSaveScope}
@@ -1071,18 +1058,18 @@ const Bottom = ({
                    <input 
                       type="text"
                       value={selectedMilestone.title}
-                      readOnly={true}
-                      disabled={true}
-                      onChange={() => {}}
-                      placeholder="Milestone Title"
-                      className="w-full px-4 py-2 bg-gray-50 border border-gray-100 rounded-lg text-sm outline-none shadow-sm opacity-75 cursor-not-allowed"
+                    readOnly={!(isEditing || prevPanelState === 'create')}
+                    disabled={!(isEditing || prevPanelState === 'create')}
+                    onChange={(e) => setSelectedMilestone({ ...selectedMilestone, title: e.target.value })}
+                    placeholder="Milestone Title"
+                    className={`w-full px-4 py-2 border border-gray-100 rounded-lg text-sm outline-none shadow-sm ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`}
                    />
                 </div>
 
                 <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
                    <h4 className="text-sm font-medium text-[#000000] mb-4">Milestone Budget - {selectedMilestone.title || "Milestone"}</h4>
                    <div className="flex flex-col lg:flex-row gap-3 mb-2">
-                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR - Indian Rupees</div>
+                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[13px] lg:text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR - Indian Rupees</div>
                       <input 
                         type="number" 
                         value={selectedMilestone.amount}
@@ -1090,7 +1077,7 @@ const Bottom = ({
                         disabled={!(isEditing || prevPanelState === 'create')}
                         onChange={(e) => setSelectedMilestone({ ...selectedMilestone, amount: e.target.value })}
                         placeholder="0"
-                        className={`flex-1 px-3 py-2 border border-gray-100 rounded-lg text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`} 
+                        className={`flex-1 px-3 py-2 border border-gray-100 rounded-lg text-[13px] lg:text-[10px] outline-none shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] text-center ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`} 
                       />
                     </div>
                 </div>
@@ -1098,7 +1085,7 @@ const Bottom = ({
                 <div className="bg-white border border-gray-100 rounded-2xl lg:px-6 px-3 py-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
                     <h4 className="text-sm font-medium text-[#000000] mb-4">Milestone Timeline - {selectedMilestone.title || "Milestone"}</h4>
                     <div className="flex flex-col lg:flex-row gap-3 mb-2">
-                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Total Days</div>
+                      <div className="lg:w-[150px] w-full px-3 py-2 bg-[#FDFDFF] border border-gray-100 rounded-lg text-[13px] lg:text-[10px] text-gray-400 whitespace-nowrap text-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">Total Days</div>
                       <input 
                         type="text" 
                         placeholder="Enter Days"
@@ -1106,7 +1093,7 @@ const Bottom = ({
                         readOnly={!(isEditing || prevPanelState === 'create')}
                         disabled={!(isEditing || prevPanelState === 'create')}
                         onChange={(e) => setSelectedMilestone({ ...selectedMilestone, duration: e.target.value })}
-                        className={`flex-1 px-3 py-2 text-center border border-gray-100 rounded-lg text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`} 
+                        className={`flex-1 px-3 py-2 text-center border border-gray-100 rounded-lg text-[13px] lg:text-[10px] outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`} 
                       />
                     </div>
                  </div>
@@ -1115,10 +1102,10 @@ const Bottom = ({
                    <textarea 
                      placeholder="Milestone Description"
                      value={selectedMilestone.description}
-                     readOnly={true}
-                     disabled={true}
-                     onChange={() => {}}
-                     className="w-full min-h-[180px] p-6 bg-gray-50 border border-gray-100 rounded-2xl text-sm text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none opacity-75 cursor-not-allowed"
+                     readOnly={!(isEditing || prevPanelState === 'create')}
+                     disabled={!(isEditing || prevPanelState === 'create')}
+                     onChange={(e) => setSelectedMilestone({ ...selectedMilestone, description: e.target.value })}
+                     className={`w-full min-h-[180px] p-6 border border-gray-100 rounded-2xl text-sm text-gray-500 leading-relaxed resize-none placeholder:italic shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] outline-none ${(isEditing || prevPanelState === 'create') ? "bg-[#FDFDFF]" : "bg-gray-50 opacity-75 cursor-not-allowed"}`}
                    />
                 </div>
               </div>

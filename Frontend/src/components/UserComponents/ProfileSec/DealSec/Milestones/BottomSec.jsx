@@ -7,13 +7,9 @@ import { serverUrl } from "@/App";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
-const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setActiveView }) => {
+const BottomSec = ({ deals, setDeals, selectedDeal, setSelectedDeal, selectedMilestone, setSelectedMilestone, activeView, setActiveView }) => {
   const navigate = useNavigate();
-  const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
-  
-  // Selection states
-  const [selectedDeal, setSelectedDeal] = useState(null);
   
   // Add Milestone states
   const [tempMilestone, setTempMilestone] = useState({
@@ -364,7 +360,11 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
                 key={deal._id} 
                 deal={deal} 
                 isSelected={selectedDeal?._id === deal._id}
-                onSelect={(d) => { setSelectedDeal(d); setSelectedMilestone(null); }}
+                onSelect={(d) => { 
+                  setSelectedDeal(d); 
+                  setSelectedMilestone(null); 
+                  setActiveView('none');
+                }}
               />
             ))
           )}
@@ -507,9 +507,9 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
                       <button onClick={() => setActiveView('none')} className="mt-4 text-[#59549F] text-xs font-bold underline">Go Back</button>
                     </div>
                   ) : (
-                    <div className="bg-white rounded-3xl p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-6">
+                    <div className="bg-white rounded-2xl p-3 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 flex flex-col space-y-6">
                       <div className="flex items-center justify-between">
-                        <h3 className="text-xl font-bold text-[#000000]">New Milestone</h3>
+                        <h3 className="text-xl font-semibold text-[#000000]">New Milestone</h3>
                         <div className="bg-[#B91C1C] text-white text-[10px] px-4 py-2 rounded-full font-bold shadow-sm italic">
                           Drafting...
                         </div>
@@ -517,7 +517,7 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
 
                       <div className="space-y-4">
                         <div className="space-y-2">
-                          <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest px-1">Milestone Name</label>
+                          <label className=" text-[13px] lg:text-[10px] font-semibold text-gray-400  tracking-widest px-1">Milestone Name</label>
                           <input 
                             type="text"
                             value={tempMilestone.title}
@@ -527,10 +527,10 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
                           />
                         </div>
 
-                        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] space-y-3">
-                          <h4 className="text-sm font-bold text-[#000000]">Budget - Setup</h4>
+                        <div className="bg-white border border-gray-100 rounded-xl p-2 lg:p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
+                          <h4 className="text-sm font-semibold text-[#000000]">Budget - Setup</h4>
                           <div className="flex gap-2">
-                            <div className="flex-[0.8] bg-[#FDFDFF] border border-gray-100 rounded-xl py-2 px-3 shadow-[inset_0px_0px_8px_rgba(0,0,0,0.1)] text-[10px] text-gray-400 font-bold flex items-center justify-center text-center">
+                            <div className="flex-[0.8] bg-[#FDFDFF] border border-gray-100 rounded-lg py-1 lg:py-2 px-3 shadow-[inset_0px_0px_8px_rgba(0,0,0,0.1)] text-[10px] text-gray-400  flex items-center justify-center text-center">
                               INR - Rupees
                             </div>
                             <input 
@@ -538,15 +538,15 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
                               placeholder="Amount"
                               value={tempMilestone.amount}
                               onChange={(e) => setTempMilestone({...tempMilestone, amount: e.target.value})}
-                              className="flex-1 px-4 py-2 bg-white border border-gray-100 rounded-xl text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_rgba(0,0,0,0.15)] font-bold text-center" 
+                              className="flex-1 px-4 py-1 lg:py-2 bg-white border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_rgba(0,0,0,0.15)]  text-center" 
                             />
                           </div>
                         </div>
 
-                        <div className="bg-white border border-gray-100 rounded-2xl p-4 shadow-[0px_4px_12px_rgba(0,0,0,0.05)] space-y-3">
-                          <h4 className="text-sm font-bold text-[#000000]">Timeline - Setup</h4>
+                        <div className="bg-white border border-gray-100 rounded-xl p-2 lg:p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
+                          <h4 className="text-sm font-semibold text-[#000000]">Timeline - Setup</h4>
                           <div className="flex gap-2">
-                            <div className="flex-[0.8] bg-[#FDFDFF] border border-gray-100 rounded-xl py-2 px-3 shadow-[inset_0px_0px_8px_rgba(0,0,0,0.1)] text-[10px] text-gray-400 font-bold flex items-center justify-center text-center">
+                            <div className="flex-[0.8] bg-[#FDFDFF] border border-gray-100 rounded-lg py-1 lg:py-2 px-3 shadow-[inset_0px_0px_8px_rgba(0,0,0,0.1)] text-[10px] text-gray-400 font-bold flex items-center justify-center text-center">
                               Total Days
                             </div>
                             <input 
@@ -554,7 +554,7 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
                               placeholder="e.g. 15 Days" 
                               value={tempMilestone.duration}
                               onChange={(e) => setTempMilestone({...tempMilestone, duration: e.target.value})}
-                              className="flex-1 px-4 py-2 bg-white border border-gray-100 rounded-xl text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_rgba(0,0,0,0.15)] font-bold text-center" 
+                              className="flex-1 px-4 py-1 lg:py-2 bg-white border border-gray-100 rounded-lg text-sm outline-none focus:border-[#D8D6F8] shadow-[0px_0px_12px_rgba(0,0,0,0.15)] font-bold text-center" 
                             />
                           </div>
                         </div>
@@ -678,13 +678,13 @@ const BottomSec = ({ selectedMilestone, setSelectedMilestone, activeView, setAct
                <button 
                  onClick={handleAddMilestoneSubmit}
                  disabled={isSubmitting}
-                 className="flex-[2] py-3 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
+                 className="flex-[2] py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-lg text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
                >
                  {isSubmitting ? "Processing..." : "Proceed for Negotiation"}
                </button>
                <button 
                  onClick={() => setActiveView('none')}
-                 className="flex-1 py-3 bg-white border border-gray-200 rounded-xl text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all shadow-sm"
+                 className="flex-1 py-2 bg-white border border-gray-200 rounded-lg text-gray-600 font-bold text-sm hover:bg-gray-50 transition-all shadow-sm"
                >
                  Cancel
                </button>

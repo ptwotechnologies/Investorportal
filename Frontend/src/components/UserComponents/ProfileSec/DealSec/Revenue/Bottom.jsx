@@ -84,15 +84,19 @@ const StatCard = ({ label, value, bgColor }) => (
   </div>
 );
 
-const Bottom = () => {
-  const [deals, setDeals] = useState([]);
+const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
   const [loading, setLoading] = useState(true);
-  const [selectedDeal, setSelectedDeal] = useState(null);
   const [selectedMilestone, setSelectedMilestone] = useState(null);
 
   useEffect(() => {
     fetchDeals();
   }, []);
+
+  useEffect(() => {
+    if (selectedDeal && !selectedMilestone) {
+      setSelectedMilestone(selectedDeal.milestones?.[0] || null);
+    }
+  }, [selectedDeal]);
 
   const fetchDeals = async () => {
     setLoading(true);

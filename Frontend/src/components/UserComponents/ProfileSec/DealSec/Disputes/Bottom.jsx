@@ -175,7 +175,7 @@ const Bottom = ({
           {/* Row 2 */}
           <div className="flex flex-col -mt-1 overflow-hidden">
             <p className="text-[13px] lg:text-sm text-[#000000] truncate">
-              {proj.requestId?.service || "Project Deal"}
+              {proj.requestId?.service || deals.find(d => d._id === proj._id)?.requestId?.service || "Project Deal"}
             </p>
           </div>
           <div className="flex flex-col items-center -mt-1">
@@ -202,7 +202,7 @@ const Bottom = ({
   };
 
   const DisputeItem = ({ dispute, deal }) => (
-    <div className="bg-white rounded-xl lg:rounded-3xl p-3 mt-1 shadow-[0px_0px_12px_rgba(0,0,0,0.25)] border border-gray-50 mb-6 last:mb-0">
+    <div className="bg-white rounded-xl lg:rounded-2xl p-3 mt-1 shadow-[0px_0px_12px_rgba(0,0,0,0.25)] border border-gray-50 mb-6 last:mb-0">
       <div className="flex items-center justify-between mb-4 px-1">
         <h4 className="lg:text-[15px] text-[11px]  font-medium text-[#001032]">Dispute ID – {getDisplayId(dispute._id)}</h4>
         <span className="bg-[#B91C1C] text-white lg:text-[10px] text-[8px]  px-3 py-1 rounded-full  shadow-sm">
@@ -214,8 +214,11 @@ const Bottom = ({
         <h5 className="text-[14px] lg:text-base font-medium text-[#001032]">
           {deal?.milestones?.find(m => m._id === dispute.milestoneId)?.title || "Milestone 1"}
         </h5>
+        <p className="text-[10px] text-gray-400 -mt-2 truncate">
+          {deal?.requestId?.service || deals.find(d => d._id === (deal?._id || dispute.dealId?._id || dispute.dealId))?.requestId?.service || "Project Deal"}
+        </p>
         <div className="space-y-2">
-          <p className="text-[12px] lg:text-sm text-gray-500 leading-relaxed line-clamp-3">
+          <p className="text-[12px] lg:text-sm text-gray-500 leading-relaxed line-clamp-2">
             <span className="text-[#59549F] font-medium">Reason</span> – {dispute.reason}
           </p>
           <p className="text-[12px] lg:text-sm text-gray-500 font-medium">
