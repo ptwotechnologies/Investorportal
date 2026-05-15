@@ -137,7 +137,7 @@ const HomeSec2 = () => {
           <h1 className="text-5xl font-normal p-10  hidden lg:block ">Who is this portal for?</h1>
           <h1 className="text-[44px] font-normal px-3 py-4 pb-10  w-full lg:hidden tracking-wider leading-11.5 ">Who is this  portal  for?</h1>
           <div className="hidden lg:block">
-            <div className="flex justify-center items-center  mx-20  ">
+            <div className="flex justify-center items-center  lg:mx-20 min-[1400px]:!mx-0 "> 
               <div className=" w-[30%]">
                 <hr className="border-t border-gray-500 pb-8 w-[90%] " />
                 <h3 className="text-2xl pb-5">Startups</h3>
@@ -145,8 +145,8 @@ const HomeSec2 = () => {
 
                   <img src="/homepage8.png" alt="" className="w-full h-full rounded-xl" />
                 </div></Link>
-                <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                  You’re building something real and ready to scale{" "}
+                <p className="pt-4 text-md leading-6 tracking-wider w-[75%] mb-15">
+                  You’re building something real and ready to scale
                 </p>
               </div>
               <div className=" w-[30%]">
@@ -156,8 +156,8 @@ const HomeSec2 = () => {
                   <img src="/homepage6.png" alt="" className="w-full h-full rounded-xl" />
 
                 </div></Link>
-                <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
-                  You seek refined, investment-ready startup in your space{" "}
+                <p className="pt-4 text-md leading-6 tracking-wider w-[75%] mb-15">
+                  You seek refined, investment-ready startup in your space
                 </p>
               </div>
               <div className=" w-[30%]">
@@ -167,7 +167,7 @@ const HomeSec2 = () => {
                   <img src="/homepage7.png" alt="" className="w-full h-full rounded-xl" />
 
                 </div></Link>
-                <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                <p className="pt-4 text-md leading-6 tracking-wider w-[75%] mb-15">
                   You want genuine startup leads without paid ads
                 </p>
               </div>

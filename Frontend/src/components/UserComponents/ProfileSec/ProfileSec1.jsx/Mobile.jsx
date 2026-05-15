@@ -55,6 +55,19 @@ const Mobile = () => {
   const [comingSoonTitle, setComingSoonTitle] = useState("");
   const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
   const [userRole, setUserRole] = useState(localStorage.getItem("role") || "");
+  const [userName, setUserName] = useState("");
+  const [profilePhoto, setProfilePhoto] = useState(null);
+
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
+    const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
+    if (imageUrl.startsWith(privateBaseUrl)) {
+      return imageUrl.replace(privateBaseUrl, publicBaseUrl);
+    }
+    if (imageUrl.startsWith("http")) return imageUrl;
+    return `${serverUrl}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
+  };
   const location = useLocation();
   const [requestsLoading, setRequestsLoading] = useState(true);
 
@@ -65,16 +78,25 @@ const Mobile = () => {
       
       setRequestsLoading(true);
       try {
-        const [reqRes, userRes] = await Promise.all([
+        const [reqRes, userRes, profileRes] = await Promise.all([
           axios.get(`${serverUrl}/requests`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
           axios.get(`${serverUrl}/user/me`, {
             headers: { Authorization: `Bearer ${token}` },
-          })
+          }),
+          axios.get(`${serverUrl}/profile/`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }).catch(() => ({ data: {} }))
         ]);
+
+        const profileData = profileRes.data;
+        const displayName = profileData?.companyName || profileData?.name || userRes.data.name || userRes.data.userName || "User";
+
         setHasRaisedRequests(reqRes.data.length > 0);
         setUserRole(userRes.data.role);
+        setUserName(displayName);
+        setProfilePhoto(profileData?.profilePhoto);
       } catch (err) {
         console.error("Error fetching mobile data", err);
         setHasRaisedRequests(false);
@@ -319,7 +341,7 @@ const Mobile = () => {
                                 <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
                                   <SheetClose asChild>
                                     <div
-                                      onClick={() => triggerComingSoon("Documents")}
+                                      onClick={() => triggerComingSoon("Investor Documents")}
                                       className="flex items-center gap-2 cursor-pointer"
                                     >
                                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
@@ -328,7 +350,7 @@ const Mobile = () => {
                                   </SheetClose>
                                   <SheetClose asChild>
                                     <div
-                                      onClick={() => triggerComingSoon("Meetings")}
+                                      onClick={() => triggerComingSoon("Investor Meetings")}
                                       className="flex items-center gap-2 cursor-pointer"
                                     >
                                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
@@ -337,7 +359,7 @@ const Mobile = () => {
                                   </SheetClose>
                                   <SheetClose asChild>
                                     <div
-                                      onClick={() => triggerComingSoon("Alerts & risk")}
+                                      onClick={() => triggerComingSoon("Investor Alerts & risk")}
                                       className="flex items-center gap-2 cursor-pointer"
                                     >
                                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
@@ -565,7 +587,7 @@ const Mobile = () => {
                     {isStartup && (
                       <SheetClose asChild>
                         <div
-                          onClick={() => triggerComingSoon("Role Switching")}
+                          onClick={() => triggerComingSoon("Switch to Professional")}
                           className=" mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
                         >
                           <div className="flex flex-col">
@@ -583,7 +605,7 @@ const Mobile = () => {
                     {isServiceProfessional && (
                       <SheetClose asChild>
                         <div
-                          onClick={() => triggerComingSoon("Role Switching")}
+                          onClick={() => triggerComingSoon("Switch to Startup")}
                           className=" mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
                         >
                           <div className="flex flex-col">
@@ -598,30 +620,34 @@ const Mobile = () => {
                       </SheetClose>
                     )}
 
-                    {/* Premium Upgrade Card */}
-                    <div className="  mb-6 p-2 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" onClick={() => navigate("/scanner")}>
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-8 h-8 bg-[#59549F] rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
-                          <FaCrown size={18} />
-                        </div>
-                        <div className="text-left">
-                          <h2 className="text-[12px] font-bold text-[#59549f]">Upgrade to Premium</h2>
-                          <p className="text-[10px] text-gray-500 leading-tight">Unlock powerful tools to grow your startup faster.</p>
-                        </div>
-                      </div>
-                      <button className="w-full py-1 bg-[#59549F] text-white rounded-sm text-[11px] font-bold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
-                        View Plans
-                        <FaArrowRight size={12} />
-                      </button>
-                      {/* Decorative background element */}
-                      <div className="absolute bottom-[-10px] right-[-10px] opacity-10 pointer-events-none transform rotate-[-12deg]">
-                         <SiSimpleanalytics size={80} />
-                      </div>
-                    </div>
-                  </ul>
-                </div>
-
-                    <div id="bottom" className="mt-10 mb-6">
+                     {/* Premium Upgrade Card - Only for Startup and Service Professional */}
+                     {(isStartup || isServiceProfessional) && (
+                        <SheetClose asChild>
+                          <div className="  mb-6 mt-2 p-2 py-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" onClick={() => triggerComingSoon("Premium Infrastructure")}>
+                            <div className="flex items-center gap-3 mb-4">
+                              <div className="w-8 h-8 bg-[#59549F] rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
+                                <FaCrown size={18} />
+                              </div>
+                              <div className="text-left">
+                                <h2 className="text-[13px] font-bold text-[#59549f]">Upgrade to Premium</h2>
+                                <p className="text-[11px] text-gray-500 leading-tight">Unlock powerful tools to grow your startup faster.</p>
+                              </div>
+                            </div>
+                            <button className="w-full py-1 bg-[#59549F] text-white rounded-sm text-[11px] font-bold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
+                              View Plans
+                              <FaArrowRight size={12} />
+                            </button>
+                            {/* Decorative background element */}
+                            <div className="absolute bottom-[-10px] right-[-10px] opacity-10 pointer-events-none">
+                               <SiSimpleanalytics size={80} />
+                            </div>
+                          </div>
+                        </SheetClose>
+                     )}
+                   </ul>
+                 </div>
+ 
+                    <div id="bottom" className="mt-8 mb-2">
                       <ul className="flex flex-col gap-2 text-[16px] text-gray-600">
                         <div className="flex items-center gap-4">
                           <IoSettingsOutline
@@ -641,39 +667,52 @@ const Mobile = () => {
                         </div>
                       </ul>
                     </div>
+                       <hr />
+                    <div id="user-profile" className="mb-2 ">
+                      {showSignoutDialog && (
+                        <div className="flex flex-col gap-2 mb-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                          <Button
+                            type="button"
+                            className="w-full text-[16px] bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold  rounded-lg" 
+                            onClick={handleConfirmSignOut}
+                          >
+                            Sign out
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            className="w-full text-gray-500 font-medium bg-gray-100 text-[16px]"
+                            onClick={() => setShowSignoutDialog(false)}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
+                      )}
+
+                      <div 
+                        onClick={() => setShowSignoutDialog(!showSignoutDialog)}
+                            className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border cursor-pointer hover:bg-gray-100 transition-colors"
+                      >
+                        <div className="w-12 h-12 rounded-full bg-[#59549F] flex items-center justify-center text-white font-bold shrink-0 overflow-hidden">
+                          {profilePhoto ? (
+                            <img src={getImageUrl(profilePhoto)} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            userName ? userName.charAt(0).toUpperCase() : "U"
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                      <p className="text-[16px] font-semibold text-[#001032] truncate">{userName}</p>
+                      <p className="text-[12px] text-gray-500 capitalize">{userRole?.replace("_", " ")}</p>
+                    </div>
+                        <FaChevronDown 
+                          className={`text-gray-400 transition-transform duration-200 ${showSignoutDialog ? "rotate-180" : ""}`} 
+                          size={14} 
+                        />
+                      </div>
+                    </div>
                   </div>
-
-                  <SheetFooter>
-                    <Button
-                      type="button"
-                      className="bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]" 
-                      onClick={handleSignOutClick}
-                    >
-                      Sign out
-                    </Button>
-
-                    <SheetClose asChild>
-                      <Button variant="outline">Cancel</Button>
-                    </SheetClose>
-                  </SheetFooter>
                 </div>
 
-                {showSignoutDialog && (
-                  <div className="absolute bottom-30  left-1/2 -translate-x-1/2 z-50 bg-white border border-gray-300 shadow-lg rounded-md w-[88%] flex flex-col items-center text-sm  p-2">
-                    <button
-                      onClick={handleConfirmSignOut}
-                      className="w-full py-2 border-b border-gray-200 active:bg-[#D8D6F8] active:text-[#001032] rounded-md"
-                    >
-                      Yes
-                    </button>
-                    <button
-                      onClick={() => setShowSignoutDialog(false)}
-                      className="w-full py-2 active:bg-[#D8D6F8] bg-[#D8D6F8] active:text-[#001032]  text-[#001032] rounded-md shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
-                    >
-                      No
-                    </button>
-                  </div>
-                )}
+
               </SheetContent>
             </div>
           </Sheet>

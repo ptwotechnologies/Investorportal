@@ -2,9 +2,9 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 
 
-const ServiceProfessionalSec1 = () => {
+const ServiceProfessionalSec1 = () => { 
   return (
-    <div className='pt-25 lg:pt-35 w-full rounded-b-2xl lg:rounded-none
+    <div className='pt-25 lg:pt-35 w-full rounded-b-2xl lg:rounded-none lg:!px-10 min-[1500px]:!px-0  h-[750px]
           bg-linear-to-b from-[#001032] from-40% via-blue-[#001032] at-130% to-[#003198] lg:bg-none text-white '>
       <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0 py-2 flex flex-col lg:flex-row justify-around items-start lg:h-auto">
         <h6 className='lg:hidden mx-auto mb-3 border border-white px-3 py-2 rounded-full text-sm'>For Service Professionals</h6>
@@ -17,7 +17,7 @@ const ServiceProfessionalSec1 = () => {
           </button></Link>
         </div>
 
-        <div id='right' className='w-full my-5 lg:w-[50%] '>
+        <div id='right' className='w-full lg:my-5 lg:w-[50%] '>
           <div className='h-60 lg:h-[470px] bg-[#D8D8D8] lg:rounded-sm rounded-2xl '>
             <img src="/servicepage2.png" alt="Image" className=' h-full w-full  lg:hidden rounded-2xl border shadow-md' />
             <img src="/servicepage1.png" alt="Image" className='object-cover h-full w-full lg:block hidden rounded-2xl border lg:rounded-sm shadow ' />

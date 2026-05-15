@@ -33,7 +33,7 @@ const PricingSec2 = () => {
   };
   return (
     <>
-    <div className="container mx-auto lg:p-10">
+    <div className="max-w-[1500px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0 py-10">
       {!isUpgradeFlow && (
         <h1 className='text-4xl lg:text-5xl text-[#001032] font-medium lg:mb-7 mb-2 px-4 lg:px-0 lg:mt-3'>
           Pricing Models

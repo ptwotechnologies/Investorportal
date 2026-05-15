@@ -77,15 +77,15 @@ const AboutSec6 = () => {
    };
 
   return (
-    <div className="w-full mx-auto py-5 pb-10">
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-8">
+    <div className="w-full mx-auto py-5 pb-10 lg:px-30">
+      <div className="max-w-[1500px] mx-auto w-full px-4  ">
         <h1 className="text-3xl mb-4 text-[#001032] lg:hidden">Here’s what founders usually ask</h1>
         <h1 className="text-3xl mb-4 text-[#001032] hidden lg:block">FAQ</h1>
         <h1 className="text-md mb-6 text-[#001032] hidden lg:block">Trust & Safety</h1>
 
         {/* DESKTOP FAQ */}
         <div className="hidden lg:block">
-          <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-x-10 ">
             {faqs.map((faq, index) => (
               <div key={index} className="border-t border-[#0010321A] py-4">
                 <div

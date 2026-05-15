@@ -17,12 +17,13 @@ const HomeSec1 = () => {
 
   return (
     <>
-      <div className="bg-[#001032] h-290 md:h-auto lg:bg-white w-full pt-5 lg:pt-20 px-5 rounded-b-4xl overflow-hidden">
+      <div className="bg-[#001032] h-auto lg:bg-white w-full pt-5 lg:pt-20 px-5 rounded-b-4xl relative pb-1">
         <div className="max-w-[1500px] mx-auto w-full">
           <div
-            className="text-[12px] text-white flex justify-start items-center gap-2 p-2 md:px-4 w-[70%] md:w-[40%] lg:w-[32%] xl:w-[22%] rounded-3xl mt-20 
-          bg-linear-to-r from-[#001032] from-20% lg:from-70% via-blue-[#001032] at-130% to-[#D8D8D8] 
+            className="text-[12px] lg:text-[#001032] text-white  border border-white lg:border-[#001032] flex justify-start items-center gap-2 p-2 md:px-4 w-[70%] md:w-[40%] lg:w-[26%] xl:w-[18%] rounded-3xl mt-20 
+           
           "
+          // bg-linear-to-r from-[#001032] from-20% lg:from-70% via-blue-[#001032] at-130% to-[#D8D8D8]
           >
             <p>We've built a platform for startups</p>
             <IoIosArrowRoundForward size={25} className="hidden md:block" />
@@ -153,12 +154,12 @@ const HomeSec1 = () => {
               <div className="rounded-xl bg-gray-200 w-full h-[870px]  hidden lg:block">
                 <img src="/homesec1.png" alt="" className="w-full h-full rounded-xl object-cover " />
               </div>
-              <div className="lg:hidden  h-90 w-full  mt-10">
-                <div className="rounded-4xl    w-full h-[200px]   border border-[#001032]">
+              <div className="lg:hidden w-full mt-10 relative z-10 -mb-22">
+                <div className="rounded-3xl w-full border-4 border-white shadow-2xl bg-white overflow-hidden">
                   <img
                     src="/homepage2.png"
-                    alt=""
-                    className="w-full h-full  rounded-4xl  "
+                    alt="Copteno Ecosystem"
+                    className="w-full h-auto"
                   />
                 </div>
               </div>

@@ -27,45 +27,43 @@ const userId = location.state?.userId || localStorage.getItem("userId");
 
   return (
     <div>
-      <div className="flex justify-between items-center  lg:min-h-dvh">
-        <div id="left" className=" w-[40%] hidden lg:block mx-auto ">
-                 <div className="flex flex-col justify-between items-center gap-y-25">
-                   <div>
-                    <img src={logo} alt="Logo" className=" w-100 " />
-                  <p className=" text-[#001032] text-xl w-full  ">Allows you to get funding,</p>
-                  <p className=" text-[#001032] text-xl   ">resources and investor connect</p>
-                  </div>
-                  <div >
-                    <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd</p>
-                  </div>
-                 </div>
-                </div>
-        <div 
-          id="right"
-          className="lg:w-[50%]  lg:px-2 lg:py-2  "
-        >
-          <div className="lg:bg-[#001032]  lg:p-3 w-screen lg:w-auto lg:rounded-lg  lg:min-h-[600px]">
-            <div className="bg-white  lg:h-auto rounded-md ">
-              <div id="top" className="text-center">
-                <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:py-6 py-8" />
-                
-                <p className="text-[#001032] border-2 border-[#00103280] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mx-5 hidden lg:block   lg:mx-30 text-lg  rounded-md  p-2">
-                  Choose the best suited onboarding plan for you
-                </p>
-                <p className="text-[#001032] border-2 border-[#00103280]  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mb-2 mx-2 lg:hidden text-lg  rounded-sm  p-2">
-                  Choose the Onboarding Plan
-                </p>
+      <div className="max-w-[1600px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0">
+        <div className="flex justify-between items-center lg:min-h-dvh">
+          <div id="left" className="w-[40%] hidden lg:block mx-auto">
+            <div className="flex flex-col justify-between items-center gap-y-25">
+              <div>
+                <img src={logo} alt="Logo" className="w-100" />
+                <p className="text-[#001032] text-xl w-full">Allows you to get funding,</p>
+                <p className="text-[#001032] text-xl">resources and investor connect</p>
               </div>
-              <div id="bottom " className=" w-full ">
-               <div>
-                {role === "startup" && <StartupPlansSec userId={userId}/>} 
-                 {role === "service_professional" && <ServiceProfessionalPlanSec userId={userId}/>}
-               
-              
-               </div>
+              <div>
+                <p className="text-lg w-full text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd</p>
               </div>
+            </div>
+          </div>
+          <div
+            id="right"
+            className="lg:w-[50%] lg:px-2 lg:py-2"
+          >
+            <div className="lg:bg-[#001032] lg:p-3 w-full lg:w-auto lg:rounded-lg lg:min-h-[600px]">
+              <div className="bg-white lg:h-auto rounded-md">
+                <div id="top" className="text-center">
+                  <img src={logo} alt="Logo" className="lg:w-55 w-45 mx-auto lg:py-6 py-8" />
 
-              
+                  <p className="text-[#001032] border-2 border-[#00103280] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mx-5 hidden lg:block lg:mx-30 text-lg rounded-md p-2">
+                    Choose the best suited onboarding plan for you
+                  </p>
+                  <p className="text-[#001032] border-2 border-[#00103280] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] mb-2 mx-2 lg:hidden text-lg rounded-sm p-2">
+                    Choose the Onboarding Plan
+                  </p>
+                </div>
+                <div id="bottom " className="w-full">
+                  <div>
+                    {role === "startup" && <StartupPlansSec userId={userId} />}
+                    {role === "service_professional" && <ServiceProfessionalPlanSec userId={userId} />}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

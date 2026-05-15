@@ -6,9 +6,12 @@ import axios from "axios";
 import { serverUrl } from "@/App";
 import { toast } from "react-hot-toast";
 
+import RequestGuideModal from "@/components/Modals/RequestGuideModal";
+
 const TopBar = ({ setRightPanelState, onProjectSelect }) => {
   const navigate = useNavigate();
   const [requests, setRequests] = useState([]);
+  const [showGuide, setShowGuide] = useState(false);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -27,12 +30,22 @@ const TopBar = ({ setRightPanelState, onProjectSelect }) => {
   };
 
   const toggleDropdown = () => {
+    if (requests.length === 0) {
+      setShowGuide(true);
+      return;
+    }
     const menu = document.getElementById('negotiation-proposal-dropdown');
     if (menu) menu.classList.toggle('hidden');
   };
 
   return (
     <div className="bg-white px-2.5 lg:px-6 lg:pt-6 pt-4 pb-3 ">
+      <RequestGuideModal 
+        isOpen={showGuide} 
+        onClose={() => setShowGuide(false)} 
+        title="Ready to Create a Proposal?"
+      />
+      
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         
         {/* Title Section */}
@@ -80,32 +93,25 @@ const TopBar = ({ setRightPanelState, onProjectSelect }) => {
                 <span className="text-sm text-black font-medium tracking-wider px-2">Select Project for Proposal</span>
               </div>
               <div className="max-h-[300px] overflow-y-auto scrollbar-hide">
-                {requests.length > 0 ? (
-                  requests.map((req) => (
-                    <div 
-                      key={req._id}
-                      onClick={() => {
-                        onProjectSelect(req);
-                        toggleDropdown();
-                      }}
-                      className="p-3 lg:p-4 hover:bg-[#FDFDFF] cursor-pointer border-b border-gray-50 last:border-0 transition-all group"
-                    >
-                      <div className="flex flex-col">
-                        <span className="text-sm lg:text-base font-semibold text-[#001032] group-hover:text-[#59549F]">
-                          {req.service || "Unnamed Project"}
-                        </span>
-                        <span className="text-[10px] lg:text-xs text-gray-400 mt-0.5">
-                          {req.professionalId?.businessDetails?.firstName} {req.professionalId?.businessDetails?.lastName}
-                        </span>
-                      </div>
+                {requests.length > 0 && requests.map((req) => (
+                  <div 
+                    key={req._id}
+                    onClick={() => {
+                      onProjectSelect(req);
+                      toggleDropdown();
+                    }}
+                    className="p-3 lg:p-4 hover:bg-[#FDFDFF] cursor-pointer border-b border-gray-50 last:border-0 transition-all group"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-sm lg:text-base font-semibold text-[#001032] group-hover:text-[#59549F]">
+                        {req.service || "Unnamed Project"}
+                      </span>
+                      <span className="text-[10px] lg:text-xs text-gray-400 mt-0.5">
+                        {req.professionalId?.businessDetails?.firstName} {req.professionalId?.businessDetails?.lastName}
+                      </span>
                     </div>
-                  ))
-                ) : (
-                  <div className="p-6 text-center text-gray-400 text-sm italic">
-                    No pending requests found. <br/>
-                    <span className="text-[10px]">First you have to raise a request.</span>
                   </div>
-                )}
+                ))}
               </div>
             </div>
           </div>

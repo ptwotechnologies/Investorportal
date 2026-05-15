@@ -74,7 +74,9 @@ const ContactUsSec3 = () => {
      setActiveIndex(index === activeIndex ? null : index);
    };
   return (
-    <div className="w-full mx-auto px-4 py-10 lg:px-30 mt-10">
+        <div className="w-full mx-auto py-10 mt-10 lg:px-30 ">
+      <div className="max-w-[1500px] mx-auto w-full px-4 ">
+
         <h1 className="text-3xl  mb-4 text-[#001032] lg:hidden ">Here’s what founders usually ask</h1>
       <h1 className="text-3xl  mb-4 text-[#001032] hidden lg:block ">FAQ</h1>
        <h1 className="text-md mb-6 text-[#001032] hidden lg:block ">Trust & Safety</h1>
@@ -150,9 +152,11 @@ const ContactUsSec3 = () => {
       
       ))}
        </div>
-   <hr />
-       </div>
+       <hr />
+        </div>
+      </div>
     </div>
+
   )
 }
 

@@ -271,7 +271,7 @@ const DashboardSec = () => {
               <div id="top" className="flex items-center gap-3">
                 <div
                   id="left"
-                  className="rounded-2xl bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 h-[47vh]  w-[50%]"
+                  className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 min-h-[400px] lg:h-[47vh] w-full max-w-[480px]"
                 >
                   <h1 className="text-3xl font-semibold text-[#202020] my-3">
                     Progress Statistics
@@ -334,7 +334,7 @@ const DashboardSec = () => {
 
                 <div
                   id="right"
-                  className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-3 py-4 h-[47vh] w-[50%] flex flex-col justify-between"
+                  className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-3 py-4 min-h-[400px] lg:h-[47vh] w-full max-w-[480px] flex flex-col justify-between"
                 >
                   <div id="top-sec">
                     <div className="flex items-center justify-between">
@@ -404,7 +404,7 @@ const DashboardSec = () => {
                 </div>
               </div>
 
-              <div id="bottom" className="bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl mt-3 h-[41vh]">
+              <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl mt-3 min-h-[350px] lg:h-[41vh] max-w-[1115px]">
                 <div className="flex items-center justify-between px-5 py-4">
                   <h1 className="text-3xl text-[#202020] font-semibold">
                     Requests
@@ -486,7 +486,7 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="w-[30%] h-[89.5vh] bg-white  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020]"
+              className="w-[30%] min-h-[800px] lg:h-[89.5vh] max-w-[450px] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020]"
             >
               <div className="flex items-center justify-between">
                 <p className="text-3xl font-semibold my-4">Activity</p>

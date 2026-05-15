@@ -292,50 +292,222 @@ const PortalDetailsSec = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center lg:min-h-dvh">
-        
-        {/* LEFT SIDE */}
-        <div id="left" className="w-[50%] hidden lg:block mx-auto">
-          <div className="flex flex-col justify-between items-center gap-y-25">
-            <div>
-              <img src={logo} alt="Logo" className="w-100" />
-              <p className="text-[#001032] text-xl w-full">Allows you to get funding,</p>
-              <p className="text-[#001032] text-xl">resources and investor connect</p>
-            </div>
-            <div>
-              <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings Â© Copteno Technologies Pvt. Ltd.
-              </p>
+      <div className="max-w-[1600px] mx-auto w-full lg:!px-10 min-[1500px]:!px-0">
+        <div className="flex justify-between items-center lg:min-h-dvh">
+          
+          {/* LEFT SIDE */}
+          <div id="left" className="w-[50%] hidden lg:block mx-auto">
+            <div className="flex flex-col justify-between items-center gap-y-25">
+              <div>
+                <img src={logo} alt="Logo" className="w-100" />
+                <p className="text-[#001032] text-xl w-full">Allows you to get funding,</p>
+                <p className="text-[#001032] text-xl">resources and investor connect</p>
+              </div>
+              <div>
+                <p className="text-lg w-full text-[#000000] relative top-45">
+                  Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* RIGHT SIDE */}
-        <div id="right" className="lg:w-[50%] lg:px-10 lg:py-2 text-center w-full min-h-screen flex flex-col">
-          <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
-            
-            <Card className="w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col relative pb-24 lg:pb-4">
+          {/* RIGHT SIDE */}
+          <div id="right" className="lg:w-[50%] lg:px-10 lg:py-5 text-center w-full">
+            <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
               
-              <CardHeader>
-                <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-50 w-45 mx-auto my-4" />
-                </CardTitle>
-                <CardDescription className="mb-1 text-[#001032] text-md lg:text-sm ">
-                  Get the most benefits from our pool of possible clients for you
-                </CardDescription>
-              </CardHeader>
+              <Card className="w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col relative pb-24 lg:pb-4">
+                
+                <CardHeader>
+                  <CardTitle>
+                    <img src={logo} alt="Logo" className="lg:w-50 w-45 mx-auto my-4" />
+                  </CardTitle>
+                  <CardDescription className="mb-1 text-[#001032] text-md lg:text-sm">
+                    Get the most benefits from our pool of possible clients for you
+                  </CardDescription>
+                </CardHeader>
 
-              {/* FORM START */}
-              <CardContent className="flex flex-col flex-grow">
-                <form onSubmit={handleSubmit} className="flex flex-col flex-grow justify-between">
-                  <div className="flex flex-col gap-3">
+                {/* FORM START */}
+                <CardContent className="flex flex-col flex-grow">
+                  <form onSubmit={handleSubmit} className="flex flex-col flex-grow justify-between">
+                    <div className="flex flex-col gap-3">
 
-                    {showPortalFields ? (
-                      <>
-                        {role === "service_professional" ? (
-                          serviceType === "Freelancer" ? (
+                      {showPortalFields ? (
+                        <>
+                          {role === "service_professional" ? (
+                            serviceType === "Freelancer" ? (
+                              <>
+                                {/* DOMAIN for Freelancer */}
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] cursor-pointer">
+                                      {domain}
+                                      <IoIosArrowDown className="mt-1" />
+                                    </button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
+                                    {domainOptions.map((item) => (
+                                      <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
+                                        {item}
+                                      </DropdownMenuItem>
+                                    ))}
+                                  </DropdownMenuContent>
+                                  </DropdownMenu>
+
+                                {/* Domain Description for Freelancer if Other is selected */}
+                                {domain === "Other" && (
+                                  <Input
+                                    type="text"
+                                    placeholder="Describe your domain"
+                                    value={domainDescription}
+                                    onChange={(e) => handleChange("domainDescription", e.target.value)}
+                                    className="p-5 text-[#00103280]"
+                                    required
+                                  />
+                                )}
+
+                                {/* Referral */}
+                                <Input
+                                  type="text"
+                                  placeholder="Referral Code (optional)"
+                                  value={referralCode}
+                                  onChange={(e) => handleChange("referralCode", e.target.value)}
+                                  className="p-5 text-[#00103280]"
+                                />
+
+                                {/* Profile upload for Freelancer */}
+                                {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
+                              </>
+                            ) : serviceType === "Company" ? (
+                              <>
+                                {/* Company: founding date */}
+                                <div>
+                                  <Calendar2 initialDate={foundedOn} onChange={(date) => handleChange("foundedOn", date)} />
+                                </div>
+
+                                {/* Company business type instead of LinkedIn */}
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] cursor-pointer">
+                                      {serviceBusinessType}
+                                      <IoIosArrowDown className="mt-1" />
+                                    </button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
+                                    {serviceBusinessOptions.map((item) => (
+                                      <DropdownMenuItem key={item} onClick={() => handleChange("serviceBusinessType", item)}>
+                                        {item}
+                                      </DropdownMenuItem>
+                                    ))}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+
+                                {/* DOMAIN */}
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] cursor-pointer">
+                                      {domain}
+                                      <IoIosArrowDown className="mt-1" />
+                                    </button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
+                                    {domainOptions.map((item) => (
+                                      <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
+                                        {item}
+                                      </DropdownMenuItem>
+                                    ))}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+
+                                {/* Domain Description if Other is selected */}
+                                {domain === "Other" && (
+                                  <Input
+                                    type="text"
+                                    placeholder="Describe your domain"
+                                    value={domainDescription}
+                                    onChange={(e) => handleChange("domainDescription", e.target.value)}
+                                    className="p-5 text-[#00103280]"
+                                    required
+                                  />
+                                )}
+
+                                {/* Referral */}
+                                <Input
+                                  type="text"
+                                  placeholder="Referral Code (optional)"
+                                  value={referralCode}
+                                  onChange={(e) => handleChange("referralCode", e.target.value)}
+                                  className="p-5 text-[#00103280]"
+                                />
+
+                                {/* Profile upload */}
+                                {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
+                              </>
+                            ) : (
+                              <>
+                                <Input
+                                  type="text"
+                                  placeholder="LinkedIn Profile"
+                                  value={linkedin}
+                                  onChange={(e) => handleChange("linkedin", e.target.value)}
+                                  className="p-5 text-[#00103280]"
+                                  required
+                                />
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] cursor-pointer">
+                                      {domain}
+                                      <IoIosArrowDown className="mt-1" />
+                                    </button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
+                                    {domainOptions.map((item) => (
+                                      <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
+                                        {item}
+                                      </DropdownMenuItem>
+                                    ))}
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                                {domain === "Other" && (
+                                  <Input
+                                    type="text"
+                                    placeholder="Describe your domain"
+                                    value={domainDescription}
+                                    onChange={(e) => handleChange("domainDescription", e.target.value)}
+                                    className="p-5 text-[#00103280]"
+                                    required
+                                  />
+                                )}
+                                <Input
+                                  type="text"
+                                  placeholder="Referral Code (optional)"
+                                  value={referralCode}
+                                  onChange={(e) => handleChange("referralCode", e.target.value)}
+                                  className="p-5 text-[#00103280]"
+                                />
+                                {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
+                              </>
+                            )
+                          ) : role === "startup" ? (
                             <>
-                              {/* DOMAIN for Freelancer */}
+                              <div>
+                                <Calendar2 initialDate={foundedOn} onChange={(date) => handleChange("foundedOn", date)} />
+                              </div>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] cursor-pointer">
+                                    {startupBusinessType}
+                                    <IoIosArrowDown className="mt-1" />
+                                  </button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
+                                  {startupBusinessOptions.map((item) => (
+                                    <DropdownMenuItem key={item} onClick={() => handleChange("startupBusinessType", item)}>
+                                      {item}
+                                    </DropdownMenuItem>
+                                  ))}
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+
                               <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
                                   <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280] cursor-pointer">
@@ -352,94 +524,26 @@ const PortalDetailsSec = () => {
                                 </DropdownMenuContent>
                               </DropdownMenu>
 
-                              {/* Domain Description for Freelancer if Other is selected */}
                               {domain === "Other" && (
                                 <Input
                                   type="text"
                                   placeholder="Describe your domain"
                                   value={domainDescription}
                                   onChange={(e) => handleChange("domainDescription", e.target.value)}
-                                  className="p-5  text-[#00103280]"
+                                  className="p-5 text-[#00103280]"
                                   required
                                 />
                               )}
 
-                              {/* Referral */}
                               <Input
                                 type="text"
                                 placeholder="Referral Code (optional)"
                                 value={referralCode}
                                 onChange={(e) => handleChange("referralCode", e.target.value)}
-                                className="p-5  text-[#00103280]"
+                                className="p-5 text-[#00103280]"
                               />
 
-                              {/* Profile upload for Freelancer */}
-                              {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
-                            </>
-                          ) : serviceType === "Company" ? (
-                            <>
-                              {/* Company: founding date */}
-                              <div>
-                                <Calendar2 initialDate={foundedOn} onChange={(date) => handleChange("foundedOn", date)} />
-                              </div>
-
-                              {/* Company business type instead of LinkedIn */}
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
-                                    {serviceBusinessType}
-                                    <IoIosArrowDown className="mt-1" />
-                                  </button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
-                                  {serviceBusinessOptions.map((item) => (
-                                    <DropdownMenuItem key={item} onClick={() => handleChange("serviceBusinessType", item)}>
-                                      {item}
-                                    </DropdownMenuItem>
-                                  ))}
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-
-                              {/* DOMAIN */}
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
-                                    {domain}
-                                    <IoIosArrowDown className="mt-1" />
-                                  </button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
-                                  {domainOptions.map((item) => (
-                                    <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
-                                      {item}
-                                    </DropdownMenuItem>
-                                  ))}
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-
-                              {/* Domain Description if Other is selected */}
-                              {domain === "Other" && (
-                                <Input
-                                  type="text"
-                                  placeholder="Describe your domain"
-                                  value={domainDescription}
-                                  onChange={(e) => handleChange("domainDescription", e.target.value)}
-                                  className="p-5  text-[#00103280]"
-                                  required
-                                />
-                              )}
-
-                              {/* Referral */}
-                              <Input
-                                type="text"
-                                placeholder="Referral Code (optional)"
-                                value={referralCode}
-                                onChange={(e) => handleChange("referralCode", e.target.value)}
-                                className="p-5  text-[#00103280]"
-                              />
-
-                              {/* Profile upload */}
-                              {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
+                              {renderFileUpload("Pitchdeck Upload", "Upload your Pitch Deck\nPitch Deck must be in pdf format. (Max 10MB)", "application/pdf")}
                             </>
                           ) : (
                             <>
@@ -448,158 +552,55 @@ const PortalDetailsSec = () => {
                                 placeholder="LinkedIn Profile"
                                 value={linkedin}
                                 onChange={(e) => handleChange("linkedin", e.target.value)}
-                                className="p-5  text-[#00103280]"
+                                className="p-5 text-[#00103280]"
                                 required
                               />
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
-                                    {domain}
-                                    <IoIosArrowDown className="mt-1" />
-                                  </button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
-                                  {domainOptions.map((item) => (
-                                    <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
-                                      {item}
-                                    </DropdownMenuItem>
-                                  ))}
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                              {domain === "Other" && (
-                                <Input
-                                  type="text"
-                                  placeholder="Describe your domain"
-                                  value={domainDescription}
-                                  onChange={(e) => handleChange("domainDescription", e.target.value)}
-                                  className="p-5  text-[#00103280]"
-                                  required
-                                />
-                              )}
                               <Input
                                 type="text"
                                 placeholder="Referral Code (optional)"
                                 value={referralCode}
                                 onChange={(e) => handleChange("referralCode", e.target.value)}
-                                className="p-5  text-[#00103280]"
-                              />
-                              {renderFileUpload("Profile Upload", "Upload your business profile\nBusiness profile must be in pdf format. (Max 10MB)", "application/pdf")}
-                            </>
-                          )
-                        ) : role === "startup" ? (
-                          <>
-                            <div>
-                              <Calendar2 initialDate={foundedOn} onChange={(date) => handleChange("foundedOn", date)} />
-                            </div>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
-                                  {startupBusinessType}
-                                  <IoIosArrowDown className="mt-1" />
-                                </button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm ">
-                                {startupBusinessOptions.map((item) => (
-                                  <DropdownMenuItem key={item} onClick={() => handleChange("startupBusinessType", item)}>
-                                    {item}
-                                  </DropdownMenuItem>
-                                ))}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <button className="w-full bg-white border border-[#0010321A] rounded-md px-4 py-2.5 flex justify-between items-center text-[#00103280]  cursor-pointer">
-                                  {domain}
-                                  <IoIosArrowDown className="mt-1" />
-                                </button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="mt-2 w-[var(--radix-dropdown-menu-trigger-width)] bg-white rounded-md shadow-sm">
-                                {domainOptions.map((item) => (
-                                  <DropdownMenuItem key={item} onClick={() => handleChange("domain", item)}>
-                                    {item}
-                                  </DropdownMenuItem>
-                                ))}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            {domain === "Other" && (
-                              <Input
-                                type="text"
-                                placeholder="Describe your domain"
-                                value={domainDescription}
-                                onChange={(e) => handleChange("domainDescription", e.target.value)}
                                 className="p-5 text-[#00103280]"
-                                required
                               />
-                            )}
-
-                            <Input
-                              type="text"
-                              placeholder="Referral Code (optional)"
-                              value={referralCode}
-                              onChange={(e) => handleChange("referralCode", e.target.value)}
-                              className="p-5  text-[#00103280]"
-                            />
-
-                            {renderFileUpload("Pitchdeck Upload", "Upload your Pitch Deck\nPitch Deck must be in pdf format. (Max 10MB)", "application/pdf")}
-                          </>
-                        ) : (
-                          <>
-                            <Input
-                              type="text"
-                              placeholder="LinkedIn Profile"
-                              value={linkedin}
-                              onChange={(e) => handleChange("linkedin", e.target.value)}
-                              className="p-5  text-[#00103280]"
-                              required
-                            />
-                            <Input
-                              type="text"
-                              placeholder="Referral Code (optional)"
-                              value={referralCode}
-                              onChange={(e) => handleChange("referralCode", e.target.value)}
-                              className="p-5  text-[#00103280]"
-                            />
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                      </>
-                    )}
-                  </div>
-
-                  {/* SUBMIT BUTTON */}
-                  <CardFooter className="fixed bottom-0 left-0 w-full p-4 bg-white  lg:relative lg:bg-transparent lg:border-t-0 lg:p-0 lg:mt-auto lg:z-10">
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-[#001032]" 
-                      disabled={isUploading || (role !== "investor" && !uploadedUrl) || isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <div className="flex items-center gap-2">
-                          <div className="w-4 h-4   rounded-full animate-spin"></div>
-                          Processing...
-                        </div>
-                      ) : isUploading ? (
-                        "Uploading File..."
-                      ) : (role !== "investor" && !uploadedUrl) ? (
-                        " Continue"
+                            </>
+                          )}
+                        </>
                       ) : (
-                        "Continue"
+                        <>
+                        </>
                       )}
-                    </Button>
-                  </CardFooter>
-                </form>
-              </CardContent>
+                    </div>
 
-            </Card>
+                    {/* SUBMIT BUTTON */}
+                    <CardFooter className="fixed bottom-0 left-0 w-full p-4 bg-white lg:relative lg:bg-transparent lg:border-t-0 lg:p-0 lg:mt-auto lg:z-10">
+                      <Button
+                        type="submit"
+                        className="w-full bg-[#001032]"
+                        disabled={isUploading || (role !== "investor" && !uploadedUrl) || isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-4 h-4 rounded-full animate-spin"></div>
+                            Processing...
+                          </div>
+                        ) : isUploading ? (
+                          "Uploading File..."
+                        ) : (role !== "investor" && !uploadedUrl) ? (
+                          " Continue"
+                        ) : (
+                          "Continue"
+                        )}
+                      </Button>
+                    </CardFooter>
+                  </form>
+                </CardContent>
+
+              </Card>
+            </div>
           </div>
+
         </div>
-
       </div>
-
     </div>
   );
 };

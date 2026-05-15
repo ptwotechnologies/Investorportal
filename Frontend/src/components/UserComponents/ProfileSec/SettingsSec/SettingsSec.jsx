@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { FiEdit2 } from "react-icons/fi";
 import { TfiList } from "react-icons/tfi";
 import { HiMiniLink } from "react-icons/hi2";
@@ -12,6 +12,7 @@ const SettingsSec = () => {
 
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [hasChanged, setHasChanged] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -157,19 +158,27 @@ const SettingsSec = () => {
                   <div className="flex items-center gap-3">
                     {editingField === "password" ? (
                     <>
-                      <input
-                        type="password"
-                        placeholder="New password"
-                        value={formData.password}
-                        onChange={(e) => {
-                          setFormData({
-                            ...formData,
-                            password: e.target.value,
-                          });
-                          setHasChanged(true);
-                        }}
-                        className="border rounded px-2 py-1 text-sm w-32 md:w-auto"
-                      />
+                      <div className="relative flex items-center">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="New password"
+                          value={formData.password}
+                          onChange={(e) => {
+                            setFormData({
+                              ...formData,
+                              password: e.target.value,
+                            });
+                            setHasChanged(true);
+                          }}
+                          className="border rounded px-2 py-1 pr-8 text-sm w-32 md:w-auto"
+                        />
+                        <div 
+                          className="absolute right-2 cursor-pointer text-gray-500 hover:text-gray-700"
+                          onClick={() => setShowPassword(!showPassword)}
+                        >
+                          {showPassword ? <FaEye size={14} /> : <FaEyeSlash size={14} />}
+                        </div>
+                      </div>
                        <button
                           className="bg-white text-sm border border-[#001032] px-3 py-1 rounded-sm"
                           onClick={() => handleSave("password")}

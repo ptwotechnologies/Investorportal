@@ -336,11 +336,11 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-[540px]  overflow-hidden relative">
+    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] h-[540px]  overflow-hidden relative">
       <div id="recaptcha-container"></div>
 
       {/* ── Left Column: Stats & Deals ── */}
-      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 max-h-[610px] ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
+      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 max-h-[610px] xl:max-h-full ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
         <div className="grid grid-cols-2 gap-4">
           <StatCard label="Total Documents" value={deals.length} bgColor="bg-[#D8E1F0]" />
           <StatCard label="Pending Signatures" value={deals.filter(d => d.status === 'Approved').length} bgColor="bg-[#D8D6F8]" />

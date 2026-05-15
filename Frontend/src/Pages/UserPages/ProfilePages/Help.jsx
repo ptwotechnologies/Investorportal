@@ -6,21 +6,19 @@ import React, { useState } from 'react'
 const Help = () => {
     const [isOpen, setIsOpen] = useState(true);
   return (
-   <div className="lg:bg-gray-100 lg:h-screen overflow-hidden">
-      <div className="lg:flex lg:h-full">
-        {/* Sidebar */}
-        <div className={`w-[20%] hidden lg:block ${isOpen ? 'w-[20%]' : 'w-[0%]'} transition-all duration-300`}>
-          <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-        </div>
-
-        {/* Mobile Nav */}
-        <div className="lg:hidden fixed top-0 z-50 w-full ">
-          <Mobile/>
-        </div>
-
-        {/* Main Section */}
-        <div className={`lg:w-[80%] ${isOpen ? 'lg:w-[80%]' : 'lg:w-[360%]'} transition-all duration-300 mt-20 lg:mt-0 h-full overflow-hidden`}>
-          <HelpSec />
+    <div className='bg-gray-100 min-h-screen'>
+      <div className='max-w-[1600px] mx-auto w-full min-h-screen'>
+        <div className='lg:flex min-h-screen'>
+          {/* Sidebar placeholder matches actual sidebar width */}
+          <div className={`${isOpen ? 'w-[18.5rem]' : 'w-16'} hidden lg:block transition-all duration-300 shrink-0`}>
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen}/>
+          </div>
+          <div className='lg:hidden fixed top-0 z-50 w-full left-0'>
+            <Mobile/>
+          </div>
+          <div className='flex-1 transition-all duration-300 mt-20 lg:mt-0 px-0 xl:px-4 lg:min-h-screen'>
+            <HelpSec />
+          </div>
         </div>
       </div>
     </div>

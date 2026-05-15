@@ -75,102 +75,103 @@ const LogicSec1 = () => {
   };
 
   return (
-    <div >
-      <div className="flex lg:justify-between items-center   lg:min-h-dvh  ">
-        <div id="left" className=" w-[50%] hidden lg:block mx-auto  ">
-         <div className="flex flex-col justify-between items-center gap-y-25">
-           <div>
-            <img src={logo} alt="Logo" className=" w-100 " />
-          <p className=" text-[#001032] text-xl w-full  ">Allows you to get funding,</p>
-          <p className=" text-[#001032] text-xl   ">resources and investor connect</p>
+    <div className=''>
+      <div className="max-w-[1600px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0"> 
+        <div className="flex lg:justify-between items-center lg:min-h-dvh">
+          <div id="left" className="w-[50%] hidden lg:block mx-auto">
+            <div className="flex flex-col justify-between items-center gap-y-25">
+              <div>
+                <img src={logo} alt="Logo" className="w-100" />
+                <p className="text-[#001032] text-xl w-full">Allows you to get funding,</p>
+                <p className="text-[#001032] text-xl">resources and investor connect</p>
+              </div>
+              <div>
+                <p className="text-lg w-full text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.</p>
+              </div>
+            </div>
           </div>
-          <div >
-            <p className="  text-lg w-full  text-[#000000] relative top-45" >Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.</p>
-          </div>
-         </div>
-        </div>
-        <div id="right" className="lg:w-[50%] w-full  lg:px-10 lg:py-5 text-center ">
-          <div className="lg:bg-[#001032]   lg:p-3 w-full lg:rounded-lg  ">
-            <Card className="w-full     mx-auto rounded-lg   lg:h-auto h-screen ">
-              <CardHeader>
-                <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto lg:my-12 my-7" />
-                </CardTitle>
-                <CardDescription className=" text-[#001032] text-sm lg:text-sm  my-5 ">
-                  Sign Up to explore the tools and resources of the portal
-                </CardDescription>
-                <CardAction></CardAction>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleLogin}>
-                  <div className="flex flex-col gap-6">
-                    <div className="grid gap-2 ">
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="Email or Phone"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        disabled={loading} // NEW: Disable when loading
-                        className="p-5  text-[#00103280]"
-                      />
+          <div id="right" className="lg:w-[50%] w-full lg:px-10 lg:py-5 text-center">
+            <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
+              <Card className="w-full mx-auto rounded-lg lg:h-auto h-screen">
+                <CardHeader>
+                  <CardTitle>
+                    <img src={logo} alt="Logo" className="lg:w-55 w-45 mx-auto lg:my-12 my-7" />
+                  </CardTitle>
+                  <CardDescription className="text-[#001032] text-sm lg:text-sm my-5">
+                    Sign Up to explore the tools and resources of the portal
+                  </CardDescription>
+                  <CardAction></CardAction>
+                </CardHeader>
+                <CardContent>
+                  <form onSubmit={handleLogin}>
+                    <div className="flex flex-col gap-6">
+                      <div className="grid gap-2">
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="Email or Phone"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          disabled={loading}
+                          className="p-5 text-[#00103280]"
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="Password"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          disabled={loading}
+                          className="p-5 text-[#00103280]"
+                        />
+                      </div>
+                      <div className="text-start text-xs text-[#00103280] leading-5 lg:leading-7 tracking-wide lg:w-[90%]">
+                        <p className="hidden lg:block">People who use our service may have uploaded your contact details and information to Instagram. Learn More</p>
+                        <p className="lg:hidden">Secure access to your account. All data and activity are protected.<span className="underline"> Learn More</span> </p>
+                        <p className="lg:hidden mt-3">By signing up, you agree to our Terms , Privacy Policy and Cookies Policy .</p>
+                      </div>
                     </div>
-                    <div className="grid gap-2">
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={loading} // NEW: Disable when loading
-                        className="p-5  text-[#00103280]"
-                      />
-                    </div>
-                    <div className="text-start text-xs text-[#00103280] leading-5 lg:leading-7 tracking-wide lg:w-[90%]">
-                      <p className="hidden lg:block">People who use our service may have uploaded your contact details and information to Instagram. Learn More</p>
-                      <p className="lg:hidden">Secure access to your account. All data and activity are protected.<span className="underline"> Learn More</span> </p>
-                      <p className="lg:hidden mt-3">By signing up, you agree to our Terms , Privacy Policy and Cookies Policy .</p>
-                    </div>
-                  </div>
 
-                  <CardFooter className="flex-col gap-2 mt-4  bottom-0 px-0  w-full lg:static">
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-[#001032] my-2 relative" 
-                      disabled={loading} // NEW: Disable when loading
-                    >
-                      {loading ? ( // NEW: Show loading spinner
-                        <div className="flex items-center justify-center gap-2">
-                          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                          <span>Logging in...</span>
-                        </div>
-                      ) : (
-                        "Log in"
-                      )}
-                    </Button>
-                    <Link to="/selectPortal" className="w-full">
-                      <Button className="w-full bg-[#001032]" disabled={loading}>
-                        Sign up
-                      </Button>
-                    </Link>
-                    <div className="fle w-full text-end">
-                      <Link
-                        to="/passwordreset"
-                        className="ml-auto inline-block text-sm underline-offset-4  hover:underline w-full text-[#001032CC]  "
+                    <CardFooter className="flex-col gap-2 mt-4 bottom-0 px-0 w-full lg:static">
+                      <Button
+                        type="submit"
+                        className="w-full bg-[#001032] my-2 relative"
+                        disabled={loading}
                       >
-                        Forgot password?
+                        {loading ? (
+                          <div className="flex items-center justify-center gap-2">
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                            <span>Logging in...</span>
+                          </div>
+                        ) : (
+                          "Log in"
+                        )}
+                      </Button>
+                      <Link to="/selectPortal" className="w-full">
+                        <Button className="w-full bg-[#001032]" disabled={loading}>
+                          Sign up
+                        </Button>
                       </Link>
-                    </div>
-                  </CardFooter>
-                </form>
-              </CardContent>
-            </Card>
+                      <div className="fle w-full text-end">
+                        <Link
+                          to="/passwordreset"
+                          className="ml-auto inline-block text-sm underline-offset-4 hover:underline w-full text-[#001032CC]"
+                        >
+                          Forgot password?
+                        </Link>
+                      </div>
+                    </CardFooter>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   )
 }

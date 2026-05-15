@@ -359,7 +359,7 @@ const Bottom = ({
     <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF]">
       
       {/* ── LEFT COLUMN ── */}
-      <div className={`flex-1 space-y-4 max-h-[630px] overflow-y-auto scrollbar-hide p-2 ${rightPanelState !== 'none' ? 'hidden lg:block' : 'block'}`}>
+      <div className={`flex-1 space-y-4 max-h-[630px] xl:max-h-full overflow-y-auto scrollbar-hide p-2 ${rightPanelState !== 'none' ? 'hidden lg:block' : 'block'}`}>
         
         {/* Summary Cards Grid */} 
         <div className="grid grid-cols-2 gap-4">
@@ -472,7 +472,7 @@ const Bottom = ({
       {/* ── RIGHT COLUMN ── */}
       <div className={`lg:w-[450px] xl:w-[550px] mt-5 lg:mt-auto flex flex-col ${rightPanelState === 'none' ? 'hidden lg:block' : 'block'}`}>
         
-        <div className={`transition-all duration-300 lg:h-[630px]  h-[540px] flex flex-col relative overflow-hidden lg:px-2 p-1
+        <div className={`transition-all duration-300 lg:h-[630px] xl:min-h-[85vh]  h-[540px] flex flex-col relative overflow-hidden lg:px-2 p-1
           ${(rightPanelState !== 'overview' && rightPanelState !== 'none' && rightPanelState !== 'create') 
             ? 'bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 lg:m-2 m-1 lg:p-3 p-2 rounded-2xl' 
             : 'bg-transparent'}`}>
@@ -675,7 +675,18 @@ const Bottom = ({
               <div className="flex-1 overflow-y-auto scrollbar-hide p-2 relative space-y-4">
                 {!isEditing && (
                   <SectionCard title="Deal Strength" showDot>
-                    <p className="text-xs text-[#585858] mb-4 tracking-wide">{selectedProject.strength || "High likelihood of successful closure"}</p>
+                    <div className="mb-4">
+                      <div className="flex justify-between items-center mb-1.5">
+                        <p className="text-xs text-[#585858] tracking-wide">{selectedProject.strength || "High likelihood of successful closure"}</p>
+                        <span className="text-[10px] font-bold text-[#59549F]">85%</span>
+                      </div>
+                      <div className="w-[65%] h-2 bg-gray-100 rounded-full overflow-hidden border border-gray-100 shadow-inner">
+                        <div 
+                          className="h-full bg-[#007832] rounded-full transition-all duration-1000 ease-out"
+                          style={{ width: '85%' }}
+                        ></div>
+                      </div>
+                    </div>
                     <ul className="space-y-2">
                       {(selectedProject.strengthPoints || ["Fast response time", "Clear milestone breakdown", "Competitive pricing"]).map((pt, i) => (
                         <li key={i} className="flex items-center gap-2 text-xs text-[#000000]">

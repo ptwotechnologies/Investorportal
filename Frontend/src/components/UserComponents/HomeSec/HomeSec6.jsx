@@ -1,5 +1,6 @@
 import React from "react";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { HiOutlineRocketLaunch, HiOutlineBanknotes, HiOutlineUserGroup } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 
 const HomeSec6 = () => {
@@ -41,7 +42,9 @@ const HomeSec6 = () => {
           >
             <div className="bg-[#001032] rounded-sm p-6 w-full">
               <div className="flex justify-start items-center py-4 gap-4 ">
-                <div className="bg-[#FFFFFF] w-15 h-15"></div>
+                <div className="bg-[#FFFFFF] w-14 h-14 flex items-center justify-center rounded-sm">
+                  <HiOutlineRocketLaunch size={35} className="text-[#001032]" />
+                </div>
                 <h1 className="text-2xl  ">Startup</h1>
               </div>
               <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
@@ -77,7 +80,9 @@ const HomeSec6 = () => {
             </div>
             <div className="bg-[#616B80] rounded-sm p-6">
               <div className="flex justify-start items-center py-4 gap-4 ">
-                <div className="bg-[#FFFFFF] w-15 h-15"></div>
+                <div className="bg-[#FFFFFF] w-14 h-14 flex items-center justify-center rounded-sm">
+                  <HiOutlineBanknotes size={35} className="text-[#616B80]" />
+                </div>
                 <h1 className="text-2xl ">Investor</h1>
               </div>
               <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
@@ -112,7 +117,9 @@ const HomeSec6 = () => {
             </div>
             <div className="bg-[#002A30CC] rounded-sm p-6">
               <div className="flex justify-start items-center py-4 gap-4 ">
-                <div className="bg-[#FFFFFF] w-15 h-15"></div>
+                <div className="bg-[#FFFFFF] w-14 h-14 flex items-center justify-center rounded-sm">
+                  <HiOutlineUserGroup size={35} className="text-[#002A30CC]" />
+                </div>
                 <h1 className="text-2xl ">Service Professionals</h1>
               </div>
               <h1 className="text-lg leading-6 tracking-wide py-4 font-light">
@@ -172,7 +179,7 @@ const HomeSec6 = () => {
           </div>
 
           <div className="bg-[#616B80] rounded-sm p-3 px-4 w-full">
-            <h1 className="text-xl ">I’m a investor</h1>
+            <h1 className="text-xl ">I’m an investor</h1>
             <h1 className="text-sm leading-6 tracking-wide py-2  pt-4 ">
               Create your investor account.
             </h1>

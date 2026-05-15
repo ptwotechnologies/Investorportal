@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { HiOutlineUser, HiOutlineBuildingOffice2, HiOutlineAcademicCap } from "react-icons/hi2";
+import { FaHandshake } from "react-icons/fa";
 
 const ServiceProfessionalSec6 = () => {
   const scrollRef = useRef(null);
@@ -17,29 +19,29 @@ const ServiceProfessionalSec6 = () => {
       paragraph: "Early-career freelancers who want predictable projects, quick payments, and vetted startup clients",
       company: "Freelancers",
       phonepara: "Professionals who deliver clarity, strategy, design, tech or support that early-stage founders need",
-      phonecompany: "Consultants & Creators"
-
+      phonecompany: "Consultants & Creators",
+      icon: HiOutlineUser
     },
     {
       paragraph: "Boutique agencies seeking founders with stage-fit budgets, repeatable scopes, and clear expectations",
       company: "Agencies",
       phonepara: "Experts who help founders scale through execution, mentoring and hands-on problem solving",
-      phonecompany: "Operators & Builders"
-
+      phonecompany: "Operators & Builders",
+      icon: HiOutlineBuildingOffice2
     },
     {
       paragraph: "Specialist consultants who deliver high-impact outcomes — legal, finance, growth, product and design experts",
       company: "Specialists",
       phonepara: "Experts who help founders scale through execution, mentoring and hands-on problem solving",
-      phonecompany: "Operators & Builders"
-
+      phonecompany: "Operators & Builders",
+      icon: HiOutlineAcademicCap
     },
     {
       paragraph: "Platform partners tools and services that complement founder’s needs, integrations and partnerships welcome",
       company: "Partners",
       phonepara: "Experts who help founders scale through execution, mentoring and hands-on problem solving",
-      phonecompany: "Operators & Builders"
-
+      phonecompany: "Operators & Builders",
+      icon: FaHandshake
     },
 
   ]
@@ -68,8 +70,8 @@ const ServiceProfessionalSec6 = () => {
   }, [])
 
   return (
-    <div className='lg:mt-8 mt-16 px-3' >
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0">
+    <div className='lg:my-18 mt-16 px-3 ' >
+      <div className="max-w-[1500px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0">
         <h1 className='text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start'>Who is this platform for?</h1>
         <div className="relative">
           <div
@@ -77,8 +79,8 @@ const ServiceProfessionalSec6 = () => {
             onScroll={handleScroll}
             className="flex overflow-x-scroll scrollbar-hide lg:px-10 pt-8 gap-4 lg:gap-5 text-[#001032] ">
             {cards.map((item, index) => (
-              <div key={index} className="w-full lg:w-[30%] h-fit shrink-0 lg:p-4 lg:mx-2">
-                <div className='w-full h-full lg:gap-10 border border-[#00103280] lg:rounded-2xl lg:shadow-lg lg:p-3 p-5 px-7 rounded-sm shadow-lg'>
+              <div key={index} className="w-full lg:w-[30%] h-auto shrink-0 lg:p-4 lg:mx-2">
+                <div className='w-full h-full min-h-[200px] lg:min-h-0 lg:gap-10 border border-[#00103280] lg:rounded-2xl lg:shadow-lg lg:p-3 p-5 px-7 rounded-sm shadow-lg flex flex-col justify-between'>
                   <p className='hidden lg:block text-[#001032B2] text-md leading-9 tracking-wider'>{item.paragraph}</p>
                   <p className='lg:hidden mb-30 text-[#001032B2] text-md leading-8 tracking-wider'>{item.phonepara}</p>
                   <div className='flex justify-between items-center lg:mt-20 mt-5' >
@@ -90,7 +92,9 @@ const ServiceProfessionalSec6 = () => {
                     </div>
                     <div className='flex justify-center items-center gap-3'>
                       <div className='w-0.5 h-10 bg-[#D9D9D9] '></div>
-                      <div className='w-[50px] h-[50px] rounded-full lg:bg-[#001032] bg-[#00000033]'></div>
+                      <div className='w-[50px] h-[50px] rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center'>
+                        <item.icon size={25} className="text-white" />
+                      </div>
                     </div>
                   </div>
                 </div>

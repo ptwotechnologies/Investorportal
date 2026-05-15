@@ -69,6 +69,19 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const [dealsLoading, setDealsLoading] = useState(!globalDealsCache);
   const [userId, setUserId] = useState(globalUserCache?._id || null);
   const [userRole, setUserRole] = useState(globalUserCache?.role || localStorage.getItem("role"));
+  const [userName, setUserName] = useState(globalUserCache?.displayName || "");
+  const [profilePhoto, setProfilePhoto] = useState(globalUserCache?.profilePhoto || null);
+
+  const getImageUrl = (imageUrl) => {
+    if (!imageUrl) return null;
+    const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
+    const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
+    if (imageUrl.startsWith(privateBaseUrl)) {
+      return imageUrl.replace(privateBaseUrl, publicBaseUrl);
+    }
+    if (imageUrl.startsWith("http")) return imageUrl;
+    return `${serverUrl}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,28 +94,42 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           setHasCreatedDeals(globalDealsCache.length > 0);
           setUserId(globalUserCache._id);
           setUserRole(globalUserCache.role);
+          setUserName(globalUserCache.displayName || "User");
+          setProfilePhoto(globalUserCache.profilePhoto);
           setDealsLoading(false);
           return;
         }
 
-        const [res, userRes] = await Promise.all([
+        const [res, userRes, profileRes] = await Promise.all([
           axios.get(`${serverUrl}/api/deals/my-deals`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
           axios.get(`${serverUrl}/user/me`, {
             headers: { Authorization: `Bearer ${token}` },
-          })
+          }),
+          axios.get(`${serverUrl}/profile/`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }).catch(() => ({ data: {} }))
         ]);
+
+        const profileData = profileRes.data;
+        const displayName = profileData?.companyName || profileData?.name || userRes.data.name || userRes.data.userName || "User";
 
         // Update cache
         globalDealsCache = res.data;
-        globalUserCache = userRes.data;
+        globalUserCache = { 
+          ...userRes.data, 
+          displayName, 
+          profilePhoto: profileData?.profilePhoto 
+        };
         lastFetchTime = Date.now();
 
         setDeals(res.data);
         setHasCreatedDeals(res.data.length > 0);
         setUserId(userRes.data._id);
         setUserRole(userRes.data.role);
+        setUserName(displayName);
+        setProfilePhoto(profileData?.profilePhoto);
       } catch (err) {
         console.error("Error fetching deals count", err);
         setDeals([]);
@@ -200,7 +227,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   }, [location.pathname, isDealRoute]);
 
   return (
-    <div className="fixed top-0 left-0 h-full z-50 overflow-y-auto scrollbar-hide">
+    <div className="sticky top-0 h-screen z-50 overflow-y-auto scrollbar-hide">
       <div className="flex min-h-full w-fit">
         {/* Purple Bar */}
         <div className="w-16 bg-[#D8D6F8] flex flex-col items-center py-4 shrink-0 min-h-full">
@@ -210,7 +237,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
 
         {/* Module Icons */}
-        <div className="flex flex-col items-center flex-1">
+        <div className="flex flex-col items-center ">
           <MdOutlineDashboardCustomize
             className="text-[#59549f] my-4 cursor-pointer"
             size={25}
@@ -284,7 +311,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </Link>
               <Link to="">
                 <RiMoneyDollarCircleLine 
-                  className="text-[#59549f] my-3 cursor-pointer"
+                  className="text-[#59549f] my-2 cursor-pointer"
                   size={28}
                 />
               </Link>
@@ -318,7 +345,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
 
         {/* Bottom Icons (Visual placeholders for icons scrolling together) */}
-        <div className="mt-auto  pb-4 text-gray-300 flex flex-col gap-3 mb-6 items-center">
+        <div className={`${isInvestor ? "mt-9" : "mt-58"}  pb-4 text-gray-300 flex flex-col gap-3  items-center`}>
           <IoSettingsOutline
             size={25}
             className=" text-[#59549f] cursor-pointer"
@@ -328,11 +355,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             size={25}
             className=" text-[#59549f] cursor-pointer"
             onClick={handleToggle}
-          />
-          <PiSignOut
-            size={25}
-            className=" text-[#59549f] cursor-pointer"
-            onClick={handleSignOutClick}
           />
         </div>
       </div>
@@ -496,21 +518,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       {isWorkspaceOpen && (
                         <div className="mt-1 w-full bg-white rounded-xl flex flex-col text-[13px] text-gray-600 p-2 pl-4 border-l-2 border-gray-100">
                           <div
-                            onClick={() => triggerComingSoon("Documents")}
+                            onClick={() => triggerComingSoon("Investor Documents")}
                             className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
                           >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Documents
                           </div>
                           <div
-                            onClick={() => triggerComingSoon("Meetings")}
+                            onClick={() => triggerComingSoon("Investor Meetings")}
                             className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
                           >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                             Meetings
                           </div>
                           <div
-                            onClick={() => triggerComingSoon("Alerts & risk")}
+                            onClick={() => triggerComingSoon("Investor Alerts & risk")}
                             className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer"
                           >
                             <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
@@ -681,7 +703,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </div>
 
                 {isDealsOpen && (
-                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
+                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2  border-l-2 border-gray-100">
                     <NavLink
                       to="/deal/activedeals"
                       className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
@@ -752,7 +774,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               {isStartup && (
                 <>
                   <div
-                    onClick={() => triggerComingSoon("Role Switching")}
+                    onClick={() => triggerComingSoon("Switch to Professional")}
                     className="px-4 mx-3 my-2 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
                   >
                     <div className="flex flex-col">
@@ -764,33 +786,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
                     </div>
                   </div>
-
-                  {/* Premium Upgrade Card */}
-                  <div className="mx-3 mt-4 p-4 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" >
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-8 h-8 bg-[#59549F] rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
-                        <FaCrown size={18} />
-                      </div>
-                      <div className="text-left">
-                        <h2 className="text-[12px] font-semibold text-[#59549f]">Upgrade to Premium</h2>
-                        <p className="text-[10px] text-gray-500 leading-tight">Unlock powerful tools to grow your startup faster.</p>
-                      </div>
-                    </div>
-                    <button className="w-full py-1 bg-[#59549F] text-white rounded-lg text-[12px] font-semibold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
-                      View Plans
-                      <FaArrowRight size={12} />
-                    </button>
-                    {/* Decorative background element */}
-                    <div className="absolute bottom-[-10px] right-[-10px] opacity-10 pointer-events-none transform rotate-[-12deg]">
-                       <SiSimpleanalytics size={80} />
-                    </div>
-                  </div>
                 </>
               )}
 
               {isServiceProfessional && (
                 <div
-                  onClick={() => triggerComingSoon("Role Switching")}
+                  onClick={() => triggerComingSoon("Switch to Startup")}
                   className="px-4 mx-3 my-2 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
                 >
                   <div className="flex flex-col">
@@ -801,42 +802,102 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-300"></div>
                     <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
                   </div>
+                </div>              
+              )}
+
+              {/* Premium Upgrade Card - Only for Startup and Service Professional */}
+              {(isStartup || isServiceProfessional) && (
+                <div className="mx-3 mt-4 p-4 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" onClick={() => triggerComingSoon("Premium Infrastructure")}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-8 h-8 bg-[#59549F] rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
+                      <FaCrown size={18} />
+                    </div>
+                    <div className="text-left">
+                      <h2 className="text-[12px] font-semibold text-[#59549f]">Upgrade to Premium</h2>
+                      <p className="text-[9px] text-gray-500 leading-tight">Unlock powerful tools to grow your startup faster.</p>
+                    </div>
+                  </div>
+                  <button className="w-full py-1 bg-[#59549F] text-white rounded-lg text-[12px] font-semibold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
+                    View Plans
+                    <FaArrowRight size={12} />
+                  </button>
+                  {/* Decorative background element */}
+                  <div className="absolute bottom-[-10px] right-[-10px] opacity-10 pointer-events-none">
+                     <SiSimpleanalytics size={80} />
+                  </div>
                 </div>
               )}
             </ul>
-          </div>
 
-          <div className="mt-8 mb-10">
-            <ul>
-              <NavLink
-                to="/settings"
-                className={({ isActive }) =>
-                  `block my-3  text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
-                  }`
-                }
-              >
-                Settings
-              </NavLink>
+            <div className="mt-8 mb-2 px-4">
+              <ul>
+                <NavLink
+                  to="/settings"
+                  className={({ isActive }) =>
+                    `block my-3 text-[17px] px-4 rounded-md ${
+                      isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                    }`
+                  }
+                >
+                  Settings
+                </NavLink>
 
-              <NavLink
-                to="/help"
-                className={({ isActive }) =>
-                  `block my-3  text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
-                  }`
-                }
-              >
-                Help
-              </NavLink>
+                <NavLink
+                  to="/help"
+                  className={({ isActive }) =>
+                    `block my-3 text-[17px] px-4 rounded-md ${
+                      isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                    }`
+                  }
+                >
+                  Help
+                </NavLink>
 
-              <li
-                onClick={handleSignOutClick}
-                className=" text-[17px] px-4 mx-3 rounded-md cursor-pointer"
-              >
-                Sign out
-              </li>
-            </ul>
+                <hr />
+
+                {/* User Profile Section */}
+                <div id="user-profile" className="mt-2 ">
+                  {showSignoutDialog && (
+                    <div className="flex flex-col gap-2 mb-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+                      <button
+                        type="button"
+                        className="w-full bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-bold py-1.5 rounded-lg text-sm" 
+                        onClick={handleConfirmSignOut}
+                      >
+                        Sign out
+                      </button>
+                      <button 
+                        className="w-full text-gray-500 font-medium py-1.5 text-sm bg-gray-100 rounded-lg text-center"
+                        onClick={() => setShowSignoutDialog(false)}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  )}
+
+                  <div 
+                    onClick={() => setShowSignoutDialog(!showSignoutDialog)}
+                    className="flex items-center gap-3  p-2 bg-gray-50 rounded-xl cursor-pointer border hover:bg-gray-100 transition-colors"
+                  >
+                    <div className="w-8 h-8 rounded-full bg-[#59549F] flex items-center justify-center text-white text-xs font-bold shrink-0 overflow-hidden">
+                      {profilePhoto ? (
+                        <img src={getImageUrl(profilePhoto)} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        userName ? userName.charAt(0).toUpperCase() : "U"
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[14px] font-semibold text-[#001032] truncate">{userName}</p>
+                      <p className="text-[10px] text-gray-500 capitalize">{userRole?.replace("_", " ")}</p>
+                    </div>
+                    <FaChevronDown 
+                      className={`text-gray-400 transition-transform duration-200 ${showSignoutDialog ? "rotate-180" : ""}`} 
+                      size={14} 
+                    />
+                  </div>
+                </div>
+              </ul>
+            </div>
           </div>
         </div>
       )}
@@ -868,27 +929,6 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
       )}
 
-      {/* Sign Out Dialog Overlay */}
-      {showSignoutDialog && (
-        <div className="fixed inset-0 bg-black/20 z-[70] flex items-center justify-center" onClick={() => setShowSignoutDialog(false)}>
-          <div className="bg-white border border-gray-300 shadow-xl rounded-md w-60 flex flex-col items-center p-2" onClick={e => e.stopPropagation()}>
-            <p className="py-2 text-sm text-[#001426]">Are you sure you want to sign out?</p>
-            <button
-              onClick={handleConfirmSignOut}
-              className="w-full py-2 border-b border-gray-200 hover:bg-gray-100 text-[#001032] font-semibold"
-            >
-              Yes, Sign out
-            </button>
-            <button
-              onClick={() => setShowSignoutDialog(false)}
-              className="w-full py-2 hover:bg-gray-100 text-[#001032]"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
-
       {showComingSoon && (
         <ComingSoonModal
           onClose={() => setShowComingSoon(false)}
@@ -900,3 +940,4 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 };
 
 export default Sidebar;
+

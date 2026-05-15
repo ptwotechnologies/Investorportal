@@ -4,7 +4,7 @@ const ServiceProfessionalSec3 = () => {
   return (
     <>
     <div className="pt-15 hidden lg:block">
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0 py-10">
+      <div className="max-w-[1500px] mx-auto w-full px-4 lg:!px-10 min-[1500px]:!px-0 py-10"> 
         <h1 className="text-[#001032CC] text-5xl font-medium">
           Gaps in the Market
         </h1>
@@ -45,7 +45,7 @@ const ServiceProfessionalSec3 = () => {
 
             </ul>
           </div>
-          <div id="right" className="w-[60%] grid grid-cols-2 gap-8 ">
+          <div id="right" className="lg:w-[60%]  grid grid-cols-2 gap-8 ">
             <div className="w-100 h-60 bg-[#EEEEEE] rounded-sm"></div>
             <div className="w-100 h-60 bg-[#002A308A] rounded-sm"></div>
             <div className="w-100 h-60 bg-[#0010329E] rounded-sm"></div>

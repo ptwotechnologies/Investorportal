@@ -11,7 +11,7 @@ const AboutSec5 = () => {
   };
   return (
     <div className=' lg:p-12 w-full'>
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-8">
+      <div className="max-w-[1500px] mx-auto w-full  lg:px-8">
         <div className='text-4xl lg:text-5xl text-[#001032]  lg:mb-30 font-medium lg:font-normal lg:leading-14 tracking-wide p-5'>
           <h1>Who’s here and what matters?</h1>
         </div>

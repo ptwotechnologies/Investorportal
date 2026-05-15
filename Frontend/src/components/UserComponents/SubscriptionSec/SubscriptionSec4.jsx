@@ -51,38 +51,15 @@ const SubscriptionSec4 = ({ urlTab }) => {
   
 // };
   return (
-     <>
-    <div className="container mx-auto lg:px-10 lg:mt-25 ">
-      <h1 className='text-3xl lg:text-5xl text-[#001032] font-medium lg:mb-5 mb-2 lg:pt-0 px-4 lg:px-5 '>Business Refinement Program</h1>
+    <div className="max-w-[1500px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0 lg:mt-25">
+      <h1 className='text-3xl lg:text-5xl text-[#001032] font-medium lg:mb-5 mb-2 lg:pt-0 px-4 lg:px-5'>Business Refinement Program</h1>
       <p className='text-lg lg:text-2xl text-[#001032] font-light px-4 lg:px-5 mb-6 lg:mb-10 lg:w-[70%]'>Refine your startup, prepare it for scaling and funding. Access is limited to startups approved through advisors or evaluation</p>
-        <p className='lg:hidden border mx-4 p-1 px-7 text-center rounded-full border-[#000000] my-4 leading-5'>Choose your refinement level based on your stage</p>
-      {/* <div className='hidden lg:block px-5'>
-        <div className="flex justify-between items-center flex-wrap  bg-[#B5B5B5] rounded-full lg:my-5 lg:mb-15 p-1 ">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            className={`px-4 py-2 rounded text-2xl ${activeTab === tab.id ? 'bg-[#001426] text-white rounded-full p-2 px-10' : ' text-white hover:bg-gray-300 hover:rounded-full hover:p-2 hover:px-10'}`}
-            onClick={() => setActiveTab(tab.id)}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-      </div>
+      <p className='lg:hidden border mx-4 p-1 px-7 text-center rounded-full border-[#000000] my-4 leading-5'>Choose your refinement level based on your stage</p>
 
-      <div className='lg:hidden '>
-        <DropDown/>
+      <div>
+        <SubscriptionPlan />
       </div>
-      <div className="hidden lg:block ">
-        {tabContents[activeTab]}
-      </div> */}
-    
-    <div>
-      <SubscriptionPlan/>
     </div>
-
-    </div>
-   </>
   )
 }
 

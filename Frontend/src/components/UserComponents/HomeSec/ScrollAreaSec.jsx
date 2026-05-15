@@ -19,7 +19,7 @@ const ScrollAreaSec = () => {
       <img src="/homepage8.png" alt="" className="w-full h-full rounded-sm" />
         </div>
       {/* <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' />*/}</Link> 
-      <p className='text-xs leading-5 tracking-wide w-[90%] mb-10  font-extralight'>You’re building something real and ready to scale</p>
+      <p className='text-xs leading-4 tracking-wide w-[85%] mb-10 mt-2 font-extralight'>You’re building something real and ready to scale</p>
     </div>
 
     {/* Card 2 */}
@@ -31,7 +31,7 @@ const ScrollAreaSec = () => {
        </div>
       {/* <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' /> */}
       </Link>
-      <p className='text-xs leading-5 tracking-wide w-[90%] mb-10 font-extralight'>You seek refined, investment-ready startup in your space</p>
+      <p className='text-xs leading-4 tracking-wide w-[87%] mb-10 mt-2 font-extralight'>You seek refined, investment-ready startup in your space</p>
     </div>
 
     {/* Card 3 */}
@@ -43,7 +43,7 @@ const ScrollAreaSec = () => {
                 
           </div>
      {/* <IoArrowForwardCircleSharp size={32} className='relative bottom-10 left-44 text-[#B5B6BA] border-2 border-white rounded-full' /> */}</Link>
-      <p className='text-xs leading-5 tracking-wide w-[95%] mb-10  font-extralight'>You want genuine startup leads without paid ads</p>
+      <p className='text-xs leading-4 tracking-wide w-[85%] mb-10 mt-2 font-extralight'>You want genuine startup leads without paid ads</p>
     </div>
 
      {/* Card 4 */}

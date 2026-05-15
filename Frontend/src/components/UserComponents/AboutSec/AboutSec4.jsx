@@ -3,7 +3,7 @@ import React from 'react'
 const AboutSec4 = () => {
   return (
     <div className=' lg:mt-2 lg:p-12'>
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-8">
+      <div className="max-w-[1500px] mx-auto w-full  lg:px-8">
         <div className='w-10 h-10 bg-[#001032]  ml-5 mt-5 lg:hidden'>
         </div>
         <h1 className='lg:hidden text-[#001032] font-medium text-2xl m-5 mb-7'>Life Time Value</h1>

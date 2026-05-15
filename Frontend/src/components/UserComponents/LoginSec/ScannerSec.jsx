@@ -145,59 +145,61 @@ const ScannerSec = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center lg:min-h-dvh  ">
-        <div id="left" className=" w-[40%] hidden lg:block mx-auto ">
-          <div className="flex flex-col justify-between items-center gap-y-25">
-            <div>
-              <img src={logo} alt="Logo" className=" w-100 " />
-              <p className=" text-[#001032] text-xl w-full  ">Allows you to get funding,</p>
-              <p className=" text-#001032] text-xl   ">resources and investor connect</p>
-            </div>
-            <div>
-              <p className="  text-lg w-full  text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.</p>
+      <div className="max-w-[1600px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0">
+        <div className="flex justify-between items-center lg:min-h-dvh">
+          <div id="left" className="w-[40%] hidden lg:block mx-auto">
+            <div className="flex flex-col justify-between items-center gap-y-25">
+              <div>
+                <img src={logo} alt="Logo" className="w-100" />
+                <p className="text-[#001032] text-xl w-full">Allows you to get funding,</p>
+                <p className="text-[#001032] text-xl">resources and investor connect</p>
+              </div>
+              <div>
+                <p className="text-lg w-full text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.</p>
+              </div>
             </div>
           </div>
-        </div>
-        <div id="right" className="lg:w-[50%] lg:px-10 lg:py-3 text-center w-full min-h-screen flex flex-col">
-          <div className="lg:bg-[#001032] lg:p-3 w-full  lg:rounded-lg ">
-            <Card className="relative w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col pb-24 lg:pb-4">
-              <CardHeader>
-                <CardTitle>
-                  <img src={logo} alt="Logo" className="lg:w-55  w-45 mx-auto  my-2" />
-                </CardTitle>
-                <CardDescription className=" mb-1 text-[#001032] rounded-md text-lg lg:text-sm border border-[#001032] mx-auto px-7 py-2">
-                  Secure Onboarding Payment
-                </CardDescription>
+          <div id="right" className="lg:w-[50%] lg:px-10 lg:py-5 text-center w-full">
+            <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
+              <Card className="relative w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col pb-24 lg:pb-4">
+                <CardHeader>
+                  <CardTitle>
+                    <img src={logo} alt="Logo" className="lg:w-55 w-45 mx-auto my-2" />
+                  </CardTitle>
+                  <CardDescription className="mb-1 text-[#001032] rounded-md text-lg lg:text-sm border border-[#001032] mx-auto px-7 py-2">
+                    Secure Onboarding Payment
+                  </CardDescription>
 
-               <CardDescription className=" mb-1 text-[#001032] text-sm lg:text-sm lg:w-[47%] w-[88%] mx-auto mt-3 lg:mt-0 ">
-                  
-                </CardDescription>
-                <CardAction></CardAction>
-              </CardHeader>
-              <CardContent className="flex-grow flex flex-col justify-center">
-                <div className="lg:w-[60%] w-[98%] mx-auto py-10">
-                  You’re one step away from getting started with the <span className="font-medium"> [{displayPlanName}] – ₹{displayAmount?.toLocaleString()}/year. </span> Complete your secure payment to continue.
-                </div>
-                
-              </CardContent>
-              <CardFooter className="fixed bottom-0 left-0 w-full p-4 bg-white  lg:static lg:relative lg:bg-transparent  lg:p-0 lg:mt-auto lg:z-10">
-                <Button 
-                  className="w-full bg-[#001032]" 
-                  onClick={checkoutHandler}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 rounded-full animate-spin"></div>
-                      Processing...
-                    </div>
-                  ) : (
-                    "Continue"
-                  )}
-                </Button>
-              </CardFooter>
+                  <CardDescription className="mb-1 text-[#001032] text-sm lg:text-sm lg:w-[47%] w-[88%] mx-auto mt-3 lg:mt-0">
 
-            </Card>
+                  </CardDescription>
+                  <CardAction></CardAction>
+                </CardHeader>
+                <CardContent className="flex-grow flex flex-col justify-center">
+                  <div className="lg:w-[60%] w-[98%] mx-auto py-10">
+                    You’re one step away from getting started with the <span className="font-medium"> [{displayPlanName}] – ₹{displayAmount?.toLocaleString()}/year. </span> Complete your secure payment to continue.
+                  </div>
+
+                </CardContent>
+                <CardFooter className="fixed bottom-0 left-0 w-full p-4 bg-white lg:static lg:relative lg:bg-transparent lg:px-5 lg:pb-5 lg:mt-auto lg:z-10">
+                  <Button
+                    className="w-full bg-[#001032]"
+                    onClick={checkoutHandler}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 rounded-full animate-spin"></div>
+                        Processing...
+                      </div>
+                    ) : (
+                      "Continue"
+                    )}
+                  </Button>
+                </CardFooter>
+
+              </Card>
+            </div>
           </div>
         </div>
       </div>

@@ -86,7 +86,7 @@ const ServiceProfessionalSec5 = () => {
   return ( 
    <>
     <div className='bg-linear-to-t from-[#002A30] to-[#001032] from-40% text-white lg:mt-25 mt-5 py-7  rounded-sm lg:rounded-none shadow-2xl lg:shadow-none' >
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0">
+      <div className="max-w-[1500px] mx-auto w-full  lg:px-0">
         <h1 className="text-5xl px-8 py-15  hidden lg:block">
           Consultations that move you forward
         </h1>

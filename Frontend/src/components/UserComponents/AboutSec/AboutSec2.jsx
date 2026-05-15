@@ -3,7 +3,7 @@ import React from 'react'
 function AboutSec2() {
   return (
     <div className='lg:bg-[#001032] bg-[#00103247] text-[#000000] lg:text-[white] lg:mt-30 mt-15 lg:rounded-4xl lg:p-10 pb-3'>
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0">
+      <div className="max-w-[1500px] mx-auto w-full lg:px-4 ">
         <div className='flex flex-col lg:flex-row justify-between items-center gap-28'>
           <div id='left' className=' lg:w-[60%] '>
             <div className='w-10 h-10 bg-[#001032]  ml-5 mt-5 lg:hidden'>

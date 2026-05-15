@@ -354,7 +354,7 @@ const Bottom = () => {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-auto overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] h-auto overflow-hidden">
       
       {/* ── Left Column ── */}
       <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) ? 'hidden lg:flex' : 'flex'}`}>

@@ -181,7 +181,7 @@ const DevelopmentContent = ({ isUpgradeFlow }) => {
       title: "Outcome Driven",
       titleBg: "#119BCD",
       titleBg2: "#61C9EF",
-      amount: 19999,
+      amount: 24999,
       amountduration: "/year",
       amountDesc: "Visibility + deal flow enhancement",
       amountButton: "Everything in Access +",
@@ -312,16 +312,17 @@ const DevelopmentContent = ({ isUpgradeFlow }) => {
           className={`grid gap-4 lg:gap-8 w-full justify-center mx-auto ${
             cardsToDisplay.length === 1 ? 'grid-cols-1 max-w-md' : 
             cardsToDisplay.length === 2 ? 'grid-cols-1 md:grid-cols-2 max-w-6xl' : 
-            'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-7xl'
+            'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-[1500px]'
           }`}
         >
           {cardsToDisplay.map((card, idx) => (
             <article
               key={idx}
-              className="lg:w-full w-screen shrink-0 snap-center lg:mr-0 lg:p-6 text-card-foreground"
+              className="w-full shrink-0 snap-center lg:mr-0 lg:p-6 text-card-foreground flex justify-center"
             >
-              <hr className="mx-4 lg:relative lg:bottom-5" />
-              <div className="bg-white py-5 lg:py-6 lg:pb-8 border-2 border-[#00103280] my-4 mx-2 lg:m-1 rounded-sm px-4 lg:px-6 lg:h-full flex flex-col  shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
+              <div className="w-full max-w-[480px]">
+                <hr className="mx-4 lg:relative lg:bottom-5" />
+                <div className="bg-white py-5 lg:py-6 lg:pb-8 border-2 border-[#00103280] my-4 mx-2 lg:m-1 rounded-sm px-4 lg:px-6 lg:h-full flex flex-col shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)]">
                 <div className="lg:mt-1 space-y-1.5">
                   <div
                     style={{
@@ -456,6 +457,7 @@ const DevelopmentContent = ({ isUpgradeFlow }) => {
                       : card.buttonText}
                   </button>
                 </div>
+              </div>
               </div>
             </article>
           ))}

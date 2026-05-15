@@ -932,7 +932,7 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
         <button 
           onClick={handleSubmitDraft}
           disabled={loading}
-          className=" py-1.5 mt-3 lg:mt-4 w-[94%] mx-auto bg-[#D8D6F8] text-[#59549F] rounded-lg hover:bg-[#D8D6F8]/90 transition-all text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-semibold tracking-wider shadow-[inset_0px_0_12px_#00000040] disabled:opacity-50"
+          className="block py-1.5 mt-3 lg:mt-4 w-[94%] mx-auto bg-[#D8D6F8] text-[#59549F] rounded-lg hover:bg-[#D8D6F8]/90 transition-all text-base shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] font-semibold tracking-wider shadow-[inset_0px_0_12px_#00000040] disabled:opacity-50"
         >
           {loading ? "Submitting..." : "Submit Draft"}
         </button>

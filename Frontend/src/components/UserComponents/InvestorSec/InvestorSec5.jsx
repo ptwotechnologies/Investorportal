@@ -78,8 +78,7 @@ const InvestorSec5 = () => {
   return (
    <>
     <div className='bg-linear-to-t from-[#002A30] to-[#001032] from-40% text-white lg:mt-25 mt-5 py-7  rounded-sm lg:rounded-none p-5 shadow-2xl lg:shadow-none' >
-         
-       
+      <div className="max-w-[1500px] mx-auto w-full">
         <h1 className="text-5xl px-8 py-15 font-medium hidden lg:block">
           Consultations that move you forward
         </h1>
@@ -88,7 +87,7 @@ const InvestorSec5 = () => {
           Why investors choose this portal?
         </h1>
        <div className='hidden lg:block'>
-            <div className="grid lg:grid-cols-3 lg:gap-x-30 gap-5 lg:gap-y-30 lg:m-10 lg:mx-25">
+            <div className="grid lg:grid-cols-3 lg:gap-x-30 gap-5 lg:gap-y-30 lg:m-10 lg:!mx-20 min-[1400px]:!mx-0">
           {
             divElements.map((item , index)=>(
                 <div key={index} className="flex">
@@ -108,6 +107,7 @@ const InvestorSec5 = () => {
        
         </div>
        </div>
+      </div>
 
        <div className=' lg:hidden'>
  <div className="grid lg:grid-cols-3 lg:gap-x-70 gap-5 lg:gap-y-30 lg:m-10 lg:mx-32">

@@ -1,4 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
+import { HiOutlineLightBulb, HiOutlineRocketLaunch, HiOutlineBriefcase } from "react-icons/hi2";
+import { FaHandshake } from "react-icons/fa";
 
 const JoinUsSec4 = () => {
   const scrollRef = useRef(null);
@@ -17,21 +19,25 @@ const JoinUsSec4 = () => {
       paragraph:
         "Founders shaping their first version, validating their idea, and defining the right direction for product and funding",
       company: "Early Stage",
+      icon: HiOutlineLightBulb,
     },
     {
       paragraph:
         "Teams preparing their investment story, strengthening traction signals, and building credibility for outreach",
       company: "Pre-seed to Seed",
+      icon: HiOutlineRocketLaunch,
     },
     {
       paragraph:
         "Boutique agencies seeking founders with stage-fit budgets, repeatable scopes, and clear expectations",
       company: "Agencies",
+      icon: HiOutlineBriefcase,
     },
     {
       paragraph:
         "Platform partners tools and services that complement founder’s needs, integrations and partnerships welcome",
       company: "Partners",
+      icon: FaHandshake,
     },
   ];
 
@@ -59,58 +65,58 @@ const JoinUsSec4 = () => {
   }, []);
 
   return (
-    <div className="lg:mt-8 lg:px-10 mt-16 px-3">
-      <h1 className="text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start">
-        Who is this platform for?
-      </h1>
-      <div className="relative">
-        <div
-          ref={scrollRef}
-          onScroll={handleScroll}
-          className="flex overflow-x-scroll scrollbar-hide lg:px-10  pt-8 gap-4 lg:gap-5 text-[#001032] "
-        >
-          {cards.map((item, index) => (
-            <div
-              key={index}
-              className="w-full  lg:w-[30%] h-fit  shrink-0 lg:p-4  lg:mx-2  "
-            >
+    <div className="lg:mt-18 mt-16">
+      <div className="max-w-[1500px] mx-auto w-full lg:!px-10 min-[1500px]:!px-0">
+        <h1 className="text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start">
+          Who is this platform for?
+        </h1>
+        <div className="relative">
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-scroll scrollbar-hide pt-8 gap-4 lg:gap-5 text-[#001032]"
+          >
+            {cards.map((item, index) => (
               <div
-                className=" w-full h-full lg:gap-10  border border-[#00103280] 
-             lg:rounded-2xl lg:shadow-lg lg:p-3 p-5 px-7   rounded-sm shadow-lg"
+                key={index}
+                className="w-full lg:w-[30%] shrink-0 lg:p-4 flex"
               >
-                <p className="  text-[#001032B2] text-md lg:leading-9  leading-8 tracking-wider">
-                  {item.paragraph}
-                </p>
-                
-                <div className=" flex justify-between items-center lg:mt-20 mt-10">
-                  <div className=" lg:text-xl ">
-                    <h1 className="text-md text-[#001032B2]">{item.company}</h1>
-                  </div>
-                  
-                  <div className="flex justify-center items-center gap-3">
-                    <div className="w-0.5 h-10 bg-[#D9D9D9] "></div>
-                    <div className="w-[50px] h-[50px]  rounded-full lg:bg-[#001032] bg-[#00000033]"></div>
+                <div
+                  className="w-full h-full flex flex-col justify-between border border-[#00103280] lg:rounded-2xl lg:shadow-lg lg:p-3 p-5 px-7 rounded-sm shadow-lg"
+                >
+                  <p className="text-[#001032B2] text-md lg:leading-9 leading-8 tracking-wider">
+                    {item.paragraph}
+                  </p>
+
+                  <div className="flex justify-between items-center lg:mt-20 mt-10">
+                    <div className="lg:text-xl">
+                      <h1 className="text-md text-[#001032B2]">{item.company}</h1>
+                    </div>
+
+                    <div className="flex justify-center items-center gap-3">
+                      <div className="w-0.5 h-10 bg-[#D9D9D9]"></div>
+                      <div className="w-[50px] h-[50px] rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center">
+                        {item.icon && <item.icon size={28} className="lg:text-white text-[#001032]" />}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+        <div className="lg:text-center mt-10">
+          <h1
+            className="lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg hidden lg:block"
+          >
+            If your work fits any of these lanes and you want a quieter, more direct way to find serious clients, this portal is for you
+          </h1>
+
+          <p className="text-[#001032] mt-3 p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block">
+            And if you’ve worked with startups before? That’s even better!
+          </p>
         </div>
       </div>
-      <div className="lg:text-center mt-10 ">
-        <h1
-          className=" lg:bg-linear-to-r from-[#001032] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] 
-            lg:text-white p-2 lg:px-10 w-fit lg:mx-auto rounded-3xl lg:text-sm text-lg hidden lg:block"
-        >
-          If your work fits any of these lanes and you want a quieter, more direct way to find serious clients, this portal is for you
-        </h1>
-       
-        <p className="text-[#001032] mt-3  p-2 lg:text-md text-lg pb-15 lg:pb-0 hidden lg:block">
-          And if you’ve worked with startups before? That’s even better!
-        </p>
-        
-      </div>
-      
     </div>
   );
 };

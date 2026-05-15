@@ -100,89 +100,90 @@ const PaymentSuccessSec = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center lg:min-h-dvh">
-        <div id="left" className="w-[40%] hidden lg:block mx-auto">
-          <div className="flex flex-col justify-between items-center gap-y-25">
-            <div>
-              <img src={logo} alt="Logo" className="w-100" />
-              <p className="text-[#001032] text-xl w-full">
-                Allows you to get funding,
-              </p>
-              <p className="text-[#001032] text-xl">
-                resources and investor connect
-              </p>
-            </div>
-            <div>
-              <p className="text-lg w-full text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © norf.kD
-                Technologies Pvt. Ltd.
-              </p>
+      <div className="max-w-[1600px] mx-auto w-full lg:!px-10 min-[1500px]:!px-0">
+        <div className="flex justify-between items-center lg:min-h-dvh">
+          <div id="left" className="w-[40%] hidden lg:block mx-auto">
+            <div className="flex flex-col justify-between items-center gap-y-25">
+              <div>
+                <img src={logo} alt="Logo" className="w-100" />
+                <p className="text-[#001032] text-xl w-full">
+                  Allows you to get funding,
+                </p>
+                <p className="text-[#001032] text-xl">
+                  resources and investor connect
+                </p>
+              </div>
+              <div>
+                <p className="text-lg w-full text-[#000000] relative top-45">
+                  Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div
-          id="right"
-          className="lg:w-[50%]  lg:px-10 lg:py-4 text-center w-full"
-        >
-          <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
-            <Card className="w-full lg:min-h-[600px] mx-auto rounded-lg">
-              <CardHeader>
-                <CardTitle>
-                  <img
-                    src={logo}
-                    alt="Logo"
-                    className="lg:w-45 w-45 mx-auto lg:my-10 my-7"
-                  />
-                </CardTitle>
-                <CardDescription className="mb-1 text-[#001032] text-xs lg:text-sm ">
-                  {roleinvest}
-                  <p className="mt-2 lg:w-[80%]  mx-auto">{statusMessage}</p>
-                  {loading && (
-                    <p className="mt-2 text-yellow-500 ">Processing...</p>
+          <div
+            id="right"
+            className="lg:w-[50%] lg:px-10 lg:py-4 text-center w-full"
+          >
+            <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
+              <Card className="w-full lg:min-h-[600px] mx-auto rounded-lg">
+                <CardHeader>
+                  <CardTitle>
+                    <img
+                      src={logo}
+                      alt="Logo"
+                      className="lg:w-45 w-45 mx-auto lg:my-10 my-7"
+                    />
+                  </CardTitle>
+                  <CardDescription className="mb-1 text-[#001032] text-xs lg:text-sm">
+                    {roleinvest}
+                    <p className="mt-2 lg:w-[80%] mx-auto">{statusMessage}</p>
+                    {loading && (
+                      <p className="mt-2 text-yellow-500">Processing...</p>
+                    )}
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent>
+                  {paymentStatus === "approved" ? (
+                    <div className="w-30 h-30 lg:w-30 lg:h-30 mx-auto border-2 border-[#00142666] rounded-full my-16 mt-20 lg:my-12">
+                      <img src={paymentSuccess} alt="QR" />
+                    </div>
+                  ) : (
+                    <div className="my-16 mt-20 lg:my-12">
+                      <SpinnerButton />
+                    </div>
                   )}
-                </CardDescription>
-              </CardHeader>
+                </CardContent>
 
-              <CardContent>
-                {paymentStatus === "approved" ? (
-                  <div className="w-30 h-30 lg:w-40 lg:h-40 mx-auto border-2 border-[#00142666] rounded-full my-16 mt-20 lg:my-12">
-                    <img src={paymentSuccess} alt="QR" />
-                  </div>
-                ) : (
-                  <div className="my-16 mt-20 lg:my-12">
-                    <SpinnerButton />
-                  </div>
-                )}
-              </CardContent>
+                <CardFooter className="absolute bottom-5 w-full lg:static mt-30">
 
-              <CardFooter className="absolute bottom-5 w-full lg:static mt-32">
-                
-                {paymentStatus === "approved" ? (
-                  <Link
-                    to="/login"
-                    className="w-full"
-                    onClick={() => {
-                      // ⭐ Clear all registration data and drafts
-                      clearRegistrationData();
-                      // Clear auth token so login page doesn't auto-redirect
-                      localStorage.removeItem("token");
-                    }}
-                  >
-                    <Button className="w-full bg-[#001032]">
-                      Back to Login
+                  {paymentStatus === "approved" ? (
+                    <Link
+                      to="/login"
+                      className="w-full"
+                      onClick={() => {
+                        // ⭐ Clear all registration data and drafts
+                        clearRegistrationData();
+                        // Clear auth token so login page doesn't auto-redirect
+                        localStorage.removeItem("token");
+                      }}
+                    >
+                      <Button className="w-full bg-[#001032]">
+                        Back to Login
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Button
+                      className="w-full bg-[#001032] opacity-50 cursor-not-allowed"
+                      disabled
+                    >
+                      Processing...
                     </Button>
-                  </Link>
-                ) : (
-                  <Button
-                    className="w-full bg-[#001032] opacity-50 cursor-not-allowed"
-                    disabled
-                  >
-                    Processing...
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
+                  )}
+                </CardFooter>
+              </Card>
+            </div>
           </div>
         </div>
       </div>

@@ -137,7 +137,7 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
   } : null;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] h-[540px] overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] h-[540px] overflow-hidden">
       
       {/* ── Left Column ── */}
       <div className={`flex-1 flex py-2 flex-col gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>

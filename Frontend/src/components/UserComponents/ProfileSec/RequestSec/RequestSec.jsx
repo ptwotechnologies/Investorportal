@@ -19,6 +19,7 @@ import InterestUpgradeModal from "./InterestUpgradeModal";
 import { RxCross2 } from "react-icons/rx";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { LuRocket } from "react-icons/lu";
 
 const calculateCompletion = (data) => {
   if (!data) return 0;
@@ -71,6 +72,7 @@ const RequestSec = () => {
   const [userPlanAmount, setUserPlanAmount] = useState(0);
   const [profileCompletion, setProfileCompletion] = useState(100);
   const [showProfileReminder, setShowProfileReminder] = useState(false);
+  const [reminderType, setReminderType] = useState(80); // 80 or 20
   const [profile, setProfile] = useState(null);
   const [showMobileCredits, setShowMobileCredits] = useState(false);
 
@@ -107,8 +109,12 @@ const RequestSec = () => {
         setProfileCompletion(completion);
         setProfile(profileRes.data);
         
-        // Show reminder if less than 80%
+        // Tiered reminders: 80% and 100%
         if (completion < 80) {
+          setReminderType(80);
+          setShowProfileReminder(true);
+        } else if (completion < 100) {
+          setReminderType(100);
           setShowProfileReminder(true);
         }
       } catch (err) {
@@ -543,62 +549,91 @@ const RequestSec = () => {
           userAmount={userPlanAmount || 0}
         />
       )}
-      {/* ✅ Profile Completion Reminder Modal */}
+      {/* ✅ Premium Profile Completion Reminder Modal - Compact Version */}
       {showProfileReminder && (
-        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm animate-in fade-in duration-200">
-          <div 
-            className="w-full max-w-[400px] rounded-lg p-6 relative shadow-2xl animate-in zoom-in-95 duration-200 overflow-hidden"
-            style={{ 
-              background: `linear-gradient( #F3F3FF 0%, #DEDEFF 100%)` 
-            }}
-          >
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="relative w-full max-w-[520px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#E9E7FD] animate-in zoom-in-95 duration-300">
+            
             {/* Close Button */}
-            <button
+            <button 
               onClick={() => setShowProfileReminder(false)}
-              className=" absolute top-2 right-2 text-[#181555] hover:opacity-70 transition-all z-10"
+              className="absolute top-4 right-4 text-gray-400 hover:text-[#59549F] transition-colors z-20"
             >
               <RxCross2 size={20} />
             </button>
 
-            {/* Header Text Box */}
-            <div className="bg-[#181555] rounded-md py-2.5 px-4 mb-4 shadow-md mt-3">
-              <h2 className="text-base md:text-sm font-semibold text-white text-center leading-tight">
-                {currentUserRole === "startup" 
-                  ? "Increase Your Chances Before Connecting" 
-                  : "Get More Opportunities with a Strong Profile"}
-              </h2>
-            </div>
+            <div className="flex flex-col md:flex-row items-stretch min-h-[280px]"> 
+              
+              {/* Visual Sidebar/Header - Compact */}
+              <div className="w-full md:w-[30%] bg-gradient-to-br from-[#59549F] to-[#2D317A] p-6 flex flex-col items-center justify-center text-white relative overflow-hidden">
+                <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+                <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-full blur-2xl"></div>
+                
+                <div className="relative z-10 flex flex-col items-center text-center">
+                  <div className="w-14 h-14 bg-white/10 backdrop-blur-xl rounded-2xl flex items-center justify-center mb-4 shadow-xl border border-white/20">
+                    <LuRocket size={28} className="text-white drop-shadow-md" />
+                  </div>
+                  <div className="space-y-0.5">
+                    <p className="text-3xl font-black">{Math.round(profileCompletion)}%</p>
+                    <p className="text-white/60 text-[9px] font-bold uppercase tracking-[0.15em]">Score</p>
+                  </div>
+                </div>
+              </div>
 
-            {/* Description */}
-            <p className="text-center mb-5 px-2 leading-snug font-medium text-[11px] md:text-[12px]" style={{ color: '#525252' }}>
-              {currentUserRole === "startup"
-                ? "Startups with a complete profile are significantly more likely to attract investor attention and build a strong first impression"
-                : "Professionals with a complete profile are more likely to receive relevant service requests and build trust with startups"}
-            </p>
+              {/* Content Section - Compact */}
+              <div className="flex-1 p-3 md:p-4 flex flex-col justify-center bg-white">
+                <div className="mb-6">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#F8F7FF] text-[#59549F] rounded-full text-[9px] font-bold uppercase tracking-wider mb-3 border border-[#E9E7FD]">
+                    <div className="w-1.5 h-1.5 bg-[#59549F] rounded-full animate-pulse"></div>
+                    Action Required
+                  </div>
+                  <h2 className="text-[18px] font-bold text-[#2D317A] mb-2 leading-tight">
+                    {reminderType === 80 
+                      ? "Boost Your Visibility" 
+                      : "Master Your Profile"}
+                  </h2>
+                  <p className="text-[#5A5E9F] text-[12px] leading-relaxed font-medium">
+                    {reminderType === 80 ? (
+                      currentUserRole === "startup"
+                        ? "Investors prioritize startups with 80%+ profile completion. Finish yours to get noticed faster."
+                        : "Profiles with 80%+ completion appear higher in search results. Complete your details now."
+                    ) : (
+                      currentUserRole === "startup"
+                        ? "A 100% complete profile builds maximum trust and increases your response rate by 3x."
+                        : "100% complete profiles receive the highest quality leads and professional trust."
+                    )}
+                  </p>
+                </div>
 
-            {/* Highlight Box */}
-            <div className="bg-white/80 border border-[#DEDEFF] rounded-2xl py-3 px-4 mb-6 shadow-sm">
-              <p className="text-center font-bold text-gray-800 text-[11px] md:text-[12px]">
-                {currentUserRole === "startup"
-                  ? "Investors prefer startups with 80%+ profile completion"
-                  : "Profiles with 80%+ completion get higher visibility"}
-              </p>
-            </div>
+                {/* Progress Indicator - Compact */}
+                <div className="mb-8 space-y-1.5">
+                  <div className="flex justify-between items-end">
+                     <span className="text-[10px] font-bold text-[#59549F] uppercase tracking-wider">Progress</span>
+                     <span className="text-[10px] font-bold text-gray-400">{Math.round(profileCompletion)} / 100</span>
+                  </div>
+                  <div className="h-2 w-full bg-[#F3F2FF] rounded-full overflow-hidden">
+                     <div 
+                       className="h-full bg-gradient-to-r from-[#59549F] to-[#2D317A] rounded-full transition-all duration-1000 ease-out shadow-sm"
+                       style={{ width: `${profileCompletion}%` }}
+                     ></div>
+                  </div>
+                </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => navigate("/profile")}
-                className="flex-1 py-2 bg-[#181555] text-white rounded-md font-semibold text-[12px] hover:opacity-90 transition-all shadow-md"
-              >
-                Complete your profile
-              </button>
-              <button
-                onClick={() => setShowProfileReminder(false)}
-                className="shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] flex-1 py-2 bg-white text-gray-800  rounded-md font-semibold text-[12px] hover:bg-gray-50 transition-all "
-              >
-                Continue anyway
-              </button>
+                <div className="flex gap-2.5">
+                  <button
+                    onClick={() => navigate("/profile")}
+                    className="flex-[1.5] py-2 bg-[#D8D6F8] text-[#59549F] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-lg font-bold text-[12px]  hover:bg-[#48438A] transform active:scale-[0.98] transition-all"
+                  >
+                    Complete Profile
+                  </button>
+                  <button
+                    onClick={() => setShowProfileReminder(false)}
+                    className="flex-1 py-2 bg-[#F8F7FF] text-[#59549F] rounded-lg font-bold text-[12px] hover:bg-[#EEEDFF] transition-all border border-[#E9E7FD]"
+                  >
+                    Later
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

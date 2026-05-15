@@ -20,7 +20,7 @@ const HomeSec3 = () => {
           </p>
           <div className="text-white rounded-2xl  hidden lg:block">
             <Link to="/login"><button className="bg-[#001032] m-2 w-70 p-2 text-xl rounded-sm">
-              I’d Like To Get Me Started
+              I’d like to get me started
             </button></Link>
             <Link to="/login"><button className="bg-[#001032] m-2 w-70 p-2 text-xl rounded-sm">
               How it works
@@ -31,7 +31,7 @@ const HomeSec3 = () => {
               How it works
             </button></Link>
             <Link to="/login"><button className="border border-[#12355C] text-[#002A30] m-2 w-fit p-2 text-md lg:text-xl rounded-sm">
-              I’d Like To Get Me Started
+              I’d like to get me started
             </button></Link>
 
           </div>

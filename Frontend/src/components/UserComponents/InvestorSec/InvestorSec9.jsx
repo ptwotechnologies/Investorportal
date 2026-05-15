@@ -62,7 +62,7 @@ const InvestorSec9 = () => {
 
   return (
     <main className="bg-background text-foreground">
-      <section className="mx-auto w-full lg:px-10 py-10 md:py-16">
+      <section className="max-w-[1500px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0 py-10 md:py-16">
         
         <header className="mb-8 md:mb-12">
           <h1 className="hidden lg:block text-[#001032] text-3xl font-medium tracking-tight md:text-5xl">

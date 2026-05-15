@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const ServiceProfessionalSec7 = () => {
   return (
     <div className=" lg:mt-10 mt-5 ">
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0 py-10">
+      <div className="max-w-[1500px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0 py-10">
         <h1 className="text-[#001032] text-3xl lg:text-5xl font-medium text-center lg:text-start">
           How do I get started?
         </h1>

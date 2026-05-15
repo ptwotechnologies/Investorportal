@@ -66,80 +66,60 @@ const TransactionIdSec = () => {
 
   return (
     <div>
-      <div className="flex justify-between items-center lg:min-h-dvh ">
-        <div id="left" className=" w-[40%] hidden lg:block mx-auto ">
-          <div className="flex flex-col justify-between items-center gap-y-25">
-            <div>
-              <img src={logo} alt="Logo" className=" w-100 " />
-              <p className=" text-[#001032] text-xl w-full ">
-                Allows you to get funding,
-              </p>
-              <p className=" text-[#001032] text-xl   ">
-                resources and investor connect
-              </p>
-            </div>
-            <div>
-              <p className="  text-lg w-full  text-[#000000] relative top-45">
-                Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.
-              </p>
+      <div className="max-w-[1600px] mx-auto w-full lg:!px-10 min-[1500px]:!px-0">
+        <div className="flex justify-between items-center lg:min-h-dvh">
+          <div id="left" className="w-[40%] hidden lg:block mx-auto">
+            <div className="flex flex-col justify-between items-center gap-y-25">
+              <div>
+                <img src={logo} alt="Logo" className="w-100" />
+                <p className="text-[#001032] text-xl w-full">Allows you to get funding,</p>
+                <p className="text-[#001032] text-xl">resources and investor connect</p>
+              </div>
+              <div>
+                <p className="text-lg w-full text-[#000000] relative top-45">Terms, Privacy Disclosures Cookie Settings © Copteno Technologies Pvt. Ltd.</p>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* RIGHT SIDE */}
-        <div id="right" className="lg:w-[50%] lg:px-10 lg:py-5 text-center w-full min-h-screen flex flex-col">
-          <div className="lg:bg-[#001032] h-screen lg:h-auto lg:p-3 w-full lg:rounded-lg ">
-            <Card className="w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col relative pb-24 lg:pb-4">
-
-              <CardHeader>
-                <CardTitle>
-                  <img
-                    src={logo}
-                    alt="Logo"
-                    className="lg:w-55 w-45 mx-auto lg:my-20 my-15"
-                  />
-                </CardTitle>
-
-                <CardDescription className="text-[#001032] text-md  mt-8">
-                  <p className="lg:w-[80%] mx-auto">
-                   Confirm the payment by adding transaction detail
-                  </p>
-                </CardDescription>
-
-                <CardAction></CardAction>
-              </CardHeader>
-
-              <CardContent className="flex flex-col flex-grow">
-                <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
-                  <div className="flex flex-col gap-6 lg:px-6">
-                    <div className="grid gap-2 ">
-                      <Input
-                        type="text"
-                        placeholder="Enter transaction ID or UTR number"
-                        value={transactionId}
-                        onChange={(e) => setTransactionId(e.target.value)}
-                        required
-                        className="lg:p-5 text-[#00103280]"
-                      />
+          {/* RIGHT SIDE */}
+          <div id="right" className="lg:w-[50%] lg:px-10 lg:py-5 text-center w-full">
+            <div className="lg:bg-[#001032] lg:p-3 w-full lg:rounded-lg">
+              <Card className="w-full lg:min-h-[650px] mx-auto rounded-lg flex flex-col relative pb-24 lg:pb-4">
+                <CardHeader>
+                  <CardTitle>
+                    <img src={logo} alt="Logo" className="lg:w-55 w-45 mx-auto lg:my-20 my-15" />
+                  </CardTitle>
+                  <CardDescription className="text-[#001032] text-md mt-8">
+                    <p className="lg:w-[80%] mx-auto">Confirm the payment by adding transaction detail</p>
+                  </CardDescription>
+                  <CardAction></CardAction>
+                </CardHeader>
+                <CardContent className="flex flex-col flex-grow">
+                  <form onSubmit={handleSubmit} className="flex flex-col flex-grow">
+                    <div className="flex flex-col gap-6 lg:px-6">
+                      <div className="grid gap-2">
+                        <Input
+                          type="text"
+                          placeholder="Enter transaction ID or UTR number"
+                          value={transactionId}
+                          onChange={(e) => setTransactionId(e.target.value)}
+                          required
+                          className="lg:p-5 text-[#00103280]"
+                        />
+                      </div>
                     </div>
-                  </div>
-
-                  <CardFooter className="fixed bottom-0 left-0 w-full p-4  lg:relative lg:bg-transparent  lg:p-0 lg:mt-auto lg:z-10">
-                    <Button
-                      type="submit"
-                      className="w-full bg-[#001032]"
-                    >
-                      Submit & Continue
-                    </Button>
-                  </CardFooter>
-                </form>
-              </CardContent>
-
-            </Card>
+                    <CardFooter className="fixed bottom-0 left-0 w-full p-4 lg:static lg:relative lg:bg-transparent lg:px-0 lg:pb-5 lg:mt-auto lg:z-10">
+                      <Button type="submit" className="w-full bg-[#001032]">
+                        Submit & Continue
+                      </Button>
+                    </CardFooter>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
   );
 };

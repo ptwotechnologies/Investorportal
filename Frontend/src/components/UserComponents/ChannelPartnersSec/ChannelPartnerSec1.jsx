@@ -113,8 +113,8 @@ const ChannelPartnerSec1 = () => {
   ];
 
   return (
-    <div className=" lg:mb-20 lg:mt-30 mt-4 lg:p-2.5 lg:border border-[#b5b3b3] bg-[#E5E5E5] rounded-4xl ">
-      <div className="lg:border border-[#E5E5E5] lg:p-7 px-1 bg-white rounded-4xl lg:py-25 py-10">
+    <div className=" lg:mb-20 lg:mt-40 mt-4 lg:p-2.5 lg:border border-[#b5b3b3] bg-[#E5E5E5] rounded-4xl max-w-[1500px] mx-auto w-full  ">
+      <div className=" lg:border border-[#E5E5E5] lg:p-7 bg-white rounded-4xl lg:py-25 py-10">
         <div id="top" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
             <div className="lg:px-4 px-2">
@@ -337,7 +337,7 @@ const ChannelPartnerSec1 = () => {
               <div className="flex justify-between items-center mt-5 text-xs">
                 <div className="font-light">
                   <p>Business Event  Organizers </p>
-                 
+                  
                 </div>
                 <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">
                   Get Started

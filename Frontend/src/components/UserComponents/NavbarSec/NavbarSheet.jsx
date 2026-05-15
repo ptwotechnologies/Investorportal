@@ -113,7 +113,7 @@ function NavbarSheet({ textColor }) {
         ) : (
           <>
             {/* Profile Circle */}
-            <div className="flex items-center justify-between  cursor-pointer   px-3 py-1 rounded-full bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)]">
+            <div className="flex items-center justify-between  cursor-pointer   px-3 py-1 rounded-full bg-white  border border-[#001032]">
                <IoNotificationsOutline 
                  size={25} 
                  className=" ml-1 text-gray-500 cursor-pointer bell-icon" 

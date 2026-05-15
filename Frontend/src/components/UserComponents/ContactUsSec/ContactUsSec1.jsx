@@ -67,13 +67,13 @@ function BenefitCard({ title, body }) {
 const ContactUsSec1 = () => {
   return (
     <section className="bg-[#001032] text-primary-foreground mt-15 lg:mt-30 lg:rounded-3xl rounded-b-3xl">
-      <div className="mx-auto w-full  px-4 md:px-8 py-8 md:py-20">
+      <div className="max-w-[1550px] mx-auto w-full px-4 lg:!px-10 min-[1500px]:!px-0 py-8 md:py-20">
         {/* Top panel */}
-        <div className="flex flex-col lg:flex-row justify-between items-start   ">
+        <div className="flex flex-col lg:flex-row justify-between items-start">
           {/* Left summary */}
-          <div className="md:pr-6 p-3">
-            <h1 className="text-[30px] text-[#F9F9F7] md:text-4xl lg:text-5xl font-semibold  tracking-wide leading-10 lg:leading-16 w-[78%]">Connect with our experts</h1>
-            <p className="py-3 text-xs leading-5 lg:leading-8 tracking-wider w-[90%] lg:w-[80%] text-[#F9F9F7]">
+          <div className="md:pr-6 p-3 lg:w-[50%]">
+            <h1 className="text-[30px] text-[#F9F9F7] md:text-4xl lg:text-5xl font-semibold tracking-wide leading-10 lg:leading-16 w-full lg:w-[85%]">Connect with our experts</h1>
+            <p className="py-3 text-xs leading-5 lg:leading-8 tracking-wider w-full lg:w-[85%] text-[#F9F9F7]">
               Our experts in Copteno will support you and solve your queries in multiple domains:
             </p>
 
@@ -83,37 +83,27 @@ const ContactUsSec1 = () => {
               ))}
             </ul>
 
-            <p className="py-7 text-sm  leading-8 tracking-wider lg:w-[80%]">
-             Get the access of 50+ investors and 500+ satrtups and 200+ service professionals
+            <p className="py-7 text-sm leading-8 tracking-wider lg:w-[85%]">
+              Get the access of 50+ investors and 500+ satrtups and 200+ service professionals
             </p>
 
             {/* Partner logos */}
-              <div id="desktop" className="mt-2 w-full hidden lg:block">
-              {/* First Row */}
+            <div id="desktop" className="mt-2 w-full hidden lg:block">
               <div className="grid grid-cols-3 divide-x divide-slate-700">
                 {logos.slice(0, 3).map((l, i) => (
                   <div key={i} className="flex items-center justify-center p-8">
                     <img
                       src={l.src || "/placeholder.svg"}
                       alt={l.alt}
-                      className={`w-auto opacity-80 ${
-                        l.isBig ? "h-14" : "h-12"
-                      }`}
+                      className={`w-auto opacity-80 ${l.isBig ? "h-14" : "h-12"}`}
                     />
                   </div>
                 ))}
               </div>
-
-              {/* Horizontal Divider */}
               <div className="border-t border-slate-700" />
-
-              {/* Second Row */}
               <div className="grid grid-cols-3 divide-x divide-slate-700">
                 {logos.slice(3, 6).map((l, i) => (
-                  <div
-                    key={i + 3}
-                    className="flex items-center justify-center p-8"
-                  >
+                  <div key={i + 3} className="flex items-center justify-center p-8">
                     <img
                       src={l.src || "/placeholder.svg"}
                       alt={l.alt}
@@ -124,54 +114,46 @@ const ContactUsSec1 = () => {
               </div>
             </div>
 
-            <div id="phone" className="mt-2 w-full  lg:hidden">
-              {/* First Row */}
+            <div id="phone" className="mt-2 w-full lg:hidden">
               <div className="grid grid-cols-2 gap-x-6">
                 {logos.map((l, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-center p-5 py-7"
-                  >
+                  <div key={i} className="flex items-center justify-center p-5 py-7">
                     <img
                       src={l.src || "/placeholder.svg"}
                       alt={l.alt}
-                      className={`w-auto opacity-80 ${
-                        l.isBig ? "h-16" : "h-12"
-                      }`}
+                      className={`w-auto opacity-80 ${l.isBig ? "h-16" : "h-12"}`}
                     />
                   </div>
                 ))}
               </div>
             </div>
-           <div className='hidden lg:block'>
-             <div className='mt-20 text-[#B2BFC1] text-sm flex items-center gap-1  '>
+            <div className='hidden lg:block'>
+              <div className='mt-20 text-[#B2BFC1] text-sm flex items-center gap-1'>
                 <p>Looking for pricing and benefits</p>
                 <Link className='underline'> Explore Auxiliaries</Link>
-                <BsBoxArrowInUpRight  /> 
-
-                </div>
-           </div>
+                <BsBoxArrowInUpRight />
+              </div>
+            </div>
           </div>
 
           {/* Right form card */}
-          <div className="md:pl-2 lg:w-[50%] mt-14 lg:mt-0">
+          <div className="md:pl-2 lg:w-[45%] mt-14 lg:mt-0">
             <div className="rounded-lg border border-border bg-card text-card-foreground p-4 md:p-6">
-              <ContactForm/>
+              <ContactForm />
             </div>
           </div>
         </div>
 
         {/* Bottom benefit cards */}
         <div className='hidden lg:block'>
-          <div className="mt-10 md:mt-30 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-35  px-10">
-            
-          {benefitCards.map((c, idx) => (
-           <div>
-             <hr className='mb-15'/>
-            <BenefitCard key={idx} title={c.title} body={c.body} />
-           </div>
-          ))}
-        </div>
+          <div className="mt-10 md:mt-30 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-20">
+            {benefitCards.map((c, idx) => (
+              <div key={idx}>
+                <hr className='mb-15 border-slate-700' />
+                <BenefitCard title={c.title} body={c.body} />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
