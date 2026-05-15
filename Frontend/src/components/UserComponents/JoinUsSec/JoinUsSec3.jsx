@@ -39,10 +39,12 @@ const JoinUsSec3 = (props) => {
 
     const autoScroll = () => {
       if (!container) return;
-      container.scrollBy({ left: scrollSpeed, behavior: "auto" });
+      
+      // Direct assignment is more reliable across browsers in production
+      container.scrollLeft += scrollSpeed;
 
-      // reset to start when we reach half
-      if (container.scrollLeft >= container.scrollWidth / 2) {
+      // Reset to start when we reach half, using a 1px buffer for sub-pixel rounding
+      if (container.scrollLeft >= (container.scrollWidth / 2) - 1) {
         container.scrollLeft = 0;
       }
 
@@ -79,7 +81,7 @@ const JoinUsSec3 = (props) => {
 
   return (
     <div className='lg:mt-17'>
-      <div className="max-w-[1500px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0">
+      <div className="max-w-[1500px] mx-auto w-full px-4 lg:!px-10 min-[1500px]:!px-0">
         <div className='hidden lg:block'>
           <div className='grid grid-cols-2 w-full gap-5'>
             {divElements.map((item, index) => (

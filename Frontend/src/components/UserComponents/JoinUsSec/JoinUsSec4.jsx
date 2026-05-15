@@ -50,9 +50,10 @@ const JoinUsSec4 = () => {
     let animationId;
 
     const autoScroll = () => {
+      if (!container) return;
       container.scrollLeft += 0.5;
 
-      if (container.scrollLeft >= container.scrollWidth / 2) {
+      if (container.scrollLeft >= (container.scrollWidth / 2) - 1) {
         container.scrollLeft = 0;
       }
 
@@ -66,7 +67,7 @@ const JoinUsSec4 = () => {
 
   return (
     <div className="lg:mt-18 mt-16">
-      <div className="max-w-[1500px] mx-auto w-full lg:!px-10 min-[1500px]:!px-0">
+      <div className="max-w-[1500px] mx-auto w-full px-4 lg:!px-10 min-[1500px]:!px-0">
         <h1 className="text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start">
           Who is this platform for?
         </h1>
@@ -79,7 +80,7 @@ const JoinUsSec4 = () => {
             {cards.map((item, index) => (
               <div
                 key={index}
-                className="w-full lg:w-[30%] shrink-0 lg:p-4 flex"
+                className="w-[90%] lg:w-[30%] shrink-0 lg:p-4 flex"
               >
                 <div
                   className="w-full h-full flex flex-col justify-between border border-[#00103280] lg:rounded-2xl lg:shadow-lg lg:p-3 p-5 px-7 rounded-sm shadow-lg"
