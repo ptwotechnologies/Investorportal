@@ -108,8 +108,8 @@ const DashboardSec = () => {
         const completion = calculateCompletion(profileRes.data);
         setProfileCompletion(completion);
         
-        // Show modal only if profile is not completed
-        if (completion < 100) {
+        // Show modal only if profile is less than 80% completed
+        if (completion < 80) {
           setShowProfileModal(true);
         } else {
           setShowProfileModal(false);
