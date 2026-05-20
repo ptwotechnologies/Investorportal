@@ -2,11 +2,12 @@ import React from "react";
 import { IoClose } from "react-icons/io5";
 import { FaCrown, FaCheckCircle, FaArrowRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
-const ComingSoonModal = ({ onClose, title }) => {
+const ComingSoonModal = ({ onClose, title, userRole: propUserRole }) => {
   const navigate = useNavigate();
   const userCache = JSON.parse(localStorage.getItem("userCache") || "{}");
-  const userRole = userCache?.role || localStorage.getItem("role") || localStorage.getItem("userRole") || "";
+  const userRole = propUserRole || localStorage.getItem("role") || userCache?.role || localStorage.getItem("userRole") || "";
   const isInvestor = userRole.toLowerCase().includes("investor");
 
   const handleUpgrade = () => {
@@ -14,6 +15,12 @@ const ComingSoonModal = ({ onClose, title }) => {
 
     if (content.primaryAction) {
       navigate(content.primaryAction);
+      onClose();
+      return;
+    }
+
+    if (title === "Switch to Startup" || title === "Switch to Professional" || title === "Role Switching") {
+      toast.success("Workspace switching is free and will be available soon!");
       onClose();
       return;
     }
@@ -149,7 +156,7 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Professional networking",
           "Business workflow systems"
         ],
-        primaryCTA: "Upgrade to Growth Plan",
+        primaryCTA: "Switch Workspace",
         secondaryCTA: "Maybe Later"
       };
     }
@@ -166,7 +173,7 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Founder networking",
           "Growth & execution tools"
         ],
-        primaryCTA: "Upgrade to Growth Plan",
+        primaryCTA: "Switch Workspace",
         secondaryCTA: "Maybe Later" 
       };
     }

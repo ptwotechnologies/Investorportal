@@ -933,6 +933,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         <ComingSoonModal
           onClose={() => setShowComingSoon(false)}
           title={comingSoonTitle}
+          userRole={userRole}
         />
       )}
     </div>

@@ -31,7 +31,7 @@ const PricingSec2 = () => {
      <StartupContent isUpgradeFlow={isUpgradeFlow} upgradeType={upgradeType} />
     ),
    ServiceProfessionals : (
-     <ServiceContent isUpgradeFlow={isUpgradeFlow} />
+     <ServiceContent isUpgradeFlow={isUpgradeFlow} upgradeType={upgradeType} />
     ),
    
   };

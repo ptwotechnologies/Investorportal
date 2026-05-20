@@ -767,6 +767,7 @@ const Mobile = () => {
         <ComingSoonModal
           onClose={() => setShowComingSoon(false)}
           title={comingSoonTitle}
+          userRole={userRole}
         />
       )}
     </div>

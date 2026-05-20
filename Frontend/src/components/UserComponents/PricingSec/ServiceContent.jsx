@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { serverUrl } from "@/App";
 
-const DevelopmentContent = ({ isUpgradeFlow }) => {
+const DevelopmentContent = ({ isUpgradeFlow, upgradeType }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const scrollRef = React.useRef(null);
   const navigate = useNavigate();
@@ -37,16 +37,30 @@ const DevelopmentContent = ({ isUpgradeFlow }) => {
       return;
     }
 
-    // ✅ Free plan
-    if (!amount || amount === 0) {
-      toast.success("You are already logged in");
+    const planAmount = Number(amount) || 0;
+    const currentAmount = Number(userPlanAmount) || 0;
+
+    // ✅ User is already on this exact plan (including Free plan)
+    if (planAmount === currentAmount) {
+      if (planAmount === 0) {
+        toast.success("You are already on the Free plan");
+      } else {
+        toast.success(`You are already subscribed to the ${planName}`);
+      }
+      navigate("/dashboard");
+      return;
+    }
+
+    // ✅ If the selected plan is Free (and they are not currently on it)
+    if (planAmount === 0) {
+      toast.success("Switching to Free plan");
       navigate("/dashboard");
       return;
     }
 
     // ✅ Paid plan - Direct to Razorpay
     navigate("/scanner", {
-      state: { userId, amount, planName },
+      state: { userId, amount: planAmount, planName },
     });
   };
 
@@ -286,12 +300,32 @@ const DevelopmentContent = ({ isUpgradeFlow }) => {
   const cardsToDisplay = React.useMemo(() => {
     if (!isUpgradeFlow) return cards;
     
+    if (upgradeType === "premium") {
+      // Show Growth Plan (Index 2) and Authority Plan (Index 3)
+      return [cards[2], cards[3]];
+    }
+    
+    if (upgradeType === "growth") {
+      // Find current plan
+      const currentAmount = Number(userPlanAmount) || 0;
+      const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
+      const currentPlan = currentIdx !== -1 ? cards[currentIdx] : cards[0];
+      const growthPlan = cards[2];
+      
+      // If user is already on the Growth Plan, avoid duplicating
+      if (currentPlan.amount === growthPlan.amount) {
+        return [currentPlan];
+      }
+      return [currentPlan, growthPlan];
+    }
+    
+    // Default fallback
     const currentAmount = Number(userPlanAmount) || 0;
     const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
     
     if (currentIdx === -1) return [cards[0], cards[1]];
     return cards.slice(currentIdx, currentIdx + 2);
-  }, [isUpgradeFlow, userPlanAmount]);
+  }, [isUpgradeFlow, userPlanAmount, upgradeType]);
 
   const handleScroll = () => {
     const container = scrollRef.current;
