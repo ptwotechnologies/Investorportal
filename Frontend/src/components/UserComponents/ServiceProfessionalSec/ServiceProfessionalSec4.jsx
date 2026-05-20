@@ -15,21 +15,21 @@ const ServiceProfessionalSec4 = () => {
    const divElements = [
      {
          paragraph:"“We started getting briefs that fit our niche within days. No more chasing, just meaningful work and timely payments”",
-         name:"Rohan Mehta",
+         name:"Michael Stevens",
         company:"Product Designer",
         color:"#002A30",
         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300&h=450"
      },
      {
          paragraph:"“Copteno cut our onboarding friction — clear scopes, upfront budgets, and founders who actually know what they want”",
-         name:"Sharanya",
+         name:"Sarah Jenkins",
         company:"Growth Consultant",
          color:"#001032",
          image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=300&h=450"
      },
      {
          paragraph:"“The visibility into high-growth startups is unmatched. It’s the easiest way to build a quality portfolio as a specialist”",
-         name:"Kritika Iyer",
+         name:"Emily Parker",
         company:"Legal Advisor",
          color:"#002A30",
          image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=450"

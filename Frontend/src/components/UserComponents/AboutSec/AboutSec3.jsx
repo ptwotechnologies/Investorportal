@@ -4,7 +4,7 @@ const AboutSec3 = () => {
   return (
     <div className="lg:mt-16 lg:bg-[#00000040] rounded-[70px] lg:p-15 lg:px-13 text-white lg:pb-9 max-w-[1500px] mx-auto w-full">
       <div className="flex flex-col lg:flex-row justify-center items-center lg:gap-5">
-        <div id="left " className="lg:bg-[#002A30CC] bg-[#616B80CC] lg:rounded-sm pb-4">
+        <div id="left " className="lg:bg-[#002A30CC] bg-[#616B80CC] lg:rounded-sm pb-10">
           <div className='w-10 h-10 bg-[#616B80]  ml-5 mt-5 lg:hidden'>
           </div>
           <h1 className='lg:hidden text-white font-medium text-2xl m-5 my-4'>Our Mission</h1>
@@ -25,7 +25,7 @@ const AboutSec3 = () => {
             making the essential parts of building a business actually accessible.
           </p>
         </div>
-        <div id="right" className="lg:bg-[#616B80CC] bg-[#2C4E53CC] lg:rounded-sm pb-4 ">
+        <div id="right" className="lg:bg-[#616B80CC] bg-[#2C4E53CC] lg:rounded-sm pb-9 ">
           <div className='w-10 h-10 bg-[#2A4C51]  ml-5 mt-5 lg:hidden'>
           </div>
           <h1 className='lg:hidden text-white font-medium text-2xl m-5 my-4 '>Our Aim</h1>
@@ -50,10 +50,10 @@ const AboutSec3 = () => {
         </div>
       </div>
       <div className="flex w-full">
-        <div className="bg-white w-5 h-5 rounded-full relative bottom-8 left-[48%] hidden lg:block ">
+        <div className="bg-white w-5 h-5 rounded-full relative bottom-9 left-[49%] hidden lg:block ">
 
         </div>
-        <div className="bg-white w-5 h-5 rounded-full relative bottom-8 left-[95%] hidden lg:block">
+        <div className="bg-white w-5 h-5 rounded-full relative bottom-8 left-[96%] hidden lg:block">
 
         </div>
       </div>

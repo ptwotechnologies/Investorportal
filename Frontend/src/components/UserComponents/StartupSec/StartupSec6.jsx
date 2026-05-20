@@ -82,22 +82,22 @@ const StartupSec6 = () => {
               className="flex overflow-x-scroll scrollbar-hide lg:px-10 pt-8 gap-4 lg:gap-5 text-[#001032] ">
               {cards.map((item, index) => (
                 <div key={index} className="w-full  lg:w-[30%] h-auto  shrink-0  lg:p-4  lg:mx-2   ">
-                  <div className=' w-full h-full min-h-[350px] lg:min-h-0 lg:gap-10  border border-[#00103280] 
+                  <div className=' w-full h-full min-h-[300px] lg:min-h-0 lg:gap-10  border border-[#00103280] 
               lg:rounded-2xl rounded-sm shadow-lg lg:p-3 p-5 px-7 flex flex-col justify-between'>
                     <p className=' hidden lg:block text-[#001032B2] text-md leading-8 tracking-wider'>{item.paragraph}</p>
-                    <p className=' lg:hidden mb-20 text-[#001032B2] text-md leading-8 tracking-wider'>{item.phonepara}</p>
-                    <div className=' flex justify-between items-center lg:mt-25 mt-5' >
+                    <p className=' lg:hidden mb-15 text-[#001032B2] text-md leading-8 tracking-wider'>{item.phonepara}</p>
+                    <div className=' flex justify-between items-center lg:mt-15 mt-3' >
                       <div className='lg:text-xl hidden lg:block'>
-                        <h1 className='text-md text-[#001032B2]'>{item.company}</h1>
+                        <h1 className='text-2xl text-[#001032] font-medium'>{item.company}</h1>
                       </div>
-                      <div className=' text-sm  lg:hidden mr-1 text-[#001032B2]'>
+                      <div className=' text-lg font-medium  lg:hidden mr-1 text-[#001032]'>
                         <h1>{item.phonecompany}</h1>
                       </div>
                       <div className='flex justify-center items-center gap-3'>
-                        <div className='w-0.5 h-10 bg-[#D9D9D9] '>
+                        <div className='w-0.5 h-[70px] bg-[#D9D9D9] '>
                         </div>
-                        <div className='w-[50px] h-[50px]  rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center'>
-                          <item.icon size={25} className="text-white" />
+                        <div className='w-[70px] h-[70px]  rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center'>
+                          <item.icon size={35} className="text-white" />
                         </div>
 
                       </div>

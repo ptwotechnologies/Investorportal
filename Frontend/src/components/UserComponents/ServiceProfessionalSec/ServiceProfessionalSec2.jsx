@@ -10,8 +10,8 @@ const ServiceProfessionalSec2 = () => {
         <div className="flex justify-evenly items-center gap-20">
           <div className="flex justify-center items-center gap-10">
             <div className="w-[18%]  ">
-              <div className="w-14 h-14 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto flex items-center justify-center">
-                <HiOutlineCheckBadge size={30} className="text-[#001032]" />
+              <div className="w-16 h-16 bg-[#001032] rounded-2xl mb-5 mx-auto flex items-center justify-center">
+                <HiOutlineCheckBadge size={35} className="text-white" />
               </div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Verified Startup  <br /> Leads</p>
             </div>
@@ -19,8 +19,8 @@ const ServiceProfessionalSec2 = () => {
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
             </div>
             <div className="w-[18%]  ">
-              <div className="w-14 h-14 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto flex items-center justify-center">
-                <HiOutlineScale size={30} className="text-[#001032]" />
+              <div className="w-16 h-16 bg-[#001032] rounded-2xl mb-5 mx-auto flex items-center justify-center">
+                <HiOutlineScale size={35} className="text-white" />
               </div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Fair & Transparent
                 Pricing</p>
@@ -29,8 +29,8 @@ const ServiceProfessionalSec2 = () => {
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
             </div>
             <div className="w-[18%]  ">
-              <div className="w-14 h-14 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto flex items-center justify-center">
-                <HiOutlineAcademicCap size={30} className="text-[#001032]" />
+              <div className="w-16 h-16 bg-[#001032] rounded-2xl mb-5 mx-auto flex items-center justify-center">
+                <HiOutlineAcademicCap size={35} className="text-white" />
               </div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Expert-Led
                 <br />
@@ -40,8 +40,8 @@ const ServiceProfessionalSec2 = () => {
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
             </div>
             <div className="w-[18%]  ">
-              <div className="w-14 h-14 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto flex items-center justify-center">
-                <HiOutlineArrowsRightLeft size={30} className="text-[#001032]" />
+              <div className="w-16 h-16 bg-[#001032] rounded-2xl mb-5 mx-auto flex items-center justify-center">
+                <HiOutlineArrowsRightLeft size={35} className="text-white" />
               </div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Smart Work
                 Matching</p>
@@ -50,8 +50,8 @@ const ServiceProfessionalSec2 = () => {
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
             </div>
             <div className="w-[18%]  ">
-              <div className="w-14 h-14 bg-[#E5E5E5] rounded-2xl mb-5 mx-auto flex items-center justify-center">
-                <HiOutlineChatBubbleLeftRight size={30} className="text-[#001032]" />
+              <div className="w-16 h-16 bg-[#001032] rounded-2xl mb-5 mx-auto flex items-center justify-center">
+                <HiOutlineChatBubbleLeftRight size={35} className="text-white" />
               </div>
               <p className="text-[#001032]  text-center tracking-wide leading-8 text-xl">Post-Delivery
                 Support</p>

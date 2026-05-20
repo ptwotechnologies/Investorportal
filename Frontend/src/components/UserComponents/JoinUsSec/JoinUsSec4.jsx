@@ -71,7 +71,7 @@ const JoinUsSec4 = () => {
         <h1 className="text-2xl lg:text-5xl text-[#001032] font-medium text-center lg:text-start">
           Who is this platform for?
         </h1>
-        <div className="relative">
+        <div className="relative"> 
           <div
             ref={scrollRef}
             onScroll={handleScroll}
@@ -96,8 +96,8 @@ const JoinUsSec4 = () => {
 
                     <div className="flex justify-center items-center gap-3">
                       <div className="w-0.5 h-10 bg-[#D9D9D9]"></div>
-                      <div className="w-[50px] h-[50px] rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center">
-                        {item.icon && <item.icon size={28} className="lg:text-white text-[#001032]" />}
+                      <div className="w-[70px] h-[70px] rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center">
+                        {item.icon && <item.icon size={35} className="lg:text-white text-[#001032]" />}
                       </div>
                     </div>
                   </div>

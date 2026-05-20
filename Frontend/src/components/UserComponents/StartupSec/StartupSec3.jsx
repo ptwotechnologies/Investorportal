@@ -46,10 +46,10 @@ const StartupSec3 = () => {
             </ul>
           </div>
           <div id="right" className="lg:w-[60%] min-[1400px]:!w-[55%] grid grid-cols-2 gap-8 "> 
-            <div className="w-100 h-60 bg-[#EEEEEE] rounded-sm"></div>
-            <div className="w-100 h-60 bg-[#002A308A] rounded-sm"></div>
-            <div className="w-100 h-60 bg-[#0010329E] rounded-sm"></div>
-            <div className="w-100 h-60 bg-[#1C1C1C99] "></div>
+            <div className="w-full h-60 bg-[#EEEEEE] rounded-sm"></div>
+            <div className="w-full h-60 bg-[#002A308A] rounded-sm"></div>
+            <div className="w-full h-60 bg-[#0010329E] rounded-sm"></div>
+            <div className="w-full h-60 bg-[#1C1C1C99] rounded-sm"></div>
           </div>
         </div>
       </div>

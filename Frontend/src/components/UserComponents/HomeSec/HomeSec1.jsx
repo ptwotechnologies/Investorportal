@@ -20,10 +20,20 @@ const HomeSec1 = () => {
       <div className="bg-[#001032] h-auto lg:bg-white w-full pt-5 lg:pt-20 px-5 rounded-b-4xl relative pb-1">
         <div className="max-w-[1500px] mx-auto w-full">
           <div
-            className="text-[12px] lg:text-[#001032] text-white  border border-white lg:border-[#001032] flex justify-start items-center gap-2 p-2 md:px-4 w-[70%] md:w-[40%] lg:w-[26%] xl:w-[18%] rounded-3xl mt-20 
+            className=" hidden lg:flex text-[12px] lg:text-[#001032] text-white  border border-white lg:border-[#001032] flex justify-start items-center gap-2 p-2 md:px-4 w-[70%] md:w-[40%] lg:w-[23%] xl:w-[17%] rounded-3xl mt-20 
            
           "
           // bg-linear-to-r from-[#001032] from-20% lg:from-70% via-blue-[#001032] at-130% to-[#D8D8D8]
+          >
+            <p>We've built a platform for startups</p>
+            <IoIosArrowRoundForward size={25} className="hidden md:block" />
+          </div>
+
+           <div
+            className="bg-linear-to-r from-[#001032] from-20% lg:from-70% via-blue-[#001032] at-130% to-[#D8D8D8] lg:hidden text-[12px] lg:text-[#001032] text-white   flex justify-start items-center gap-2 p-2 md:px-4 w-[70%] md:w-[40%] lg:w-[26%] xl:w-[18%] rounded-3xl mt-20 
+           
+          "
+        
           >
             <p>We've built a platform for startups</p>
             <IoIosArrowRoundForward size={25} className="hidden md:block" />
@@ -36,12 +46,21 @@ const HomeSec1 = () => {
                   Build smarter, grow faster, and fund confidently
                 </h1>
 
-                <p className="w-[89%] md:w-[68%] mt-3 lg:text-xl text-[#FFFFFFCC] lg:text-[#001032B5] leading-9 tracking-wide  font-light lg:font-normal">
+                <p className="w-[89%] md:w-[68%] mt-3 lg:text-xl text-[#FFFFFFCC] lg:text-[#000000] leading-9 tracking-wide  font-light lg:font-normal">
                   Access curated investors, verified experts, and essential growth
                   tools — all connected seamlessly inside Copteno
                 </p>
 
-                <Link to="/login" onClick={handleGetStartedClick}>
+                <Link to="/login" onClick={handleGetStartedClick} className="hidden lg:block">
+                  {" "}
+                  <button
+                    className={`lg:mt-11 mt-8  bg-white text-[#12355C] lg:text-[#001032] border border-[#001032] lg:p-3 p-3 lg:px-13 px-8 text-xl rounded-sm transition-all duration-300 ease-in-out shadow-md lg:shadow-lg lg:hover:scale-105 lg:hover:-translate-y-1 lg:hover:brightness-110 lg:hover:shadow-2xl lg:hover:bg-[#001032] lg:hover:text-white ${isClicked ? "scale-90 brightness-75 ring-4 ring-[#12355C]/40" : "active:scale-95"}`}
+                  >
+                    Get Started
+                  </button>
+                </Link>
+
+                <Link to="/login" onClick={handleGetStartedClick} className="lg:hidden">
                   {" "}
                   <button
                     className={`lg:mt-11 mt-8 lg:bg-[#001032] bg-white text-[#12355C] lg:text-white  lg:p-4 p-3 lg:px-17 px-8 text-xl rounded-sm transition-all duration-300 ease-in-out shadow-md lg:shadow-lg lg:hover:scale-105 lg:hover:-translate-y-1 lg:hover:brightness-110 lg:hover:shadow-2xl lg:hover:bg-white lg:hover:text-[#001032] ${isClicked ? "scale-90 brightness-75 ring-4 ring-[#12355C]/40" : "active:scale-95"}`}
@@ -54,9 +73,8 @@ const HomeSec1 = () => {
               <hr className="lg:hidden mt-12 w-[90%] m-auto border-t border-[#FFFFFF33]" />
               <div className="hidden lg:block">
                 <div
-                  className="text-sm mx-auto lg:mx-0 text-white flex justify-start items-center gap-2 p-2 md:px-4 w-[65%] md:w-[55%] lg:w-[50%] xl:w-[45%] rounded-3xl  lg:mt-40
-          bg-linear-to-r from-[#001426] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8]"
-                >
+                  className="text-sm mx-auto lg:mx-0 text-[#001032] border border-[#001032] flex justify-start items-center gap-2 p-2 md:px-4 w-[65%] md:w-[55%] lg:w-[50%] xl:w-[38%] rounded-3xl  lg:mt-40">
+                    {/* bg-linear-to-r from-[#001426] lg:from-70% via-blue-[#001426] at-130% to-[#D8D8D8] */} 
                   <p>We've built a platform for startups</p>
                   <IoIosArrowRoundForward size={25} className="hidden md:block" />
                 </div>
@@ -78,25 +96,25 @@ const HomeSec1 = () => {
 
               <div className=" text-lg hidden lg:block">
                 <div className="flex justify-start items-center gap-3 mt-10">
-                  <div className="w-8 h-8 bg-[#001032]"></div>
+                  <div className="w-8 h-8 bg-[#001032] rounded-lg"></div>
                   <p className="leading-8 tracking-wider">
                     Investors are actively browsing for founders like you
                   </p>
                 </div>
                 <div className="flex justify-start items-center gap-3 mt-10">
-                  <div className="w-8 h-8 bg-[#001032]"></div>
+                  <div className="w-8 h-8 bg-[#001032] rounded-lg"></div>
                   <p className="leading-8 tracking-wider">
                     Experts are ready to guide you at every critical step
                   </p>
                 </div>
                 <div className="flex justify-start items-center gap-3 mt-10">
-                  <div className="w-8 h-8 bg-[#001032]"></div>
+                  <div className="w-8 h-8 bg-[#001032] rounded-lg"></div>
                   <p className="leading-8 tracking-wider">
                     Reach real audiences organically without spending on ads
                   </p>
                 </div>
                 <div className="flex justify-start items-center gap-3 mt-10 ">
-                  <div className="w-8 h-8 bg-[#001032] "></div>
+                  <div className="w-8 h-8 bg-[#001032] rounded-lg "></div>
                   <p className="leading-8 tracking-wider">
                     Access practical, founder-focused support for investor
                     readiness

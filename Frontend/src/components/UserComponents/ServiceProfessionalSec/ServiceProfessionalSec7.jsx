@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const ServiceProfessionalSec7 = () => {
+  const [activeStep, setActiveStep] = useState(1);
+
+  const getImage = () => {
+    switch(activeStep) {
+      case 1: return "/onboardingplan2.png";
+      case 2: return "/onboardingplan1.png";
+      case 3: return "/onboardingplan3.png";
+      case 4: return "/onboardingplan4.png";
+      default: return "/onboardingplan2.png";
+    }
+  }
+
   return (
     <div className=" lg:mt-10 mt-5 ">
       <div className="max-w-[1500px] mx-auto w-full  lg:!px-10 min-[1500px]:!px-0 py-10">
@@ -12,25 +24,24 @@ const ServiceProfessionalSec7 = () => {
           <div className="flex  justify-center items-center gap-40 pt-15 ">
             <div id="left" className="w-[40%] ">
               <div className='text-[#001032] text-2xl  leading-8 tracking-wide '>
-                <h1 className='py-6'>Choose your on-boarding plan</h1>
+                <h1 className={`py-6 cursor-pointer transition-all ${activeStep === 1 ? 'font-medium' : 'opacity-70 hover:opacity-100'}`} onClick={() => setActiveStep(1)}>Choose your on-boarding plan</h1>
                 <hr />
-                <h1 className='py-6'>Create your profile and list your services</h1>
+                <h1 className={`py-6 cursor-pointer transition-all ${activeStep === 2 ? 'font-medium' : 'opacity-70 hover:opacity-100'}`} onClick={() => setActiveStep(2)}>Create your profile and list your services</h1>
                 <hr />
-                <h1 className='py-6'>Get approved in 24 hours</h1>
+                <h1 className={`py-6 cursor-pointer transition-all ${activeStep === 3 ? 'font-medium' : 'opacity-70 hover:opacity-100'}`} onClick={() => setActiveStep(3)}>Get approved in 24 hours</h1>
                 <hr />
-                <h1 className='py-6'>Go live on the portal</h1>
+                <h1 className={`py-6 cursor-pointer transition-all ${activeStep === 4 ? 'font-medium' : 'opacity-70 hover:opacity-100'}`} onClick={() => setActiveStep(4)}>Go live on the portal</h1>
                 <hr />
               </div>
               <div className='flex justify-between items-center gap-15'>
                 <h1 className='py-6 text-4xl '>Get Onboarded</h1>
-                <p className='bg-[#D9D9D9] rounded-full p-6 text-4xl mr-10 mt-2'>1/4</p>
+                <p className='bg-[#D9D9D9] rounded-full p-6 text-4xl mr-10 mt-2'>{activeStep}/4</p>
               </div>
             </div>
             <div id="right" className="w-[60%]  ">
-              <div className="w-full h-[500px] bg-[#EEEEEE] rounded-sm">
-                <img src="/onboardingplan2.png" alt="" className='w-full h-full rounded-sm  object-cover ' />
+              <div className="w-full h-[500px] bg-[#EEEEEE] rounded-sm transition-opacity duration-300">
+                <img src={getImage()} alt="" className='w-full h-full rounded-sm' />
               </div>
-
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa'
 
 const HomeSec5 = () => {
   const scrollRef = useRef(null)
@@ -10,36 +11,30 @@ const HomeSec5 = () => {
         "“Helps decode your runway, spotlight where cash burns, and show exactly how to extend it. Breaks down your numbers, shows you how long your runway actually is, and where you’re bleeding cash.”",
       lgPara:
         "Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
-      name: "Arjun Mehta ",
-      lgname: "Arjun Mehta",
-      company: "Elvehico ",
-      company2: "Founder",
-      companyName: "Early-stage product team",
-       image: "https://randomuser.me/api/portraits/men/45.jpg"
+      name: "Michael Stevens",
+      position: "Co-Founder",
+      image: "https://randomuser.me/api/portraits/men/45.jpg",
+      rating: 4
     },
     {
       paragraph:
         "“With Copteno, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
       lgPara:
         "With Copteno, we stopped guessing. Our financial madesense, our pitch felt stronger, and investors finally understood what we were building. It saved us weeks of confusion and endless revisions.",
-      name: "Niharika Sharma ",
-      lgname: "Niharika Sharma",
-      company2: "TSAH",
-      company: "TSAH ",
-      companyName: "Founder",
-       image: "https://randomuser.me/api/portraits/women/68.jpg"
+      name: "Sarah Jenkins",
+      position: "Founder",
+      image: "https://randomuser.me/api/portraits/women/68.jpg",
+      rating: 4.5
     },
     {
       paragraph:
         "“Copteno helped us uncover the truth behind our runway, fix our messy numbers, and finally understand the real story we needed to show investors. It gave us clarity we didn’t even realize we were missing.",
       lgPara:
         "Before Copteno, our financial story felt scattered. With its insights, we streamlined our data, identified key gaps, and built a much stronger narrative for investors. It became an essential part of our decision-making process.",
-      name: "Vivek T ",
-      lgname: "Sanjay Kumar",
-      company2: "Founder",
-      company: "TSAH",
-      companyName: "Startup",
-       image: "https://randomuser.me/api/portraits/men/32.jpg"
+      name: "David Peterson",
+      position: "Early-stage Founder",
+      image: "https://randomuser.me/api/portraits/men/32.jpg",
+      rating: 5
     },
   ]
  
@@ -89,13 +84,28 @@ const HomeSec5 = () => {
                 key={index}
                 className="w-full lg:w-[42%] shrink-0 p-4 mx-2"
               >
-                <div className="flex flex-col lg:flex-row justify-center items-start w-full h-full gap-6 lg:gap-8 px-7 lg:p-7 border border-[#00103280] rounded-sm shadow-lg">
-                  <p className="text-[#001032B2] text-md leading-8 tracking-wider lg:hidden py-2">
-                    {item.paragraph}
-                  </p>
-                  <p className="text-[#001032B2] text-md leading-9 tracking-wider hidden lg:block">
-                    {item.lgPara}
-                  </p>
+                <div className="flex flex-col lg:flex-row justify-between items-start w-full h-full gap-6 lg:gap-8 px-7 lg:p-7 border border-[#00103280] rounded-sm shadow-lg">
+                  
+                  <div className="flex flex-col justify-between h-full w-full lg:w-[60%]">
+                    <p className="text-[#001032B2] text-md leading-8 tracking-wider lg:hidden py-2">
+                      {item.paragraph}
+                    </p>
+                    <p className="text-[#001032B2] text-md leading-9 tracking-wider hidden lg:block">
+                      {item.lgPara}
+                    </p>
+
+                    <div className="hidden lg:flex gap-1 mt-5 lg:mb-2 items-center">
+                      {[1, 2, 3, 4, 5].map((star) => {
+                        if (item.rating >= star) {
+                          return <FaStar key={star} className="text-[#001032]" size={20} />;
+                        } else if (item.rating >= star - 0.5) {
+                          return <FaStarHalfAlt key={star} className="text-[#001032]" size={20} />;
+                        } else {
+                          return <FaRegStar key={star} className="text-[#001032]" size={20} />;
+                        }
+                      })}
+                    </div>
+                  </div>
 
                   <div className="lg:hidden flex justify-between items-center gap-5 w-full py-3">
                     <div>
@@ -103,11 +113,19 @@ const HomeSec5 = () => {
                         {item.name}
                       </p>
                       <p className="text-sm text-[#001032B5]">
-                        {item.company2}
+                        {item.position}
                       </p>
-                      <p className="text-sm text-[#001032B5]">
-                        Early-stage product team
-                      </p>
+                      <div className="flex gap-1 mt-2 items-center">
+                        {[1, 2, 3, 4, 5].map((star) => {
+                          if (item.rating >= star) {
+                            return <FaStar key={star} className="text-[#001032]" size={14} />;
+                          } else if (item.rating >= star - 0.5) {
+                            return <FaStarHalfAlt key={star} className="text-[#001032]" size={14} />;
+                          } else {
+                            return <FaRegStar key={star} className="text-[#001032]" size={14} />;
+                          }
+                        })}
+                      </div>
                     </div>
                     <div className="flex justify-center items-center gap-5">
                       <div className="border-l h-20 border-[#00000033]"></div>
@@ -119,18 +137,15 @@ const HomeSec5 = () => {
                   </div>
 
                   <div className="hidden lg:block mt-3">
-                    <div className="w-[180px] h-[200px] bg-[#D9D9D9] rounded-sm">
+                    <div className="w-[180px] h-[250px] bg-[#D9D9D9] rounded-sm">
                       <img src={item.image} alt="" className='w-full h-full object-cover rounded-sm'/>
 
                     </div>
                     <p className="text-sm pt-2 text-[#001032B5]">
-                      {item.lgname}
+                      {item.name}
                     </p>
                     <p className="text-sm text-[#001032B5]">
-                      {item.company}
-                    </p>
-                    <p className="text-sm text-[#001032B5]">
-                      {item.companyName}
+                      {item.position}
                     </p>
                   </div>
                 </div>

@@ -147,7 +147,7 @@ const HomeSec2 = () => {
                 </div></Link>
                 <p className="pt-4 text-md leading-6 tracking-wider w-[75%] mb-15">
                   You’re building something real and ready to scale
-                </p>
+                </p> 
               </div>
               <div className=" w-[30%]">
                 <hr className="border-t border-gray-500 pb-8 w-[90%] " />

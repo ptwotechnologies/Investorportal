@@ -11,7 +11,31 @@ const ComingSoonModal = ({ onClose, title }) => {
 
   const handleUpgrade = () => {
     const content = getContent();
-    navigate(content.primaryAction || "/scanner");
+
+    if (content.primaryAction) {
+      navigate(content.primaryAction);
+      onClose();
+      return;
+    }
+
+    // Default to pricing page instead of scanner page
+    let upgradeType = "growth";
+    if (title === "Premium Infrastructure") {
+      upgradeType = "premium";
+    }
+    
+    const roleLower = String(userRole).toLowerCase();
+    const isService = roleLower.includes("service") || roleLower.includes("professional");
+    const roleForPricing = isService ? "serviceprofessional" : "startup";
+
+    navigate("/pricing", { 
+      state: { 
+        isUpgradeFlow: true, 
+        role: roleForPricing,
+        upgradeType: upgradeType 
+      } 
+    });
+    
     onClose();
   };
 
@@ -59,7 +83,7 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Fundraising analytics"
         ],
         primaryCTA: "Unlock Fundraising",
-        secondaryCTA: "View Growth Plan"
+        secondaryCTA: "Maybe Later"
       };
     }
 
@@ -76,7 +100,7 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Commitment monitoring"
         ],
         primaryCTA: "Access Investor Hub",
-        secondaryCTA: "Upgrade to Premium"
+        secondaryCTA: "Maybe Later"
       };
     }
 
@@ -93,7 +117,7 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Operational analytics"
         ],
         primaryCTA: "Unlock Operations",
-        secondaryCTA: "Explore Premium Access"
+        secondaryCTA: "Maybe Later"
       };
     }
 
@@ -108,8 +132,8 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Startup Operations",
           "Analytics & Execution Tools"
         ],
-        primaryCTA: "Upgrade to Growth Plan",
-        secondaryCTA: "View Premium Features"
+        primaryCTA: "Upgrade to Scale Plan",
+        secondaryCTA: "Maybe Later"
       };
     }
 
@@ -125,8 +149,8 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Professional networking",
           "Business workflow systems"
         ],
-        primaryCTA: "Switch to Professional",
-        secondaryCTA: "Explore Professional Tools"
+        primaryCTA: "Upgrade to Growth Plan",
+        secondaryCTA: "Maybe Later"
       };
     }
 
@@ -142,8 +166,8 @@ const ComingSoonModal = ({ onClose, title }) => {
           "Founder networking",
           "Growth & execution tools"
         ],
-        primaryCTA: "Switch to Startup",
-        secondaryCTA: "Explore Startup Workspace"
+        primaryCTA: "Upgrade to Growth Plan",
+        secondaryCTA: "Maybe Later" 
       };
     }
     

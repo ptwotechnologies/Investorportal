@@ -9,7 +9,7 @@ function AboutSec2() {
             <div className='w-10 h-10 bg-[#001032]  ml-5 mt-5 lg:hidden'>
             </div>
             <h1 className='lg:hidden text-[#001032] font-medium text-2xl m-5 my-4'>Our Mission</h1>
-            <button className=' lg:bg-[#FFFFFF]  lg:text-[#001032] bg-[#001032] text-[#FFFFFF]  lg:font-medium text-3xl lg:leading-9 leading-8 tracking-wider lg:w-[70%] text-start p-5 lg:mb-14 lg:rounded-lg '>
+            <button className=' lg:bg-[#FFFFFF]  lg:text-[#001032] bg-[#001032] text-[#FFFFFF]  lg:font-medium text-3xl lg:leading-9 leading-8 tracking-wider lg:w-[100%] text-start p-5 lg:mb-14 lg:rounded-lg '>
               A mission to simplify growth for every startup</button>
             <p className='lg:text-xl text-md leading-8 tracking-wide lg:py-5 p-5 lg:font-light'>Our mission is to bring everything that helps a startup grow into one space, while connecting the right people with the right support at the right time.</p>
             <p className='text-md lg:text-xl leading-8 tracking-wider lg:py-7 lg:p-5 px-5 lg:font-light'>We created this portal to make the startup journey less overwhelming and more focused.</p>
@@ -23,7 +23,7 @@ function AboutSec2() {
         </div>
       </div>
 
-      <div className="bg-white w-5 h-5 rounded-full relative top-4 left-[90%] hidden lg:block ">
+      <div className="bg-white w-5 h-5 rounded-full relative top-4 left-[99.5%] hidden lg:block ">
       </div>
     </div>
   )

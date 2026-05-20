@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { serverUrl } from "@/App";
 
-const DesigningContent = ({ isUpgradeFlow }) => {
+const DesigningContent = ({ isUpgradeFlow, upgradeType }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const scrollRef = React.useRef(null);
   const navigate = useNavigate();
@@ -37,16 +37,30 @@ const DesigningContent = ({ isUpgradeFlow }) => {
       return;
     }
 
-    // ✅ Free plan
-    if (!amount || amount === 0) {
-      toast.success("You are already logged in");
+    const planAmount = Number(amount) || 0;
+    const currentAmount = Number(userPlanAmount) || 0;
+
+    // ✅ User is already on this exact plan (including Free plan)
+    if (planAmount === currentAmount) {
+      if (planAmount === 0) {
+        toast.success("You are already on the Free plan");
+      } else {
+        toast.success(`You are already subscribed to the ${planName}`);
+      }
+      navigate("/dashboard");
+      return;
+    }
+
+    // ✅ If the selected plan is Free (and they are not currently on it)
+    if (planAmount === 0) {
+      toast.success("Switching to Free plan");
       navigate("/dashboard");
       return;
     }
 
     // ✅ Paid plan - Direct to Razorpay
     navigate("/scanner", {
-      state: { userId, amount, planName },
+      state: { userId, amount: planAmount, planName },
     });
   };
 
@@ -183,7 +197,7 @@ const DesigningContent = ({ isUpgradeFlow }) => {
       title: "Starter Growth Plan",
       titleBg: "#119BCD",
       titleBg2: "#61C9EF",
-      amount: 19999,
+      amount: 24999,
       amountduration: "/year",
       amountDesc: "Enhanced visibility & positioning",
       amountButton: "Everything in Foundation +",
@@ -320,12 +334,32 @@ const DesigningContent = ({ isUpgradeFlow }) => {
   const cardsToDisplay = React.useMemo(() => {
     if (!isUpgradeFlow) return cards;
     
+    if (upgradeType === "premium") {
+      // Show Growth Plan (Index 2) and Scale Plan (Index 3)
+      return [cards[2], cards[3]];
+    }
+    
+    if (upgradeType === "growth") {
+      // Find current plan
+      const currentAmount = Number(userPlanAmount) || 0;
+      const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
+      const currentPlan = currentIdx !== -1 ? cards[currentIdx] : cards[0];
+      const growthPlan = cards[2];
+      
+      // If user is already on the Growth Plan, avoid duplicating
+      if (currentPlan.amount === growthPlan.amount) {
+        return [currentPlan];
+      }
+      return [currentPlan, growthPlan];
+    }
+    
+    // Default fallback
     const currentAmount = Number(userPlanAmount) || 0;
     const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
     
     if (currentIdx === -1) return [cards[0], cards[1]];
     return cards.slice(currentIdx, currentIdx + 2);
-  }, [isUpgradeFlow, userPlanAmount]);
+  }, [isUpgradeFlow, userPlanAmount, upgradeType]);
 
   const handleScroll = () => {
     const container = scrollRef.current;
@@ -338,12 +372,12 @@ const DesigningContent = ({ isUpgradeFlow }) => {
 
   return (
     <main className="bg-background text-foreground">
-      <section className="mx-auto w-full lg:px-6  ">
+      <section className="mx-auto w-full   ">
         {/* ⭐ Scrollable Cards with Tracking */}
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className={`grid gap-4 lg:gap-8 w-full justify-center mx-auto ${
+          className={`grid gap-4 lg:gap-0 w-full justify-center mx-auto ${
             cardsToDisplay.length === 1 ? 'grid-cols-1 max-w-md' : 
             cardsToDisplay.length === 2 ? 'grid-cols-1 md:grid-cols-2 max-w-6xl' : 
             'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-[1500px]'
@@ -384,6 +418,14 @@ const DesigningContent = ({ isUpgradeFlow }) => {
                     </span>
                   </p>
                   <p className="text-sm ">{card.amountDesc}</p>
+                   {card.amountButton && (
+                          <>
+                          <button className="bg-linear-to-r from-[#BA1E1E] from-70% to-[#B77070] w-full py-1 text-start px-2 text-sm text-white rounded-sm my-4">
+                            {card.amountButton}
+                          </button>
+                          <hr />
+                          </>
+                        )}
                 </div>
 
                 <div className="bg-[#0000001A] flex items-center text-[10px] lg:gap-4 pl-6 gap-2 px-2 py-1 rounded-sm mt-6 lg:mt-4">

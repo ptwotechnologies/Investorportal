@@ -25,20 +25,27 @@ const InvestorSec1 = () => {
           </button>
         </div>
 
-        <div id="right" className="w-full my-5 lg:my-0 lg:w-[60%] min-[1450px]:w-full">
-          <div className="relative h-[250px] lg:!h-[400px] min-[1400px]:!h-[550px] bg-[#D8D8D8] lg:rounded-sm rounded-2xl flex justify-center items-end overflow-hidden shadow-md lg:shadow-none">
+        <div id="right" className="w-full my-5 lg:my-0 lg:w-[80%] min-[1450px]:w-full">
+          <div className="relative h-[250px] lg:!h-[400px] min-[1400px]:!h-[550px] bg-[#D8D8D8] lg:bg-[#FDFDFD] lg:rounded-sm rounded-2xl flex justify-center items-end overflow-hidden shadow-md lg:shadow-none border">
             {/* Image */}
-            <img
-              src="/investorpage1.png"
-              alt="Image"
-              className="w-full h-full  rounded-2xl lg:rounded-none border hidden lg:block object-cover "
-            />
+            <div className="hidden lg:flex items-center justify-between w-full h-full">
+            <img src="/investorImg11.png" alt="" className="w-1/2 h-full object-contain scale-120" />
+            <img src="/investorImg22.png" alt="" className="w-1/2 h-full object-contain scale-120" />
+           </div>
           
             <img
               src="/investorpage2.png"
               alt="Image"
-              className="w-full h-full shadow-md rounded-2xl  border lg:hidden"
+              className="w-full h-full shadow-md rounded-2xl border lg:hidden"
             />
+            {/* Desktop Button */}
+            <div className="hidden lg:block absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+              <Link to="/login">
+                <button className="bg-[#001032] text-white p-2 px-12 rounded-md text-lg shadow-lg hover:shadow-2xl transition duration-200">
+                  Get Listed
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
         <div className="hidden lg:block text-center  w-[60%]">
@@ -47,19 +54,6 @@ const InvestorSec1 = () => {
             Founder-Focused Ecosystem
           </h1>
 
-          <Link to="/login"><button
-              className="
-          hidden lg:block 
-          mx-auto mt-3
-          bg-[#001032] text-white 
-          p-3 px-15 rounded-sm text-lg
-
-          shadow-lg hover:shadow-2xl
-          transition duration-200
-        "
-            >
-              Get Listed
-            </button></Link>
         </div>
       </div>
     </div>

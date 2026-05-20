@@ -18,8 +18,11 @@ const HomeSec4 = () => {
                 <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
                 <div>
                   <h1 className="lg:text-6xl text-4xl">1</h1>
-                  <p className="text-lg tracking-wide w-70">
-                    Legal structure, compliance, and investor paperwork
+                  <p className="tracking-wide lg:text-xl text-lg">
+                    Legal & Compliance:
+                  </p>
+                  <p className="lg:text-lg text-md font-light tracking-wide w-70">
+                    Legal structure, compliance, and investor paperwork 
                   </p>
                 </div>
               </div>
@@ -27,7 +30,10 @@ const HomeSec4 = () => {
                 <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
                 <div>
                   <h1 className="lg:text-6xl text-4xl">2</h1>
-                  <p className="text-lg tracking-wide w-70">
+                  <p className="tracking-wide lg:text-xl text-lg">
+                    Tech & Product:
+                  </p>
+                  <p className="lg:text-lg text-md font-light tracking-wide  w-70">
                     MVP build or tech scale-up — done efficiently
                   </p>
                 </div>
@@ -36,7 +42,10 @@ const HomeSec4 = () => {
                 <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
                 <div>
                   <h1 className="lg:text-6xl text-4xl">3</h1>
-                  <p className="text-lg tracking-wide w-70">
+                  <p className="tracking-wide lg:text-xl text-lg">
+                    Brand Identity:
+                  </p>
+                  <p className="lg:text-lg text-md font-light tracking-wide w-70">
                     Branding that wins trust and builds recall
                   </p>
                 </div>
@@ -45,7 +54,10 @@ const HomeSec4 = () => {
                 <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
                 <div>
                   <h1 className="lg:text-6xl text-4xl">4</h1>
-                  <p className="text-lg tracking-wide w-70">
+                  <p className="tracking-wide lg:text-xl text-lg">
+                    Growth Marketing:
+                  </p>
+                  <p className="lg:text-lg text-md font-light tracking-wide  w-70">
                     Marketing that converts, not just attracts
                   </p>
                 </div>
@@ -54,7 +66,10 @@ const HomeSec4 = () => {
                 <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
                 <div>
                   <h1 className="lg:text-6xl text-4xl">5</h1>
-                  <p className="text-lg tracking-wide w-70">
+                  <p className="tracking-wide lg:text-xl text-lg">
+                    Pitch & Storytelling:
+                  </p>
+                  <p className="lg:text-lg text-md font-light tracking-wide  w-70">
                     Investor prep — tell your story with clarity
                   </p>
                 </div>
@@ -63,7 +78,10 @@ const HomeSec4 = () => {
                 <div className="border-l h-20 lg:border-gray-700 border-[#FFFFFF4D] p-2"></div>
                 <div>
                   <h1 className="lg:text-6xl text-4xl">6</h1>
-                  <p className="text-lg tracking-wide w-70">
+                  <p className="tracking-wide lg:text-xl text-lg">
+                    Financial Management:
+                  </p>
+                  <p className="lg:text-lg text-md font-light tracking-wide  w-70">
                     Financial visibility — know your runway, always
                   </p>
                 </div>

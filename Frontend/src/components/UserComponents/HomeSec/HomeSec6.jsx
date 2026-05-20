@@ -54,25 +54,19 @@ const HomeSec6 = () => {
                 Learn how to use your founder credit and start building with
                 expert guidance
               </p>
-              <div className="flex justify-end items-center gap-3 relative group w-full">
+              <div className="flex justify-end items-center gap-3 relative group w-full min-h-[70px]">
 
-                <div className="flex items-center gap-3 group-hover:hidden transition-all">
+                <div className="flex items-center gap-3 group-hover:opacity-0 transition-opacity duration-300">
                   <div className="mt-5">
-                    <button className="text-2xl   mt-5">
+                    <button className="text-2xl mt-5">
                       Startups
                     </button>
                   </div>
                   <IoIosArrowRoundForward size={25} className="mt-10" />
                 </div>
 
-
-                <Link to="/startup">
-                  <button
-                    className="
-          hidden group-hover:block 
-          text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
-        "
-                  >
+                <Link to="/startup" className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
+                  <button className="text-lg bg-white text-[#000000] py-1 px-3 rounded-sm">
                     Get Started
                   </button>
                 </Link>
@@ -91,25 +85,19 @@ const HomeSec6 = () => {
               <p className="text-lg leading-6 tracking-wide  font-light">
                 Share your focus areas, deal sizes, and investment interests.
               </p>
-              <div className="flex justify-end items-center gap-3 relative group w-full">
+              <div className="flex justify-end items-center gap-3 relative group w-full min-h-[70px]">
 
-                <div className="flex items-center gap-3 group-hover:hidden transition-all">
+                <div className="flex items-center gap-3 group-hover:opacity-0 transition-opacity duration-300">
                   <div className="mt-5">
-                    <button className="text-2xl  mb-2 mt-5">
+                    <button className="text-2xl mb-2 mt-5">
                       Investors
                     </button>
                   </div>
                   <IoIosArrowRoundForward size={25} className="mt-10" />
                 </div>
 
-
-                <Link to="/investor">
-                  <button
-                    className="
-          hidden group-hover:block 
-          text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
-        "
-                  >
+                <Link to="/investor" className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
+                  <button className="text-lg bg-white text-[#000000] py-1 px-3 rounded-sm">
                     Get Started
                   </button>
                 </Link>
@@ -128,25 +116,19 @@ const HomeSec6 = () => {
               <p className="text-lg leading-6 tracking-wide font-light">
                 Connect with verified startups and convert leads directly.
               </p>
-              <div className="flex justify-end items-center gap-3 relative group w-full">
+              <div className="flex justify-end items-center gap-3 relative group w-full min-h-[70px]">
 
-                <div className="flex items-center gap-3 group-hover:hidden transition-all">
+                <div className="flex items-center gap-3 group-hover:opacity-0 transition-opacity duration-300">
                   <div className="mt-5">
-                    <button className="text-2xl   mt-5">
+                    <button className="text-2xl mt-5">
                       Service Professionals
                     </button>
                   </div>
                   <IoIosArrowRoundForward size={25} className="mt-10" />
                 </div>
 
-
-                <Link to="/serviceprofessional">
-                  <button
-                    className="
-          hidden group-hover:block 
-          text-2xl  mt-10 bg-white text-[#000000] py-1 px-3 rounded-sm transition-all
-        "
-                  >
+                <Link to="/serviceprofessional" className="absolute right-0 bottom-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none group-hover:pointer-events-auto">
+                  <button className="text-lg bg-white text-[#000000] py-1 px-3 rounded-sm">
                     Get Started
                   </button>
                 </Link>

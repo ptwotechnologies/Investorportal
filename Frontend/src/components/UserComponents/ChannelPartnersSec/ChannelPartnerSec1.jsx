@@ -278,12 +278,13 @@ const ChannelPartnerSec1 = () => {
           </div>
         </div>
 
-        <div id="middle" className="lg:hidden  ">
-          <h1 className=" text-xl text-[#001032] font-semibold px-5 my-10">
+        <div id="middle" className=" lg:px-10 ">
+          <h1 className=" text-xl lg:text-4xl text-[#001032] font-semibold lg:px-0 px-5 my-10">
             Who can be the channel partner?
           </h1>
 
-          <div className="shadow-xl border bg-white p-4 rounded-md mt-5 mx-3">
+          <div className="lg:flex items-center justify-center gap-10">
+            <div className="shadow-xl border bg-white p-4 rounded-md mt-5 lg:mt-0 lg:mx-0 mx-3">
             <div className="bg-gray-200 w-full h-50 rounded-md">
               <img src="/channelpartnerpage1.png" alt="" className="w-full h-full  rounded-md" />
             </div>
@@ -303,8 +304,8 @@ const ChannelPartnerSec1 = () => {
               </div>
             </div>
           </div>
-          <hr className="my-6 mx-6 " />
-          <div className="shadow-xl border bg-white p-4 rounded-md  mx-3">
+          <hr className="my-6 mx-6 lg:hidden " />
+          <div className="shadow-xl border bg-white p-4 rounded-md lg:mx-0 mx-3">
             <div className="bg-gray-200 w-full h-50 rounded-md">
               <img src="/channelpartnerpage2.png" alt="" className="w-full h-full  rounded-md" />
             </div>
@@ -324,8 +325,8 @@ const ChannelPartnerSec1 = () => {
             </div>
           </div>
 
-          <hr className="my-6 mx-6 " />
-          <div className="shadow-xl border bg-white p-4 rounded-md  mx-3">
+          <hr className="my-6 mx-6 lg:hidden" />
+          <div className="shadow-xl border bg-white p-4 rounded-md lg:mx-0 mx-3">
             <div className="bg-gray-200 w-full h-50 rounded-md">
               <img src="/channelpartnerpage3.png" alt="" className="w-full h-full  rounded-md" />
             </div>
@@ -345,10 +346,11 @@ const ChannelPartnerSec1 = () => {
               </div>
             </div>
           </div>
+          </div>
         </div>
 
         <div id="bottom" className="lg:mt-30 lg:px-10 ">
-          <h1 className="lg:hidden text-xl text-[#001032] font-medium px-5 my-10">
+          <h1 className="lg:text-4xl text-xl text-[#001032] font-medium px-5 lg:px-0 my-10">
             Experience to be remembered
           </h1>
 

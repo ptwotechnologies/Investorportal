@@ -145,7 +145,7 @@ const SubscriptionPlan = () => {
 
   return (
      <main className="bg-background text-foreground">
-             <section className="mx-auto w-full lg:px-6">
+             <section className="mx-auto w-full ">
                <div
                  ref={scrollRef}
                  onScroll={handleScroll}
@@ -166,7 +166,7 @@ const SubscriptionPlan = () => {
                          style={{
                            background: `linear-gradient(180deg, ${card.titleBg} 20%, ${card.titleBg2} 100%)`,
                          }}
-                         className="py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.75)] rounded-sm mx-4 lg:mx-6 bg-white z-10 text-center"
+                         className="py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.75)] rounded-sm mx-4 lg:mx-4 bg-white z-10 text-center"
                        >
                          <div className="lg:mt-1 space-y-1.5">
                            <div className="text-[#000000] bg-[#FFFFFF] py-1 rounded-sm w-fit px-4 mb-2 lg:text-xs mx-auto shadow-[inset_0px_4px_12px_rgba(0,0,0,0.5)]">
@@ -270,7 +270,7 @@ const SubscriptionPlan = () => {
                          {/* Bottom section pinned to bottom */}
                          <div className="mt-auto pt-6 text-center">
                            <p className='my-1 text-xs'>{card.bottomText}</p>
-                           <button className='text-[10px] bg-linear-to-r from-[#BA1E1E] to-[#B77070] p-2 w-full rounded-sm text-white'>
+                           <button className='text-[10px] bg-linear-to-r from-[#BA1E1E] to-[#BA1E1E] p-2 w-full rounded-sm text-white'>
                              {card.buttonText2}
                            </button>
                            <button

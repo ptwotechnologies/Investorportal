@@ -31,8 +31,10 @@ const NavigationDesk = () => {
           <NavigationMenuContent className="inner-shadow left-[-100px]">
             <ul className="grid w-[800px] h-80 gap-4 shadow-md border rounded-xl p-4">
               <li className="flex items-start justify-center gap-5 gap-y-20">
-                <NavigationMenuLink asChild>
-                  <div className="w-[33%] border border-[#D0D0D0] rounded-2xl mt-1.5">
+              <div className=" border p-2 px-4 my-1 rounded-xl  flex flex-col shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
+                 <div className="flex items-center justify-between  ">
+                 <NavigationMenuLink asChild>
+                  <div className="w-[50%]  mt-1.5">
                     <Link to="/BusinessRefinementProgram">
                       <div className="relative bottom-2 font-medium border border-[#D5D5D5] text-[#5C5C5C] rounded-full p-1 w-full bg-[#DEDEDE] px-3 hover:bg-[#D5D5D5] ">
                         Business Refinement Program
@@ -82,12 +84,12 @@ const NavigationDesk = () => {
                       <p className="text-[#001032] tracking-wide leading-5 text-xs font-light">• Legal & Compliance Setup</p>
                       <p className="text-[#001032] tracking-wide leading-5 text-xs font-light">• Financial & Pitch Readiness</p>
                       <p className="text-[#001032] tracking-wide leading-5 text-xs font-light">• Expert Consultation Access</p>
-                      <Link to="/BusinessRefinementProgram"><button className="bg-[#001032] text-white px-4 py-1.5 mt-4 rounded-full">Start Refinement</button></Link>
+                      <Link to="/BusinessRefinementProgram"><button className=" border border-[#001032] text-[#001032] px-4 py-1.5 mt-4 rounded-full">Start Refinement</button></Link>
                     </div>
                   </div>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild>
-                  <div className="w-[30%]">
+                  <div className="w-[40%]">
                     <Link to="#">
                       <div className="font-medium border border-[#D5D5D5] text-[#5C5C5C] rounded-full p-1 w-fit px-4">
                         Profile
@@ -120,9 +122,21 @@ const NavigationDesk = () => {
                       </div>
                     </Link>
                   </div>
-                </NavigationMenuLink>
+                </NavigationMenuLink> 
+               </div>
+               <div className="text-xs text-[#001032]  flex items-center gap-1 ml-3 relative ">
+                Explore the benefits of{" "}
+                <Link
+                  to="/channelpartners"
+                  className="underline flex items-center gap-1"
+                >
+                  channel partners{" "}
+                  <BsBoxArrowInUpRight size={15} className="mt-1" />{" "}
+                </Link>{" "}
+              </div>
+              </div>
                 <NavigationMenuLink asChild>
-                  <div className="border border-[#D0D0D040] inner-shadow rounded-xl p-2  w-[30%] mt-1.5">
+                  <div className="border border-[#D0D0D040] inner-shadow rounded-xl p-2  w-[30%] ">
                     <div className="border border-[#D0D0D040] shadow-md rounded-xl p-3 text-center">
                       <h1 className="text-[#5C5C5C] font-medium">Join us!</h1>
                       <p className="text-xs">
@@ -145,7 +159,7 @@ const NavigationDesk = () => {
 
                       <Link to="/joinus">
                         {" "}
-                        <button className="bg-[#001032] text-white p-1 px-5  rounded-full mb-2 mt-6">
+                        <button className="bg-[#001032] text-white p-1 px-5  rounded-full mb-4 mt-6">
                           Explore
                         </button>
                       </Link>
@@ -153,16 +167,7 @@ const NavigationDesk = () => {
                   </div>
                 </NavigationMenuLink>
               </li>
-              <div className="text-xs text-[#001032]  flex items-center gap-1 ml-3 relative bottom-10">
-                Explore the benefits of{" "}
-                <Link
-                  to="/channelpartners"
-                  className="underline flex items-center gap-1"
-                >
-                  channel partners{" "}
-                  <BsBoxArrowInUpRight size={15} className="mt-1" />{" "}
-                </Link>{" "}
-              </div>
+             
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>

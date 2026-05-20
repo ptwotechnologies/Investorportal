@@ -76,12 +76,12 @@ const InvestorSec6 = () => {
                         <p className=' py-5 lg:py-0 text-[#001032B2] text-md lg:leading-9 tracking-wider leading-8 '>{item.paragraph}</p>
                         <div className=' flex justify-between items-center ' >
                           <div className=' lg:text-xl text-md py-5 lg:py-0'>
-                            <h1 className='text-md text-[#001032B2]'>{item.company}</h1>
+                            <h1 className='text-lg  lg:text-2xl text-[#001032] font-medium'>{item.company}</h1>
                           </div>
-                          <div className='flex justify-center items-center gap-3 '>
-                            <div className='w-0.5 h-10 bg-[#D9D9D9] '></div>
-                            <div className='w-[50px] h-[50px]  rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center'>
-                               <item.icon size={25} className="text-white" />
+                          <div className='flex justify-center items-center gap-3 pb-3 '>
+                            <div className='w-0.5 h-[70px] bg-[#D9D9D9] '></div>
+                            <div className='w-[70px] h-[70px]  rounded-full lg:bg-[#001032] bg-[#00000033] flex items-center justify-center'>
+                              <item.icon size={35} className="text-white" />
                             </div>
                           </div>
                         </div>

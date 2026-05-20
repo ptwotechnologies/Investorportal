@@ -15,22 +15,22 @@ const StartupSec4 = () => {
     const divElements = [
       {
           paragraph:"Copteno turned our scattershot outreach into a clear fundraising path. We tightened our story, found the right leads, and closed our first term sheet — faster than we expected.",
-          name:"Niharika Sharma",
-         company:"Cofounder, Elvehico",
+          name:"Sarah Jenkins",
+         company:"Cofounder",
          color:"#002A30",
          image: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=300&h=450"
       },
       {
           paragraph:"Before Copteno we pitched everywhere and got nowhere. Here we met investors who actually understood our metrics and moved the conversation forward.",
-          name:"Shravani",
-         company:"Co-founder, Smriti Adventures",
+          name:"Emily Parker",
+         company:"Co-founder",
          color:"#001032",
          image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=300&h=450"
       },
       {
           paragraph:"“Raise capital, close deals, and manage your portfolio — all from a single platform. Copteno Technologies handles all overhead and back-office services.”",
-          name:"Arjun Malik",
-         company:"Founder, tefo.RE",
+          name:"James Cooper",
+         company:"Founder",
           color:"#616B80",
           image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300&h=450"
       }, 

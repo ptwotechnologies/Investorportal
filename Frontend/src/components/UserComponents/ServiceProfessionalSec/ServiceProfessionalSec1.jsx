@@ -9,10 +9,10 @@ const ServiceProfessionalSec1 = () => {
       <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-0 py-2 flex flex-col lg:flex-row justify-around items-start lg:h-auto">
         <h6 className='lg:hidden mx-auto mb-3 border border-white px-3 py-2 rounded-full text-sm'>For Service Professionals</h6>
         <div id='left' className='w-full text-center lg:text-start lg:w-[50%] lg:my-5 lg:text-[#001032]   lg:pt-3 '>
-          <h1 className='hidden lg:block text-5xl lg:text-4xl lg:font-bold font-semibold lg:leading-14 leading-15 tracking-wider lg:w-[80%] '>Grow Your Services by Partnering with </h1>
-          <h1 className='hidden lg:block text-5xl lg:text-4xl lg:font-bold font-semibold lg:leading-14 leading-15 tracking-wider lg:w-[90%] ' >India’s Most Trusted Founder Ecosystem</h1>
+          <h1 className='hidden lg:block text-5xl lg:text-4xl lg:font-semibold font-semibold lg:leading-12 leading-15 tracking-wider lg:w-[80%] '>Grow Your Services by Partnering with India’s Most Trusted Founder Ecosystem</h1>
+          {/* <h1 className='hidden lg:block text-5xl lg:text-4xl lg:font-bold font-semibold lg:leading-14 leading-15 tracking-wider lg:w-[90%] ' ></h1> */}
           <h1 className='lg:hidden text-4xl font-semibold tracking-wider leading-13'>Grow Your Business by Working With India’s Most Serious & Verified Startups</h1>
-          <p className='text-2xl lg:leading-9 tracking-wider lg:w-[80%] font-medium py-7 hidden lg:block text-[#001032]'>Join Copteno to get verified leads, fair terms, and predictable projects</p>
+          <p className='text-2xl lg:leading-9 tracking-wider lg:w-[80%]  py-7 hidden lg:block text-[#001032]'>Join Copteno to get verified leads, fair terms, and predictable projects</p>
           <Link to="/login"><button className='  mt-7 lg:bg-[#001032] lg:text-white bg-white text-[#001032] p-2 lg:p-4 px-6 lg:px-13 rounded-sm text-xl lg:font-medium mb-15 lg:mb-0'>Get Discovered
           </button></Link>
         </div>

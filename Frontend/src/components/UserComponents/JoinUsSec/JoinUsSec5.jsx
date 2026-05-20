@@ -14,7 +14,7 @@ const JoinUsSec5 = () => {
           <div id='bottom' className='lg:bg-[#002A3033] mt-10 grid grid-cols-2 gap-10 w-full gap-x-6 p-20 py-12 text-white'>
             <div className='bg-[#001426] rounded-sm p-6 w-full'>
               <div className='flex justify-start items-center py-4 gap-4'>
-                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-sm'>
+                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-lg'>
                   <HiOutlineHandRaised size={50} className="text-[#001426]" />
                 </div>
                 <h1 className='text-2xl font-medium'>NGO Portal</h1>
@@ -28,7 +28,7 @@ const JoinUsSec5 = () => {
             </div>
             <div className='bg-[#002A30] rounded-sm p-6'>
               <div className='flex justify-start items-center py-4 gap-4'>
-                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-sm'>
+                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-lg'>
                   <HiOutlineRocketLaunch size={50} className="text-[#002A30]" />
                 </div>
                 <h1 className='text-2xl font-medium'>Incubation Portal</h1>
@@ -41,7 +41,7 @@ const JoinUsSec5 = () => {
             </div>
             <div className='bg-[#002A30] rounded-sm p-6'>
               <div className='flex justify-start items-center py-4 gap-4'>
-                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-sm'>
+                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-lg'>
                   <HiOutlineBuildingLibrary size={50} className="text-[#002A30]" />
                 </div>
                 <h1 className='text-2xl font-medium'>Ash Portal</h1>
@@ -55,7 +55,7 @@ const JoinUsSec5 = () => {
             </div>
             <div className='bg-[#001426] rounded-sm p-6'>
               <div className='flex justify-start items-center py-4 gap-4'>
-                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-sm'>
+                <div className='bg-[#FFFFFF] w-22 h-22 flex items-center justify-center rounded-lg'>
                   <HiOutlineShoppingBag size={50} className="text-[#001426]" />
                 </div>
                 <h1 className='text-2xl font-medium'>ECOM Portal</h1>

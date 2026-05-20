@@ -26,22 +26,27 @@ const StartupSec1 = () => {
           </Link>
         </div>
 
-        <div id="right" className="w-full my-5 lg:my-0 lg:w-[60%] min-[1450px]:w-full">
-          <div className="h-[250px] lg:h-[400px] min-[1400px]:!h-[550px] bg-[#D8D8D8] lg:rounded-sm rounded-2xl flex justify-center items-end overflow-hidden shadow-md lg:shadow-none">
-            {/* Image */}
+        <div id="right" className="w-full my-5 lg:my-0 lg:w-[80%] min-[1450px]:w-full">
+          <div className="h-[250px] lg:h-[450px] min-[1400px]:!h-[450px] bg-[#D8D8D8] lg:bg-[#FDFDFD] lg:rounded-sm rounded-2xl flex justify-center items-end overflow-hidden shadow-md lg:shadow-none border relative">
+            {/* Image */} 
+           <div className="hidden lg:flex items-center justify-between w-full h-full">
+            <img src="/startupImg11.png" alt="" className="w-1/2 h-full object-contain" />
+            <img src="/startupImg22.png" alt="" className="w-1/2 h-full object-contain" />
+           </div>
             <img
-              src="/startuppage1.png"
-              alt=""
-              className="w-full h-full border hidden lg:block  "
-            />
-            <img
-              src="/startuppage2.png"
+              src="/startuppage2.png" 
               alt=""
               className="w-full h-full shadow-md border lg:hidden lg:rounded-sm "
             />
 
-            {/* Button */}
-
+            {/* Desktop Button */}
+            <div className="hidden lg:block absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
+              <Link to="/login">
+                <button className="bg-[#001032] text-white p-2 px-12 rounded-md text-lg shadow-lg hover:shadow-2xl transition duration-200">
+                  Get Listed
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
         <div className="hidden lg:block text-center  w-[60%] ">
@@ -50,20 +55,6 @@ const StartupSec1 = () => {
             and Funding
             <br /> Ecosystem
           </h1>
-
-          <Link to="/login">
-            <button
-              className=" hidden lg:block  
-          bg-[#001032] text-white 
-          p-3 px-15 rounded-sm text-lg
-          mx-auto mt-3
-          shadow-lg hover:shadow-2xl
-          transition duration-200
-        "
-            >
-              Get Listed
-            </button>
-          </Link>
         </div>
       </div>
     </div>

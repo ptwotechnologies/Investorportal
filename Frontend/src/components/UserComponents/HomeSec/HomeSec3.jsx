@@ -48,9 +48,10 @@ const HomeSec3 = () => {
                 <p className="mb-2">That’s when we realized —</p>
                 <p className="text-2xl   mb-2">The problem wasn’t the founders. </p>
                 <p className="text-2xl  mb-17 ">It was the system around them</p>
-                <hr className='w-full mb-5 ' />
+                <div className="min-h-[420px]">
+                  <hr className='w-full mb-5 ' />
 
-                <h1 className='text-xl  mb-5 ' onClick={() => setIsOpen(!isOpen)}>Really! The system is built to exhaust founders</h1>
+                <h1 className='text-xl  mb-5 cursor-pointer' onClick={() => { setIsOpen(!isOpen); setIsSecondOpen(false); setIsThirdOpen(false); }}>Really! The system is built to exhaust founders</h1>
                 {isOpen && (
                   <div className="leading-20 tracking-wider w-[94%]">
                     <p className="text-sm leading-6">
@@ -72,20 +73,25 @@ const HomeSec3 = () => {
                   </div>
                 )}
                 <hr />
-                <h1 className='my-4 text-xl ' onClick={() => setIsSecondOpen(!isSecondOpen)}>Keep your financials clean and transparent</h1>
+                <h1 className='my-4 text-xl cursor-pointer' onClick={() => { setIsSecondOpen(!isSecondOpen); setIsOpen(false); setIsThirdOpen(false); }}>Keep your financials clean and transparent</h1>
                 {isSecondOpen && (
                   <div className="leading-20 tracking-wider w-[94%]">
-                    <p className="text-sm leading-6" >Keep your financials clean and transparent</p>
+                    <p className="text-sm leading-6 pb-3" >
+                      No more hidden fees or confusing spreadsheets. We provide a clear, real-time dashboard so you always know exactly where your money is going. Build trust with your investors through complete financial transparency.
+                    </p>
                   </div>
                 )}
                 <hr />
-                <h1 className='my-4 text-xl ' onClick={() => setIsThirdOpen(!isThirdOpen)}>Get simplified compliance and support</h1>
+                <h1 className='my-4 text-xl cursor-pointer' onClick={() => { setIsThirdOpen(!isThirdOpen); setIsOpen(false); setIsSecondOpen(false); }}>Get simplified compliance and support</h1>
                 {isThirdOpen && (
                   <div className="leading-20 tracking-wider w-[94%]">
-                    <p className="text-sm leading-6" >Keep your financials clean and transparent</p>
+                    <p className="text-sm leading-6 pb-3" >
+                      Navigating legal requirements shouldn't be a full-time job. Our platform streamlines the compliance process with automated tools and expert support, so you can focus on growing your business instead of worrying about red tape.
+                    </p>
                   </div>
                 )}
                 <hr />
+                </div>
 
               </div>
 
@@ -123,8 +129,8 @@ const HomeSec3 = () => {
 
           </div>
 
-          <div className="flex justify-end pb-12 pt-5">
-            <p className="bg-white w-[45%] text-center rounded-4xl p-2 px-3 text-[#001032] tracking-wide mr-18">Simply, a one stop solution for startups & founders!</p>
+          <div className="flex justify-end pb-12 ">
+            <p className="bg-white w-[42%] text-center rounded-4xl p-2 px-3 text-[#001032] tracking-wide mr-20">Simply, a one stop solution for startups & founders!</p>
           </div>
         </div>
 

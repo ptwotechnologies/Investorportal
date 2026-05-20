@@ -5,7 +5,7 @@ const StartupSec5 = () => {
   const divElements = [
      {
         number:"1 ",
-        phoneScreenHeading:"Get visibility without paid ads :",
+        phoneScreenHeading:"Get visibility without paid ads:",
         phoneScreenPara:"Reach verified investors and consultants with zero ad spend or noisy outreach"
      },
      {
@@ -30,7 +30,7 @@ const StartupSec5 = () => {
      },
      {
         number:"6 ",
-         phoneScreenHeading:"Verified ecosystem, zero scam :",
+         phoneScreenHeading:"Verified ecosystem, zero scam:",
         phoneScreenPara:"We maintain a 99.99% safe environment so you don’t waste energy on noise"
      },
    
@@ -40,37 +40,37 @@ const StartupSec5 = () => {
    const phoneElements = [
      {
         number:"1 ",
-        phoneScreenHeading:"Get visibility without paid ads :",
+        phoneScreenHeading:"Get visibility without paid ads:",
         phoneScreenPara:"Reach verified investors and consultantswith zero ad spend or noisy outreach"
      },
      {
         number:"2",
-        phoneScreenHeading:"Your startup gets protected :",
+        phoneScreenHeading:"Your startup gets protected:",
         phoneScreenPara:"Every interaction is reviewed by ourteam for clarity, fairness and trust"
      },
      {
         number:"3",
-        phoneScreenHeading:"Guidance when you need it :",
+        phoneScreenHeading:"Guidance when you need it:",
         phoneScreenPara:"Get one-on-one support with strategy,positioning, pitch materials and growth"
      },
         {
         number:"4",
-         phoneScreenHeading:"Access to active investors :",
+         phoneScreenHeading:"Access to active investors:",
         phoneScreenPara:"Build credibility faster inside ourgrowing investor discovery ecosystem"
      },
      {
         number:"5",
-        phoneScreenHeading:"Seamless founder coordination :",
+        phoneScreenHeading:"Seamless founder coordination:",
         phoneScreenPara:"We simplify intros, align scopes andkeep your fundraising clean and smooth"
      },
      {
         number:"6 ",
-         phoneScreenHeading:"Verified ecosystem, zero scam risk :",
+         phoneScreenHeading:"Verified ecosystem, zero scam risk:",
         phoneScreenPara:"We maintain a 99.99% safe environmentso you don’t waste energy on noise"
      },
      {
         number:"7 ",
-         phoneScreenHeading:"Opportunity to join incubation : ",
+         phoneScreenHeading:"Opportunity to join incubation: ",
         phoneScreenPara:"Become part of our curated program andscale faster with structured support"
      },
  

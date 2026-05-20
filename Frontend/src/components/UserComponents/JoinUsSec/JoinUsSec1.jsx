@@ -28,4 +28,4 @@ const JoinUsSec1 = () => {
   )
 }
 
-export default JoinUsSec1
+export default JoinUsSec1;

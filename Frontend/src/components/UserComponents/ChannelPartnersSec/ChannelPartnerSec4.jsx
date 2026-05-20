@@ -90,18 +90,19 @@ const ChannelPartnerSec4 = () => {
   return (
     <>
       <div className="w-full bg-white">
-        <div className="max-w-[1500px] mx-auto w-full lg:!px-10 min-[1500px]:!px-0 rounded-4xl lg:rounded-none mt-13">
+        <div className="max-w-[1500px] mx-auto w-full   rounded-4xl lg:rounded-none mt-13">
           <div className="">
-            <h1 className="text-5xl font-normal p-10  hidden lg:block text-[#001032]">Who is this portal for?</h1>
-            <h1 className="text-[44px] font-normal px-3  pb-10  w-full lg:hidden tracking-wider leading-11.5 text-[#001032]">Who is this  portal  for?</h1>
+            <h1 className="lg:text-4xl  font-medium p-10  hidden lg:block text-[#001032]">Who do you want to refer?</h1>
+            <h1 className="text-xl font-medium px-3  pb-5  w-full lg:hidden tracking-wider leading-10 text-[#001032]">Who do you want to refer?</h1>
             <div className="hidden lg:block">
-              <div className="flex justify-center items-center  mx-20  ">
+              <div className="flex justify-center items-center  mx-10  ">
                 <div className=" w-[30%]">
                   <hr className="border-t border-gray-500 pb-8 w-[90%] " />
                   <h3 className="text-2xl pb-5">Startups</h3>
-                  <div className="rounded-xl w-[90%] h-[400px] bg-gray-200 cursor-pointer" onClick={() => setSelectedRole("Startups")}>
+                  <div className="rounded-2xl w-[90%] h-[400px] bg-gray-200 cursor-pointer" onClick={() => setSelectedRole("Startups")}>
+                    <img src="/homepage8.png" alt="" className="w-full h-full " />
                   </div>
-                  <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                  <p className="pt-4 text-md leading-6 tracking-wider w-[85%] mb-15">
                     You’re building something real and ready to scale{" "}
                   </p>
                 </div>
@@ -109,8 +110,9 @@ const ChannelPartnerSec4 = () => {
                   <hr className="border-t border-gray-500 pb-8 w-[90%] " />
                   <h3 className="text-2xl pb-5">Investors</h3>
                   <div  className="rounded-xl w-[90%] h-[400px] bg-gray-200 cursor-pointer" onClick={() => setSelectedRole("Investors")}>
+                    <img src="/homepage6.png" alt=""  className="w-full h-full "/>
                   </div>
-                  <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                  <p className="pt-4 text-md leading-6 tracking-wider w-[85%] mb-15">
                     You seek refined, investment-ready startup in your space{" "}
                   </p>
                 </div>
@@ -118,8 +120,9 @@ const ChannelPartnerSec4 = () => {
                   <hr className="border-t border-gray-500 pb-8 w-[90%] " />
                   <h3 className="text-2xl pb-5">Service Professionals</h3>
                   <div className="rounded-xl w-[90%] h-[400px] bg-gray-200 cursor-pointer" onClick={() => setSelectedRole("Service Professionals")}>
+                    <img src="/homepage7.png" alt=""  className="w-full h-full "/>
                   </div>
-                  <p className="pt-4 text-md leading-6 tracking-wider w-[90%] mb-15">
+                  <p className="pt-4 text-md leading-6 tracking-wider w-[85%] mb-15">
                     You want genuine startup leads without paid ads
                   </p>
                 </div>

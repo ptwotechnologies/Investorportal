@@ -15,21 +15,21 @@ const InvestorSec4 = () => {
      const divElements = [
        {
            paragraph:"Copteno streamlines how we review and assess early-stage opportunities. The platform filters noise, organizes data, and delivers founder profiles that are actually investor-ready.",
-           name:"Nandini Sharma",
+           name:"Laura Bennett",
           company:"Fund Manager",
           color:"#002A30",
           image: "https://images.unsplash.com/photo-1573162915955-6a8ba9d2fe20?auto=format&fit=crop&q=80&w=300&h=450"
        },
        {
            paragraph:"The due diligence clarity here is far better than open networks. Every startup we evaluate arrives structured, verified, and aligned with our investment thesis. Copteno reduces our overhead.",
-           name:"Shruti M",
+           name:"Jessica Chen",
           company:"Venture Partner",
            color:"#001032",
            image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&q=80&w=300&h=450"
        },
        {
            paragraph:"We rely on Copteno to identify strong founders earlier. The platform presents traction, financials, and milestones in a format built for investors, not noise. It’s become a reliable source of deal flow.",
-           name:"Kalyani P",
+           name:"Amanda Richards",
           company:"Angel Investor",
            color:"#616B80",
            image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&q=80&w=300&h=450"

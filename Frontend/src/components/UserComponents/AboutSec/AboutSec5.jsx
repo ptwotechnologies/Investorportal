@@ -10,9 +10,9 @@ const AboutSec5 = () => {
     setOpenSection(prev => prev === name ? null : name);
   };
   return (
-    <div className=' lg:p-12 w-full'>
+    <div className=' lg:px-12 lg:pb-12 w-full'>
       <div className="max-w-[1500px] mx-auto w-full  lg:px-8">
-        <div className='text-4xl lg:text-5xl text-[#001032]  lg:mb-30 font-medium lg:font-normal lg:leading-14 tracking-wide p-5'>
+        <div className='text-4xl lg:text-5xl text-[#001032]  lg:mb-20 font-medium lg:font-normal lg:leading-14 tracking-wide p-5'>
           <h1>Who’s here and what matters?</h1>
         </div>
         <div className='flex flex-col lg:flex-row items-center  gap-2 w-full '>
@@ -121,8 +121,17 @@ const AboutSec5 = () => {
           </div>
 
           <div id='right' className=' w-[60%]  pl-12 hidden lg:block '>
-            <div className='w-full h-[480px] bg-[#D8D8D8] rounded-sm '>
-              <img src="/investorpage1.png" alt="" className="w-full h-full border rounded-sm" />
+            <div className='w-full h-[480px] bg-[#D8D8D8] rounded-sm transition-all duration-300'>
+              <img 
+                src={
+                  openSection === "investors" ? "/investorpage1.png" : 
+                  openSection === "service" ? "/servicepage1.png" : 
+                  openSection === "channel" ? "/servicepage1.png" : 
+                  "/investorpage1.png"
+                } 
+                alt="Section feature" 
+                className="w-full h-full border rounded-sm object-cover" 
+              />
             </div>
           </div>
         </div>

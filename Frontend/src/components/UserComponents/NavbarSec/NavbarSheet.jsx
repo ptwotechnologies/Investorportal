@@ -220,7 +220,7 @@ function NavbarSheet({ textColor }) {
           </SheetTrigger>
            </div>
 
-          <SheetContent className="w-[94vw] h-fit mt-20 mx-3 rounded-xl p-3 bg-[#D5D5D5] ">
+          <SheetContent className="w-[94vw] h-fit mt-17 mx-3 rounded-xl p-3 bg-[#D5D5D5] ">
             <SheetHeader className="border h-fit bg-white">
               <SheetTitle></SheetTitle>
 
@@ -423,7 +423,7 @@ function NavbarSheet({ textColor }) {
                 </div>
 
                 {/* Join Us Card (Scrollable)  */}
-                <div className="border border-[#D5D5D5] p-2 mt-10 shadow-[inset_0px_4px_4px_rgba(208,208,208,0.25)] rounded-2xl">
+                <div className="border border-[#D5D5D5] p-2 mt-6 shadow-[inset_0px_4px_4px_rgba(208,208,208,0.25)] rounded-2xl">
                   <div className="border border-[#D5D5D5]  shadow-[0px_0px_4px_4px_rgba(20,20,20,0.3)] rounded-2xl p-1 px-2 pr-3">
                     <div className="flex items-start justify-between">
                       <p className="text-[10px] mt-1">
@@ -467,7 +467,7 @@ function NavbarSheet({ textColor }) {
                   </div>
                 </div>
               </div>
-              <div className="w-full flex justify-between items-center gap-4 mt-4 text-xl sticky bottom-0 bg-white py-3 border-t">
+              <div className="w-full flex justify-between items-center gap-4 mt-2 text-xl sticky bottom-0 bg-white py-2 border-t">
                 {!isLoggedIn ? (
                   <>
                     <Link

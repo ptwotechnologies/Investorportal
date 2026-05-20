@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 const ContactUsSec2 = () => {
   return (
     <div className='bg-[#F9972A1A]'>
-      <div className="max-w-[1500px] mx-auto w-full px-4 lg:!px-10 min-[1500px]:!px-0 py-10 lg:py-15">
+      <div className="max-w-[1500px] mx-auto w-full px-4 lg:px-55 py-10 lg:py-15">
         <div className='bg-linear-to-b from-[#C1CFED] from-80% to-[#001032D9] w-full p-8 lg:p-10'>
           <div className='bg-[#001032] text-white text-center w-full'>
             <h1 className='text-xl lg:text-5xl pt-7 lg:pt-15 font-medium tracking-wide'>Before you close this tab <br />

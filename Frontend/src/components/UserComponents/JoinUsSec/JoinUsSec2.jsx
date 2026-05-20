@@ -38,36 +38,36 @@ const JoinUsSec2 = () => {
           <div className="flex justify-evenly items-center gap-10">
             <div className="flex justify-center items-center gap-7 w-full">
               <div className="flex-1">
-                <div className="w-15 h-15 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
-                  <HiOutlineCheckBadge size={35} className="text-[#001032]" />
+                <div className="w-17 h-17 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
+                  <HiOutlineCheckBadge size={45} className="text-[#001032]" />
                 </div>
                 <p className="text-[#001032] text-center tracking-wide leading-8 text-xl">Verified Client <br /> pipelines</p>
               </div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
               <div className="flex-1">
-                <div className="w-15 h-15 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
-                  <HiOutlineBanknotes size={35} className="text-[#001032]" />
+                <div className="w-17 h-17 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
+                  <HiOutlineBanknotes size={45} className="text-[#001032]" />
                 </div>
                 <p className="text-[#001032] text-center tracking-wide leading-8 text-xl">Admin-Controlled <br /> Payments</p>
               </div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
               <div className="flex-1">
-                <div className="w-15 h-15 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
-                  <HiOutlineChatBubbleLeftRight size={35} className="text-[#001032]" />
+                <div className="w-17 h-17 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
+                  <HiOutlineChatBubbleLeftRight size={45} className="text-[#001032]" />
                 </div>
                 <p className="text-[#001032] text-center tracking-wide leading-8 text-xl">Post-Sales <br /> Support</p>
               </div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
               <div className="flex-1">
-                <div className="w-15 h-15 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
-                  <HiOutlineArrowsRightLeft size={35} className="text-[#001032]" />
+                <div className="w-17 h-17 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
+                  <HiOutlineArrowsRightLeft size={45} className="text-[#001032]" />
                 </div>
                 <p className="text-[#001032] text-center tracking-wide leading-8 text-xl">Automated Client <br /> Matching</p>
               </div>
               <div className="h-30 w-0.5 bg-[#00103233]"></div>
               <div className="flex-1">
-                <div className="w-15 h-15 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
-                  <HiOutlineAcademicCap size={35} className="text-[#001032]" />
+                <div className="w-17 h-17 bg-[#E5E5E5] mb-5 mx-auto flex items-center justify-center">
+                  <HiOutlineAcademicCap size={45} className="text-[#001032]" />
                 </div>
                 <p className="text-[#001032] text-center tracking-wide leading-8 text-xl">Industry Experts <br /> Guidance</p>
               </div>

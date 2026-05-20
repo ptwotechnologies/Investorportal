@@ -304,12 +304,12 @@ const DevelopmentContent = ({ isUpgradeFlow }) => {
 
   return (
     <main className="bg-background text-foreground">
-      <section className="mx-auto w-full lg:px-6  ">
-        {/* ⭐ Scrollable Cards with Tracking */}
+      <section className="mx-auto w-full   ">
+        {/* ⭐ Scrollable Cards with Tracking */} 
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className={`grid gap-4 lg:gap-8 w-full justify-center mx-auto ${
+          className={`grid gap-4 lg:gap-0 w-full justify-center mx-auto ${
             cardsToDisplay.length === 1 ? 'grid-cols-1 max-w-md' : 
             cardsToDisplay.length === 2 ? 'grid-cols-1 md:grid-cols-2 max-w-6xl' : 
             'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-[1500px]'

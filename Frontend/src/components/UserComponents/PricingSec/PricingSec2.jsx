@@ -9,10 +9,14 @@ const PricingSec2 = () => {
   const location = useLocation();
   const isUpgradeFlow = location.state?.isUpgradeFlow;
   const userRole = location.state?.role;
+  const upgradeType = location.state?.upgradeType;
 
   const [activeTab, setActiveTab] = useState(() => {
     if (isUpgradeFlow && userRole) {
-      return userRole === 'startup' ? 'Startups' : 'ServiceProfessionals';
+      const roleLower = String(userRole).toLowerCase();
+      if (roleLower.includes('startup')) return 'Startups';
+      if (roleLower.includes('service') || roleLower.includes('professional')) return 'ServiceProfessionals';
+      return 'Startups';
     }
     return 'Startups';
   });
@@ -24,7 +28,7 @@ const PricingSec2 = () => {
 
   const tabContents = {
     Startups: (
-     <StartupContent isUpgradeFlow={isUpgradeFlow} />
+     <StartupContent isUpgradeFlow={isUpgradeFlow} upgradeType={upgradeType} />
     ),
    ServiceProfessionals : (
      <ServiceContent isUpgradeFlow={isUpgradeFlow} />
@@ -46,7 +50,7 @@ const PricingSec2 = () => {
 
       {isUpgradeFlow ? (
         <div className="flex justify-start items-center relative lg:right-134 right-21 top-7 lg:top-10 flex-wrap  w-fit rounded-full p-1 mx-auto">
-          <div className="text-[#001032] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.75)] px-8 py-2 text-xl lg:text-2xl font-semibold rounded-full text-center">
+          <div className="text-[#001032] border border-[#001032] hover:bg-[#001032] hover:text-white transition-colors cursor-pointer px-8 py-2 text-xl lg:text-2xl font-semibold rounded-full text-center">
             {activeTab === 'Startups' ? 'Startup Plan' : 'Service Professional Plan'}
           </div> 
         </div>
