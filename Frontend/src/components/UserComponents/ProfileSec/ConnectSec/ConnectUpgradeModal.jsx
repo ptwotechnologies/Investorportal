@@ -82,7 +82,8 @@ const ConnectUpgradeModal = ({ onClose, userRole }) => {
                 onClick={() => navigate("/pricing", { 
                   state: { 
                     isUpgradeFlow: true, 
-                    role: userRole || "startup"
+                    role: userRole || "startup",
+                    upgradeType: "growth"
                   } 
                 })}
                 className="w-full py-2 bg-[#59549F] text-white rounded-2xl font-bold text-sm shadow-lg shadow-[#59549F]/30 hover:bg-[#48438A] transform active:scale-[0.98] transition-all tracking-wide"

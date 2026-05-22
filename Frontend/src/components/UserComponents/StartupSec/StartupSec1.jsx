@@ -49,7 +49,7 @@ const StartupSec1 = () => {
             </div>
           </div>
         </div>
-        <div className="hidden lg:block text-center  w-[60%] ">
+        <div className="hidden lg:block text-center  w-[60%] my-4">
           <h1 className="  text-center text-3xl font-medium  leading-9  tracking-wide  text-[#001032]">
             Grow Your Startup with India’s most Founder- Focused-Focused Growth
             and Funding

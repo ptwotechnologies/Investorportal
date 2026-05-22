@@ -44,7 +44,8 @@ const InterestUpgradeModal = ({ onClose, userRole, userAmount }) => {
               state: { 
                 isUpgradeFlow: true, 
                 role: userRole, 
-                currentPlanAmount: userAmount 
+                currentPlanAmount: userAmount,
+                upgradeType: "growth"
               } 
             })}
             className="w-full py-2 bg-[#59549F] text-white rounded-md font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#48438a] transition-all shadow-md active:scale-95"
@@ -57,7 +58,8 @@ const InterestUpgradeModal = ({ onClose, userRole, userAmount }) => {
               state: { 
                 isUpgradeFlow: true, 
                 role: userRole, 
-                currentPlanAmount: userAmount 
+                currentPlanAmount: userAmount,
+                upgradeType: "growth"
               } 
             })}
             className="py-1 text-[10px] font-bold text-gray-400 hover:text-gray-600 transition-colors tracking-widest uppercase"

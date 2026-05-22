@@ -194,84 +194,157 @@ const DashboardSec = () => {
   return (
     <div className="relative">
       <div
-        className={`lg:bg-gray-200 h-auto lg:h-screen pt-2 lg:px-2 pb-2 lg:pb-0 transition-all duration-300 ${
+        className={`lg:bg-gray-200 h-auto lg:h-screen pt-2 lg:px-2 pb-2 lg:pb-0 flex flex-col transition-all duration-300 ${
           showProfileModal ? "blur-sm pointer-events-none" : ""
         }`}
       >
-       <div  id="topbar" className="flex items-stretch w-[100%] px-2 gap-1 lg:gap-2 ">
-        <div
-          className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-2 py-2 lg:mr-1 lg:ml-1 bg-white"
-        >
-          <div >
-            <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">
-              Welcome, {profile?.companyName || profile?.name || "User"}!
-            </p>
-          </div>
-          <div className="flex items-center gap-1 lg:gap-x-3">
-            {/* {profile?.profilePhoto ? (
-              <img
-                src={`${serverUrl}${profile.profilePhoto}`}
-                alt="profile"
-                className="w-8 h-8 rounded-full object-cover"
-                onError={(e) => (e.target.style.display = "none")}
-              />
-            ) : (
-              <CgProfile className="text-gray-500" size={25} />
-            )}
-            {profile?.role === "startup" && (
-              <p className="bg-[#D8D6F8] text-[#59549F] rounded-md text-[10px] lg:text-xs hidden lg:block px-2 py-1 transition-all border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)]">
-                Switch to professional
+        {/* Global Topbar - Spans full width across both columns */}
+        <div id="topbar" className="flex items-stretch w-[100%] px-2 gap-1 lg:gap-2 mb-2 shrink-0">
+          <div
+            className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-2 py-2 lg:mr-1 lg:ml-1 bg-white"
+          >
+            <div>
+              <p className="font-semibold text-[#001032] text-sm lg:text-[16px] px-0.5">
+                Welcome, {profile?.companyName || profile?.name || "User"}!
               </p>
-            )} */}
-
-            {/* Mobile Star Button (Inside Welcome Box) */}
-            {profile?.isFreePlan && (
-              <button
-                onClick={() => setShowMobileCredits(true)}
-                className="lg:hidden flex items-center justify-center w-8 h-8 bg-[#D8D6F8] rounded-md border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)] shrink-0"
-              >
-                <div className="w-5 h-5 rounded-full bg-white border-2 border-[#59549F] flex items-center justify-center">
-                  <FaStar size={12} className="text-[#59549F]" />
-                </div>
-              </button>
-            )}
+            </div>
+            <div className="flex items-center gap-1 lg:gap-x-3">
+              {profile?.isFreePlan && (
+                <button
+                  onClick={() => setShowMobileCredits(true)}
+                  className="lg:hidden flex items-center justify-center w-8 h-8 bg-[#D8D6F8] rounded-md border border-[#59549F]/10 shadow-[inner_0_0_10px_rgba(0,0,0,0.1)] shrink-0"
+                >
+                  <div className="w-5 h-5 rounded-full bg-white border-2 border-[#59549F] flex items-center justify-center">
+                    <FaStar size={12} className="text-[#59549F]" />
+                  </div>
+                </button>
+              )}
+            </div>
           </div>
+
+          {/* Desktop Credits Widget */}
+          {profile?.isFreePlan && (
+            <div
+              onClick={() => setShowMobileCredits(true)}
+              className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%]"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
+                  {profile.credits ?? 0}
+                </div>
+                <div className="flex flex-col items-end">
+                  <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
+                    Opportunities Available
+                  </p>
+                  <div className="-mt-0.5">
+                    <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
+                      More connections are waiting
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+                Unlock More Opportunities
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Desktop Credits Widget */}
-        {profile?.isFreePlan && (
-          <div
-            onClick={() => setShowMobileCredits(true)}
-            className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%]"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
-                {profile.credits ?? 0}
-              </div>
-              <div className="flex flex-col items-end">
-                <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
-                  Opportunities Available
-                </p>
-                <div className="-mt-0.5">
-                  <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
-                    More connections are waiting
-                  </span>
+        {/* Desktop Layout */}
+        <div className="hidden lg:block flex-1 overflow-hidden">
+          <div className="bg-gray-200 px-3 pt-1 flex gap-3 h-full overflow-hidden pb-3">
+            {/* Scrollable Left Column */}
+            <div id="left" className="w-[70%] h-full overflow-y-auto scrollbar-hide pb-6 flex flex-col gap-3 pr-1">
+              
+              {/* Row 1: Who Searched Your Profile & Trigger/Automation Cards */}
+              <div id="desktop-top-row-1" className="flex items-stretch gap-3 w-full">
+                
+                {/* Card 1: Who Searched Your Profile (LinkedIn-style) */}
+                <div className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 h-[47vh] w-[50%] flex flex-col justify-between">
+                  <div className="flex flex-col flex-1 overflow-hidden">
+                    <h1 className="text-3xl font-semibold text-[#202020] my-2 truncate">
+                      Who Searched Your Profile
+                    </h1>
+                    
+                    <div className="flex items-center gap-3 my-2 shrink-0">
+                      <h1 className="text-4xl font-bold text-[#59549F]">247</h1>
+                      <span className="text-green-600 bg-green-100 text-xs px-2 py-0.5 rounded-full font-semibold flex items-center shrink-0">
+                        ↑ 18.4%
+                      </span>
+                      <span className="text-gray-500 text-xs font-medium truncate">this week</span>
+                    </div>
+
+                    <div className="flex flex-col gap-2.5 my-2 overflow-y-auto flex-1 pr-1 scrollbar-hide">
+                      <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100 shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[#E8E7FD] text-[#59549F] flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+                          TV
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-xs text-[#202020] truncate">TechVentures Capital</p>
+                          <p className="text-[10px] text-[#6F6F6F] truncate">Investor • Searched via "FinTech Startup"</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100 shrink-0">
+                        <div className="w-8 h-8 rounded-full bg-[#E1F0FF] text-[#0B5EFF] flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+                          AN
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-semibold text-xs text-[#202020] truncate">Angel Network India</p>
+                          <p className="text-[10px] text-[#6F6F6F] truncate">Syndicate • Viewed Pitch Deck</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-100 pt-3 shrink-0">
+                    <button className="w-full text-center text-xs font-semibold text-[#59549F] hover:underline cursor-pointer">
+                      View all search history →
+                    </button>
+                  </div>
                 </div>
+
+                {/* Card 2: Ecosystem Alerts & Automations */}
+                <div className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 h-[47vh] w-[50%] flex flex-col justify-between">
+                  <div className="flex flex-col flex-1 overflow-hidden">
+                    <h1 className="text-3xl font-semibold text-[#202020] my-2 truncate">
+                      Ecosystem Insights
+                    </h1>
+
+                    <div className="flex flex-col gap-2.5 my-3 overflow-y-auto flex-1 pr-1 scrollbar-hide">
+                      <div className="flex items-start gap-2 p-2.5 bg-orange-50 border border-orange-200/50 rounded-xl text-orange-850 shrink-0">
+                        <span className="text-sm shrink-0">⚠️</span>
+                        <div className="text-[10px] leading-relaxed">
+                          <p className="font-bold text-orange-950">No active deal pipeline created</p>
+                          <p className="mt-0.5 text-orange-900/90">Launch a new draft deal to increase your profile discoverability to connected investors.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-2 p-2.5 bg-blue-50 border border-blue-100 rounded-xl text-blue-850 shrink-0">
+                        <span className="text-sm shrink-0">💡</span>
+                        <div className="text-[10px] leading-relaxed">
+                          <p className="font-bold text-blue-950">Optimize your Pitch Deck</p>
+                          <p className="mt-0.5 text-blue-900/90">Upload a complete business proposal to get featured on the main dashboard directory.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="border-t border-gray-100 pt-3 flex gap-2 shrink-0">
+                    <button className="flex-1 text-center py-2 bg-[#001426] hover:bg-[#001426]/90 text-white rounded-lg text-[10px] font-semibold shadow-sm transition-all duration-300 cursor-pointer">
+                      Setup automation
+                    </button>
+                    <button className="flex-1 text-center py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-[10px] font-semibold transition-all duration-300 cursor-pointer">
+                      View suggestions
+                    </button>
+                  </div>
+                </div>
+
               </div>
-            </div>
-            <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
-              Unlock More Opportunities
-            </div>
-          </div>
-        )}
-      </div>
-        <div className="hidden lg:block">
-          <div className="bg-gray-200 px-3 pt-3 flex gap-3 ">
-            <div id="left" className="w-[70%] ">
-              <div id="top" className="flex items-center gap-3">
+
+              {/* Row 2: Progress Statistics & Profile Row */}
+              <div id="top" className="flex items-stretch gap-3">
                 <div
                   id="left"
-                  className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 h-[47vh]  w-[50%]"
+                  className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 h-[47vh] w-[50%]"
                 >
                   <h1 className="text-3xl font-semibold text-[#202020] my-3">
                     Progress Statistics
@@ -404,7 +477,8 @@ const DashboardSec = () => {
                 </div>
               </div>
 
-              <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl mt-3 h-[41vh]">
+              {/* Requests Section */}
+              <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl mt-0 h-[41vh]">
                 <div className="flex items-center justify-between px-5 py-4">
                   <h1 className="text-3xl text-[#202020] font-semibold">
                     Requests
@@ -486,7 +560,7 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="w-[30%] h-[89.5vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020]"
+              className="w-[30%] h-full bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] overflow-y-auto scrollbar-hide pb-6"
             >
               <div className="flex items-center justify-between">
                 <p className="text-3xl font-semibold my-4">Activity</p>
@@ -548,7 +622,86 @@ const DashboardSec = () => {
 
         <div className="lg:hidden bg-gray-100 h-auto">
           <div>
-            <div id="right" className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-3 py-4 mt-2 m-2 flex flex-col justify-between min-h-[320px]">
+            {/* Mobile Card 1: Who Searched Your Profile */}
+            <div className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 mt-2 m-2 flex flex-col justify-between min-h-[300px]">
+              <div className="flex flex-col flex-1 overflow-hidden">
+                <h1 className="text-xl font-semibold text-[#202020] my-1">
+                  Who Searched Your Profile
+                </h1>
+                
+                <div className="flex items-center gap-3 my-2 shrink-0">
+                  <h1 className="text-3xl font-bold text-[#59549F]">247</h1>
+                  <span className="text-green-600 bg-green-100 text-[10px] px-2 py-0.5 rounded-full font-semibold flex items-center shrink-0">
+                    ↑ 18.4%
+                  </span>
+                  <span className="text-gray-500 text-[10px] font-medium truncate">this week</span>
+                </div>
+
+                <div className="flex flex-col gap-2.5 my-2">
+                  <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100 shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-[#E8E7FD] text-[#59549F] flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+                      TV
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-xs text-[#202020] truncate">TechVentures Capital</p>
+                      <p className="text-[10px] text-[#6F6F6F] truncate">Investor • Searched via "FinTech Startup"</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl border border-gray-100 shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-[#E1F0FF] text-[#0B5EFF] flex items-center justify-center font-bold text-xs shadow-sm shrink-0">
+                      AN
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-xs text-[#202020] truncate">Angel Network India</p>
+                      <p className="text-[10px] text-[#6F6F6F] truncate">Syndicate • Viewed Pitch Deck</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 pt-3 mt-2 shrink-0">
+                <button className="w-full text-center text-xs font-semibold text-[#59549F] hover:underline cursor-pointer">
+                  View all search history →
+                </button>
+              </div>
+            </div>
+
+            {/* Mobile Card 2: Ecosystem Insights */}
+            <div className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 mt-3 m-2 flex flex-col justify-between min-h-[300px]">
+              <div className="flex flex-col flex-1 overflow-hidden">
+                <h1 className="text-xl font-semibold text-[#202020] my-1">
+                  Ecosystem Insights
+                </h1>
+
+                <div className="flex flex-col gap-2.5 my-3">
+                  <div className="flex items-start gap-2 p-2.5 bg-orange-50 border border-orange-200/50 rounded-xl text-orange-850 shrink-0">
+                    <span className="text-sm shrink-0">⚠️</span>
+                    <div className="text-[10px] leading-relaxed">
+                      <p className="font-bold text-orange-950">No active deal pipeline created</p>
+                      <p className="mt-0.5 text-orange-900/90">Launch a new draft deal to increase your profile discoverability to connected investors.</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 p-2.5 bg-blue-50 border border-blue-100 rounded-xl text-blue-850 shrink-0">
+                    <span className="text-sm shrink-0">💡</span>
+                    <div className="text-[10px] leading-relaxed">
+                      <p className="font-bold text-blue-950">Optimize your Pitch Deck</p>
+                      <p className="mt-0.5 text-blue-900/90">Upload a complete business proposal to get featured on the main dashboard directory.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-gray-100 pt-3 mt-2 flex gap-2 shrink-0">
+                <button className="flex-1 text-center py-2 bg-[#001426] hover:bg-[#001426]/90 text-white rounded-lg text-[10px] font-semibold shadow-sm transition-all duration-300 cursor-pointer">
+                  Setup automation
+                </button>
+                <button className="flex-1 text-center py-2 border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg text-[10px] font-semibold transition-all duration-300 cursor-pointer">
+                  View suggestions
+                </button>
+              </div>
+            </div>
+
+            <div id="right" className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-3 py-4 mt-3 m-2 flex flex-col justify-between min-h-[320px]">
               <div id="top-sec">
                 <div className="flex items-center justify-between">
                   <h1 className="text-xl font-semibold text-[#202020] my-1">
@@ -928,7 +1081,8 @@ const DashboardSec = () => {
                 state={{ 
                   isUpgradeFlow: true, 
                   role: profile?.role, 
-                  currentPlanAmount: profile?.plan?.amount || 0 
+                  currentPlanAmount: profile?.plan?.amount || 0,
+                  upgradeType: "growth"
                 }}
                 onClick={() => setShowMobileCredits(false)}
                 className="w-full py-2.5 bg-[#181555] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 shadow-lg shadow-[#181555]/20 transition-all transform active:scale-[0.98] tracking-wide"

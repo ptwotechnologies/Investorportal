@@ -179,15 +179,30 @@ const Mobile = () => {
             </SheetTrigger>
 
             <div>
-              <SheetContent className="w-screen h-[85vh] p-3 bg-[#D5D5D5] rounded-2xl mt-17 overflow-y-auto scrollbar-hide">
-                <div className="border border-[#D9D9D9] bg-white ">
-                  <SheetHeader>
+              <SheetContent className="w-screen h-[100vh] p-3 bg-[#D5D5D5]  overflow-hidden flex flex-col">
+                <div className="border border-[#D9D9D9] bg-white  flex-1 flex flex-col overflow-hidden">
+                  {/* Top Header Row inside Mobile Drawer */}
+                  <div className="flex items-center justify-between px-2 py-4 pt-3 shrink-0 bg-white">
+                    <Link to="/dashboard">
+                      <SheetClose asChild>
+                        <img src={loginLogo} alt="logo" className="w-28" />
+                      </SheetClose>
+                    </Link>
+                    <SheetClose asChild>
+                      <button className="p-1  hover:bg-gray-100 transition-colors cursor-pointer text-[#000000]">
+                        <RxCross2 size={24} />
+                      </button>
+                    </SheetClose>
+                  </div>
+
+                  <SheetHeader className="p-0">
                     <SheetTitle></SheetTitle>
                   </SheetHeader>
 
-                  <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl px-4">
+                  <div className="flex-1 overflow-y-auto scrollbar-hide px-4 py-2">
+                    <div className="grid flex-1 auto-rows-min gap-6 text-[#001032] text-xl pb-4">
                     <div id="top">
-                      <ul className="flex flex-col gap-2 text-[16px] text-gray-600">
+                      <ul className="flex flex-col gap-2 text-[16px] text-[#001426]">
                         <div className="flex items-center gap-4">
                           <MdOutlineDashboardCustomize
                             className="text-[#59549F] "
@@ -409,7 +424,7 @@ const Mobile = () => {
 
                             <div className="flex flex-col gap-2">
                               <div
-                                className="flex items-center gap-4 cursor-pointer w-full"
+                                className="flex items-center justify-between cursor-pointer w-full"
                                 onClick={() => {
                                   setIsOperateOpen(!isOperateOpen);
                                   if (!isOperateOpen) {
@@ -418,21 +433,21 @@ const Mobile = () => {
                                   }
                                 }}
                               >
-                                <FaRegClosedCaptioning className="text-[#59549F]" size={28} />
-                                <li className="flex justify-between items-center w-full">
-                                  <div className="flex items-center gap-2">
-                                    <div className="flex flex-col">
-                                      <span className="text-[15px] font-medium text-gray-700 leading-tight">Operate</span>
-                                      <p className="text-[11px] text-gray-400">Startup operations hub</p>
-                                    </div>
-                                    <LuLock className="text-gray-400" size={16} />
+                                <div className="flex items-center gap-4">
+                                  <FaRegClosedCaptioning className="text-[#59549F]" size={28} />
+                                  <div className="flex flex-col">
+                                    <span className="text-[15px] font-medium text-gray-700 leading-tight">Operate</span>
+                                    <p className="text-[11px] text-gray-400">Startup operations hub</p>
                                   </div>
-                                  {isOperateOpen ? (
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <LuLock className="text-gray-400" size={16} />
+                                  {/* {isOperateOpen ? (
                                     <FaChevronUp className="text-[#59549F]" size={15} />
                                   ) : (
                                     <FaChevronDown className="text-[#59549F]" size={15} />
-                                  )}
-                                </li>
+                                  )} */}
+                                </div>
                               </div>
                               {isOperateOpen && (
                                 <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
@@ -588,11 +603,11 @@ const Mobile = () => {
                       <SheetClose asChild>
                         <div
                           onClick={() => triggerComingSoon("Switch to Professional")}
-                          className=" mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
+                          className=" mt-4 py-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
                         >
                           <div className="flex flex-col">
-                            <span className="text-[14px] font-bold text-[#59549f]">Switch to Professional</span>
-                            <span className="text-[10px] text-gray-500 font-medium">Explore professional tools</span>
+                            <span className="text-[14px] my-1 font-bold text-[#59549f]">Switch to Professional</span>
+                            <span className="text-[10px]  text-gray-500 font-medium">Explore professional tools</span>
                           </div>
                           <div className="relative inline-flex items-center cursor-pointer">
                             <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors"></div>
@@ -606,10 +621,10 @@ const Mobile = () => {
                       <SheetClose asChild>
                         <div
                           onClick={() => triggerComingSoon("Switch to Startup")}
-                          className=" mt-4 mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
+                          className=" mt-4 py-4  mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
                         >
                           <div className="flex flex-col">
-                            <span className="text-[14px] font-bold text-[#59549f]">Switch to Buyer</span>
+                            <span className="text-[14px] my-1 font-bold text-[#59549f]">Switch to Buyer</span>
                             <span className="text-[10px] text-gray-500 font-medium">View as a buyer</span>
                           </div>
                           <div className="relative inline-flex items-center cursor-pointer">
@@ -623,7 +638,7 @@ const Mobile = () => {
                      {/* Premium Upgrade Card - Only for Startup and Service Professional */}
                      {(isStartup || isServiceProfessional) && (
                         <SheetClose asChild>
-                          <div className="  mb-6 mt-2 p-2 py-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" onClick={() => triggerComingSoon("Premium Infrastructure")}>
+                          <div className="  mb-6 mt-2 p-2 py-5 bg-[#F8F7FF] border border-[#E9E7FD] rounded-2xl relative overflow-hidden group cursor-pointer" onClick={() => triggerComingSoon("Premium Infrastructure")}>
                             <div className="flex items-center gap-3 mb-4">
                               <div className="w-8 h-8 bg-[#59549F] rounded-full flex items-center justify-center text-white shrink-0 shadow-lg">
                                 <FaCrown size={18} />
@@ -633,7 +648,7 @@ const Mobile = () => {
                                 <p className="text-[11px] text-gray-500 leading-tight">Unlock powerful tools to grow your startup faster.</p>
                               </div>
                             </div>
-                            <button className="w-full py-1 bg-[#59549F] text-white rounded-sm text-[11px] font-bold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
+                            <button className="w-full py-1 mt-6 bg-[#59549F] text-white rounded-sm text-[11px] font-bold flex items-center justify-center gap-2 hover:bg-[#48438A] transition-colors relative z-10">
                               View Plans
                               <FaArrowRight size={12} />
                             </button>
@@ -711,6 +726,7 @@ const Mobile = () => {
                     </div>
                   </div>
                 </div>
+              </div>
 
 
               </SheetContent>

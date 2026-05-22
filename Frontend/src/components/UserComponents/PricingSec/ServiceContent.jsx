@@ -11,7 +11,9 @@ const DevelopmentContent = ({ isUpgradeFlow, upgradeType }) => {
   const scrollRef = React.useRef(null);
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
-  const [userPlanAmount, setUserPlanAmount] = React.useState(0);
+  const [userPlanAmount, setUserPlanAmount] = React.useState(() => {
+    return Number(localStorage.getItem("pricing_userPlanAmount")) || 0;
+  });
 
   React.useEffect(() => {
     if (isUpgradeFlow) {
@@ -21,7 +23,9 @@ const DevelopmentContent = ({ isUpgradeFlow, upgradeType }) => {
           const res = await axios.get(`${serverUrl}/user/me`, {
             headers: { Authorization: `Bearer ${token}` }
           });
-          setUserPlanAmount(res.data.plan?.amount || 0);
+          const amount = res.data.plan?.amount || 0;
+          setUserPlanAmount(amount);
+          localStorage.setItem("pricing_userPlanAmount", String(amount));
         } catch (err) {
           console.error("Error fetching plan:", err);
         }
@@ -300,13 +304,8 @@ const DevelopmentContent = ({ isUpgradeFlow, upgradeType }) => {
   const cardsToDisplay = React.useMemo(() => {
     if (!isUpgradeFlow) return cards;
     
-    if (upgradeType === "premium") {
-      // Show Growth Plan (Index 2) and Authority Plan (Index 3)
-      return [cards[2], cards[3]];
-    }
-    
-    if (upgradeType === "growth") {
-      // Find current plan
+    if (upgradeType === "premium" || upgradeType === "growth") {
+      // Find current plan and Growth Plan (25k)
       const currentAmount = Number(userPlanAmount) || 0;
       const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
       const currentPlan = currentIdx !== -1 ? cards[currentIdx] : cards[0];

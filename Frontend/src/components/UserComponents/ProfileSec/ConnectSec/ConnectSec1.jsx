@@ -1815,7 +1815,8 @@ const ConnectSec1 = () => {
                 state={{ 
                   isUpgradeFlow: true, 
                   role: profile?.role, 
-                  currentPlanAmount: profile?.plan?.amount || 0 
+                  currentPlanAmount: profile?.plan?.amount || 0,
+                  upgradeType: "growth"
                 }}
                 onClick={() => setShowMobileCredits(false)}
                 className="w-full py-2.5 bg-[#181555] text-white rounded-xl font-bold text-sm flex items-center justify-center gap-2 hover:opacity-90 shadow-lg shadow-[#181555]/20 transition-all transform active:scale-[0.98] tracking-wide"

@@ -114,7 +114,7 @@ const ChannelPartnerSec1 = () => {
 
   return (
     <div className=" lg:mb-20 lg:mt-40 mt-4 lg:p-2.5 lg:border border-[#b5b3b3] bg-[#E5E5E5] rounded-4xl max-w-[1500px] mx-auto w-full  ">
-      <div className=" lg:border border-[#E5E5E5] lg:p-7 bg-white rounded-4xl lg:py-25 py-10">
+      <div className=" lg:border border-[#E5E5E5] lg:p-7 bg-white rounded-4xl lg:py-15 py-10">
         <div id="top" className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
             <div className="lg:px-4 px-2">
@@ -283,69 +283,63 @@ const ChannelPartnerSec1 = () => {
             Who can be the channel partner?
           </h1>
 
-          <div className="lg:flex items-center justify-center gap-10">
-            <div className="shadow-xl border bg-white p-4 rounded-md mt-5 lg:mt-0 lg:mx-0 mx-3">
-            <div className="bg-gray-200 w-full h-50 rounded-md">
-              <img src="/channelpartnerpage1.png" alt="" className="w-full h-full  rounded-md" />
-            </div>
-
-            <div>
-              <p className="text-xs my-2">
-                Bring your startup community into the investment ecosystem. Refer founders and ventures to the platform and earn partnership benefits.
-              </p>
-              <div className="flex justify-between items-center mt-5 text-xs">
-                <div className="font-light">
-                  <p>Co-working Spaces </p>
-                  
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10 max-w-[1200px] mx-auto lg:items-stretch lg:px-0 px-3">
+            <div className="shadow-xl border bg-white p-4 rounded-md flex flex-col justify-between h-full">
+              <div>
+                <div className="bg-gray-200 w-full h-50 rounded-md overflow-hidden">
+                  <img src="/channelpartnerpage3.png" alt="" className="w-full h-full object-cover rounded-md" />
                 </div>
-                <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">
+                <p className="text-xs my-3 text-gray-600 leading-relaxed">
+                  Bring your startup community into the investment ecosystem. Refer founders and ventures to the platform and earn partnership benefits.
+                </p>
+              </div>
+              <div className="flex justify-between items-center mt-5 text-xs pt-2 border-t border-gray-100">
+                <div className="font-medium text-[#001032]">
+                  <p>Co-working Spaces</p>
+                </div>
+                <button className="bg-[#001032] text-white px-4 py-2 rounded-sm hover:opacity-90 transition-opacity whitespace-nowrap">
                   Get Started
                 </button>
               </div>
             </div>
-          </div>
-          <hr className="my-6 mx-6 lg:hidden " />
-          <div className="shadow-xl border bg-white p-4 rounded-md lg:mx-0 mx-3">
-            <div className="bg-gray-200 w-full h-50 rounded-md">
-              <img src="/channelpartnerpage2.png" alt="" className="w-full h-full  rounded-md" />
-            </div>
 
-            <div>
-              <p className="text-xs my-2">
-                Support your startups beyond mentorship by enabling funding access. Partner with us to connect your founders with investors.
-              </p>
-              <div className="flex justify-between items-center mt-5 text-xs">
-                <div className="font-light">
+            <div className="shadow-xl border bg-white p-4 rounded-md flex flex-col justify-between h-full">
+              <div>
+                <div className="bg-gray-200 w-full h-50 rounded-md overflow-hidden">
+                  <img src="/channelpartnerpage2.png" alt="" className="w-full h-full object-cover rounded-md" />
+                </div>
+                <p className="text-xs my-3 text-gray-600 leading-relaxed">
+                  Support your startups beyond mentorship by enabling funding access. Partner with us to connect your founders with investors.
+                </p>
+              </div>
+              <div className="flex justify-between items-center mt-5 text-xs pt-2 border-t border-gray-100">
+                <div className="font-medium text-[#001032]">
                   <p>Incubation Centers</p>
                 </div>
-                <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">
+                <button className="bg-[#001032] text-white px-4 py-2 rounded-sm hover:opacity-90 transition-opacity whitespace-nowrap">
                   Get Started
                 </button>
               </div>
             </div>
-          </div>
 
-          <hr className="my-6 mx-6 lg:hidden" />
-          <div className="shadow-xl border bg-white p-4 rounded-md lg:mx-0 mx-3">
-            <div className="bg-gray-200 w-full h-50 rounded-md">
-              <img src="/channelpartnerpage3.png" alt="" className="w-full h-full  rounded-md" />
-            </div>
-
-            <div>
-              <p className="text-xs my-2">
-                Turn your events into powerful funding gateways.If you host startup meetups, pitch events, or investor gatherings, you can partner with us.
-              </p>
-              <div className="flex justify-between items-center mt-5 text-xs">
-                <div className="font-light">
-                  <p>Business Event  Organizers </p>
-                  
+            <div className="shadow-xl border bg-white p-4 rounded-md flex flex-col justify-between h-full">
+              <div>
+                <div className="bg-gray-200 w-full h-50 rounded-md overflow-hidden">
+                  <img src="/channelpartnerpage1.png" alt="" className="w-full h-full object-cover rounded-md" />
                 </div>
-                <button className="bg-[#001032] text-white px-4 py-2 rounded-sm">
+                <p className="text-xs my-3 text-gray-600 leading-relaxed">
+                  Turn your events into powerful funding gateways. If you host startup meetups, pitch events, or investor gatherings, you can partner with us.
+                </p>
+              </div>
+              <div className="flex justify-between items-center mt-5 text-xs pt-2 border-t border-gray-100">
+                <div className="font-medium text-[#001032]">
+                  <p>Business Event Organizers</p>
+                </div>
+                <button className="bg-[#001032] text-white px-4 py-2 rounded-sm hover:opacity-90 transition-opacity whitespace-nowrap">
                   Get Started
                 </button>
               </div>
             </div>
-          </div>
           </div>
         </div>
 

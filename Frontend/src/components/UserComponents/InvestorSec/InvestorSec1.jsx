@@ -48,7 +48,7 @@ const InvestorSec1 = () => {
             </div>
           </div>
         </div>
-        <div className="hidden lg:block text-center  w-[60%]">
+        <div className="hidden lg:block text-center  w-[60%] my-4">
           <h1 className="  text-center text-3xl font-semibold  leading-9  tracking-wide  text-[#001032]">
             Discover Curated And High Quality Startups Screened Through a
             Founder-Focused Ecosystem

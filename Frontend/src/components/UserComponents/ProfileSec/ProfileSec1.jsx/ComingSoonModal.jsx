@@ -20,7 +20,13 @@ const ComingSoonModal = ({ onClose, title, userRole: propUserRole }) => {
     }
 
     if (title === "Switch to Startup" || title === "Switch to Professional" || title === "Role Switching") {
-      toast.success("Workspace switching is free and will be available soon!");
+      navigate("/pricing", { 
+        state: { 
+          isUpgradeFlow: true, 
+          role: "startup",
+          upgradeType: "switch" 
+        } 
+      });
       onClose();
       return;
     }

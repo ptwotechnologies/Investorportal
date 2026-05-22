@@ -18,6 +18,7 @@ const ChannelPartnerSec4 = () => {
       companyName: "",
       website: "",
       linkedin: "",
+      partnerId: "",
       alreadyRegistered: false,
       termsAccepted: false
     });
@@ -75,6 +76,7 @@ const ChannelPartnerSec4 = () => {
           companyName: "",
           website: "",
           linkedin: "",
+          partnerId: "",
           alreadyRegistered: false,
           termsAccepted: false
         });
@@ -135,10 +137,9 @@ const ChannelPartnerSec4 = () => {
           </div>
         </div>
       </div>
-
   {selectedRole && createPortal(
-    <div className="fixed inset-0 bg-black/50 overflow-y-auto z-[9999]  py-8 pt-30">
-        <div className="relative w-[100%] lg:w-[50%] mx-auto mt-10 mb-10">
+    <div className="fixed inset-0 bg-black/50 overflow-y-auto z-[9999]  py-8 pt-10">
+        <div className="relative w-[95%] lg:w-[90%] max-w-[1100px] mx-auto mt-10 mb-10">
           <button onClick={() => setSelectedRole(null)} className="absolute -top-10 right-0 text-white hover:text-gray-300">
             <IoClose size={32} />
           </button>
@@ -146,92 +147,116 @@ const ChannelPartnerSec4 = () => {
              id="form"
              className="p-2.5 border-3 rounded-xl border-[#E4E4E4] bg-white shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
            >
-             <form onSubmit={handleSubmit} className="bg-white rounded-xl border-3 border-[#E4E4E4] lg:p-10 px-3 py-5 shadow-[0px_0px_4px_rgba(0,0,0,1)]">
-               <input
-                 readOnly
-                 name="role"
-                 value={formData.role}
-                 className="p-3 lg:py-6 border rounded-lg w-full mb-4 bg-gray-100 text-black cursor-not-allowed font-medium placeholder-gray-500"
-                 placeholder="Role"
-               />
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+             <form onSubmit={handleSubmit} className="bg-white rounded-xl border-3 border-[#E4E4E4] lg:p-6 lg:py-6 px-3 py-4 shadow-[0px_0px_4px_rgba(0,0,0,1)]">
+               
+               {/* Line 1: Role input (Full Width) */}
+               <div className="mb-3">
                  <input
-                  required
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  className="p-3 lg:py-6 border rounded-lg w-full text-black placeholder-gray-500"
-                  placeholder="First name"
-                />
-                <input
-                  required
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  className="p-3 lg:py-6 border rounded-lg w-full text-black placeholder-gray-500"
-                  placeholder="Last name"
-                />
-              </div>
+                   readOnly
+                   name="role"
+                   value={formData.role}
+                   className="p-3 lg:py-3 border rounded-lg w-full bg-gray-100 text-black cursor-not-allowed font-medium placeholder-gray-500 text-sm"
+                   placeholder="Role"
+                 />
+               </div>
 
-              <input
-                required
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                className="p-3 lg:py-6 border rounded-lg w-full mt-4 text-black placeholder-gray-500"
-                placeholder="Work email address"
-              />
-              <input
-                required
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-                className="p-3 lg:py-6 border rounded-lg w-full mt-4 text-black placeholder-gray-500"
-                placeholder="Company name"
-              />
-              <input
-                name="website"
-                value={formData.website}
-                onChange={handleChange}
-                className="p-3 lg:py-6 border rounded-lg w-full mt-4 text-black placeholder-gray-500"
-                placeholder="Website"
-              />
-              <input
-                name="linkedin"
-                value={formData.linkedin}
-                onChange={handleChange}
-                className="p-3 lg:py-6 border rounded-lg w-full mt-4 text-black placeholder-gray-500"
-                placeholder="LinkedIn Profile URL"
-              />
+               {/* Line 2: First Name & Last Name (2 columns on desktop) */}
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                 <input
+                   required
+                   name="firstName"
+                   value={formData.firstName}
+                   onChange={handleChange}
+                   className="p-3 lg:py-3 border rounded-lg w-full text-black placeholder-gray-500 text-sm"
+                   placeholder="First name"
+                 />
+                 <input
+                   required
+                   name="lastName"
+                   value={formData.lastName}
+                   onChange={handleChange}
+                   className="p-3 lg:py-3 border rounded-lg w-full text-black placeholder-gray-500 text-sm"
+                   placeholder="Last name"
+                 />
+               </div>
 
-              <div className="lg:mt-20 mt-10 lg:mb-5 mb-10 text-[#1D2A29CC]">
-                <p className="tracking-wide lg:leading-7 text-sm lg:text-md mb-2 lg:mb-0">
-                  By clicking, you agree to our Term and Conditions to be a
-                  channel partner.
-                </p>
-                <div className="flex lg:items-center items-start lg:gap-3 gap-1">
-                  <input type="checkbox" name="termsAccepted" checked={formData.termsAccepted} onChange={handleChange} className="mt-1 lg:mt-0" />
-                  <span className=" tracking-wide text-sm lg:text-md">
-                    I have read all the terms and conditions and I’m ready to be
-                    a channel partner.
-                  </span>
-                </div>
-              </div>
+               {/* Line 3: Company name & Work email address (2 columns on desktop) */}
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                 <input
+                   required
+                   name="companyName"
+                   value={formData.companyName}
+                   onChange={handleChange}
+                   className="p-3 lg:py-3 border rounded-lg w-full text-black placeholder-gray-500 text-sm"
+                   placeholder="Company name"
+                 />
+                 <input
+                   required
+                   type="email"
+                   name="email"
+                   value={formData.email}
+                   onChange={handleChange}
+                   className="p-3 lg:py-3 border rounded-lg w-full text-black placeholder-gray-500 text-sm"
+                   placeholder="Work email address"
+                 />
+               </div>
 
-              <button type="submit" disabled={loading} className="mt-6 lg:mb-35 mb-20 bg-[#001032] text-white px-8 py-3 rounded-sm text-lg">
-                {loading ? "Submitting..." : "Get Started"}
-              </button>
+               {/* Line 4: Website & LinkedIn (2 columns on desktop) */}
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                 <input
+                   name="website"
+                   value={formData.website}
+                   onChange={handleChange}
+                   className="p-3 lg:py-3 border rounded-lg w-full text-black placeholder-gray-500 text-sm"
+                   placeholder="Website"
+                 />
+                 <input
+                   name="linkedin"
+                   value={formData.linkedin}
+                   onChange={handleChange}
+                   className="p-3 lg:py-3 border rounded-lg w-full text-black placeholder-gray-500 text-sm"
+                   placeholder="LinkedIn Profile URL"
+                 />
+               </div>
 
-              <p className="lg:text-[16px] text-[14px] text-[#1D2A29CC] ">
-                Please note that this is an application to seek funding or other
-                services for a new venture or business. By clicking "Get
-                Started" you agree to Copteno’s Privacy Policy
-              </p>
-            </form>
-          </div>
-        </div>
-    </div>,
+               {/* Line 5: Partner ID (Mobile and Desktop Both - Full Width) */}
+               <div className="mb-3">
+                 <input
+                   name="partnerId"
+                   value={formData.partnerId}
+                   onChange={handleChange}
+                   className="p-3 lg:py-3 border rounded-lg w-full text-black placeholder-gray-500 text-sm"
+                   placeholder="Partner ID"
+                 />
+               </div>
+
+               <div className="lg:mt-4 mt-6 lg:mb-3 mb-5 text-[#1D2A29CC]">
+                 <p className="tracking-wide lg:leading-7 text-sm lg:text-md mb-2 lg:mb-0">
+                   By clicking, you agree to our Term and Conditions to be a
+                   channel partner.
+                 </p>
+                 <div className="flex lg:items-center items-start lg:gap-3 gap-1">
+                   <input type="checkbox" name="termsAccepted" checked={formData.termsAccepted} onChange={handleChange} className="mt-1 lg:mt-0" />
+                   <span className=" tracking-wide text-sm lg:text-md">
+                     I have read all the terms and conditions and I’m ready to be
+                     a channel partner.
+                   </span>
+                 </div>
+               </div>
+
+               <button type="submit" disabled={loading} className="mt-4 lg:mb-4 mb-6 bg-[#001032] text-white px-8 py-3 rounded-sm text-lg hover:opacity-95 transition-opacity">
+                 {loading ? "Submitting..." : "Get Started"}
+               </button>
+
+               <p className="lg:text-[16px] text-[14px] text-[#1D2A29CC] ">
+                 Please note that this is an application to seek funding or other
+                 services for a new venture or business. By clicking "Get
+                 Started" you agree to Copteno’s Privacy Policy
+               </p>
+             </form>
+           </div>
+         </div>
+     </div>,
     document.body
   )}
     </>

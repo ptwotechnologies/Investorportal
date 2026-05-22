@@ -107,7 +107,8 @@ const TwinCardModal = ({ onClose, lightbulbImg, lockImg, userRole, userAmount })
                 state: { 
                   isUpgradeFlow: true, 
                   role: userRole, 
-                  currentPlanAmount: userAmount 
+                  currentPlanAmount: userAmount,
+                  upgradeType: "growth"
                 } 
               })}
               className="w-full py-2 bg-[#59549F] text-white rounded-md font-bold text-[11px] md:text-xs flex items-center justify-center gap-2 hover:bg-[#48438a] transition-colors shadow-md active:scale-[0.98]"

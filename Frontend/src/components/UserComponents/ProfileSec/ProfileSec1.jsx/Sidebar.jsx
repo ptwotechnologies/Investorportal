@@ -583,20 +583,20 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                             setIsDealsOpen(false);
                           }
                         }}
-                        className="text-[17px] px-4 rounded-md cursor-pointer flex justify-between items-center hover:bg-white/50 relative"
+                        className="text-[17px] px-4 rounded-md cursor-pointer flex justify-between items-center hover:bg-white/50 relative text-[#001426]"
                       >
-                        <div className="flex items-center gap-2">
-                          <div className="flex flex-col">
-                            <span>Operate</span>
-                            <p className="text-[10px] text-gray-400 font-normal">Startup operations hub</p>
-                          </div>
-                          <LuLock className="text-gray-300" size={14} />
+                        <div className="flex flex-col">
+                          <span>Operate</span>
+                          <p className="text-[10px] text-gray-400 font-normal">Startup operations hub</p>
                         </div>
-                        {isOperateOpen ? (
-                          <FaChevronUp className="text-gray-500 text-sm" size={12} />
-                        ) : (
-                          <FaChevronDown className="text-gray-500 text-sm" size={12} />
-                        )}
+                        <div className="flex items-center gap-2">
+                          <LuLock className="text-gray-300" size={14} />
+                          {/* {isOperateOpen ? (
+                            <FaChevronUp className="text-gray-500 text-xs" size={10} />
+                          ) : (
+                            <FaChevronDown className="text-gray-500 text-xs" size={10} />
+                          )} */}
+                        </div>
                       </div>
 
                       {isOperateOpen && (

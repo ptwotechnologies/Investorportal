@@ -7,9 +7,54 @@ import DropDown from './DropDown';
 
 const PricingSec2 = () => {
   const location = useLocation();
-  const isUpgradeFlow = location.state?.isUpgradeFlow;
-  const userRole = location.state?.role;
-  const upgradeType = location.state?.upgradeType;
+
+  // Read state from location or fallback to sessionStorage
+  const [isUpgradeFlow, setIsUpgradeFlow] = useState(() => {
+    if (location.state?.isUpgradeFlow !== undefined) {
+      return location.state.isUpgradeFlow;
+    }
+    return sessionStorage.getItem("pricing_isUpgradeFlow") === "true";
+  });
+
+  const [userRole, setUserRole] = useState(() => {
+    if (location.state?.role !== undefined) {
+      return location.state.role;
+    }
+    return sessionStorage.getItem("pricing_role") || "";
+  });
+
+  const [upgradeType, setUpgradeType] = useState(() => {
+    if (location.state?.upgradeType !== undefined) {
+      return location.state.upgradeType;
+    }
+    return sessionStorage.getItem("pricing_upgradeType") || "";
+  });
+
+  // Keep state updated if location.state changes or reset if accessed normally
+  useEffect(() => {
+    if (location.state) {
+      if (location.state.isUpgradeFlow !== undefined) {
+        setIsUpgradeFlow(location.state.isUpgradeFlow);
+        sessionStorage.setItem("pricing_isUpgradeFlow", String(location.state.isUpgradeFlow));
+      }
+      if (location.state.role !== undefined) {
+        setUserRole(location.state.role);
+        sessionStorage.setItem("pricing_role", String(location.state.role));
+      }
+      if (location.state.upgradeType !== undefined) {
+        setUpgradeType(location.state.upgradeType);
+        sessionStorage.setItem("pricing_upgradeType", String(location.state.upgradeType));
+      }
+    } else if (location.pathname === "/pricing") {
+      // Normal direct navigation - clear persisted states so default pricing shows
+      setIsUpgradeFlow(false);
+      setUserRole("");
+      setUpgradeType("");
+      sessionStorage.removeItem("pricing_isUpgradeFlow");
+      sessionStorage.removeItem("pricing_role");
+      sessionStorage.removeItem("pricing_upgradeType");
+    }
+  }, [location.state, location.pathname]);
 
   const [activeTab, setActiveTab] = useState(() => {
     if (isUpgradeFlow && userRole) {
@@ -20,6 +65,18 @@ const PricingSec2 = () => {
     }
     return 'Startups';
   });
+
+  // Ensure activeTab switches appropriately if userRole or isUpgradeFlow updates
+  useEffect(() => {
+    if (isUpgradeFlow && userRole) {
+      const roleLower = String(userRole).toLowerCase();
+      if (roleLower.includes('startup')) {
+        setActiveTab('Startups');
+      } else if (roleLower.includes('service') || roleLower.includes('professional')) {
+        setActiveTab('ServiceProfessionals');
+      }
+    }
+  }, [isUpgradeFlow, userRole]);
 
   const tabs = [
     { id: 'Startups', label: ' Startups ' },
@@ -33,7 +90,6 @@ const PricingSec2 = () => {
    ServiceProfessionals : (
      <ServiceContent isUpgradeFlow={isUpgradeFlow} upgradeType={upgradeType} />
     ),
-   
   };
   return (
     <>
