@@ -453,7 +453,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span>Discover</span>
                         <p className="text-[10px] text-gray-400 font-normal">Find potential deals</p>
                       </div>
-                      <LuLock className="text-gray-300" size={14} />
+                      <LuLock className="text-gray-400" size={14} />
                     </div>
 
                     <div
@@ -464,7 +464,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span>Deal pipeline</span>
                         <p className="text-[10px] text-gray-400 font-normal">Track investment flow</p>
                       </div>
-                      <LuLock className="text-gray-300" size={14} />
+                      <LuLock className="text-gray-400" size={14} />
                     </div>
 
                     <div
@@ -475,7 +475,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span>My investment</span>
                         <p className="text-[10px] text-gray-400 font-normal">Portfolio performance</p>
                       </div>
-                      <LuLock className="text-gray-300" size={14} />
+                      <LuLock className="text-gray-400" size={14} />
                     </div>
 
                     <div
@@ -486,7 +486,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span>Portfolio strategy</span>
                         <p className="text-[10px] text-gray-400 font-normal">Optimize returns</p>
                       </div>
-                      <LuLock className="text-gray-300" size={14} />
+                      <LuLock className="text-gray-400" size={14} />
                     </div>
 
                     <div className="my-2 relative">
@@ -506,7 +506,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                             <span>Workspace</span>
                             <p className="text-[10px] text-gray-400 font-normal">Collaboration tools</p>
                           </div>
-                          <LuLock className="text-gray-300" size={14} />
+                          <LuLock className="text-gray-400" size={14} />
                         </div>
                         {isWorkspaceOpen ? (
                           <FaChevronUp className="text-gray-500 text-sm" size={12} />
@@ -560,7 +560,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span>Fundraising</span>
                         <p className="text-[10px] text-gray-400 font-normal">Unlock investor pipeline</p>
                       </div>
-                      <LuLock className="text-gray-300" size={14} />
+                      <LuLock className="text-gray-400" size={14} />
                     </div>
 
                     <div
@@ -571,7 +571,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span>Investors</span>
                         <p className="text-[10px] text-gray-400 font-normal">Manage investors relations</p>
                       </div>
-                      <LuLock className="text-gray-300" size={14} />
+                      <LuLock className="text-gray-400" size={14} />
                     </div>
 
                     <div className="my-2 relative">
@@ -590,7 +590,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                           <p className="text-[10px] text-gray-400 font-normal">Startup operations hub</p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <LuLock className="text-gray-300" size={14} />
+                          <LuLock className="text-gray-400" size={14} />
                           {/* {isOperateOpen ? (
                             <FaChevronUp className="text-gray-500 text-xs" size={10} />
                           ) : (

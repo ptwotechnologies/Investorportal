@@ -1,7 +1,7 @@
 import React from "react";
 import { IoMdCheckmark } from "react-icons/io";
 import { CgAsterisk } from "react-icons/cg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { serverUrl } from "@/App";
@@ -10,8 +10,12 @@ const DesigningContent = ({ isUpgradeFlow, upgradeType }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const scrollRef = React.useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const userId = localStorage.getItem("userId");
   const [userPlanAmount, setUserPlanAmount] = React.useState(() => {
+    if (location.state?.currentPlanAmount !== undefined) {
+      return Number(location.state.currentPlanAmount) || 0;
+    }
     return Number(localStorage.getItem("pricing_userPlanAmount")) || 0;
   });
 
@@ -338,32 +342,18 @@ const DesigningContent = ({ isUpgradeFlow, upgradeType }) => {
   const cardsToDisplay = React.useMemo(() => {
     if (!isUpgradeFlow) return cards;
 
-    if (upgradeType === "switch") {
-      // Show Explorer Access (Free plan), Growth Plan (25k), and Scale Plan (50k)
-      return [cards[0], cards[2], cards[3]];
-    }
-    
-    if (upgradeType === "premium" || upgradeType === "growth") {
-      // Find current plan and Growth Plan (25k)
-      const currentAmount = Number(userPlanAmount) || 0;
-      const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
-      const currentPlan = currentIdx !== -1 ? cards[currentIdx] : cards[0];
-      const growthPlan = cards[2];
-      
-      // If user is already on the Growth Plan, avoid duplicating
-      if (currentPlan.amount === growthPlan.amount) {
-        return [currentPlan];
-      }
-      return [currentPlan, growthPlan];
-    }
-    
-    // Default fallback
+    // Find current plan index
     const currentAmount = Number(userPlanAmount) || 0;
     const currentIdx = cards.findIndex(c => (c.amount || 0) === currentAmount);
     
-    if (currentIdx === -1) return [cards[0], cards[1]];
-    return cards.slice(currentIdx, currentIdx + 2);
-  }, [isUpgradeFlow, userPlanAmount, upgradeType]);
+    // Default to Free Plan if not matched
+    const activeIdx = currentIdx !== -1 ? currentIdx : 0;
+    
+    // Slice exactly 3 plans: current plan and the next 2 plans
+    // Using clamping to ensure 3 cards are always displayed without out-of-bounds errors
+    const startIdx = Math.max(0, Math.min(cards.length - 3, activeIdx));
+    return cards.slice(startIdx, startIdx + 3);
+  }, [isUpgradeFlow, userPlanAmount]);
 
   const handleScroll = () => {
     const container = scrollRef.current;
