@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useNotifications } from "@/context/NotificationContext";
 import { CgProfile } from "react-icons/cg";
 import { MdEdit } from "react-icons/md";
 import { Link } from "react-router-dom";
@@ -17,6 +19,7 @@ import { FaLinkedin } from "react-icons/fa6";
 import { AiFillInstagram } from "react-icons/ai";
 import { FaInstagram } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
+import { RxCross2 } from "react-icons/rx";
 import { statesData } from "./StateCity";
 import { IoDiamondOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
@@ -27,6 +30,7 @@ const ProfileSec = () => {
   const MAX_PORTFOLIO_IMAGES = 20;
 
   const token = localStorage.getItem("token");
+  const { showPortfolioModal, setShowPortfolioModal, refreshProfile } = useNotifications();
   const [profile, setProfile] = useState({
     name: "",
     bio: "",
@@ -121,6 +125,24 @@ const ProfileSec = () => {
               ],
       });
       setPortfolioFiles(res.data.portfolio || []);
+
+      // Check missing portfolio condition and trigger the popup banner every time they open the page
+      const hasPortfolio = res.data.portfolio && res.data.portfolio.length > 0;
+      const signupDate = res.data.userId?.createdAt 
+        ? new Date(res.data.userId.createdAt) 
+        : new Date();
+      const hoursSinceSignup = (Date.now() - signupDate.getTime()) / (1000 * 60 * 60);
+      console.log("[DEBUG PORTFOLIO POPUP] Evaluating warning modal criteria:", {
+        hasPortfolio,
+        signupDate: signupDate.toISOString(),
+        hoursSinceSignup
+      });
+      
+      if (!hasPortfolio && hoursSinceSignup > 24) {
+        setShowPortfolioModal(true);
+      } else {
+        setShowPortfolioModal(false);
+      }
     } catch (err) {
       console.error(err);
       
@@ -203,6 +225,8 @@ const ProfileSec = () => {
 
     setSelectedFile(null);
     await fetchProfile();
+    await refreshProfile();
+    window.dispatchEvent(new Event("profile-updated"));
     toast.success("Portfolio uploaded successfully!");
   } catch (err) {
     console.error("Upload failed:", err);
@@ -333,6 +357,8 @@ const ProfileSec = () => {
       setPortfolioFiles((prev) =>
         prev.filter((item) => item._id !== portfolioId),
       );
+      refreshProfile();
+      window.dispatchEvent(new Event("profile-updated"));
     } catch (error) {
       console.error("Delete failed", error);
     }
@@ -765,7 +791,13 @@ onClick={() => {
 
             {/* Save button outside the flex container */}
             {editSections.header && (
-              <div className="flex justify-end px-2 lg:pl-13 mb-4">
+              <div className="flex justify-end gap-3 px-2 lg:pl-13 mb-4">
+                <button
+                  onClick={() => setEditSections((prev) => ({ ...prev, header: false }))}
+                  className="px-4 py-1 border rounded-md h-10 mb-2 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
                 <button
                   disabled={isSavingProfile}
                   onClick={async () => {
@@ -859,7 +891,13 @@ onClick={() => {
         </div>
 
         {editSections.aboutAndSkills && (
-          <div className="flex justify-end px-4 lg:px-0 mb-4 ">
+          <div className="flex justify-end gap-3 px-4 lg:px-0 mb-4 ">
+            <button
+              onClick={() => setEditSections((prev) => ({ ...prev, aboutAndSkills: false }))}
+              className="px-4 py-1 border rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
             <button
               disabled={isSavingProfile}
               onClick={async () => {
@@ -926,7 +964,13 @@ onClick={() => {
         </div>
 
         {editSections.services && (
-          <div className="flex justify-end px-4 lg:px-0 mb-4 lg:pl-9">
+          <div className="flex justify-end gap-3 px-4 lg:px-0 mb-4 lg:pl-9">
+            <button
+              onClick={() => setEditSections((prev) => ({ ...prev, services: false }))}
+              className="px-4 py-1 border rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
             <button
               disabled={isSavingProfile}
               onClick={async () => {
@@ -1247,7 +1291,13 @@ onClick={() => {
         </div>
 
         {Object.values(experienceEdit).some((v) => v) && (
-          <div className="flex justify-end px-4 mb-4 lg:px-0">
+          <div className="flex justify-end gap-3 px-4 mb-4 lg:px-0">
+            <button
+              onClick={() => setExperienceEdit({})}
+              className="px-4 py-1 border rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
             <button
               onClick={async () => {
                 // Remove blank experiences
@@ -1446,7 +1496,7 @@ onClick={() => {
             /* 🟢 EDIT MODE → inputs enabled */
             <>
               <input
-                placeholder="LinkedIn Profile URL"
+                placeholder="Enter your LinkedIn public profile URL"
                 value={profile?.socialMedia?.linkedin || ""}
                 onChange={(e) =>
                   setProfile({
@@ -1460,20 +1510,25 @@ onClick={() => {
                 className="border-2 rounded-md p-2"
               />
 
-              <input
-                placeholder="Instagram Profile URL"
-                value={profile?.socialMedia?.instagram || ""}
-                onChange={(e) =>
-                  setProfile({
-                    ...profile,
-                    socialMedia: {
-                      ...profile?.socialMedia,
-                      instagram: e.target.value,
-                    },
-                  })
-                }
-                className="border-2 rounded-md p-2"
-              />
+              <div className="flex border-2 rounded-md overflow-hidden bg-white focus-within:border-gray-400 transition-colors">
+                <span className="flex items-center px-3 text-gray-500 bg-gray-100 border-r border-gray-200 text-sm">
+                  instagram.com/
+                </span>
+                <input
+                  placeholder="Enter your Instagram username"
+                  value={profile?.socialMedia?.instagram || ""}
+                  onChange={(e) =>
+                    setProfile({
+                      ...profile,
+                      socialMedia: {
+                        ...profile?.socialMedia,
+                        instagram: e.target.value,
+                      },
+                    })
+                  }
+                  className="p-2 flex-1 outline-none bg-transparent"
+                />
+              </div>
             </>
           ) : profile?.socialMedia?.linkedin ||
             profile?.socialMedia?.instagram ? (
@@ -1492,7 +1547,7 @@ onClick={() => {
 
               {profile?.socialMedia?.instagram && (
                 <a
-                  href={profile.socialMedia.instagram}
+                  href={profile.socialMedia.instagram.includes("http") ? profile.socialMedia.instagram : `https://instagram.com/${profile.socialMedia.instagram}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-2 text-pink-500"
@@ -1506,22 +1561,33 @@ onClick={() => {
             /* ⚪ VIEW MODE (no data yet) → disabled inputs */
             <>
               <input
-                placeholder="LinkedIn Profile URL"
+                placeholder="Enter your LinkedIn public profile URL"
                 disabled
                 className="border-2 rounded-md p-2 bg-gray-100 cursor-not-allowed"
               />
-              <input
-                placeholder="Instagram Profile URL"
-                disabled
-                className="border-2 rounded-md p-2 bg-gray-100 cursor-not-allowed"
-              />
+              <div className="flex border-2 rounded-md overflow-hidden bg-gray-100 cursor-not-allowed opacity-75">
+                <span className="flex items-center px-3 text-gray-500 border-r border-gray-200 text-sm">
+                  instagram.com/
+                </span>
+                <input
+                  placeholder="Enter your Instagram username"
+                  disabled
+                  className="p-2 flex-1 outline-none bg-transparent cursor-not-allowed"
+                />
+              </div>
             </>
           )}
         </div>
 
         {/* Save button only in edit mode */}
         {editSections.socialMedia && (
-          <div className="flex justify-end px-4 mb-4 lg:px-0">
+          <div className="flex justify-end gap-3 px-4 mb-4 lg:px-0">
+            <button
+              onClick={() => setEditSections((prev) => ({ ...prev, socialMedia: false }))}
+              className="px-4 py-1 border rounded-md hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
             <button
               disabled={isSavingProfile}
               onClick={handleSaveSocialMedia}
@@ -1915,6 +1981,46 @@ onClick={() => {
                 {isSavingProfile ? "Saving..." : "Save"}
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {/* Real-time Portfolio Missing Popup Modal */}
+      {showPortfolioModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white w-[90%] sm:w-[400px] rounded-2xl p-5 relative shadow-xl animate-fadeIn">
+            {/* Close Icon */}
+            <button
+              onClick={() => setShowPortfolioModal(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-black"
+            >
+              <RxCross2 size={22} />
+            </button>
+
+            {/* Content */}
+            <h2 className="text-xl font-semibold text-[#001426] mb-2 text-center">
+              Upload Your Portfolio ✨
+            </h2>
+
+            <p className="text-sm text-gray-600 text-center mb-4">
+              Add past work, case studies or business profiles to showcase your expertise, build trust, and unlock personalized connections.
+            </p>
+
+            <button
+              onClick={() => {
+                setShowPortfolioModal(false);
+                const portfolioEl = document.getElementById("portfolio");
+                if (portfolioEl) {
+                  portfolioEl.scrollIntoView({ behavior: "smooth", block: "center" });
+                  setTimeout(() => {
+                    const fileInput = document.getElementById("portfolioUploadInput");
+                    if (fileInput) fileInput.click();
+                  }, 600);
+                }
+              }}
+              className="w-full bg-[#59549F] text-white py-2 rounded-lg font-medium hover:bg-[#4a4686]"
+            >
+              Upload Portfolio Now
+            </button>
           </div>
         </div>
       )}

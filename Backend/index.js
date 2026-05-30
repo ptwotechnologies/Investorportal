@@ -18,6 +18,11 @@ import partnerReferralRoutes from './Routes/PartnerReferral.Routes.js';
 import dealRoutes from './Routes/deal.routes.js';
 import disputeRoutes from './Routes/dispute.routes.js';
 
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { initSocket } from "./lib/socket.js";
+import { startCronJobs } from "./lib/cron.js";
+
 const app = express();
 
 // Middlewares
@@ -26,6 +31,20 @@ const allowedOrigins = [
   "https://copteno.com",
   "https://www.copteno.com"
 ];
+
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+  }
+});
+
+initSocket(io);
+
+// INITIALIZE BACKGROUND JOBS
+startCronJobs();
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -113,10 +132,11 @@ app.use((err, req, res, next) => {
 // For local development
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3000;
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
 
 // Export for Vercel
+export { io, server };
 export default app;

@@ -28,3 +28,15 @@ export const markAsRead = async (req, res) => {
     res.status(500).json({ message: "Failed to update notification" });
   }
 };
+
+// Sabhi notifications ko read mark karne ke liye
+export const markAllAsRead = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    await Notification.updateMany({ userId, isRead: false }, { isRead: true });
+    res.status(200).json({ message: "All notifications marked as read" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to mark all as read" });
+  }
+};

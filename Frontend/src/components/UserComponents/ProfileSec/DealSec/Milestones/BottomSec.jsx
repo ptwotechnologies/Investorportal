@@ -31,6 +31,10 @@ const BottomSec = ({ deals, setDeals, selectedDeal, setSelectedDeal, selectedMil
 
   useEffect(() => {
     fetchDeals();
+
+    const handleRefresh = () => fetchDeals();
+    window.addEventListener("sidebar-refresh", handleRefresh);
+    return () => window.removeEventListener("sidebar-refresh", handleRefresh);
   }, []);
 
   useEffect(() => {

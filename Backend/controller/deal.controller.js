@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Deal from "../Models/deal.model.js";
 import Request from "../Models/request.model.js";
+import { emitDealUpdated } from "../lib/socket.js";
 
 // CREATE DEAL DRAFT
 export const createDealDraft = async (req, res) => {
@@ -47,6 +48,9 @@ export const createDealDraft = async (req, res) => {
     // Update request status
     request.status = "deal_created";
     await request.save();
+
+    // Trigger real-time update for both parties
+    emitDealUpdated([startupId, request.acceptedProvider]);
 
     res.status(201).json({
       message: "Deal draft created successfully",
@@ -185,6 +189,9 @@ export const updateDeal = async (req, res) => {
     }
 
     await deal.save();
+
+    // Trigger real-time update for both parties
+    emitDealUpdated([deal.startupId, deal.professionalId]);
 
     res.status(200).json({
       message: "Deal updated successfully",

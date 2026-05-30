@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNotifications } from "@/context/NotificationContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -45,7 +46,7 @@ import { LuLock } from "react-icons/lu";
 const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const { notifications, fetchNotifications, markAllNotificationsAsRead } = useNotifications();
   const [expandedIds, setExpandedIds] = useState([]);
   const [isDealsOpen, setIsDealsOpen] = useState(false);
   const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
@@ -57,6 +58,7 @@ const Mobile = () => {
   const [userRole, setUserRole] = useState(localStorage.getItem("role") || "");
   const [userName, setUserName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
@@ -97,6 +99,7 @@ const Mobile = () => {
         setUserRole(userRes.data.role);
         setUserName(displayName);
         setProfilePhoto(profileData?.profilePhoto);
+        setUserId(userRes.data._id);
       } catch (err) {
         console.error("Error fetching mobile data", err);
         setHasRaisedRequests(false);
@@ -105,6 +108,12 @@ const Mobile = () => {
       }
     };
     fetchData();
+
+    // Listen for real-time updates triggered by NotificationContext
+    window.addEventListener("sidebar-refresh", fetchData);
+    return () => {
+      window.removeEventListener("sidebar-refresh", fetchData);
+    };
   }, [location.pathname]);
 
   const isStartup = String(userRole).toLowerCase().includes("startup");
@@ -134,19 +143,11 @@ const Mobile = () => {
     setShowNotifications((prev) => !prev);
   };
 
-  const fetchNotifications = async () => {
-    try {
-      const res = await axios.get(`${serverUrl}/profile/notifications`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-      setNotifications(res.data);
-    } catch (err) {
-      console.error("Failed to fetch notifications", err);
-    }
-  };
-
   useEffect(() => {
-    if (showNotifications) fetchNotifications();
+    if (showNotifications) {
+      fetchNotifications();
+      markAllNotificationsAsRead();
+    }
   }, [showNotifications]);
 
   const toggleExpanded = (id) => {
@@ -165,11 +166,18 @@ const Mobile = () => {
         </div>
 
         <div className="flex items-center   rounded-full py-1 px-2 shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] mr-2">
-          <IoNotificationsOutline
-            size={18}
-            onClick={handleNotificationClick}
-            className="text-[#59549F] ml-1"
-          />
+          <div className="relative ml-1 cursor-pointer">
+            <IoNotificationsOutline
+              size={18}
+              onClick={handleNotificationClick}
+              className="text-[#59549F]"
+            />
+            {notifications.filter(n => !n.isRead).length > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-red-600 text-[7px] font-bold text-white shadow-md animate-pulse">
+                {notifications.filter(n => !n.isRead).length}
+              </span>
+            )}
+          </div>
           <div className="w-0.2 h-6 border mx-1"></div>
           <Sheet>
             <SheetTrigger asChild>
@@ -751,27 +759,80 @@ const Mobile = () => {
                 return (
                   <div
                     key={n._id}
-                    className="border p-2 flex items-start gap-4 rounded-lg w-full"
+                    className="border p-2 flex flex-col gap-2 rounded-lg w-full bg-gray-50 hover:bg-white transition-colors"
                   >
-                    <div className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0"></div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold">{n.title}</p>
-                      <p
-                        className={`text-sm text-gray-600 transition-all duration-300 ${
-                          !isExpanded ? "line-clamp-2" : ""
-                        }`}
-                      >
-                        {n.message}
-                      </p>
-                      {n.message.length > 100 && (
-                        <button
-                          className="text-blue-600 text-sm mt-1"
-                          onClick={() => toggleExpanded(n._id)}
+                    <div className="flex items-start gap-4 w-full">
+                      <div className="w-10 h-10 rounded-full border flex items-center justify-center shrink-0 bg-[#D8D6F8] text-sm">
+                        {n.type === "missing_portfolio" || n.type === "incomplete_profile" ? "⚠️" : n.type === "welcome_trigger" ? "✨" : n.type === "new_opportunity" ? "📋" : n.type === "explore_professionals" ? "🔍" : "🔔"}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-sm text-[#001426]">{n.title}</p>
+                        <p
+                          className={`text-xs text-gray-600 leading-relaxed ${
+                            !isExpanded ? "line-clamp-2" : ""
+                          }`}
                         >
-                          {isExpanded ? "Show Less" : "See More"}
-                        </button>
-                      )}
+                          {n.message}
+                        </p>
+                        {n.message.length > 100 && (
+                          <button
+                            className="text-blue-600 text-xs mt-1 font-medium"
+                            onClick={() => toggleExpanded(n._id)}
+                          >
+                            {isExpanded ? "Show Less" : "See More"}
+                          </button>
+                        )}
+                      </div>
                     </div>
+                    {n.type === "missing_portfolio" && (
+                      <div className="pl-14">
+                        <Link 
+                          to="/profile"
+                          onClick={() => setShowNotifications(false)}
+                          className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                        >
+                          Upload Portfolio
+                        </Link>
+                      </div>
+                    )}
+                    {(n.type === "welcome_trigger" || n.type === "incomplete_profile") && (
+                      <div className="pl-14">
+                        <Link 
+                          to="/profile"
+                          onClick={() => setShowNotifications(false)}
+                          className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                        >
+                          Complete Profile
+                        </Link>
+                      </div>
+                    )}
+                    {n.type === "explore_professionals" && (
+                      <div className="pl-14">
+                        <Link 
+                          to="/request"
+                          state={{ defaultTab: "received" }}
+                          onClick={() => setShowNotifications(false)}
+                          className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                        >
+                          Discover Professionals
+                        </Link>
+                      </div>
+                    )}
+                    {n.type === "new_opportunity" && (
+                      <div className="pl-14">
+                        <Link 
+                          to="/request"
+                          state={{ defaultTab: "received" }}
+                          onClick={() => {
+                            localStorage.setItem(`new_opportunity_seen_${userId}`, "true");
+                            setShowNotifications(false);
+                          }}
+                          className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                        >
+                          View Opportunity
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 );
               })

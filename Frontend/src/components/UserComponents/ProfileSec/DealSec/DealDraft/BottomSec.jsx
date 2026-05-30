@@ -211,12 +211,33 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
   const navigate = useNavigate();
   
   // ── State for Data ──
+  const [currentUser, setCurrentUser] = useState(null);
   const [scopeItems, setScopeItems] = useState([]);
   const [description, setDescription] = useState("");
   
   const [milestones, setMilestones] = useState([]);
   const [totalBudget, setTotalBudget] = useState("");
   const [totalTimeline, setTotalTimeline] = useState("");
+
+  // ── Selection State (for when requestId is missing) ──
+  const [selectionRequestId, setSelectionRequestId] = useState(requestId || null);
+  const [selectionProfessionalId, setSelectionProfessionalId] = useState(professionalId || null);
+  const [eligibleRequests, setEligibleRequests] = useState([]);
+  const [isFetchingRequests, setIsFetchingRequests] = useState(!requestId);
+
+  // Sync props to state if they change or arrive late
+  useEffect(() => {
+    if (requestId) setSelectionRequestId(requestId);
+    if (professionalId) setSelectionProfessionalId(professionalId);
+  }, [requestId, professionalId]);
+
+  // ── Temp State for Editors ──
+  const [tempMilestone, setTempMilestone] = useState(null);
+  const [newScopeInput, setNewScopeInput] = useState("");
+  const [tempDescription, setTempDescription] = useState("");
+  const [tempScopeItems, setTempScopeItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [submitAttempted, setSubmitAttempted] = useState(false);
 
   // Auto-calculate total budget from milestones
   useEffect(() => {
@@ -226,13 +247,72 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
     }
   }, [milestones]);
 
-  // ── Temp State for Editors ──
-  const [tempMilestone, setTempMilestone] = useState(null);
-  const [newScopeInput, setNewScopeInput] = useState("");
-  const [tempDescription, setTempDescription] = useState("");
-  const [tempScopeItems, setTempScopeItems] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [isDraftLoaded, setIsDraftLoaded] = useState(false);
+  const [showTopNotificationStrip, setShowTopNotificationStrip] = useState(false);
+
+  // ── Load Draft on Mount/User Fetch ──
+  useEffect(() => {
+    if (!currentUser?._id) return;
+    
+    const saved = localStorage.getItem(`deal_draft_autosave_${currentUser._id}`);
+    if (saved) {
+      try {
+        const draftData = JSON.parse(saved);
+        if (draftData.scopeItems) setScopeItems(draftData.scopeItems);
+        if (draftData.description) setDescription(draftData.description);
+        if (draftData.milestones) setMilestones(draftData.milestones);
+        if (draftData.totalBudget) setTotalBudget(draftData.totalBudget);
+        if (draftData.totalTimeline) setTotalTimeline(draftData.totalTimeline);
+        if (draftData.selectionRequestId) setSelectionRequestId(draftData.selectionRequestId);
+        if (draftData.selectionProfessionalId) setSelectionProfessionalId(draftData.selectionProfessionalId);
+        
+        toast.success("Draft recovered: Continue working on your proposal!", { id: "draft-recovered" });
+
+        // Evaluate if draft is older than 6 hours
+        const lastSavedAt = draftData.lastSavedAt || Date.now();
+        const sixHours = 6 * 60 * 60 * 1000;
+        const isOlderThan6h = (Date.now() - lastSavedAt) > sixHours;
+        
+        if (isOlderThan6h) {
+          setShowTopNotificationStrip(true);
+        }
+      } catch (err) {
+        console.error("Failed to parse saved draft", err);
+      }
+    }
+    setIsDraftLoaded(true);
+  }, [currentUser]);
+
+  // ── Auto-save Draft to LocalStorage ──
+  useEffect(() => {
+    if (!isDraftLoaded || !currentUser?._id) return;
+    
+    const hasContent = 
+      scopeItems.length > 0 || 
+      description.trim() !== "" || 
+      milestones.length > 0;
+
+    if (hasContent) {
+      const draftData = {
+        scopeItems,
+        description,
+        milestones,
+        totalBudget,
+        totalTimeline,
+        selectionRequestId,
+        selectionProfessionalId,
+        lastSavedAt: Date.now()
+      };
+      localStorage.setItem(`deal_draft_autosave_${currentUser._id}`, JSON.stringify(draftData));
+      
+      // Reset dismissed banner status when they take action
+      localStorage.removeItem(`deal_draft_recovery_dismissed_${currentUser._id}`);
+    } else {
+      localStorage.removeItem(`deal_draft_autosave_${currentUser._id}`);
+    }
+  }, [scopeItems, description, milestones, totalBudget, totalTimeline, selectionRequestId, selectionProfessionalId, isDraftLoaded, currentUser]);
+
+
 
   // ── Validation Helpers ──
   const getWordCount = (str) => {
@@ -269,12 +349,7 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
   const showImproveCard = submitAttempted && hasAnyIssue;
 
 
-  // ── Selection State (for when requestId is missing) ──
-  const [selectionRequestId, setSelectionRequestId] = useState(requestId || null);
-  const [selectionProfessionalId, setSelectionProfessionalId] = useState(professionalId || null);
-  const [eligibleRequests, setEligibleRequests] = useState([]);
-  const [isFetchingRequests, setIsFetchingRequests] = useState(!requestId);
-  const [currentUser, setCurrentUser] = useState(null);
+
 
   // Sync temp state when activeView changes
   useEffect(() => {
@@ -360,14 +435,8 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
     
     setMilestones(updatedMilestones);
     
-    // Determine if we should close the view
-    const validationIssues = getProposalIssues();
-    const hasAnyIssue = Object.values(validationIssues).some(v => v === false);
-    const shouldClose = !silent && (!submitAttempted || !hasAnyIssue);
-
-    if (shouldClose) {
-      setActiveView('none');
-    }
+    // Always close the view after saving to prevent double-saving on multiple submits
+    setActiveView('none');
     
     if (!silent) {
       toast.success("Milestone saved successfully");
@@ -398,14 +467,8 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
     setScopeItems(finalItems);
     setDescription(tempDescription);
 
-    // Determine if we should close the view
-    const validationIssues = getProposalIssues();
-    const hasAnyIssue = Object.values(validationIssues).some(v => v === false);
-    const shouldClose = !silent && (!submitAttempted || !hasAnyIssue);
-
-    if (shouldClose) {
-      setActiveView('none');
-    }
+    // Always close the view after saving to prevent double-saving
+    setActiveView('none');
 
     if (!silent) {
       toast.success("Scope saved successfully");
@@ -503,6 +566,9 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
       });
 
       invalidateSidebarCache();
+      if (currentUser?._id) {
+        localStorage.removeItem(`deal_draft_autosave_${currentUser._id}`);
+      }
       toast.success("Deal Draft submitted successfully!");
       navigate("/deal/activedeals");
     } catch (err) {
@@ -515,66 +581,113 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
 
   if (!requestId && !selectionRequestId) {
     return (
-      <div className="flex-1 p-6 flex flex-col items-center justify-center min-h-[400px]">
-        <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-[0px_0px_24px_rgba(0,0,0,0.1)] border border-gray-100">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-[#001032]">Select a Request</h2>
-            <p className="text-gray-500 mt-2">Which project would you like to create a deal for?</p>
-          </div>
-
-          {isFetchingRequests ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#59549F]"></div>
+      <>
+        {showTopNotificationStrip && (
+          <div className="bg-gradient-to-r from-[#59549F] to-[#48438A] text-white py-2.5 px-4 flex items-center justify-between gap-4 text-xs font-medium animate-in slide-in-from-top duration-300 w-full shrink-0 shadow-[0px_4px_12px_rgba(89,84,159,0.15)] mb-3">
+            <div className="flex items-center gap-2">
+              <span>📝</span>
+              <p>Your request draft is waiting to be published.</p>
             </div>
-          ) : eligibleRequests.length > 0 ? (
-            <div className="grid gap-4">
-              {eligibleRequests.map((req) => {
-                const partner = req.acceptedProvider?._id || req.acceptedProvider;
-                const partnerName = req.acceptedProvider?.name || "Professional";
-                return (
-                  <div 
-                    key={req._id}
-                    onClick={() => {
-                      setSelectionRequestId(req._id);
-                      setSelectionProfessionalId(partner);
-                    }}
-                    className="flex items-center justify-between p-5 rounded-2xl border-2 border-gray-50 hover:border-[#D8D6F8] hover:bg-[#FDFDFF] cursor-pointer transition-all group"
-                  >
-                    <div>
-                      <h4 className="font-bold text-[#001032] group-hover:text-[#59549F]">{req.service}</h4>
-                      <p className="text-xs text-gray-400 mt-1">Working with: {partnerName}</p>
-                    </div>
-                    <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-[#59549F] group-hover:bg-[#D8D6F8] transition-all">
-                      →
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FiTrash2 className="text-red-400 text-2xl" />
-              </div>
-              <h4 className="text-lg font-medium text-gray-700">No Eligible Requests</h4>
-              <p className="text-sm text-gray-500 mt-2 max-w-sm mx-auto">
-                You need to have an accepted professional on a request before you can create a deal draft.
-              </p>
+            <div className="flex items-center gap-3">
               <button 
-                onClick={() => navigate("/profile/request")}
-                className="mt-6 px-8 py-2.5 bg-[#59549F] text-white rounded-full font-bold hover:bg-[#48438a] transition-all"
+                onClick={() => setShowTopNotificationStrip(false)}
+                className="bg-white text-[#59549F] px-3.5 py-1 rounded-lg font-bold hover:bg-purple-50 transition-all duration-300 cursor-pointer"
               >
-                Go to Requests
+                Continue Draft
+              </button>
+              <button 
+                onClick={() => setShowTopNotificationStrip(false)}
+                className="text-white/80 hover:text-white cursor-pointer"
+              >
+                <FiX size={16} />
               </button>
             </div>
-          )}
+          </div>
+        )}
+        <div className="flex-1 p-6 flex flex-col items-center justify-center min-h-[400px]">
+          <div className="w-full max-w-2xl bg-white rounded-3xl p-8 shadow-[0px_0px_24px_rgba(0,0,0,0.1)] border border-gray-100">
+            <div className="text-center mb-8">
+              <h2 className="text-2xl font-bold text-[#001032]">Select a Request</h2>
+              <p className="text-gray-500 mt-2">Which project would you like to create a deal for?</p>
+            </div>
+
+            {isFetchingRequests ? (
+              <div className="flex justify-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#59549F]"></div>
+              </div>
+            ) : eligibleRequests.length > 0 ? (
+              <div className="grid gap-4">
+                {eligibleRequests.map((req) => {
+                  const partner = req.acceptedProvider?._id || req.acceptedProvider || req.userId?._id || req.userId;
+                  const partnerName = req.acceptedProvider?.name || req.userId?.name || req.userId?.companyName || "Partner";
+                  return (
+                    <div 
+                      key={req._id}
+                      onClick={() => {
+                        setSelectionRequestId(req._id);
+                        setSelectionProfessionalId(partner);
+                      }}
+                      className="flex items-center justify-between p-5 rounded-2xl border-2 border-gray-50 hover:border-[#D8D6F8] hover:bg-[#FDFDFF] cursor-pointer transition-all group"
+                    >
+                      <div>
+                        <h4 className="font-bold text-[#001032] group-hover:text-[#59549F]">{req.service || "Service Request"}</h4>
+                        <p className="text-xs text-gray-400 mt-1">Working with: {partnerName}</p>
+                      </div>
+                      <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-[#59549F] group-hover:bg-[#D8D6F8] transition-all">
+                        →
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FiTrash2 className="text-red-400 text-2xl" />
+                </div>
+                <h4 className="text-lg font-medium text-gray-700">No Eligible Requests</h4>
+                <p className="text-sm text-gray-500 mt-2 max-w-sm mx-auto">
+                  You need to have an accepted professional on a request before you can create a deal draft.
+                </p>
+                <button 
+                  onClick={() => navigate("/profile/request")}
+                  className="mt-6 px-8 py-2.5 bg-[#59549F] text-white rounded-full font-bold hover:bg-[#48438a] transition-all"
+                >
+                  Go to Requests
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-1 bg-[#FDFDFF]">
+    <div className="flex flex-col w-full">
+      {showTopNotificationStrip && (
+        <div className="bg-gradient-to-r from-[#59549F] to-[#48438A] text-white py-2.5 px-4 flex items-center justify-between gap-4 text-xs font-medium animate-in slide-in-from-top duration-300 w-full shrink-0 shadow-[0px_4px_12px_rgba(89,84,159,0.15)] mb-3 rounded-2xl">
+          <div className="flex items-center gap-2">
+            <span>📝</span>
+            <p>Your request draft is waiting to be published.</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setShowTopNotificationStrip(false)}
+              className="bg-white text-[#59549F] px-3.5 py-1 rounded-lg font-bold hover:bg-purple-50 transition-all duration-300 cursor-pointer"
+            >
+              Continue Draft
+            </button>
+            <button 
+              onClick={() => setShowTopNotificationStrip(false)}
+              className="text-white/80 hover:text-white cursor-pointer"
+            >
+              <FiX size={16} />
+            </button>
+          </div>
+        </div>
+      )}
+      <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-1 bg-[#FDFDFF]">
       
       {/* ── LEFT COLUMN (Project Overview) ── */}
       <div className={`flex-1 space-y-4 max-h-[620px] overflow-y-auto p-2 scrollbar-hide mb-2 ${activeView !== 'none' ? 'hidden lg:block' : 'block'}`}>
@@ -937,6 +1050,7 @@ const BottomSec = ({ activeView, setActiveView, selectedMilestone, setSelectedMi
           {loading ? "Submitting..." : "Submit Draft"}
         </button>
       </div>
+    </div>
     </div>
   );
 };

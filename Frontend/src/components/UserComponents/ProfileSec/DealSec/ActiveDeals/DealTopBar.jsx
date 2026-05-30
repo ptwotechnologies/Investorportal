@@ -94,11 +94,13 @@ const DealTopBar = () => {
                 <span className="text-sm text-black font-medium tracking-wider px-2">Select Request to Create Deal</span>
               </div>
               <div className="max-h-[300px] overflow-y-auto scrollbar-hide">
-                {requests.length > 0 && requests.map((req) => (
+                {requests.length > 0 && requests.map((req) => {
+                  const partner = req.acceptedProvider?._id || req.acceptedProvider || req.userId?._id || req.userId;
+                  return (
                   <div 
                     key={req._id}
                     onClick={() => {
-                      navigate("/deal/dealdraft", { state: { requestId: req._id } });
+                      navigate("/deal/dealdraft", { state: { requestId: req._id, professionalId: partner } });
                       toggleDropdown();
                     }}
                     className="p-3 lg:p-4 hover:bg-[#FDFDFF] cursor-pointer border-b border-gray-50 last:border-0 transition-all group"
@@ -112,7 +114,7 @@ const DealTopBar = () => {
                       </span>
                     </div>
                   </div>
-                ))}
+                )})}
               </div>
             </div>
           </div>

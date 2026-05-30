@@ -121,6 +121,10 @@ const Bottom = () => {
   useEffect(() => {
     fetchDeals();
     fetchUserPhone();
+
+    const handleRefresh = () => fetchDeals();
+    window.addEventListener("sidebar-refresh", handleRefresh);
+    return () => window.removeEventListener("sidebar-refresh", handleRefresh);
   }, []);
 
   useEffect(() => {

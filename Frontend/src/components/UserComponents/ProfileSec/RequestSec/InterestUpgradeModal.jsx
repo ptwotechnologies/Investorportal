@@ -25,11 +25,11 @@ const InterestUpgradeModal = ({ onClose, userRole, userAmount }) => {
           </div>
           
           <div className="flex-1">
-            <h2 className="text-[13px] font-bold text-[#001032] leading-tight mb-1">
-              Free Plan: <span className="font-medium text-gray-600">You've used 1 / 1 interests.</span>
+            <h2 className="text-sm font-bold text-[#001032] leading-tight mb-1">
+              You’ve reached your active proposal limit.
             </h2>
-            <p className="text-xs text-gray-500 font-medium">
-              More opportunities are waiting for you!
+            <p className="text-xs text-gray-500 font-medium leading-relaxed">
+              Upgrade to continue engaging with more startup opportunities.
             </p>
           </div>
         </div>
@@ -50,7 +50,7 @@ const InterestUpgradeModal = ({ onClose, userRole, userAmount }) => {
             })}
             className="w-full py-2 bg-[#59549F] text-white rounded-md font-bold text-xs flex items-center justify-center gap-2 hover:bg-[#48438a] transition-all shadow-md active:scale-95"
           >
-            🔒 Upgrade Now
+            🔒 Upgrade Plan
           </button>
           
           <button 

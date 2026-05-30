@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNotifications } from "@/context/NotificationContext";
 import { IoMdMenu } from "react-icons/io";
 import { CgProfile } from "react-icons/cg";
 import requestLogo from "/requestlogo.png";
@@ -52,7 +53,7 @@ export const invalidateSidebarCache = () => {
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
-  const [notifications, setNotifications] = useState([]);
+  const { notifications, fetchNotifications, markAllNotificationsAsRead } = useNotifications();
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -189,24 +190,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     setShowNotifications(!showNotifications);
   };
 
-  const fetchNotifications = async () => {
-    try {
-      const res = await axios.get(`${serverUrl}/profile/notifications`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setNotifications(res.data);
-    } catch (err) {
-      console.error("Failed to fetch notifications", err);
-    }
-  };
-
   useEffect(() => {
     if (showNotifications) {
       // jab box open ho
       fetchNotifications();
+      markAllNotificationsAsRead();
+      document.body.style.overflow = "hidden";
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+      document.documentElement.style.overflow = "unset";
     }
+    return () => {
+      document.body.style.overflow = "unset";
+      document.documentElement.style.overflow = "unset";
+    };
   }, [showNotifications]);
 
   const [expandedIds, setExpandedIds] = useState([]); // store expanded notification IDs
@@ -230,7 +228,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     <div className="sticky top-0 h-screen z-50 overflow-y-auto scrollbar-hide">
       <div className="flex min-h-full w-fit">
         {/* Purple Bar */}
-        <div className="w-16 bg-[#D8D6F8] flex flex-col items-center py-4 shrink-0 min-h-full">
+        <div className="w-14 bg-[#D8D6F8] flex flex-col items-center py-4 shrink-0 min-h-full">
         {/* Top Icon */}
         <div className="text-[#59549f] py-6">
           <IoMdMenu size={27} onClick={handleToggle} className="cursor-pointer" />
@@ -259,11 +257,18 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             size={25}
             onClick={handleToggle}
           />
-          <IoNotificationsOutline
-            className="text-[#59549f] my-3 cursor-pointer"
-            size={25}
-            onClick={handleNotificationClick}
-          />
+          <div className="relative my-3 cursor-pointer">
+            <IoNotificationsOutline
+              className="text-[#59549f]"
+              size={25}
+              onClick={handleNotificationClick}
+            />
+            {notifications.filter(n => !n.isRead).length > 0 && (
+              <span className="absolute -top-1 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-red-600 text-[8px] font-bold text-white shadow-md animate-pulse">
+                {notifications.filter(n => !n.isRead).length}
+              </span>
+            )}
+          </div>
 
           <Link to="/deal/analytics">
             <SiSimpleanalytics
@@ -413,16 +418,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 Connect
               </NavLink>
 
-              <NavLink
-                to="/notification"
-                className={({ isActive }) =>
-                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
-                  }`
-                }
+              <div
+                onClick={handleNotificationClick}
+                className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] cursor-pointer "
               >
                 Notification
-              </NavLink>
+              </div>
               <hr />
               <h1 className="text-gray-500 text-[10px] m-3 font-semibold uppercase tracking-wider">INSIGHTS</h1>
 
@@ -905,23 +906,88 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
       {/* Notification Box (Overlay) */}
       {showNotifications && (
-        <div className="fixed top-14 left-20 ml-4 w-100 h-[90vh] bg-white border border-gray-300 shadow-lg rounded-md z-[60] p-4">
+        <div 
+          className="fixed top-19 left-72 ml-4 w-100 h-[80vh] bg-white border border-gray-300 shadow-lg rounded-md z-[60] p-4"
+          style={{ overscrollBehavior: 'contain' }}
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
           <div className="flex items-center justify-between mb-3">
             <h1 className="text-lg font-semibold text-[#001426]">Notifications</h1>
             <RxCross2 size={25} className="cursor-pointer text-gray-500 hover:text-black" onClick={handleNotificationClick} />
           </div>
           <hr />
-          <div className="flex flex-col gap-2 max-h-[80vh] overflow-y-auto scrollbar-hide px-2 py-3">
+          <div 
+            className="flex flex-col gap-2 h-[95vh] overflow-y-auto scrollbar-hide px-2 py-3"
+            style={{ overscrollBehavior: 'contain' }}
+          >
             {notifications.length === 0 ? (
-              <p className="text-center text-gray-500 mt-10">No notifications</p>
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <span className="text-3xl mb-2">🎉</span>
+                <p className="text-sm font-semibold text-gray-700">All caught up!</p>
+                <p className="text-xs text-gray-450 mt-1.5 max-w-[200px]">You have no new notifications at this time.</p>
+              </div>
             ) : (
               notifications.map((n) => (
-                <div key={n._id} className="border p-3 flex items-start gap-4 rounded-lg bg-gray-50 hover:bg-white transition-colors">
-                  <div className="w-10 h-10 rounded-full bg-[#D8D6F8] flex items-center justify-center shrink-0"></div>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-sm text-[#001426]">{n.title}</p>
-                    <p className="text-xs text-gray-600 line-clamp-2">{n.message}</p>
+                <div key={n._id} className="border p-3 flex flex-col gap-2 rounded-lg bg-gray-50 hover:bg-white transition-colors">
+                  <div className="flex items-start gap-4 w-full">
+                    <div className="w-10 h-10 rounded-full bg-[#D8D6F8] flex items-center justify-center shrink-0 text-sm">
+                      {n.type === "missing_portfolio" || n.type === "incomplete_profile" ? "⚠️" : n.type === "welcome_trigger" ? "✨" : n.type === "new_opportunity" ? "📋" : n.type === "explore_professionals" ? "🔍" : "🔔"}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-semibold text-sm text-[#001426]">{n.title}</p>
+                      <p className="text-xs text-gray-600 leading-relaxed">{n.message}</p>
+                    </div>
                   </div>
+                  {n.type === "missing_portfolio" && (
+                    <div className="pl-14">
+                      <Link 
+                        to="/profile"
+                        onClick={() => setShowNotifications(false)}
+                        className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                      >
+                        Upload Portfolio
+                      </Link>
+                    </div>
+                  )}
+                  {(n.type === "welcome_trigger" || n.type === "incomplete_profile") && (
+                    <div className="pl-14">
+                      <Link 
+                        to="/profile"
+                        onClick={() => setShowNotifications(false)}
+                        className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                      >
+                        Complete Profile
+                      </Link>
+                    </div>
+                  )}
+                  {n.type === "explore_professionals" && (
+                    <div className="pl-14">
+                      <Link 
+                        to="/request"
+                        state={{ defaultTab: "received" }}
+                        onClick={() => setShowNotifications(false)}
+                        className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                      >
+                        Discover Professionals
+                      </Link>
+                    </div>
+                  )}
+                  {n.type === "new_opportunity" && (
+                    <div className="pl-14">
+                      <Link 
+                        to="/request"
+                        state={{ defaultTab: "received" }}
+                        onClick={() => {
+                          localStorage.setItem(`new_opportunity_seen_${userId}`, "true");
+                          setShowNotifications(false);
+                        }}
+                        className="inline-block bg-[#59549F] hover:bg-[#4a4686] text-white font-semibold py-1.5 px-4 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                      >
+                        View Opportunity
+                      </Link>
+                    </div>
+                  )}
                 </div>
               ))
             )}

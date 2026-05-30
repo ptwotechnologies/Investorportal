@@ -24,6 +24,13 @@ const DealBottomSec = ({
   const [userId, setUserId] = React.useState(null);
   const [tempScopeItems, setTempScopeItems] = React.useState([]);
   const [newScopeInput, setNewScopeInput] = React.useState("");
+  const [showDealActivatedToast, setShowDealActivatedToast] = React.useState(false);
+  const [activatedDealId, setActivatedDealId] = React.useState(null);
+  
+  const [showPendingMilestoneToast, setShowPendingMilestoneToast] = React.useState(false);
+  const [pendingMilestoneDealId, setPendingMilestoneDealId] = React.useState(null);
+  const [pendingMilestoneData, setPendingMilestoneData] = React.useState(null);
+  const [showMilestoneApprovalBanner, setShowMilestoneApprovalBanner] = React.useState(false);
 
   // Robust Role Detection: Compare current user ID with deal participants to ensure accurate labels
   const amIStartup = userId && (selectedProject?.startupId?._id === userId || selectedProject?.startupId === userId);
@@ -45,6 +52,10 @@ const DealBottomSec = ({
   React.useEffect(() => {
     fetchDeals();
     fetchUserInfo();
+
+    const handleRefresh = () => fetchDeals(false);
+    window.addEventListener("sidebar-refresh", handleRefresh);
+    return () => window.removeEventListener("sidebar-refresh", handleRefresh);
   }, []);
 
   // Polling to keep state in sync across both parties
@@ -66,6 +77,46 @@ const DealBottomSec = ({
       }
     }
   }, [editedDeal?.milestones, isEditing]);
+
+  React.useEffect(() => {
+    if (isStartup && deals.length > 0) {
+      let foundPending = null;
+      let foundDealId = null;
+      for (const deal of deals) {
+        const pendingMs = deal.milestones?.find(m => m.status === "Completed");
+        if (pendingMs) {
+          foundPending = pendingMs;
+          foundDealId = deal._id;
+          break;
+        }
+      }
+
+      if (foundPending && userId) {
+        const isDismissed = localStorage.getItem(`pending_milestone_toast_dismissed_${userId}_${foundPending._id || foundPending.id}`) === "true";
+        if (!isDismissed) {
+          setPendingMilestoneData(foundPending);
+          setPendingMilestoneDealId(foundDealId);
+          setShowPendingMilestoneToast(true);
+        }
+      }
+    }
+
+    if (!isStartup && deals.length > 0 && userId) {
+      let foundApproved = null;
+      for (const deal of deals) {
+        const approvedMs = deal.milestones?.find(m => m.status === "Approved" || m.status === "approved");
+        if (approvedMs) {
+          foundApproved = approvedMs;
+          break;
+        }
+      }
+
+      if (foundApproved || localStorage.getItem('debug_milestone_approval_trigger') === "true") {
+        const approvalDismissed = localStorage.getItem(`milestone_approval_banner_dismissed_${userId}`) === "true";
+        setShowMilestoneApprovalBanner(!approvalDismissed);
+      }
+    }
+  }, [deals, userId, isStartup]);
 
   const fetchDeals = async (showLoading = true) => {
     if (showLoading) setLoading(true);
@@ -157,6 +208,9 @@ const DealBottomSec = ({
       };
       if (updatedProject.documentation.startupAgreed && updatedProject.documentation.professionalAgreed) {
         updatedProject.status = "Approved";
+        setShowDealActivatedToast(true);
+        setActivatedDealId(updatedProject._id || updatedProject.id);
+        localStorage.setItem(`deal_activated_trigger_${userId}`, "true");
       }
       setSelectedProject(updatedProject);
       fetchDeals(false);
@@ -168,6 +222,17 @@ const DealBottomSec = ({
   };
 
   // ── Handlers ──
+  const handleReviewSubmission = () => {
+    const deal = deals.find(d => d._id === pendingMilestoneDealId);
+    if (deal) {
+      setSelectedProject(deal);
+      setSelectedMilestone(pendingMilestoneData);
+      setRightPanelState('milestoneDetails');
+      setShowPendingMilestoneToast(false);
+      localStorage.setItem(`pending_milestone_toast_dismissed_${userId}_${pendingMilestoneData._id || pendingMilestoneData.id}`, "true");
+    }
+  };
+
   const handleViewProject = (proj) => {
     setSelectedProject(proj);
     setRightPanelState('overview');
@@ -220,6 +285,74 @@ const DealBottomSec = ({
   const backLabel = (rightPanelState === 'scopeDetails' || rightPanelState === 'milestoneDetails') ? 'Back to Overview' : 'Back to List';
 
   return (
+    <>
+      {showDealActivatedToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top-10 fade-in duration-500 w-[95%] md:w-auto">
+          <div className="bg-gradient-to-r from-[#59549F] to-[#48438A] p-0.5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+            <div className="bg-white rounded-[14px] px-4 py-3 md:px-5 md:py-4 flex flex-col md:flex-row items-center gap-3 md:gap-6 justify-between">
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="w-10 h-10 rounded-full bg-[#E8E7F5] flex items-center justify-center shrink-0">
+                  <IoMdCheckmark className="text-[#59549F] text-xl" />
+                </div>
+                <div className="flex-1 text-left">
+                  <h3 className="font-bold text-[#000000] text-sm md:text-base leading-tight">Deal Accepted!</h3>
+                  <p className="text-xs text-gray-500 font-medium mt-0.5">Your deal workspace is now active.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 w-full md:w-auto justify-end mt-1 md:mt-0">
+                <button
+                  onClick={() => setShowDealActivatedToast(false)}
+                  className="text-gray-400 hover:text-gray-600 text-xs font-semibold px-2"
+                >
+                  Dismiss
+                </button>
+                <button
+                  onClick={() => navigate('/deal/documentation')}
+                  className="bg-gradient-to-r from-[#59549F] to-[#48438A] hover:opacity-90 text-white font-bold py-2 px-5 rounded-lg text-xs shadow-sm transition-all whitespace-nowrap"
+                >
+                  Open Workspace
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showPendingMilestoneToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-top-10 fade-in duration-500 w-[95%] md:w-auto">
+          <div className="bg-gradient-to-r from-[#D8D6F8] to-[#C9C7F0] p-0.5 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.2)]">
+            <div className="bg-white rounded-[14px] px-4 py-3 md:px-5 md:py-4 flex flex-col md:flex-row items-center gap-3 md:gap-6 justify-between">
+              <div className="flex items-center gap-3 w-full md:w-auto">
+                <div className="w-10 h-10 rounded-full bg-[#FFF9C4] flex items-center justify-center shrink-0 border border-[#FBC02D]/30">
+                  <span className="text-[#F9A825] text-xl font-bold">!</span>
+                </div>
+                <div className="flex-1 text-left">
+                  <h3 className="font-bold text-[#000000] text-sm md:text-base leading-tight">Pending Approval</h3>
+                  <p className="text-xs text-gray-500 font-medium mt-0.5">A milestone is awaiting your approval.</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 w-full md:w-auto justify-end mt-1 md:mt-0">
+                <button
+                  onClick={() => {
+                    setShowPendingMilestoneToast(false);
+                    localStorage.setItem(`pending_milestone_toast_dismissed_${userId}_${pendingMilestoneData._id || pendingMilestoneData.id}`, "true");
+                  }}
+                  className="text-gray-400 hover:text-gray-600 text-xs font-semibold px-2"
+                >
+                  Dismiss
+                </button>
+                <button
+                  onClick={handleReviewSubmission}
+                  className="bg-gradient-to-r from-[#D8D6F8] to-[#C9C7F0] hover:opacity-90 text-[#59549F] font-bold py-2 px-5 rounded-lg text-xs shadow-[inset_0px_0px_8px_rgba(0,0,0,0.1)] transition-all whitespace-nowrap"
+                >
+                  Review Submission
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     <div className="flex flex-col lg:flex-row gap-2  lg:px-4  lg:py-2 bg-[#FDFDFF]"> 
       
       {/* ── LEFT COLUMN (Project List) ── */}
@@ -341,6 +474,32 @@ const DealBottomSec = ({
             {/* OVERVIEW STATE */}
             {rightPanelState === 'overview' && selectedProject && (
               <div className="space-y-4 ">
+                
+                {/* Milestone Approval Trigger */}
+                {showMilestoneApprovalBanner && !isEditing && (
+                  <div className="bg-gradient-to-r from-[#ECFDF5] to-[#D1FAE5] border border-[#059669]/20 rounded-2xl p-4 shadow-[0px_2px_8px_rgba(0,0,0,0.05)] mb-2 flex flex-col md:flex-row md:items-center justify-between gap-3 animate-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-[#059669]/10 flex items-center justify-center shrink-0">
+                        <span className="text-[#059669] text-lg">💰</span>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-[#001032]">Payment Update</h4>
+                        <p className="text-xs font-normal text-[#001032]/70 mt-0.5">A milestone has been approved successfully.</p>
+                      </div>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        localStorage.setItem(`milestone_approval_banner_dismissed_${userId}`, "true");
+                        setShowMilestoneApprovalBanner(false);
+                        setRightPanelState('milestoneDetails');
+                      }}
+                      className="bg-[#059669] hover:bg-[#047857] text-white text-xs font-medium py-2 px-4 rounded-xl shadow-sm transition-all whitespace-nowrap self-start md:self-auto"
+                    >
+                      View Payment
+                    </button>
+                  </div>
+                )}
+
                 {!isEditing && (
                   <SectionCard title="Deal Strength" showDot> 
                     <div className="mb-4">
@@ -771,6 +930,7 @@ const DealBottomSec = ({
         </div>
       </div>
     </div>
+    </>
   );
 };
 
@@ -828,11 +988,22 @@ const ProjectCard = ({ proj, selectedProject, handleViewProject }) => {
         </div>
       </div>
 
+      {isStartup && proj.status === 'Approved' && (
+        <div className="bg-[#FFF9C4]/40 rounded-2xl p-3 mb-1 flex items-start gap-3 border border-[#FBC02D]/30 shadow-sm mt-3">
+          <div className="w-6 h-6 rounded-full bg-[#FFF9C4] flex items-center justify-center shrink-0 border border-[#FBC02D]/30 mt-0.5">
+            <span className="text-[#F9A825] text-[11px] font-bold">!</span>
+          </div>
+          <div className="flex flex-col">
+            <p className="text-xs font-semibold text-[#000000] leading-tight">Milestone payments remain protected until approval.</p>
+          </div>
+        </div>
+      )}
+
       <button 
         onClick={() => handleViewProject(proj)}
-        className="w-full mt-4 py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all"
+        className={`w-full mt-4 py-2 rounded-xl font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all ${isStartup && proj.status === 'Approved' ? 'bg-gradient-to-r from-[#D8D6F8] to-[#C9C7F0] text-[#59549F]' : 'bg-[#D8D6F8] text-[#59549F]'}`}
       >
-        View Details
+        {isStartup && proj.status === 'Approved' ? "Release Payment" : "View Details"}
       </button>
     </div>
   );

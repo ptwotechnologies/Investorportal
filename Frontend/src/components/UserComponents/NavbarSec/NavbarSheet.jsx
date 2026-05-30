@@ -20,6 +20,7 @@ import { serverUrl } from "@/App";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoIosNotifications } from "react-icons/io";
 import { IoNotificationsOutline } from "react-icons/io5";
+import { useNotifications } from "@/context/NotificationContext";
 
 function NavbarSheet({ textColor }) {
   const [openSheet, setOpenSheet] = useState(false);
@@ -32,6 +33,8 @@ function NavbarSheet({ textColor }) {
   const [openNotificationMenu, setOpenNotificationMenu] = useState(false);
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
+  
+  const { notifications } = useNotifications();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -162,36 +165,64 @@ function NavbarSheet({ textColor }) {
       </div>
 
       {openProfileMenu && (
-        <div className="absolute right-0 mt-3 w-52 bg-white rounded-xl shadow-lg border z-50">
-          <div className="p-3 border-b">
-            <p className="text-sm font-medium">
-              {profile?.companyName || profile?.name || "User"}
-            </p>
-            <p className="text-xs text-gray-500">Logged in</p>
+        <div className="absolute right-0.5 mt-14 lg:mt-4 w-48 bg-white rounded-2xl shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 z-50 overflow-hidden animate-in slide-in-from-top-4 fade-in duration-200">
+          <div className="p-2">
+            <Link
+              to="/profile"
+              onClick={() => setOpenProfileMenu(false)}
+              className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 rounded-xl hover:bg-[#F5F4FF] hover:text-[#59549F] transition-colors"
+            >
+              <CgProfile size={18} />
+              My Profile
+            </Link>
+
+            <button
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.reload();
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors mt-1"
+            >
+              <IoIosClose size={22} className="-ml-0.5" />
+              Logout
+            </button>
           </div>
-
-          <Link
-            to="/profile"
-            className="block px-4 py-2 text-sm hover:bg-gray-100"
-          >
-            My Profile
-          </Link>
-
-          <button
-            onClick={() => {
-              localStorage.removeItem("token");
-              window.location.reload();
-            }}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-          >
-            Logout
-          </button>
         </div>
       )}
 
       {openNotificationMenu && (
-        <div ref={notificationRef} className="absolute right-0 lg:right-40 lg:mt-3 mt-12 w-[92vw] max-h-[60vh] bg-white rounded-xl shadow-lg border z-50 p-4">
-          <p className="text-sm text-gray-500 text-center">Notification not found</p>
+        <div 
+          ref={notificationRef} 
+          className="absolute right-0 lg:right-0.5 mt-14 lg:mt-10 w-[92vw] lg:w-[380px] max-h-[70vh] bg-white rounded-2xl shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 z-50 flex flex-col overflow-hidden animate-in slide-in-from-top-4 fade-in duration-200"
+        >
+          <div className="p-4 border-b border-gray-100 bg-gray-50/50 shrink-0">
+            <h3 className="font-semibold text-[#001032]">Notifications</h3>
+          </div>
+          <div className="p-4 overflow-y-auto scrollbar-hide">
+            {notifications && notifications.length > 0 ? (
+              <div className="flex flex-col gap-2">
+                {notifications.map((n) => (
+                  <div key={n._id} className="border p-3 flex flex-col gap-2 rounded-lg bg-gray-50 hover:bg-white transition-colors">
+                    <div className="flex items-start gap-3 w-full">
+                      <div className="w-8 h-8 rounded-full bg-[#D8D6F8] flex items-center justify-center shrink-0 text-xs">
+                        {n.type === "missing_portfolio" || n.type === "incomplete_profile" ? "⚠️" : n.type === "welcome_trigger" ? "✨" : n.type === "new_opportunity" ? "📋" : n.type === "explore_professionals" ? "🔍" : "🔔"}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-bold text-xs text-[#001426]">{n.title}</p>
+                        <p className="text-[10px] text-gray-600 leading-relaxed">{n.message}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-6 flex flex-col items-center">
+                <span className="text-2xl mb-1">🎉</span>
+                <p className="text-sm text-gray-500 font-semibold">All caught up!</p>
+                <p className="text-xs text-gray-400 mt-1">No new notifications</p>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

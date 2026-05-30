@@ -3,7 +3,7 @@ import { deletePortfolioItem, getAllProfiles, getProfile,  updateProfile, upload
 import { authenticateUser } from "../controller/auth.middleware.js";
 import { uploadPortfolio, upload } from "../controller/Profile.controller.js";
 import { getSettings, updateSettings } from "../controller/settings.controller.js";
-import { getNotifications, markAsRead } from "../controller/notification.controller.js";
+import { getNotifications, markAsRead, markAllAsRead } from "../controller/notification.controller.js";
 
 
 const router = express.Router();
@@ -19,6 +19,7 @@ router.get("/settings", authenticateUser, getSettings);
 router.put("/settings", authenticateUser, updateSettings);
 router.get("/notifications", authenticateUser, getNotifications);
 router.post("/read",authenticateUser, markAsRead);
+router.post("/read-all", authenticateUser, markAllAsRead);
 router.get("/all", authenticateUser, getAllProfiles);
 
 

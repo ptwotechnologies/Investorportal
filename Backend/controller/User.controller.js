@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import resend, { RESEND_FROM } from "../lib/resend.js";
 import verificationTemplate from "../emailTemplates/verificationTemplate.js";
+import { sendPushNotification } from "../lib/onesignal.js";
 
 
 export const createUser = async (req, res) => {
@@ -239,6 +240,14 @@ export const updatePayment = async (req, res) => {
     user.transactionId = transactionId;
     user.paymentStatus = paymentStatus;
     if (paymentStatus === "approved") {
+      user.isApproved = true;
+      // Send Welcome Push Notification to match the dynamic frontend notification
+      let roleText = "";
+      if (user.role === "startup") roleText = "Complete your startup profile to start connecting.";
+      else if (user.role === "investor") roleText = "Set up your investor profile to discover startups.";
+      else roleText = "Complete your professional profile to receive opportunities.";
+      
+      sendPushNotification(userId, "✨ Welcome to Copteno!", roleText, "/profile");
       user.registrationStep = 5; // Signup complete
     }
     await user.save();

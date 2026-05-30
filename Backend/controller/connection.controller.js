@@ -1,5 +1,6 @@
 import Connection from "../Models/connect.model.js";
 import Notification from "../Models/notification.model.js";
+import { sendPushNotification } from "../lib/onesignal.js";
 
 // SEND CONNECTION REQUEST
 export const sendConnectionRequest = async (req, res) => {
@@ -33,6 +34,9 @@ export const sendConnectionRequest = async (req, res) => {
       title: "New Connection Request",
       message: "You have received a new connection request",
     });
+    
+    // Send Push Notification
+    sendPushNotification(receiverId, "New Connection Request", "You have received a new connection request", "/network");
 
     res.status(200).json({
       message: "Connection request sent",

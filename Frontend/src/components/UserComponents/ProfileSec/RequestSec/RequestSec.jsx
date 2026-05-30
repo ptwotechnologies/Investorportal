@@ -13,13 +13,14 @@ import RightReceived from "./RightReceived";
 import AllTabSec from "./AllTabSec";
 import RightAllTab from "./RightAllTab";
 import { IoClose } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import TwinCardModal from "./TwinCardModal";
 import InterestUpgradeModal from "./InterestUpgradeModal";
 import { RxCross2 } from "react-icons/rx";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { LuRocket } from "react-icons/lu";
+import RequestSuccessModal from "./RequestSuccessModal";
 
 const calculateCompletion = (data) => {
   if (!data) return 0;
@@ -41,7 +42,11 @@ const calculateCompletion = (data) => {
 
 const RequestSec = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("all");
+  const location = useLocation();
+  const [showEmptyRequestPopup, setShowEmptyRequestPopup] = useState(false);
+  const [showOpportunityPopup, setShowOpportunityPopup] = useState(false); // Managed dynamically based on available matching opportunities
+  const [showExploreProfessionalsBanner, setShowExploreProfessionalsBanner] = useState(false);
+  const [activeTab, setActiveTab] = useState(location.state?.defaultTab || "all");
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeModalType, setUpgradeModalType] = useState("interest"); // 'request' or 'interest'
   const [raisedRequests, setRaisedRequests] = useState([]);
@@ -67,6 +72,9 @@ const RequestSec = () => {
 
   const [showTwinCardModal, setShowTwinCardModal] = useState(false);
   const [showInterestUpgradeModal, setShowInterestUpgradeModal] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [publishedRequest, setPublishedRequest] = useState(null);
+  const [showAwaitingResponseBanner, setShowAwaitingResponseBanner] = useState(false);
 
   const [currentUserRole, setCurrentUserRole] = useState(null);
   const [userPlanAmount, setUserPlanAmount] = useState(0);
@@ -75,6 +83,8 @@ const RequestSec = () => {
   const [reminderType, setReminderType] = useState(80); // 80 or 20
   const [profile, setProfile] = useState(null);
   const [showMobileCredits, setShowMobileCredits] = useState(false);
+  const [hasLoadedRequests, setHasLoadedRequests] = useState(false);
+  const [hasLoadedUserData, setHasLoadedUserData] = useState(false);
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -87,8 +97,29 @@ const RequestSec = () => {
         });
 
         setRaisedRequests(res.data);
+
+        // Awaiting Response Trigger logic
+        const userId = localStorage.getItem("userId");
+        let hasPendingAwaitingResponse = false;
+        const oneDayAgo = new Date();
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1);
+        
+        const requestsList = res.data || [];
+        requestsList.forEach(req => {
+          if (req.status !== "deal_created" && req.status !== "completed" && req.interestedBy && req.interestedBy.length > 0) {
+            const createdDate = new Date(req.createdAt);
+            if (createdDate < oneDayAgo) {
+              hasPendingAwaitingResponse = true;
+            }
+          }
+        });
+        
+        const awaitingResponseDismissed = localStorage.getItem(`request_page_awaiting_response_dismissed_${userId}`) === "true";
+        setShowAwaitingResponseBanner(hasPendingAwaitingResponse && !awaitingResponseDismissed);
       } catch (err) {
         console.error("Error fetching requests:", err);
+      } finally {
+        setHasLoadedRequests(true);
       }
     };
 
@@ -101,6 +132,33 @@ const RequestSec = () => {
         setCurrentUserRole(res.data.role);
         setUserPlanAmount(res.data.plan?.amount || 0);
 
+        const userId = res.data._id;
+        
+        // Dynamic check for Service Professional matching opportunity alert
+        if (res.data.role === "service_professional") {
+          try {
+            const receivedRes = await axios.get(`${serverUrl}/requests/received`, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            const matchingRequests = receivedRes.data.forwardedRequests || [];
+            if (matchingRequests.length > 0) {
+              const opportunityDismissed = localStorage.getItem(`new_opportunity_banner_dismissed_${userId}`);
+              if (!opportunityDismissed) {
+                setShowOpportunityPopup(true);
+              } else {
+                setShowOpportunityPopup(false);
+              }
+            } else {
+              setShowOpportunityPopup(false);
+            }
+          } catch (error) {
+            console.error("Error checking forwarded requests", error);
+            setShowOpportunityPopup(false);
+          }
+        } else {
+          setShowOpportunityPopup(false);
+        }
+
         // Fetch Profile for completion check
         const profileRes = await axios.get(`${serverUrl}/profile/`, {
           headers: { Authorization: `Bearer ${token}` }
@@ -110,21 +168,64 @@ const RequestSec = () => {
         setProfile(profileRes.data);
         
         // Tiered reminders: 80% and 100%
-        if (completion < 80) {
-          setReminderType(80);
-          setShowProfileReminder(true);
-        } else if (completion < 100) {
-          setReminderType(100);
-          setShowProfileReminder(true);
+        if (!location.state?.showEmptyRequestPopup) {
+          if (completion < 80) {
+            setReminderType(80);
+            setShowProfileReminder(true);
+          } else if (completion < 100) {
+            setReminderType(100);
+            setShowProfileReminder(true);
+          }
         }
       } catch (err) {
         console.error("Error fetching user data:", err);
+      } finally {
+        setHasLoadedUserData(true);
       }
     };
 
     fetchRequests();
     fetchUserData();
   }, []);
+
+  useEffect(() => {
+    if (!profile) return; // Wait until profile loads to avoid undefined userId key
+
+    if (currentUserRole === "startup") {
+      const fortyEightHoursAgo = new Date();
+      fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48);
+
+      const hasUnresolvedOpportunity = raisedRequests.some(r => {
+        const createdDate = new Date(r.createdAt);
+        const isOlderThan48h = createdDate < fortyEightHoursAgo;
+        const isUnresolved = r.status !== "deal_created" && r.status !== "completed";
+        return isOlderThan48h && isUnresolved;
+      });
+
+      const userId = profile?.userId?._id || profile?.userId;
+      if (!userId) return;
+
+      const dismissed = localStorage.getItem(`explore_professionals_dismissed_${userId}`) === "true";
+      setShowExploreProfessionalsBanner(hasUnresolvedOpportunity && !dismissed);
+    } else {
+      setShowExploreProfessionalsBanner(false);
+    }
+  }, [raisedRequests, currentUserRole, profile]);
+
+  useEffect(() => {
+    if (location.state?.showEmptyRequestPopup) {
+      setShowEmptyRequestPopup(true);
+      window.history.replaceState({}, document.title);
+    } else if (hasLoadedRequests && hasLoadedUserData) {
+      if (currentUserRole === "startup" && raisedRequests.length === 0) {
+        setShowEmptyRequestPopup(true);
+      }
+    }
+    if (location.state?.defaultTab) {
+      setActiveTab(location.state.defaultTab);
+      window.history.replaceState({}, document.title);
+    }
+  }, [location, hasLoadedRequests, hasLoadedUserData, currentUserRole, raisedRequests.length]);
 
   // Fetch unseen count whenever active tab changes, so notifications stay up-to-date
   useEffect(() => {
@@ -149,7 +250,8 @@ const RequestSec = () => {
 
   const handleCreateRequest = (newRequest) => {
     setRaisedRequests((prev) => [newRequest, ...prev]);
-    setMobileView("right");
+    setPublishedRequest(newRequest);
+    setShowSuccessModal(true);
   };
 
   const triggerUpgradeModal = useCallback((type) => {
@@ -263,6 +365,112 @@ const RequestSec = () => {
                   </div>
                 )}
               </div>
+
+      {/* Awaiting Response Trigger Banner */}
+      {showAwaitingResponseBanner && (
+        <div className="mx-2.5 my-3 p-4 bg-gradient-to-r from-[#F5F4FF] to-[#EBE9FE] text-[#001032] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl shrink-0">⏳</span>
+            <div className="text-left">
+              <h3 className="font-bold text-sm text-[#001032]">Action Required</h3>
+              <p className="text-xs text-[#001032]/80 mt-0.5 leading-relaxed font-medium">
+                A proposal is awaiting your response.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-4 shrink-0 w-full md:w-auto mt-2 md:mt-0 justify-end">
+            <button 
+              onClick={() => {
+                setActiveTab("raised");
+              }}
+              className="bg-[#59549F] hover:bg-[#48438A] text-white font-bold py-1.5 px-4 rounded-xl text-xs shadow-sm transition-all duration-300 cursor-pointer whitespace-nowrap"
+            >
+              Continue Negotiation
+            </button>
+            <button
+              onClick={() => {
+                const userId = localStorage.getItem("userId");
+                localStorage.setItem(`request_page_awaiting_response_dismissed_${userId}`, "true");
+                setShowAwaitingResponseBanner(false);
+              }}
+              className="text-[#001032]/60 hover:text-[#001032] text-xs font-semibold hover:underline cursor-pointer"
+            >
+              Dismiss
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Dynamic matching startup request available testing banner */}
+      {showOpportunityPopup && (
+        <div className="mx-2.5 my-3 p-4 bg-gradient-to-r from-[#59549F] to-[#48438A] text-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl shrink-0">📋</span>
+            <div className="text-left">
+              <h3 className="font-bold text-sm">New Opportunity Available</h3>
+              <p className="text-xs text-white/90 mt-0.5 leading-relaxed">
+                A startup request matching your expertise is now available.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+            <button
+              onClick={() => {
+                setShowOpportunityPopup(false);
+                setActiveTab("received");
+              }}
+              className="bg-white hover:bg-purple-50 text-[#59549F] font-bold py-1.5 px-4 rounded-xl text-xs shadow-sm transition-all duration-300 cursor-pointer"
+            >
+              View Opportunity
+            </button>
+            <button
+              onClick={() => {
+                setShowOpportunityPopup(false);
+              }}
+              className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
+          </div>
+        </div>
+      )}
+      {/* Explore Professionals Banner for Startup */}
+      {showExploreProfessionalsBanner && currentUserRole === "startup" && (
+        <div className="mx-2.5 my-3 p-4 bg-gradient-to-r from-[#59549F] to-[#48438A] text-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="flex items-center gap-3 text-left">
+            <span className="text-2xl shrink-0">🔍</span>
+            <div>
+              <h3 className="font-bold text-sm">Curated Execution Partners</h3>
+              <p className="text-xs text-white/90 mt-0.5 leading-relaxed">
+                Explore curated execution partners aligned with your startup needs.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+            <button
+              onClick={() => {
+                const userId = profile?.userId?._id || profile?.userId;
+                localStorage.setItem(`explore_professionals_dismissed_${userId}`, "true");
+                setShowExploreProfessionalsBanner(false);
+                setActiveTab("received");
+              }}
+              className="bg-white hover:bg-purple-50 text-[#59549F] font-bold py-1.5 px-4 rounded-xl text-xs shadow-sm transition-all duration-300 cursor-pointer whitespace-nowrap"
+            >
+              View Received Tab
+            </button>
+            <button
+              onClick={() => {
+                const userId = profile?.userId?._id || profile?.userId;
+                localStorage.setItem(`explore_professionals_dismissed_${userId}`, "true");
+                setShowExploreProfessionalsBanner(false);
+              }}
+              className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
+          </div>
+        </div>
+      )}
 
         <div className="flex gap-4">
           <div
@@ -551,7 +759,7 @@ const RequestSec = () => {
         />
       )}
       {/* ✅ Premium Profile Completion Reminder Modal - Compact Version */}
-      {showProfileReminder && (
+      {showProfileReminder && !showEmptyRequestPopup && (
         <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-300">
           <div className="relative w-full max-w-[520px] bg-white rounded-2xl shadow-2xl overflow-hidden border border-[#E9E7FD] animate-in zoom-in-95 duration-300">
             
@@ -751,6 +959,55 @@ const RequestSec = () => {
           </div>
         </div>
       )}
+      {showEmptyRequestPopup && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6 border border-[#E9E7FD] animate-in zoom-in-95 duration-300 text-center">
+            {/* Close Button */}
+            <button 
+              onClick={() => setShowEmptyRequestPopup(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-[#59549F] transition-colors"
+            >
+              <RxCross2 size={20} />
+            </button>
+            
+            <div className="w-12 h-12 bg-[#F8F7FF] rounded-full flex items-center justify-center mx-auto mb-4 border border-[#E9E7FD]">
+              <span className="text-xl">📋</span>
+            </div>
+            
+            <h3 className="text-lg font-bold text-[#2D317A] mb-2 leading-snug">
+              Requests Pending
+            </h3>
+            
+            <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+              You haven’t created any execution requests yet.
+            </p>
+            
+            <button
+              onClick={() => {
+                setShowEmptyRequestPopup(false);
+                setActiveTab("newRequest");
+              }}
+              className="w-full py-2.5 bg-[#59549F] text-white rounded-xl font-semibold text-sm hover:opacity-90 transition-all shadow-md"
+            >
+              Create First Request
+            </button>
+          </div>
+        </div>
+      )}
+
+      <RequestSuccessModal
+        isOpen={showSuccessModal}
+        onClose={() => setShowSuccessModal(false)}
+        onViewRequest={() => {
+          setShowSuccessModal(false);
+          setActiveTab("raised");
+          if (publishedRequest) {
+            setSelectedRequest(publishedRequest);
+            setMobileView("right");
+          }
+        }}
+      />
+
     </div>
   );
 };

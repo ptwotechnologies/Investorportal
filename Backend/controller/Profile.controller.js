@@ -3,6 +3,7 @@ import Request from "../Models/request.model.js";
 import Connection from "../Models/connect.model.js";
 import resend, { RESEND_FROM } from "../lib/resend.js";
 import profileUpdateTemplate from "../emailTemplates/profileUpdateTemplate.js";
+import { checkAndEmitPortfolioWarning } from "../lib/socket.js";
 // -------------------- CLOUD MULTER SETUP --------------------
 
 import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
@@ -39,9 +40,9 @@ export const upload = multer({
 
 export const getProfile = async (req, res) => {
   try {
-    let profile = await Profile.findOne({ userId: req.user._id }).populate(
+    let profile = await Profile.findOne({ userId: req.user._id }).populate( 
       "userId",
-      "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName plan",
+      "role email businessDetails.firstName businessDetails.lastName businessDetails.number businessDetails.companyName plan createdAt paymentStatus",
     );
 
     if (!profile) {
@@ -97,7 +98,8 @@ export const getProfile = async (req, res) => {
       companyName: profile.userId?.businessDetails?.companyName,
       plan: profile.userId?.plan,
       credits: credits,
-      isFreePlan: isFreePlan
+      isFreePlan: isFreePlan,
+      paymentStatus: profile.userId?.paymentStatus
     });
   } catch (error) {
     console.error(error);
@@ -203,6 +205,9 @@ export const uploadPortfolio = async (req, res) => {
     profile.portfolio.push({ title, fileUrl, thumbnailUrl });
     await profile.save();
 
+    // Re-evaluate portfolio warning rules and emit Socket.IO updates
+    checkAndEmitPortfolioWarning(req.user._id);
+
     res.status(200).json({
       message: "Portfolio uploaded successfully",
       portfolio: profile.portfolio,
@@ -253,6 +258,9 @@ export const deletePortfolioItem = async (req, res) => {
 
     profile.portfolio.pull(id);
     await profile.save();
+
+    // Re-evaluate portfolio warning rules and emit Socket.IO updates
+    checkAndEmitPortfolioWarning(req.user._id);
 
     res.status(200).json({
       message: "Portfolio item deleted successfully",
