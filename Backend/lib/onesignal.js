@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const ONESIGNAL_APP_ID = "e9e59ecd-bb4b-4387-863e-863b6b8158ef";
-const ONESIGNAL_REST_API_KEY = "os_v2_app_5hsz5tn3jnbypbr6qy5wxaky56long7tfghel55vp462wgim2jzzaafwby5mka2oxmm62yjiggsuffezzpijlvngulzhld4rxr7vxkq";
+const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID;
+const ONESIGNAL_REST_API_KEY = process.env.ONESIGNAL_REST_API_KEY;
 
 /**
  * Sends a push notification to specific users via OneSignal
