@@ -17,7 +17,7 @@ import { useEffect, useRef } from "react";
 import { CgProfile } from "react-icons/cg";
 import axios from "axios";
 import { serverUrl } from "@/App";
-import { RxHamburgerMenu } from "react-icons/rx";
+import { RxHamburgerMenu, RxDashboard } from "react-icons/rx";
 import { IoIosNotifications } from "react-icons/io";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { useNotifications } from "@/context/NotificationContext";
@@ -168,9 +168,18 @@ function NavbarSheet({ textColor }) {
         <div className="absolute right-0.5 mt-14 lg:mt-4 w-48 bg-white rounded-2xl shadow-[0px_10px_40px_-10px_rgba(0,0,0,0.2)] border border-gray-100 z-50 overflow-hidden animate-in slide-in-from-top-4 fade-in duration-200">
           <div className="p-2">
             <Link
-              to="/profile"
+              to="/dashboard"
               onClick={() => setOpenProfileMenu(false)}
               className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 rounded-xl hover:bg-[#F5F4FF] hover:text-[#59549F] transition-colors"
+            >
+              <RxDashboard size={18} />
+              Dashboard
+            </Link>
+
+            <Link
+              to="/profile"
+              onClick={() => setOpenProfileMenu(false)}
+              className="flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-gray-700 rounded-xl hover:bg-[#F5F4FF] hover:text-[#59549F] transition-colors mt-1"
             >
               <CgProfile size={18} />
               My Profile
@@ -181,9 +190,9 @@ function NavbarSheet({ textColor }) {
                 localStorage.removeItem("token");
                 window.location.reload();
               }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-600 rounded-xl hover:bg-red-50 transition-colors mt-1"
+              className="w-full flex items-center justify-center gap-2 px-3 py-1 text-sm font-semibold text-white bg-red-600 rounded-sm hover:bg-red-700 shadow-sm transition-colors mt-2"
             >
-              <IoIosClose size={22} className="-ml-0.5" />
+              <IoIosClose size={22} className="-ml-1" />
               Logout
             </button>
           </div>

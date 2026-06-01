@@ -56,6 +56,18 @@ const DashboardSec = () => {
   const [showDealCompletionModal, setShowDealCompletionModal] = useState(false);
   const [completedDealData, setCompletedDealData] = useState(null);
 
+  const [notificationPermission, setNotificationPermission] = useState('granted');
+  const [showNotificationBanner, setShowNotificationBanner] = useState(false);
+
+  useEffect(() => {
+    if ("Notification" in window) {
+      setNotificationPermission(Notification.permission);
+      if (Notification.permission !== "granted") {
+        setShowNotificationBanner(true);
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (showProfileModal || showDealCompletionModal || showProposalSubmittedModal || showDealActivatedModal || showPaymentReleasedModal) {
       document.body.style.overflow = "hidden"; // scroll lock
@@ -172,12 +184,12 @@ const DashboardSec = () => {
         setShowProfileModal(false);
       }
 
-      // 80% Visibility Boost / Verified Investor Trigger check
+      // 60% Visibility Boost / Verified Investor Trigger check
       if (userId) {
         const isStartupOrSP = profileData.role === "startup" || profileData.role === "service_professional";
         const isInvestor = profileData.role === "investor";
 
-        if (isStartupOrSP && completion >= 80) {
+        if (isStartupOrSP && completion >= 60) {
           const bannerDismissed = localStorage.getItem(`visibility_boost_banner_dismissed_${userId}`);
           if (!bannerDismissed) {
             setShowVisibilityBoostBanner(true);
@@ -596,52 +608,80 @@ const DashboardSec = () => {
         </div>
       )}
 
-      {/* Welcome Trigger Toast */}
-      {showWelcomeBanner && (
-        <motion.div
-          initial={{ y: -50, x: "-50%", opacity: 0 }}
-          animate={{ y: 0, x: "-50%", opacity: 1 }}
-          exit={{ y: -50, x: "-50%", opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          className="fixed top-4 left-1/2 z-[9999] w-[92%] sm:w-[90%] max-w-[650px] bg-[#59549F] text-white p-3.5 sm:p-4 rounded-xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4 transition-all duration-300"
-        >
-          <div className="flex items-start gap-3 w-full sm:w-auto">
-            <span className="text-xl shrink-0 mt-0.5 sm:mt-0 text-white">✨</span>
-            <div className="flex-1">
-              <p className="text-xs sm:text-sm font-semibold text-white leading-relaxed">
-                {profile?.role === "startup"
-                  ? "Welcome to Copteno. Complete your startup profile to start connecting with professionals and investors."
-                  : profile?.role === "investor"
-                  ? "Welcome to Copteno. Set up your investor profile to start discovering curated startup opportunities."
-                  : "Welcome to Copteno. Complete your professional profile to start receiving startup opportunities."}
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center justify-end sm:justify-start gap-2.5 w-full sm:w-auto mt-2 sm:mt-0 shrink-0 border-t border-white/15 sm:border-0 pt-2.5 sm:pt-0">
-            <Link
-              to="/profile"
-              onClick={handleWelcomeBannerCTA}
-              className="bg-white hover:bg-purple-50 text-[#59549F] font-semibold py-1.5 px-4 rounded-lg text-xs transition-all duration-300 shadow-md text-center flex-1 sm:flex-none whitespace-nowrap"
-            >
-              Complete Profile
-            </Link>
-            <button
-              onClick={handleWelcomeBannerDismiss}
-              className="text-white/80 hover:text-white p-1.5 rounded-full hover:bg-white/10 transition-colors shrink-0"
-            >
-              <RxCross2 size={16} />
-            </button>
-          </div>
-        </motion.div>
-      )}
       <div
         className={`lg:bg-gray-200 h-auto lg:h-screen pt-2 lg:px-0 pb-2 lg:pb-0 flex flex-col transition-all duration-300 ${
           showProfileModal ? "blur-sm pointer-events-none" : ""
         }`}
       >
+        {/* Notification Permission Banner */}
+        {showNotificationBanner && (
+          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#FFEBEE] to-[#FFCDD2] text-[#B71C1C] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#E53935]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0 relative pr-4">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl shrink-0 mt-0.5 sm:mt-0">🔔</span>
+              <div className="text-left">
+                <h3 className="font-bold text-sm">Action Required: Enable Notifications</h3>
+                <p className="text-xs text-[#B71C1C]/90 mt-0.5 leading-relaxed">
+                  {notificationPermission === "denied"
+                    ? "Notifications are blocked. Please click the lock icon 🔒 in your browser's address bar and allow notifications to receive important updates."
+                    : "Please enable notifications to receive critical updates about your profile, opportunities, and requests."}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
+              {notificationPermission !== "denied" && (
+                <button
+                  onClick={() => {
+                    Notification.requestPermission().then((permission) => {
+                      setNotificationPermission(permission);
+                      if (permission === "granted") {
+                        setShowNotificationBanner(false);
+                      }
+                    });
+                  }}
+                  className="bg-[#D32F2F] hover:bg-[#C62828] text-white font-bold py-1.5 px-4 rounded-xl text-xs shadow-sm transition-all duration-300 cursor-pointer text-center whitespace-nowrap"
+                >
+                  Enable Notifications
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+        {/* Welcome Trigger Dashboard Banner */}
+        {showWelcomeBanner && (
+          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#59549F] to-[#48438A] text-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0 relative pr-10">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl shrink-0 mt-0.5 sm:mt-0">✨</span>
+              <div className="text-left">
+                <h3 className="font-bold text-sm">Welcome to Copteno</h3>
+                <p className="text-xs text-white/90 mt-0.5 leading-relaxed">
+                  {profile?.role === "startup"
+                    ? "Complete your startup profile to start connecting with professionals and investors."
+                    : profile?.role === "investor"
+                    ? "Set up your investor profile to start discovering curated startup opportunities."
+                    : "Complete your professional profile to start receiving startup opportunities."}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
+              <Link
+                to="/profile"
+                onClick={handleWelcomeBannerCTA}
+                className="bg-white hover:bg-purple-50 text-[#59549F] font-bold py-1.5 px-4 rounded-xl text-xs shadow-sm transition-all duration-300 cursor-pointer text-center"
+              >
+                Complete Profile
+              </Link>
+            </div>
+            <button
+              onClick={handleWelcomeBannerDismiss}
+              className="absolute top-3 right-3 text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
+          </div>
+        )}
         {/* Visibility Boost / Verified Investor Dashboard Banner */}
         {showVisibilityBoostBanner && (
-          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#59549F] to-[#48438A] text-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#59549F] to-[#48438A] text-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0 relative pr-10">
             <div className="flex items-center gap-3">
               <span className="text-2xl shrink-0">
                 {profile?.role === "investor" ? "🎖️" : "🚀"}
@@ -652,14 +692,14 @@ const DashboardSec = () => {
                 </h3>
                 <p className="text-xs text-white/90 mt-0.5 leading-relaxed">
                   {profile?.role === "startup" 
-                    ? "Visibility Boost Activated. Your startup is now prioritized in discovery and investor recommendations."
+                    ? `Visibility Boost Activated (${profileCompletion}% Profile). Your startup is now prioritized in discovery and investor recommendations.`
                     : profile?.role === "investor"
-                    ? "Your investor profile is now verified across the ecosystem."
-                    : "Visibility Boost Activated. Your profile is now prioritized in startup recommendations."}
+                    ? `Your investor profile (${profileCompletion}%) is now verified across the ecosystem.`
+                    : `Visibility Boost Activated (${profileCompletion}% Profile). Your profile is now prioritized in startup recommendations.`}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
               <button
                 onClick={() => {
                   const userId = profile?.userId?._id || profile?.userId;
@@ -678,26 +718,26 @@ const DashboardSec = () => {
                   ? "Explore Startups"
                   : "Explore Opportunities"}
               </button>
-              <button
-                onClick={() => {
-                  const userId = profile?.userId?._id || profile?.userId;
-                  const key = profile?.role === "investor" 
-                    ? `verified_investor_banner_dismissed_${userId}` 
-                    : `visibility_boost_banner_dismissed_${userId}`;
-                  localStorage.setItem(key, "true");
-                  setShowVisibilityBoostBanner(false);
-                }}
-                className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0"
-              >
-                <RxCross2 size={18} />
-              </button>
             </div>
+            <button
+              onClick={() => {
+                const userId = profile?.userId?._id || profile?.userId;
+                const key = profile?.role === "investor" 
+                  ? `verified_investor_banner_dismissed_${userId}` 
+                  : `visibility_boost_banner_dismissed_${userId}`;
+                localStorage.setItem(key, "true");
+                setShowVisibilityBoostBanner(false);
+              }}
+              className="absolute top-3 right-3 text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
           </div>
         )}
 
         {/* Startup Momentum Banner */}
         {showStartupMomentumBanner && (
-          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#D7EBE4] to-[#C3DFD5] text-[#001032] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#3CC033]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#D7EBE4] to-[#C3DFD5] text-[#001032] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#3CC033]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0 relative pr-10">
             <div className="flex items-center gap-3">
               <span className="text-2xl shrink-0">📈</span>
               <div className="text-left">
@@ -707,7 +747,7 @@ const DashboardSec = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
               <button
                 onClick={() => {
                   const userId = profile?.userId?._id || profile?.userId;
@@ -719,23 +759,23 @@ const DashboardSec = () => {
               >
                 View Activity
               </button>
-              <button
-                onClick={() => {
-                  const userId = profile?.userId?._id || profile?.userId;
-                  localStorage.setItem(`startup_momentum_dismissed_${userId}`, "true");
-                  setShowStartupMomentumBanner(false);
-                }}
-                className="text-[#001032]/60 hover:text-[#001032] p-1 rounded-full hover:bg-white/40 transition-colors cursor-pointer shrink-0"
-              >
-                <RxCross2 size={18} />
-              </button>
             </div>
+            <button
+              onClick={() => {
+                const userId = profile?.userId?._id || profile?.userId;
+                localStorage.setItem(`startup_momentum_dismissed_${userId}`, "true");
+                setShowStartupMomentumBanner(false);
+              }}
+              className="absolute top-3 right-3 text-[#001032]/60 hover:text-[#001032] p-1 rounded-full hover:bg-white/40 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
           </div>
         )}
 
         {/* Expansion Banner */}
         {showExpansionBanner && (
-          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#FFF5D1] to-[#FFEAB6] text-[#001032] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#FBC02D]/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#FFF5D1] to-[#FFEAB6] text-[#001032] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#FBC02D]/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0 relative pr-10">
             <div className="flex items-center gap-3">
               <span className="text-2xl shrink-0">🌱</span>
               <div className="text-left">
@@ -745,7 +785,7 @@ const DashboardSec = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
               <Link
                 to="/connect"
                 onClick={() => {
@@ -757,23 +797,23 @@ const DashboardSec = () => {
               >
                 Explore Professionals
               </Link>
-              <button
-                onClick={() => {
-                  const userId = profile?.userId?._id || profile?.userId;
-                  localStorage.setItem(`expansion_banner_dismissed_${userId}`, "true");
-                  setShowExpansionBanner(false);
-                }}
-                className="text-[#001032]/60 hover:text-[#001032] p-1 rounded-full hover:bg-white/40 transition-colors cursor-pointer shrink-0"
-              >
-                <RxCross2 size={18} />
-              </button>
             </div>
+            <button
+              onClick={() => {
+                const userId = profile?.userId?._id || profile?.userId;
+                localStorage.setItem(`expansion_banner_dismissed_${userId}`, "true");
+                setShowExpansionBanner(false);
+              }}
+              className="absolute top-3 right-3 text-[#001032]/60 hover:text-[#001032] p-1 rounded-full hover:bg-white/40 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
           </div>
         )}
 
         {/* Startup Viewed Profile Banner */}
         {showStartupViewedBanner && (
-          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#D7EBE4] to-[#C3DFD5] text-[#001032] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#3CC033]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#D7EBE4] to-[#C3DFD5] text-[#001032] rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#3CC033]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0 relative pr-10">
             <div className="flex items-center gap-3">
               <span className="text-2xl shrink-0">👀</span>
               <div className="text-left">
@@ -783,7 +823,7 @@ const DashboardSec = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
               <Link
                 to="/connect"
                 onClick={() => {
@@ -795,23 +835,23 @@ const DashboardSec = () => {
               >
                 View Insights
               </Link>
-              <button
-                onClick={() => {
-                  const userId = profile?.userId?._id || profile?.userId;
-                  localStorage.setItem(`startup_viewed_banner_dismissed_${userId}`, "true");
-                  setShowStartupViewedBanner(false);
-                }}
-                className="text-[#001032]/60 hover:text-[#001032] p-1 rounded-full hover:bg-white/40 transition-colors cursor-pointer shrink-0"
-              >
-                <RxCross2 size={18} />
-              </button>
             </div>
+            <button
+              onClick={() => {
+                const userId = profile?.userId?._id || profile?.userId;
+                localStorage.setItem(`startup_viewed_banner_dismissed_${userId}`, "true");
+                setShowStartupViewedBanner(false);
+              }}
+              className="absolute top-3 right-3 text-[#001032]/60 hover:text-[#001032] p-1 rounded-full hover:bg-white/40 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
           </div>
         )}
 
         {/* New Opportunity Operational Alert Banner for Service Professional */}
         {showNewOpportunityBanner && (
-          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#59549F] to-[#48438A] text-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0">
+          <div className="mx-2.5 my-2 p-4 bg-gradient-to-r from-[#59549F] to-[#48438A] text-white rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-[#59549F]/20 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-in slide-in-from-top-4 duration-300 shrink-0 relative pr-10">
             <div className="flex items-center gap-3">
               <span className="text-2xl shrink-0">📋</span>
               <div className="text-left">
@@ -821,7 +861,7 @@ const DashboardSec = () => {
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end">
+            <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
               <Link
                 to="/request"
                 state={{ defaultTab: "received" }}
@@ -834,17 +874,17 @@ const DashboardSec = () => {
               >
                 View Opportunity
               </Link>
-              <button
-                onClick={() => {
-                  const userId = profile?.userId?._id || profile?.userId;
-                  localStorage.setItem(`new_opportunity_banner_dismissed_${userId}`, "true");
-                  setShowNewOpportunityBanner(false);
-                }}
-                className="text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0"
-              >
-                <RxCross2 size={18} />
-              </button>
             </div>
+            <button
+              onClick={() => {
+                const userId = profile?.userId?._id || profile?.userId;
+                localStorage.setItem(`new_opportunity_banner_dismissed_${userId}`, "true");
+                setShowNewOpportunityBanner(false);
+              }}
+              className="absolute top-3 right-3 text-white/80 hover:text-white p-1 rounded-full hover:bg-white/10 transition-colors cursor-pointer shrink-0"
+            >
+              <RxCross2 size={18} />
+            </button>
           </div>
         )}
 
