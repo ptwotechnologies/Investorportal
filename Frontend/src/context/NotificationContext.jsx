@@ -701,7 +701,8 @@ export const NotificationProvider = ({ children }) => {
       setShowPortfolioModal,
       fetchNotifications,
       markAllNotificationsAsRead,
-      refreshProfile: fetchProfileAndUser
+      refreshProfile: fetchProfileAndUser,
+      socket
     }}>
       {children}
     </NotificationContext.Provider>

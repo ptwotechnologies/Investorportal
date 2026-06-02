@@ -1,5 +1,8 @@
 import Dispute from '../Models/dispute.model.js';
 import Deal from '../Models/deal.model.js';
+import { emitNewMessage } from '../lib/socket.js';
+import Notification from '../Models/notification.model.js';
+import { sendPushNotification } from '../lib/onesignal.js';
 
 export const createDispute = async (req, res) => {
   try {
@@ -85,6 +88,30 @@ export const addDisputeMessage = async (req, res) => {
     
     const updatedDispute = await Dispute.findById(id)
       .populate('messages.senderId', 'businessDetails role');
+
+    const newestMessage = updatedDispute.messages[updatedDispute.messages.length - 1];
+    emitNewMessage([dispute.dealId.startupId, dispute.dealId.professionalId], id, { 
+      message: newestMessage, 
+      updatedDispute 
+    });
+
+    const targetUserId = isStartup ? dispute.dealId.professionalId : dispute.dealId.startupId;
+    try {
+      await Notification.create({
+        userId: targetUserId,
+        title: "💬 New Message",
+        message: "You have received a new message regarding your project.",
+        isRead: false
+      });
+      sendPushNotification(
+        targetUserId, 
+        "💬 New Message", 
+        "You have received a new message regarding your project.", 
+        "/deal/communication"
+      );
+    } catch (notifErr) {
+      console.error("Failed to send message notification", notifErr);
+    }
 
     res.status(200).json({ success: true, dispute: updatedDispute });
   } catch (error) {

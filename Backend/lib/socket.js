@@ -149,10 +149,28 @@ export const emitDealUpdated = (userIds) => {
   if (!socketIoInstance) return;
   
   userIds.forEach(userId => {
+    if (!userId) return;
     const sockets = userSockets.get(userId.toString());
     if (sockets) {
       sockets.forEach(sid => {
         socketIoInstance.to(sid).emit("deal_updated");
+      });
+    }
+  });
+};
+
+/**
+ * Emits a real-time 'receive_message' event to specific users for the chat
+ */
+export const emitNewMessage = (userIds, disputeId, payload) => {
+  if (!socketIoInstance) return;
+  
+  userIds.forEach(userId => {
+    if (!userId) return;
+    const sockets = userSockets.get(userId.toString());
+    if (sockets) {
+      sockets.forEach(sid => {
+        socketIoInstance.to(sid).emit("receive_message", { disputeId, ...payload });
       });
     }
   });

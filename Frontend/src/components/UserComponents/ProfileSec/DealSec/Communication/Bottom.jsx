@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FiArrowLeft, FiPlus, FiFileText, FiSend, FiPaperclip } from "react-icons/fi";
 import { MdOutlineFactCheck } from "react-icons/md";
 import { IoMdCheckmark } from "react-icons/io";
@@ -6,11 +6,13 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { serverUrl } from "@/App";
 import { toast } from "react-hot-toast";
+import { useNotifications } from "@/context/NotificationContext";
 
 const Bottom = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState("Milestones");
   const [disputes, setDisputes] = useState([]);
+  const { socket } = useNotifications();
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
   
@@ -108,7 +110,7 @@ const Bottom = () => {
   const role = localStorage.getItem("role")?.toLowerCase();
   const isStartup = role === "startup";
 
-  const handleMarkAsRead = async (disputeId) => {
+  const handleMarkAsRead = useCallback(async (disputeId) => {
     try {
       await axios.put(`${serverUrl}/api/disputes/mark-read/${disputeId}`, {}, {
         headers: { Authorization: `Bearer ${token}` }
@@ -120,13 +122,41 @@ const Bottom = () => {
         : d
       ));
     } catch (error) {
-      console.error("Error marking as read:", error);
+      console.error("Failed to mark as read", error);
     }
-  };
+  }, [token, isStartup]);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleReceiveMessage = (data) => {
+      const { disputeId, updatedDispute } = data;
+
+      setDisputes(prev => prev.map(d => 
+        d._id === updatedDispute._id ? updatedDispute : d
+      ));
+
+      setSelectedDispute(prev => {
+        if (prev && prev._id === disputeId) {
+          // If this thread is open, mark it as read immediately
+          if (isStartup && !updatedDispute.isReadByStartup) handleMarkAsRead(disputeId);
+          if (!isStartup && !updatedDispute.isReadByProfessional) handleMarkAsRead(disputeId);
+          return updatedDispute;
+        }
+        return prev;
+      });
+    };
+
+    socket.on("receive_message", handleReceiveMessage);
+
+    return () => {
+      socket.off("receive_message", handleReceiveMessage);
+    };
+  }, [socket, isStartup, handleMarkAsRead]);
 
   const DisputeSummaryCard = ({ dispute }) => {
-    const deal = dispute.dealId;
-    const startupName = deal.startupId?.businessDetails?.companyName || "N/A";
+    const deal = dispute?.dealId || {};
+    const startupName = deal?.startupId?.businessDetails?.companyName || "N/A";
     const hasUnread = isStartup ? !dispute.isReadByStartup : !dispute.isReadByProfessional;
 
     return (
@@ -138,7 +168,7 @@ const Bottom = () => {
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2">
            <h5 className="text-sm font-bold text-[#001032]">{startupName}</h5>
-           <p className="text-[10px] text-gray-400 -mt-1 truncate">{deal.requestId?.service || "Project Deal"}</p>
+           <p className="text-[10px] text-gray-400 -mt-1 truncate">{deal?.requestId?.service || "Project Deal"}</p>
            <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
              <span className="text-[#59549F] font-bold ">Reason</span> – {dispute.reason}
            </p>

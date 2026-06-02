@@ -57,7 +57,7 @@ const Bottom = ({
   // Handle initial data from routing state
   useEffect(() => {
     if (initialDealId && deals.length > 0) {
-      const deal = deals.find(d => String(d._id) === String(initialDealId));
+      const deal = deals.find(d => d && String(d._id) === String(initialDealId));
       if (deal) {
         setSelectedDeal(deal);
         if (initialMilestoneId) {
@@ -175,7 +175,7 @@ const Bottom = ({
           {/* Row 2 */}
           <div className="flex flex-col -mt-1 overflow-hidden">
             <p className="text-[13px] lg:text-sm text-[#000000] truncate">
-              {proj.requestId?.service || deals.find(d => d._id === proj._id)?.requestId?.service || "Project Deal"}
+              {proj.requestId?.service || deals.find(d => d && d._id === proj._id)?.requestId?.service || "Project Deal"}
             </p>
           </div>
           <div className="flex flex-col items-center -mt-1">
@@ -212,10 +212,10 @@ const Bottom = ({
       
       <div className="bg-[#F9FAFB]/50 rounded-xl border border-gray-100 lg:p-3 p-2 lg:px-6 shadow-[0px_0px_12px_rgba(0,0,0,0.25)] space-y-3">
         <h5 className="text-[14px] lg:text-base font-medium text-[#001032]">
-          {deal?.milestones?.find(m => m._id === dispute.milestoneId)?.title || "Milestone 1"}
+          {deal?.milestones?.find(m => m && m._id === dispute.milestoneId)?.title || "Milestone 1"}
         </h5>
         <p className="text-[10px] text-gray-400 -mt-2 truncate">
-          {deal?.requestId?.service || deals.find(d => d._id === (deal?._id || dispute.dealId?._id || dispute.dealId))?.requestId?.service || "Project Deal"}
+          {deal?.requestId?.service || deals.find(d => d && d._id === (deal?._id || dispute.dealId?._id || dispute.dealId))?.requestId?.service || "Project Deal"}
         </p>
         <div className="space-y-2">
           <p className="text-[12px] lg:text-sm text-gray-500 leading-relaxed line-clamp-2">
@@ -251,8 +251,8 @@ const Bottom = ({
       <div className={`flex-1 flex flex-col lg:py-2 gap-4 overflow-hidden ${ (selectedDeal || selectedDispute) ? 'hidden lg:flex' : 'flex'}`}>
         <div className="grid grid-cols-2 gap-4 shrink-0 px-2 lg:px-0">
           <StatCard label="Total Disputes" value={disputes.length} bgColor="bg-[#D8E1F0]" />
-          <StatCard label="Active Disputes" value={disputes.filter(d => d.status === 'Open' || d.status === 'In-Progress' || !d.status).length} bgColor="bg-[#D8D6F8]" />
-          <StatCard label="Resolved" value={disputes.filter(d => d.status === 'Resolved').length} bgColor="bg-[#EFDBD9]" />
+          <StatCard label="Active Disputes" value={disputes.filter(d => d && (d.status === 'Open' || d.status === 'In-Progress' || !d.status)).length} bgColor="bg-[#D8D6F8]" />
+          <StatCard label="Resolved" value={disputes.filter(d => d && d.status === 'Resolved').length} bgColor="bg-[#EFDBD9]" />
           <StatCard label="Escalated" value={disputes.length} bgColor="bg-[#D7EBE4]" />
         </div>
 
@@ -444,10 +444,10 @@ const Bottom = ({
             ) : (
               /* ── Disputes List View (Project specific) ── */
               <div className="px-2 space-y-4">
-                {disputes.filter(d => d.dealId._id === selectedDeal._id).map((dispute) => (
+                {disputes.filter(d => d?.dealId?._id === selectedDeal?._id).map((dispute) => (
                   <DisputeItem key={dispute._id} dispute={dispute} deal={selectedDeal} />
                 ))}
-                {disputes.filter(d => d.dealId._id === selectedDeal._id).length === 0 && (
+                {disputes.filter(d => d?.dealId?._id === selectedDeal?._id).length === 0 && (
                    <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-40">
                       <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
                         <IoMdCheckmark size={30} className="text-gray-300" />
