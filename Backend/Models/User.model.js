@@ -11,6 +11,12 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
 
+    spMode: {
+      type: String,
+      enum: ["provider", "buyer"],
+      default: "provider",
+    },
+
     businessDetails: {
       // General fields (made optional to support different roles)
        firstName: { type: String, default: "" },

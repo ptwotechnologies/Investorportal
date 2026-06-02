@@ -65,6 +65,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [comingSoonTitle, setComingSoonTitle] = useState("");
+  const [spMode, setSpMode] = useState(globalUserCache?.spMode || localStorage.getItem("spMode") || "provider");
   const [hasCreatedDeals, setHasCreatedDeals] = useState(false);
   const [deals, setDeals] = useState(globalDealsCache || []);
   const [dealsLoading, setDealsLoading] = useState(!globalDealsCache);
@@ -131,6 +132,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         setUserRole(userRes.data.role);
         setUserName(displayName);
         setProfilePhoto(profileData?.profilePhoto);
+        if (userRes.data.spMode) {
+          setSpMode(userRes.data.spMode);
+          localStorage.setItem("spMode", userRes.data.spMode);
+        }
       } catch (err) {
         console.error("Error fetching deals count", err);
         setDeals([]);
@@ -144,7 +149,19 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
     // Listen for manual refreshes
     window.addEventListener("sidebar-refresh", fetchData);
-    return () => window.removeEventListener("sidebar-refresh", fetchData);
+    
+    const handleSpModeChange = () => {
+      const updatedMode = localStorage.getItem("spMode");
+      if (updatedMode) {
+        setSpMode(updatedMode);
+      }
+    };
+    window.addEventListener("spModeChanged", handleSpModeChange);
+
+    return () => {
+      window.removeEventListener("sidebar-refresh", fetchData);
+      window.removeEventListener("spModeChanged", handleSpModeChange);
+    };
   }, [token, location.pathname]);
 
   const isAtActiveDeals = location.pathname === "/deal/activedeals";
@@ -350,7 +367,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
 
         {/* Bottom Icons (Visual placeholders for icons scrolling together) */}
-        <div className={`${isInvestor ? "mt-9" : "mt-58"}  pb-4 text-gray-300 flex flex-col gap-3  items-center`}>
+        <div className={`${isInvestor ? "mt-9" : "mt-57"}  pb-4 text-gray-300 flex flex-col gap-3  items-center`}>
           <IoSettingsOutline
             size={25}
             className=" text-[#59549f] cursor-pointer"
@@ -792,16 +809,39 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
               {isServiceProfessional && (
                 <div
-                  onClick={() => triggerComingSoon("Switch to Startup")}
+                  onClick={async () => {
+                    const newMode = spMode === "provider" ? "buyer" : "provider";
+                    setSpMode(newMode);
+                    localStorage.setItem("spMode", newMode);
+                    try {
+                      await axios.put(`${serverUrl}/user/sp-mode`, { spMode: newMode }, {
+                        headers: { Authorization: `Bearer ${token}` }
+                      });
+                      if (globalUserCache) {
+                        globalUserCache.spMode = newMode;
+                      }
+                      window.dispatchEvent(new Event("spModeChanged"));
+                    } catch (error) {
+                      console.error("Failed to update spMode on backend", error);
+                      // Revert on failure
+                      setSpMode(spMode);
+                      localStorage.setItem("spMode", spMode);
+                      toast.error("Failed to update mode");
+                    }
+                  }}
                   className="px-4 mx-3 my-2 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
                 >
                   <div className="flex flex-col">
-                    <span className="text-[12px] font-semibold text-[#59549f]">Switch to Buyer</span>
-                    <span className="text-[10px] text-gray-500 ">Experience buyer portal</span>
+                    <span className="text-[12px] font-semibold text-[#59549f]">
+                      {spMode === "provider" ? "Switch to Buyer" : "Switch to Provider"}
+                    </span>
+                    <span className="text-[10px] text-gray-500 ">
+                      {spMode === "provider" ? "Experience buyer portal" : "Experience provider portal"}
+                    </span>
                   </div>
                   <div className="relative inline-flex items-center cursor-pointer">
-                    <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-300"></div>
-                    <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+                    <div className={`w-11 h-6 rounded-full transition-colors ${spMode === "buyer" ? "bg-[#59549f]" : "bg-gray-300 group-hover:bg-gray-400"}`}></div>
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm ${spMode === "buyer" ? "translate-x-6 left-1" : "translate-x-0 left-1"}`}></div>
                   </div>
                 </div>              
               )}

@@ -13,6 +13,7 @@ const ReceivedTabSec = ({
   setReceivedHandlers,
   decrementUnseenCount,
   triggerUpgradeModal,
+  checkProviderMode,
 }) => {
   const [forwardedRequests, setForwardedRequests] = useState([]);
   const [myInterestedRequests, setMyInterestedRequests] = useState([]);
@@ -522,6 +523,7 @@ const ReceivedTabSec = ({
                   <>
                     <button
                       onClick={() => {
+                        if (checkProviderMode && !checkProviderMode()) return;
                         if (selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored) return;
                         setInterestSurvey && setInterestSurvey({
                           requestId: selectedRequest._id,

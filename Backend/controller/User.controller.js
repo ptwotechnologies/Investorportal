@@ -681,3 +681,29 @@ export const getCurrentUser = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+export const updateSpMode = async (req, res) => {
+  try {
+    const { spMode } = req.body;
+    
+    if (!["provider", "buyer"].includes(spMode)) {
+      return res.status(400).json({ message: "Invalid mode" });
+    }
+
+    if (!req.user) {
+      return res.status(401).json({ message: "User not authenticated" });
+    }
+
+    if (req.user.role !== "service_professional") {
+      return res.status(403).json({ message: "Only Service Professionals can change modes" });
+    }
+
+    req.user.spMode = spMode;
+    await req.user.save();
+
+    res.status(200).json({ message: "Mode updated successfully", spMode: req.user.spMode });
+  } catch (error) {
+    console.error("Update Mode Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};

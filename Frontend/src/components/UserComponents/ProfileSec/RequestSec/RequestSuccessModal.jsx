@@ -6,7 +6,7 @@ const RequestSuccessModal = ({ isOpen, onClose, onViewRequest }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/25 backdrop-blur-xs animate-in fade-in duration-300">
-      <div className="relative flex flex-col sm:flex-row items-center gap-4 sm:gap-5 bg-white/95 border border-[#59549F]/20 rounded-2xl p-6 sm:p-5 shadow-[0px_12px_40px_rgba(89,84,159,0.2)] max-w-lg w-full animate-in zoom-in-95 duration-200">
+      <div className="relative flex flex-col sm:flex-row items-center gap-4 sm:gap-5 bg-white/95 border border-[#59549F]/20 rounded-2xl p-6 sm:p-5 pr-10 sm:pr-12 shadow-[0px_12px_40px_rgba(89,84,159,0.2)] max-w-[550px] w-full animate-in zoom-in-95 duration-200">
         
         {/* Absolute Top-Right Close Button for perfect alignment on both mobile & desktop */}
         <button
@@ -24,7 +24,7 @@ const RequestSuccessModal = ({ isOpen, onClose, onViewRequest }) => {
         
         {/* Center: Title & message text */}
         <div className="flex-1 text-center sm:text-left min-w-0 pr-0 sm:pr-4">
-          <h4 className="font-extrabold text-sm text-[#001032] leading-tight">Request Published!</h4>
+          <h4 className="font-semibold text-sm text-[#001032] leading-tight">Request Published!</h4>
           <p className="text-xs text-gray-500 mt-1 leading-normal">
             Your request is now live. Relevant professionals are being notified.
           </p>

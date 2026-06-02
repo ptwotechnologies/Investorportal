@@ -4,7 +4,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdClose, IoMdCheckmark } from "react-icons/io";
 
-const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllHandlers, triggerUpgradeModal }) => {
+const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllHandlers, triggerUpgradeModal, checkProviderMode }) => {
   const [forwardedRequests, setForwardedRequests] = useState([]);
   const [raisedRequests, setRaisedRequests] = useState([]);
   const [myInterestedRequests, setMyInterestedRequests] = useState([]);
@@ -496,6 +496,7 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
                   <div className="flex gap-2 pt-2">
                     <button
                       onClick={() => {
+                        if (checkProviderMode && !checkProviderMode()) return;
                         if (selectedRequest.hasShownInterest || selectedRequest.isIgnored || selectedRequest.professionalData?.isIgnored) return;
                         setInterestSurvey && setInterestSurvey({
                           requestId: selectedRequest._id,

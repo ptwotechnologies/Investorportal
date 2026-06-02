@@ -21,6 +21,7 @@ import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { LuRocket } from "react-icons/lu";
 import RequestSuccessModal from "./RequestSuccessModal";
+import { toast } from "react-hot-toast";
 
 const calculateCompletion = (data) => {
   if (!data) return 0;
@@ -70,6 +71,8 @@ const RequestSec = () => {
 
   const [requestAttemptCount, setRequestAttemptCount] = useState(0);
 
+  const [showProviderModal, setShowProviderModal] = useState(false);
+  const [showBuyerModal, setShowBuyerModal] = useState(false);
   const [showTwinCardModal, setShowTwinCardModal] = useState(false);
   const [showInterestUpgradeModal, setShowInterestUpgradeModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -77,6 +80,7 @@ const RequestSec = () => {
   const [showAwaitingResponseBanner, setShowAwaitingResponseBanner] = useState(false);
 
   const [currentUserRole, setCurrentUserRole] = useState(null);
+  const [spMode, setSpMode] = useState(localStorage.getItem("spMode") || "provider");
   const [userPlanAmount, setUserPlanAmount] = useState(0);
   const [profileCompletion, setProfileCompletion] = useState(100);
   const [showProfileReminder, setShowProfileReminder] = useState(false);
@@ -131,6 +135,9 @@ const RequestSec = () => {
         });
         setCurrentUserRole(res.data.role);
         setUserPlanAmount(res.data.plan?.amount || 0);
+        if (res.data.spMode) {
+          setSpMode(res.data.spMode);
+        }
 
         const userId = res.data._id;
         
@@ -186,6 +193,16 @@ const RequestSec = () => {
 
     fetchRequests();
     fetchUserData();
+
+    const handleModeChange = () => {
+      const updatedMode = localStorage.getItem("spMode");
+      if (updatedMode) {
+        setSpMode(updatedMode);
+      }
+    };
+
+    window.addEventListener("spModeChanged", handleModeChange);
+    return () => window.removeEventListener("spModeChanged", handleModeChange);
   }, []);
 
   useEffect(() => {
@@ -247,6 +264,21 @@ const RequestSec = () => {
 
     fetchUnseenCount();
   }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === "newRequest" && currentUserRole === "service_professional" && spMode === "provider") {
+      setActiveTab("all");
+      setShowProviderModal(true);
+    }
+  }, [activeTab, currentUserRole, spMode]);
+
+  const checkProviderMode = () => {
+    if (currentUserRole === "service_professional" && spMode === "buyer") {
+      setShowBuyerModal(true);
+      return false;
+    }
+    return true;
+  };
 
   const handleCreateRequest = (newRequest) => {
     setRaisedRequests((prev) => [newRequest, ...prev]);
@@ -490,8 +522,12 @@ const RequestSec = () => {
                 <div className="flex items-center gap-2 w-full ">
                   <button
                     onClick={() => {
-                      setActiveTab("newRequest");
-                      setMobileView("left");
+                      if (currentUserRole === "service_professional" && spMode === "provider") {
+                        setShowProviderModal(true);
+                      } else {
+                        setActiveTab("newRequest");
+                        setMobileView("left");
+                      }
                     }}
                     className="bg-[#D8D6F8] text-[#59549F] lg:py-1 p-1.5 rounded-sm lg:w-[28%] w-[30%] text-sm lg:text-[16px]  font-medium shadow-[inset_0_0_12px_#00000040]"
                   >
@@ -554,6 +590,7 @@ const RequestSec = () => {
                       setMobileView={setMobileView}
                       setAllHandlers={setAllHandlers}
                       triggerUpgradeModal={triggerUpgradeModal}
+                      checkProviderMode={checkProviderMode}
                     />
                   </TabsContent>
 
@@ -565,6 +602,7 @@ const RequestSec = () => {
                       setReceivedHandlers={setReceivedHandlers}
                       decrementUnseenCount={decrementUnseenCount}
                       triggerUpgradeModal={triggerUpgradeModal}
+                      checkProviderMode={checkProviderMode}
                     />
                   </TabsContent>
 
@@ -600,7 +638,9 @@ const RequestSec = () => {
              setSelectedRequest={setSelectedRequest}
              setRaisedRequests={setRaisedRequests}
              setMobileView={setMobileView}
-             handleInterest={allHandlers.handleInterest}
+             handleInterest={(...args) => {
+               if(checkProviderMode()) allHandlers.handleInterest?.(...args);
+             }}
              handleIgnore={allHandlers.handleIgnore}
              handleAccept={allHandlers.handleAccept}
              showConfirm={allHandlers.showConfirm}
@@ -613,8 +653,10 @@ const RequestSec = () => {
   <RightReceived
     selectedRequest={selectedRequest}
     setSelectedRequest={setSelectedRequest}
-    setMobileView={setMobileView}  // ← ADD THIS LINE
-    handleInterest={receivedHandlers.handleInterest}
+    setMobileView={setMobileView}
+    handleInterest={(...args) => {
+      if(checkProviderMode()) receivedHandlers.handleInterest?.(...args);
+    }}
     handleIgnore={receivedHandlers.handleIgnore}
     handleAccept={receivedHandlers.handleAccept}
     showConfirm={receivedHandlers.showConfirm}
@@ -735,6 +777,98 @@ const RequestSec = () => {
             >
               Maybe Later
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Provider Mode Restriction Modal */}
+      {showProviderModal && (
+        <div className="fixed inset-0 z-[130] flex items-center justify-center backdrop-blur-sm bg-black/60 p-4 animate-in fade-in duration-300">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-5 relative animate-in zoom-in-95 duration-300">
+            <button
+              onClick={() => setShowProviderModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-[#59549F] transition-colors"
+            >
+              <IoClose size={20} />
+            </button>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-[#F8F7FF] rounded-full flex items-center justify-center mb-3 text-xl text-[#59549F] shadow-sm border border-[#E9E7FD]">
+                🔄
+              </div>
+              <h2 className="text-lg font-semibold text-[#001032] mb-1">Provider Mode Active</h2>
+              <p className="text-gray-500 mb-4 text-sm leading-tight">
+                You are currently acting as a Provider. To raise a service request, you need to switch to <b>Buyer</b> mode.
+              </p>
+              <button
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("token");
+                    await axios.put(`${serverUrl}/user/sp-mode`, { spMode: "buyer" }, {
+                      headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setSpMode("buyer");
+                    localStorage.setItem("spMode", "buyer");
+                    if (window.globalUserCache) window.globalUserCache.spMode = "buyer";
+                    window.dispatchEvent(new Event("spModeChanged"));
+                    setShowProviderModal(false);
+                    setActiveTab("newRequest");
+                    setMobileView("left");
+                    toast.success("Switched to Buyer mode");
+                  } catch (error) {
+                    toast.error("Failed to switch mode");
+                  }
+                }}
+                className="w-full py-1.5 bg-[#59549F] text-white rounded-sm font-semibold text-sm hover:opacity-90 transition-opacity"
+              >
+                Switch to Buyer Mode
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Buyer Mode Restriction Modal (for showing interest) */}
+      {showBuyerModal && (
+        <div className="fixed inset-0 z-[130] flex items-center justify-center backdrop-blur-sm bg-black/60 p-4 animate-in fade-in duration-300">
+          <div className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-5 relative animate-in zoom-in-95 duration-300">
+            <button
+              onClick={() => setShowBuyerModal(false)}
+              className="absolute top-3 right-3 text-gray-400 hover:text-[#59549F] transition-colors"
+            >
+              <IoClose size={20} />
+            </button>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-[#F8F7FF] rounded-full flex items-center justify-center mb-3 text-xl text-[#59549F] shadow-sm border border-[#E9E7FD]">
+                🔄
+              </div>
+              <h2 className="text-lg font-semibold text-[#001032] mb-1">Buyer Mode Active</h2>
+              <p className="text-gray-500 mb-4 text-sm leading-tight">
+                You are currently acting as a Buyer. To express interest in providing a service, you need to switch to <b>Provider</b> mode.
+              </p>
+              <button
+                onClick={async () => {
+                  try {
+                    const token = localStorage.getItem("token");
+                    await axios.put(`${serverUrl}/user/sp-mode`, { spMode: "provider" }, {
+                      headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setSpMode("provider");
+                    localStorage.setItem("spMode", "provider");
+                    if (window.globalUserCache) window.globalUserCache.spMode = "provider";
+                    window.dispatchEvent(new Event("spModeChanged"));
+                    setShowBuyerModal(false);
+                    toast.success("Switched to Provider mode");
+                  } catch (error) {
+                    toast.error("Failed to switch mode");
+                  }
+                }}
+                className="w-full py-1 bg-[#59549F] text-white rounded-sm font-semibold text-sm hover:opacity-90 transition-opacity"
+              >
+                Switch to Provider Mode
+              </button>
+            </div>
           </div>
         </div>
       )}

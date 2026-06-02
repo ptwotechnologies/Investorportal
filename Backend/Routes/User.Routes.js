@@ -1,5 +1,5 @@
 import express from "express";
-import { createUser, getPaymentStatus, login,  updateAdditionalDetails, updatePayment, updatePlan, forgetPassword, verifyOtp, resetPassword, verifyEmail, resendVerificationOtp, uploadPortalFile, checkVerificationStatus, getUserById, getCurrentUser } from "../controller/User.controller.js";
+import { createUser, getPaymentStatus, login,  updateAdditionalDetails, updatePayment, updatePlan, forgetPassword, verifyOtp, resetPassword, verifyEmail, resendVerificationOtp, uploadPortalFile, checkVerificationStatus, getUserById, getCurrentUser, updateSpMode } from "../controller/User.controller.js";
 import { portalUpload } from "../middleware/userUpload.middleware.js";
 import { authenticateUser } from './../controller/auth.middleware.js';
 
@@ -21,5 +21,6 @@ router.post("/resend-otp", resendVerificationOtp);
 router.post("/portal-upload", portalUpload.single("file"), uploadPortalFile);
 router.get("/me", authenticateUser, getCurrentUser);
 router.get("/:userId", getUserById); //
+router.put("/sp-mode", authenticateUser, updateSpMode);
 
 export default router;

@@ -20,6 +20,10 @@ export const createRequest = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    if (user.role === "service_professional" && user.spMode !== "buyer") {
+      return res.status(403).json({ message: "You must switch to Buyer mode to raise a request." });
+    }
+
     // ⭐ Check free plan limit
     const isFreePlan =
       user.plan?.planName === "Explorer Access" ||
@@ -193,6 +197,11 @@ export const markInterested = async (req, res) => {
 
      // ⭐ Check free plan limit on backend
     const user = await User.findById(userId);
+
+    if (user.role === "service_professional" && user.spMode === "buyer") {
+      return res.status(403).json({ message: "You must switch to Provider mode to express interest." });
+    }
+
     const isFreePlan =
       user.plan?.planName === "Explorer Access" ||
       !user.plan?.planName ||
