@@ -25,12 +25,25 @@ import { IoDiamondOutline } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa6";
 import instaIcon from "/instagram.jpeg";
 import toast, { Toaster } from "react-hot-toast";
+import ComingSoonModal from "./ComingSoonModal";
 
 const ProfileSec = () => {
   const MAX_PORTFOLIO_IMAGES = 20;
 
   const token = localStorage.getItem("token");
   const { showPortfolioModal, setShowPortfolioModal, refreshProfile } = useNotifications();
+  const [spMode, setSpMode] = useState(localStorage.getItem("spMode") || "provider");
+  const [showComingSoon, setShowComingSoon] = useState(false);
+  const [comingSoonTitle, setComingSoonTitle] = useState("");
+  
+  useEffect(() => {
+    const handleSpModeChange = () => {
+      const updatedMode = localStorage.getItem("spMode");
+      if (updatedMode) setSpMode(updatedMode);
+    };
+    window.addEventListener("spModeChanged", handleSpModeChange);
+    return () => window.removeEventListener("spModeChanged", handleSpModeChange);
+  }, []);
   const [profile, setProfile] = useState({
     name: "",
     bio: "",
@@ -536,6 +549,61 @@ const getImageUrl = (imageUrl) => {
             </p>
           </div>
           <div className="flex items-center gap-x-3">
+            {profile?.role === "startup" && (
+              <div
+                onClick={() => {
+                  setComingSoonTitle("Switch to Professional");
+                  setShowComingSoon(true);
+                }}
+                className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+              >
+                <div className="flex flex-col text-right">
+                  <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
+                  <span className="text-[10px] text-gray-500 leading-tight">Explore professional tools</span>
+                </div>
+                <div className="relative inline-flex items-center cursor-pointer shrink-0">
+                  <div className="w-9 h-5 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-400"></div>
+                  <div className="absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm"></div>
+                </div>
+              </div>
+            )}
+            
+            {profile?.role === "service_professional" && (
+              <div
+                onClick={async () => {
+                  const newMode = spMode === "provider" ? "buyer" : "provider";
+                  setSpMode(newMode);
+                  localStorage.setItem("spMode", newMode);
+                  try {
+                    await axios.put(`${serverUrl}/user/sp-mode`, { spMode: newMode }, {
+                      headers: { Authorization: `Bearer ${token}` }
+                    });
+                    if (window.globalUserCache) window.globalUserCache.spMode = newMode;
+                    window.dispatchEvent(new Event("spModeChanged"));
+                  } catch (error) {
+                    console.error("Failed to update spMode on backend", error);
+                    setSpMode(spMode);
+                    localStorage.setItem("spMode", spMode);
+                    toast.error("Failed to update mode");
+                  }
+                }}
+                className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+              >
+                <div className="flex flex-col text-right">
+                  <span className="text-[12px] font-semibold text-[#59549f]">
+                    {spMode === "provider" ? "Switch to Buyer" : "Switch to Provider"}
+                  </span>
+                  <span className="text-[10px] text-gray-500 leading-tight">
+                    {spMode === "provider" ? "Experience buyer portal" : "Experience provider portal"}
+                  </span>
+                </div>
+                <div className="relative inline-flex items-center cursor-pointer shrink-0">
+                  <div className={`w-9 h-5 rounded-full transition-colors ${spMode === "buyer" ? "bg-[#59549f]" : "bg-gray-300 group-hover:bg-gray-400"}`}></div>
+                  <div className={`absolute top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm ${spMode === "buyer" ? "translate-x-4 left-[3px]" : "translate-x-0 left-[3px]"}`}></div>
+                </div>
+              </div>
+            )}
+
            <img
   src={
     profile?.profilePhoto
@@ -545,9 +613,6 @@ const getImageUrl = (imageUrl) => {
   alt="Profile"
   className="w-8 h-8 rounded-full object-cover border-2 border-[#001032]"
 />
-            <p className="text-[#001426] font-semibold">
-              Switch to professional
-            </p>
           </div>
         </div>
       </div>
@@ -2023,6 +2088,12 @@ onClick={() => {
             </button>
           </div>
         </div>
+      )}
+      {showComingSoon && (
+        <ComingSoonModal 
+          onClose={() => setShowComingSoon(false)}
+          title={comingSoonTitle}
+        />
       )}
     </div>
   );
