@@ -59,6 +59,7 @@ const Mobile = () => {
   const [userName, setUserName] = useState("");
   const [profilePhoto, setProfilePhoto] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [spMode, setSpMode] = useState(localStorage.getItem("spMode") || "provider");
 
   const getImageUrl = (imageUrl) => {
     if (!imageUrl) return null;
@@ -100,6 +101,10 @@ const Mobile = () => {
         setUserName(displayName);
         setProfilePhoto(profileData?.profilePhoto);
         setUserId(userRes.data._id);
+        if (userRes.data.spMode) {
+          setSpMode(userRes.data.spMode);
+          localStorage.setItem("spMode", userRes.data.spMode);
+        }
       } catch (err) {
         console.error("Error fetching mobile data", err);
         setHasRaisedRequests(false);
@@ -111,8 +116,18 @@ const Mobile = () => {
 
     // Listen for real-time updates triggered by NotificationContext
     window.addEventListener("sidebar-refresh", fetchData);
+    
+    const handleSpModeChange = () => {
+      const updatedMode = localStorage.getItem("spMode");
+      if (updatedMode) {
+        setSpMode(updatedMode);
+      }
+    };
+    window.addEventListener("spModeChanged", handleSpModeChange);
+
     return () => {
       window.removeEventListener("sidebar-refresh", fetchData);
+      window.removeEventListener("spModeChanged", handleSpModeChange);
     };
   }, [location.pathname]);
 
@@ -628,16 +643,37 @@ const Mobile = () => {
                     {isServiceProfessional && (
                       <SheetClose asChild>
                         <div
-                          onClick={() => triggerComingSoon("Switch to Startup")}
-                          className=" mt-4 py-4  mb-4 flex items-center justify-between p-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl cursor-pointer"
+                          onClick={async () => {
+                            const newMode = spMode === "provider" ? "buyer" : "provider";
+                            setSpMode(newMode);
+                            localStorage.setItem("spMode", newMode);
+                            try {
+                              const token = localStorage.getItem("token");
+                              await axios.put(`${serverUrl}/user/sp-mode`, { spMode: newMode }, {
+                                headers: { Authorization: `Bearer ${token}` }
+                              });
+                              window.dispatchEvent(new Event("spModeChanged"));
+                            } catch (err) {
+                              console.error("Failed to update spMode on backend", err);
+                              // Revert on failure
+                              setSpMode(spMode);
+                              localStorage.setItem("spMode", spMode);
+                              toast.error("Failed to update mode");
+                            }
+                          }}
+                          className={`mt-4 py-4 mb-4 flex items-center justify-between p-3 border rounded-xl cursor-pointer transition-all duration-300 ${spMode === "buyer" ? "bg-[#f8f7ff] border-[#e8e6f8]" : "bg-white border-gray-100 hover:border-gray-200 shadow-sm"}`}
                         >
                           <div className="flex flex-col">
-                            <span className="text-[14px] my-1 font-bold text-[#59549f]">Switch to Buyer</span>
-                            <span className="text-[10px] text-gray-500 font-medium">View as a buyer</span>
+                            <span className={`text-[14px] my-1 font-bold ${spMode === "buyer" ? "text-[#59549f]" : "text-[#001032]"}`}>
+                              {spMode === "provider" ? "Switch to Buyer" : "Switch to Provider"}
+                            </span>
+                            <span className="text-[10px] text-gray-500 font-medium">
+                              {spMode === "provider" ? "Experience buyer portal" : "Experience provider portal"}
+                            </span>
                           </div>
                           <div className="relative inline-flex items-center cursor-pointer">
-                            <div className="w-11 h-6 bg-gray-300 rounded-full transition-colors"></div>
-                            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm"></div>
+                            <div className={`w-11 h-6 rounded-full transition-colors ${spMode === "buyer" ? "bg-[#59549f]" : "bg-gray-300"}`}></div>
+                            <div className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform shadow-sm ${spMode === "buyer" ? "translate-x-6" : "translate-x-0"}`}></div>
                           </div>
                         </div>
                       </SheetClose>
