@@ -703,7 +703,109 @@ export const updateSpMode = async (req, res) => {
 
     res.status(200).json({ message: "Mode updated successfully", spMode: req.user.spMode });
   } catch (error) {
-    console.error("Update Mode Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+export const getUserIndicators = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const role = req.user.role;
+    const spMode = req.user.spMode;
+
+    const indicators = {
+      requests: { hasUnread: false, count: 0 },
+      connect: { hasUnread: false, count: 0 },
+      serviceDeal: {
+        hasUnread: false,
+        activeDeals: false,
+        negotiations: false,
+        completed: false,
+        disputes: false,
+      },
+      communication: { hasUnread: false, count: 0 }
+    };
+
+    // 1. REQUESTS
+    try {
+      const Request = (await import("../Models/request.model.js")).default;
+      if (role === "service_professional" && spMode === "provider") {
+        const forwarded = await Request.find({ forwardedTo: userId });
+        const unreadCount = forwarded.filter(r => r.seenBy && !r.seenBy.includes(userId)).length;
+        indicators.requests.count = unreadCount;
+        indicators.requests.hasUnread = unreadCount > 0;
+      } else {
+        const raised = await Request.find({ raisedBy: userId });
+        const unreadCount = raised.filter(r => r.seenBy && !r.seenBy.includes(userId) && r.interestedBy && r.interestedBy.length > 0).length;
+        indicators.requests.count = unreadCount;
+        indicators.requests.hasUnread = unreadCount > 0;
+      }
+    } catch (e) { console.error("Error calculating request indicators", e); }
+
+    // 2. CONNECT
+    try {
+      const Connection = (await import("../Models/connect.model.js")).default;
+      const pendingReceived = await Connection.countDocuments({ receiverId: userId, status: "pending", isSeenByReceiver: { $ne: true } });
+      const acceptedUnreadSent = await Connection.countDocuments({ senderId: userId, status: "accepted", isSeenBySender: { $ne: true } });
+      
+      const totalUnreadConnects = pendingReceived + acceptedUnreadSent;
+      indicators.connect.count = totalUnreadConnects;
+      indicators.connect.hasUnread = totalUnreadConnects > 0;
+    } catch (e) { console.error("Error calculating connect indicators", e); }
+
+    // 3. SERVICE DEAL
+    try {
+      const Deal = (await import("../Models/deal.model.js")).default;
+      const deals = await Deal.find({
+        $or: [{ startupId: userId }, { professionalId: userId }]
+      });
+
+      const isSP = role === "service_professional" && spMode === "provider";
+      const isStartup = role === "startup" || (role === "service_professional" && spMode === "buyer");
+
+      deals.forEach(d => {
+        // Active Deals
+        if (isSP && d.status === "Draft") {
+          indicators.serviceDeal.activeDeals = true;
+        }
+        // Negotiations
+        if (d.status === "Negotiating" && d.negotiation?.lastSender && d.negotiation.lastSender.toString() !== userId.toString()) {
+          indicators.serviceDeal.negotiations = true;
+        }
+        // Completed
+        if (isStartup && d.status === "Completed") {
+          indicators.serviceDeal.completed = true;
+        }
+      });
+
+      // Disputes
+      const Dispute = (await import("../Models/dispute.model.js")).default;
+      const disputes = await Dispute.find({
+        dealId: { $in: deals.map(d => d._id) }
+      });
+
+      disputes.forEach(disp => {
+        if (isSP && !disp.isReadByProfessional) indicators.serviceDeal.disputes = true;
+        if (isStartup && !disp.isReadByStartup) indicators.serviceDeal.disputes = true;
+      });
+
+      indicators.serviceDeal.hasUnread = 
+        indicators.serviceDeal.activeDeals || 
+        indicators.serviceDeal.negotiations || 
+        indicators.serviceDeal.completed || 
+        indicators.serviceDeal.disputes;
+
+    } catch (e) { console.error("Error calculating deal indicators", e); }
+
+    // 4. COMMUNICATION
+    try {
+      indicators.communication.hasUnread = indicators.serviceDeal.disputes; 
+      indicators.communication.count = indicators.serviceDeal.disputes ? 1 : 0;
+    } catch (e) { console.error("Error calculating communication indicators", e); }
+
+    res.status(200).json(indicators);
+  } catch (error) {
+    console.error("Get Indicators Error:", error);
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };

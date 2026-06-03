@@ -87,6 +87,14 @@ export const addDisputeMessage = async (req, res) => {
     await dispute.save();
     
     const updatedDispute = await Dispute.findById(id)
+      .populate({
+        path: 'dealId',
+        populate: [
+          { path: 'requestId', select: 'service' },
+          { path: 'startupId', select: 'businessDetails' },
+          { path: 'professionalId', select: 'businessDetails' }
+        ]
+      })
       .populate('messages.senderId', 'businessDetails role');
 
     const newestMessage = updatedDispute.messages[updatedDispute.messages.length - 1];

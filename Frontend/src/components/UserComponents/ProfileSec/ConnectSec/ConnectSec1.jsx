@@ -128,7 +128,8 @@ const ConnectSec1 = () => {
       }
 
       const planName = userRes.data.plan?.planName || "Explorer Access";
-      setUserPlan(planName);
+      const planAmount = userRes.data.plan?.amount || 0;
+      setUserPlan({ planName, amount: planAmount });
 
       setSentRequests(connectionsRes.data.sent);
       setReceivedRequests(connectionsRes.data.received);
@@ -248,11 +249,23 @@ const ConnectSec1 = () => {
           );
         }
 
-        // Fetch connections
-        const connectionsRes = await axios.get(`${serverUrl}/connections/my`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Fetch connections and user plan
+        const userId = localStorage.getItem("userId");
+        const [connectionsRes, userRes] = await Promise.all([
+          axios.get(`${serverUrl}/connections/my`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          userId && userId !== "null"
+            ? axios.get(`${serverUrl}/user/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+              }).catch(() => ({ data: { plan: null } }))
+            : Promise.resolve({ data: { plan: null } }),
+        ]);
         
+        const planName = userRes.data.plan?.planName || "Explorer Access";
+        const planAmount = userRes.data.plan?.amount || 0;
+        setUserPlan({ planName, amount: planAmount });
+
         setSentRequests(connectionsRes.data.sent);
         setReceivedRequests(connectionsRes.data.received);
 
@@ -562,7 +575,7 @@ const ConnectSec1 = () => {
   const isFreePlan =
     (currentUserRole === "startup" ||
       currentUserRole === "service_professional") &&
-    (userPlan === "Explorer Access" || !userPlan);
+    (!userPlan || !userPlan.amount || Number(userPlan.amount) === 0);
 
   return (
     <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
@@ -609,22 +622,22 @@ const ConnectSec1 = () => {
                         </div>
                 
                         {/* Desktop Credits Widget */}
-                        {isFreePlan && (
+                        {userPlan !== null && currentUserRole !== "investor" && (
                           <div
                             onClick={() => setShowMobileCredits(true)}
-                            className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer  lg:w-[55.3%] "
+                            className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:w-[55.3%]"
                           >
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
-                                {profile.credits ?? 0}
+                                {isFreePlan ? (profile.credits ?? 0) : "∞"}
                               </div>
-                              <div className="flex flex-col items-end">
+                              <div className="flex flex-col items-start">
                                 <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
-                                  Opportunities Available
+                                  {isFreePlan ? "Opportunities Available" : "Unlimited Access"}
                                 </p>
                                 <div className="-mt-0.5">
                                   <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
-                                    More connections are waiting
+                                    {isFreePlan ? "More connections are waiting" : "All premium features unlocked"}
                                   </span>
                                 </div>
                               </div>

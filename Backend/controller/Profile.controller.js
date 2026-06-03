@@ -63,10 +63,7 @@ export const getProfile = async (req, res) => {
 
     // Calculate Credits for Free Plan users
     const userObj = profile.userId;
-    const isFreePlan =
-      userObj.plan?.planName === "Explorer Access" ||
-      !userObj.plan?.planName ||
-      userObj.plan?.amount === 0;
+    const isFreePlan = !userObj.plan || !userObj.plan.amount || Number(userObj.plan.amount) === 0;
 
     let credits = null;
     if (isFreePlan) {

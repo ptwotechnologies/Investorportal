@@ -23,6 +23,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { useSidebarIndicators } from "@/hooks/useSidebarIndicators";
 import { IoIosNotifications } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
@@ -47,6 +48,7 @@ const Mobile = () => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { notifications, fetchNotifications, markAllNotificationsAsRead } = useNotifications();
+  const { indicators } = useSidebarIndicators();
   const [expandedIds, setExpandedIds] = useState([]);
   const [isDealsOpen, setIsDealsOpen] = useState(false);
   const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
@@ -248,8 +250,13 @@ const Mobile = () => {
                             className="text-[#59549F] "
                             size={25}
                           />
-                          <Link to="/request">
+                          <Link to="/request" className="flex items-center gap-2">
                             <li>Requests</li>
+                            {indicators.requests.hasUnread && (
+                              <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                                {indicators.requests.count}
+                              </span>
+                            )}
                           </Link>
                         </div>
 
@@ -258,8 +265,11 @@ const Mobile = () => {
                             className="text-[#59549F] my-1"
                             size={25}
                           />
-                          <Link to="/connect">
+                          <Link to="/connect" className="flex items-center gap-2">
                             <li>Connect</li>
+                            {indicators.connect.hasUnread && (
+                              <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                            )}
                           </Link>
                         </div>
 
@@ -522,7 +532,12 @@ const Mobile = () => {
                             <IoChatbubblesOutline className="text-[#59549F]" size={28} />
                             <li className="flex justify-between items-center w-full">
                               <div className="flex flex-col">
-                                <span className="text-[15px] font-medium leading-tight text-gray-700">Communication</span>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-[15px] font-medium leading-tight text-gray-700">Communication</span>
+                                  {indicators.communication.hasUnread && (
+                                    <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                                  )}
+                                </div>
                                 <p className="text-[11px] text-gray-400">Messages, notifications</p>
                               </div>
                               {isCommunicationOpen ? (
@@ -565,7 +580,12 @@ const Mobile = () => {
 
                           <li className="flex justify-between items-center w-full mt-2">
                             <div className="flex flex-col">
-                              <span className="text-[15px] font-medium leading-tight text-gray-700">Service Deal</span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[15px] font-medium leading-tight text-gray-700">Service Deal</span>
+                                {indicators.serviceDeal.hasUnread && (
+                                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                                )}
+                              </div>
                               <p className="text-[11px] text-gray-400">Agreements & services</p>
                             </div>
 
@@ -585,13 +605,19 @@ const Mobile = () => {
 
                         {isDealsOpen && (
                           <ul className="ml-11 mt-2 flex flex-col gap-2 text-[15px] text-gray-600">
-                            <Link to="/deal/activedeals" className="flex items-center gap-2">
-                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                              <li>Active Deals</li>
+                            <Link to="/deal/activedeals" className="flex items-center justify-between pr-4">
+                              <div className="flex items-center gap-2">
+                                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                <li>Active Deals</li>
+                              </div>
+                              {indicators.serviceDeal.activeDeals && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                             </Link>
-                             <Link to="/deal/negotiations" className="flex items-center gap-2">
-                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                              <li>Negotiations</li>
+                             <Link to="/deal/negotiations" className="flex items-center justify-between pr-4">
+                              <div className="flex items-center gap-2">
+                                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                <li>Negotiations</li>
+                              </div>
+                              {indicators.serviceDeal.negotiations && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                             </Link>
                             <Link to="/deal/documentation" className="flex items-center gap-2">
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
@@ -611,13 +637,19 @@ const Mobile = () => {
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                               <li>Milestones</li>
                             </Link>
-                             <Link to="/deal/completed" className="flex items-center gap-2">
-                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                              <li>Completed</li>
+                             <Link to="/deal/completed" className="flex items-center justify-between pr-4">
+                              <div className="flex items-center gap-2">
+                                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                <li>Completed</li>
+                              </div>
+                              {indicators.serviceDeal.completed && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                             </Link>
-                            <Link to="/deal/disputes" className="flex items-center gap-2">
-                              <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                              <li>Disputes</li>
+                            <Link to="/deal/disputes" className="flex items-center justify-between pr-4">
+                              <div className="flex items-center gap-2">
+                                <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                <li>Disputes</li>
+                              </div>
+                              {indicators.serviceDeal.disputes && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                             </Link>
                         </ul>
                       )}

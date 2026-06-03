@@ -17,6 +17,14 @@ const connectionSchema = new mongoose.Schema(
       enum: ["pending", "accepted", "ignored"],
       default: "pending",
     },
+    isSeenBySender: {
+      type: Boolean,
+      default: false,
+    },
+    isSeenByReceiver: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

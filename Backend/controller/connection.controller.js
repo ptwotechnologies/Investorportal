@@ -75,6 +75,30 @@ export const getMyConnections = async (req, res) => {
       { path: "receiverId", select: "businessDetails.firstName businessDetails.lastName profilePhoto coverImage" }
     ]);
 
+    // Mark accepted connections as seen for the sender
+    const acceptedConnectionsToMark = accepted.filter(
+      conn => String(conn.senderId._id) === String(userId) && !conn.isSeenBySender
+    );
+
+    if (acceptedConnectionsToMark.length > 0) {
+      await Connection.updateMany(
+        { _id: { $in: acceptedConnectionsToMark.map(c => c._id) } },
+        { $set: { isSeenBySender: true } }
+      );
+    }
+
+    // Mark pending connections as seen for the receiver
+    const pendingConnectionsToMark = received.filter(
+      conn => String(conn.receiverId._id) === String(userId) && !conn.isSeenByReceiver
+    );
+
+    if (pendingConnectionsToMark.length > 0) {
+      await Connection.updateMany(
+        { _id: { $in: pendingConnectionsToMark.map(c => c._id) } },
+        { $set: { isSeenByReceiver: true } }
+      );
+    }
+
     res.json({ sent, received, accepted });
   } catch (error) {
     console.error("Get connections error:", error);

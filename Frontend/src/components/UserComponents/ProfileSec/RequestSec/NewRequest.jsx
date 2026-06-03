@@ -54,7 +54,8 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
 
         // ⭐ Fix: extract planName from plan object
         const planName = userRes.data.plan?.planName || "Explorer Access";
-        setUserPlan(planName);
+        const planAmount = userRes.data.plan?.amount || 0;
+        setUserPlan({ planName, amount: planAmount });
 
         const requestsRes = await axios.get(`${serverUrl}/requests`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -74,7 +75,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
   }, [userId]);
 
   // Check if user is on free plan and reached request limit
-  const isFreePlan = userPlan === "Explorer Access";
+  const isFreePlan = !userPlan || !userPlan.amount || Number(userPlan.amount) === 0;
   const hasReachedLimit = isFreePlan && requestsCount >= 1;
 
   const handleSend = async () => {

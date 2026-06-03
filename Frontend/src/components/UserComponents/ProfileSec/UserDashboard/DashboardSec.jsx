@@ -1102,22 +1102,22 @@ const DashboardSec = () => {
           </div>
 
           {/* Desktop Credits Widget */}
-          {profile?.isFreePlan && (
+          {profile?.isFreePlan !== undefined && profile?.role !== "investor" && (
             <div
               onClick={() => setShowMobileCredits(true)}
               className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%]"
             >
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
-                  {profile.credits ?? 0}
+                  {profile?.isFreePlan ? (profile.credits ?? 0) : "∞"}
                 </div>
-                <div className="flex flex-col items-end">
+                <div className="flex flex-col items-start">
                   <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
-                    Opportunities Available
+                    {profile?.isFreePlan ? "Opportunities Available" : "Unlimited Access"}
                   </p>
                   <div className="-mt-0.5">
                     <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
-                      More connections are waiting
+                      {profile?.isFreePlan ? "More connections are waiting" : "All premium features unlocked"}
                     </span>
                   </div>
                 </div>

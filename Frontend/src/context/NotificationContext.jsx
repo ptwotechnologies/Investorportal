@@ -116,6 +116,9 @@ export const NotificationProvider = ({ children }) => {
         return [newNotification, ...prev];
       });
 
+      // Fire global event to update sidebar indicators in real-time
+      window.dispatchEvent(new Event("sidebar-refresh"));
+
       // Special handling for portfolio missing trigger
       if (newNotification.type === "missing_portfolio") {
         setIsPortfolioMissing(true);
@@ -126,6 +129,11 @@ export const NotificationProvider = ({ children }) => {
     newSocket.on("deal_updated", () => {
       console.log("[SOCKET] Deal updated, triggering real-time UI refresh");
       // Fire global event to tell Sidebar and Mobile Navbar to refresh their data
+      window.dispatchEvent(new Event("sidebar-refresh"));
+    });
+
+    newSocket.on("receive_message", () => {
+      console.log("[SOCKET] New message received, triggering real-time UI refresh");
       window.dispatchEvent(new Event("sidebar-refresh"));
     });
 

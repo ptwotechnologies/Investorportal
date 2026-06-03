@@ -69,7 +69,8 @@ const ReceivedTabSec = ({
         setMyInterestedRequests(res.data.myInterestedRequests);
 
         const planName = userRes.data.plan?.planName || "Explorer Access";
-        setUserPlan(planName);
+        const planAmount = userRes.data.plan?.amount || 0;
+        setUserPlan({ planName, amount: planAmount });
 
         const alreadyInterestedCount = res.data.forwardedRequests.filter(
           (r) => r.hasShownInterest,
@@ -83,7 +84,7 @@ const ReceivedTabSec = ({
         setIsLoadingUserData(false);
       } catch (err) {
         console.error("Error fetching received requests:", err);
-        setUserPlan("Explorer Access");
+        setUserPlan({ planName: "Explorer Access", amount: 0 });
         setIsLoadingUserData(false);
       } finally {
         setLoading(false);
@@ -150,7 +151,7 @@ const ReceivedTabSec = ({
         return; // Already in a final state, do nothing
       }
 
-      const isFreePlan = userPlan === "Explorer Access" || !userPlan;
+      const isFreePlan = !userPlan || !userPlan.amount || Number(userPlan.amount) === 0;
       if (isFreePlan && (interestCount + ignoreCount) >= 1) {
         triggerUpgradeModal("interest");
         return;
@@ -232,7 +233,7 @@ const ReceivedTabSec = ({
           return; // Already in a final state, do nothing
         }
 
-        const isFreePlan = userPlan === "Explorer Access" || !userPlan;
+        const isFreePlan = !userPlan || !userPlan.amount || Number(userPlan.amount) === 0;
         if (isFreePlan && (interestCount + ignoreCount) >= 1) {
           triggerUpgradeModal("interest");
           return;

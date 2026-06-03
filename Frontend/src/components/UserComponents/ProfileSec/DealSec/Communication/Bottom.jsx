@@ -396,24 +396,33 @@ const Bottom = () => {
         </div>
 
         <div className="flex items-center gap-2 px-2.5 shrink-0">
-          {["Milestones", "Disputes", "Files"].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => {
-                setActiveTab(tab);
-                setSelectedDeal(null);
-                setSelectedDispute(null);
-                setIsThreadOpen(false);
-              }}
-              className={`flex-1 py-1 text-[13px] lg:text-sm font-semibold rounded-sm transition-all shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border ${
-                activeTab === tab 
-                ? "bg-[#D8D6F8] text-[#000000] border-[#D8D6F8]" 
-                : "bg-white text-[#000000] border-gray-100 hover:bg-gray-50"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          {["Milestones", "Disputes", "Files"].map((tab) => {
+            const hasUnread = tab === "Milestones" 
+              ? disputes.some(d => d.milestoneId && (isStartup ? !d.isReadByStartup : !d.isReadByProfessional))
+              : tab === "Disputes" 
+              ? disputes.some(d => !d.milestoneId && (isStartup ? !d.isReadByStartup : !d.isReadByProfessional))
+              : false;
+
+            return (
+              <button
+                key={tab}
+                onClick={() => {
+                  setActiveTab(tab);
+                  setSelectedDeal(null);
+                  setSelectedDispute(null);
+                  setIsThreadOpen(false);
+                }}
+                className={`flex-1 py-1 text-[13px] lg:text-sm font-semibold rounded-sm transition-all shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border flex items-center justify-center gap-2 ${
+                  activeTab === tab 
+                  ? "bg-[#D8D6F8] text-[#000000] border-[#D8D6F8]" 
+                  : "bg-white text-[#000000] border-gray-100 hover:bg-gray-50"
+                }`}
+              >
+                {tab}
+                {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+              </button>
+            );
+          })}
         </div>
 
         <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2 w-full lg:w-auto"> 

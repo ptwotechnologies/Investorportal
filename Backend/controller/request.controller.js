@@ -25,10 +25,7 @@ export const createRequest = async (req, res) => {
     }
 
     // ⭐ Check free plan limit
-    const isFreePlan =
-      user.plan?.planName === "Explorer Access" ||
-      !user.plan?.planName ||
-      user.plan?.amount === 0;
+    const isFreePlan = !user.plan || !user.plan.amount || Number(user.plan.amount) === 0;
 
     console.log("DEBUG: isFreePlan:", isFreePlan);
 
@@ -202,10 +199,7 @@ export const markInterested = async (req, res) => {
       return res.status(403).json({ message: "You must switch to Provider mode to express interest." });
     }
 
-    const isFreePlan =
-      user.plan?.planName === "Explorer Access" ||
-      !user.plan?.planName ||
-      user.plan?.amount === 0;
+    const isFreePlan = !user.plan || !user.plan.amount || Number(user.plan.amount) === 0;
 
     if (isFreePlan) {
       // Count requests where this user already showed interest

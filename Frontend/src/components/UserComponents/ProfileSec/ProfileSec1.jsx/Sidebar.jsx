@@ -10,6 +10,7 @@ import loginLogo from "/coptenologo2.png";
 import { NavLink, useNavigate, useLocation, Link } from "react-router-dom";
 import { serverUrl } from "@/App";
 import axios from "axios";
+import { useSidebarIndicators } from "@/hooks/useSidebarIndicators";
 import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlineDashboardCustomize } from "react-icons/md";
@@ -54,6 +55,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const [showSignoutDialog, setShowSignoutDialog] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false); // New state
   const { notifications, fetchNotifications, markAllNotificationsAsRead } = useNotifications();
+  const { indicators } = useSidebarIndicators();
 
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -167,18 +169,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const isAtActiveDeals = location.pathname === "/deal/activedeals";
   const isAtNegotiations = location.pathname === "/deal/negotiations";
 
-  const hasActiveDealDot = !isAtActiveDeals && deals.some(d => 
-    String(userRole).toLowerCase().includes("professional") && d.status === "Draft"
-  );
-
-  const hasNegotiationDot = !isAtNegotiations && deals.some(d => {
-    if (d.status === "Negotiating") {
-      return d.negotiation?.lastSender && String(d.negotiation.lastSender) !== String(userId);
-    }
-    return false;
-  });
-
-  const hasAnyDealDot = hasActiveDealDot || hasNegotiationDot;
+  const hasActiveDealDot = indicators.serviceDeal.activeDeals;
+  const hasNegotiationDot = indicators.serviceDeal.negotiations;
+  const hasAnyDealDot = indicators.serviceDeal.hasUnread;
   const isStartup = String(userRole).toLowerCase().includes("startup");
   const isServiceProfessional = String(userRole).toLowerCase().includes("professional");
   const isInvestor = String(userRole).toLowerCase().includes("investor");
@@ -422,17 +415,25 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 }
               >
                 Requests
+                {indicators.requests.hasUnread && (
+                  <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    {indicators.requests.count}
+                  </span>
+                )}
               </NavLink>
 
               <NavLink
                 to="/connect"
                 className={({ isActive }) =>
-                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                  `my-3 text-[17px] px-4 mx-3 rounded-md flex items-center justify-between ${
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] hover:bg-gray-100"
                   }`
                 }
               >
                 Connect
+                {indicators.connect.hasUnread && (
+                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                )}
               </NavLink>
 
               <div
@@ -660,7 +661,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
                   <div className="flex flex-col">
-                    <span>Communication</span>
+                    <div className="flex items-center gap-2">
+                      <span>Communication</span>
+                      {indicators.communication.hasUnread && (
+                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                      )}
+                    </div>
                     <p className="text-[10px] text-gray-400 font-normal">Messages, notifications</p>
                   </div>
                   {isCommunicationOpen ? (
@@ -710,7 +716,12 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
                 >
                   <div className="flex flex-col">
-                    <span>Service Deal</span>
+                    <div className="flex items-center gap-2">
+                      <span>Service Deal</span>
+                      {hasAnyDealDot && (
+                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                      )}
+                    </div>
                     <p className="text-[10px] text-gray-400 font-normal">Agreements & services</p>
                   </div>
                   {isDealsOpen ? (
@@ -724,18 +735,24 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2  border-l-2 border-gray-100">
                     <NavLink
                       to="/deal/activedeals"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
-                      Active Deals
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        Active Deals
+                      </div>
+                      {indicators.serviceDeal.activeDeals && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                     </NavLink>
 
                     <NavLink
                       to="/deal/negotiations"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
-                      Negotiations
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        Negotiations
+                      </div>
+                      {indicators.serviceDeal.negotiations && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                     </NavLink>
 
                     <NavLink
@@ -772,18 +789,24 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                     <NavLink
                       to="/deal/completed"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
-                      Completed
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        Completed
+                      </div>
+                      {indicators.serviceDeal.completed && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                     </NavLink>
 
                     <NavLink
                       to="/deal/disputes"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
-                      Disputes
+                      <div className="flex items-center gap-2">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        Disputes
+                      </div>
+                      {indicators.serviceDeal.disputes && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
                     </NavLink>
                   </div>
                 )}
