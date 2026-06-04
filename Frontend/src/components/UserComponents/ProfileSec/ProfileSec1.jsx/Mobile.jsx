@@ -204,7 +204,7 @@ const Mobile = () => {
             </SheetTrigger>
 
             <div>
-              <SheetContent className="w-screen h-[100vh] p-3 bg-[#D5D5D5]  overflow-hidden flex flex-col">
+              <SheetContent className="w-screen h-[90vh] p-3 bg-[#D5D5D5]  overflow-hidden flex flex-col">
                 <div className="border border-[#D9D9D9] bg-white  flex-1 flex flex-col overflow-hidden">
                   {/* Top Header Row inside Mobile Drawer */}
                   <div className="flex items-center justify-between px-2 py-4 pt-3 shrink-0 bg-white">
@@ -253,7 +253,7 @@ const Mobile = () => {
                           <Link to="/request" className="flex items-center gap-2">
                             <li>Requests</li>
                             {indicators.requests.hasUnread && (
-                              <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                              <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
                                 {indicators.requests.count}
                               </span>
                             )}
@@ -268,7 +268,9 @@ const Mobile = () => {
                           <Link to="/connect" className="flex items-center gap-2">
                             <li>Connect</li>
                             {indicators.connect.hasUnread && (
-                              <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                              <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                                {indicators.connect.count}
+                              </span>
                             )}
                           </Link>
                         </div>
@@ -535,7 +537,9 @@ const Mobile = () => {
                                 <div className="flex items-center gap-2">
                                   <span className="text-[15px] font-medium leading-tight text-gray-700">Communication</span>
                                   {indicators.communication.hasUnread && (
-                                    <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                                    <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                                      {indicators.communication.count}
+                                    </span>
                                   )}
                                 </div>
                                 <p className="text-[11px] text-gray-400">Messages, notifications</p>
@@ -583,7 +587,9 @@ const Mobile = () => {
                               <div className="flex items-center gap-2">
                                 <span className="text-[15px] font-medium leading-tight text-gray-700">Service Deal</span>
                                 {indicators.serviceDeal.hasUnread && (
-                                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                                  <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                                    {indicators.serviceDeal.count}
+                                  </span>
                                 )}
                               </div>
                               <p className="text-[11px] text-gray-400">Agreements & services</p>
@@ -610,14 +616,14 @@ const Mobile = () => {
                                 <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                 <li>Active Deals</li>
                               </div>
-                              {indicators.serviceDeal.activeDeals && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                              {indicators.serviceDeal.activeDealsCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.activeDealsCount}</span>}
                             </Link>
                              <Link to="/deal/negotiations" className="flex items-center justify-between pr-4">
                               <div className="flex items-center gap-2">
                                 <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                 <li>Negotiations</li>
                               </div>
-                              {indicators.serviceDeal.negotiations && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                              {indicators.serviceDeal.negotiationsCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.negotiationsCount}</span>}
                             </Link>
                             <Link to="/deal/documentation" className="flex items-center gap-2">
                               <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
@@ -642,14 +648,14 @@ const Mobile = () => {
                                 <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                 <li>Completed</li>
                               </div>
-                              {indicators.serviceDeal.completed && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                              {indicators.serviceDeal.completedCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.completedCount}</span>}
                             </Link>
                             <Link to="/deal/disputes" className="flex items-center justify-between pr-4">
                               <div className="flex items-center gap-2">
                                 <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                 <li>Disputes</li>
                               </div>
-                              {indicators.serviceDeal.disputes && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                              {indicators.serviceDeal.disputesCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.disputesCount}</span>}
                             </Link>
                         </ul>
                       )}

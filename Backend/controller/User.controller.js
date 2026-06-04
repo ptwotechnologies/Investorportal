@@ -718,10 +718,11 @@ export const getUserIndicators = async (req, res) => {
       connect: { hasUnread: false, count: 0 },
       serviceDeal: {
         hasUnread: false,
-        activeDeals: false,
-        negotiations: false,
-        completed: false,
-        disputes: false,
+        count: 0,
+        activeDealsCount: 0,
+        negotiationsCount: 0,
+        completedCount: 0,
+        disputesCount: 0,
       },
       communication: { hasUnread: false, count: 0 }
     };
@@ -766,15 +767,15 @@ export const getUserIndicators = async (req, res) => {
       deals.forEach(d => {
         // Active Deals
         if (isSP && d.status === "Draft") {
-          indicators.serviceDeal.activeDeals = true;
+          indicators.serviceDeal.activeDealsCount += 1;
         }
         // Negotiations
         if (d.status === "Negotiating" && d.negotiation?.lastSender && d.negotiation.lastSender.toString() !== userId.toString()) {
-          indicators.serviceDeal.negotiations = true;
+          indicators.serviceDeal.negotiationsCount += 1;
         }
         // Completed
         if (isStartup && d.status === "Completed") {
-          indicators.serviceDeal.completed = true;
+          indicators.serviceDeal.completedCount += 1;
         }
       });
 
@@ -785,24 +786,27 @@ export const getUserIndicators = async (req, res) => {
       });
 
       disputes.forEach(disp => {
-        if (isSP && !disp.isReadByProfessional) indicators.serviceDeal.disputes = true;
-        if (isStartup && !disp.isReadByStartup) indicators.serviceDeal.disputes = true;
+        if (isSP && !disp.isReadByProfessional) indicators.serviceDeal.disputesCount += 1;
+        if (isStartup && !disp.isReadByStartup) indicators.serviceDeal.disputesCount += 1;
       });
 
-      indicators.serviceDeal.hasUnread = 
-        indicators.serviceDeal.activeDeals || 
-        indicators.serviceDeal.negotiations || 
-        indicators.serviceDeal.completed || 
-        indicators.serviceDeal.disputes;
+      indicators.serviceDeal.count = 
+        indicators.serviceDeal.activeDealsCount + 
+        indicators.serviceDeal.negotiationsCount + 
+        indicators.serviceDeal.completedCount + 
+        indicators.serviceDeal.disputesCount;
+
+      indicators.serviceDeal.hasUnread = indicators.serviceDeal.count > 0;
 
     } catch (e) { console.error("Error calculating deal indicators", e); }
 
     // 4. COMMUNICATION
     try {
-      indicators.communication.hasUnread = indicators.serviceDeal.disputes; 
-      indicators.communication.count = indicators.serviceDeal.disputes ? 1 : 0;
+      indicators.communication.hasUnread = indicators.serviceDeal.disputesCount > 0; 
+      indicators.communication.count = indicators.serviceDeal.disputesCount;
     } catch (e) { console.error("Error calculating communication indicators", e); }
 
+    console.log("INDICATORS RESPONSE:", JSON.stringify(indicators.serviceDeal));
     res.status(200).json(indicators);
   } catch (error) {
     console.error("Get Indicators Error:", error);

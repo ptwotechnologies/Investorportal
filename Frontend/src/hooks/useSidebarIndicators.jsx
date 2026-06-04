@@ -8,10 +8,11 @@ export const useSidebarIndicators = () => {
     connect: { hasUnread: false, count: 0 },
     serviceDeal: {
       hasUnread: false,
-      activeDeals: false,
-      negotiations: false,
-      completed: false,
-      disputes: false,
+      count: 0,
+      activeDealsCount: 0,
+      negotiationsCount: 0,
+      completedCount: 0,
+      disputesCount: 0,
     },
     communication: { hasUnread: false, count: 0 }
   });
@@ -21,7 +22,7 @@ export const useSidebarIndicators = () => {
     if (!token) return;
 
     try {
-      const res = await axios.get(`${serverUrl}/user/indicators`, {
+      const res = await axios.get(`${serverUrl}/user/indicators?t=${Date.now()}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data) {

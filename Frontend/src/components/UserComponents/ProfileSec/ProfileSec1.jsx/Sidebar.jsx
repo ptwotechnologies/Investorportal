@@ -416,7 +416,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               >
                 Requests
                 {indicators.requests.hasUnread && (
-                  <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  <span className="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
                     {indicators.requests.count}
                   </span>
                 )}
@@ -432,7 +432,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               >
                 Connect
                 {indicators.connect.hasUnread && (
-                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                  <span className="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                    {indicators.connect.count}
+                  </span>
                 )}
               </NavLink>
 
@@ -664,7 +666,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                     <div className="flex items-center gap-2">
                       <span>Communication</span>
                       {indicators.communication.hasUnread && (
-                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                        <span className="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                          {indicators.communication.count}
+                        </span>
                       )}
                     </div>
                     <p className="text-[10px] text-gray-400 font-normal">Messages, notifications</p>
@@ -718,8 +722,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
                       <span>Service Deal</span>
-                      {hasAnyDealDot && (
-                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                      {indicators.serviceDeal.hasUnread && (
+                        <span className="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                          {indicators.serviceDeal.count}
+                        </span>
                       )}
                     </div>
                     <p className="text-[10px] text-gray-400 font-normal">Agreements & services</p>
@@ -741,7 +747,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
                         Active Deals
                       </div>
-                      {indicators.serviceDeal.activeDeals && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                      {indicators.serviceDeal.activeDealsCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.activeDealsCount}</span>}
                     </NavLink>
 
                     <NavLink
@@ -752,7 +758,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
                         Negotiations
                       </div>
-                      {indicators.serviceDeal.negotiations && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                      {indicators.serviceDeal.negotiationsCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.negotiationsCount}</span>}
                     </NavLink>
 
                     <NavLink
@@ -795,7 +801,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
                         Completed
                       </div>
-                      {indicators.serviceDeal.completed && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                      {indicators.serviceDeal.completedCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.completedCount}</span>}
                     </NavLink>
 
                     <NavLink
@@ -806,7 +812,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                         <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
                         Disputes
                       </div>
-                      {indicators.serviceDeal.disputes && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                      {indicators.serviceDeal.disputesCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.disputesCount}</span>}
                     </NavLink>
                   </div>
                 )}

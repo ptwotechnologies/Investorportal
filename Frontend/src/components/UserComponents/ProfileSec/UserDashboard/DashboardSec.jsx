@@ -478,21 +478,28 @@ const DashboardSec = () => {
         }
       }
 
-      // Process New Registrations
-      const sortedUsers = allProfilesRes.data
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 4)
-        .map(p => ({
-          name: p.name || "User",
-          role: p.userId?.role?.replace("_", " ") || "Member",
-          hours: timeAgo(p.createdAt)
-        }));
-      setNewRegistrations(sortedUsers);
-
       // Process Connections Data
       const { sent, accepted } = connectionsRes.data;
       const registeredCount = accepted?.length || 0;
       const onApprovalCount = sent?.length || 0;
+
+      // Map accepted connections for the Activity widget
+      const myConnectionsList = (accepted || [])
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 4)
+        .map(c => {
+           const otherParty = c.senderId?._id === userId ? c.receiverId : c.senderId;
+           const name = otherParty?.businessDetails?.firstName 
+             ? `${otherParty.businessDetails.firstName} ${otherParty.businessDetails.lastName || ""}`
+             : (otherParty?.name || "Unknown User");
+           const role = otherParty?.role?.replace("_", " ") || "Member";
+           return {
+             name,
+             role,
+             hours: timeAgo(c.createdAt)
+           };
+        });
+      setNewRegistrations(myConnectionsList);
 
       // Calculate weekly stats (last 7 days)
       const sevenDaysAgo = new Date();
@@ -1649,7 +1656,9 @@ const DashboardSec = () => {
 
                     <div className="bg-[#001426] text-white p-1 rounded-lg text-center mt-2">
                       <Link to="/profile">
-                        <button className="w-full py-1">Complete Your Profile</button>
+                        <button className="w-full py-1">
+                          {profileCompletion === 100 ? "Profile Completed" : "Complete Your Profile"}
+                        </button>
                       </Link>
                     </div>
                   </div>
@@ -1657,7 +1666,7 @@ const DashboardSec = () => {
               </div>
 
               {/* Requests Section */}
-              <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl mt-0 h-[41vh]">
+              <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl mt-0 flex flex-col" style={{ minHeight: '43vh' }}>
                 <div className="flex items-center justify-between px-5 py-4">
                   <h1 className="text-3xl text-[#202020] font-semibold">
                     Requests
@@ -1673,7 +1682,7 @@ const DashboardSec = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4 px-4 overflow-x-auto pb-2">
+                <div className="flex items-stretch gap-4 px-4 overflow-x-auto pb-4 flex-1">
                   {recentRequests.length > 0 ? (
                     recentRequests.map((req, idx) => {
                       const isDark = idx % 2 === 1;
@@ -1729,7 +1738,7 @@ const DashboardSec = () => {
                       );
                     })
                   ) : (
-                    <div className="w-full text-center py-10 text-gray-400">
+                    <div className="flex-1 h-full flex items-center justify-center text-gray-400">
                       No recent requests found.
                     </div>
                   )}
@@ -1739,7 +1748,7 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="w-[30%] h-full bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] overflow-y-auto scrollbar-hide pb-6"
+              className="w-[30%] h-[88vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] overflow-y-auto scrollbar-hide pb-6"
             >
               <div className="flex items-center justify-between">
                 <p className="text-3xl font-semibold my-4">Activity</p>
@@ -1760,39 +1769,45 @@ const DashboardSec = () => {
 
               <div className="bg-[#F1F1F1] px-8 py-4 mt-4 rounded-2xl">
                 <h3 className="text-gray-900 text-[18px] font-semibold mb-3">
-                  New Registrations
+                  My Connections
                 </h3>
-                <div className="flex flex-col gap-2 mt-1">
-                  {newRegistrations.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      whileHover={{ scale: 1.02 }}
-                      className="flex justify-between items-center"
-                    >
-                      <div className="flex items-start gap-3">
-                        {idx === 0 ? (
-                          <RiCheckDoubleLine
-                            size={24}
-                            className="text-blue-500 text-xs mt-1"
-                          />
-                        ) : (
-                          <RiCheckLine
-                            size={24}
-                            className="text-gray-400 text-xs mt-1"
-                          />
-                        )}
-                        <div>
-                          <p className="text-sm mb-1 text-gray-500">
-                            {item.name}
-                          </p>
-                          <p className="text-sm font-medium text-gray-900">
-                            {item.role}
-                          </p>
+                <div className="flex flex-col gap-2 mt-1 min-h-[150px]">
+                  {newRegistrations.length > 0 ? (
+                    newRegistrations.map((item, idx) => (
+                      <motion.div
+                        key={idx}
+                        whileHover={{ scale: 1.02 }}
+                        className="flex justify-between items-center"
+                      >
+                        <div className="flex items-start gap-3">
+                          {idx === 0 ? (
+                            <RiCheckDoubleLine
+                              size={24}
+                              className="text-blue-500 text-xs mt-1"
+                            />
+                          ) : (
+                            <RiCheckLine
+                              size={24}
+                              className="text-gray-400 text-xs mt-1"
+                            />
+                          )}
+                          <div>
+                            <p className="text-sm mb-1 text-gray-500">
+                              {item.name}
+                            </p>
+                            <p className="text-sm font-medium text-gray-900">
+                              {item.role}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <p className="text-sm text-gray-600">{item.hours}</p>
-                    </motion.div>
-                  ))}
+                        <p className="text-sm text-gray-600">{item.hours}</p>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="flex-1 flex items-center justify-center text-gray-400 text-sm font-medium h-full min-h-[150px]">
+                      No Connections
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -2063,7 +2078,9 @@ const DashboardSec = () => {
 
                 <div className="bg-[#001426] text-white p-1 rounded-lg text-center mt-2">
                   <Link to="/profile">
-                    <button className="w-full py-1">Complete Your Profile</button>
+                    <button className="w-full py-1">
+                      {profileCompletion === 100 ? "Profile Completed" : "Complete Your Profile"}
+                    </button>
                   </Link>
                 </div>
               </div>
@@ -2123,7 +2140,7 @@ const DashboardSec = () => {
               </div>
             </div>
 
-            <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-5 mt-3 m-2">
+            <div id="bottom" className="bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-5 mt-3 m-2 ">
               <div className="flex items-center justify-between  py-2">
                 <h1 className="text-xl text-[#202020] font-semibold">
                   Requests
@@ -2316,39 +2333,45 @@ const DashboardSec = () => {
 
               <div className="bg-[#F1F1F1] px-8 py-6 mt-5 rounded-2xl">
                 <h3 className="text-gray-900 text-[18px] font-semibold mb-3">
-                  New Registrations
+                  My Connections
                 </h3>
-                <div className="flex flex-col gap-2 mt-1">
-                  {newRegistrations.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      whileHover={{ scale: 1.02 }}
-                      className="flex justify-between items-center"
-                    >
-                      <div className="flex items-start gap-3">
-                        {idx === 0 ? (
-                          <RiCheckDoubleLine
-                            size={24}
-                            className="text-blue-500 text-xs mt-1"
-                          />
-                        ) : (
-                          <RiCheckLine
-                            size={24}
-                            className="text-gray-400 text-xs mt-1"
-                          />
-                        )}
-                        <div>
-                          <p className="text-sm mb-1 text-gray-500">
-                            {item.name}
-                          </p>
-                          <p className="text-sm font-medium text-gray-900">
-                            {item.role}
-                          </p>
+                <div className="flex flex-col gap-2 mt-1 min-h-[150px]">
+                  {newRegistrations.length > 0 ? (
+                    newRegistrations.map((item, idx) => (
+                      <motion.div
+                        key={idx}
+                        whileHover={{ scale: 1.02 }}
+                        className="flex justify-between items-center"
+                      >
+                        <div className="flex items-start gap-3">
+                          {idx === 0 ? (
+                            <RiCheckDoubleLine
+                              size={24}
+                              className="text-blue-500 text-xs mt-1"
+                            />
+                          ) : (
+                            <RiCheckLine
+                              size={24}
+                              className="text-gray-400 text-xs mt-1"
+                            />
+                          )}
+                          <div>
+                            <p className="text-sm mb-1 text-gray-500">
+                              {item.name}
+                            </p>
+                            <p className="text-sm font-medium text-gray-900">
+                              {item.role}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                      <p className="text-sm text-gray-600">{item.hours}</p>
-                    </motion.div>
-                  ))}
+                        <p className="text-sm text-gray-600">{item.hours}</p>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="flex-1 flex items-center justify-center text-gray-400 text-sm font-medium h-full min-h-[150px]">
+                      No Connections
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
