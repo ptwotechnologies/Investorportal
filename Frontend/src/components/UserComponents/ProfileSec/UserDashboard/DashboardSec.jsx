@@ -58,6 +58,19 @@ const DashboardSec = () => {
 
   const [notificationPermission, setNotificationPermission] = useState('granted');
   const [showNotificationBanner, setShowNotificationBanner] = useState(false);
+  const [spMode, setSpMode] = useState(localStorage.getItem("spMode") || "provider");
+
+  useEffect(() => {
+    const handleSpModeChange = () => {
+      setSpMode(localStorage.getItem("spMode") || "provider");
+    };
+    window.addEventListener("spModeChanged", handleSpModeChange);
+    return () => window.removeEventListener("spModeChanged", handleSpModeChange);
+  }, []);
+
+  const actualRole = profile?.role?.toLowerCase() || "";
+  const isServiceProfessional = actualRole === "service_professional" || actualRole.includes("professional");
+  const isStartupMode = actualRole === "startup" || (isServiceProfessional && spMode === "buyer");
 
   useEffect(() => {
     if ("Notification" in window) {
@@ -144,6 +157,7 @@ const DashboardSec = () => {
       const headers = { Authorization: `Bearer ${token}` };
 
       // Fire all requests in parallel for maximum speed
+      const spModeLocal = localStorage.getItem("spMode") || "provider";
       const [
         profileRes,
         myRequestsRes,
@@ -157,7 +171,7 @@ const DashboardSec = () => {
         axios.get(`${serverUrl}/requests/received`, { headers }),
         axios.get(`${serverUrl}/profile/all`, { headers }),
         axios.get(`${serverUrl}/connections/my/`, { headers }),
-        axios.get(`${serverUrl}/api/deals/my-deals`, { headers }).catch(() => ({ data: [] }))
+        axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spModeLocal}`, { headers }).catch(() => ({ data: [] }))
       ]);
 
       // Process Profile Data
@@ -2579,9 +2593,9 @@ const DashboardSec = () => {
               </div>
               <div>
                 <h2 className="text-lg font-bold text-[#001032] leading-tight">
-                  {profile?.role === "startup" ? "Unlock More" : "Grow Your"}<br />
+                  {isStartupMode ? "Unlock More" : "Grow Your"}<br />
                   <span className="text-[#59549F]">
-                    {profile?.role === "startup" ? "Opportunities" : "Business"}
+                    {isStartupMode ? "Opportunities" : "Business"}
                   </span> Waiting
                 </h2>
               </div>
@@ -2589,7 +2603,7 @@ const DashboardSec = () => {
 
             {/* Description */}
             <p className="text-xs text-gray-500 mb-3 leading-relaxed">
-              {profile?.role === "startup" 
+              {isStartupMode 
                 ? "You've reached your free access limit. More investors and professionals are ready to connect with you."
                 : "You've reached your free access limit. More high-intent startups are looking for professionals like you."}
             </p>
@@ -2615,17 +2629,17 @@ const DashboardSec = () => {
                   {
                     icon: "🤝",
                     color: "bg-blue-100",
-                    text: profile?.role === "startup" ? "Connect with multiple investors" : "Connect with high-intent startups",
+                    text: isStartupMode ? "Connect with multiple investors" : "Connect with high-intent startups",
                   },
                   { 
                     icon: "⚡", 
                     color: "bg-green-100", 
-                    text: profile?.role === "startup" ? "Get faster responses to requests" : "Get more relevant client matches" 
+                    text: isStartupMode ? "Get faster responses to requests" : "Get more relevant client matches" 
                   },
                   {
                     icon: "📈",
                     color: "bg-purple-100",
-                    text: profile?.role === "startup" ? "Increase visibility to top investors" : "Showcase profile to decision makers",
+                    text: isStartupMode ? "Increase visibility to top investors" : "Showcase profile to decision makers",
                   },
                   { 
                     icon: "🏆", 

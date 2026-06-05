@@ -89,7 +89,8 @@ const RightReceived = ({
       if (selectedRequest?._id) {
         try {
           const token = localStorage.getItem("token");
-          const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+          const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+          const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
             headers: { Authorization: `Bearer ${token}` },
           });
           const existingDeal = res.data.find(d => d.requestId?._id === selectedRequest._id || d.requestId === selectedRequest._id);

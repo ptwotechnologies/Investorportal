@@ -17,16 +17,36 @@ const Bottom = () => {
 
   useEffect(() => {
     fetchCompletedDeals();
+    const handleRefresh = () => fetchCompletedDeals();
+    window.addEventListener("spModeChanged", handleRefresh);
+    window.addEventListener("sidebar-refresh", handleRefresh);
+    return () => {
+      window.removeEventListener("spModeChanged", handleRefresh);
+      window.removeEventListener("sidebar-refresh", handleRefresh);
+    };
   }, []);
 
   const fetchCompletedDeals = async () => {
     try {
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      let allDeals = res.data;
+      const currentUserId = userData?._id || userData?.id;
+      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
+      
+      if (currentUserId && String(actualRole).includes("professional")) {
+        if (spMode === "buyer") {
+          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currentUserId));
+        } else {
+          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currentUserId));
+        }
+      }
+
       // Filter for deals that are marked as Completed
       // or deals where ALL milestones are Completed
-      const completedDeals = res.data.filter(d => 
+      const completedDeals = allDeals.filter(d => 
         d.status === "Completed" || 
         (d.milestones?.length > 0 && d.milestones.every(m => m.status === 'Completed'))
       );

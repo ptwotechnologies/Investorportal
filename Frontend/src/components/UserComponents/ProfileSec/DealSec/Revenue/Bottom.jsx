@@ -93,7 +93,11 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
 
     const handleRefresh = () => fetchDeals();
     window.addEventListener("sidebar-refresh", handleRefresh);
-    return () => window.removeEventListener("sidebar-refresh", handleRefresh);
+    window.addEventListener("spModeChanged", handleRefresh);
+    return () => {
+      window.removeEventListener("sidebar-refresh", handleRefresh);
+      window.removeEventListener("spModeChanged", handleRefresh);
+    };
   }, []);
 
   useEffect(() => {
@@ -105,16 +109,26 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
   const fetchDeals = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const userStr = localStorage.getItem("user");
       const userData = userStr ? JSON.parse(userStr) : null;
       const currentUserId = userData?._id ? String(userData._id) : (userData?.id ? String(userData.id) : null);
+      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
+      let allDeals = res.data;
+      
+      if (currentUserId && String(actualRole).includes("professional")) {
+        if (spMode === "buyer") {
+          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currentUserId));
+        } else {
+          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currentUserId));
+        }
+      }
 
       // Show Documented (verified), Active or Completed deals ONLY where user is Professional
-      const revenueDeals = res.data.filter(d => {
+      const revenueDeals = allDeals.filter(d => {
         const profIdStr = d.professionalId?._id ? String(d.professionalId._id) : (typeof d.professionalId === 'string' ? d.professionalId : String(d.professionalId));
         const isProfessionalOfThisDeal = profIdStr === currentUserId;
 

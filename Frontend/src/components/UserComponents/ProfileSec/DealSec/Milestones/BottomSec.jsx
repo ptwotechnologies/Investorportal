@@ -34,7 +34,11 @@ const BottomSec = ({ deals, setDeals, selectedDeal, setSelectedDeal, selectedMil
 
     const handleRefresh = () => fetchDeals();
     window.addEventListener("sidebar-refresh", handleRefresh);
-    return () => window.removeEventListener("sidebar-refresh", handleRefresh);
+    window.addEventListener("spModeChanged", handleRefresh);
+    return () => {
+      window.removeEventListener("sidebar-refresh", handleRefresh);
+      window.removeEventListener("spModeChanged", handleRefresh);
+    };
   }, []);
 
   useEffect(() => {
@@ -51,12 +55,27 @@ const BottomSec = ({ deals, setDeals, selectedDeal, setSelectedDeal, selectedMil
 
   const fetchDeals = async () => {
     try {
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
+      let allDeals = res.data;
+      const userStr = localStorage.getItem("user");
+      const userData = userStr ? JSON.parse(userStr) : null;
+      const currId = userData?._id || userData?.id;
+      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
+      
+      if (currId && String(actualRole).includes("professional")) {
+        if (spMode === "buyer") {
+          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currId));
+        } else {
+          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currId));
+        }
+      }
+
       // Show Active, Completed, Negotiating, or Documented deals
-      const activeDeals = res.data.filter(d => 
+      const activeDeals = allDeals.filter(d => 
         ["Active", "Completed", "Negotiating", "Documented"].includes(d.status)
       );
       setDeals(activeDeals);

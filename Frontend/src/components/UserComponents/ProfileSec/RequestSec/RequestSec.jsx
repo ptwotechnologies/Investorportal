@@ -1110,7 +1110,7 @@ const RequestSec = () => {
             </div>
             
             <h3 className="text-lg font-bold text-[#2D317A] mb-2 leading-snug">
-              Requests Pending
+              No Request Created Yet
             </h3>
             
             <p className="text-sm text-gray-500 mb-6 leading-relaxed">

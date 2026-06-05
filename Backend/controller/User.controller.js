@@ -48,6 +48,25 @@ export const createUser = async (req, res) => {
       return res.status(400).json({ message: "Mobile number already registered" });
     }
 
+    // Check if companyName or firmName already exists
+    if (businessDetails.companyName) {
+      const existingCompany = await User.findOne({ 
+        "businessDetails.companyName": { $regex: new RegExp(`^${businessDetails.companyName.trim()}$`, 'i') } 
+      });
+      if (existingCompany) {
+        return res.status(400).json({ message: "Company name already registered" });
+      }
+    }
+
+    if (businessDetails.firmName) {
+      const existingFirm = await User.findOne({ 
+        "businessDetails.firmName": { $regex: new RegExp(`^${businessDetails.firmName.trim()}$`, 'i') } 
+      });
+      if (existingFirm) {
+        return res.status(400).json({ message: "Firm name already registered" });
+      }
+    }
+
     // 3. Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -129,6 +148,22 @@ export const updateAdditionalDetails = async (req, res) => {
     if (user.role === "startup") {
       if (!additionalDetails || !additionalDetails.startupBusinessType) {
         return res.status(400).json({ message: "Startup business type is required" });
+      }
+    }
+
+    // Check if linkedinProfile already exists for another user
+    if (additionalDetails.linkedinProfile && additionalDetails.linkedinProfile.length > 0) {
+      const linkedinUrls = additionalDetails.linkedinProfile;
+      const existingLinkedin = await User.findOne({ 
+        _id: { $ne: userId },
+        "additionalDetails.linkedinProfile": { 
+          $elemMatch: { 
+            $in: linkedinUrls.map(url => new RegExp(`^${url.trim()}$`, 'i')) 
+          } 
+        } 
+      });
+      if (existingLinkedin) {
+         return res.status(400).json({ message: "LinkedIn profile already registered by another user" });
       }
     }
 
@@ -711,7 +746,7 @@ export const getUserIndicators = async (req, res) => {
   try {
     const userId = req.user._id;
     const role = req.user.role;
-    const spMode = req.user.spMode;
+    const spMode = req.query.spMode || req.user.spMode;
 
     const indicators = {
       requests: { hasUnread: false, count: 0 },
@@ -757,12 +792,19 @@ export const getUserIndicators = async (req, res) => {
     // 3. SERVICE DEAL
     try {
       const Deal = (await import("../Models/deal.model.js")).default;
-      const deals = await Deal.find({
+      let deals = await Deal.find({
         $or: [{ startupId: userId }, { professionalId: userId }]
       });
 
       const isSP = role === "service_professional" && spMode === "provider";
       const isStartup = role === "startup" || (role === "service_professional" && spMode === "buyer");
+
+      // STRICT CONTEXT FILTERING: Only keep deals relevant to the active role
+      if (isSP) {
+        deals = deals.filter(d => d.professionalId && d.professionalId.toString() === userId.toString());
+      } else if (isStartup) {
+        deals = deals.filter(d => d.startupId && d.startupId.toString() === userId.toString());
+      }
 
       deals.forEach(d => {
         // Active Deals

@@ -124,7 +124,11 @@ const Bottom = () => {
 
     const handleRefresh = () => fetchDeals();
     window.addEventListener("sidebar-refresh", handleRefresh);
-    return () => window.removeEventListener("sidebar-refresh", handleRefresh);
+    window.addEventListener("spModeChanged", handleRefresh);
+    return () => {
+      window.removeEventListener("sidebar-refresh", handleRefresh);
+      window.removeEventListener("spModeChanged", handleRefresh);
+    };
   }, []);
 
   useEffect(() => {
@@ -161,15 +165,26 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      let allDeals = res.data;
       const userStr = localStorage.getItem("user");
       const userData = userStr ? JSON.parse(userStr) : null;
       const currentId = userData?._id || userData?.id;
+      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
+      
+      if (currentId && String(actualRole).includes("professional")) {
+        if (spMode === "buyer") {
+          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currentId));
+        } else {
+          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currentId));
+        }
+      }
 
       // Show Approved and Documented deals
-      const approvedDeals = res.data.filter(d => {
+      const approvedDeals = allDeals.filter(d => {
         return d.status === "Approved" || d.status === "Documented";
       });
       setDeals(approvedDeals);

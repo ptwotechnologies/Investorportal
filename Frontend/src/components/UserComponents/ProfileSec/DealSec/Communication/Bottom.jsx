@@ -27,8 +27,13 @@ const Bottom = () => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
 
   useEffect(() => {
-    fetchDisputes();
-    fetchDeals();
+    const handleRefresh = () => {
+      fetchDisputes();
+      fetchDeals();
+    };
+    handleRefresh();
+    window.addEventListener("spModeChanged", handleRefresh);
+    return () => window.removeEventListener("spModeChanged", handleRefresh);
   }, []);
 
   const fetchDisputes = async () => {
@@ -36,7 +41,21 @@ const Bottom = () => {
       const res = await axios.get(`${serverUrl}/api/disputes/my-disputes`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setDisputes(res.data);
+      let allDisputes = res.data;
+      const userStr = localStorage.getItem("user");
+      const userData = userStr ? JSON.parse(userStr) : null;
+      const currId = userData?._id || userData?.id;
+      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
+      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      
+      if (currId && String(actualRole).includes("professional")) {
+        if (spMode === "buyer") {
+          allDisputes = allDisputes.filter(d => String(d.dealId?.startupId?._id || d.dealId?.startupId) === String(currId));
+        } else {
+          allDisputes = allDisputes.filter(d => String(d.dealId?.professionalId?._id || d.dealId?.professionalId) === String(currId));
+        }
+      }
+      setDisputes(allDisputes);
       
       if (location.state?.disputeId) {
         const d = res.data.find(disp => disp._id === location.state.disputeId);
@@ -56,10 +75,24 @@ const Bottom = () => {
 
   const fetchDeals = async () => {
     try {
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      setDeals(res.data);
+      let allDeals = res.data;
+      const userStr = localStorage.getItem("user");
+      const userData = userStr ? JSON.parse(userStr) : null;
+      const currId = userData?._id || userData?.id;
+      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
+      
+      if (currId && String(actualRole).includes("professional")) {
+        if (spMode === "buyer") {
+          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currId));
+        } else {
+          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currId));
+        }
+      }
+      setDeals(allDeals);
     } catch (error) {
       console.error("Error fetching deals:", error);
     }

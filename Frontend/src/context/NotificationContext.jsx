@@ -423,7 +423,8 @@ export const NotificationProvider = ({ children }) => {
       // Prepend dynamic Deal triggers
       if (userId) {
         try {
-          const resDeals = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+          const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+          const resDeals = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const allDeals = resDeals.data || [];
@@ -595,7 +596,8 @@ export const NotificationProvider = ({ children }) => {
       // Workspace Inactivity Trigger (Applies to any role with deals)
       if (userId) {
         try {
-          const dealsRes = await axios.get(`${serverUrl}/api/deals/my-deals`, {
+          const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+          const dealsRes = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const deals = dealsRes.data || [];

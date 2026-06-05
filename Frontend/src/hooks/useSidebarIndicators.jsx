@@ -22,7 +22,8 @@ export const useSidebarIndicators = () => {
     if (!token) return;
 
     try {
-      const res = await axios.get(`${serverUrl}/user/indicators?t=${Date.now()}`, {
+      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(`${serverUrl}/user/indicators?t=${Date.now()}&spMode=${spMode}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (res.data) {

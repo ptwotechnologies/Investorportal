@@ -66,14 +66,21 @@ export const createDealDraft = async (req, res) => {
 export const getMyDeals = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { status } = req.query;
+    const { status, spMode } = req.query;
 
-    const query = {
+    let query = {
       $or: [
         { startupId: new mongoose.Types.ObjectId(userId) }, 
         { professionalId: new mongoose.Types.ObjectId(userId) }
       ],
     };
+
+    // If the frontend explicitly specifies the mode, we securely filter at the DB level
+    if (spMode === "buyer") {
+      query = { startupId: new mongoose.Types.ObjectId(userId) };
+    } else if (spMode === "provider") {
+      query = { professionalId: new mongoose.Types.ObjectId(userId) };
+    }
 
     if (status) {
       query.status = status;
