@@ -16,7 +16,7 @@ const TopBar = ({ onCreateClick }) => {
         {/* Right Section: Search and Action Buttons */}
         <div className="flex items-center gap-2 lg:gap-6 w-full lg:flex-1 lg:justify-end">
           {/* Search Bar */}
-          <div className="relative flex-1 lg:max-w-[670px] flex items-center rounded-lg lg:rounded-xl justify-between gap-2 lg:gap-6 border pl-2 lg:pl-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] bg-white h-8 lg:h-12 overflow-hidden">
+          <div className="relative flex-1 lg:max-w-[670px] flex items-center rounded-lg lg:rounded-xl justify-between gap-2 lg:gap-6 border pl-2 lg:pl-3 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] bg-white h-8 lg:h-12 overflow-hidden"> 
             <div className="flex items-center gap-2 w-full overflow-hidden">
               <div className="w-4 h-4 lg:w-5 lg:h-5 border-2 border-gray-300 rounded-full shrink-0 ml-1" />
               <input

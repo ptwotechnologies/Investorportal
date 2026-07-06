@@ -13,7 +13,7 @@ import axios from "axios";
 import { useSidebarIndicators } from "@/hooks/useSidebarIndicators";
 import toast from "react-hot-toast";
 import { RxCross2 } from "react-icons/rx";
-import { MdOutlineDashboardCustomize } from "react-icons/md";
+import { MdOutlineDashboardCustomize, MdOutlineManageAccounts } from "react-icons/md";
 import { HiOutlineTicket } from "react-icons/hi";
 import { HiOutlineUserGroup } from "react-icons/hi";
 import { AiOutlineFund } from "react-icons/ai";
@@ -65,6 +65,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
   const [isOperateOpen, setIsOperateOpen] = useState(false);
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isRequirementsOpen, setIsRequirementsOpen] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [comingSoonTitle, setComingSoonTitle] = useState("");
   const [spMode, setSpMode] = useState(globalUserCache?.spMode || localStorage.getItem("spMode") || "provider");
@@ -258,7 +260,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             onClick={handleToggle}
           />
           <HiOutlineTicket
-            className="text-[#59549f] my-3 cursor-pointer"
+            className="text-[#59549f] my-3 mt-5 cursor-pointer"
             size={25}
             onClick={handleToggle}
           />
@@ -395,32 +397,139 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 Dashboard
               </NavLink>
 
-              <NavLink
-                to="/profile"
-                className={({ isActive }) =>
-                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
-                  }`
-                }
-              >
-                Profile
-              </NavLink>
+              <div className="my-3 relative">
+                <div className="flex justify-between items-center rounded-md hover:bg-[#D8D6F8] mx-3 group">
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                      `block py-1.5 px-4 flex-grow text-[17px] rounded-md ${
+                        isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] group-hover:text-[#59549f]"
+                      }`
+                    }
+                  >
+                    Profile
+                  </NavLink>
+                  <div
+                    onClick={() => {
+                      setIsProfileOpen(!isProfileOpen);
+                      if (!isProfileOpen) {
+                        setIsCommunicationOpen(false);
+                        setIsDealsOpen(false);
+                        setIsOperateOpen(false);
+                        setIsWorkspaceOpen(false);
+                      }
+                    }}
+                    className="cursor-pointer pr-4"
+                  >
+                    {isProfileOpen ? (
+                      <FaChevronUp className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                    ) : (
+                      <FaChevronDown className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                    )}
+                  </div>
+                </div>
 
-              <NavLink
-                to="/request"
-                className={({ isActive }) =>
-                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
-                  }`
-                }
-              >
-                Requests
-                {indicators.requests.hasUnread && (
-                  <span className="ml-auto bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
-                    {indicators.requests.count}
-                  </span>
+                {isProfileOpen && (
+                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
+                    {isStartup && (
+                      <>
+                        <div onClick={() => triggerComingSoon("Founder Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                          <CgProfile size={14} className="text-[#59549F]" />
+                          Founder Profile
+                        </div>
+                        <div onClick={() => triggerComingSoon("Startup Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                          <HiOutlineUserGroup size={14} className="text-[#59549F]" />
+                          Startup Profile
+                        </div>
+                      </>
+                    )}
+                    {isInvestor && (
+                      <>
+                        <div onClick={() => triggerComingSoon("Investor Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                          <CgProfile size={14} className="text-[#59549F]" />
+                          Investor Profile
+                        </div>
+                        <div onClick={() => triggerComingSoon("Investment Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                          <RiMoneyDollarCircleLine size={14} className="text-[#59549F]" />
+                          Investment Profile
+                        </div>
+                      </>
+                    )}
+                    {isServiceProfessional && (
+                      <>
+                        <div onClick={() => triggerComingSoon("Professional Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                          <CgProfile size={14} className="text-[#59549F]" />
+                          Professional Profile
+                        </div>
+                        <div onClick={() => triggerComingSoon("Service Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                          <BsPersonWorkspace size={14} className="text-[#59549F]" />
+                          Service Profile
+                        </div>
+                      </>
+                    )}
+                  </div>
                 )}
-              </NavLink>
+              </div>
+
+              <div className="my-3 relative">
+                <div className="flex justify-between items-center rounded-md hover:bg-[#D8D6F8] mx-3 group">
+                  <NavLink
+                    to="/request"
+                    className={({ isActive }) =>
+                      `py-1.5 px-4 flex-grow text-[17px] rounded-md flex items-center justify-between ${
+                        isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] group-hover:text-[#59549f]"
+                      }`
+                    }
+                  >
+                    <span>Requirements</span>
+                    {indicators.requests.hasUnread && (
+                      <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                        {indicators.requests.count}
+                      </span>
+                    )}
+                  </NavLink>
+                  <div
+                    onClick={() => {
+                      setIsRequirementsOpen(!isRequirementsOpen);
+                      if (!isRequirementsOpen) {
+                        setIsCommunicationOpen(false);
+                        setIsDealsOpen(false);
+                        setIsOperateOpen(false);
+                        setIsWorkspaceOpen(false);
+                        setIsProfileOpen(false);
+                      }
+                    }}
+                    className="cursor-pointer pr-4"
+                  >
+                    {isRequirementsOpen ? (
+                      <FaChevronUp className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                    ) : (
+                      <FaChevronDown className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                    )}
+                  </div>
+                </div>
+
+                {isRequirementsOpen && (
+                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
+                    <div onClick={() => navigate("/request", { state: { defaultTab: "newRequest" } })} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      New
+                    </div>
+                    <div onClick={() => navigate("/request", { state: { defaultTab: "received" } })} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Received
+                    </div>
+                    <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Raised
+                    </div>
+                    <div onClick={() => {}} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                      Cancelled
+                    </div>
+                  </div>
+                )}
+              </div>
 
               <NavLink
                 to="/connect"

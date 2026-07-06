@@ -54,6 +54,8 @@ const Mobile = () => {
   const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
   const [isOperateOpen, setIsOperateOpen] = useState(false);
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isRequirementsOpen, setIsRequirementsOpen] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [comingSoonTitle, setComingSoonTitle] = useState("");
   const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
@@ -238,26 +240,148 @@ const Mobile = () => {
                           </Link>
                         </div>
 
-                        <div className="flex items-center gap-4">
-                          <CgProfile className="text-[#59549F] my-1" size={25} />
-                          <Link to="/profile">
-                            <li>Profile</li>
-                          </Link>
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-4 w-full">
+                            <CgProfile className="text-[#59549F] my-1" size={25} />
+                            <li className="flex justify-between items-center w-full">
+                              <Link to="/profile" className="flex-grow">
+                                <span>Profile</span>
+                              </Link>
+                              <div
+                                onClick={() => {
+                                  setIsProfileOpen(!isProfileOpen);
+                                  if (!isProfileOpen) {
+                                    setIsCommunicationOpen(false);
+                                    setIsDealsOpen(false);
+                                    setIsOperateOpen(false);
+                                    setIsWorkspaceOpen(false);
+                                  }
+                                }}
+                                className="cursor-pointer p-2 pr-4"
+                              >
+                                {isProfileOpen ? (
+                                  <FaChevronUp className="text-[#59549F]" size={15} />
+                                ) : (
+                                  <FaChevronDown className="text-[#59549F]" size={15} />
+                                )}
+                              </div>
+                            </li>
+                          </div>
+                          {isProfileOpen && (
+                            <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
+                              {isStartup && (
+                                <>
+                                  <SheetClose asChild>
+                                    <div onClick={() => triggerComingSoon("Founder Profile")} className="flex items-center gap-2 cursor-pointer">
+                                      <CgProfile size={14} className="text-[#59549F]" />
+                                      <li>Founder Profile</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div onClick={() => triggerComingSoon("Startup Profile")} className="flex items-center gap-2 cursor-pointer">
+                                      <HiOutlineUserGroup size={14} className="text-[#59549F]" />
+                                      <li>Startup Profile</li>
+                                    </div>
+                                  </SheetClose>
+                                </>
+                              )}
+                              {isInvestor && (
+                                <>
+                                  <SheetClose asChild>
+                                    <div onClick={() => triggerComingSoon("Investor Profile")} className="flex items-center gap-2 cursor-pointer">
+                                      <CgProfile size={14} className="text-[#59549F]" />
+                                      <li>Investor Profile</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div onClick={() => triggerComingSoon("Investment Profile")} className="flex items-center gap-2 cursor-pointer">
+                                      <RiMoneyDollarCircleLine size={14} className="text-[#59549F]" />
+                                      <li>Investment Profile</li>
+                                    </div>
+                                  </SheetClose>
+                                </>
+                              )}
+                              {isServiceProfessional && (
+                                <>
+                                  <SheetClose asChild>
+                                    <div onClick={() => triggerComingSoon("Professional Profile")} className="flex items-center gap-2 cursor-pointer">
+                                      <CgProfile size={14} className="text-[#59549F]" />
+                                      <li>Professional Profile</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div onClick={() => triggerComingSoon("Service Profile")} className="flex items-center gap-2 cursor-pointer">
+                                      <BsPersonWorkspace size={14} className="text-[#59549F]" />
+                                      <li>Service Profile</li>
+                                    </div>
+                                  </SheetClose>
+                                </>
+                              )}
+                            </ul>
+                          )}
                         </div>
 
-                        <div className="flex items-center gap-4">
-                          <HiOutlineTicket
-                            className="text-[#59549F] "
-                            size={25}
-                          />
-                          <Link to="/request" className="flex items-center gap-2">
-                            <li>Requests</li>
-                            {indicators.requests.hasUnread && (
-                              <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
-                                {indicators.requests.count}
-                              </span>
-                            )}
-                          </Link>
+                        <div className="flex flex-col gap-2">
+                          <div className="flex items-center gap-4 w-full">
+                            <HiOutlineTicket className="text-[#59549F] my-1" size={25} />
+                            <li className="flex justify-between items-center w-full">
+                              <Link to="/request" className="flex items-center gap-2 flex-grow">
+                                <span>Requirements</span>
+                                {indicators.requests.hasUnread && (
+                                  <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                                    {indicators.requests.count}
+                                  </span>
+                                )}
+                              </Link>
+                              <div
+                                onClick={() => {
+                                  setIsRequirementsOpen(!isRequirementsOpen);
+                                  if (!isRequirementsOpen) {
+                                    setIsCommunicationOpen(false);
+                                    setIsDealsOpen(false);
+                                    setIsOperateOpen(false);
+                                    setIsWorkspaceOpen(false);
+                                    setIsProfileOpen(false);
+                                  }
+                                }}
+                                className="cursor-pointer p-2 pr-4"
+                              >
+                                {isRequirementsOpen ? (
+                                  <FaChevronUp className="text-[#59549F]" size={15} />
+                                ) : (
+                                  <FaChevronDown className="text-[#59549F]" size={15} />
+                                )}
+                              </div>
+                            </li>
+                          </div>
+                          {isRequirementsOpen && (
+                            <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
+                              <SheetClose asChild>
+                                <div onClick={() => navigate("/request", { state: { defaultTab: "newRequest" } })} className="flex items-center gap-2 cursor-pointer">
+                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                  <li>New</li>
+                                </div>
+                              </SheetClose>
+                              <SheetClose asChild>
+                                <div onClick={() => navigate("/request", { state: { defaultTab: "received" } })} className="flex items-center gap-2 cursor-pointer">
+                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                  <li>Received</li>
+                                </div>
+                              </SheetClose>
+                              <SheetClose asChild>
+                                <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 cursor-pointer">
+                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                  <li>Raised</li>
+                                </div>
+                              </SheetClose>
+                              <SheetClose asChild>
+                                <div onClick={() => {}} className="flex items-center gap-2 cursor-pointer opacity-50">
+                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                  <li>Cancelled</li>
+                                </div>
+                              </SheetClose>
+                            </ul>
+                          )}
                         </div>
 
                         <div className="flex items-center gap-4">

@@ -47,6 +47,7 @@ import Message from '@/Pages/UserPages/ProfilePages/Message'
 import Meet from '@/Pages/UserPages/ProfilePages/Meet'
 import Call from '@/Pages/UserPages/ProfilePages/Call'
 import Analytics from '@/Pages/UserPages/ProfilePages/Analytics'
+import CompanyProfile from '@/Pages/UserPages/ProfilePages/CompanyProfile'
 
 
 
@@ -79,7 +80,8 @@ const UserRoutes = () => {
   '/payments',
   '/dashboard',
   '/deal',
-  '/communication'
+  '/communication',
+  '/companyprofile'
    ]
 
    
@@ -134,6 +136,7 @@ const UserRoutes = () => {
              <Route path="/communication/meet" element={<ProtectedRoute><Meet/></ProtectedRoute>} />
              <Route path="/communication/call" element={<ProtectedRoute><Call/></ProtectedRoute>} />
              <Route path="/deal/analytics" element={<ProtectedRoute><Analytics/></ProtectedRoute>} />
+             <Route path="/companyprofile" element={<ProtectedRoute><CompanyProfile/></ProtectedRoute>} />
       </Routes>
 
     </div>
