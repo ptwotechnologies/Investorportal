@@ -1,0 +1,178 @@
+[
+  {
+    "negotiation": {
+      "lastSender": "69fb2ed5993a3856914efa49",
+      "history": [
+        {
+          "senderId": "69fb2ed5993a3856914efa49",
+          "milestones": [
+            {
+              "extensionRequest": {
+                "days": 0,
+                "status": "None"
+              },
+              "title": "frontend",
+              "description": "These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].",
+              "amount": 20000,
+              "duration": "20 Days",
+              "status": "Pending",
+              "isDisapproved": false,
+              "_id": "6a4cf36a432a33398b6217ef"
+            }
+          ],
+          "scopeDescription": "These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].",
+          "scopeItems": [
+            "Implement payment gateway integration",
+            "Implement payment gateway integration",
+            "Implement payment gateway integration"
+          ],
+          "totalAmount": 20000,
+          "totalTimeline": "20 days",
+          "timestamp": "2026-07-07T12:40:23.806Z",
+          "_id": "6a4cf3b7432a33398b621883"
+        }
+      ]
+    },
+    "documentation": {
+      "startupAgreed": false,
+      "professionalAgreed": false,
+      "startupVerified": false,
+      "professionalVerified": false
+    },
+    "_id": "6a4cf36a432a33398b6217ee",
+    "requestId": {
+      "_id": "6a4774dadd92533b35b5be71",
+      "service": "Connect with Incubators",
+      "budget": "Under ₹25K"
+    },
+    "startupId": {
+      "businessDetails": {
+        "firstName": "",
+        "lastName": "",
+        "investorType": "",
+        "firmName": "",
+        "serviceType": "",
+        "companyName": "",
+        "number": "6886939999",
+        "businessName": "Test Ventures",
+        "businessEmail": "moni@gmail.com",
+        "website": "https://testventures.com",
+        "businessType": "Manufacturing",
+        "foundedon": "2025-12-22"
+      },
+      "additionalDetails": {
+        "domain": "",
+        "domainDescription": "",
+        "referralCode": "",
+        "logoFileName": "",
+        "profileFileName": "",
+        "pitchDeckFileName": "",
+        "profileUrl": "",
+        "pitchDeckUrl": "",
+        "startupBusinessType": "",
+        "serviceBusinessType": "",
+        "pitchDeckUpload": "aa",
+        "profileUpload": "gggg",
+        "linkedinProfile": [
+          "ttt"
+        ],
+        "reason": [
+          "Funding"
+        ]
+      },
+      "plan": {
+        "planName": "",
+        "amount": 0
+      },
+      "spMode": "provider",
+      "resetOtp": null,
+      "otpExpire": null,
+      "isVerified": false,
+      "verificationOtp": null,
+      "verificationOtpExpire": null,
+      "_id": "6949201c21b43669c8fbab4e",
+      "email": "moni@gmail.com",
+      "role": "startup",
+      "transactionId": "123",
+      "paymentStatus": "approved",
+      "registrationStep": 5,
+      "createdAt": "2025-12-22T10:40:28.362Z",
+      "updatedAt": "2026-07-07T08:04:46.440Z",
+      "__v": 0
+    },
+    "professionalId": {
+      "businessDetails": {
+        "firstName": "Monika",
+        "lastName": "sharma",
+        "number": "1234 567 890",
+        "website": "",
+        "investorType": null,
+        "firmName": null,
+        "serviceType": "Freelancer",
+        "companyName": null
+      },
+      "additionalDetails": {
+        "linkedinProfile": [],
+        "foundedon": null,
+        "domain": "Technology",
+        "domainDescription": null,
+        "referralCode": "44",
+        "logoFileName": "",
+        "profileFileName": "134049866802215799.jpg",
+        "pitchDeckFileName": null,
+        "profileUrl": "https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com/portal/1778069341845-134049866802215799.jpg",
+        "pitchDeckUrl": "",
+        "startupBusinessType": null,
+        "serviceBusinessType": null
+      },
+      "plan": {
+        "amount": 0,
+        "planName": "Explorer Access"
+      },
+      "_id": "69fb2ed5993a3856914efa49",
+      "email": "monikasharma279826@gmail.com",
+      "role": "service_professional",
+      "transactionId": "",
+      "paymentStatus": "approved",
+      "resetOtp": null,
+      "otpExpire": null,
+      "isVerified": true,
+      "verificationOtp": null,
+      "verificationOtpExpire": null,
+      "registrationStep": 4,
+      "createdAt": "2026-05-06T12:06:45.607Z",
+      "updatedAt": "2026-07-07T13:08:13.057Z",
+      "__v": 0,
+      "spMode": "provider"
+    },
+    "scopeDescription": "These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].",
+    "scopeItems": [
+      "Implement payment gateway integration",
+      "Implement payment gateway integration",
+      "Implement payment gateway integration"
+    ],
+    "totalAmount": 30000,
+    "totalTimeline": "20 days",
+    "currency": "INR",
+    "milestones": [
+      {
+        "extensionRequest": {
+          "days": 0,
+          "status": "None"
+        },
+        "title": "frontend",
+        "description": "These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated]. These Terms and Conditions (“Terms”) govern the access to and use of the website and collaboration portal available at https://collaboration.copteno.com (“Portal”) operated by Copteno Technologies Private Limited, a company incorporated under the Companies Act, 2013, having its registered office at [Registered Office: To be updated].",
+        "amount": 30000,
+        "duration": "20 Days",
+        "status": "Pending",
+        "isDisapproved": false,
+        "_id": "6a4cf36a432a33398b6217ef"
+      }
+    ],
+    "status": "Negotiating",
+    "paymentStatus": "Pending",
+    "createdAt": "2026-07-07T12:39:06.463Z",
+    "updatedAt": "2026-07-07T12:40:23.811Z",
+    "__v": 1
+  }
+]

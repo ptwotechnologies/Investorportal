@@ -43,6 +43,10 @@ export const createDealDraft = async (req, res) => {
       negotiation: {
         lastSender: startupId,
       },
+      documentation: {
+        startupAgreed: false,
+        professionalAgreed: false,
+      },
     });
 
     // Update request status
@@ -67,6 +71,8 @@ export const getMyDeals = async (req, res) => {
   try {
     const userId = req.user._id;
     const { status, spMode } = req.query;
+    
+    console.log('GET MY DEALS CALLED. userId:', userId, 'role:', req.user?.role, 'spMode:', spMode);
 
     let query = {
       $or: [
@@ -81,6 +87,7 @@ export const getMyDeals = async (req, res) => {
     } else if (spMode === "provider") {
       query = { professionalId: new mongoose.Types.ObjectId(userId) };
     }
+    console.log('Final query:', JSON.stringify(query));
 
     if (status) {
       query.status = status;
@@ -161,9 +168,15 @@ export const updateDeal = async (req, res) => {
         });
         deal.negotiation.lastSender = userId;
         deal.status = "Negotiating";
-        // Reset approvals when a counter is made
-        deal.documentation.startupAgreed = false;
-        deal.documentation.professionalAgreed = false;
+        
+        // Reset approvals when a counter is made, but set the sender's approval to true
+        if (deal.startupId.toString() === userId.toString()) {
+            deal.documentation.startupAgreed = true;
+            deal.documentation.professionalAgreed = false;
+        } else {
+            deal.documentation.startupAgreed = false;
+            deal.documentation.professionalAgreed = true;
+        }
     }
 
     if (scopeDescription) deal.scopeDescription = scopeDescription;

@@ -14,7 +14,9 @@ const userSchema = new mongoose.Schema(
     spMode: {
       type: String,
       enum: ["provider", "buyer"],
-      default: "provider",
+      default: function() {
+        return (this && this.role === 'startup') ? 'buyer' : 'provider';
+      }
     },
 
     businessDetails: {

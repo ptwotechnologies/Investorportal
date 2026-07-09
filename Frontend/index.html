@@ -13,7 +13,9 @@
       OneSignalDeferred.push(async function(OneSignal) {
         await OneSignal.init({
           appId: "e9e59ecd-bb4b-4387-863e-863b6b8158ef",
+          allowLocalhostAsSecureOrigin: true,
         });
+        OneSignal.Slidedown.promptPush();
       });
     </script>
   </head>

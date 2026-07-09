@@ -39,7 +39,7 @@ const PortalDetailsSec = () => {
   // ðŸ”¹ Destructure persisted data from Context
   const { 
     linkedin, foundedOn, domain, domainDescription, referralCode,
-    startupBusinessType, serviceBusinessType, uploadedUrl
+    startupBusinessType, serviceBusinessType, uploadedUrl, uploadedFileSize
   } = formData;
 
   const [logoFile, setLogoFile] = useState(null);
@@ -87,6 +87,7 @@ const PortalDetailsSec = () => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       handleChange("uploadedUrl", res.data.fileUrl);
+      handleChange("uploadedFileSize", res.data.fileSize);
       toast.success("File uploaded successfully");
     } catch (error) {
       console.error("Upload error:", error);
@@ -216,6 +217,8 @@ const PortalDetailsSec = () => {
         pitchDeckFileName: role === "startup" ? (logoFile ? logoFile.name : null) : null,
         profileUrl: role === "startup" ? "" : uploadedUrl, // ðŸ”¹ Added for R2
         pitchDeckUrl: role === "startup" ? uploadedUrl : "", // ðŸ”¹ Added for R2
+        profileFileSize: role === "startup" ? null : uploadedFileSize,
+        pitchDeckFileSize: role === "startup" ? uploadedFileSize : null,
         startupBusinessType: role === "startup" ? (startupBusinessType === "Select Business Type" || startupBusinessType === " Business Type" ? null : startupBusinessType) : null,
         serviceBusinessType: role === "service_professional" && serviceType === "Company" ? (serviceBusinessType === "Select Business Type" || serviceBusinessType === " Business Type" ? null : serviceBusinessType) : null,
       };

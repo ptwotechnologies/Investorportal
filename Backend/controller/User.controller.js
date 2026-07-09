@@ -204,6 +204,7 @@ export const uploadPortalFile = async (req, res) => {
       message: "File uploaded successfully",
       fileUrl: req.file.location,
       fileName: req.file.originalname,
+      fileSize: req.file.size,
     });
   } catch (error) {
     console.error("Portal File Upload Error:", error);
@@ -578,6 +579,7 @@ export const verifyEmail = async (req, res) => {
       token: jwt.sign({ userId: newUser._id, email: newUser.email, role: newUser.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
       userId: newUser._id,
       role: newUser.role,
+      spMode: newUser.spMode,
       serviceType: newUser.businessDetails ? newUser.businessDetails.serviceType : null,
       paymentStatus: newUser.paymentStatus || "not_paid",
     });
@@ -616,6 +618,7 @@ export const checkVerificationStatus = async (req, res) => {
           token: jwt.sign({ userId: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1d' }),
           userId: user._id,
           role: user.role,
+          spMode: user.spMode,
           serviceType: user.businessDetails ? user.businessDetails.serviceType : null,
           paymentStatus: user.paymentStatus || "not_paid",
         });

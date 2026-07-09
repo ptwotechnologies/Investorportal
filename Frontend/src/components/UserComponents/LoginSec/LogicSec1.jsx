@@ -44,6 +44,19 @@ const LogicSec1 = () => {
         localStorage.setItem("user", JSON.stringify(response.data.user));
         localStorage.setItem("userId", response.data.userId); // Ensure userId is saved
         localStorage.setItem("paymentStatus", response.data.user.paymentStatus || "not_paid");
+        
+        // Ensure role and default spMode are correctly initialized on login
+        const userRole = response.data.user.role?.toLowerCase();
+        localStorage.setItem("role", userRole);
+        if (response.data.user.spMode) {
+          localStorage.setItem("spMode", response.data.user.spMode);
+        } else if (userRole === "startup") {
+          localStorage.setItem("spMode", "buyer");
+        } else if (userRole === "service_professional" || userRole === "investor") {
+          localStorage.setItem("spMode", "provider");
+        }
+        window.dispatchEvent(new Event("spModeChanged"));
+
         toast.success("Login successful!");
         
         // Redirect user based on registrationStep

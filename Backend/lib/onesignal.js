@@ -1,17 +1,15 @@
 import axios from 'axios';
 
-const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID;
-const ONESIGNAL_REST_API_KEY = process.env.ONESIGNAL_REST_API_KEY;
-
-/**
- * Sends a push notification to specific users via OneSignal
- * @param {Array|String} userIds - A single user ID or array of user IDs
- * @param {String} title - The title of the notification
- * @param {String} message - The body text of the notification
- * @param {String} url - The URL to open when the notification is clicked (optional)
- */
 export const sendPushNotification = async (userIds, title, message, url = "/") => {
   try {
+    const ONESIGNAL_APP_ID = process.env.ONESIGNAL_APP_ID;
+    const ONESIGNAL_REST_API_KEY = process.env.ONESIGNAL_REST_API_KEY;
+
+    if (!ONESIGNAL_APP_ID || !ONESIGNAL_REST_API_KEY) {
+      console.warn("[ONESIGNAL] Missing API keys in environment variables");
+      return;
+    }
+
     const targetIds = Array.isArray(userIds) ? userIds : [userIds];
     const stringIds = targetIds.map(id => String(id));
 
