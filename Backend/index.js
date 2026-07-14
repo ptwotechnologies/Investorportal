@@ -25,7 +25,15 @@ import { startCronJobs } from "./lib/cron.js";
 
 const app = express();
 
-// Middlewares
+// Explicitly handle all OPTIONS requests before ANYTHING else
+app.options('*', (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "https://copteno.com");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, PATCH");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With, Accept");
+  return res.status(200).end();
+});
+
 import cors from "cors";
 
 const allowedOrigins = [

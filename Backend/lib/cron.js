@@ -1,6 +1,6 @@
 import cron from "node-cron";
-import Profile from "../models/profile.model.js";
-import Template from "../models/Template.model.js";
+import Profile from "../Models/profile.model.js";
+import Template from "../Models/Template.model.js";
 import { sendPushNotification } from "./onesignal.js";
 
 // Initialize all background workers
