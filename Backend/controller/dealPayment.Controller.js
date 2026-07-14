@@ -2,7 +2,7 @@ import Razorpay from "razorpay";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import Transaction from "../Models/transaction.model.js";
-import Deal from "../Models/Deal.model.js";
+import Deal from "../Models/deal.model.js";
 
 dotenv.config();
 
