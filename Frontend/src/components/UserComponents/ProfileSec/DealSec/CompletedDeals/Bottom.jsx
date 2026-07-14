@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FiFileText, FiPlus, FiArrowLeft, FiClipboard } from "react-icons/fi";
-import { MdOutlineFactCheck } from "react-icons/md";
+import { MdOutlineFactCheck, MdOutlinePrivateConnectivity } from "react-icons/md";
 import { IoMdCheckmark } from "react-icons/io";
 import axios from "axios";
 import { serverUrl } from "@/App";
@@ -151,15 +151,80 @@ const Bottom = () => {
       
       {/* ── Left Column: Project List ── */}
       <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
-        <div className="grid grid-cols-2 gap-4 shrink-0  px-2 lg:px-0">
-          <StatCard label="Total Completed" value={deals.length} bgColor="bg-[#D8E1F0]" />
-          <StatCard label="Total Value" value={`Rs ${deals.reduce((acc, d) => acc + (d.totalAmount || 0), 0)}`} bgColor="bg-[#D8D6F8]" />
-          <StatCard label="Success Rate" value={deals.length > 0 ? "100%" : "0%"} bgColor="bg-[#D7EBE4]" />
-          <StatCard 
-            label="Average Days" 
-            value={deals.length > 0 ? Math.round(deals.reduce((acc, d) => acc + (parseInt(d.totalTimeline) || 0), 0) / deals.length) : 0} 
-            bgColor="bg-[#EFDBD9]" 
-          />
+        <div className="grid grid-cols-2 gap-4 shrink-0 p-3">
+          <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <MdOutlinePrivateConnectivity size={18} className="text-indigo-200" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-white">Total Completed</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-white leading-none">{deals.length}</p>
+                  <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#EAE9FE] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-indigo-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Total Value</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
+                    Rs {deals.reduce((acc, d) => acc + (d.totalAmount || 0), 0)}
+                  </p>
+                  <span className="text-[9px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#FDF5E6] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-orange-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Success Rate</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
+                    {deals.length > 0 ? "100%" : "0%"}
+                  </p>
+                  <span className="text-[9px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#FDE8F1] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-pink-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Average Days</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
+                    {deals.length > 0 ? Math.round(deals.reduce((acc, d) => acc + (parseInt(d.totalTimeline) || 0), 0) / deals.length) : 0}
+                  </p>
+                  <span className="text-[9px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <h2 className="text-xl font-medium text-[#000000] px-3 shrink-0">All Deals</h2>

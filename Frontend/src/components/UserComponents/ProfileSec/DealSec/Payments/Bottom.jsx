@@ -115,6 +115,7 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
     setLoading(true);
     try {
       const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const token = localStorage.getItem("token");
       const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -175,7 +176,7 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const amount = Number(selectedMilestone.amount);
+      const amount = milestoneBreakdown.total;
       
       console.log("Creating order for deal:", selectedDeal._id, "milestone:", selectedMilestone._id);
       
@@ -286,19 +287,82 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
     amount: Number(selectedMilestone.amount),
     fee: Math.round(Number(selectedMilestone.amount) * 0.2), // 20% Platform Fee
     gst: Math.round(Number(selectedMilestone.amount) * 0.2 * 0.18), // 18% GST on Fee
-    total: Math.round(Number(selectedMilestone.amount) + (Number(selectedMilestone.amount) * 0.2 * 1.18))
+    total: Math.round(Number(selectedMilestone.amount) - (Number(selectedMilestone.amount) * 0.2) - (Number(selectedMilestone.amount) * 0.2 * 0.18))
   } : null;
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] h-[540px] overflow-hidden">
+    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] lg:overflow-hidden">
       
       {/* ── Left Column ── */}
       <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
         <div className="grid grid-cols-2 gap-4">
-          <StatCard label="Active Deals" value={deals.length} bgColor="bg-[#D8E1F0]" />
-          <StatCard label="Pending Payments" value={deals.length} bgColor="bg-[#D8D6F8]" />
-          <StatCard label="Overdue Payments" value="0" bgColor="bg-[#EFDBD9]" />
-          <StatCard label="Total Payments" value="0" bgColor="bg-[#D7EBE4]" />
+          <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <MdOutlinePrivateConnectivity size={18} className="text-indigo-200" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-white">Active Deals</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-white leading-none">{deals.length}</p>
+                  <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#EAE9FE] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-indigo-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Pending Payments</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">{deals.length}</p>
+                  <span className="text-[9px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#FDF5E6] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-orange-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Overdue Payments</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">0</p>
+                  <span className="text-[9px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#FDE8F1] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-pink-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Total Payments</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">0</p>
+                  <span className="text-[9px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Deals</h2>
@@ -400,7 +464,7 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
                 {selectedMilestone && (
                   <div className="bg-white mt-3  rounded-2xl shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 overflow-hidden">
                     <div className="flex items-center justify-between px-6 lg:px-8 py-2 bg-[#F0EDFD] rounded-2xl">
-                        <h3 className="text-base font-semibold text-[#000000]">Breakdown</h3>
+                        <h3 className="text-base font-semibold text-[#000000]">Payment Breakdown</h3>
                         <FiChevronDown size={22} className="text-[#000000] cursor-pointer" />
                     </div>
 

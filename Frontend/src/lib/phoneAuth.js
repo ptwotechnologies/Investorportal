@@ -4,7 +4,6 @@ import { auth } from "./firebase.js";
 // send OTP
 export const sendOtp = async (phone) => {
   try {
-    // ⭐ Optimization: Only initialize if not already present or if it was cleared
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
         size: "invisible",
@@ -12,7 +11,6 @@ export const sendOtp = async (phone) => {
           console.log("Recaptcha resolved");
         }
       });
-      // Pre-render to speed up subsequent call
       await window.recaptchaVerifier.render();
     }
 
@@ -26,16 +24,14 @@ export const sendOtp = async (phone) => {
     return confirmationResult;
   } catch (error) {
     console.error("Error in sendOtp:", error);
-    // Reset on serious errors to allow clean retry
     if (window.recaptchaVerifier) {
-      try {
-        window.recaptchaVerifier.clear();
-      } catch (e) {}
+      try { window.recaptchaVerifier.clear(); } catch (e) {}
       window.recaptchaVerifier = null;
     }
     throw error;
   }
 };
+
 
 
 // verify OTP

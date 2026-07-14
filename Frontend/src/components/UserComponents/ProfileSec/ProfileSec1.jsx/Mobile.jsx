@@ -50,12 +50,17 @@ const Mobile = () => {
   const { notifications, fetchNotifications, markAllNotificationsAsRead } = useNotifications();
   const { indicators } = useSidebarIndicators();
   const [expandedIds, setExpandedIds] = useState([]);
-  const [isDealsOpen, setIsDealsOpen] = useState(false);
-  const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
+  const location = useLocation();
+  const [isDealsOpen, setIsDealsOpen] = useState(
+    location.pathname.startsWith("/deal") && !location.pathname.startsWith("/deal/communication") && !location.pathname.startsWith("/deal/analytics")
+  );
+  const [isCommunicationOpen, setIsCommunicationOpen] = useState(
+    location.pathname.startsWith("/communication")
+  );
   const [isOperateOpen, setIsOperateOpen] = useState(false);
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isRequirementsOpen, setIsRequirementsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(location.pathname === "/profile");
+  const [isRequirementsOpen, setIsRequirementsOpen] = useState(location.pathname.startsWith("/request"));
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [comingSoonTitle, setComingSoonTitle] = useState("");
   const [hasRaisedRequests, setHasRaisedRequests] = useState(null);
@@ -75,7 +80,6 @@ const Mobile = () => {
     if (imageUrl.startsWith("http")) return imageUrl;
     return `${serverUrl}${imageUrl.startsWith("/") ? "" : "/"}${imageUrl}`;
   };
-  const location = useLocation();
   const [requestsLoading, setRequestsLoading] = useState(true);
 
   useEffect(() => {
@@ -243,22 +247,23 @@ const Mobile = () => {
                         <div className="flex flex-col gap-2">
                           <div className="flex items-center gap-4 w-full">
                             <CgProfile className="text-[#59549F] my-1" size={25} />
-                            <li className="flex justify-between items-center w-full">
-                              <Link to="/profile" className="flex-grow">
-                                <span>Profile</span>
-                              </Link>
-                              <div
-                                onClick={() => {
-                                  setIsProfileOpen(!isProfileOpen);
+                            <li
+                              className="flex justify-between items-center w-full cursor-pointer"
+                              onClick={() => {
+                                setIsProfileOpen(!isProfileOpen);
                                   if (!isProfileOpen) {
                                     setIsCommunicationOpen(false);
                                     setIsDealsOpen(false);
                                     setIsOperateOpen(false);
                                     setIsWorkspaceOpen(false);
+                                    setIsRequirementsOpen(false);
                                   }
-                                }}
-                                className="cursor-pointer p-2 pr-4"
-                              >
+                              }}
+                            >
+                              <div className="flex-grow py-2">
+                                <span>Profile</span>
+                              </div>
+                              <div className="p-2 pr-4">
                                 {isProfileOpen ? (
                                   <FaChevronUp className="text-[#59549F]" size={15} />
                                 ) : (
@@ -268,19 +273,25 @@ const Mobile = () => {
                             </li>
                           </div>
                           {isProfileOpen && (
-                            <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
+                            <ul className="ml-[41px] mt-1 flex flex-col gap-2 text-[15px] text-gray-600">
                               {isStartup && (
                                 <>
                                   <SheetClose asChild>
-                                    <div onClick={() => triggerComingSoon("Founder Profile")} className="flex items-center gap-2 cursor-pointer">
-                                      <CgProfile size={14} className="text-[#59549F]" />
+                                    <div onClick={() => navigate("/profile")} className={`flex items-center gap-2 cursor-pointer ${location.pathname === "/profile" ? "text-[#59549f] font-semibold" : "hover:text-[#59549f]"}`}>
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                       <li>Founder Profile</li>
                                     </div>
                                   </SheetClose>
                                   <SheetClose asChild>
-                                    <div onClick={() => triggerComingSoon("Startup Profile")} className="flex items-center gap-2 cursor-pointer">
-                                      <HiOutlineUserGroup size={14} className="text-[#59549F]" />
-                                      <li>Startup Profile</li>
+                                    <div onClick={() => triggerComingSoon("Startup Profile")} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Company Profile</li>
+                                    </div>
+                                  </SheetClose>
+                                  <SheetClose asChild>
+                                    <div onClick={() => triggerComingSoon("Fundraising Profile")} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                      <li>Fundraising Profile</li>
                                     </div>
                                   </SheetClose>
                                 </>
@@ -288,14 +299,14 @@ const Mobile = () => {
                               {isInvestor && (
                                 <>
                                   <SheetClose asChild>
-                                    <div onClick={() => triggerComingSoon("Investor Profile")} className="flex items-center gap-2 cursor-pointer">
-                                      <CgProfile size={14} className="text-[#59549F]" />
+                                    <div onClick={() => navigate("/profile")} className={`flex items-center gap-2 cursor-pointer ${location.pathname === "/profile" ? "text-[#59549f] font-semibold" : "hover:text-[#59549f]"}`}>
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                       <li>Investor Profile</li>
                                     </div>
                                   </SheetClose>
                                   <SheetClose asChild>
-                                    <div onClick={() => triggerComingSoon("Investment Profile")} className="flex items-center gap-2 cursor-pointer">
-                                      <RiMoneyDollarCircleLine size={14} className="text-[#59549F]" />
+                                    <div onClick={() => triggerComingSoon("Investment Profile")} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                       <li>Investment Profile</li>
                                     </div>
                                   </SheetClose>
@@ -304,14 +315,14 @@ const Mobile = () => {
                               {isServiceProfessional && (
                                 <>
                                   <SheetClose asChild>
-                                    <div onClick={() => triggerComingSoon("Professional Profile")} className="flex items-center gap-2 cursor-pointer">
-                                      <CgProfile size={14} className="text-[#59549F]" />
+                                    <div onClick={() => navigate("/profile")} className={`flex items-center gap-2 cursor-pointer ${location.pathname === "/profile" ? "text-[#59549f] font-semibold" : "hover:text-[#59549f]"}`}>
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                       <li>Professional Profile</li>
                                     </div>
                                   </SheetClose>
                                   <SheetClose asChild>
-                                    <div onClick={() => triggerComingSoon("Service Profile")} className="flex items-center gap-2 cursor-pointer">
-                                      <BsPersonWorkspace size={14} className="text-[#59549F]" />
+                                    <div onClick={() => triggerComingSoon("Service Profile")} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
+                                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                       <li>Service Profile</li>
                                     </div>
                                   </SheetClose>
@@ -324,28 +335,28 @@ const Mobile = () => {
                         <div className="flex flex-col gap-2">
                           <div className="flex items-center gap-4 w-full">
                             <HiOutlineTicket className="text-[#59549F] my-1" size={25} />
-                            <li className="flex justify-between items-center w-full">
-                              <Link to="/request" className="flex items-center gap-2 flex-grow">
-                                <span>Requirements</span>
+                            <li
+                              className="flex justify-between items-center w-full cursor-pointer"
+                              onClick={() => {
+                                setIsRequirementsOpen(!isRequirementsOpen);
+                                if (!isRequirementsOpen) {
+                                  setIsCommunicationOpen(false);
+                                  setIsDealsOpen(false);
+                                  setIsOperateOpen(false);
+                                  setIsWorkspaceOpen(false);
+                                  setIsProfileOpen(false);
+                                }
+                              }}
+                            >
+                              <div className="flex items-center gap-2 flex-grow py-2">
+                                <span>Service Request</span>
                                 {indicators.requests.hasUnread && (
                                   <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
                                     {indicators.requests.count}
                                   </span>
                                 )}
-                              </Link>
-                              <div
-                                onClick={() => {
-                                  setIsRequirementsOpen(!isRequirementsOpen);
-                                  if (!isRequirementsOpen) {
-                                    setIsCommunicationOpen(false);
-                                    setIsDealsOpen(false);
-                                    setIsOperateOpen(false);
-                                    setIsWorkspaceOpen(false);
-                                    setIsProfileOpen(false);
-                                  }
-                                }}
-                                className="cursor-pointer p-2 pr-4"
-                              >
+                              </div>
+                              <div className="p-2 pr-4">
                                 {isRequirementsOpen ? (
                                   <FaChevronUp className="text-[#59549F]" size={15} />
                                 ) : (
@@ -355,21 +366,21 @@ const Mobile = () => {
                             </li>
                           </div>
                           {isRequirementsOpen && (
-                            <ul className="ml-11 mt-1 flex flex-col gap-3 text-[14px] text-gray-500">
+                            <ul className="ml-[41px] mt-1 flex flex-col gap-2 text-[15px] text-gray-600">
                               <SheetClose asChild>
-                                <div onClick={() => navigate("/request", { state: { defaultTab: "newRequest" } })} className="flex items-center gap-2 cursor-pointer">
+                                <div onClick={() => navigate("/request", { state: { defaultTab: "newRequest" } })} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
                                   <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                   <li>New</li>
                                 </div>
                               </SheetClose>
                               <SheetClose asChild>
-                                <div onClick={() => navigate("/request", { state: { defaultTab: "received" } })} className="flex items-center gap-2 cursor-pointer">
+                                <div onClick={() => navigate("/request", { state: { defaultTab: "received" } })} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
                                   <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                   <li>Received</li>
                                 </div>
                               </SheetClose>
                               <SheetClose asChild>
-                                <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 cursor-pointer">
+                                <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
                                   <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                   <li>Raised</li>
                                 </div>
@@ -492,6 +503,8 @@ const Mobile = () => {
                                     setIsCommunicationOpen(false);
                                     setIsDealsOpen(false);
                                     setIsOperateOpen(false);
+                                    setIsProfileOpen(false);
+                                    setIsRequirementsOpen(false);
                                   }
                                 }}
                               >
@@ -589,6 +602,9 @@ const Mobile = () => {
                                   if (!isOperateOpen) {
                                     setIsCommunicationOpen(false);
                                     setIsDealsOpen(false);
+                                    setIsProfileOpen(false);
+                                    setIsRequirementsOpen(false);
+                                    setIsWorkspaceOpen(false);
                                   }
                                 }}
                               >
@@ -652,6 +668,9 @@ const Mobile = () => {
                               if (!isCommunicationOpen) {
                                 setIsDealsOpen(false);
                                 setIsOperateOpen(false);
+                                setIsProfileOpen(false);
+                                setIsRequirementsOpen(false);
+                                setIsWorkspaceOpen(false);
                               }
                             }}
                           >
@@ -701,6 +720,9 @@ const Mobile = () => {
                             if (!isDealsOpen) {
                               setIsCommunicationOpen(false);
                               setIsOperateOpen(false);
+                              setIsProfileOpen(false);
+                              setIsRequirementsOpen(false);
+                              setIsWorkspaceOpen(false);
                             }
                           }}
                         >

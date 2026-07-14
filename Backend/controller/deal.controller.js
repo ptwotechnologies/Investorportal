@@ -184,6 +184,7 @@ export const updateDeal = async (req, res) => {
     if (milestones) deal.milestones = milestones;
     if (totalAmount) deal.totalAmount = totalAmount;
     if (totalTimeline) deal.totalTimeline = totalTimeline;
+    if (req.body.bankDetails) deal.bankDetails = req.body.bankDetails;
     
     // Double Approval Logic
     if (req.body.startupAgreed !== undefined) deal.documentation.startupAgreed = req.body.startupAgreed;

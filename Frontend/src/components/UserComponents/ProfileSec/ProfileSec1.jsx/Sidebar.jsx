@@ -62,11 +62,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   const location = useLocation();
   const isDealRoute = location.pathname.startsWith("/deal");
   const [isDealsOpen, setIsDealsOpen] = useState(false);
-  const [isCommunicationOpen, setIsCommunicationOpen] = useState(false);
+  const [isCommunicationOpen, setIsCommunicationOpen] = useState(location.pathname.startsWith("/communication"));
   const [isOperateOpen, setIsOperateOpen] = useState(false);
   const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const [isRequirementsOpen, setIsRequirementsOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(location.pathname.startsWith("/profile"));
+  const [isRequirementsOpen, setIsRequirementsOpen] = useState(location.pathname.startsWith("/request"));
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [comingSoonTitle, setComingSoonTitle] = useState("");
   const [spMode, setSpMode] = useState(globalUserCache?.spMode || localStorage.getItem("spMode") || "provider");
@@ -162,9 +162,15 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     };
     window.addEventListener("spModeChanged", handleSpModeChange);
 
+    const handleShowComingSoon = (e) => {
+      triggerComingSoon(e.detail?.title || "Feature");
+    };
+    window.addEventListener("showComingSoonModal", handleShowComingSoon);
+
     return () => {
       window.removeEventListener("sidebar-refresh", fetchData);
       window.removeEventListener("spModeChanged", handleSpModeChange);
+      window.removeEventListener("showComingSoonModal", handleShowComingSoon);
     };
   }, [token, location.pathname]);
 
@@ -255,21 +261,27 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           />
 
           <CgProfile
-            className="text-[#59549f]  cursor-pointer"
+            className="text-[#59549f] cursor-pointer transition-all duration-300 mt-2"
             size={25}
             onClick={handleToggle}
+            style={{
+              marginBottom: isProfileOpen ? (isStartup ? '116px' : '84px') : '0px'
+            }}
           />
           <HiOutlineTicket
-            className="text-[#59549f] my-3 mt-5 cursor-pointer"
+            className="text-[#59549f] mt-5 cursor-pointer transition-all duration-300"
             size={25}
             onClick={handleToggle}
+            style={{
+              marginBottom: isRequirementsOpen ? '160px' : '12px'
+            }}
           />
           <HiOutlineUserGroup
-            className="text-[#59549f]  cursor-pointer"
+            className="text-[#59549f]  cursor-pointer mt-2"
             size={25}
             onClick={handleToggle}
           />
-          <div className="relative my-3 cursor-pointer">
+          <div className="relative my-3 mt-5 cursor-pointer">
             <IoNotificationsOutline
               className="text-[#59549f]"
               size={25}
@@ -284,7 +296,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
           <Link to="/deal/analytics">
             <SiSimpleanalytics
-              className="text-[#59549f] my-3 mt-10 cursor-pointer"
+              className="text-[#59549f] my-3 mt-13 cursor-pointer"
               size={22}
             />
           </Link>
@@ -340,8 +352,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </Link>
               <Link to="">
                 <BsPersonWorkspace 
-                  className="text-[#59549f] my-3 cursor-pointer"
+                  className="text-[#59549f] mt-3 cursor-pointer transition-all duration-300"
                   size={28}
+                  style={{
+                    marginBottom: isWorkspaceOpen ? '128px' : '12px'
+                  }}
                 />
               </Link>
             </>
@@ -349,20 +364,28 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
           <Link to="/deal/communication">
             <IoChatbubblesOutline
-              className="text-[#59549f] my-3 mt-13 cursor-pointer"
+              className="text-[#59549f] cursor-pointer transition-all duration-300 " 
               size={25}
+              style={{
+                marginTop: isOperateOpen ? '168px' : '62px',
+                marginBottom: isCommunicationOpen ? '128px' : '12px'
+              }}
             />
           </Link>
 
           <FaHandshake
-            className="text-[#59549f] my-4 cursor-pointer"
+            className="text-[#59549f] cursor-pointer transition-all duration-300 mt-5"
             size={25}
             onClick={handleToggle}
+            style={{
+              marginTop: '16px',
+              marginBottom: isDealsOpen ? '304px' : '16px'
+            }}
           />
         </div>
 
         {/* Bottom Icons (Visual placeholders for icons scrolling together) */}
-        <div className={`${isInvestor ? "mt-9" : "mt-57"}  pb-4 text-gray-300 flex flex-col gap-3  items-center`}>
+        <div className={`${isInvestor ? "mt-9" : "mt-62"}  pb-4 text-gray-300 flex flex-col gap-3  items-center`}>
           <IoSettingsOutline
             size={25}
             className=" text-[#59549f] cursor-pointer"
@@ -370,7 +393,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           />
           <BiHelpCircle
             size={25}
-            className=" text-[#59549f] cursor-pointer"
+            className=" text-[#59549f] cursor-pointer mt-2"
             onClick={handleToggle}
           />
         </div>
@@ -389,8 +412,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                  `block my-3 text-[17px] px-4 mx-3 rounded-md py-1 ${
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] transition-colors"
                   }`
                 }
               >
@@ -398,33 +421,29 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </NavLink>
 
               <div className="my-3 relative">
-                <div className="flex justify-between items-center rounded-md hover:bg-[#D8D6F8] mx-3 group">
-                  <NavLink
-                    to="/profile"
-                    className={({ isActive }) =>
-                      `block py-1.5 px-4 flex-grow text-[17px] rounded-md ${
-                        isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] group-hover:text-[#59549f]"
-                      }`
+                <div 
+                  className={`flex justify-between items-center rounded-md hover:bg-[#D8D6F8] mx-3 px-4 cursor-pointer group ${
+                    location.pathname === "/profile" ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                  }`}
+                  onClick={() => {
+                    setIsProfileOpen(!isProfileOpen);
+                    if (!isProfileOpen) {
+                      setIsCommunicationOpen(false);
+                      setIsDealsOpen(false);
+                      setIsOperateOpen(false);
+                      setIsWorkspaceOpen(false);
+                      setIsRequirementsOpen(false);
                     }
-                  >
+                  }}
+                >
+                  <div className="text-[17px] py-1 flex-grow">
                     Profile
-                  </NavLink>
-                  <div
-                    onClick={() => {
-                      setIsProfileOpen(!isProfileOpen);
-                      if (!isProfileOpen) {
-                        setIsCommunicationOpen(false);
-                        setIsDealsOpen(false);
-                        setIsOperateOpen(false);
-                        setIsWorkspaceOpen(false);
-                      }
-                    }}
-                    className="cursor-pointer pr-4"
-                  >
+                  </div>
+                  <div>
                     {isProfileOpen ? (
-                      <FaChevronUp className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                      <FaChevronUp className={`text-sm ${location.pathname === "/profile" ? "text-[#59549f]" : "text-gray-500 group-hover:text-[#59549f]"}`} size={12} />
                     ) : (
-                      <FaChevronDown className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                      <FaChevronDown className={`text-sm ${location.pathname === "/profile" ? "text-[#59549f]" : "text-gray-500 group-hover:text-[#59549f]"}`} size={12} />
                     )}
                   </div>
                 </div>
@@ -433,36 +452,40 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
                     {isStartup && (
                       <>
-                        <div onClick={() => triggerComingSoon("Founder Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
-                          <CgProfile size={14} className="text-[#59549F]" />
+                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-2 py-1.5 cursor-pointer ${location.pathname === "/profile" ? "text-[#59549f] font-semibold" : "hover:text-[#59549f]"}`}>
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                           Founder Profile
                         </div>
                         <div onClick={() => triggerComingSoon("Startup Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
-                          <HiOutlineUserGroup size={14} className="text-[#59549F]" />
-                          Startup Profile
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                          Company Profile
+                        </div>
+                        <div onClick={() => triggerComingSoon("Fundraising Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                          Fundraising Profile
                         </div>
                       </>
                     )}
                     {isInvestor && (
                       <>
-                        <div onClick={() => triggerComingSoon("Investor Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
-                          <CgProfile size={14} className="text-[#59549F]" />
+                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-2 py-1.5 cursor-pointer ${location.pathname === "/profile" ? "text-[#59549f] font-semibold" : "hover:text-[#59549f]"}`}>
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                           Investor Profile
                         </div>
                         <div onClick={() => triggerComingSoon("Investment Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
-                          <RiMoneyDollarCircleLine size={14} className="text-[#59549F]" />
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                           Investment Profile
                         </div>
                       </>
                     )}
                     {isServiceProfessional && (
                       <>
-                        <div onClick={() => triggerComingSoon("Professional Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
-                          <CgProfile size={14} className="text-[#59549F]" />
+                        <div onClick={() => navigate("/profile")} className={`flex items-center gap-2 py-1.5 cursor-pointer ${location.pathname === "/profile" ? "text-[#59549f] font-semibold" : "hover:text-[#59549f]"}`}>
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                           Professional Profile
                         </div>
                         <div onClick={() => triggerComingSoon("Service Profile")} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
-                          <BsPersonWorkspace size={14} className="text-[#59549F]" />
+                          <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                           Service Profile
                         </div>
                       </>
@@ -472,39 +495,34 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               </div>
 
               <div className="my-3 relative">
-                <div className="flex justify-between items-center rounded-md hover:bg-[#D8D6F8] mx-3 group">
-                  <NavLink
-                    to="/request"
-                    className={({ isActive }) =>
-                      `py-1.5 px-4 flex-grow text-[17px] rounded-md flex items-center justify-between ${
-                        isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] group-hover:text-[#59549f]"
-                      }`
+                <div 
+                  className={`flex justify-between items-center rounded-md hover:bg-[#D8D6F8] mx-3 px-4 cursor-pointer group ${
+                    location.pathname === "/request" ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                  }`}
+                  onClick={() => {
+                    setIsRequirementsOpen(!isRequirementsOpen);
+                    if (!isRequirementsOpen) {
+                      setIsCommunicationOpen(false);
+                      setIsDealsOpen(false);
+                      setIsOperateOpen(false);
+                      setIsWorkspaceOpen(false);
+                      setIsProfileOpen(false);
                     }
-                  >
-                    <span>Requirements</span>
+                  }}
+                >
+                  <div className="text-[17px] py-1 flex-grow flex items-center justify-between">
+                    <span>Service Request</span>
                     {indicators.requests.hasUnread && (
-                      <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+                      <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full mr-2">
                         {indicators.requests.count}
                       </span>
                     )}
-                  </NavLink>
-                  <div
-                    onClick={() => {
-                      setIsRequirementsOpen(!isRequirementsOpen);
-                      if (!isRequirementsOpen) {
-                        setIsCommunicationOpen(false);
-                        setIsDealsOpen(false);
-                        setIsOperateOpen(false);
-                        setIsWorkspaceOpen(false);
-                        setIsProfileOpen(false);
-                      }
-                    }}
-                    className="cursor-pointer pr-4"
-                  >
+                  </div>
+                  <div>
                     {isRequirementsOpen ? (
-                      <FaChevronUp className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                      <FaChevronUp className={`text-sm ${location.pathname === "/request" ? "text-[#59549f]" : "text-gray-500 group-hover:text-[#59549f]"}`} size={12} />
                     ) : (
-                      <FaChevronDown className="text-gray-500 group-hover:text-[#59549f] text-sm" size={12} />
+                      <FaChevronDown className={`text-sm ${location.pathname === "/request" ? "text-[#59549f]" : "text-gray-500 group-hover:text-[#59549f]"}`} size={12} />
                     )}
                   </div>
                 </div>
@@ -534,8 +552,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/connect"
                 className={({ isActive }) =>
-                  `my-3 text-[17px] px-4 mx-3 rounded-md flex items-center justify-between ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] hover:bg-gray-100"
+                  `py-1 my-3 text-[17px] px-4 mx-3 rounded-md flex items-center justify-between ${
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] transition-colors"
                   }`
                 }
               >
@@ -549,7 +567,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
               <div
                 onClick={handleNotificationClick}
-                className="block my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] cursor-pointer "
+                className="block py-1 my-3 text-[17px] px-4 mx-3 rounded-md text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] cursor-pointer transition-colors"
               >
                 Notification
               </div>
@@ -559,8 +577,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               <NavLink
                 to="/deal/analytics"
                 className={({ isActive }) =>
-                  `block my-3 text-[17px] px-4 mx-3 rounded-md ${
-                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                  `block py-1 my-3 text-[17px] px-4 mx-3 rounded-md ${
+                    isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] transition-colors"
                   }`
                 }
               >
@@ -769,7 +787,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       setIsOperateOpen(false);
                     }
                   }}
-                  className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
+                  className="text-[17px] py-1 px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-[#D8D6F8] hover:text-[#59549f] transition-colors relative"
                 >
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
@@ -793,21 +811,21 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                   <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
                     <NavLink
                       to="/communication/message"
-                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Message
                     </NavLink>
                     <NavLink
                       to="/communication/meet"
-                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Meet
                     </NavLink>
                     <NavLink
                       to="/communication/call"
-                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-bold" : ""}`}
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Call
@@ -826,7 +844,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       setIsOperateOpen(false);
                     }
                   }}
-                  className="text-[17px] px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-gray-100 relative"
+                  className="text-[17px] py-1 px-4 mx-3 rounded-md cursor-pointer flex justify-between items-center hover:bg-[#D8D6F8] hover:text-[#59549f] transition-colors relative"
                 >
                   <div className="flex flex-col">
                     <div className="flex items-center gap-2">
@@ -847,13 +865,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 </div>
 
                 {isDealsOpen && (
-                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2  border-l-2 border-gray-100">
+                  <div className="mt-1 w-full bg-white flex flex-col text-[13px] text-gray-600 p-2 pl-6 border-l-2 border-gray-100">
                     <NavLink
                       to="/deal/activedeals"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer justify-between pr-2 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                         Active Deals
                       </div>
                       {indicators.serviceDeal.activeDealsCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.activeDealsCount}</span>}
@@ -861,10 +879,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                     <NavLink
                       to="/deal/negotiations"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer justify-between pr-2 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                         Negotiations
                       </div>
                       {indicators.serviceDeal.negotiationsCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.negotiationsCount}</span>}
@@ -872,42 +890,42 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                     <NavLink
                       to="/deal/documentation"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Documentation
                     </NavLink>
 
                     <NavLink
                       to="/deal/payments"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Payments
                     </NavLink>
 
                     <NavLink
                       to="/deal/revenue"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Revenue
                     </NavLink>
 
                     <NavLink
                       to="/deal/milestones"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032]"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
-                      <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Milestones
                     </NavLink>
 
                     <NavLink
                       to="/deal/completed"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer justify-between pr-2 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                         Completed
                       </div>
                       {indicators.serviceDeal.completedCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.completedCount}</span>}
@@ -915,10 +933,10 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
 
                     <NavLink
                       to="/deal/disputes"
-                      className="flex items-center gap-2 py-1.5 hover:text-[#001032] justify-between pr-2"
+                      className={({ isActive }) => `flex items-center gap-2 py-1.5 cursor-pointer justify-between pr-2 hover:text-[#59549f] ${isActive ? "text-[#59549f] font-semibold" : ""}`}
                     >
                       <div className="flex items-center gap-2">
-                        <span className="w-1 h-1 bg-gray-400 rounded-full ml-3"></span>
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                         Disputes
                       </div>
                       {indicators.serviceDeal.disputesCount > 0 && <span className="bg-red-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">{indicators.serviceDeal.disputesCount}</span>}
@@ -1008,13 +1026,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
               )}
             </ul>
 
-            <div className="mt-8 mb-2 px-4">
+            <div className="mt-8 mb-2">
               <ul>
                 <NavLink
                   to="/settings"
                   className={({ isActive }) =>
-                    `block my-3 text-[17px] px-4 rounded-md ${
-                      isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                    `block my-3 py-1 text-[17px] px-4 mx-3 rounded-md ${
+                      isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] transition-colors"
                     }`
                   }
                 >
@@ -1024,8 +1042,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 <NavLink
                   to="/help"
                   className={({ isActive }) =>
-                    `block my-3 text-[17px] px-4 rounded-md ${
-                      isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426]"
+                    `block my-3 py-1 text-[17px] px-4 mx-3 rounded-md ${
+                      isActive ? "bg-[#D8D6F8] text-[#59549f]" : "text-[#001426] hover:bg-[#D8D6F8] hover:text-[#59549f] transition-colors"
                     }`
                   }
                 >
@@ -1035,7 +1053,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 <hr />
 
                 {/* User Profile Section */}
-                <div id="user-profile" className="mt-2 ">
+                <div id="user-profile" className="mt-2 mx-3">
                   {showSignoutDialog && (
                     <div className="flex flex-col gap-2 mb-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
                       <button

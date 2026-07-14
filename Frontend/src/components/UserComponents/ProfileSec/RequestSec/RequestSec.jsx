@@ -47,6 +47,16 @@ const RequestSec = () => {
   const [showEmptyRequestPopup, setShowEmptyRequestPopup] = useState(false);
   const [showOpportunityPopup, setShowOpportunityPopup] = useState(false); // Managed dynamically based on available matching opportunities
   const [showExploreProfessionalsBanner, setShowExploreProfessionalsBanner] = useState(false);
+  const [spMode, setSpMode] = useState(localStorage.getItem("spMode") || "provider");
+  
+  useEffect(() => {
+    const handleSpModeChange = () => {
+      setSpMode(localStorage.getItem("spMode") || "provider");
+    };
+    window.addEventListener("spModeChanged", handleSpModeChange);
+    return () => window.removeEventListener("spModeChanged", handleSpModeChange);
+  }, []);
+
   const [activeTab, setActiveTab] = useState(location.state?.defaultTab || "all");
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [upgradeModalType, setUpgradeModalType] = useState("interest"); // 'request' or 'interest'
@@ -80,7 +90,6 @@ const RequestSec = () => {
   const [showAwaitingResponseBanner, setShowAwaitingResponseBanner] = useState(false);
 
   const [currentUserRole, setCurrentUserRole] = useState(null);
-  const [spMode, setSpMode] = useState(localStorage.getItem("spMode") || "provider");
   const [userPlanAmount, setUserPlanAmount] = useState(0);
   const [profileCompletion, setProfileCompletion] = useState(100);
   const [showProfileReminder, setShowProfileReminder] = useState(false);
@@ -375,26 +384,83 @@ const RequestSec = () => {
                 {profile?.isFreePlan !== undefined && profile?.role !== "investor" && (
                   <div
                     onClick={() => setShowMobileCredits(true)}
-                    className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:w-[59.2%]"
+                    className={`hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:w-[59.2%] ${profile?.isFreePlan ? "justify-between" : "justify-end"}`}
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
-                        {profile?.isFreePlan ? (profile.credits ?? 0) : "∞"}
-                      </div>
-                      <div className="flex flex-col items-start">
-                        <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
-                          {profile?.isFreePlan ? "Opportunities Available" : "Unlimited Access"}
-                        </p>
-                        <div className="-mt-0.5">
-                          <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
-                            {profile?.isFreePlan ? "More connections are waiting" : "All premium features unlocked"}
-                          </span>
+                    {profile?.isFreePlan && (
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
+                          {profile.credits ?? 0}
+                        </div>
+                        <div className="flex flex-col items-start">
+                          <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
+                            Opportunities Available
+                          </p>
+                          <div className="-mt-0.5">
+                            <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
+                              More connections are waiting
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
-                      Unlock More Opportunities
-                    </div>
+                    )}
+                    {profile?.isFreePlan ? (
+                      <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+                        Unlock More Opportunities
+                      </div>
+                    ) : currentUserRole === "startup" ? (
+                      <div
+                        onClick={() => {
+                          window.dispatchEvent(new CustomEvent("showComingSoonModal", { detail: { title: "Switch to Professional" } }));
+                        }}
+                        className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                      >
+                        <div className="flex flex-col text-right">
+                          <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
+                          <span className="text-[10px] text-gray-500 leading-tight">Explore professional tools</span>
+                        </div>
+                        <div className="relative inline-flex items-center cursor-pointer shrink-0">
+                          <div className="w-9 h-5 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-400"></div>
+                          <div className="absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm"></div>
+                        </div>
+                      </div>
+                    ) : (currentUserRole === "service_professional" || currentUserRole === "professional") ? (
+                      <div
+                        onClick={async () => {
+                          const currentMode = localStorage.getItem("spMode") || "provider";
+                          const newMode = currentMode === "provider" ? "buyer" : "provider";
+                          localStorage.setItem("spMode", newMode);
+                          window.dispatchEvent(new Event("spModeChanged"));
+                          try {
+                            await axios.put(`${serverUrl}/user/sp-mode`, { spMode: newMode }, {
+                              headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+                            });
+                            if (window.globalUserCache) window.globalUserCache.spMode = newMode;
+                          } catch (error) {
+                            console.error("Failed to update spMode on backend", error);
+                            localStorage.setItem("spMode", currentMode);
+                            window.dispatchEvent(new Event("spModeChanged"));
+                          }
+                        }}
+                        className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                      >
+                        <div className="flex flex-col text-right">
+                          <span className="text-[12px] font-semibold text-[#59549f]">
+                            {spMode === "provider" ? "Switch to Buyer" : "Switch to Provider"}
+                          </span>
+                          <span className="text-[10px] text-gray-500 leading-tight">
+                            {spMode === "provider" ? "Experience buyer portal" : "Experience provider portal"}
+                          </span>
+                        </div>
+                        <div className="relative inline-flex items-center cursor-pointer shrink-0">
+                          <div className={`w-9 h-5 rounded-full transition-colors ${spMode === "buyer" ? "bg-[#59549f]" : "bg-gray-300 group-hover:bg-gray-400"}`}></div>
+                          <div className={`absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm ${spMode === "buyer" ? "translate-x-4" : ""}`}></div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+                        Unlock More Opportunities
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

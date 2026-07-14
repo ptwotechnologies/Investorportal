@@ -121,6 +121,13 @@ const dealSchema = new mongoose.Schema(
         type: Date,
       },
     },
+    bankDetails: {
+      accountHolderName: String,
+      accountNumber: String,
+      ifscCode: String,
+      branchName: String,
+      isConfirmed: Boolean
+    },
     paymentStatus: {
       type: String,
       enum: ["Pending", "Partially Paid", "Fully Paid"],

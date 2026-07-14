@@ -64,10 +64,11 @@ const ScannerSec = () => {
 
       const result = await axios.post(
         `${serverUrl}/api/payment/checkout`, 
-        { amount: displayAmount ,
-          userId: userId
-        },
-        
+        { 
+          amount: displayAmount,
+          userId: userId,
+          planName: displayPlanName
+        }
       );
 
       if (!result.data.success) {

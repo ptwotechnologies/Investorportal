@@ -339,20 +339,39 @@ export const getAllProfiles = async (req, res) => {
       "businessDetails.firstName businessDetails.lastName businessDetails.investorType role additionalDetails.domain"
     );
 
-    // Calculate accepted connections count for each profile
-    const profiles = await Promise.all(rawProfiles.map(async (profile) => {
-      const uId = profile.userId?._id || profile.userId;
-      
-      const connectionsCount = await Connection.countDocuments({
-        $or: [{ senderId: uId }, { receiverId: uId }],
-        status: "accepted"
-      });
+    const userIds = rawProfiles.map(p => p.userId?._id || p.userId).filter(id => id);
+    
+    const connectionCounts = await Connection.aggregate([
+      {
+        $match: {
+          status: "accepted",
+          $or: [
+            { senderId: { $in: userIds } },
+            { receiverId: { $in: userIds } }
+          ]
+        }
+      },
+      { $project: { users: ["$senderId", "$receiverId"] } },
+      { $unwind: "$users" },
+      { $match: { users: { $in: userIds } } },
+      { $group: { _id: "$users", count: { $sum: 1 } } }
+    ]);
 
+    const connectionCountMap = {};
+    connectionCounts.forEach(item => {
+      if (item._id) {
+        connectionCountMap[item._id.toString()] = item.count;
+      }
+    });
+
+    const profiles = rawProfiles.map((profile) => {
+      const uId = profile.userId?._id || profile.userId;
+      const count = (uId && connectionCountMap[uId.toString()]) || 0;
       return {
         ...profile.toObject(),
-        totalConnections: connectionsCount
+        totalConnections: count
       };
-    }));
+    });
 
     res.json(profiles);
   } catch (error) {

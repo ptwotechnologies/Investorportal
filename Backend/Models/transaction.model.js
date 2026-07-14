@@ -7,6 +7,7 @@ const transactionSchema = new mongoose.Schema(
     // Optional: for project milestone payments
     dealId: { type: mongoose.Schema.Types.ObjectId, ref: "Deal" },
     milestoneId: { type: String }, 
+    planName: { type: String, default: "" }, // For subscription upgrades
 
     // Internal Reference
     receipt_id: { type: String, required: true }, 

@@ -498,44 +498,80 @@ const Bottom = ({
         
         {/* Summary Cards Grid */} 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[#D8E1F0] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <HiOutlineArrowsRightLeft size={20} className="text-[#001032]" />
-              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Open Proposals</h3>
+          <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
+            <div className="flex items-start gap-3">
+              <div className="w-7 h-7 bg-white/20 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+                <HiOutlineArrowsRightLeft size={18} className="text-indigo-200" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-white">Open Proposals</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-white leading-none">{deals.length}</p>
+                  <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">{deals.length}</p>
           </div>
 
-          <div className="bg-[#D8D6F8] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] px-2 py-4 lg:p-4 rounded-2xl flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <HiOutlineUserGroup size={20} className="text-[#001032]" />
-              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Awaiting Response</h3>
+          <div className="bg-gradient-to-br from-[#EAE9FE] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-indigo-50">
+            <div className="flex items-start gap-3">
+              <div className="w-7 h-7 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <HiOutlineUserGroup size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Awaiting Response</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
+                    {deals.filter(d => {
+                      const uAgreed = isStartup ? d.documentation?.startupAgreed : d.documentation?.professionalAgreed;
+                      const oAgreed = isStartup ? d.documentation?.professionalAgreed : d.documentation?.startupAgreed;
+                      return uAgreed && !oAgreed;
+                    }).length}
+                  </p>
+                  <span className="text-[9px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">
-              {deals.filter(d => {
-                const uAgreed = isStartup ? d.documentation?.startupAgreed : d.documentation?.professionalAgreed;
-                const oAgreed = isStartup ? d.documentation?.professionalAgreed : d.documentation?.startupAgreed;
-                return uAgreed && !oAgreed;
-              }).length}
-            </p>
           </div>
 
-          <div className="bg-[#EFDBD9] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] py-2 px-2 lg:p-4 rounded-2xl flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <LuArrowLeftRight size={20} className="text-[#001032]" />
-              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Counter Offers</h3>
+          <div className="bg-gradient-to-br from-[#FDF5E6] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-orange-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <LuArrowLeftRight size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Counter Offers</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
+                    {deals.reduce((acc, d) => acc + (d.negotiation?.history?.length || 0), 0)}
+                  </p>
+                  <span className="text-[9px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">
-              {deals.reduce((acc, d) => acc + (d.negotiation?.history?.length || 0), 0)}
-            </p>
           </div>
 
-          <div className="bg-[#D7EBE4] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] py-4 px-2 lg:p-4 rounded-2xl flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <LuClock size={20} className="text-[#001032]" />
-              <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Expiring Soon</h3>
+          <div className="bg-gradient-to-br from-[#FDE8F1] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-pink-50">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
+                <LuClock size={18} className="text-[#001032]" />
+              </div>
+              <div className="flex flex-col gap-1 w-full">
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Expiring Soon</h3>
+                <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">0</p>
+                  <span className="text-[9px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
+                    <span className="text-[7px]">▶</span> 3 this week
+                  </span>
+                </div>
+              </div>
             </div>
-            <p className="text-xl lg:text-2xl font-bold text-[#001032]">0</p>
           </div>
         </div>
 
@@ -738,7 +774,7 @@ const Bottom = ({
                               <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1 shrink-0" />
                               <div>
                                 <h5 className="text-[10px] font-bold text-[#000000]">{m.title || "Untitled Milestone"}</h5>
-                                <p className="text-[9px] text-gray-400">Rs {m.amount || 0}</p>
+                                <p className="text-[9px] text-gray-400">Rs  {m.amount || 0}</p>
                               </div>
                             </div>
                             <div className="flex items-center gap-2">
@@ -920,7 +956,7 @@ const Bottom = ({
                       <div className="lg:w-[150px] w-full px-4 py-2 bg-gray-50 rounded-lg text-xs text-gray-400 border border-gray-100 flex items-center justify-center shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">INR - Indian Rupees</div>
                       {isEditing ? (
                         <div className="flex-1 relative">
-                          <span className="absolute left-35 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rs</span>
+                          <span className="absolute left-30 top-1/2 -translate-y-1/2 text-gray-400 text-xs">Rs </span>
                           <input 
                             type="number"
                             className="w-full pl-8 pr-4 py-2 bg-white rounded-lg text-xs text-[#000000] border-2 border-[#D8D6F8] shadow-sm text-center focus:outline-none"

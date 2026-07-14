@@ -18,6 +18,20 @@ const notificationSchema = new mongoose.Schema({
   isRead: {
     type: Boolean,
     default: false,
+  },
+  type: {
+    type: String,
+    enum: ["PUSH", "EMAIL", "IN_APP"],
+    default: "PUSH",
+  },
+  status: {
+    type: String,
+    enum: ["Sent", "Delivered", "Failed"],
+    default: "Sent",
+  },
+  actionLink: {
+    type: String,
+    default: "/",
   }
 }, { timestamps: true });
 

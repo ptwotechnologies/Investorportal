@@ -38,6 +38,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
   const [priority, setPriority] = useState(null);
   const [isPriorityOpen, setIsPriorityOpen] = useState(false);
   const [isBudgetOpen, setIsBudgetOpen] = useState(false);
+  const [dropdownDirection, setDropdownDirection] = useState("bottom");
 
   const userId = localStorage.getItem("userId");
 
@@ -151,14 +152,22 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
   return (
     <div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-1  md:grid-cols-2 gap-4  overflow-y-auto overscroll-contain touch-pan-y h-[calc(100dvh-250px)] pb-20 md:pb-0 md:h-auto scrollbar-hide ">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 pb-20 md:pb-0">
         {raisedRequestOptions.map((option) => (
           <div key={option.id} className="flex flex-col gap-2 relative">
             <div
               className={`flex items-center gap-3 cursor-pointer transition-all duration-300 ${selectedRequest === option.id ? "border-[#59549F]" : ""}`}
-              onClick={() => {
+              onClick={(e) => {
                 setSelectedRequest(option.id);
                 setSelectedService(option.label);
+                
+                const rect = e.currentTarget.getBoundingClientRect();
+                const spaceBelow = window.innerHeight - rect.bottom;
+                if (spaceBelow < 250) {
+                  setDropdownDirection("top");
+                } else {
+                  setDropdownDirection("bottom");
+                }
               }}
             >
               <div className="shrink-0 p-3 border-2 border-gray-200 rounded-full shadow-[inset_0_0_12px_#00000040] ">
@@ -175,7 +184,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
 
             {/* Absolute Overlay Dropdowns when selected */}
             {selectedRequest === option.id && (
-              <div className="absolute z-50 left-15 right-0 top-[90%] mt-2 p-4 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-wrap gap-4">
+              <div className={`absolute z-50 left-15 right-0 p-4 bg-white/95 backdrop-blur-md border border-gray-200 rounded-2xl shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-wrap gap-4 ${dropdownDirection === "top" ? "bottom-full mb-2" : "top-[90%] mt-2"}`}>
                 <div className="flex-1 min-w-[140px] relative">
                   <label className="text-[11px]  text-[#59549F]  ml-1 block mb-1.5 tracking-wider">Expected Budget <span className="text-red-500">*</span></label>
                   <div className="relative">
@@ -198,7 +207,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
                     </button>
 
                     {isBudgetOpen && (
-                      <div className="absolute z-[60] left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className={`absolute z-[60] left-0 right-0 ${dropdownDirection === "top" ? "bottom-full mb-1.5" : "top-full mt-1.5"} bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200`}>
                         {["Flexible", "Under ₹25K", "₹25K–₹1L", "₹1L+"].map((b) => (
                           <div
                             key={b}
@@ -239,7 +248,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
                     </button>
 
                     {isPriorityOpen && (
-                      <div className="absolute z-[60] left-0 right-0 top-full mt-1.5 bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className={`absolute z-[60] left-0 right-0 ${dropdownDirection === "top" ? "bottom-full mb-1.5" : "top-full mt-1.5"} bg-white border border-gray-100 rounded-2xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200`}>
                         {[
                           "Urgent (within 1 week)",
                           "Short term (1–3 weeks)",

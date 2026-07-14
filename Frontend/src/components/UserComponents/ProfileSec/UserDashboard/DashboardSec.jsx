@@ -1126,26 +1126,83 @@ const DashboardSec = () => {
           {profile?.isFreePlan !== undefined && profile?.role !== "investor" && (
             <div
               onClick={() => setShowMobileCredits(true)}
-              className="hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center justify-between gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%]"
+              className={`hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%] ${profile?.isFreePlan ? "justify-between" : "justify-end"}`}
             >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
-                  {profile?.isFreePlan ? (profile.credits ?? 0) : "∞"}
-                </div>
-                <div className="flex flex-col items-start">
-                  <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
-                    {profile?.isFreePlan ? "Opportunities Available" : "Unlimited Access"}
-                  </p>
-                  <div className="-mt-0.5">
-                    <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
-                      {profile?.isFreePlan ? "More connections are waiting" : "All premium features unlocked"}
-                    </span>
+              {profile?.isFreePlan && (
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
+                    {profile.credits ?? 0}
+                  </div>
+                  <div className="flex flex-col items-start">
+                    <p className="text-[18px] font-semibold text-[#59549F] leading-tight w-full text-left">
+                      Opportunities Available
+                    </p>
+                    <div className="-mt-0.5">
+                      <span className="bg-[#D8D6F8] text-[#59549F] px-2 py-0.5 rounded-full text-[9px] font-medium shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] whitespace-nowrap">
+                        More connections are waiting
+                      </span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
-                Unlock More Opportunities
-              </div>
+              )}
+              {profile?.isFreePlan ? (
+                <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+                  Unlock More Opportunities
+                </div>
+              ) : actualRole === "startup" ? (
+                <div
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent("showComingSoonModal", { detail: { title: "Switch to Professional" } }));
+                  }}
+                  className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                >
+                  <div className="flex flex-col text-right">
+                    <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
+                    <span className="text-[10px] text-gray-500 leading-tight">Explore professional tools</span>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer shrink-0">
+                    <div className="w-9 h-5 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-400"></div>
+                    <div className="absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm"></div>
+                  </div>
+                </div>
+              ) : (actualRole === "service_professional" || actualRole === "professional") ? (
+                <div
+                  onClick={async () => {
+                    const currentMode = localStorage.getItem("spMode") || "provider";
+                    const newMode = currentMode === "provider" ? "buyer" : "provider";
+                    localStorage.setItem("spMode", newMode);
+                    window.dispatchEvent(new Event("spModeChanged"));
+                    try {
+                      await axios.put(`${serverUrl}/user/sp-mode`, { spMode: newMode }, {
+                        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+                      });
+                      if (window.globalUserCache) window.globalUserCache.spMode = newMode;
+                    } catch (error) {
+                      console.error("Failed to update spMode on backend", error);
+                      localStorage.setItem("spMode", currentMode);
+                      window.dispatchEvent(new Event("spModeChanged"));
+                    }
+                  }}
+                  className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                >
+                  <div className="flex flex-col text-right">
+                    <span className="text-[12px] font-semibold text-[#59549f]">
+                      {spMode === "provider" ? "Switch to Buyer" : "Switch to Provider"}
+                    </span>
+                    <span className="text-[10px] text-gray-500 leading-tight">
+                      {spMode === "provider" ? "Experience buyer portal" : "Experience provider portal"}
+                    </span>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer shrink-0">
+                    <div className={`w-9 h-5 rounded-full transition-colors ${spMode === "buyer" ? "bg-[#59549f]" : "bg-gray-300 group-hover:bg-gray-400"}`}></div>
+                    <div className={`absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm ${spMode === "buyer" ? "translate-x-4" : ""}`}></div>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+                  Unlock More Opportunities
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -1762,9 +1819,9 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="w-[30%] h-[88vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] overflow-y-auto scrollbar-hide pb-6"
+              className="w-[30%] h-[88vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] overflow-hidden pb-6 flex flex-col"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between shrink-0">
                 <p className="text-3xl font-semibold my-4">Activity</p>
                 <div className="flex items-center gap-1 border border-[#6F6F6F] p-1 px-3 rounded-2xl">
                   <FaCalendar />
@@ -1772,20 +1829,20 @@ const DashboardSec = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-5 p-5 py-5">
+              <div className="flex items-center gap-5 p-5 py-5 shrink-0">
                 <p className="text-3xl font-semibold">{stats.weeklyConnects || 0}</p>
                 <p className="text-md font-medium">Connects</p>
               </div>
 
-              <div>
+              <div className="shrink-0">
                 <Graph1 />
               </div>
 
-              <div className="bg-[#F1F1F1] px-8 py-4 mt-4 rounded-2xl">
-                <h3 className="text-gray-900 text-[18px] font-semibold mb-3">
+              <div className="bg-[#F1F1F1] px-8 py-4 mt-4 rounded-2xl flex-1 flex flex-col min-h-0">
+                <h3 className="text-gray-900 text-[18px] font-semibold mb-3 shrink-0">
                   My Connections
                 </h3>
-                <div className="flex flex-col gap-2 mt-1 min-h-[150px]">
+                <div className="flex flex-col gap-2 mt-1 flex-1 overflow-y-auto scrollbar-hide relative">
                   {newRegistrations.length > 0 ? (
                     newRegistrations.map((item, idx) => (
                       <motion.div
@@ -1818,7 +1875,7 @@ const DashboardSec = () => {
                       </motion.div>
                     ))
                   ) : (
-                    <div className="flex-1 flex items-center justify-center text-gray-400 text-sm font-medium h-full min-h-[150px]">
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm font-medium">
                       No Connections
                     </div>
                   )}
@@ -2254,7 +2311,7 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="mt-2 m-2 h-[96vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020]"
+              className="mt-2 m-2 h-[96vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] flex flex-col"
             >
               <div className="flex items-center justify-between">
                 <p className="text-3xl font-semibold my-4">Activity</p>
@@ -2266,28 +2323,28 @@ const DashboardSec = () => {
 
               {/* Ecosystem Activity Banner */}
               {showEcosystemActivityBanner && (
-                <div className="bg-gradient-to-r from-[#F0FDF4] to-[#F8FAFC] border border-[#BBF7D0]/60 rounded-xl p-3 mt-1 mb-3 flex items-center justify-between shadow-sm animate-in fade-in">
-                  <div className="flex items-center gap-3">
-                    <span className="text-xl">🌟</span>
+                <div className="bg-gradient-to-r from-[#F0FDF4] to-[#F8FAFC] border border-[#BBF7D0]/60 rounded-xl p-3 mt-1 mb-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-sm animate-in fade-in relative">
+                  <div className="flex items-start sm:items-center gap-3 pr-6 sm:pr-0">
+                    <span className="text-xl shrink-0 mt-0.5 sm:mt-0">🌟</span>
                     <div>
                       <p className="text-sm font-bold text-[#166534]">Ecosystem Activity</p>
-                      <p className="text-xs text-[#166534]/90">Your profile engagement and opportunity visibility are increasing.</p>
+                      <p className="text-xs text-[#166534]/90 mt-0.5">Your profile engagement and opportunity visibility are increasing.</p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 self-end sm:self-auto">
                     <Link to="/analytics" className="bg-gradient-to-r from-[#22C55E] to-[#16A34A] text-white px-4 py-1.5 rounded-lg text-xs font-semibold shadow-sm hover:opacity-90 transition-opacity whitespace-nowrap">
                       View Activity
                     </Link>
-                    <button onClick={() => {
-                        const userId = profile?.userId?._id || profile?.userId;
-                        localStorage.setItem(`ecosystem_activity_banner_dismissed_${userId}`, "true");
-                        setShowEcosystemActivityBanner(false);
-                      }} 
-                      className="text-[#166534]/60 hover:text-[#166534] p-1 transition-colors"
-                    >
-                      <RxCross2 size={16} />
-                    </button>
                   </div>
+                  <button onClick={() => {
+                      const userId = profile?.userId?._id || profile?.userId;
+                      localStorage.setItem(`ecosystem_activity_banner_dismissed_${userId}`, "true");
+                      setShowEcosystemActivityBanner(false);
+                    }} 
+                    className="absolute top-2 right-2 text-[#166534]/60 hover:text-[#166534] p-1 transition-colors"
+                  >
+                    <RxCross2 size={16} />
+                  </button>
                 </div>
               )}
 
@@ -2345,11 +2402,11 @@ const DashboardSec = () => {
                 </div>
               )}
 
-              <div className="bg-[#F1F1F1] px-8 py-6 mt-5 rounded-2xl">
-                <h3 className="text-gray-900 text-[18px] font-semibold mb-3">
+              <div className="bg-[#F1F1F1] px-8 py-6 mt-5 rounded-2xl flex-1 flex flex-col min-h-0">
+                <h3 className="text-gray-900 text-[18px] font-semibold mb-3 shrink-0">
                   My Connections
                 </h3>
-                <div className="flex flex-col gap-2 mt-1 min-h-[150px]">
+                <div className="flex flex-col gap-2 mt-1 flex-1 overflow-y-auto scrollbar-hide relative">
                   {newRegistrations.length > 0 ? (
                     newRegistrations.map((item, idx) => (
                       <motion.div
@@ -2382,7 +2439,7 @@ const DashboardSec = () => {
                       </motion.div>
                     ))
                   ) : (
-                    <div className="flex-1 flex items-center justify-center text-gray-400 text-sm font-medium h-full min-h-[150px]">
+                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-sm font-medium">
                       No Connections
                     </div>
                   )}

@@ -3,6 +3,7 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 import Transaction from "../Models/transaction.model.js";
 import User from "../Models/User.model.js";
+import Upgrade from "../Models/Upgrade.model.js";
 
 dotenv.config();
 
@@ -13,7 +14,7 @@ const razorpay = new Razorpay({
 
 export const checkout = async (req, res) => {
   try {
-    const { amount, userId } = req.body; // frontend se bheja userId
+    const { amount, userId, planName } = req.body; // frontend se bheja userId and planName
 
     // Input validation
     if (!amount || isNaN(amount) || amount <= 0) {
@@ -51,6 +52,7 @@ export const checkout = async (req, res) => {
       razorpay_order_id: order.id,
       amount: amount,
       currency: "INR",
+      planName: planName || "",
       status: "created"
     });
 
@@ -109,11 +111,31 @@ export const paymentVerification = async (req, res) => {
       transaction.status = "captured";
       await transaction.save();
 
-      // 2. Update User profile with payment status and link the transaction ID
+      // Fetch the user to get the current plan (fromPlan) before upgrading
+      const user = await User.findById(transaction.userId);
+      const fromPlan = user && user.plan && user.plan.planName ? user.plan.planName : "Free";
+      const toPlan = transaction.planName || "Unknown Plan";
+
+      // 2. Create Upgrade record if this is an upgrade (planName exists)
+      if (transaction.planName) {
+        const upgradeRecord = new Upgrade({
+          userId: transaction.userId,
+          transactionId: transaction._id,
+          fromPlan: fromPlan,
+          toPlan: toPlan,
+          amount: transaction.amount,
+          currency: transaction.currency || "INR",
+          cycle: "Monthly" // Defaulting to Monthly for now as per current specs
+        });
+        await upgradeRecord.save();
+      }
+
+      // 3. Update User profile with payment status and link the transaction ID
       await User.findByIdAndUpdate(transaction.userId, {
         paymentStatus: "approved",
         transactionId: transaction._id,
-        "plan.amount": transaction.amount
+        "plan.amount": transaction.amount,
+        "plan.planName": transaction.planName || toPlan
       });
 
       return res.status(200).json({
