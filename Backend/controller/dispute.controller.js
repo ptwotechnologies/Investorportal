@@ -1,5 +1,5 @@
-import Dispute from '../Models/dispute.model.js';
-import Deal from '../Models/deal.model.js';
+import Dispute from '../Models/Dispute.model.js';
+import Deal from '../Models/Deal.model.js';
 import { emitNewMessage } from '../lib/socket.js';
 import Notification from '../Models/notification.model.js';
 import { sendPushNotification } from '../lib/onesignal.js';
