@@ -15,6 +15,8 @@ export const sendPushNotification = async (userIds, title, message, url = "/") =
 
     if (stringIds.length === 0) return;
 
+    const absoluteUrl = url.startsWith("http") ? url : `https://copteno.com${url.startsWith("/") ? url : "/" + url}`;
+
     const response = await axios.post(
       "https://onesignal.com/api/v1/notifications",
       {
@@ -22,10 +24,11 @@ export const sendPushNotification = async (userIds, title, message, url = "/") =
         include_aliases: {
           external_id: stringIds
         },
+        include_external_user_ids: stringIds, // Fallback for older OneSignal app configurations
         target_channel: "push",
         headings: { en: title },
         contents: { en: message },
-        url: url
+        url: absoluteUrl
       },
       {
         headers: {
