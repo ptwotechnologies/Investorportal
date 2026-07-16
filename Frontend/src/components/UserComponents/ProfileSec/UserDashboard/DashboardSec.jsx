@@ -73,12 +73,35 @@ const DashboardSec = () => {
   const isStartupMode = actualRole === "startup" || (isServiceProfessional && spMode === "buyer");
 
   useEffect(() => {
-    if ("Notification" in window) {
-      setNotificationPermission(Notification.permission);
-      if (Notification.permission !== "granted") {
+    const checkPermission = async () => {
+      try {
+        if (window.OneSignalDeferred) {
+          window.OneSignalDeferred.push(async function(OneSignal) {
+            try {
+              const permission = await OneSignal.Notifications.permissionNative;
+              setNotificationPermission(permission);
+              if (permission !== "granted") {
+                setShowNotificationBanner(true);
+              }
+            } catch (e) {
+              // If OneSignal fails (e.g. unsupported browser like Chrome on iOS)
+              setShowNotificationBanner(true);
+            }
+          });
+        } else if ("Notification" in window) {
+          setNotificationPermission(Notification.permission);
+          if (Notification.permission !== "granted") {
+            setShowNotificationBanner(true);
+          }
+        } else {
+          // Push notifications completely unsupported (e.g. older iOS browsers)
+          setShowNotificationBanner(true);
+        }
+      } catch (e) {
         setShowNotificationBanner(true);
       }
-    }
+    };
+    checkPermission();
   }, []);
 
   useEffect(() => {
@@ -649,15 +672,26 @@ const DashboardSec = () => {
               </div>
             </div>
             <div className="flex items-center gap-3 w-full md:w-auto shrink-0 justify-end mt-2 md:mt-0">
-              {notificationPermission !== "denied" && (
+              {notificationPermission !== "granted" && (
                 <button
                   onClick={() => {
-                    Notification.requestPermission().then((permission) => {
-                      setNotificationPermission(permission);
-                      if (permission === "granted") {
-                        setShowNotificationBanner(false);
-                      }
-                    });
+                    if (window.OneSignalDeferred) {
+                      window.OneSignalDeferred.push(async function(OneSignal) {
+                        await OneSignal.Slidedown.promptPush({ force: true });
+                        const permission = await OneSignal.Notifications.permissionNative;
+                        setNotificationPermission(permission);
+                        if (permission === "granted") {
+                          setShowNotificationBanner(false);
+                        }
+                      });
+                    } else {
+                      Notification.requestPermission().then((permission) => {
+                        setNotificationPermission(permission);
+                        if (permission === "granted") {
+                          setShowNotificationBanner(false);
+                        }
+                      });
+                    }
                   }}
                   className="bg-[#D32F2F] hover:bg-[#C62828] text-white font-bold py-1.5 px-4 rounded-xl text-xs shadow-sm transition-all duration-300 cursor-pointer text-center whitespace-nowrap"
                 >

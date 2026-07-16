@@ -5,7 +5,9 @@
     <link rel="icon" type="image/png" href="/fav.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Copteno</title>
-
+    <!-- PWA Manifest (Required for iOS Web Push) -->
+    <link rel="manifest" href="/manifest.json" />
+    
     <!-- OneSignal SDK -->
     <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
     <script>
@@ -15,7 +17,6 @@
           appId: "e9e59ecd-bb4b-4387-863e-863b6b8158ef",
           allowLocalhostAsSecureOrigin: true,
         });
-        OneSignal.Slidedown.promptPush();
       });
     </script>
   </head>
