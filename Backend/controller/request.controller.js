@@ -1,5 +1,6 @@
 import Request from "../Models/request.model.js";
 import User from "../Models/User.model.js";
+import { sendPushNotification } from "../lib/onesignal.js";
 
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
@@ -57,6 +58,15 @@ export const createRequest = async (req, res) => {
     });
 
     console.log("DEBUG: Request created successfully:", newRequest._id);
+
+    // Send Push Notification to the user who raised it
+    sendPushNotification(
+      user._id,
+      "Request Live",
+      `Your request for "${service}" is now live. Relevant professionals are being notified.`,
+      "/profile"
+    );
+
     res.status(201).json(newRequest);
   } catch (error) {
     console.error("--- CREATE REQUEST ERROR ---");
@@ -116,6 +126,15 @@ export const forwardRequest = async (req, res) => {
     request.seenBy = [];
 
     await request.save();
+
+    if (userIds && userIds.length > 0) {
+      sendPushNotification(
+        userIds,
+        "🚀 New Opportunity Available",
+        "A startup request matching your expertise is now available.",
+        "/request"
+      );
+    }
 
     res.status(200).json({ message: "Request forwarded successfully" });
   } catch (error) {
@@ -243,6 +262,13 @@ export const markInterested = async (req, res) => {
     }
 
     await request.save();
+
+    sendPushNotification(
+      request.raisedBy,
+      "⚡ Action Required",
+      "A proposal is awaiting your response.",
+      "/request"
+    );
 
     console.log("After save - status:", request.status);
     console.log("After save - interestedBy:", request.interestedBy);

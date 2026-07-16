@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Deal from "../Models/deal.model.js";
 import Request from "../Models/request.model.js";
 import { emitDealUpdated } from "../lib/socket.js";
+import { sendPushNotification } from "../lib/onesignal.js";
 
 // CREATE DEAL DRAFT
 export const createDealDraft = async (req, res) => {
@@ -213,6 +214,23 @@ export const updateDeal = async (req, res) => {
 
     // Trigger real-time update for both parties
     emitDealUpdated([deal.startupId, deal.professionalId]);
+
+    // Trigger Push Notification to the other party
+    const targetPushId = userId.toString() === deal.startupId.toString() ? deal.professionalId : deal.startupId;
+
+    if (req.body.isCounter) {
+      sendPushNotification(targetPushId, "⚡ Action Required", "A proposal is awaiting your response.", `/deal/${deal._id}`);
+    } else if (deal.status === "Approved") {
+      sendPushNotification(targetPushId, "✅ Pending Approval", "A milestone is awaiting your approval.", `/deal/${deal._id}`);
+    } else if (deal.status === "Documented") {
+      sendPushNotification(targetPushId, "📄 Action Required", "Deal documentation needs your verification.", `/deal/${deal._id}`);
+    } else if (deal.status === "Active") {
+      sendPushNotification(targetPushId, "🚀 Deal Accepted!", "Your deal workspace is now active.", `/deal/${deal._id}`);
+    } else if (deal.status === "Completed") {
+      sendPushNotification(targetPushId, "🏆 Deal Completed!", "Your deal has been completed successfully.", `/deal/${deal._id}`);
+    } else if (status) { 
+      sendPushNotification(targetPushId, "🔔 Deal Update", `Deal status updated.`, `/deal/${deal._id}`);
+    }
 
     res.status(200).json({
       message: "Deal updated successfully",
