@@ -73,10 +73,12 @@ const io = new Server(server, {
   }
 });
 
-initSocket(io);
-
-// INITIALIZE BACKGROUND JOBS
-startCronJobs();
+// INITIALIZE BACKGROUND JOBS AND SOCKETS ONLY IF NOT ON VERCEL
+// Vercel serverless functions crash (FUNCTION_INVOCATION_FAILED) if background timers (cron/socket.io) block the event loop
+if (!process.env.VERCEL) {
+  initSocket(io);
+  startCronJobs();
+}
 
 app.use(express.json());
 app.use(cookieParser());

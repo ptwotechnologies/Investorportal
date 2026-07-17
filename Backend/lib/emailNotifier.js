@@ -1,5 +1,5 @@
 import resend, { RESEND_FROM } from "./resend.js";
-import User from "../models/User.model.js";
+import User from "../Models/User.model.js";
 
 /**
  * Sends a transactional email notification to a user.
