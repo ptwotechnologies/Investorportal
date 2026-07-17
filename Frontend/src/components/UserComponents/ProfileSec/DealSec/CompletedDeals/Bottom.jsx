@@ -189,7 +189,7 @@ const Bottom = () => {
     <div className="flex flex-col lg:flex-row gap-2 lg:px-4 lg:py-1 bg-[#FDFDFF] flex-1 min-h-0 overflow-hidden">
       {/* ── Left Column: Project List ── */}
       <div
-        className={`flex-1 flex flex-col min-h-0 lg:py-2 gap-6 overflow-hidden ${selectedDeal ? "hidden lg:flex" : "flex"}`}
+        className={`flex-1 flex flex-col min-h-0 lg:py-2 gap-6 overflow-y-auto scrollbar-hide ${selectedDeal ? "hidden lg:flex" : "flex"}`}
       >
         <div className="grid grid-cols-2 gap-4 shrink-0 p-3">
           <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
@@ -300,7 +300,7 @@ const Bottom = () => {
           All Deals
         </h2>
 
-        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide space-y-4 p-2">
+        <div className="flex flex-col space-y-4 p-2">
           {deals.length === 0 ? (
             <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-[90%] lg:w-auto max-w-sm mx-auto lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">

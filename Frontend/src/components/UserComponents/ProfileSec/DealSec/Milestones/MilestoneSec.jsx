@@ -9,17 +9,19 @@ const MilestoneSec = () => {
   const [activeView, setActiveView] = useState("none"); // 'none', 'addMilestone'
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 bg-[#FDFDFF] overflow-hidden">
-      <TopBar
-        deals={deals}
-        onProjectSelect={(deal) => {
-          setSelectedDeal(deal);
-          setActiveView("addMilestone");
-        }}
-        onAddClick={() => setActiveView("addMilestone")}
-      />
+    <div className="flex flex-col flex-1 min-h-0 w-full h-full bg-[#FDFDFF] overflow-hidden">
+      <div id="top" className="shrink-0">
+        <TopBar
+          deals={deals}
+          onProjectSelect={(deal) => {
+            setSelectedDeal(deal);
+            setActiveView("addMilestone");
+          }}
+          onAddClick={() => setActiveView("addMilestone")}
+        />
+      </div>
 
-      <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+      <div id="bottom" className="flex-1 min-h-0 flex flex-col overflow-hidden">
         <BottomSec
           deals={deals}
           setDeals={setDeals}

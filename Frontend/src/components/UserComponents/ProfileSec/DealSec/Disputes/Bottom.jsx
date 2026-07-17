@@ -314,7 +314,7 @@ const Bottom = ({
     <div className="flex flex-col lg:flex-row gap-2 lg:px-4 lg:py-1 bg-[#FDFDFF] flex-1 min-h-0 overflow-hidden">
       {/* ── Left Column ── */}
       <div
-        className={`flex-1 flex flex-col min-h-0 lg:py-2 gap-4 overflow-hidden ${selectedDeal || selectedDispute ? "hidden lg:flex" : "flex"}`}
+        className={`flex-1 flex flex-col min-h-0 lg:py-2 gap-4 overflow-y-auto scrollbar-hide ${selectedDeal || selectedDispute ? "hidden lg:flex" : "flex"}`}
       >
         <div className="grid grid-cols-2 gap-4 shrink-0 p-3">
           <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
@@ -429,7 +429,7 @@ const Bottom = ({
           Case List
         </h2>
 
-        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide space-y-4 p-2">
+        <div className="flex flex-col space-y-4 p-2">
           {displayDeals.length > 0 ? (
             displayDeals.map((deal) => (
               <ProjectCard

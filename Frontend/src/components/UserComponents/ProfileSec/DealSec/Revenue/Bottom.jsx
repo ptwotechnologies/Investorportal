@@ -207,7 +207,7 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
     <div className="flex flex-col lg:flex-row gap-2 px-1 lg:px-4 lg:py-2 bg-[#FDFDFF] flex-1 min-h-0 overflow-hidden">
       {/* ── Left Column ── */}
       <div
-        className={`flex-1 flex py-2 flex-col gap-6 overflow-hidden ${selectedDeal ? "hidden lg:flex" : "flex"}`}
+        className={`flex-1 flex py-2 flex-col gap-6 overflow-y-auto scrollbar-hide ${selectedDeal ? "hidden lg:flex" : "flex"}`}
       >
         <div className="grid grid-cols-2 gap-4 shrink-0 px-1">
           <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
@@ -311,7 +311,7 @@ const Bottom = ({ deals, setDeals, selectedDeal, setSelectedDeal }) => {
           Revenue Overview
         </h2>
 
-        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide p-1 space-y-4 p-2">
+        <div className="flex flex-col p-1 space-y-4 p-2">
           {loading ? (
             <div className="text-center py-10 text-gray-400">Loading...</div>
           ) : deals.length === 0 ? (
