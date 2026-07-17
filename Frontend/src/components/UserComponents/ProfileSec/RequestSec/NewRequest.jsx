@@ -150,9 +150,8 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
   };
 
   return (
-    <div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 pb-20 md:pb-0">
+    <div className="flex-1 flex flex-col relative min-h-0">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 pb-20 md:pb-0 overflow-y-auto flex-1 overscroll-none">
         {raisedRequestOptions.map((option) => (
           <div key={option.id} className="flex flex-col gap-2 relative">
             <div
@@ -288,7 +287,7 @@ const NewRequest = ({ onCreateRequest, triggerUpgradeModal }) => {
         ))}
       </div>
 
-      <div className="lg:border lg:p-3 mt-7  lg:border-gray-400 rounded-lg lg:static fixed bottom-1.5 left-1.5 right-1.5 z-20 ">
+      <div className="lg:border lg:p-3 mt-auto lg:border-gray-400 rounded-lg lg:static sticky bottom-0 bg-white z-20 pb-2 pt-2">
         <div className="flex border-2 shadow-md border-gray-300 items-center px-4 py-1 lg:py-0 justify-between rounded-xl flex-1  bg-linear-to-r from-[#D8D6F8] via-[#EADDF3] to-[#F8DEDE]">
           <input
             type="text"

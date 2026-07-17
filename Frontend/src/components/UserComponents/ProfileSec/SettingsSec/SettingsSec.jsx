@@ -114,8 +114,8 @@ const SettingsSec = () => {
   }
 
   return (
-    <div className="md:flex  lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-4">
-      <div className=" bg-gray-100 h-[85vh]  w-full  mx-auto  pt-2">
+    <div className="flex flex-col flex-1 min-h-0 lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-4">
+      <div className="bg-gray-100 flex-1 flex flex-col min-h-0 w-full mx-auto pt-2">
         {/* Header */}
         <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-3 justify-between items-center">
           <h1 className="text-md font-semibold text-gray-800">
@@ -133,10 +133,10 @@ const SettingsSec = () => {
         </div>
 
         {/* ✅ Equal height fix added here */}
-        <div className="flex gap-4 items-stretch">
+        <div className="flex gap-4 flex-1 min-h-0 items-stretch">
           {/* Left Card */}
-          <div className="flex flex-col justify-between w-full md:w-[60%] items-center h-screen lg:h-[90vh]">
-            <div className="border px-6 py-3 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full h-full">
+          <div className="flex flex-col justify-between w-full md:w-[60%] items-center flex-1 min-h-0">
+            <div className="border px-6 py-3 flex flex-col gap-6 bg-white border-gray-300 shadow-md rounded-lg w-full flex-1 min-h-0 overflow-y-auto">
               {/* Left content starts here */}
 
               <div className="flex flex-col lg:gap-4 gap-3 text-sm text-gray-800 w-full">
@@ -229,8 +229,8 @@ const SettingsSec = () => {
           </div>
 
           {/* ✅ Right Card (exact UI, untouched CSS) */}
-          <div className="hidden lg:flex w-[40%] h-[90vh] ">
-            <div className="bg-white border border-gray-300 shadow-md rounded-2xl overflow-hidden flex flex-col justify-between w-full h-full">
+          <div className="hidden lg:flex w-[40%] flex-1 min-h-0 flex-col">
+            <div className="bg-white border border-gray-300 shadow-md rounded-2xl overflow-y-auto flex flex-col justify-between w-full flex-1 min-h-0">
               {/* Header image section */}
               <div
                 className="relative h-40 border-2 border-gray-300 bg-gray-100"

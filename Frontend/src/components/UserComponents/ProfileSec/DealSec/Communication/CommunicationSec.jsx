@@ -1,19 +1,19 @@
-import React from 'react';
-import TopBar from './TopBar';
-import Bottom from './Bottom';
+import React from "react";
+import TopBar from "./TopBar";
+import Bottom from "./Bottom";
 
 const CommunicationSec = () => {
   return (
-   <div>
-      <div id='top'>
-         <TopBar />
+    <div className="flex flex-col flex-1 min-h-0 w-full h-full overflow-hidden">
+      <div id="top" className="shrink-0">
+        <TopBar />
       </div>
 
-      <div id='bottom'>
+      <div id="bottom" className="flex-1 flex flex-col min-h-0 overflow-hidden">
         <Bottom />
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default CommunicationSec;

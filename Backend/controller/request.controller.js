@@ -2,6 +2,7 @@ import Request from "../Models/request.model.js";
 import User from "../Models/User.model.js";
 import Notification from "../Models/notification.model.js";
 import { sendPushNotification } from "../lib/onesignal.js";
+import { sendEmailNotification } from "../lib/emailNotifier.js";
 
 // CREATE REQUEST
 export const createRequest = async (req, res) => {
@@ -75,6 +76,13 @@ export const createRequest = async (req, res) => {
       actionLink: "/request",
       type: "IN_APP"
     });
+
+    sendEmailNotification(
+      user._id,
+      "🚀 Request Live",
+      `Your request for "${service}" is now live on Copteno Investor Portal. Relevant professionals are being notified.`,
+      "/request"
+    );
 
     res.status(201).json(newRequest);
   } catch (error) {
@@ -295,6 +303,13 @@ export const markInterested = async (req, res) => {
       actionLink: "/request",
       type: "IN_APP"
     });
+
+    sendEmailNotification(
+      request.raisedBy,
+      "⏳ Action Required: Proposal Received",
+      "A service professional has submitted a proposal for your request. Log in to review it.",
+      "/request"
+    );
 
     console.log("After save - status:", request.status);
     console.log("After save - interestedBy:", request.interestedBy);

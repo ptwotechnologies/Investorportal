@@ -2392,7 +2392,7 @@ const DashboardSec = () => {
 
             <div
               id="right"
-              className="mt-2 m-2 h-[96vh] bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] flex flex-col"
+              className="mt-2 m-2 min-h-[96vh] h-auto bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-2xl p-4 text-[#202020] flex flex-col"
             >
               <div className="flex items-center justify-between">
                 <p className="text-3xl font-semibold my-4">Activity</p>
@@ -2483,7 +2483,7 @@ const DashboardSec = () => {
                 </div>
               )}
 
-              <div className="bg-[#F1F1F1] px-8 py-6 mt-5 rounded-2xl flex-1 flex flex-col min-h-0">
+              <div className="bg-[#F1F1F1] px-8 py-6 mt-5 rounded-2xl h-[320px] shrink-0 flex flex-col">
                 <h3 className="text-gray-900 text-[18px] font-semibold mb-3 shrink-0">
                   My Connections
                 </h3>

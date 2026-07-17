@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { FiArrowLeft, FiPlus, FiFileText, FiSend, FiPaperclip } from "react-icons/fi";
+import {
+  FiArrowLeft,
+  FiPlus,
+  FiFileText,
+  FiSend,
+  FiPaperclip,
+} from "react-icons/fi";
 import { MdOutlineFactCheck } from "react-icons/md";
 import { IoMdCheckmark } from "react-icons/io";
 import { useLocation } from "react-router-dom";
@@ -15,7 +21,7 @@ const Bottom = () => {
   const { socket } = useNotifications();
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Selection states
   const [selectedDeal, setSelectedDeal] = useState(null);
   const [selectedDispute, setSelectedDispute] = useState(null);
@@ -39,26 +45,41 @@ const Bottom = () => {
   const fetchDisputes = async () => {
     try {
       const res = await axios.get(`${serverUrl}/api/disputes/my-disputes`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
       });
       let allDisputes = res.data;
       const userStr = localStorage.getItem("user");
       const userData = userStr ? JSON.parse(userStr) : null;
       const currId = userData?._id || userData?.id;
-      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
-      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
-      
+      const actualRole =
+        localStorage.getItem("role")?.toLowerCase() ||
+        userData?.role?.toLowerCase() ||
+        "";
+      const spMode =
+        localStorage.getItem("spMode")?.toLowerCase() || "provider";
+
       if (currId && String(actualRole).includes("professional")) {
         if (spMode === "buyer") {
-          allDisputes = allDisputes.filter(d => String(d.dealId?.startupId?._id || d.dealId?.startupId) === String(currId));
+          allDisputes = allDisputes.filter(
+            (d) =>
+              String(d.dealId?.startupId?._id || d.dealId?.startupId) ===
+              String(currId),
+          );
         } else {
-          allDisputes = allDisputes.filter(d => String(d.dealId?.professionalId?._id || d.dealId?.professionalId) === String(currId));
+          allDisputes = allDisputes.filter(
+            (d) =>
+              String(
+                d.dealId?.professionalId?._id || d.dealId?.professionalId,
+              ) === String(currId),
+          );
         }
       }
       setDisputes(allDisputes);
-      
+
       if (location.state?.disputeId) {
-        const d = res.data.find(disp => disp._id === location.state.disputeId);
+        const d = res.data.find(
+          (disp) => disp._id === location.state.disputeId,
+        );
         if (d) {
           setSelectedDispute(d);
           setSelectedDeal(d.dealId);
@@ -75,21 +96,34 @@ const Bottom = () => {
 
   const fetchDeals = async () => {
     try {
-      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const spMode =
+        localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(
+        `${serverUrl}/api/deals/my-deals?spMode=${spMode}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       let allDeals = res.data;
       const userStr = localStorage.getItem("user");
       const userData = userStr ? JSON.parse(userStr) : null;
       const currId = userData?._id || userData?.id;
-      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
-      
+      const actualRole =
+        localStorage.getItem("role")?.toLowerCase() ||
+        userData?.role?.toLowerCase() ||
+        "";
+
       if (currId && String(actualRole).includes("professional")) {
         if (spMode === "buyer") {
-          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currId));
+          allDeals = allDeals.filter(
+            (d) => String(d.startupId?._id || d.startupId) === String(currId),
+          );
         } else {
-          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currId));
+          allDeals = allDeals.filter(
+            (d) =>
+              String(d.professionalId?._id || d.professionalId) ===
+              String(currId),
+          );
         }
       }
       setDeals(allDeals);
@@ -102,14 +136,20 @@ const Bottom = () => {
     if (!newMessage.trim() || !selectedDispute) return;
 
     try {
-      const res = await axios.post(`${serverUrl}/api/disputes/message/${selectedDispute._id}`, {
-        message: newMessage
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
+      const res = await axios.post(
+        `${serverUrl}/api/disputes/message/${selectedDispute._id}`,
+        {
+          message: newMessage,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
       const updatedDisp = res.data.dispute;
-      setDisputes(prev => prev.map(d => d._id === updatedDisp._id ? updatedDisp : d));
+      setDisputes((prev) =>
+        prev.map((d) => (d._id === updatedDisp._id ? updatedDisp : d)),
+      );
       setSelectedDispute(updatedDisp);
       setNewMessage("");
     } catch (error) {
@@ -126,15 +166,20 @@ const Bottom = () => {
     if (!imageUrl) return null;
     const publicBaseUrl = "https://pub-cb99bea3292949639f304d67adc5d74e.r2.dev";
     const privateBaseUrl = `https://copteno.c2fc1593db66d893ceff4e23d571cfb6.r2.cloudflarestorage.com`;
-    if (imageUrl.startsWith(privateBaseUrl)) return imageUrl.replace(privateBaseUrl, publicBaseUrl);
+    if (imageUrl.startsWith(privateBaseUrl))
+      return imageUrl.replace(privateBaseUrl, publicBaseUrl);
     return imageUrl.startsWith("http") ? imageUrl : `${serverUrl}${imageUrl}`;
   };
 
   const StatCard = ({ label, value, bgColor }) => (
-    <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+    <div
+      className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}
+    >
       <div className="flex items-center gap-2">
         <FiFileText size={20} className="text-[#001032]" />
-        <h3 className="text-[13px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
+        <h3 className="text-[13px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">
+          {label}
+        </h3>
       </div>
       <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
     </div>
@@ -143,21 +188,34 @@ const Bottom = () => {
   const role = localStorage.getItem("role")?.toLowerCase();
   const isStartup = role === "startup";
 
-  const handleMarkAsRead = useCallback(async (disputeId) => {
-    try {
-      await axios.put(`${serverUrl}/api/disputes/mark-read/${disputeId}`, {}, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      // Update local state
-      setDisputes(prev => prev.map(d => 
-        d._id === disputeId 
-        ? { ...d, [isStartup ? 'isReadByStartup' : 'isReadByProfessional']: true } 
-        : d
-      ));
-    } catch (error) {
-      console.error("Failed to mark as read", error);
-    }
-  }, [token, isStartup]);
+  const handleMarkAsRead = useCallback(
+    async (disputeId) => {
+      try {
+        await axios.put(
+          `${serverUrl}/api/disputes/mark-read/${disputeId}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        // Update local state
+        setDisputes((prev) =>
+          prev.map((d) =>
+            d._id === disputeId
+              ? {
+                  ...d,
+                  [isStartup ? "isReadByStartup" : "isReadByProfessional"]:
+                    true,
+                }
+              : d,
+          ),
+        );
+      } catch (error) {
+        console.error("Failed to mark as read", error);
+      }
+    },
+    [token, isStartup],
+  );
 
   useEffect(() => {
     if (!socket) return;
@@ -165,15 +223,17 @@ const Bottom = () => {
     const handleReceiveMessage = (data) => {
       const { disputeId, updatedDispute } = data;
 
-      setDisputes(prev => prev.map(d => 
-        d._id === updatedDispute._id ? updatedDispute : d
-      ));
+      setDisputes((prev) =>
+        prev.map((d) => (d._id === updatedDispute._id ? updatedDispute : d)),
+      );
 
-      setSelectedDispute(prev => {
+      setSelectedDispute((prev) => {
         if (prev && prev._id === disputeId) {
           // If this thread is open, mark it as read immediately
-          if (isStartup && !updatedDispute.isReadByStartup) handleMarkAsRead(disputeId);
-          if (!isStartup && !updatedDispute.isReadByProfessional) handleMarkAsRead(disputeId);
+          if (isStartup && !updatedDispute.isReadByStartup)
+            handleMarkAsRead(disputeId);
+          if (!isStartup && !updatedDispute.isReadByProfessional)
+            handleMarkAsRead(disputeId);
           return updatedDispute;
         }
         return prev;
@@ -190,26 +250,40 @@ const Bottom = () => {
   const DisputeSummaryCard = ({ dispute }) => {
     const deal = dispute?.dealId || {};
     const startupName = deal?.startupId?.businessDetails?.companyName || "N/A";
-    const hasUnread = isStartup ? !dispute.isReadByStartup : !dispute.isReadByProfessional;
+    const hasUnread = isStartup
+      ? !dispute.isReadByStartup
+      : !dispute.isReadByProfessional;
 
     return (
-      <div className={`bg-white rounded-2xl p-3 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border-2 transition-all relative ${selectedDispute?._id === dispute._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
-        {hasUnread && <div className="absolute top-4 left-4 w-2.5 h-2.5 bg-[#3CC033] rounded-full border border-white z-10" />}
+      <div
+        className={`bg-white rounded-2xl p-3 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border-2 transition-all relative ${selectedDispute?._id === dispute._id ? "border-[#D8D6F8]" : "border-transparent"}`}
+      >
+        {hasUnread && (
+          <div className="absolute top-4 left-4 w-2.5 h-2.5 bg-[#3CC033] rounded-full border border-white z-10" />
+        )}
         <div className="flex items-center justify-between">
-          <h4 className="text-sm font-semibold text-[#001032] ml-2 lg:ml-4">Dispute ID – {getDisplayId(dispute._id)}</h4>
-          <span className="bg-[#B91C1C] text-white text-[7px] lg:text-[10px] lg:px-3 p-2 py-1 rounded-full font-semibold">Duration - 20 Days</span>
+          <h4 className="text-sm font-semibold text-[#001032] ml-2 lg:ml-4">
+            Dispute ID – {getDisplayId(dispute._id)}
+          </h4>
+          <span className="bg-[#B91C1C] text-white text-[7px] lg:text-[10px] lg:px-3 p-2 py-1 rounded-full font-semibold">
+            Duration - 20 Days
+          </span>
         </div>
         <div className="bg-white rounded-xl border border-gray-100 p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2">
-           <h5 className="text-sm font-bold text-[#001032]">{startupName}</h5>
-           <p className="text-[10px] text-gray-400 -mt-1 truncate">{deal?.requestId?.service || "Project Deal"}</p>
-           <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
-             <span className="text-[#59549F] font-bold ">Reason</span> – {dispute.reason}
-           </p>
-           <p className="text-[11px] text-gray-500">
-             <span className="text-[#59549F] font-bold ">Amount</span> – Rs {dispute.amount}
-           </p>
-           <div className="flex justify-end pt-2">
-             <button 
+          <h5 className="text-sm font-bold text-[#001032]">{startupName}</h5>
+          <p className="text-[10px] text-gray-400 -mt-1 truncate">
+            {deal?.requestId?.service || "Project Deal"}
+          </p>
+          <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
+            <span className="text-[#59549F] font-bold ">Reason</span> –{" "}
+            {dispute.reason}
+          </p>
+          <p className="text-[11px] text-gray-500">
+            <span className="text-[#59549F] font-bold ">Amount</span> – Rs{" "}
+            {dispute.amount}
+          </p>
+          <div className="flex justify-end pt-2">
+            <button
               onClick={() => {
                 setSelectedDispute(dispute);
                 setSelectedDeal(dispute.dealId);
@@ -217,10 +291,10 @@ const Bottom = () => {
                 if (hasUnread) handleMarkAsRead(dispute._id);
               }}
               className="px-4 py-1.5 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-lg shadow-sm hover:opacity-90"
-             >
-               View Details
-             </button>
-           </div>
+            >
+              View Details
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -232,17 +306,25 @@ const Bottom = () => {
     const owner = prof ? `${prof.firstName} ${prof.lastName}` : "N/A";
 
     return (
-      <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${isSelected ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+      <div
+        className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${isSelected ? "border-[#D8D6F8]" : "border-transparent"}`}
+      >
         <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
           {/* Row 1 */}
           <div className="flex flex-col overflow-hidden">
-            <h3 className="text-[16px] font-medium text-[#000000] leading-tight truncate">{startup}</h3>
+            <h3 className="text-[16px] font-medium text-[#000000] leading-tight truncate">
+              {startup}
+            </h3>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+            <p className="text-[16px] text-[#000000] font-medium whitespace-nowrap">
+              Timeline
+            </p>
           </div>
           <div className="flex flex-col items-end">
-            <p className="text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+            <p className="text-[16px] text-[#000000] font-medium whitespace-nowrap">
+              Price
+            </p>
           </div>
 
           {/* Row 2 */}
@@ -252,10 +334,14 @@ const Bottom = () => {
             </p>
           </div>
           <div className="flex flex-col items-center -mt-1">
-            <p className="text-[13px] lg:text-sm text-[#000000]">{deal.totalTimeline || "N/A"}</p>
+            <p className="text-[13px] lg:text-sm text-[#000000]">
+              {deal.totalTimeline || "N/A"}
+            </p>
           </div>
           <div className="flex flex-col items-end -mt-1">
-            <p className="text-[13px] lg:text-sm text-[#000000]">Rs {deal.totalAmount || 0}</p>
+            <p className="text-[13px] lg:text-sm text-[#000000]">
+              Rs {deal.totalAmount || 0}
+            </p>
           </div>
 
           {/* Row 3 */}
@@ -264,7 +350,7 @@ const Bottom = () => {
           </div>
         </div>
 
-        <button 
+        <button
           onClick={() => onSelect(deal)}
           className="w-full py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all"
         >
@@ -275,24 +361,40 @@ const Bottom = () => {
   };
 
   const MilestoneDisputeCard = ({ milestone, project, dispute }) => {
-    const hasUnread = isStartup ? !dispute?.isReadByStartup : !dispute?.isReadByProfessional;
+    const hasUnread = isStartup
+      ? !dispute?.isReadByStartup
+      : !dispute?.isReadByProfessional;
     return (
       <div className="bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4 border border-gray-100 relative">
-        {hasUnread && <div className="absolute top-4 left-4 w-2.5 h-2.5 bg-[#3CC033] rounded-full border border-white z-10" />}
+        {hasUnread && (
+          <div className="absolute top-4 left-4 w-2.5 h-2.5 bg-[#3CC033] rounded-full border border-white z-10" />
+        )}
         <div className="flex items-center justify-between px-1">
-          <h4 className={`text-sm font-semibold text-[#001032] ${hasUnread ? 'ml-4' : ''}`}>Com - MS-2026-CO{milestone._id?.slice(-7).toUpperCase()}</h4>
-          <span className="bg-[#B91C1C] text-white text-[8px] lg:text-[10px] px-3 py-1 rounded-full font-bold">Duration - 20 Days</span>
+          <h4
+            className={`text-sm font-semibold text-[#001032] ${hasUnread ? "ml-4" : ""}`}
+          >
+            Com - MS-2026-CO{milestone._id?.slice(-7).toUpperCase()}
+          </h4>
+          <span className="bg-[#B91C1C] text-white text-[8px] lg:text-[10px] px-3 py-1 rounded-full font-bold">
+            Duration - 20 Days
+          </span>
         </div>
-        <div className={`bg-white rounded-xl border p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2 transition-all ${dispute ? 'border-gray-200 border-2' : 'border-gray-100'}`}>
-           <h5 className="text-sm font-bold text-[#001032]">{milestone.title}</h5>
-           <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
-             <span className="text-[#59549F] font-bold">Reason</span> – {dispute?.reason || "No issues reported."}
-           </p>
-           <p className="text-[11px] text-gray-500">
-             <span className="text-[#59549F] font-bold">Amount</span> – Rs {milestone.amount}
-           </p>
-           <div className="flex justify-end pt-2">
-             <button 
+        <div
+          className={`bg-white rounded-xl border p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-2 transition-all ${dispute ? "border-gray-200 border-2" : "border-gray-100"}`}
+        >
+          <h5 className="text-sm font-bold text-[#001032]">
+            {milestone.title}
+          </h5>
+          <p className="text-[11px] text-gray-500 leading-relaxed line-clamp-2">
+            <span className="text-[#59549F] font-bold">Reason</span> –{" "}
+            {dispute?.reason || "No issues reported."}
+          </p>
+          <p className="text-[11px] text-gray-500">
+            <span className="text-[#59549F] font-bold">Amount</span> – Rs{" "}
+            {milestone.amount}
+          </p>
+          <div className="flex justify-end pt-2">
+            <button
               disabled={!dispute}
               onClick={() => {
                 setSelectedDispute(dispute);
@@ -300,141 +402,226 @@ const Bottom = () => {
                 setIsThreadOpen(true);
                 if (hasUnread) handleMarkAsRead(dispute._id);
               }}
-              className={`px-4 py-1.5 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-lg shadow-sm ${!dispute ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-90'}`}
-             >
-               View Details
-             </button>
-           </div>
+              className={`px-4 py-1.5 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-lg shadow-sm ${!dispute ? "opacity-50 cursor-not-allowed" : "hover:opacity-90"}`}
+            >
+              View Details
+            </button>
+          </div>
         </div>
       </div>
     );
   };
 
-  if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-full">Loading...</div>
+    );
 
   const renderThreadView = () => (
     <div className="h-full flex flex-col">
       {/* Scrollable Content */}
-      <div className="flex-1 overflow-y-auto scrollbar-hide space-y-6 px-2">
+      <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide space-y-6 px-2">
         <div className="flex items-center justify-between mt-2">
           <h4 className="text-sm font-bold text-[#001032] ">
             Dispute ID – {getDisplayId(selectedDispute?._id)}
           </h4>
-          <span className="bg-[#B91C1C] text-white lg:text-[10px] text-[8px] px-2 lg:px-3 py-1 lg:py-1.5 rounded-lg font-bold">Duration - 20 Days</span>
+          <span className="bg-[#B91C1C] text-white lg:text-[10px] text-[8px] px-2 lg:px-3 py-1 lg:py-1.5 rounded-lg font-bold">
+            Duration - 20 Days
+          </span>
         </div>
-        
+
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-3">
-           <h5 className="text-sm font-bold text-[#001032]">
-             {selectedDeal?.milestones?.find(m => String(m._id) === String(selectedDispute?.milestoneId))?.title || "Milestone 1"}
-           </h5>
-           <p className="text-[12px] text-gray-500 leading-relaxed"><span className="text-[#59549F] font-bold">Reason</span> – {selectedDispute?.reason}</p>
-           <p className="text-[12px] text-gray-500 font-bold"><span className="text-[#59549F]">Amount</span> – Rs {selectedDispute?.amount}</p>
+          <h5 className="text-sm font-bold text-[#001032]">
+            {selectedDeal?.milestones?.find(
+              (m) => String(m._id) === String(selectedDispute?.milestoneId),
+            )?.title || "Milestone 1"}
+          </h5>
+          <p className="text-[12px] text-gray-500 leading-relaxed">
+            <span className="text-[#59549F] font-bold">Reason</span> –{" "}
+            {selectedDispute?.reason}
+          </p>
+          <p className="text-[12px] text-gray-500 font-bold">
+            <span className="text-[#59549F]">Amount</span> – Rs{" "}
+            {selectedDispute?.amount}
+          </p>
         </div>
-  
+
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
-           <h5 className="text-sm font-bold text-[#001032]">Evidence Upload</h5>
-           <div className="grid grid-cols-2 gap-4">
-             {selectedDispute?.evidence?.split(',').filter(u => u).map((url, i) => (
-               <div key={i} className="aspect-[4/3] rounded-xl overflow-hidden border border-gray-100">
-                  <img src={getImageUrl(url)} className="w-full h-full object-cover" alt="evidence" />
-               </div>
-             ))}
-           </div>
-        </div>
-  
-        <div className="space-y-6 pt-6">
-           <h3 className="text-base font-bold text-[#001032]">Communication Thread</h3>
-           <div className="space-y-4 pb-4">
-              {selectedDispute?.messages?.map((msg, i) => (
-                <div key={i} className="flex flex-col gap-1">
-                   <div className="bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-50 relative">
-                      <div className="flex gap-3">
-                         <div className="w-10 h-10 bg-gray-200 rounded-full shrink-0" />
-                         <div className="flex-1">
-                            <div className="flex items-center justify-between mb-1">
-                               <span className="font-bold text-sm text-[#001032]">
-                                 {String(msg.senderId._id || msg.senderId) === String(user._id) 
-                                   ? "You" 
-                                   : (msg.senderId.businessDetails?.companyName || (msg.senderId.businessDetails ? `${msg.senderId.businessDetails.firstName} ${msg.senderId.businessDetails.lastName}` : "User"))
-                                 }
-                               </span>
-                               <span className="text-[10px] text-gray-400">{msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Recently"}</span>
-                            </div>
-                            <p className="text-[11px] text-gray-500 leading-relaxed text-left">{msg.message}</p>
-                         </div>
-                      </div>
-                      <div className="flex justify-end mt-2">
-                         <button className="px-4 py-1 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-md shadow-sm">Reply</button>
-                      </div>
-                   </div>
+          <h5 className="text-sm font-bold text-[#001032]">Evidence Upload</h5>
+          <div className="grid grid-cols-2 gap-4">
+            {selectedDispute?.evidence
+              ?.split(",")
+              .filter((u) => u)
+              .map((url, i) => (
+                <div
+                  key={i}
+                  className="aspect-[4/3] rounded-xl overflow-hidden border border-gray-100"
+                >
+                  <img
+                    src={getImageUrl(url)}
+                    className="w-full h-full object-cover"
+                    alt="evidence"
+                  />
                 </div>
               ))}
-           </div>
+          </div>
+        </div>
+
+        <div className="space-y-6 pt-6">
+          <h3 className="text-base font-bold text-[#001032]">
+            Communication Thread
+          </h3>
+          <div className="space-y-4 pb-4">
+            {selectedDispute?.messages?.map((msg, i) => (
+              <div key={i} className="flex flex-col gap-1">
+                <div className="bg-white rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-50 relative">
+                  <div className="flex gap-3">
+                    <div className="w-10 h-10 bg-gray-200 rounded-full shrink-0" />
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-sm text-[#001032]">
+                          {String(msg.senderId._id || msg.senderId) ===
+                          String(user._id)
+                            ? "You"
+                            : msg.senderId.businessDetails?.companyName ||
+                              (msg.senderId.businessDetails
+                                ? `${msg.senderId.businessDetails.firstName} ${msg.senderId.businessDetails.lastName}`
+                                : "User")}
+                        </span>
+                        <span className="text-[10px] text-gray-400">
+                          {msg.timestamp
+                            ? new Date(msg.timestamp).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "Recently"}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-gray-500 leading-relaxed text-left">
+                        {msg.message}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex justify-end mt-2">
+                    <button className="px-4 py-1 bg-[#D8D6F8] text-[#59549F] text-[10px] font-bold rounded-md shadow-sm">
+                      Reply
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Static Footer Section */}
-      <div className="pt-4  space-y-4 bg-[#FDFDFF] border-t border-gray-100 mt-auto px-2">
+      <div className="pt-4 space-y-4 bg-[#FDFDFF] border-t border-gray-100 mt-auto px-2">
         <div className="relative">
-           <input 
-             type="text" 
-             placeholder="Enter the text" 
-             className="w-full pl-4 pr-16 py-4 bg-white border border-gray-200 rounded-lg shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] text-xs outline-none"
-             value={newMessage}
-             onChange={(e) => setNewMessage(e.target.value)}
-             onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
-           />
-           <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3 text-[#59549F]">
-              <button className="hover:opacity-70"><FiPaperclip size={18} /></button>
-              <button onClick={handleSendMessage} className="hover:opacity-70"><FiSend size={18} /></button>
-           </div>
+          <input
+            type="text"
+            placeholder="Enter the text"
+            className="w-full pl-4 pr-16 py-4 bg-white border border-gray-200 rounded-lg shadow-[0px_0px_10px_0px_rgba(0,0,0,0.1)] text-xs outline-none"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+          />
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3 text-[#59549F]">
+            <button className="hover:opacity-70">
+              <FiPaperclip size={18} />
+            </button>
+            <button onClick={handleSendMessage} className="hover:opacity-70">
+              <FiSend size={18} />
+            </button>
+          </div>
         </div>
 
         <div className="space-y-3 pb-2">
-           <button 
-             onClick={() => setShowResolutions(!showResolutions)}
-             className="w-full py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-[#313131] hover:bg-gray-50 shadow-sm transition-all"
-           >
-             Resolution Options
-           </button>
-           
-           {showResolutions && (
-             <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
-                <button className="w-full py-2 bg-[#004F5B] text-white rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-all">
-                  Approve Payment
+          <button
+            onClick={() => setShowResolutions(!showResolutions)}
+            className="w-full py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-[#313131] hover:bg-gray-50 shadow-sm transition-all"
+          >
+            Resolution Options
+          </button>
+
+          {showResolutions && (
+            <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+              <button className="w-full py-2 bg-[#004F5B] text-white rounded-lg text-sm font-bold shadow-md hover:opacity-90 transition-all">
+                Approve Payment
+              </button>
+              <div className="grid grid-cols-2 gap-4">
+                <button className="py-1.5 bg-[#FFEDCF] text-[#FF9D00] rounded-lg text-sm font-bold shadow-sm">
+                  Refund Payment
                 </button>
-                <div className="grid grid-cols-2 gap-4">
-                   <button className="py-1.5 bg-[#FFEDCF] text-[#FF9D00] rounded-lg text-sm font-bold shadow-sm">Refund Payment</button>
-                   <button className="py-1.5 bg-white border border-[#D8D6F8] text-[#59549F] rounded-lg text-sm font-bold shadow-sm">Split Payment</button>
-                   <button className="py-1.5 bg-[#CDCDCD] text-[#404040] rounded-lg text-sm font-bold shadow-sm">Request Revision</button>
-                   <button className="py-1.5 bg-[#FFD0D0] text-[#BA1E1E] rounded-lg text-sm font-bold shadow-sm">Escalate</button>
-                </div>
-             </div>
-           )}
+                <button className="py-1.5 bg-white border border-[#D8D6F8] text-[#59549F] rounded-lg text-sm font-bold shadow-sm">
+                  Split Payment
+                </button>
+                <button className="py-1.5 bg-[#CDCDCD] text-[#404040] rounded-lg text-sm font-bold shadow-sm">
+                  Request Revision
+                </button>
+                <button className="py-1.5 bg-[#FFD0D0] text-[#BA1E1E] rounded-lg text-sm font-bold shadow-sm">
+                  Escalate
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] h-auto overflow-hidden">
-      
+    <div className="flex flex-col lg:flex-row gap-2 flex-1 min-h-0 lg:px-4 lg:py-2 bg-[#FDFDFF]">
       {/* ── Left Column ── */}
-      <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${ (selectedDeal || selectedDispute) ? 'hidden lg:flex' : 'flex'}`}>
+      <div
+        className={`flex-1 flex flex-col min-h-0 lg:py-2 gap-6 overflow-hidden ${selectedDeal || selectedDispute ? "hidden lg:flex" : "flex"}`}
+      >
         <div className="grid grid-cols-2 gap-4 px-2 shrink-0">
-          <StatCard label="Active Conversations" value={disputes.filter(d => d.status !== 'Resolved').length} bgColor="bg-[#D8E1F0]" />
-          <StatCard label="Awaiting Response" value={disputes.filter(d => d.messages?.length === 0).length} bgColor="bg-[#D8D6F8]" />
-          <StatCard label="In Discussion" value={disputes.filter(d => d.messages?.length > 0 && d.status !== 'Resolved').length} bgColor="bg-[#EFDBD9]" />
-          <StatCard label="Closed Conversations" value={disputes.filter(d => d.status === 'Resolved').length} bgColor="bg-[#D7EBE4]" />
+          <StatCard
+            label="Active Conversations"
+            value={disputes.filter((d) => d.status !== "Resolved").length}
+            bgColor="bg-[#D8E1F0]"
+          />
+          <StatCard
+            label="Awaiting Response"
+            value={disputes.filter((d) => d.messages?.length === 0).length}
+            bgColor="bg-[#D8D6F8]"
+          />
+          <StatCard
+            label="In Discussion"
+            value={
+              disputes.filter(
+                (d) => d.messages?.length > 0 && d.status !== "Resolved",
+              ).length
+            }
+            bgColor="bg-[#EFDBD9]"
+          />
+          <StatCard
+            label="Closed Conversations"
+            value={disputes.filter((d) => d.status === "Resolved").length}
+            bgColor="bg-[#D7EBE4]"
+          />
         </div>
 
         <div className="flex items-center gap-2 px-2.5 shrink-0">
           {["Milestones", "Disputes", "Files"].map((tab) => {
-            const hasUnread = tab === "Milestones" 
-              ? disputes.some(d => d.milestoneId && (isStartup ? !d.isReadByStartup : !d.isReadByProfessional))
-              : tab === "Disputes" 
-              ? disputes.some(d => !d.milestoneId && (isStartup ? !d.isReadByStartup : !d.isReadByProfessional))
-              : false;
+            const hasUnread =
+              tab === "Milestones"
+                ? disputes.some(
+                    (d) =>
+                      d.milestoneId &&
+                      (isStartup
+                        ? !d.isReadByStartup
+                        : !d.isReadByProfessional),
+                  )
+                : tab === "Disputes"
+                  ? disputes.some(
+                      (d) =>
+                        !d.milestoneId &&
+                        (isStartup
+                          ? !d.isReadByStartup
+                          : !d.isReadByProfessional),
+                    )
+                  : false;
 
             return (
               <button
@@ -446,19 +633,21 @@ const Bottom = () => {
                   setIsThreadOpen(false);
                 }}
                 className={`flex-1 py-1 text-[13px] lg:text-sm font-semibold rounded-sm transition-all shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] border flex items-center justify-center gap-2 ${
-                  activeTab === tab 
-                  ? "bg-[#D8D6F8] text-[#000000] border-[#D8D6F8]" 
-                  : "bg-white text-[#000000] border-gray-100 hover:bg-gray-50"
+                  activeTab === tab
+                    ? "bg-[#D8D6F8] text-[#000000] border-[#D8D6F8]"
+                    : "bg-white text-[#000000] border-gray-100 hover:bg-gray-50"
                 }`}
               >
                 {tab}
-                {hasUnread && <span className="w-2 h-2 rounded-full bg-red-500"></span>}
+                {hasUnread && (
+                  <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                )}
               </button>
             );
           })}
         </div>
 
-        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2 w-full lg:w-auto"> 
+        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide space-y-4 p-2 w-full lg:w-auto">
           {deals.length === 0 ? (
             <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-full max-w-sm mx-auto my-3 lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
@@ -477,129 +666,208 @@ const Bottom = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">No conversations found</h3>
-                <p className="text-sm text-gray-500">Raise a request and make a deal to communicate with professionals.</p>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  No conversations found
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Raise a request and make a deal to communicate with
+                  professionals.
+                </p>
               </div>
             </div>
-          ) : (activeTab === "Milestones" || activeTab === "Files") ? (
-             deals.map(deal => (
-               <ProjectCard 
-                 key={deal._id} 
-                 deal={deal} 
-                 isSelected={selectedDeal?._id === deal._id} 
-                 onSelect={(d) => { setSelectedDeal(d); setSelectedDispute(null); setIsThreadOpen(false); }} 
-               />
-             ))
+          ) : activeTab === "Milestones" || activeTab === "Files" ? (
+            deals.map((deal) => (
+              <ProjectCard
+                key={deal._id}
+                deal={deal}
+                isSelected={selectedDeal?._id === deal._id}
+                onSelect={(d) => {
+                  setSelectedDeal(d);
+                  setSelectedDispute(null);
+                  setIsThreadOpen(false);
+                }}
+              />
+            ))
           ) : activeTab === "Disputes" ? (
-             disputes.map(disp => <DisputeSummaryCard key={disp._id} dispute={disp} />)
+            disputes.map((disp) => (
+              <DisputeSummaryCard key={disp._id} dispute={disp} />
+            ))
           ) : (
-            <div className="text-center py-20 text-gray-400 italic">Tab content coming soon</div>
+            <div className="text-center py-20 text-gray-400 italic">
+              Tab content coming soon
+            </div>
           )}
         </div>
       </div>
 
-      <div className="hidden lg:block w-px bg-gray-200 self-stretch  my-2" />
+      <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full  flex flex-col overflow-hidden ${(selectedDeal || selectedDispute) ? 'flex' : 'hidden lg:flex'}`}>
-        
+      <div
+        className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col flex-1 min-h-0 overflow-hidden ${selectedDeal || selectedDispute ? "flex" : "hidden lg:flex"}`}
+      >
         {/* Header */}
         {(selectedDeal || selectedDispute) && (
           <div className="flex lg:hidden items-center gap-3 py-2 px-2 shrink-0">
-            <button 
-                onClick={() => {
-                    if (isThreadOpen) {
-                        setIsThreadOpen(false);
-                    } else {
-                        setSelectedDeal(null);
-                        setSelectedDispute(null);
-                    }
-                }} 
-                className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
+            <button
+              onClick={() => {
+                if (isThreadOpen) {
+                  setIsThreadOpen(false);
+                } else {
+                  setSelectedDeal(null);
+                  setSelectedDispute(null);
+                }
+              }}
+              className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
             >
               <FiArrowLeft size={18} />
             </button>
             <h2 className="text-lg font-semibold text-[#001032]">
-              {isThreadOpen ? "Communication Thread" : (activeTab === "Milestones" ? "Milestones" : (activeTab === "Files" ? "Files" : "Disputes"))}
+              {isThreadOpen
+                ? "Communication Thread"
+                : activeTab === "Milestones"
+                  ? "Milestones"
+                  : activeTab === "Files"
+                    ? "Files"
+                    : "Disputes"}
             </h2>
           </div>
         )}
 
-        <div className={`flex-1 flex flex-col overflow-hidden  rounded-2xl relative ${(!selectedDeal && !selectedDispute) ? 'shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] m-2' : ''}`}>
-          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+        <div
+          className={`flex-1 flex flex-col min-h-0 overflow-hidden rounded-2xl relative ${!selectedDeal && !selectedDispute ? "shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] m-2" : ""}`}
+        >
+          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide relative">
             {!selectedDeal && !selectedDispute ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
                   <IoMdCheckmark size={40} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
-                <p className="text-sm text-gray-400 mt-1 italic">Select a {activeTab === "Milestones" ? "project" : "dispute"} from the left to view details.</p>
+                <h3 className="text-lg font-bold text-gray-400">
+                  No Project Selected
+                </h3>
+                <p className="text-sm text-gray-400 mt-1 italic">
+                  Select a {activeTab === "Milestones" ? "project" : "dispute"}{" "}
+                  from the left to view details.
+                </p>
               </div>
             ) : isThreadOpen ? (
-              <div className=" h-full flex flex-col">
-                {renderThreadView()}
-              </div>
-            ) : (activeTab === "Milestones" || activeTab === "Files") && selectedDeal ? (
+              <div className=" h-full flex flex-col">{renderThreadView()}</div>
+            ) : (activeTab === "Milestones" || activeTab === "Files") &&
+              selectedDeal ? (
               /* ═══ Milestone List ═══ */
               <div className=" p-2 space-y-6">
-                 {selectedDeal.milestones?.map(ms => {
-                   const msDispute = disputes.find(d => String(d.milestoneId) === String(ms._id) && String(d.dealId?._id) === String(selectedDeal._id));
-                   return <MilestoneDisputeCard key={ms._id} milestone={ms} project={selectedDeal} dispute={msDispute} />;
-                 })}
-                 {(!selectedDeal.milestones || selectedDeal.milestones.length === 0) && (
-                   <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-40">
-                      <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                        <IoMdCheckmark size={30} className="text-gray-300" />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-700">No {activeTab === "Files" ? "files" : "milestones"} found</h3>
-                      <p className="text-sm text-gray-500">There is nothing to show for this project yet.</p>
-                   </div>
-                 )}
+                {selectedDeal.milestones?.map((ms) => {
+                  const msDispute = disputes.find(
+                    (d) =>
+                      String(d.milestoneId) === String(ms._id) &&
+                      String(d.dealId?._id) === String(selectedDeal._id),
+                  );
+                  return (
+                    <MilestoneDisputeCard
+                      key={ms._id}
+                      milestone={ms}
+                      project={selectedDeal}
+                      dispute={msDispute}
+                    />
+                  );
+                })}
+                {(!selectedDeal.milestones ||
+                  selectedDeal.milestones.length === 0) && (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-40">
+                    <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                      <IoMdCheckmark size={30} className="text-gray-300" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-700">
+                      No {activeTab === "Files" ? "files" : "milestones"} found
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      There is nothing to show for this project yet.
+                    </p>
+                  </div>
+                )}
               </div>
-            ) : activeTab === "Disputes" && (selectedDeal || selectedDispute) ? (
+            ) : activeTab === "Disputes" &&
+              (selectedDeal || selectedDispute) ? (
               /* ═══ Disputes List (Right Panel) ═══ */
               <div className="p-3 lg:p-2 h-full overflow-y-auto scrollbar-hide">
-                 <div className="bg-white rounded-2xl p-3 lg:p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]  min-h-full">
-                    <h3 className="text-base lg:text-lg font-bold text-[#000000] mb-4">Disputes</h3>
-                    <div className="space-y-6">
-                       {disputes.filter(d => 
-                         String(d.dealId?._id || d.dealId) === String(selectedDeal?._id || selectedDispute?.dealId?._id || selectedDispute?.dealId)
-                       ).map(disp => {
-                         const fullDeal = deals.find(d => d._id === (disp.dealId?._id || disp.dealId)) || disp.dealId;
-                         return (
-                         <div key={disp._id} className={`bg-white rounded-2xl p-5 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${selectedDispute?._id === disp._id ? 'border-[#D8D6F8]' : 'border-gray-50'}`}>
+                <div className="bg-white rounded-2xl p-3 lg:p-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] min-h-full">
+                  <h3 className="text-base lg:text-lg font-bold text-[#000000] mb-4">
+                    Disputes
+                  </h3>
+                  <div className="space-y-6">
+                    {disputes
+                      .filter(
+                        (d) =>
+                          String(d.dealId?._id || d.dealId) ===
+                          String(
+                            selectedDeal?._id ||
+                              selectedDispute?.dealId?._id ||
+                              selectedDispute?.dealId,
+                          ),
+                      )
+                      .map((disp) => {
+                        const fullDeal =
+                          deals.find(
+                            (d) => d._id === (disp.dealId?._id || disp.dealId),
+                          ) || disp.dealId;
+                        return (
+                          <div
+                            key={disp._id}
+                            className={`bg-white rounded-2xl p-5 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${selectedDispute?._id === disp._id ? "border-[#D8D6F8]" : "border-gray-50"}`}
+                          >
                             <div className="grid grid-cols-3 gap-3 lg:gap-4 items-start mb-6">
-                               <div className="flex flex-col overflow-hidden">
-                                  <h4 className="text-[16px] font-semibold text-[#000000] truncate">{fullDeal?.startupId?.businessDetails?.companyName || "N/A"}</h4>
-                                  <p className="text-[13px] lg:text-[12px] text-gray-400 truncate">{fullDeal?.requestId?.service || "Project Deal"}</p>
-                                  <p className="text-[13px] lg:text-[12px] text-[#000000] mt-2 opacity-70 truncate">
-                                    {fullDeal?.professionalId?.businessDetails ? `${fullDeal.professionalId.businessDetails.firstName} ${fullDeal.professionalId.businessDetails.lastName}` : "N/A"}
-                                  </p>
-                               </div>
-                               <div className="flex flex-col items-center">
-                                  <span className="text-[16px] font-semibold text-[#000000]">Due Date</span>
-                                  <p className="text-[13px] lg:text-[12px] text-gray-400 whitespace-nowrap">1 March, 2026</p>
-                               </div>
-                               <div className="flex flex-col items-end">
-                                  <span className="text-[16px] font-semibold text-[#000000]">Price</span>
-                                  <p className="text-[13px] lg:text-[12px] text-gray-400 whitespace-nowrap">Rs {disp.dealId?.totalAmount?.toLocaleString()}</p>
-                               </div>
+                              <div className="flex flex-col overflow-hidden">
+                                <h4 className="text-[16px] font-semibold text-[#000000] truncate">
+                                  {fullDeal?.startupId?.businessDetails
+                                    ?.companyName || "N/A"}
+                                </h4>
+                                <p className="text-[13px] lg:text-[12px] text-gray-400 truncate">
+                                  {fullDeal?.requestId?.service ||
+                                    "Project Deal"}
+                                </p>
+                                <p className="text-[13px] lg:text-[12px] text-[#000000] mt-2 opacity-70 truncate">
+                                  {fullDeal?.professionalId?.businessDetails
+                                    ? `${fullDeal.professionalId.businessDetails.firstName} ${fullDeal.professionalId.businessDetails.lastName}`
+                                    : "N/A"}
+                                </p>
+                              </div>
+                              <div className="flex flex-col items-center">
+                                <span className="text-[16px] font-semibold text-[#000000]">
+                                  Due Date
+                                </span>
+                                <p className="text-[13px] lg:text-[12px] text-gray-400 whitespace-nowrap">
+                                  1 March, 2026
+                                </p>
+                              </div>
+                              <div className="flex flex-col items-end">
+                                <span className="text-[16px] font-semibold text-[#000000]">
+                                  Price
+                                </span>
+                                <p className="text-[13px] lg:text-[12px] text-gray-400 whitespace-nowrap">
+                                  Rs{" "}
+                                  {disp.dealId?.totalAmount?.toLocaleString()}
+                                </p>
+                              </div>
                             </div>
-                            <button 
+                            <button
                               onClick={() => {
                                 setSelectedDispute(disp);
                                 setIsThreadOpen(true);
-                                const hasUnread = isStartup ? !disp.isReadByStartup : !disp.isReadByProfessional;
+                                const hasUnread = isStartup
+                                  ? !disp.isReadByStartup
+                                  : !disp.isReadByProfessional;
                                 if (hasUnread) handleMarkAsRead(disp._id);
                               }}
                               className="w-full py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_10px_rgba(0,0,0,0.15)] transition-all"
                             >
                               Open Thread
                             </button>
-                         </div>
-                       )})}
-                    </div>
-                 </div>
+                          </div>
+                        );
+                      })}
+                  </div>
+                </div>
               </div>
             ) : null}
           </div>

@@ -101,7 +101,7 @@ const RaisedTabSec = ({ requests, setRaisedRequests, setSelectedRequest, selecte
   // NEW: Loading state component
   if (loading) {
     return (
-      <div className="h-130 lg:h-133 flex items-center justify-center">
+      <div className="flex-1 min-h-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#59549F]"></div>
           <p className="text-sm text-gray-500">Loading requests...</p>
@@ -113,7 +113,7 @@ const RaisedTabSec = ({ requests, setRaisedRequests, setSelectedRequest, selecte
   // NEW: No requests state component
   if (!requests || requests.length === 0) {
     return (
-      <div className="h-130 lg:h-133 flex items-center justify-center">
+      <div className="flex-1 min-h-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white">
           <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center">
             <svg
@@ -150,7 +150,7 @@ const RaisedTabSec = ({ requests, setRaisedRequests, setSelectedRequest, selecte
     return (
       <>
         {/* Mobile Detail View */}
-        <div className="md:hidden w-full h-130 flex flex-col p-2  rounded-md">
+        <div className="md:hidden w-full flex-1 min-h-0 flex flex-col p-2  rounded-md">
           {/* Header with Close Button */}
           <div className="flex items-center justify-between mb-4 pb-3 border-b shrink-0">
             <h2 className="text-lg font-semibold text-[#001032]">
@@ -305,7 +305,7 @@ const RaisedTabSec = ({ requests, setRaisedRequests, setSelectedRequest, selecte
         )}
 
         {/* Desktop List View - Always show on desktop even when showDetails is true */}
-        <div className='hidden md:block h-130 lg:h-133 overflow-y-auto scrollbar-hide'>
+        <div className='hidden md:block flex-1 min-h-0 overflow-y-auto scrollbar-hide'>
           {requests.map((req) => (
             <div key={req._id || req.id}
               onClick={() => handleRequestClick(req)}
@@ -351,7 +351,7 @@ const RaisedTabSec = ({ requests, setRaisedRequests, setSelectedRequest, selecte
   }
 
   return (
-    <div className='h-130 lg:h-133 overflow-y-auto scrollbar-hide '>
+    <div className='flex-1 min-h-0 overflow-y-auto scrollbar-hide '>
       {requests.map((req) => (
         <div key={req._id || req.id}
           onClick={() => handleRequestClick(req)}

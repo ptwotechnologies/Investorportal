@@ -339,8 +339,8 @@ const RequestSec = () => {
   const widths = getCardWidths();
 
   return (
-    <div className="lg:bg-gray-100 lg:mx-4"> 
-      <div className="bg-gray-100 w-full mx-auto pt-7 lg:pt-2">
+    <div className="lg:bg-gray-100 lg:mx-4 h-[calc(100dvh-60px)] lg:h-auto overflow-hidden lg:overflow-visible flex flex-col"> 
+      <div className="bg-gray-100 w-full mx-auto pt-4 lg:pt-2 flex flex-col flex-1 min-h-0 pb-4 lg:pb-0">
          <div  id="topbar" className="flex items-stretch  gap-1 lg:gap-2 mb-2 hidden lg:flex">
                 <div
                   className="flex justify-between items-center flex-1 border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl lg:px-4 px-3 py-2 lg:mr-2  bg-white"
@@ -574,11 +574,11 @@ const RequestSec = () => {
         </div>
       )}
 
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-1 min-h-0">
           <div
-            className={`${widths.left} ${mobileView === "right" ? "hidden md:block" : "block"} flex flex-col gap-2 transition-all duration-300`}
+            className={`${widths.left} ${mobileView === "right" ? "hidden md:block" : "block"} flex flex-col gap-2 transition-all duration-300 flex-1 min-h-0`}
           >
-            <div className="border border-gray-400 bg-white rounded-md shadow-md lg:px-4 lg:pt-4 p-2 lg:h-[88vh] h-[calc(100dvh-110px)] overflow-hidden">
+            <div className="border border-gray-400 bg-white rounded-md shadow-md lg:px-4 lg:pt-4 p-2 lg:h-[88vh] flex-1 min-h-0 overflow-hidden flex flex-col">
               <Tabs
                 value={activeTab}
                 onValueChange={(value) => {
@@ -587,7 +587,7 @@ const RequestSec = () => {
                     setMobileView("left");
                   }
                 }}
-                className="w-full"
+                className="w-full flex-1 flex flex-col min-h-0"
               >
                 <div className="flex items-center gap-2 w-full ">
                   <button
@@ -654,15 +654,15 @@ const RequestSec = () => {
                   </TabsTrigger>
                 </TabsList>
 
-                <div className="overflow-y-auto h-[calc(100dvh-210px)] lg:h-[calc(92vh-140px)] scrollbar-hide">
-                  <TabsContent value="newRequest" className="mt-0">
+                <div className="flex-1 flex flex-col min-h-0">
+                  <TabsContent value="newRequest" className="mt-0 flex-1 flex flex-col min-h-0">
                     <NewRequest
                       onCreateRequest={handleCreateRequest}
                       triggerUpgradeModal={triggerUpgradeModal}
                     />
                   </TabsContent>
 
-                  <TabsContent value="all" className="mt-0">
+                  <TabsContent value="all" className="mt-0 flex-1 flex flex-col min-h-0">
                     <AllTabSec
                       setSelectedRequest={setSelectedRequest}
                       selectedRequest={selectedRequest}
@@ -673,7 +673,7 @@ const RequestSec = () => {
                     />
                   </TabsContent>
 
-                  <TabsContent value="received" className="mt-0">
+                  <TabsContent value="received" className="mt-0 flex-1 flex flex-col min-h-0">
                     <ReceivedTabSec
                       setSelectedRequest={setSelectedRequest}
                       selectedRequest={selectedRequest}
@@ -686,7 +686,7 @@ const RequestSec = () => {
                   </TabsContent>
 
                   {(currentUserRole === "startup" || spMode === "buyer") && (
-                    <TabsContent value="raised" className="mt-0">
+                    <TabsContent value="raised" className="mt-0 flex-1 flex flex-col min-h-0">
                       <RaisedTabSec
                         requests={raisedRequests.filter(req => req.status !== "cancelled")}
                         setRaisedRequests={setRaisedRequests}
@@ -697,7 +697,7 @@ const RequestSec = () => {
                     </TabsContent>
                   )}
 
-                  <TabsContent value="cancelled" className="mt-0">
+                  <TabsContent value="cancelled" className="mt-0 flex-1 flex flex-col min-h-0">
                     <CancelledTabSec
                       setSelectedRequest={setSelectedRequest}
                       selectedRequest={selectedRequest}

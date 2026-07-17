@@ -18,10 +18,11 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
   const currentUserId = userData?._id || userData?.id;
 
   // Determine which party to show (the "other" party)
-  const isStartup = String(proj.startupId?._id || proj.startupId) === String(currentUserId);
+  const isStartup =
+    String(proj.startupId?._id || proj.startupId) === String(currentUserId);
   const displayUser = isStartup ? proj.professionalId : proj.startupId;
 
-  const party = typeof displayUser === 'object' ? displayUser : {};
+  const party = typeof displayUser === "object" ? displayUser : {};
   const companyName = party.businessDetails?.companyName || "N/A";
   const firstName = party.businessDetails?.firstName || "";
   const lastName = party.businessDetails?.lastName || "";
@@ -29,7 +30,9 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
   const userName = fullName || "N/A";
 
   return (
-    <div className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+    <div
+      className={`bg-white rounded-2xl px-4 lg:px-6 py-4 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all shrink-0 ${selectedProject?._id === proj._id ? "border-[#D8D6F8]" : "border-transparent"}`}
+    >
       <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
         {/* Row 1, Col 1: Real Company Name */}
         <div className="flex flex-col overflow-hidden">
@@ -39,11 +42,15 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
         </div>
         {/* Row 1, Col 2: Timeline Label */}
         <div className="flex flex-col items-center">
-          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">
+            Timeline
+          </p>
         </div>
         {/* Row 1, Col 3: Price Label */}
         <div className="flex flex-col items-end">
-          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+          <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">
+            Price
+          </p>
         </div>
 
         {/* Row 2, Col 1: Project Title */}
@@ -60,17 +67,17 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
         </div>
         {/* Row 2, Col 3: Price Value */}
         <div className="flex flex-col items-end -mt-1">
-          <p className="text-[13px] lg:text-sm text-[#000000] ">Rs {proj.totalAmount || 0}</p>
+          <p className="text-[13px] lg:text-sm text-[#000000] ">
+            Rs {proj.totalAmount || 0}
+          </p>
         </div>
 
         {/* Row 3, Col 1: Real User Name */}
         <div className="col-span-3 mt-1">
-          <p className="text-[13px] lg:text-sm text-[#000000] ">
-            {userName}
-          </p>
+          <p className="text-[13px] lg:text-sm text-[#000000] ">{userName}</p>
         </div>
       </div>
-      <button 
+      <button
         onClick={() => handleViewProject(proj)}
         className="w-full mt-4 py-2 bg-[#D8D6F8] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] hover:opacity-90 transition-all"
       >
@@ -81,10 +88,14 @@ const ProposalCard = ({ proj, selectedProject, handleViewProject }) => {
 };
 
 const StatCard = ({ label, value, bgColor }) => (
-  <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+  <div
+    className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}
+  >
     <div className="flex items-center gap-2">
       <MdOutlinePrivateConnectivity size={20} className="text-[#001032]" />
-      <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">{label}</h3>
+      <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">
+        {label}
+      </h3>
     </div>
     <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
   </div>
@@ -94,7 +105,7 @@ const Bottom = () => {
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedDeal, setSelectedDeal] = useState(null);
-  const [step, setStep] = useState('overview'); // 'overview' or 'verification'
+  const [step, setStep] = useState("overview"); // 'overview' or 'verification'
   const [agreementAccepted, setAgreementAccepted] = useState(false);
   const [showBankPanel, setShowBankPanel] = useState(false);
   const [bankDetails, setBankDetails] = useState({
@@ -103,10 +114,10 @@ const Bottom = () => {
     confirmAccountNumber: "",
     ifscCode: "",
     branchName: "",
-    isConfirmed: false
+    isConfirmed: false,
   });
   const [isSavingBank, setIsSavingBank] = useState(false);
-  
+
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -117,15 +128,21 @@ const Bottom = () => {
   const [agreementContent, setAgreementContent] = useState({
     scope: "",
     terms: "",
-    confidentiality: ""
+    confidentiality: "",
   });
   const navigate = useNavigate();
   const userRole = localStorage.getItem("role");
 
   const userStr = localStorage.getItem("user");
   const userData = userStr ? JSON.parse(userStr) : null;
-  const currentUserId = userData?._id ? String(userData._id) : (userData?.id ? String(userData.id) : null);
-  const isProfessional = selectedDeal?.professionalId?._id === currentUserId || selectedDeal?.professionalId === currentUserId;
+  const currentUserId = userData?._id
+    ? String(userData._id)
+    : userData?.id
+      ? String(userData.id)
+      : null;
+  const isProfessional =
+    selectedDeal?.professionalId?._id === currentUserId ||
+    selectedDeal?.professionalId === currentUserId;
   const isStartupUser = selectedDeal && !isProfessional;
 
   useEffect(() => {
@@ -148,15 +165,16 @@ const Bottom = () => {
   }, [selectedDeal]);
 
   const generateAgreement = (deal) => {
-    const startupName = deal.startupId?.businessDetails?.companyName || "the Startup";
-    const professionalName = deal.professionalId?.businessDetails?.firstName 
-      ? `${deal.professionalId.businessDetails.firstName} ${deal.professionalId.businessDetails.lastName}` 
+    const startupName =
+      deal.startupId?.businessDetails?.companyName || "the Startup";
+    const professionalName = deal.professionalId?.businessDetails?.firstName
+      ? `${deal.professionalId.businessDetails.firstName} ${deal.professionalId.businessDetails.lastName}`
       : "the Professional";
-    
+
     const scopeText = `This project involves ${deal.requestId?.service || "the agreed services"}. The project will be completed in ${deal.totalTimeline || "the specified timeline"} for a total consideration of Rs ${deal.totalAmount || 0}.
 
 Milestones Breakdown:
-${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.duration})\n   - ${m.description}`).join('\n\n')}`;
+${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.duration})\n - ${m.description}`).join("\n\n")}`;
 
     const termsText = `1. Payment Schedule: Payments will be released upon completion and approval of each milestone.
 2. Timeline: Both parties agree to adhere to the total timeline of ${deal.totalTimeline}.
@@ -167,7 +185,7 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
     setAgreementContent({
       scope: scopeText,
       terms: termsText,
-      confidentiality: confidentialityText
+      confidentiality: confidentialityText,
     });
   };
 
@@ -175,26 +193,40 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const spMode =
+        localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(
+        `${serverUrl}/api/deals/my-deals?spMode=${spMode}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       let allDeals = res.data;
       const userStr = localStorage.getItem("user");
       const userData = userStr ? JSON.parse(userStr) : null;
       const currentId = userData?._id || userData?.id;
-      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
-      
+      const actualRole =
+        localStorage.getItem("role")?.toLowerCase() ||
+        userData?.role?.toLowerCase() ||
+        "";
+
       if (currentId && String(actualRole).includes("professional")) {
         if (spMode === "buyer") {
-          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currentId));
+          allDeals = allDeals.filter(
+            (d) =>
+              String(d.startupId?._id || d.startupId) === String(currentId),
+          );
         } else {
-          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currentId));
+          allDeals = allDeals.filter(
+            (d) =>
+              String(d.professionalId?._id || d.professionalId) ===
+              String(currentId),
+          );
         }
       }
 
       // Show Approved and Documented deals
-      const approvedDeals = allDeals.filter(d => {
+      const approvedDeals = allDeals.filter((d) => {
         return d.status === "Approved" || d.status === "Documented";
       });
       setDeals(approvedDeals);
@@ -222,12 +254,16 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
 
   const setupRecaptcha = () => {
     if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-        'size': 'invisible',
-        'callback': (response) => {
-          console.log("Recaptcha resolved");
-        }
-      });
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        auth,
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            console.log("Recaptcha resolved");
+          },
+        },
+      );
     }
   };
 
@@ -238,8 +274,14 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
     try {
       setupRecaptcha();
       const appVerifier = window.recaptchaVerifier;
-      const formattedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+91${phoneNumber}`;
-      const result = await signInWithPhoneNumber(auth, formattedPhone, appVerifier);
+      const formattedPhone = phoneNumber.startsWith("+")
+        ? phoneNumber
+        : `+91${phoneNumber}`;
+      const result = await signInWithPhoneNumber(
+        auth,
+        formattedPhone,
+        appVerifier,
+      );
       setConfirmationResult(result);
       toast.success("OTP sent successfully!");
     } catch (error) {
@@ -257,42 +299,50 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
       setIsVerifying(true);
       try {
         const token = localStorage.getItem("token");
-        await axios.put(`${serverUrl}/api/deals/${selectedDeal._id}`, {
-          ...(isStartupUser ? { startupVerified: true } : { professionalVerified: true }),
-          ...(isProfessional ? { registrationNumber } : {})
-        }, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        
+        await axios.put(
+          `${serverUrl}/api/deals/${selectedDeal._id}`,
+          {
+            ...(isStartupUser
+              ? { startupVerified: true }
+              : { professionalVerified: true }),
+            ...(isProfessional ? { registrationNumber } : {}),
+          },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
         invalidateSidebarCache();
         toast.success("Identity verified successfully!");
-        
+
         // Show success and refresh (stay on page for both roles)
-        const roleMsg = isStartupUser 
-          ? "Agreement documented. You can now proceed to payment." 
+        const roleMsg = isStartupUser
+          ? "Agreement documented. You can now proceed to payment."
           : "Agreement documented. Waiting for Startup payment to activate the deal.";
-          
+
         toast(roleMsg, {
-          icon: isStartupUser ? '✅' : '⏳',
-          duration: 4000
+          icon: isStartupUser ? "✅" : "⏳",
+          duration: 4000,
         });
 
         // Update local list state to show verified UI immediately
-        const updatedDeals = deals.map(d => {
+        const updatedDeals = deals.map((d) => {
           if (d._id === selectedDeal._id) {
             return {
               ...d,
               documentation: {
                 ...d.documentation,
-                ...(isStartupUser ? { startupVerified: true } : { professionalVerified: true })
-              }
+                ...(isStartupUser
+                  ? { startupVerified: true }
+                  : { professionalVerified: true }),
+              },
             };
           }
           return d;
         });
         setDeals(updatedDeals);
-        setSelectedDeal(updatedDeals.find(d => d._id === selectedDeal._id));
-        setStep('overview');
+        setSelectedDeal(updatedDeals.find((d) => d._id === selectedDeal._id));
+        setStep("overview");
       } catch (error) {
         console.error("Failed to update deal status:", error);
         toast.error("Failed to proceed. Please try again.");
@@ -324,7 +374,12 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
   };
 
   const handleSaveBankDetails = async () => {
-    if (!bankDetails.accountHolderName || !bankDetails.accountNumber || !bankDetails.ifscCode || !bankDetails.branchName) {
+    if (
+      !bankDetails.accountHolderName ||
+      !bankDetails.accountNumber ||
+      !bankDetails.ifscCode ||
+      !bankDetails.branchName
+    ) {
       return toast.error("Please fill all bank details.");
     }
     if (bankDetails.accountNumber !== bankDetails.confirmAccountNumber) {
@@ -337,17 +392,21 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
     setIsSavingBank(true);
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`${serverUrl}/api/deals/${selectedDeal._id}`, {
-        bankDetails: {
-          accountHolderName: bankDetails.accountHolderName,
-          accountNumber: bankDetails.accountNumber,
-          ifscCode: bankDetails.ifscCode,
-          branchName: bankDetails.branchName,
-          isConfirmed: bankDetails.isConfirmed
-        }
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await axios.put(
+        `${serverUrl}/api/deals/${selectedDeal._id}`,
+        {
+          bankDetails: {
+            accountHolderName: bankDetails.accountHolderName,
+            accountNumber: bankDetails.accountNumber,
+            ifscCode: bankDetails.ifscCode,
+            branchName: bankDetails.branchName,
+            isConfirmed: bankDetails.isConfirmed,
+          },
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       toast.success("Bank details saved successfully!");
       setShowBankPanel(false);
       fetchDeals(); // Refresh deal to get updated data
@@ -364,18 +423,24 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
     // But keeping it as a fallback or for direct calls
     try {
       const token = localStorage.getItem("token");
-      await axios.put(`${serverUrl}/api/deals/${selectedDeal._id}`, {
-        status: 'Documented',
-        registrationNumber
-      }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `${serverUrl}/api/deals/${selectedDeal._id}`,
+        {
+          status: "Documented",
+          registrationNumber,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       invalidateSidebarCache();
       toast.success("Agreement signed and documented!");
-      
+
       const userStr = localStorage.getItem("user");
       const userData = userStr ? JSON.parse(userStr) : null;
-      const isProfessional = selectedDeal?.professionalId?._id === String(userData?._id) || selectedDeal?.professionalId === String(userData?._id);
+      const isProfessional =
+        selectedDeal?.professionalId?._id === String(userData?._id) ||
+        selectedDeal?.professionalId === String(userData?._id);
 
       if (isProfessional) {
         navigate("/deal/revenue", { state: { dealId: selectedDeal._id } });
@@ -401,21 +466,30 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2  lg:px-4 lg:py-2 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] lg:overflow-hidden relative">
+    <div className="flex flex-col lg:flex-row gap-2 lg:px-4 lg:py-2 bg-[#FDFDFF] flex-1 min-h-0 lg:overflow-hidden relative">
       <div id="recaptcha-container"></div>
 
       {/* ── Left Column: Stats & Deals ── */}
-      <div className={`flex-1 space-y-6 overflow-y-auto scrollbar-hide p-2 max-h-[610px] xl:max-h-full ${selectedDeal ? 'hidden lg:block' : 'block'}`}>
+      <div
+        className={`flex-1 space-y-4 flex flex-col min-h-0 overflow-y-auto scrollbar-hide p-2 flex flex-col flex-1 min-h-0 ${selectedDeal ? "hidden lg:flex" : "flex"}`}
+      >
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                <MdOutlinePrivateConnectivity size={18} className="text-indigo-200" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-indigo-200"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-white">Total Documents</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-white">
+                  Total Documents
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
-                  <p className="text-xl lg:text-2xl font-bold text-white leading-none">{deals.length}</p>
+                  <p className="text-xl lg:text-2xl font-bold text-white leading-none">
+                    {deals.length}
+                  </p>
                   <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
                     <span className="text-[7px]">▶</span> 3 this week
                   </span>
@@ -427,13 +501,18 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
           <div className="bg-gradient-to-br from-[#EAE9FE] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-indigo-50">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
-                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-[#001032]"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Pending Signatures</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">
+                  Pending Signatures
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
                   <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
-                    {deals.filter(d => d.status === 'Approved').length}
+                    {deals.filter((d) => d.status === "Approved").length}
                   </p>
                   <span className="text-[9px] bg-indigo-100 text-indigo-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
                     <span className="text-[7px]">▶</span> 3 this week
@@ -446,12 +525,19 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
           <div className="bg-gradient-to-br from-[#FDF5E6] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-orange-50">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
-                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-[#001032]"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Overdue Documents</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">
+                  Overdue Documents
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
-                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">0</p>
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
+                    0
+                  </p>
                   <span className="text-[9px] bg-orange-100 text-orange-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
                     <span className="text-[7px]">▶</span> 3 this week
                   </span>
@@ -463,12 +549,19 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
           <div className="bg-gradient-to-br from-[#FDE8F1] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-pink-50">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
-                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-[#001032]"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Completed Documents</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">
+                  Completed Documents
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
-                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">0</p>
+                  <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
+                    0
+                  </p>
                   <span className="text-[9px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
                     <span className="text-[7px]">▶</span> 3 this week
                   </span>
@@ -481,9 +574,11 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
         <h2 className="text-xl font-medium text-[#000000] mt-4 px-1">Deals</h2>
         <div className="space-y-4">
           {loading ? (
-            <div className="text-center py-10 text-gray-400">Loading deals...</div>
+            <div className="text-center py-10 text-gray-400">
+              Loading deals...
+            </div>
           ) : deals.length === 0 ? (
-            <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-[90%] lg:w-auto  max-w-sm mx-auto my-5 lg:my-10">
+            <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-[90%] lg:w-auto max-w-sm mx-auto my-5 lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
                 <svg
                   className="w-8 h-8 text-gray-400"
@@ -500,19 +595,23 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">No documents found</h3>
-                <p className="text-sm text-gray-500">Approved deals awaiting documentation will appear here.</p>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  No documents found
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Approved deals awaiting documentation will appear here.
+                </p>
               </div>
             </div>
           ) : (
-            deals.map(deal => (
-              <ProposalCard 
-                key={deal._id} 
-                proj={deal} 
+            deals.map((deal) => (
+              <ProposalCard
+                key={deal._id}
+                proj={deal}
                 selectedProject={selectedDeal}
                 handleViewProject={(d) => {
                   setSelectedDeal(d);
-                  setStep('overview');
+                  setStep("overview");
                 }}
               />
             ))
@@ -524,70 +623,159 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2" />
 
       {/* ── Right Column: Interactive Content ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
-        
+      <div
+        className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col flex-1 min-h-0 ${!selectedDeal ? "hidden lg:flex" : "flex"}`}
+      >
         {selectedDeal && (
           <div className="lg:hidden flex items-center gap-3 mb-2 px-2">
-             <button 
-               onClick={() => setSelectedDeal(null)} 
-               className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm"
-             >
-               <FiArrowLeft size={20} />
-             </button>
-             <span className=" text-lg text-[#000000] ">Back to List</span>
+            <button
+              onClick={() => setSelectedDeal(null)}
+              className="p-2 bg-gray-50 rounded-full text-[#59549F] shadow-sm"
+            >
+              <FiArrowLeft size={20} />
+            </button>
+            <span className=" text-lg text-[#000000] ">Back to List</span>
           </div>
         )}
 
-        <div className={`flex-1 flex flex-col overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative`}>
-          <div className="flex-1 overflow-y-auto scrollbar-hide p-2 relative">
+        <div
+          className={`flex-1 flex flex-col min-h-0 overflow-hidden bg-white shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border border-gray-100 m-2 rounded-2xl relative`}
+        >
+          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide p-2 relative">
             {selectedDeal ? (
-              <div className="flex-1 flex flex-col">
-                
+              <div className="flex-1 flex flex-col min-h-0">
                 {/* ══ BANK DETAILS PANEL ══ */}
                 {showBankPanel && (
                   <div className="p-2 lg:p-4 flex flex-col space-y-4">
-                     <div className="flex items-center gap-3 mb-2">
-                       <button onClick={() => setShowBankPanel(false)} className="p-1 bg-gray-50 rounded-full text-[#59549F] hover:bg-gray-100 shadow-sm">
-                         <FiArrowLeft size={20} />
-                       </button>
-                       <h3 className="lg:text-xl text-lg font-semibold text-[#000000]">Account Details</h3>
-                     </div>
-                     <div className="w-full bg-white border border-gray-100 rounded-2xl p-4 lg:p-6 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col space-y-4 max-h-[500px] overflow-y-auto scrollbar-hide">
-                       <div>
-                         <label className="text-xs text-[#000000] font-semibold mb-1 block">Account Holder Name</label>
-                         <input type="text" value={bankDetails.accountHolderName} onChange={e => setBankDetails({...bankDetails, accountHolderName: e.target.value})} className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white" placeholder="Enter Full Name" />
-                       </div>
-                       <div>
-                         <label className="text-xs text-[#000000] font-semibold mb-1 block">Account Number</label>
-                         <input type="text" value={bankDetails.accountNumber} onChange={e => setBankDetails({...bankDetails, accountNumber: e.target.value})} className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white" placeholder="Enter Account Number" />
-                       </div>
-                       <div>
-                         <label className="text-xs text-[#000000] font-semibold mb-1 block">Confirm Account Number</label>
-                         <input type="text" value={bankDetails.confirmAccountNumber} onChange={e => setBankDetails({...bankDetails, confirmAccountNumber: e.target.value})} className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white" placeholder="Re-enter Account Number" />
-                       </div>
-                       <div>
-                         <label className="text-xs text-[#000000] font-semibold mb-1 block">IFSC Code</label>
-                         <input type="text" value={bankDetails.ifscCode} onChange={e => setBankDetails({...bankDetails, ifscCode: e.target.value})} className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white" placeholder="e.g. HDFC0001234" />
-                       </div>
-                       <div>
-                         <label className="text-xs text-[#000000] font-semibold mb-1 block">Branch Name</label>
-                         <input type="text" value={bankDetails.branchName} onChange={e => setBankDetails({...bankDetails, branchName: e.target.value})} className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white" placeholder="Enter Branch Name" />
-                       </div>
-                       <div className="flex items-start gap-3 mt-2">
-                         <input type="checkbox" id="confirmBank" checked={bankDetails.isConfirmed} onChange={e => setBankDetails({...bankDetails, isConfirmed: e.target.checked})} className="mt-1 w-4 h-4 rounded border-gray-300 accent-[#59549F]" />
-                         <label htmlFor="confirmBank" className="text-xs text-[#000000] leading-relaxed cursor-pointer font-medium">
-                           I confirm that all the provided details are accurate and belong to me.
-                         </label>
-                       </div>
-                     </div>
+                    <div className="flex items-center gap-3 mb-2">
+                      <button
+                        onClick={() => setShowBankPanel(false)}
+                        className="p-1 bg-gray-50 rounded-full text-[#59549F] hover:bg-gray-100 shadow-sm"
+                      >
+                        <FiArrowLeft size={20} />
+                      </button>
+                      <h3 className="lg:text-xl text-lg font-semibold text-[#000000]">
+                        Account Details
+                      </h3>
+                    </div>
+                    <div className="w-full bg-white border border-gray-100 rounded-2xl p-4 lg:p-6 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col space-y-4 max-h-[500px] overflow-y-auto scrollbar-hide">
+                      <div>
+                        <label className="text-xs text-[#000000] font-semibold mb-1 block">
+                          Account Holder Name
+                        </label>
+                        <input
+                          type="text"
+                          value={bankDetails.accountHolderName}
+                          onChange={(e) =>
+                            setBankDetails({
+                              ...bankDetails,
+                              accountHolderName: e.target.value,
+                            })
+                          }
+                          className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white"
+                          placeholder="Enter Full Name"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-[#000000] font-semibold mb-1 block">
+                          Account Number
+                        </label>
+                        <input
+                          type="text"
+                          value={bankDetails.accountNumber}
+                          onChange={(e) =>
+                            setBankDetails({
+                              ...bankDetails,
+                              accountNumber: e.target.value,
+                            })
+                          }
+                          className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white"
+                          placeholder="Enter Account Number"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-[#000000] font-semibold mb-1 block">
+                          Confirm Account Number
+                        </label>
+                        <input
+                          type="text"
+                          value={bankDetails.confirmAccountNumber}
+                          onChange={(e) =>
+                            setBankDetails({
+                              ...bankDetails,
+                              confirmAccountNumber: e.target.value,
+                            })
+                          }
+                          className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white"
+                          placeholder="Re-enter Account Number"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-[#000000] font-semibold mb-1 block">
+                          IFSC Code
+                        </label>
+                        <input
+                          type="text"
+                          value={bankDetails.ifscCode}
+                          onChange={(e) =>
+                            setBankDetails({
+                              ...bankDetails,
+                              ifscCode: e.target.value,
+                            })
+                          }
+                          className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white"
+                          placeholder="e.g. HDFC0001234"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-[#000000] font-semibold mb-1 block">
+                          Branch Name
+                        </label>
+                        <input
+                          type="text"
+                          value={bankDetails.branchName}
+                          onChange={(e) =>
+                            setBankDetails({
+                              ...bankDetails,
+                              branchName: e.target.value,
+                            })
+                          }
+                          className="w-full h-11 border border-gray-100 rounded-xl px-4 text-sm text-[#000000] font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] focus:border-[#D8D6F8] outline-none bg-white"
+                          placeholder="Enter Branch Name"
+                        />
+                      </div>
+                      <div className="flex items-start gap-3 mt-2">
+                        <input
+                          type="checkbox"
+                          id="confirmBank"
+                          checked={bankDetails.isConfirmed}
+                          onChange={(e) =>
+                            setBankDetails({
+                              ...bankDetails,
+                              isConfirmed: e.target.checked,
+                            })
+                          }
+                          className="mt-1 w-4 h-4 rounded border-gray-300 accent-[#59549F]"
+                        />
+                        <label
+                          htmlFor="confirmBank"
+                          className="text-xs text-[#000000] leading-relaxed cursor-pointer font-medium"
+                        >
+                          I confirm that all the provided details are accurate
+                          and belong to me.
+                        </label>
+                      </div>
+                    </div>
                   </div>
                 )}
-                
+
                 {/* ══ STEP 1: AGREEMENT OVERVIEW ══ */}
-                {!showBankPanel && step === 'overview' && (
+                {!showBankPanel && step === "overview" && (
                   <div className="p-2 lg:p-3 flex flex-col space-y-4">
                     <div className="flex items-center justify-between">
-                      <h3 className="lg:text-xl text-lg font-semibold text-[#000000]">Agreement & Contract</h3>
+                      <h3 className="lg:text-xl text-lg font-semibold text-[#000000]">
+                        Agreement & Contract
+                      </h3>
                       <span className="bg-[#B91C1C] text-white text-[10px] px-2 lg:px-3 lg:py-1.5 py-1 rounded-full lg:font-semibold shrink-0">
                         Duration - {selectedDeal.totalTimeline}
                       </span>
@@ -597,26 +785,47 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
                     <div className="w-full bg-white border border-gray-100 rounded-2xl p-4 lg:p-6 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] h-[400px] overflow-y-auto scrollbar-hide">
                       <div className="space-y-6">
                         <div>
-                          <h4 className="text-base font-semibold  text-[#000000] mb-2">Scope of Work & Milestones</h4>
-                          <textarea 
+                          <h4 className="text-base font-semibold text-[#000000] mb-2">
+                            Scope of Work & Milestones
+                          </h4>
+                          <textarea
                             value={agreementContent.scope}
-                            onChange={(e) => setAgreementContent({...agreementContent, scope: e.target.value})}
+                            onChange={(e) =>
+                              setAgreementContent({
+                                ...agreementContent,
+                                scope: e.target.value,
+                              })
+                            }
                             className="w-full min-h-[150px] text-xs text-gray-500 leading-relaxed bg-transparent border-none focus:ring-0 resize-none scrollbar-hide"
                           />
                         </div>
                         <div>
-                          <h4 className="text-base font-semibold text-[#000000] mb-2">Terms and Conditions</h4>
-                          <textarea 
+                          <h4 className="text-base font-semibold text-[#000000] mb-2">
+                            Terms and Conditions
+                          </h4>
+                          <textarea
                             value={agreementContent.terms}
-                            onChange={(e) => setAgreementContent({...agreementContent, terms: e.target.value})}
+                            onChange={(e) =>
+                              setAgreementContent({
+                                ...agreementContent,
+                                terms: e.target.value,
+                              })
+                            }
                             className="w-full min-h-[100px] text-xs text-gray-500 leading-relaxed bg-transparent border-none focus:ring-0 resize-none scrollbar-hide"
                           />
                         </div>
                         <div>
-                          <h4 className="text-base font-semibold text-[#000000] mb-2">Confidentiality</h4>
-                          <textarea 
+                          <h4 className="text-base font-semibold text-[#000000] mb-2">
+                            Confidentiality
+                          </h4>
+                          <textarea
                             value={agreementContent.confidentiality}
-                            onChange={(e) => setAgreementContent({...agreementContent, confidentiality: e.target.value})}
+                            onChange={(e) =>
+                              setAgreementContent({
+                                ...agreementContent,
+                                confidentiality: e.target.value,
+                              })
+                            }
                             className="w-full min-h-[100px] text-xs text-gray-500 leading-relaxed bg-transparent border-none focus:ring-0 resize-none scrollbar-hide"
                           />
                         </div>
@@ -625,30 +834,39 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
 
                     {/* Checkbox */}
                     <div className="flex items-start gap-3 ">
-                      <input 
-                        type="checkbox" 
-                        id="agreement" 
+                      <input
+                        type="checkbox"
+                        id="agreement"
                         checked={agreementAccepted}
                         onChange={(e) => setAgreementAccepted(e.target.checked)}
                         className="mt-1 w-4 h-4 rounded border-gray-300 accent-[#59549F]"
                       />
-                      <label htmlFor="agreement" className="text-xs text-[#000000]  leading-relaxed cursor-pointer">
-                        I have read all the policies, terms and conditions and ready to sign up the agreement
+                      <label
+                        htmlFor="agreement"
+                        className="text-xs text-[#000000] leading-relaxed cursor-pointer"
+                      >
+                        I have read all the policies, terms and conditions and
+                        ready to sign up the agreement
                       </label>
                     </div>
                   </div>
                 )}
 
                 {/* ══ STEP 2: VERIFICATION (OTP) ══ */}
-                {!showBankPanel && step === 'verification' && (
+                {!showBankPanel && step === "verification" && (
                   <div className="space-y-4 p-2 lg:p-4">
                     <div className="relative">
                       <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
-                          <button onClick={() => setStep('overview')} className="p-1 bg-gray-50 rounded-full text-[#59549F] hover:bg-gray-100">
+                          <button
+                            onClick={() => setStep("overview")}
+                            className="p-1 bg-gray-50 rounded-full text-[#59549F] hover:bg-gray-100"
+                          >
                             <FiArrowLeft size={20} />
                           </button>
-                          <h3 className="text-xl font-semibold text-[#000000]">Confirmation</h3>
+                          <h3 className="text-xl font-semibold text-[#000000]">
+                            Confirmation
+                          </h3>
                         </div>
                         <span className="bg-[#B91C1C] text-white text-[10px] px-3 py-1.5 rounded-full font-semibold">
                           Duration - {selectedDeal.totalTimeline}
@@ -658,26 +876,31 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
                       <div className="space-y-4">
                         {/* Step 1 Identity Verification */}
                         <div className="bg-white border border-gray-100 rounded-2xl p-3 lg:p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                          <h4 className="text-sm font-semibold text-[#000000] mb-2 ">Step 1 - Identity Verification</h4>
-                          <p className="text-[10px] text-gray-500 mb-4 font-medium ">To confirm this agreement, please verify your identity by entering your registered contact number</p>
-                          
+                          <h4 className="text-sm font-semibold text-[#000000] mb-2 ">
+                            Step 1 - Identity Verification
+                          </h4>
+                          <p className="text-[10px] text-gray-500 mb-4 font-medium ">
+                            To confirm this agreement, please verify your
+                            identity by entering your registered contact number
+                          </p>
+
                           <div className="flex flex-col sm:flex-row gap-3">
                             <div className="flex gap-2 flex-1">
                               <div className="px-2 w-[55px] h-11 bg-white border border-gray-100 rounded-xl flex items-center justify-center text-[#000000] text-sm shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] font-semibold shrink-0">
                                 +91
                               </div>
-                              <input 
-                                type="text" 
+                              <input
+                                type="text"
                                 placeholder="Contact Number"
                                 value={phoneNumber}
                                 onChange={(e) => setPhoneNumber(e.target.value)}
-                                className="flex-1 h-11 bg-white border border-gray-100 rounded-xl px-4 text-[#000000] text-sm font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]" 
+                                className="flex-1 h-11 bg-white border border-gray-100 rounded-xl px-4 text-[#000000] text-sm font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]"
                               />
                             </div>
-                            <button 
+                            <button
                               onClick={handleSendOtp}
                               disabled={isSendingOtp}
-                              className="w-full sm:w-auto px-9 lg:h-11  h-7 bg-[#D8D6F8] text-[#59549F] rounded-lg lg:rounded-xl text-sm font-bold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] disabled:opacity-50 transition-all active:scale-95"
+                              className="w-full sm:w-auto px-9 lg:h-11 h-7 bg-[#D8D6F8] text-[#59549F] rounded-lg lg:rounded-xl text-sm font-bold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] disabled:opacity-50 transition-all active:scale-95"
                             >
                               {isSendingOtp ? "..." : "Send"}
                             </button>
@@ -686,7 +909,9 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
 
                         {/* Step 2 - Enter OTP */}
                         <div className="bg-white border border-gray-100 rounded-2xl p-5 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)]">
-                          <h4 className="text-sm font-semibold text-[#000000] mb-4 ">Step 2 - Enter 6 digit OTP</h4>
+                          <h4 className="text-sm font-semibold text-[#000000] mb-4 ">
+                            Step 2 - Enter 6 digit OTP
+                          </h4>
                           <div className="flex justify-between gap-2 mb-4">
                             {otp.map((digit, index) => (
                               <input
@@ -695,28 +920,39 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
                                 type="text"
                                 maxLength={1}
                                 value={digit}
-                                onChange={(e) => handleOtpChange(e.target.value, index)}
+                                onChange={(e) =>
+                                  handleOtpChange(e.target.value, index)
+                                }
                                 className="w-full aspect-square max-w-[50px] bg-white border border-gray-200 rounded-xl text-center text-lg font-semibold shadow-[inset_0px_0px_8px_0px_rgba(0,0,0,0.15)] outline-none focus:border-[#D8D6F8]"
                               />
                             ))}
                           </div>
                           <p className="text-[10px] text-gray-400 font-medium ">
-                            Didn't receive it yet? <span className="text-[#59549F] cursor-pointer font-bold" onClick={handleSendOtp}>Resend</span>
+                            Didn't receive it yet?{" "}
+                            <span
+                              className="text-[#59549F] cursor-pointer font-bold"
+                              onClick={handleSendOtp}
+                            >
+                              Resend
+                            </span>
                           </p>
                         </div>
                       </div>
                     </div>
                   </div>
                 )}
-
               </div>
             ) : (
               <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
                   <IoMdCheckmark size={40} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
-                <p className="text-sm text-gray-400 mt-1 italic">Select a deal from the left to view agreement details.</p>
+                <h3 className="text-lg font-bold text-gray-400">
+                  No Project Selected
+                </h3>
+                <p className="text-sm text-gray-400 mt-1 italic">
+                  Select a deal from the left to view agreement details.
+                </p>
               </div>
             )}
           </div>
@@ -726,28 +962,36 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
         {selectedDeal && (
           <div className="sticky bottom-0 z-20 px-4 py-4 lg:py-2 mx-2 bg-[#FDFDFF] lg:bg-transparent shadow-[0px_-4px_12px_rgba(0,0,0,0.05)] lg:shadow-none">
             {showBankPanel ? (
-              <button 
+              <button
                 onClick={handleSaveBankDetails}
                 disabled={isSavingBank}
                 className="w-full py-2 bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] rounded-xl font-semibold text-sm hover:bg-[#48438a] hover:text-white transition-all disabled:opacity-50"
               >
                 {isSavingBank ? "Saving..." : "Save Account Details"}
               </button>
-            ) : ((isStartupUser && selectedDeal.documentation?.startupVerified) || (!isStartupUser && selectedDeal.documentation?.professionalVerified)) ? (
+            ) : (isStartupUser &&
+                selectedDeal.documentation?.startupVerified) ||
+              (!isStartupUser &&
+                selectedDeal.documentation?.professionalVerified) ? (
               <div className="flex flex-col gap-2">
                 <div className="w-full py-2.5 bg-green-50 text-green-600 rounded-xl font-bold text-sm border border-green-100 flex items-center justify-center gap-2">
                   <IoMdCheckmark size={18} /> Identity Verified
                 </div>
                 {isStartupUser && (
-                  <button 
-                    onClick={() => navigate("/deal/payments", { state: { dealId: selectedDeal._id } })}
+                  <button
+                    onClick={() =>
+                      navigate("/deal/payments", {
+                        state: { dealId: selectedDeal._id },
+                      })
+                    }
                     className="w-full py-2 bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] rounded-xl font-semibold text-sm hover:bg-[#48438a] hover:text-white transition-all flex items-center justify-center gap-2"
                   >
-                    Proceed to Payment <FiArrowLeft className="rotate-180 mt-1" />
+                    Proceed to Payment{" "}
+                    <FiArrowLeft className="rotate-180 mt-1" />
                   </button>
                 )}
                 {!isStartupUser && (
-                  <button 
+                  <button
                     onClick={() => setShowBankPanel(true)}
                     className="w-full py-2 bg-[#D8D6F8] text-[#59549F] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] rounded-xl font-semibold text-sm hover:bg-[#48438a] hover:text-white transition-all flex items-center justify-center gap-2"
                   >
@@ -755,31 +999,30 @@ ${deal.milestones?.map((m, i) => `${i + 1}. ${m.title}: Rs ${m.amount} (${m.dura
                   </button>
                 )}
               </div>
-            ) : step === 'overview' ? (
-              <button 
+            ) : step === "overview" ? (
+              <button
                 disabled={!agreementAccepted}
-                onClick={() => setStep('verification')}
-                className={`w-full py-2 lg:py-2.5 rounded-xl font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all ${agreementAccepted ? 'bg-[#D8D6F8] text-[#59549F] hover:bg-[#C9C7F0]' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
+                onClick={() => setStep("verification")}
+                className={`w-full py-2 lg:py-2.5 rounded-xl font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all ${agreementAccepted ? "bg-[#D8D6F8] text-[#59549F] hover:bg-[#C9C7F0]" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
               >
                 Proceed for Verification
               </button>
             ) : (
-              <button 
+              <button
                 onClick={handleVerifyOtp}
                 disabled={isVerifying}
                 className="w-full py-2.5 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-semibold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all disabled:opacity-50"
               >
-                {isVerifying ? "Verifying..." : (
-                  isStartupUser 
-                    ? "Confirm & Proceed for Payment" 
-                    : "Confirm & Wait for Deal Activation"
-                )}
+                {isVerifying
+                  ? "Verifying..."
+                  : isStartupUser
+                    ? "Confirm & Proceed for Payment"
+                    : "Confirm & Wait for Deal Activation"}
               </button>
             )}
           </div>
         )}
       </div>
-
     </div>
   );
 };

@@ -3,12 +3,13 @@ import { IoSearchOutline } from "react-icons/io5";
 
 const AnalyticsTopBar = () => {
   return (
-    <div className="bg-white px-2.5 lg:px-6 lg:pt-6 pt-4 pb-3   ">
+    <div className="bg-white px-2.5 lg:px-6 lg:pt-6 pt-4 pb-3 ">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
-        
         {/* Title Section */}
         <div className="flex-shrink-0 text-left w-full lg:w-auto">
-          <h1 className="text-2xl font-medium text-[#001032] leading-tight">Analytics</h1>
+          <h1 className="text-2xl font-medium text-[#001032] leading-tight">
+            Analytics
+          </h1>
           <p className="text-[13px] lg:text-sm text-[#000000] mt-1">
             Track your performance and deal statistics
           </p>

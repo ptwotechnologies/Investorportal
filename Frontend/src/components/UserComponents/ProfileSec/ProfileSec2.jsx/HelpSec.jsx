@@ -104,8 +104,8 @@ const HelpSec = () => {
   });
 
   return (
-    <div className="md:flex lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
-      <div className="bg-gray-100 h-[85vh] w-full mx-auto pt-4">
+    <div className="flex flex-col flex-1 min-h-0 lg:bg-gray-100 lg:pl-4 lg:pr-4 lg:pb-6">
+      <div className="bg-gray-100 flex-1 flex flex-col min-h-0 w-full mx-auto pt-4">
         {/* Top bar - exact original */}
         <div className="hidden md:flex bg-white border border-gray-400 shadow-md rounded-lg px-10 mb-4 justify-between items-center">
           <h1 className="text-md font-semibold text-gray-800">
@@ -120,10 +120,10 @@ const HelpSec = () => {
           </button>
         </div>
 
-        <div className="flex gap-4 items-stretch">
+        <div className="flex gap-4 flex-1 min-h-0 items-stretch">
           {/* ─── LEFT PANEL - exact original design ─────────────────────── */}
           <div
-            className={`relative flex flex-col bg-white border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[34%] h-screen lg:h-[88vh] gap-2 ${
+            className={`relative flex flex-col bg-white border border-gray-400 p-4 rounded-md shadow-md w-full md:w-[34%] flex-1 min-h-0 gap-2 ${
               showChat ? "hidden lg:flex" : "flex"
             }`}
           >
@@ -179,7 +179,7 @@ const HelpSec = () => {
             </div>
 
             {/* Chat list - exact original card design */}
-            <div className="flex flex-col gap-2 w-full max-h-140 scrollbar-hide overflow-y-auto">
+            <div className="flex flex-col gap-2 w-full flex-1 min-h-0 scrollbar-hide overflow-y-auto">
               {loading ? (
                 <div className="text-center text-gray-400 py-8 text-sm">Loading...</div>
               ) : filteredTickets.length === 0 ? (
@@ -227,7 +227,7 @@ const HelpSec = () => {
           </div>
 
           {/* ─── RIGHT PANEL ────────────────────────────────────────────── */}
-          <div className={`lg:w-[66%] h-[88vh] ${showChat ? "flex" : "hidden lg:flex"}`}>
+          <div className={`lg:w-[66%] flex-col flex-1 min-h-0 ${showChat ? "flex" : "hidden lg:flex"}`}>
             {selectedChat ? (
               <RightHelp
                 ticket={selectedChat}

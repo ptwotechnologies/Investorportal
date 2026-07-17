@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import TopBar from './TopBar'
-import Bottom from './Bottom'
-import axios from 'axios'
-import { serverUrl } from '@/App'
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import TopBar from "./TopBar";
+import Bottom from "./Bottom";
+import axios from "axios";
+import { serverUrl } from "@/App";
 
 const DisputesSec = () => {
   const location = useLocation();
-  const [isCreateMode, setIsCreateMode] = React.useState(location.state?.isCreateMode || false);
+  const [isCreateMode, setIsCreateMode] = React.useState(
+    location.state?.isCreateMode || false,
+  );
   const [deals, setDeals] = useState([]);
   const [selectedDeal, setSelectedDeal] = useState(null);
   const token = localStorage.getItem("token");
@@ -29,26 +31,40 @@ const DisputesSec = () => {
 
   const fetchDeals = async () => {
     try {
-      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const spMode =
+        localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(
+        `${serverUrl}/api/deals/my-deals?spMode=${spMode}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       let allDeals = res.data;
       const userStr = localStorage.getItem("user");
       const userData = userStr ? JSON.parse(userStr) : null;
       const currentUserId = userData?._id || userData?.id;
-      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
-      
+      const actualRole =
+        localStorage.getItem("role")?.toLowerCase() ||
+        userData?.role?.toLowerCase() ||
+        "";
+
       if (currentUserId && String(actualRole).includes("professional")) {
         if (spMode === "buyer") {
-          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currentUserId));
+          allDeals = allDeals.filter(
+            (d) =>
+              String(d.startupId?._id || d.startupId) === String(currentUserId),
+          );
         } else {
-          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currentUserId));
+          allDeals = allDeals.filter(
+            (d) =>
+              String(d.professionalId?._id || d.professionalId) ===
+              String(currentUserId),
+          );
         }
       }
 
-      const validDeals = allDeals.filter(d => 
-        ["Active", "Documented", "Approved", "Completed"].includes(d.status)
+      const validDeals = allDeals.filter((d) =>
+        ["Active", "Documented", "Approved", "Completed"].includes(d.status),
       );
       setDeals(validDeals);
     } catch (error) {
@@ -62,19 +78,19 @@ const DisputesSec = () => {
   };
 
   return (
-    <div>
-      <div id='top'>
-        <TopBar 
-          deals={deals} 
-          onProjectSelect={handleProjectSelect} 
-          onCreateClick={() => setIsCreateMode(true)} 
+    <div className="flex flex-col flex-1 min-h-0 w-full h-full overflow-hidden">
+      <div id="top" className="shrink-0">
+        <TopBar
+          deals={deals}
+          onProjectSelect={handleProjectSelect}
+          onCreateClick={() => setIsCreateMode(true)}
         />
       </div>
 
-      <div id='bottom'>
-        <Bottom 
-          isCreateMode={isCreateMode} 
-          setIsCreateMode={setIsCreateMode} 
+      <div id="bottom" className="flex-1 flex flex-col min-h-0 overflow-hidden">
+        <Bottom
+          isCreateMode={isCreateMode}
+          setIsCreateMode={setIsCreateMode}
           initialDealId={location.state?.dealId}
           initialMilestoneId={location.state?.milestoneId}
           deals={deals}
@@ -83,7 +99,7 @@ const DisputesSec = () => {
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default DisputesSec
+export default DisputesSec;

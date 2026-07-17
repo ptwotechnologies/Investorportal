@@ -204,8 +204,14 @@ const Mobile = () => {
           <div className="w-0.2 h-6 border mx-1"></div>
           <Sheet>
             <SheetTrigger asChild>
-              <div className="flex items-center ">
-                <RxHamburgerMenu size={18} className="text-[#59549F] mx-1 " />
+              <div className="flex items-center relative cursor-pointer">
+                <RxHamburgerMenu size={18} className="text-[#59549F] mx-1" />
+                {(indicators.requests?.hasUnread || 
+                  indicators.connect?.hasUnread || 
+                  indicators.communication?.hasUnread || 
+                  indicators.serviceDeal?.hasUnread) && (
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2 rounded-full bg-red-600 shadow-md"></span>
+                )}
               </div>
             </SheetTrigger>
 

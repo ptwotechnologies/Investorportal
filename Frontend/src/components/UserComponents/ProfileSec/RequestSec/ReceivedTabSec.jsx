@@ -339,7 +339,7 @@ const ReceivedTabSec = ({
 
   if (loading) {
     return (
-      <div className="h-130 lg:h-123 flex items-center justify-center">
+      <div className="flex-1 min-h-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#59549F]"></div>
           <p className="text-sm text-gray-500">Loading requests...</p>
@@ -350,7 +350,7 @@ const ReceivedTabSec = ({
 
   if (hasNoRequests && !loading) {
     return (
-      <div className="h-130 lg:h-123 flex items-center justify-center">
+      <div className="flex-1 min-h-0 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4 p-8 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-xl bg-white">
           <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center">
             <svg
@@ -657,7 +657,7 @@ const ReceivedTabSec = ({
         </div>
 
         {/* Desktop List View - Always show on desktop */}
-        <div className="hidden md:block h-130 lg:h-123 overflow-y-auto scrollbar-hide">
+        <div className="hidden md:block flex-1 min-h-0 overflow-y-auto scrollbar-hide">
           {forwardedRequests.map((req) => {
             const raiserProfile = getRaiserProfile(req);
             const raiserName = raiserProfile ? (raiserProfile.name || raiserProfile.email) : (req.raisedBy?.name || req.raisedBy?.email || "Requester");
@@ -821,7 +821,7 @@ const ReceivedTabSec = ({
 
   // Final return for default view (Desktop)
   return (
-    <div className="h-130 lg:h-123 overflow-y-auto scrollbar-hide">
+    <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide">
       {forwardedRequests.map((req) => {
         const raiserProfile = getRaiserProfile(req);
         const raiserName = raiserProfile ? (raiserProfile.name || raiserProfile.email) : (req.raisedBy?.name || req.raisedBy?.email || "Requester");

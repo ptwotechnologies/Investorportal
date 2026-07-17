@@ -7,12 +7,9 @@ const RevenueSec = () => {
   const [selectedDeal, setSelectedDeal] = useState(null);
 
   return (
-    <div className="flex flex-col h-full bg-[#FDFDFF] overflow-hidden">
-      <TopBar 
-        deals={deals}
-        onProjectSelect={(deal) => setSelectedDeal(deal)}
-      />
-      <Bottom 
+    <div className="flex flex-col flex-1 min-h-0 bg-[#FDFDFF] overflow-hidden">
+      <TopBar deals={deals} onProjectSelect={(deal) => setSelectedDeal(deal)} />
+      <Bottom
         deals={deals}
         setDeals={setDeals}
         selectedDeal={selectedDeal}

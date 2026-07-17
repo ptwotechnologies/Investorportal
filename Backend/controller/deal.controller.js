@@ -4,6 +4,7 @@ import Request from "../Models/request.model.js";
 import Notification from "../Models/notification.model.js";
 import { emitDealUpdated } from "../lib/socket.js";
 import { sendPushNotification } from "../lib/onesignal.js";
+import { sendEmailNotification } from "../lib/emailNotifier.js";
 
 // CREATE DEAL DRAFT
 export const createDealDraft = async (req, res) => {
@@ -222,18 +223,23 @@ export const updateDeal = async (req, res) => {
     if (req.body.isCounter) {
       sendPushNotification(targetPushId, "⏳ Action Required", "A proposal is awaiting your response.", "/deal/negotiations");
       await Notification.create({ userId: targetPushId, title: "⏳ Action Required", message: "A proposal is awaiting your response.", actionLink: "/deal/negotiations", type: "IN_APP" });
+      sendEmailNotification(targetPushId, "⏳ Action Required", "A proposal is awaiting your response on Copteno Investor Portal. Please review it.", "/deal/negotiations");
     } else if (deal.status === "Approved") {
       sendPushNotification(targetPushId, "⏳ Pending Approval", "A milestone is awaiting your approval.", "/deal/activedeals");
       await Notification.create({ userId: targetPushId, title: "⏳ Pending Approval", message: "A milestone is awaiting your approval.", actionLink: "/deal/activedeals", type: "IN_APP" });
+      sendEmailNotification(targetPushId, "⏳ Pending Approval", "A milestone is awaiting your approval on Copteno Investor Portal. Please review and approve it.", "/deal/activedeals");
     } else if (deal.status === "Documented") {
       sendPushNotification(targetPushId, "📄 Action Required", "Deal documentation needs your verification.", "/deal/documentation");
       await Notification.create({ userId: targetPushId, title: "📄 Action Required", message: "Deal documentation needs your verification.", actionLink: "/deal/documentation", type: "IN_APP" });
+      sendEmailNotification(targetPushId, "📄 Action Required", "Deal documentation needs your verification on Copteno Investor Portal.", "/deal/documentation");
     } else if (deal.status === "Active") {
       sendPushNotification(targetPushId, "🤝 Deal Accepted!", "Your deal workspace is now active.", "/deal/activedeals");
       await Notification.create({ userId: targetPushId, title: "🤝 Deal Accepted!", message: "Your deal workspace is now active.", actionLink: "/deal/activedeals", type: "IN_APP" });
+      sendEmailNotification(targetPushId, "🤝 Deal Accepted!", "Your deal workspace is now active on Copteno Investor Portal.", "/deal/activedeals");
     } else if (deal.status === "Completed") {
       sendPushNotification(targetPushId, "🎉 Deal Completed!", "Your deal has been completed successfully.", "/deal/completed");
       await Notification.create({ userId: targetPushId, title: "🎉 Deal Completed!", message: "Your deal has been completed successfully.", actionLink: "/deal/completed", type: "IN_APP" });
+      sendEmailNotification(targetPushId, "🎉 Deal Completed!", "Your deal has been completed successfully on Copteno Investor Portal.", "/deal/completed");
     } else if (status) { 
       sendPushNotification(targetPushId, "🔔 Deal Update", `Deal status updated.`, "/deal/activedeals");
       await Notification.create({ userId: targetPushId, title: "🔔 Deal Update", message: `Deal status updated.`, actionLink: "/deal/activedeals", type: "IN_APP" });

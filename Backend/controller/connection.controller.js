@@ -1,6 +1,7 @@
 import Connection from "../Models/connect.model.js";
 import Notification from "../Models/notification.model.js";
 import { sendPushNotification } from "../lib/onesignal.js";
+import { sendEmailNotification } from "../lib/emailNotifier.js";
 
 // SEND CONNECTION REQUEST
 export const sendConnectionRequest = async (req, res) => {
@@ -37,6 +38,9 @@ export const sendConnectionRequest = async (req, res) => {
     
     // Send Push Notification
     sendPushNotification(receiverId, "New Connection Request", "You have received a new connection request", "/network");
+
+    // Send Email Notification
+    sendEmailNotification(receiverId, "New Connection Request", "You have received a new connection request on Copteno Investor Portal.", "/network");
 
     res.status(200).json({
       message: "Connection request sent",

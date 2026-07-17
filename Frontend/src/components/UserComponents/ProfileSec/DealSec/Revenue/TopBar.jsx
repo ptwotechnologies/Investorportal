@@ -4,8 +4,8 @@ import { FaPlus } from "react-icons/fa";
 
 const TopBar = ({ deals = [], onProjectSelect }) => {
   const toggleDropdown = () => {
-    const menu = document.getElementById('revenue-dropdown-menu');
-    if (menu) menu.classList.toggle('hidden');
+    const menu = document.getElementById("revenue-dropdown-menu");
+    if (menu) menu.classList.toggle("hidden");
   };
 
   return (
@@ -13,9 +13,11 @@ const TopBar = ({ deals = [], onProjectSelect }) => {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
         {/* Left Section: Title and Subtitle */}
         <div className="flex-shrink-0 text-left w-full lg:w-auto">
-          <h1 className="text-2xl font-medium text-[#001032] leading-tight">Revenue</h1>
+          <h1 className="text-2xl font-medium text-[#001032] leading-tight">
+            Revenue
+          </h1>
           <p className="text-[13px] lg:text-sm text-[#000000] mt-1">
-            Manage all ongoing projects and work progress 
+            Manage all ongoing projects and work progress
           </p>
         </div>
 
@@ -38,21 +40,25 @@ const TopBar = ({ deals = [], onProjectSelect }) => {
 
           {/* Revenue Dropdown */}
           <div className="relative group">
-            <button 
+            <button
               className="flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]"
               onClick={toggleDropdown}
             >
               <FaPlus size={15} className="lg:hidden" />
               <FaPlus size={18} className="hidden lg:block" />
-              <span className="text-[13px] lg:text-lg whitespace-nowrap">Revenue</span>
+              <span className="text-[13px] lg:text-lg whitespace-nowrap">
+                Revenue
+              </span>
             </button>
 
-            <div 
+            <div
               id="revenue-dropdown-menu"
               className="hidden absolute right-0 mt-2 w-[280px] lg:w-[350px] bg-white rounded-xl shadow-[0px_8px_24px_rgba(0,0,0,0.15)] border border-gray-100 z-50 overflow-hidden"
             >
               <div className="p-2 border-b border-gray-50 bg-gray-50/50">
-                <span className="text-sm text-black font-medium tracking-wider px-2">Select Project to View Revenue</span>
+                <span className="text-sm text-black font-medium tracking-wider px-2">
+                  Select Project to View Revenue
+                </span>
               </div>
               <div className="max-h-[300px] overflow-y-auto scrollbar-hide">
                 {deals.length > 0 ? (
@@ -60,12 +66,17 @@ const TopBar = ({ deals = [], onProjectSelect }) => {
                     const userStr = localStorage.getItem("user");
                     const userData = userStr ? JSON.parse(userStr) : null;
                     const currentUserId = userData?._id || userData?.id;
-                    const isStartup = String(deal.startupId?._id || deal.startupId) === String(currentUserId);
-                    const party = isStartup ? (deal.professionalId || {}) : (deal.startupId || {});
-                    const companyName = party.businessDetails?.companyName || "N/A";
-                    
+                    const isStartup =
+                      String(deal.startupId?._id || deal.startupId) ===
+                      String(currentUserId);
+                    const party = isStartup
+                      ? deal.professionalId || {}
+                      : deal.startupId || {};
+                    const companyName =
+                      party.businessDetails?.companyName || "N/A";
+
                     return (
-                      <div 
+                      <div
                         key={deal._id}
                         onClick={() => {
                           onProjectSelect(deal);
@@ -74,8 +85,12 @@ const TopBar = ({ deals = [], onProjectSelect }) => {
                         className="p-3 lg:p-4 hover:bg-[#FDFDFF] cursor-pointer border-b border-gray-50 last:border-0 transition-all group"
                       >
                         <div className="flex flex-col">
-                          <span className="text-sm lg:text-base font-semibold text-[#001032] group-hover:text-[#59549F]">{companyName}</span>
-                          <span className="text-[10px] lg:text-xs text-gray-400 mt-0.5">{deal.requestId?.service || "Project Deal"}</span>
+                          <span className="text-sm lg:text-base font-semibold text-[#001032] group-hover:text-[#59549F]">
+                            {companyName}
+                          </span>
+                          <span className="text-[10px] lg:text-xs text-gray-400 mt-0.5">
+                            {deal.requestId?.service || "Project Deal"}
+                          </span>
                         </div>
                       </div>
                     );

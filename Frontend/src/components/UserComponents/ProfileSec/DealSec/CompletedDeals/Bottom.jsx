@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FiFileText, FiPlus, FiArrowLeft, FiClipboard } from "react-icons/fi";
-import { MdOutlineFactCheck, MdOutlinePrivateConnectivity } from "react-icons/md";
+import {
+  MdOutlineFactCheck,
+  MdOutlinePrivateConnectivity,
+} from "react-icons/md";
 import { IoMdCheckmark } from "react-icons/io";
 import axios from "axios";
 import { serverUrl } from "@/App";
@@ -8,7 +11,7 @@ import { serverUrl } from "@/App";
 const Bottom = () => {
   const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedDeal, setSelectedDeal] = useState(null); 
+  const [selectedDeal, setSelectedDeal] = useState(null);
   const [selectedMilestone, setSelectedMilestone] = useState(null);
 
   const userStr = localStorage.getItem("user");
@@ -28,27 +31,43 @@ const Bottom = () => {
 
   const fetchCompletedDeals = async () => {
     try {
-      const spMode = localStorage.getItem("spMode")?.toLowerCase() || "provider";
-      const res = await axios.get(`${serverUrl}/api/deals/my-deals?spMode=${spMode}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const spMode =
+        localStorage.getItem("spMode")?.toLowerCase() || "provider";
+      const res = await axios.get(
+        `${serverUrl}/api/deals/my-deals?spMode=${spMode}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
       let allDeals = res.data;
       const currentUserId = userData?._id || userData?.id;
-      const actualRole = localStorage.getItem("role")?.toLowerCase() || userData?.role?.toLowerCase() || "";
-      
+      const actualRole =
+        localStorage.getItem("role")?.toLowerCase() ||
+        userData?.role?.toLowerCase() ||
+        "";
+
       if (currentUserId && String(actualRole).includes("professional")) {
         if (spMode === "buyer") {
-          allDeals = allDeals.filter(d => String(d.startupId?._id || d.startupId) === String(currentUserId));
+          allDeals = allDeals.filter(
+            (d) =>
+              String(d.startupId?._id || d.startupId) === String(currentUserId),
+          );
         } else {
-          allDeals = allDeals.filter(d => String(d.professionalId?._id || d.professionalId) === String(currentUserId));
+          allDeals = allDeals.filter(
+            (d) =>
+              String(d.professionalId?._id || d.professionalId) ===
+              String(currentUserId),
+          );
         }
       }
 
       // Filter for deals that are marked as Completed
       // or deals where ALL milestones are Completed
-      const completedDeals = allDeals.filter(d => 
-        d.status === "Completed" || 
-        (d.milestones?.length > 0 && d.milestones.every(m => m.status === 'Completed'))
+      const completedDeals = allDeals.filter(
+        (d) =>
+          d.status === "Completed" ||
+          (d.milestones?.length > 0 &&
+            d.milestones.every((m) => m.status === "Completed")),
       );
       setDeals(completedDeals);
     } catch (error) {
@@ -59,10 +78,14 @@ const Bottom = () => {
   };
 
   const StatCard = ({ label, value, bgColor }) => (
-    <div className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}>
+    <div
+      className={`${bgColor} rounded-2xl px-2 py-4 lg:p-4 shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-2`}
+    >
       <div className="flex items-center gap-2">
         <FiFileText size={20} className="text-[#001032]" />
-        <h3 className="text-[13px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">{label}</h3>
+        <h3 className="text-[13px] lg:text-sm lg:font-semibold text-[#001032] leading-tight">
+          {label}
+        </h3>
       </div>
       <p className="text-xl lg:text-2xl font-bold text-[#001032]">{value}</p>
     </div>
@@ -72,10 +95,11 @@ const Bottom = () => {
     const currentUserId = userData?._id || userData?.id;
 
     // Determine which party to show (the "other" party)
-    const isStartupOwner = String(deal.startupId?._id || deal.startupId) === String(currentUserId);
+    const isStartupOwner =
+      String(deal.startupId?._id || deal.startupId) === String(currentUserId);
     const displayUser = isStartupOwner ? deal.professionalId : deal.startupId;
-    
-    const party = typeof displayUser === 'object' ? displayUser : {};
+
+    const party = typeof displayUser === "object" ? displayUser : {};
     const companyName = party.businessDetails?.companyName || "N/A";
     const firstName = party.businessDetails?.firstName || "";
     const lastName = party.businessDetails?.lastName || "";
@@ -83,7 +107,9 @@ const Bottom = () => {
     const userName = fullName || "N/A";
 
     return (
-      <div className={`bg-white rounded-2xl p-4 lg:px-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${isSelected ? 'border-[#D8D6F8]' : 'border-transparent'}`}>
+      <div
+        className={`bg-white rounded-2xl p-4 lg:px-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] border-2 transition-all ${isSelected ? "border-[#D8D6F8]" : "border-transparent"}`}
+      >
         <div className="grid grid-cols-3 gap-2 lg:gap-2 mb-4 items-start w-full">
           {/* Row 1: Labels */}
           <div className="flex flex-col overflow-hidden">
@@ -92,10 +118,14 @@ const Bottom = () => {
             </h3>
           </div>
           <div className="flex flex-col items-center">
-            <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Timeline</p>
+            <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">
+              Timeline
+            </p>
           </div>
           <div className="flex flex-col items-end">
-            <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">Price</p>
+            <p className="text-[16px] lg:text-[16px] text-[#000000] font-medium whitespace-nowrap">
+              Price
+            </p>
           </div>
 
           {/* Row 2: Values */}
@@ -110,17 +140,17 @@ const Bottom = () => {
             </p>
           </div>
           <div className="flex flex-col items-end -mt-1">
-            <p className="text-[13px] lg:text-sm text-[#000000]">Rs {deal.totalAmount || 0}</p>
+            <p className="text-[13px] lg:text-sm text-[#000000]">
+              Rs {deal.totalAmount || 0}
+            </p>
           </div>
 
           {/* Row 3: User Name */}
           <div className="col-span-3 mt-1">
-            <p className="text-[13px] lg:text-sm text-[#000000]">
-              {userName}
-            </p>
+            <p className="text-[13px] lg:text-sm text-[#000000]">{userName}</p>
           </div>
         </div>
-        <button 
+        <button
           onClick={() => onSelect(deal)}
           className="w-full mt-4 py-2 bg-[#D8D6F8] hover:bg-[#C9C7F0] rounded-xl text-[#59549F] font-bold text-sm shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] transition-all"
         >
@@ -136,31 +166,48 @@ const Bottom = () => {
         <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1.5" />
         <div>
           <h4 className="text-sm text-[#001032] font-semibold">{ms.title}</h4>
-          <p className="text-[10px] text-gray-400 mt-1">{ms.description || "Project milestone successfully completed"}</p>
-          <p className="text-[9px] text-gray-400">Timeline - {ms.duration || "20 Days"}</p>
+          <p className="text-[10px] text-gray-400 mt-1">
+            {ms.description || "Project milestone successfully completed"}
+          </p>
+          <p className="text-[9px] text-gray-400">
+            Timeline - {ms.duration || "20 Days"}
+          </p>
         </div>
       </div>
-      <div className="bg-[#D7EBE4] text-[#2D6A4F] text-[10px] font-bold px-4 py-1.5 rounded-md shadow-sm border border-[#2D6A4F]/20">Completed</div>
+      <div className="bg-[#D7EBE4] text-[#2D6A4F] text-[10px] font-bold px-4 py-1.5 rounded-md shadow-sm border border-[#2D6A4F]/20">
+        Completed
+      </div>
     </div>
   );
 
-  if (loading) return <div className="flex justify-center items-center h-full">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-full">Loading...</div>
+    );
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 lg:px-4 lg:py-1 bg-[#FDFDFF] lg:h-[640px] xl:min-h-[85vh] h-auto overflow-hidden">
-      
+    <div className="flex flex-col lg:flex-row gap-2 lg:px-4 lg:py-1 bg-[#FDFDFF] flex-1 min-h-0 overflow-hidden">
       {/* ── Left Column: Project List ── */}
-      <div className={`flex-1 flex flex-col lg:py-2 gap-6 overflow-hidden ${selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
+      <div
+        className={`flex-1 flex flex-col min-h-0 lg:py-2 gap-6 overflow-hidden ${selectedDeal ? "hidden lg:flex" : "flex"}`}
+      >
         <div className="grid grid-cols-2 gap-4 shrink-0 p-3">
           <div className="bg-[#070534] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-[#1a1442]">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                <MdOutlinePrivateConnectivity size={18} className="text-indigo-200" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-indigo-200"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-white">Total Completed</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-white">
+                  Total Completed
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
-                  <p className="text-xl lg:text-2xl font-bold text-white leading-none">{deals.length}</p>
+                  <p className="text-xl lg:text-2xl font-bold text-white leading-none">
+                    {deals.length}
+                  </p>
                   <span className="text-[9px] bg-green-100 text-green-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
                     <span className="text-[7px]">▶</span> 3 this week
                   </span>
@@ -172,10 +219,15 @@ const Bottom = () => {
           <div className="bg-gradient-to-br from-[#EAE9FE] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-indigo-50">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
-                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-[#001032]"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Total Value</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">
+                  Total Value
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
                   <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
                     Rs {deals.reduce((acc, d) => acc + (d.totalAmount || 0), 0)}
@@ -191,10 +243,15 @@ const Bottom = () => {
           <div className="bg-gradient-to-br from-[#FDF5E6] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-orange-50">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
-                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-[#001032]"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Success Rate</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">
+                  Success Rate
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
                   <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
                     {deals.length > 0 ? "100%" : "0%"}
@@ -210,13 +267,25 @@ const Bottom = () => {
           <div className="bg-gradient-to-br from-[#FDE8F1] to-[#FFFFFF] shadow-[0px_0px_12px_0px_rgba(0,0,0,0.50)] px-3 py-4 lg:p-4 rounded-2xl flex flex-col justify-between min-h-[100px] border border-pink-50">
             <div className="flex items-start gap-3">
               <div className="w-8 h-8 bg-white/60 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm border border-white">
-                <MdOutlinePrivateConnectivity size={18} className="text-[#001032]" />
+                <MdOutlinePrivateConnectivity
+                  size={18}
+                  className="text-[#001032]"
+                />
               </div>
               <div className="flex flex-col gap-1 w-full">
-                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">Average Days</h3>
+                <h3 className="text-[13px] lg:text-sm lg:font-medium text-[#001032]">
+                  Average Days
+                </h3>
                 <div className="flex flex-col lg:flex-row lg:items-center gap-1 lg:gap-2 mt-1">
                   <p className="text-xl lg:text-2xl font-bold text-[#001032] leading-none">
-                    {deals.length > 0 ? Math.round(deals.reduce((acc, d) => acc + (parseInt(d.totalTimeline) || 0), 0) / deals.length) : 0}
+                    {deals.length > 0
+                      ? Math.round(
+                          deals.reduce(
+                            (acc, d) => acc + (parseInt(d.totalTimeline) || 0),
+                            0,
+                          ) / deals.length,
+                        )
+                      : 0}
                   </p>
                   <span className="text-[9px] bg-pink-100 text-pink-700 px-1.5 py-0.5 rounded font-medium w-fit lg:ml-1">
                     <span className="text-[7px]">▶</span> 3 this week
@@ -227,9 +296,11 @@ const Bottom = () => {
           </div>
         </div>
 
-        <h2 className="text-xl font-medium text-[#000000] px-3 shrink-0">All Deals</h2>
-        
-        <div className="flex-1 overflow-y-auto scrollbar-hide space-y-4 p-2">
+        <h2 className="text-xl font-medium text-[#000000] px-3 shrink-0">
+          All Deals
+        </h2>
+
+        <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide space-y-4 p-2">
           {deals.length === 0 ? (
             <div className="flex flex-col items-center gap-4 lg:p-8 p-5 text-center border border-gray-300 shadow-[0_4px_16px_rgba(0,0,0,0.15)] rounded-md bg-white w-[90%] lg:w-auto max-w-sm mx-auto lg:my-10">
               <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center">
@@ -248,17 +319,24 @@ const Bottom = () => {
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">No completed deals</h3>
-                <p className="text-sm text-gray-500">Your successfully finished projects will appear here.</p>
+                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                  No completed deals
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Your successfully finished projects will appear here.
+                </p>
               </div>
             </div>
           ) : (
-            deals.map(deal => (
-              <ProjectCard 
-                key={deal._id} 
-                deal={deal} 
+            deals.map((deal) => (
+              <ProjectCard
+                key={deal._id}
+                deal={deal}
                 isSelected={selectedDeal?._id === deal._id}
-                onSelect={(d) => { setSelectedDeal(d); setSelectedMilestone(null); }}
+                onSelect={(d) => {
+                  setSelectedDeal(d);
+                  setSelectedMilestone(null);
+                }}
               />
             ))
           )}
@@ -268,92 +346,127 @@ const Bottom = () => {
       <div className="hidden lg:block w-px bg-gray-200 self-stretch my-2 ml-1" />
 
       {/* ── Right Column: Details ── */}
-      <div className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col overflow-hidden ${!selectedDeal ? 'hidden lg:flex' : 'flex'}`}>
-        
+      <div
+        className={`w-full lg:w-[450px] xl:w-[550px] h-full flex flex-col flex-1 min-h-0 overflow-hidden ${!selectedDeal ? "hidden lg:flex" : "flex"}`}
+      >
         {/* Header */}
         {selectedDeal && (
           <div className="lg:hidden flex items-center gap-3 py-2 px-4 shrink-0">
-            <button 
-                onClick={() => setSelectedDeal(null)} 
-                className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
+            <button
+              onClick={() => setSelectedDeal(null)}
+              className="p-1.5 bg-gray-50 rounded-full text-[#59549F] shadow-sm hover:bg-gray-100"
             >
               <FiArrowLeft size={18} />
             </button>
-            <h2 className="text-lg font-semibold text-[#001032]">Deal Details</h2>
+            <h2 className="text-lg font-semibold text-[#001032]">
+              Deal Details
+            </h2>
           </div>
         )}
 
-        <div className="flex-1 flex flex-col overflow-hidden bg-white   rounded-2xl relative">
-          <div className="flex-1 overflow-y-auto scrollbar-hide relative">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-white rounded-2xl relative">
+          <div className="flex-1 min-h-0 overflow-y-auto scrollbar-hide relative">
             {!selectedDeal ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-10 opacity-50">
                 <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-[#D8D6F8]">
-                   <IoMdCheckmark size={40} />
+                  <IoMdCheckmark size={40} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-400">No Project Selected</h3>
-                <p className="text-sm text-gray-400 mt-1 italic">Select a completed project from the left to view details.</p>
+                <h3 className="text-lg font-bold text-gray-400">
+                  No Project Selected
+                </h3>
+                <p className="text-sm text-gray-400 mt-1 italic">
+                  Select a completed project from the left to view details.
+                </p>
               </div>
             ) : (
               <div className="p-2 space-y-5">
                 {/* Success Rate Card */}
                 <div className="bg-white rounded-2xl p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] flex flex-col gap-4">
-                   <h3 className="text-lg font-semibold text-[#001032]">Success Rate</h3>
-                   <p className="text-sm text-[#001032]/70 leading-relaxed">
-                     90% as per analysis about work flow, disputes and timely delivery
-                   </p>
-                   <button className="w-full py-1 bg-[#D8D6F8] hover:bg-[#C9C7F0] text-[#59549F] rounded-xl font-bold shadow-sm transition-all">
-                     View Details
-                   </button>
+                  <h3 className="text-lg font-semibold text-[#001032]">
+                    Success Rate
+                  </h3>
+                  <p className="text-sm text-[#001032]/70 leading-relaxed">
+                    90% as per analysis about work flow, disputes and timely
+                    delivery
+                  </p>
+                  <button className="w-full py-1 bg-[#D8D6F8] hover:bg-[#C9C7F0] text-[#59549F] rounded-xl font-bold shadow-sm transition-all">
+                    View Details
+                  </button>
                 </div>
 
                 {/* Total Value Section */}
                 <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
-                   <h3 className="text-lg font-semibold text-[#001032]">Total Value</h3>
-                   <div className="flex gap-3">
-                      <div className="bg-[#FDFDFF] px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-[0.8] text-center flex items-center justify-center">
-                        INR - Indian Rupees
-                      </div>
-                      <div className="bg-white px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-1 text-center flex items-center justify-center">
-                        {`Total: Rs ${selectedDeal.totalAmount || 0}`}
-                      </div>
-                   </div>
+                  <h3 className="text-lg font-semibold text-[#001032]">
+                    Total Value
+                  </h3>
+                  <div className="flex gap-3">
+                    <div className="bg-[#FDFDFF] px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400 shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-[0.8] text-center flex items-center justify-center">
+                      INR - Indian Rupees
+                    </div>
+                    <div className="bg-white px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400 shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-1 text-center flex items-center justify-center">
+                      {`Total: Rs ${selectedDeal.totalAmount || 0}`}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Completed Date Section */}
                 <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-4">
-                   <h3 className="text-lg font-semibold text-[#001032]">Completed Date</h3>
-                   <div className="flex gap-3">
-                      <div className="bg-[#FDFDFF] px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-[0.8] text-center flex items-center justify-center">
-                        Completed On
-                      </div>
-                      <div className="bg-white px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400  shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-1 text-center flex items-center justify-center">
-                        {selectedDeal.updatedAt ? new Date(selectedDeal.updatedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : "N/A"}
-                      </div>
-                   </div>
+                  <h3 className="text-lg font-semibold text-[#001032]">
+                    Completed Date
+                  </h3>
+                  <div className="flex gap-3">
+                    <div className="bg-[#FDFDFF] px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400 shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-[0.8] text-center flex items-center justify-center">
+                      Completed On
+                    </div>
+                    <div className="bg-white px-4 py-2 rounded-lg border border-gray-100 text-[11px] lg:text-[13px] text-gray-400 shadow-[inset_0px_0px_12px_rgba(0,0,0,0.1)] flex-1 text-center flex items-center justify-center">
+                      {selectedDeal.updatedAt
+                        ? new Date(selectedDeal.updatedAt).toLocaleDateString(
+                            "en-GB",
+                            { day: "numeric", month: "long", year: "numeric" },
+                          )
+                        : "N/A"}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Released Funds Section */}
                 <div className="bg-white rounded-2xl border border-gray-100 p-4 lg:p-6 shadow-[0px_0px_12px_0px_rgba(0,0,0,0.25)] space-y-6">
-                   <h3 className="text-lg font-semibold text-[#001032]">Released Funds</h3>
-                   <div className="space-y-4">
-                      {selectedDeal.milestones?.length > 0 ? selectedDeal.milestones.map((ms) => (
-                        <div key={ms._id} className="bg-[#F3F3F3] rounded-2xl p-3 lg:p-4 flex items-center justify-between gap-2 lg:gap-4 overflow-hidden">
-                           <div className="flex items-start gap-3 min-w-0">
-                              <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1.5 shrink-0" />
-                              <div className="min-w-0">
-                                 <h4 className="text-sm font-semibold text-[#001032] truncate">{ms.title}</h4>
-                                 <p className="text-[11px] text-gray-400 mt-0.5 truncate">{ms.description || "Milestone successfully released"}</p>
-                                 <p className="text-[11px] text-gray-400">Due Date - {ms.duration || "N/A"}</p>
-                              </div>
-                           </div>
-                           <div className="bg-[#D8D6F8] text-[#59549F] text-[10px] lg:text-[13px] font-bold px-3 lg:px-4 py-1.5 rounded-md shadow-sm whitespace-nowrap shrink-0">
-                             Completed
-                           </div>
+                  <h3 className="text-lg font-semibold text-[#001032]">
+                    Released Funds
+                  </h3>
+                  <div className="space-y-4">
+                    {selectedDeal.milestones?.length > 0 ? (
+                      selectedDeal.milestones.map((ms) => (
+                        <div
+                          key={ms._id}
+                          className="bg-[#F3F3F3] rounded-2xl p-3 lg:p-4 flex items-center justify-between gap-2 lg:gap-4 overflow-hidden"
+                        >
+                          <div className="flex items-start gap-3 min-w-0">
+                            <div className="w-3 h-3 rounded-full bg-[#D8D6F8] mt-1.5 shrink-0" />
+                            <div className="min-w-0">
+                              <h4 className="text-sm font-semibold text-[#001032] truncate">
+                                {ms.title}
+                              </h4>
+                              <p className="text-[11px] text-gray-400 mt-0.5 truncate">
+                                {ms.description ||
+                                  "Milestone successfully released"}
+                              </p>
+                              <p className="text-[11px] text-gray-400">
+                                Due Date - {ms.duration || "N/A"}
+                              </p>
+                            </div>
+                          </div>
+                          <div className="bg-[#D8D6F8] text-[#59549F] text-[10px] lg:text-[13px] font-bold px-3 lg:px-4 py-1.5 rounded-md shadow-sm whitespace-nowrap shrink-0">
+                            Completed
+                          </div>
                         </div>
-                      )) : (
-                        <div className="text-center py-10 opacity-30 italic text-sm">No released funds found.</div>
-                      )}
-                   </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-10 opacity-30 italic text-sm">
+                        No released funds found.
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}

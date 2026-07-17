@@ -29,41 +29,65 @@ export const createUser = async (req, res) => {
     }
 
     // 2. Check if email or phone already exists in User collection
-    const existingEmail = await User.findOne({ email });
+    let existingEmail = await User.findOne({ email });
     if (existingEmail) {
-      // If onboarding is incomplete, allow them to resume
-      if (existingEmail.registrationStep < 4) {
-        return res.status(200).json({ 
-          message: "Resuming your registration...", 
-          userId: existingEmail._id,
-          registrationStep: existingEmail.registrationStep,
-          isResuming: true 
-        });
+      if (existingEmail.paymentStatus === "rejected") {
+        existingEmail.email = `rejected_${Date.now()}_${existingEmail.email}`;
+        await existingEmail.save();
+        existingEmail = null;
+      } else {
+        // If onboarding is incomplete, allow them to resume
+        if (existingEmail.registrationStep < 4) {
+          return res.status(200).json({ 
+            message: "Resuming your registration...", 
+            userId: existingEmail._id,
+            registrationStep: existingEmail.registrationStep,
+            isResuming: true 
+          });
+        }
+        return res.status(400).json({ message: "Email already registered" });
       }
-      return res.status(400).json({ message: "Email already registered" });
     }
 
-    const existingPhone = await User.findOne({ "businessDetails.number": businessDetails.number });
+    let existingPhone = await User.findOne({ "businessDetails.number": businessDetails.number });
     if (existingPhone) {
-      return res.status(400).json({ message: "Mobile number already registered" });
+      if (existingPhone.paymentStatus === "rejected") {
+        existingPhone.businessDetails.number = `rejected_${Date.now()}_${existingPhone.businessDetails.number}`;
+        await existingPhone.save();
+        existingPhone = null;
+      } else {
+        return res.status(400).json({ message: "Mobile number already registered" });
+      }
     }
 
     // Check if companyName or firmName already exists
     if (businessDetails.companyName) {
-      const existingCompany = await User.findOne({ 
+      let existingCompany = await User.findOne({ 
         "businessDetails.companyName": { $regex: new RegExp(`^${businessDetails.companyName.trim()}$`, 'i') } 
       });
       if (existingCompany) {
-        return res.status(400).json({ message: "Company name already registered" });
+        if (existingCompany.paymentStatus === "rejected") {
+          existingCompany.businessDetails.companyName = `rejected_${Date.now()}_${existingCompany.businessDetails.companyName}`;
+          await existingCompany.save();
+          existingCompany = null;
+        } else {
+          return res.status(400).json({ message: "Company name already registered" });
+        }
       }
     }
 
     if (businessDetails.firmName) {
-      const existingFirm = await User.findOne({ 
+      let existingFirm = await User.findOne({ 
         "businessDetails.firmName": { $regex: new RegExp(`^${businessDetails.firmName.trim()}$`, 'i') } 
       });
       if (existingFirm) {
-        return res.status(400).json({ message: "Firm name already registered" });
+        if (existingFirm.paymentStatus === "rejected") {
+          existingFirm.businessDetails.firmName = `rejected_${Date.now()}_${existingFirm.businessDetails.firmName}`;
+          await existingFirm.save();
+          existingFirm = null;
+        } else {
+          return res.status(400).json({ message: "Firm name already registered" });
+        }
       }
     }
 

@@ -7,10 +7,11 @@ const TopBar = () => {
   return (
     <div className="bg-white px-2.5 lg:px-6 lg:pt-6 pt-4 pb-3 ">
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 lg:gap-6">
-        
         {/* Title Section */}
         <div className="flex-shrink-0 text-left w-full lg:w-auto">
-          <h1 className="text-2xl font-medium text-[#001032] leading-tight">Documentation</h1>
+          <h1 className="text-2xl font-medium text-[#001032] leading-tight">
+            Documentation
+          </h1>
           <p className="text-[13px] lg:text-sm text-[#000000] mt-1">
             Manage all ongoing projects and work progress
           </p>
@@ -32,15 +33,17 @@ const TopBar = () => {
               />
             </div>
             {/* <button className="flex items-center justify-center shrink-0 w-[80px] lg:w-[120px] lg:rounded-xl rounded-lg h-full hover:bg-gray-50 transition-all text-[#313131] font-medium text-[10px] lg:text-[15px] shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)] border-l">
-              All Status
-            </button> */}
+ All Status
+ </button> */}
           </div>
 
           {/* Action Button */}
           <button className="flex items-center justify-center gap-1 lg:gap-2 h-8 lg:h-12 px-3 lg:px-6 bg-[#D8D6F8] lg:rounded-xl rounded-lg hover:opacity-90 transition-all text-[#59549F] font-bold shadow-[inset_0px_0px_12px_0px_rgba(0,0,0,0.25)]">
             <FaPlus size={15} className="lg:hidden" />
             <FaPlus size={18} className="hidden lg:block" />
-            <span className="text-[13px] lg:text-lg whitespace-nowrap">Documentation</span>
+            <span className="text-[13px] lg:text-lg whitespace-nowrap">
+              Documentation
+            </span>
           </button>
         </div>
       </div>
