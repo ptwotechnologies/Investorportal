@@ -48,9 +48,9 @@ const AllTabSec = ({ setSelectedRequest, selectedRequest, setMobileView, setAllH
           axios.get(`${serverUrl}/user/me`, { headers: { Authorization: `Bearer ${token}` } }).catch(() => ({ data: { plan: null } })),
         ]);
 
-        const forwarded = receivedRes.data.forwardedRequests;
-        const myInterested = receivedRes.data.myInterestedRequests;
-        const raised = raisedRes.data;
+        const forwarded = receivedRes.data.forwardedRequests.filter(r => r.status !== "cancelled" && !r.isIgnored);
+        const myInterested = receivedRes.data.myInterestedRequests.filter(r => r.status !== "cancelled");
+        const raised = raisedRes.data.filter(r => r.status !== "cancelled");
 
         setProfiles(profileRes.data);
         setForwardedRequests(forwarded);

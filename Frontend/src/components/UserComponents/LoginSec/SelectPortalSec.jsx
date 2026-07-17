@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import logo from "/coptenologo2.png";
 import { IoIosArrowRoundForward } from "react-icons/io";
+import { FaInfoCircle } from "react-icons/fa";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Link } from "react-router-dom";
@@ -9,7 +10,15 @@ import toast from "react-hot-toast";
 
 const SelectPortalSec = () => {
   const [role, setRole] = useState("");
+  const [activeTooltip, setActiveTooltip] = useState(null);
   const navigate = useNavigate();
+
+  // Close tooltip when tapping outside
+  React.useEffect(() => {
+    const handleClickOutside = () => setActiveTooltip(null);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   return (
     <div>
@@ -52,7 +61,13 @@ const SelectPortalSec = () => {
                 </div>
                 <div id="bottom" className="hidden lg:block">
                   <div className="flex justify-center items-center gap-3 p-3 pb-17 text-white">
-                    <div className="bg-[#001032CC] rounded-sm p-3">
+                    <div className="bg-[#001032CC] rounded-sm p-3 relative">
+                      <div className="absolute top-3 right-3 group cursor-pointer z-10">
+                        <FaInfoCircle className="text-white/70 hover:text-white" size={14} />
+                        <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block w-48 bg-black/90 text-white text-[10px] p-2 rounded shadow-lg z-50 pointer-events-none text-left">
+                          For founders, co-founders, and startup teams looking to build and grow their businesses.
+                        </div>
+                      </div>
                       <div className="flex justify-start items-center py-3 gap-2">
                         <div className="bg-[#FFFFFF] w-6 h-6"></div>
                         <h1 className="text-sm">Startup</h1>
@@ -75,7 +90,13 @@ const SelectPortalSec = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="bg-[#002A30CC] rounded-sm p-3">
+                    <div className="bg-[#002A30CC] rounded-sm p-3 relative">
+                      <div className="absolute top-3 right-3 group cursor-pointer z-10">
+                        <FaInfoCircle className="text-white/70 hover:text-white" size={14} />
+                        <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block w-48 bg-black/90 text-white text-[10px] p-2 rounded shadow-lg z-50 pointer-events-none text-left">
+                          For angel investors, venture capitalists, family offices, and other individuals or organizations looking to invest in startups.
+                        </div>
+                      </div>
                       <div className="flex justify-start items-center py-3 gap-2">
                         <div className="bg-[#FFFFFF] w-6 h-6"></div>
                         <h1 className="text-sm">Investor</h1>
@@ -98,12 +119,16 @@ const SelectPortalSec = () => {
                         </button>
                       </div>
                     </div>
-                    <div className="bg-[#65677E] rounded-sm p-3">
+                    <div className="bg-[#65677E] rounded-sm p-3 relative">
+                      <div className="absolute top-3 right-3 group cursor-pointer z-10">
+                        <FaInfoCircle className="text-white/70 hover:text-white" size={14} />
+                        <div className="absolute right-0 bottom-full mb-2 hidden group-hover:block w-48 bg-black/90 text-white text-[10px] p-2 rounded shadow-lg z-50 pointer-events-none text-left">
+                          For professionals offering services such as design, legal compliance, software development, marketing, finance, etc.
+                        </div>
+                      </div>
                       <div className="flex justify-start items-center py-3 gap-2">
                         <div className="bg-[#FFFFFF] w-6 h-6"></div>
-                        <h1 className="text-sm">
-                          Service Professional
-                        </h1>
+                        <h1 className="text-sm">Service Professional</h1>
                       </div>
                       <p className="text-xs leading-5 tracking-wide mb-2">
                         Start exploring, connect with others, get listed, build
@@ -130,41 +155,89 @@ const SelectPortalSec = () => {
                   <div className="px-10">
                     <RadioGroup onValueChange={setRole}>
                       <div className="bg-[#001032CC] text-white px-5 py-2 mb-2 rounded-md">
-                        <div className="flex items-center gap-5">
-                          <RadioGroupItem
-                            value="startup"
-                            id="r1"
-                            className="border-2 border-white"
-                          />
-                          <Label htmlFor="r1" className="text-lg">
-                            Startup or Founder
-                          </Label>
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-5">
+                            <RadioGroupItem
+                              value="startup"
+                              id="r1"
+                              className="border-2 border-white"
+                            />
+                            <Label htmlFor="r1" className="text-lg">
+                              Startup or Founder
+                            </Label>
+                          </div>
+                          <div 
+                            className="relative cursor-pointer flex items-center"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTooltip(activeTooltip === "startup" ? null : "startup");
+                            }}
+                          >
+                            <FaInfoCircle className="text-white/70 hover:text-white" size={16} />
+                            {activeTooltip === "startup" && (
+                              <div className="absolute right-0 bottom-full mb-2 w-52 bg-black text-white text-[10px] p-2 rounded shadow-lg z-50 pointer-events-none text-left font-normal leading-4">
+                                For founders, co-founders, and startup teams looking to build and grow their businesses.
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
 
                       <div className="bg-[#002A30CC] text-white px-5 py-2 mb-2 rounded-md">
-                        <div className="flex items-center gap-5">
-                          <RadioGroupItem
-                            value="investor"
-                            id="r2"
-                            className="border-2 border-white"
-                          />
-                          <Label htmlFor="r2" className="text-lg">
-                            Angel Investor or VC
-                          </Label>
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-5">
+                            <RadioGroupItem
+                              value="investor"
+                              id="r2"
+                              className="border-2 border-white"
+                            />
+                            <Label htmlFor="r2" className="text-lg">
+                              Angel Investor or VC
+                            </Label>
+                          </div>
+                          <div 
+                            className="relative cursor-pointer flex items-center"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTooltip(activeTooltip === "investor" ? null : "investor");
+                            }}
+                          >
+                            <FaInfoCircle className="text-white/70 hover:text-white" size={16} />
+                            {activeTooltip === "investor" && (
+                              <div className="absolute right-0 bottom-full mb-2 w-52 bg-black text-white text-[10px] p-2 rounded shadow-lg z-50 pointer-events-none text-left font-normal leading-4">
+                                For angel investors, venture capitalists, family offices, and other individuals or organizations looking to invest in startups.
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
 
                       <div className="bg-[#65677E] text-white px-5 py-2 mb-2 rounded-md">
-                        <div className="flex items-center gap-5">
-                          <RadioGroupItem
-                            value="service_professional"
-                            id="r3"
-                            className="border-2 border-white"
-                          />
-                          <Label htmlFor="r3" className="text-lg">
-                            Service professional
-                          </Label>
+                        <div className="flex justify-between items-center">
+                          <div className="flex items-center gap-5">
+                            <RadioGroupItem
+                              value="service_professional"
+                              id="r3"
+                              className="border-2 border-white"
+                            />
+                            <Label htmlFor="r3" className="text-lg">
+                              Service professional
+                            </Label>
+                          </div>
+                          <div 
+                            className="relative cursor-pointer flex items-center"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveTooltip(activeTooltip === "service_professional" ? null : "service_professional");
+                            }}
+                          >
+                            <FaInfoCircle className="text-white/70 hover:text-white" size={16} />
+                            {activeTooltip === "service_professional" && (
+                              <div className="absolute right-0 bottom-full mb-2 w-52 bg-black text-white text-[10px] p-2 rounded shadow-lg z-50 pointer-events-none text-left font-normal leading-4">
+                                For professionals offering services such as design, legal compliance, software development, marketing, finance, etc.
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </RadioGroup>

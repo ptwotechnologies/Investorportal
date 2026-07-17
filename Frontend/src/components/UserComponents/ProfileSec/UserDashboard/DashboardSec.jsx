@@ -1162,7 +1162,7 @@ const DashboardSec = () => {
               onClick={() => setShowMobileCredits(true)}
               className={`hidden lg:flex border-2 border-[#D9D9D9] shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] rounded-xl bg-white lg:px-4 px-2.5 items-center gap-2 py-1.5 shrink-0 group hover:border-[#59549F] transition-all duration-300 cursor-pointer lg:mr-1 lg:w-[64.4%] ${profile?.isFreePlan ? "justify-between" : "justify-end"}`}
             >
-              {profile?.isFreePlan && (
+              {profile?.isFreePlan && actualRole !== "service_professional" && actualRole !== "professional" && (
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#59549F] text-white text-lg font-bold shadow-md">
                     {profile.credits ?? 0}
@@ -1179,29 +1179,10 @@ const DashboardSec = () => {
                   </div>
                 </div>
               )}
-              {profile?.isFreePlan ? (
-                <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
-                  Unlock More Opportunities
-                </div>
-              ) : actualRole === "startup" ? (
+              {(actualRole === "service_professional" || actualRole === "professional") ? (
                 <div
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent("showComingSoonModal", { detail: { title: "Switch to Professional" } }));
-                  }}
-                  className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
-                >
-                  <div className="flex flex-col text-right">
-                    <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
-                    <span className="text-[10px] text-gray-500 leading-tight">Explore professional tools</span>
-                  </div>
-                  <div className="relative inline-flex items-center cursor-pointer shrink-0">
-                    <div className="w-9 h-5 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-400"></div>
-                    <div className="absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm"></div>
-                  </div>
-                </div>
-              ) : (actualRole === "service_professional" || actualRole === "professional") ? (
-                <div
-                  onClick={async () => {
+                  onClick={async (e) => {
+                    e.stopPropagation();
                     const currentMode = localStorage.getItem("spMode") || "provider";
                     const newMode = currentMode === "provider" ? "buyer" : "provider";
                     localStorage.setItem("spMode", newMode);
@@ -1230,6 +1211,27 @@ const DashboardSec = () => {
                   <div className="relative inline-flex items-center cursor-pointer shrink-0">
                     <div className={`w-9 h-5 rounded-full transition-colors ${spMode === "buyer" ? "bg-[#59549f]" : "bg-gray-300 group-hover:bg-gray-400"}`}></div>
                     <div className={`absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm ${spMode === "buyer" ? "translate-x-4" : ""}`}></div>
+                  </div>
+                </div>
+              ) : profile?.isFreePlan ? (
+                <div className="flex bg-[#D8D6F8] text-[#59549F] px-6 py-2.5 rounded-xl text-sm font-semibold transition-all border border-[#59549F]/20 shadow-md group-hover:bg-[#59549F] group-hover:text-white duration-300">
+                  Unlock More Opportunities
+                </div>
+              ) : actualRole === "startup" ? (
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.dispatchEvent(new CustomEvent("showComingSoonModal", { detail: { title: "Switch to Professional" } }));
+                  }}
+                  className="px-3 py-1.5 flex items-center gap-3 bg-[#F8F7FF] border border-[#E9E7FD] rounded-xl group cursor-pointer"
+                >
+                  <div className="flex flex-col text-right">
+                    <span className="text-[12px] font-semibold text-[#59549f]">Switch to Professional</span>
+                    <span className="text-[10px] text-gray-500 leading-tight">Explore professional tools</span>
+                  </div>
+                  <div className="relative inline-flex items-center cursor-pointer shrink-0">
+                    <div className="w-9 h-5 bg-gray-300 rounded-full transition-colors group-hover:bg-gray-400"></div>
+                    <div className="absolute left-[3px] top-[3px] w-3.5 h-3.5 bg-white rounded-full transition-transform shadow-sm"></div>
                   </div>
                 </div>
               ) : (
@@ -1302,14 +1304,37 @@ const DashboardSec = () => {
                     </h1>
 
                     <div className="flex flex-col gap-2.5 my-3 overflow-y-auto flex-1 pr-1 scrollbar-hide">
-                      {!isPortfolioMissing && !isProfileIncomplete && !isRequestEmpty && !showDraftRecoveryBanner && !showMultipleProposalsBanner && !showAwaitingResponseBanner && !showPaymentReleasedBanner && !showFastResponderBanner && !showReputationMomentumBanner ? (
+                      {!isPortfolioMissing && !isProfileIncomplete && !isRequestEmpty && !showDraftRecoveryBanner && !showMultipleProposalsBanner && !showAwaitingResponseBanner && !showPaymentReleasedBanner && !showFastResponderBanner && !showReputationMomentumBanner && (!notifications || notifications.filter(n => n.type === 'IN_APP' || !n.type).length === 0) ? (
                         <div className="flex flex-col items-center justify-center h-full text-center py-8">
-                          <span className="text-2xl mb-2">🎉</span>
+                          <span className="text-2xl mb-2">✨</span>
                           <p className="text-xs font-semibold text-gray-700">All caught up!</p>
                           <p className="text-[10px] text-gray-400 mt-1 max-w-[180px]">Your profile and ecosystem insights are completely optimized.</p>
                         </div>
                       ) : (
                         <>
+                          {notifications && notifications.filter(n => n.type === 'IN_APP' || !n.type).slice(0, 5).map((n, i) => (
+                            <div key={n._id || i} className="flex items-start gap-2.5 p-2.5 bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl text-[#001032] shrink-0 shadow-sm animate-in fade-in duration-300">
+                              <span className="text-sm shrink-0">
+                                {n.title.includes("Deal") ? "🤝" : n.title.includes("Payment") ? "💸" : n.title.includes("Request") ? "🚀" : n.title.includes("Action") ? "⏳" : "🔔"}
+                              </span>
+                              <div className="text-[10px] leading-relaxed w-full">
+                                <p className="font-bold text-gray-800">{n.title}</p>
+                                <p className="mt-0.5 text-gray-600 font-medium">
+                                  {n.message}
+                                </p>
+                                {n.actionLink && (
+                                  <div className="mt-2 flex justify-start">
+                                    <Link 
+                                      to={n.actionLink} 
+                                      className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-1 px-3.5 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                                    >
+                                      View Details
+                                    </Link>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          ))}
                           {showReputationMomentumBanner && (
                             <div className="flex items-start gap-2.5 p-2.5 bg-gradient-to-r from-[#F5F3FF] to-[#FAF5FF] border border-[#DDD6FE]/60 rounded-xl text-[#001032] shrink-0 shadow-sm animate-in fade-in duration-300">
                               <span className="text-sm shrink-0">📈</span>
@@ -2002,7 +2027,6 @@ const DashboardSec = () => {
                 </div>
               </div>
             )}
-
             {/* Mobile Card 2: Ecosystem Insights */}
             <div className="rounded-2xl bg-white shadow-[inset_0_0_12px_0_rgba(0,0,0,0.25)] p-5 mt-3 m-2 flex flex-col justify-between min-h-[300px]">
               <div className="flex flex-col flex-1 overflow-hidden">
@@ -2010,14 +2034,37 @@ const DashboardSec = () => {
                   Ecosystem Insights
                 </h1>
                 <div className="flex flex-col gap-2.5 my-3">
-                  {!isPortfolioMissing && !isProfileIncomplete && !isRequestEmpty && !showDraftRecoveryBanner ? (
+                  {!isPortfolioMissing && !isProfileIncomplete && !isRequestEmpty && !showDraftRecoveryBanner && (!notifications || notifications.filter(n => n.type === 'IN_APP' || !n.type).length === 0) ? (
                     <div className="flex flex-col items-center justify-center h-full text-center py-6">
-                      <span className="text-2xl mb-2">🎉</span>
+                      <span className="text-2xl mb-2">✨</span>
                       <p className="text-xs font-semibold text-gray-700">All caught up!</p>
                       <p className="text-[10px] text-gray-400 mt-1 max-w-[180px]">Your profile and ecosystem insights are completely optimized.</p>
                     </div>
                   ) : (
                     <>
+                      {notifications && notifications.filter(n => n.type === 'IN_APP' || !n.type).slice(0, 5).map((n, i) => (
+                        <div key={n._id || i} className="flex items-start gap-2.5 p-2.5 bg-gradient-to-r from-gray-50 to-white border border-gray-200 rounded-xl text-[#001032] shrink-0 shadow-sm animate-in fade-in duration-300">
+                          <span className="text-sm shrink-0">
+                            {n.title.includes("Deal") ? "🤝" : n.title.includes("Payment") ? "💸" : n.title.includes("Request") ? "🚀" : n.title.includes("Action") ? "⏳" : "🔔"}
+                          </span>
+                          <div className="text-[10px] leading-relaxed w-full">
+                            <p className="font-bold text-gray-800">{n.title}</p>
+                            <p className="mt-0.5 text-gray-600 font-medium">
+                              {n.message}
+                            </p>
+                            {n.actionLink && (
+                              <div className="mt-2 flex justify-start">
+                                <Link 
+                                  to={n.actionLink} 
+                                  className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-1 px-3.5 rounded-lg text-[9px] shadow-sm transition-all duration-300"
+                                >
+                                  View Details
+                                </Link>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ))}
                       {showDraftRecoveryBanner && (
                         <div className="flex items-start gap-2.5 p-2.5 bg-[#F5F3FF] border border-[#DDD6FE] rounded-xl text-[#5B21B6] shrink-0">
                           <span className="text-sm shrink-0">📝</span>

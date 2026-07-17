@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import Deal from "../Models/deal.model.js";
 import Request from "../Models/request.model.js";
+import Notification from "../Models/notification.model.js";
 import { emitDealUpdated } from "../lib/socket.js";
 import { sendPushNotification } from "../lib/onesignal.js";
 
@@ -219,17 +220,23 @@ export const updateDeal = async (req, res) => {
     const targetPushId = userId.toString() === deal.startupId.toString() ? deal.professionalId : deal.startupId;
 
     if (req.body.isCounter) {
-      sendPushNotification(targetPushId, "⚡ Action Required", "A proposal is awaiting your response.", `/deal/${deal._id}`);
+      sendPushNotification(targetPushId, "⏳ Action Required", "A proposal is awaiting your response.", "/deal/negotiations");
+      await Notification.create({ userId: targetPushId, title: "⏳ Action Required", message: "A proposal is awaiting your response.", actionLink: "/deal/negotiations", type: "IN_APP" });
     } else if (deal.status === "Approved") {
-      sendPushNotification(targetPushId, "✅ Pending Approval", "A milestone is awaiting your approval.", `/deal/${deal._id}`);
+      sendPushNotification(targetPushId, "⏳ Pending Approval", "A milestone is awaiting your approval.", "/deal/activedeals");
+      await Notification.create({ userId: targetPushId, title: "⏳ Pending Approval", message: "A milestone is awaiting your approval.", actionLink: "/deal/activedeals", type: "IN_APP" });
     } else if (deal.status === "Documented") {
-      sendPushNotification(targetPushId, "📄 Action Required", "Deal documentation needs your verification.", `/deal/${deal._id}`);
+      sendPushNotification(targetPushId, "📄 Action Required", "Deal documentation needs your verification.", "/deal/documentation");
+      await Notification.create({ userId: targetPushId, title: "📄 Action Required", message: "Deal documentation needs your verification.", actionLink: "/deal/documentation", type: "IN_APP" });
     } else if (deal.status === "Active") {
-      sendPushNotification(targetPushId, "🚀 Deal Accepted!", "Your deal workspace is now active.", `/deal/${deal._id}`);
+      sendPushNotification(targetPushId, "🤝 Deal Accepted!", "Your deal workspace is now active.", "/deal/activedeals");
+      await Notification.create({ userId: targetPushId, title: "🤝 Deal Accepted!", message: "Your deal workspace is now active.", actionLink: "/deal/activedeals", type: "IN_APP" });
     } else if (deal.status === "Completed") {
-      sendPushNotification(targetPushId, "🏆 Deal Completed!", "Your deal has been completed successfully.", `/deal/${deal._id}`);
+      sendPushNotification(targetPushId, "🎉 Deal Completed!", "Your deal has been completed successfully.", "/deal/completed");
+      await Notification.create({ userId: targetPushId, title: "🎉 Deal Completed!", message: "Your deal has been completed successfully.", actionLink: "/deal/completed", type: "IN_APP" });
     } else if (status) { 
-      sendPushNotification(targetPushId, "🔔 Deal Update", `Deal status updated.`, `/deal/${deal._id}`);
+      sendPushNotification(targetPushId, "🔔 Deal Update", `Deal status updated.`, "/deal/activedeals");
+      await Notification.create({ userId: targetPushId, title: "🔔 Deal Update", message: `Deal status updated.`, actionLink: "/deal/activedeals", type: "IN_APP" });
     }
 
     res.status(200).json({

@@ -1,5 +1,6 @@
 import Request from "../Models/request.model.js";
 import User from "../Models/User.model.js";
+import Notification from "../Models/notification.model.js";
 import { sendPushNotification } from "../lib/onesignal.js";
 
 // CREATE REQUEST
@@ -62,10 +63,18 @@ export const createRequest = async (req, res) => {
     // Send Push Notification to the user who raised it
     sendPushNotification(
       user._id,
-      "Request Live",
+      "🚀 Request Live",
       `Your request for "${service}" is now live. Relevant professionals are being notified.`,
-      "/profile"
+      "/request"
     );
+
+    await Notification.create({
+      userId: user._id,
+      title: "🚀 Request Live",
+      message: `Your request for "${service}" is now live. Relevant professionals are being notified.`,
+      actionLink: "/request",
+      type: "IN_APP"
+    });
 
     res.status(201).json(newRequest);
   } catch (error) {
@@ -134,6 +143,15 @@ export const forwardRequest = async (req, res) => {
         "A startup request matching your expertise is now available.",
         "/request"
       );
+
+      const notifications = userIds.map(id => ({
+        userId: id,
+        title: "🚀 New Opportunity Available",
+        message: "A startup request matching your expertise is now available.",
+        actionLink: "/request",
+        type: "IN_APP"
+      }));
+      await Notification.insertMany(notifications);
     }
 
     res.status(200).json({ message: "Request forwarded successfully" });
@@ -265,10 +283,18 @@ export const markInterested = async (req, res) => {
 
     sendPushNotification(
       request.raisedBy,
-      "⚡ Action Required",
+      "⏳ Action Required",
       "A proposal is awaiting your response.",
       "/request"
     );
+
+    await Notification.create({
+      userId: request.raisedBy,
+      title: "⏳ Action Required",
+      message: "A proposal is awaiting your response.",
+      actionLink: "/request",
+      type: "IN_APP"
+    });
 
     console.log("After save - status:", request.status);
     console.log("After save - interestedBy:", request.interestedBy);
@@ -458,11 +484,9 @@ export const deleteRequest = async (req, res) => {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    if (request.interestedBy.length > 0) {
-      return res.status(400).json({ message: "Cannot cancel request with interests" });
-    }
-
-    await Request.findByIdAndDelete(requestId);
+    request.status = "cancelled";
+    await request.save();
+    
     res.status(200).json({ message: "Request cancelled successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });

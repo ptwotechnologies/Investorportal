@@ -6,6 +6,44 @@ import { LuArrowLeftRight, LuClock } from "react-icons/lu";
 import axios from "axios";
 import { serverUrl } from "@/App";
 import { toast } from "react-hot-toast";
+import { Link } from 'react-router-dom';
+
+const calculateDealStrength = (deal) => {
+  if (!deal) return { percent: 0, text: "Calculating...", points: [] };
+  let percent = 20;
+  const points = [];
+  if (deal.status !== "Draft" && deal.status !== "Negotiating") {
+    percent += 20; points.push("High commitment level");
+  } else {
+    points.push("Active discussions");
+  }
+  if (deal.totalAmount > 0) {
+    percent += 20; points.push("Clear financial terms");
+  }
+  if (deal.scopeItems?.length > 0) {
+    percent += 15; points.push("Well-defined scope");
+  } else if (deal.scopeDescription?.length > 20) {
+    percent += 10; points.push("Detailed description");
+  }
+  if (deal.milestones?.length > 0) {
+    percent += 10;
+    if (deal.milestones.length >= 3) {
+      percent += 15; points.push("Comprehensive milestones");
+    } else {
+      points.push("Milestone structure initiated");
+    }
+  }
+  if (deal.paymentStatus === "Fully Paid") {
+    percent = 100; points.push("Payment completed");
+  } else {
+    percent = Math.min(percent, 95);
+  }
+  let text = "Good foundation";
+  if (percent >= 80) text = "High likelihood of successful closure";
+  else if (percent >= 50) text = "Moderate strength, needs refinement";
+  else text = "Early stage formulation";
+  return { percent, text, points: points.slice(0, 3) };
+};
 import { useNavigate } from "react-router-dom";
 import { invalidateSidebarCache } from "../../ProfileSec1.jsx/Sidebar";
 import React from "react";
@@ -895,26 +933,33 @@ const Bottom = ({
 
                 {!isEditing && (
                   <SectionCard title="Deal Strength" showDot>
-                    <div className="mb-4">
-                      <div className="flex justify-between items-center mb-1.5">
-                        <p className="text-xs text-[#585858] tracking-wide">{selectedProject.strength || "High likelihood of successful closure"}</p>
-                        <span className="text-[10px] font-bold text-[#59549F]">85%</span>
-                      </div>
-                      <div className="w-[65%] h-2 bg-gray-100 rounded-full overflow-hidden border border-gray-100 shadow-inner">
-                        <div 
-                          className="h-full bg-[#007832] rounded-full transition-all duration-1000 ease-out"
-                          style={{ width: '85%' }}
-                        ></div>
-                      </div>
-                    </div>
-                    <ul className="space-y-2">
-                      {(selectedProject.strengthPoints || ["Fast response time", "Clear milestone breakdown", "Competitive pricing"]).map((pt, i) => (
-                        <li key={i} className="flex items-center gap-2 text-xs text-[#000000]">
-                          <IoMdCheckmark className="text-green-800" size={16} />
-                          {pt}
-                        </li>
-                      ))}
-                    </ul>
+                    {(() => {
+                      const strength = calculateDealStrength(selectedProject);
+                      return (
+                        <>
+                          <div className="mb-4">
+                            <div className="flex justify-between items-center mb-1.5">
+                              <p className="text-xs text-[#585858] tracking-wide">{strength.text}</p>
+                              <span className="text-[10px] font-bold text-[#59549F]">{strength.percent}%</span>
+                            </div>
+                            <div className="w-[65%] h-2 bg-gray-100 rounded-full overflow-hidden border border-gray-100 shadow-inner">
+                              <div 
+                                className="h-full bg-[#007832] rounded-full transition-all duration-1000 ease-out"
+                                style={{ width: `${strength.percent}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                          <ul className="space-y-2">
+                            {strength.points.map((pt, i) => (
+                              <li key={i} className="flex items-center gap-2 text-xs text-[#000000]">
+                                <IoMdCheckmark className="text-green-800" size={16} />
+                                {pt}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      );
+                    })()}
                   </SectionCard>
                 )}
                 {/* Scope summary */}

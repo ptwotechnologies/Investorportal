@@ -379,14 +379,16 @@ const Mobile = () => {
                                   <li>Received</li>
                                 </div>
                               </SheetClose>
+                              {(userRole === "startup" || spMode === "buyer") && (
+                                <SheetClose asChild>
+                                  <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
+                                    <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                                    <li>Raised</li>
+                                  </div>
+                                </SheetClose>
+                              )}
                               <SheetClose asChild>
-                                <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
-                                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                                  <li>Raised</li>
-                                </div>
-                              </SheetClose>
-                              <SheetClose asChild>
-                                <div onClick={() => {}} className="flex items-center gap-2 cursor-pointer opacity-50">
+                                <div onClick={() => navigate("/request", { state: { defaultTab: "cancelled" } })} className="flex items-center gap-2 cursor-pointer hover:text-[#59549f]">
                                   <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                                   <li>Cancelled</li>
                                 </div>

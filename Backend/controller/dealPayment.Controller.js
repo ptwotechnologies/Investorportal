@@ -3,6 +3,7 @@ import crypto from "crypto";
 import dotenv from "dotenv";
 import Transaction from "../Models/transaction.model.js";
 import Deal from "../Models/deal.model.js";
+import Notification from "../Models/notification.model.js";
 import { sendPushNotification } from "../lib/onesignal.js";
 
 dotenv.config();
@@ -96,10 +97,12 @@ export const verifyDealPayment = async (req, res) => {
           console.log("Deal saved successfully with Paid milestone");
 
           // Send Push Notification for payment received
-          sendPushNotification(deal.professionalId, "💰 Payment Received!", "Milestone payment has been released successfully.", `/deal/${deal._id}`);
+          sendPushNotification(deal.professionalId, "💸 Payment Received!", "Milestone payment has been released successfully.", "/deal/payments");
+          await Notification.create({ userId: deal.professionalId, title: "💸 Payment Received!", message: "Milestone payment has been released successfully.", actionLink: "/deal/payments", type: "IN_APP" });
           
           if (deal.status === "Active" && deal.status !== "Documented") { // If it just became active
-            sendPushNotification(deal.professionalId, "🚀 Deal Accepted!", "Your deal workspace is now active.", `/deal/${deal._id}`);
+            sendPushNotification(deal.professionalId, "🤝 Deal Accepted!", "Your deal workspace is now active.", "/deal/activedeals");
+            await Notification.create({ userId: deal.professionalId, title: "🤝 Deal Accepted!", message: "Your deal workspace is now active.", actionLink: "/deal/activedeals", type: "IN_APP" });
           }
         } else {
           console.error(`Milestone ${milestoneId} not found in deal ${dealId}`);

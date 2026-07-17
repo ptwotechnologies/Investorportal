@@ -65,8 +65,8 @@ const ReceivedTabSec = ({
         ]);
 
         setProfiles(profileRes.data);
-        setForwardedRequests(res.data.forwardedRequests);
-        setMyInterestedRequests(res.data.myInterestedRequests);
+        setForwardedRequests(res.data.forwardedRequests.filter(r => r.status !== "cancelled" && !r.isIgnored));
+        setMyInterestedRequests(res.data.myInterestedRequests.filter(r => r.status !== "cancelled"));
 
         const planName = userRes.data.plan?.planName || "Explorer Access";
         const planAmount = userRes.data.plan?.amount || 0;

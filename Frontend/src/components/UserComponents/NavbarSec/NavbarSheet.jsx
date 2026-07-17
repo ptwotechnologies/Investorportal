@@ -114,53 +114,31 @@ function NavbarSheet({ textColor }) {
             </Link>
           </>
         ) : (
-          <>
-            {/* Profile Circle */}
-            <div className="flex items-center justify-between  cursor-pointer   px-3 py-1 rounded-full bg-white  border border-[#001032]">
-               <IoNotificationsOutline 
-                 size={25} 
-                 className=" ml-1 text-gray-500 cursor-pointer bell-icon" 
-                 onClick={(e) => {
-                   e.stopPropagation();
-                   setOpenNotificationMenu(!openNotificationMenu);
-                   setOpenProfileMenu(false);
-                 }}
-               />
-                <div className="w-0.2 h-6 border mr-1.5 ml-2"></div>
-              <div className="flex items-center justify-between  cursor-pointer   px-2 py-1 rounded-sm">
-              {/* My Account Button */}
-
-              
-              <button
-                onClick={() => {
-                  setOpenProfileMenu(!openProfileMenu);
-                  setOpenNotificationMenu(false);
+          <div className="flex items-center gap-4">
+            <div className="flex items-center justify-between cursor-pointer px-3 py-1 rounded-full bg-white border border-[#001032]">
+              <IoNotificationsOutline 
+                size={25} 
+                className="ml-1 text-gray-500 cursor-pointer bell-icon" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenNotificationMenu(!openNotificationMenu);
+                  setOpenProfileMenu(false);
                 }}
-                className=""
-              >
-                Dashboard
-              </button>
-
-              {/* Profile Image */}
-              {/* <div
-                onClick={() => setOpenProfileMenu(!openProfileMenu)}
-                className="w-9 h-9 rounded-full overflow-hidden border-2 border-white"
-              >
-                {profile?.profilePhoto ? (
-                  <img
-                    src={getProfileImage(profile.profilePhoto)}
-                    className="w-full h-full object-cover"
-                    alt="profile"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-[#001032] flex items-center justify-center">
-                    <CgProfile size={18} className="text-white" />
-                  </div>
-                )}
-              </div> */}
+              />
+              <div className="w-0.2 h-6 border mr-1.5 ml-2"></div>
+              <div className="flex items-center justify-between cursor-pointer px-2 py-1 rounded-sm">
+                <button
+                  onClick={() => {
+                    setOpenProfileMenu(!openProfileMenu);
+                    setOpenNotificationMenu(false);
+                  }}
+                  className=""
+                >
+                  Dashboard
+                </button>
+              </div>
             </div>
-            </div>
-          </>
+          </div>
         )}
       </div>
 
@@ -214,11 +192,22 @@ function NavbarSheet({ textColor }) {
                   <div key={n._id} className="border p-3 flex flex-col gap-2 rounded-lg bg-gray-50 hover:bg-white transition-colors">
                     <div className="flex items-start gap-3 w-full">
                       <div className="w-8 h-8 rounded-full bg-[#D8D6F8] flex items-center justify-center shrink-0 text-xs">
-                        {n.type === "missing_portfolio" || n.type === "incomplete_profile" ? "⚠️" : n.type === "welcome_trigger" ? "✨" : n.type === "new_opportunity" ? "📋" : n.type === "explore_professionals" ? "🔍" : "🔔"}
+                        {n.title?.includes("Deal") ? "🤝" : n.title?.includes("Payment") ? "💸" : n.title?.includes("Request") ? "🚀" : n.title?.includes("Action") ? "⏳" : n.type === "missing_portfolio" || n.type === "incomplete_profile" ? "⚠️" : n.type === "welcome_trigger" ? "✨" : n.type === "new_opportunity" ? "📋" : n.type === "explore_professionals" ? "🔍" : "🔔"}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-xs text-[#001426]">{n.title}</p>
                         <p className="text-[10px] text-gray-600 leading-relaxed">{n.message}</p>
+                        {(n.actionLink || n.link) && (
+                          <div className="mt-2">
+                            <Link 
+                              to={n.actionLink || n.link}
+                              onClick={() => setOpenNotificationMenu(false)}
+                              className="inline-block bg-[#001032] hover:bg-gray-800 text-white font-semibold py-1 px-3 rounded-md text-[9px] shadow-sm transition-all duration-300"
+                            >
+                              View Details
+                            </Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

@@ -58,7 +58,6 @@ const LogicSec1 = () => {
         window.dispatchEvent(new Event("spModeChanged"));
 
         toast.success("Login successful!");
-        
         // Redirect user based on registrationStep
         const step = response.data.registrationStep;
         if (step === 2) {
@@ -66,7 +65,13 @@ const LogicSec1 = () => {
         } else if (step === 3) {
           navigate("/onboardingplans");
         } else {
-          navigate("/dashboard");
+          const redirectUrl = localStorage.getItem("redirectAfterLogin");
+          if (redirectUrl) {
+            localStorage.removeItem("redirectAfterLogin");
+            navigate(redirectUrl);
+          } else {
+            navigate("/dashboard");
+          }
         }
       } else {
         toast.error(response.data.message);

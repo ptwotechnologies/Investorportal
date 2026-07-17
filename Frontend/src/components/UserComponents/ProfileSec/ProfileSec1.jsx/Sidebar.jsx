@@ -273,7 +273,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             size={25}
             onClick={handleToggle}
             style={{
-              marginBottom: isRequirementsOpen ? '160px' : '12px'
+              marginBottom: isRequirementsOpen 
+                ? ((userRole === "startup" || spMode === "buyer") ? '160px' : '126px') 
+                : '12px'
             }}
           />
           <HiOutlineUserGroup
@@ -385,7 +387,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         </div>
 
         {/* Bottom Icons (Visual placeholders for icons scrolling together) */}
-        <div className={`${isInvestor ? "mt-9" : "mt-62"}  pb-4 text-gray-300 flex flex-col gap-3  items-center`}>
+        <div className={`${isInvestor ? "mt-9" : "mt-60"}  pb-4 text-gray-300 flex flex-col gap-3  items-center`}>
           <IoSettingsOutline
             size={25}
             className=" text-[#59549f] cursor-pointer"
@@ -537,11 +539,13 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Received
                     </div>
-                    <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
-                      <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                      Raised
-                    </div>
-                    <div onClick={() => {}} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                    {(userRole === "startup" || spMode === "buyer") && (
+                      <div onClick={() => navigate("/request", { state: { defaultTab: "raised" } })} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
+                        <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                        Raised
+                      </div>
+                    )}
+                    <div onClick={() => navigate("/request", { state: { defaultTab: "cancelled" } })} className="flex items-center gap-2 py-1.5 hover:text-[#59549f] cursor-pointer">
                       <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
                       Cancelled
                     </div>
